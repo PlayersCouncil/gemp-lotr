@@ -170,7 +170,7 @@ public class SortAndFilterCards {
                 final LotroCardBlueprint blueprint = cardBlueprint.get(blueprintId);
                 if (blueprint.getCardType() == CardType.SITE) {
                     if (blueprint.getSiteBlock() == SitesBlock.FELLOWSHIP) {
-                        if ("fotr_block".contains(set)) {
+                        if ("fotr_block,pc_fotr_block".contains(set)) {
                             return true;
                         }
                         return false;
@@ -182,7 +182,7 @@ public class SortAndFilterCards {
                         return false;
                     }
                     if (blueprint.getSiteBlock() == SitesBlock.KING) {
-                        if ("king_block,rotk_sta,movie".contains(set)) {
+                        if ("king_block,rotk_sta,movie,pc_movie_block".contains(set)) {
                             return true;
                         }
                         return false;

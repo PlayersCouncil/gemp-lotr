@@ -1,0 +1,50 @@
+{
+   "52_32": {
+    "side": "free_people",
+    "cost": 0,
+    "strength": 1,
+    "culture": "Gondor",
+    "possession": "Hand Weapon",
+    "title": "Flaming Brand",
+    "type": "possession",
+    "target": "ranger",
+    "effects": [
+      {
+        "type": "extrapossessionclass"
+      },
+      {
+        "type": "activated",
+        "phase": "skirmish",
+        "condition": {
+          "type": "canSpot",
+          "filter": "bearer,inSkirmishAgainst(Nazgul)",
+        },
+        "cost": [
+          {
+            "type": "memorize",
+            "filter": "bearer",
+            "memory": "bearer"
+          },
+          {
+            "type": "discard",
+            "filter": "self"
+          }
+        ],
+        "effect":[
+          {
+            "type": "modifyStrength",
+            "filter": "memory(bearer)",
+            "amount": 3
+          },
+          {
+            "type": "addKeyword",
+            "filter": "memory(bearer)",
+            "keyword": "damage+1"
+          }
+        ]
+      },
+    ]
+  },
+  
+  
+}

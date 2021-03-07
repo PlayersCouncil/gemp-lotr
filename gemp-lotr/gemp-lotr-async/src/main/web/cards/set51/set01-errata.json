@@ -1,0 +1,103 @@
+{
+  "51_40": {
+    "title": "*Elrond",
+    "subtitle": "Lord of Rivendell",
+    "culture": "elven",
+    "cost": 4,
+    "type": "ally",
+    "allyHome": "fellowship,3",
+    "race": "elf",
+    "strength": 8,
+    "vitality": 4,
+    "condition": {
+      "type": "canSpot",
+      "filter": "or(name(Gandalf),elf)"
+    },
+    "effects": [
+      {
+        "type": "trigger",
+        "trigger": {
+          "type": "startOfTurn"
+        },
+        "effect": {
+          "type": "heal",
+          "filter": "choose(ally,allyHome(fellowship,3))",
+          "count": "0-3"
+        }
+      },
+      {
+        "type": "activated",
+        "phase": "fellowship",
+        "cost": {
+          "type": "exert",
+          "filter": "self",
+          "times": {
+            "type": "condition",
+            "condition": {
+              "type": "canSpot",
+              "count": 2,
+              "filter": "not(self),culture(elven),ally"
+            },
+            "true": 1,
+            "false": 2
+          }
+        },
+        "effect": {
+          "type": "drawCards"
+        }
+      }
+    ]
+  },
+  
+  "51_311": {
+    "title": "*Sam",
+    "subtitle": "Son of Hamfast",
+    "culture": "shire",
+    "cost": 2,
+    "type": "companion",
+    "race": "hobbit",
+    "strength": 3,
+    "vitality": 4,
+    "resistance": 5,
+    "signet": "aragorn",
+    "effects": [
+      {
+        "type": "activated",
+        "phase": "fellowship",
+        "cost": [
+          {
+            "type": "exert",
+            "filter": "self",
+            "times": 1
+          },
+          {
+            "type": "exert",
+            "filter": "choose(another,companion)",
+            "times": 1
+          }
+        ],
+        "effect": {
+          "type": "removeBurdens",
+          "amount": 1
+        }
+      },
+      {
+        "type": "trigger",
+        "optional": true,
+        "trigger": {
+          "type": "killed",
+          "filter": "name(Frodo),ring bearer"
+        },
+        "effect": {
+          "type": "makeSelfRingBearer"
+        }
+      }
+    ]
+  },
+  
+
+  
+  
+  
+  
+}

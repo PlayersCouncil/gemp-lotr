@@ -1,0 +1,99 @@
+{
+ "53_42": {
+    "side": "free_people",
+    "cost": 0,
+    "culture": "Gondor",
+    "title": "*Horn of Boromir",
+    "type": "possession",
+    "target": "name(Boromir)",
+    "effects": {
+      "type": "activated",
+      "phase": "maneuver",
+      "cost": [
+        {
+          "type": "exert",
+          "filter": "bearer",
+          "times": 1
+        },
+        {
+          "type": "exert",
+          "filter": "choose(ally)",
+          "memorize": "summonedAlly",
+          "times": 1
+        }        
+      ],
+      "effect":[
+        {
+          "type": "allyCanParticipateInArcheryFireAndSkirmishes",
+          "filter": "memory(summonedAlly)",
+          "until": "start(regroup)"
+        }
+      ]
+    }
+  },
+  
+  "53_68": {
+    "side": "shadow",
+    "site": 4,
+    "cost": 4,
+    "race": "Wizard",
+    "strength": 8,
+    "culture": "Isengard",
+    "vitality": 4,
+    "subtitle": "Keeper of Isengard",
+    "title": "*Saruman",
+    "type": "minion",
+    "effects": [
+      {
+        "type": "modifier",
+        "modifier": {
+          "type": "cantbeassignedtoskirmish",
+          "filter": "self"
+        }
+      },
+      {
+        "type": "modifier",
+        "modifier": {
+          "type": "cantTakeWounds",
+          "filter": "self",
+          "condition": {
+            "type": "phase",
+            "phase": "archery"
+          }
+        }
+      },
+      {
+        "type": "activatedTrigger",
+        "trigger": {
+          "type": "aboutToTakeWound",
+          "filter": "uruk-hai"
+        },
+        "cost": {
+          "type": "exert",
+          "filter": "self",
+          "times": 1
+        },
+        "effect":
+        {
+          "type": "preventWound",
+          "filter": "choose(uruk-hai)"
+        }
+      },
+      {
+        "type": "activated",
+        "phase": "maneuver",
+        "cost": {
+          "type": "exert",
+          "filter": "self",
+          "times": 1
+        },
+        "effect": {
+          "type": "addKeyword",
+          "filter": "choose(uruk-hai)",
+          "keyword": "fierce"
+        }
+      },
+    ]
+  },
+  
+}

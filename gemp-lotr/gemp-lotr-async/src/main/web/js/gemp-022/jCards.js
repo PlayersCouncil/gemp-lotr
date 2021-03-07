@@ -216,6 +216,9 @@ var Card = Class.extend({
         img = hobbit[blueprintId];
         if (img != null)
             return img;
+        img = PCCards[blueprintId];
+        if (img != null)
+            return img;
         return null;
     },
 
