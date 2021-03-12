@@ -149,7 +149,7 @@
   },
   {
     "setId": "51",
-    "setName": "PC Errata",
+    "setName": "PC FotR Errata",
     "rarityFile": "/set51-rarity.txt",
     "originalSet": false,
     "merchantable": false,
@@ -157,9 +157,18 @@
     "playable": true
   },
   {
-    "setId": "101",
-    "setName": "PC FOTR Supplements",
-    "rarityFile": "/set101-rarity.txt",
+    "setId": "52",
+    "setName": "PC MoM Errata",
+    "rarityFile": "/set52-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "53",
+    "setName": "PC RotEL Errata",
+    "rarityFile": "/set53-rarity.txt",
     "originalSet": false,
     "merchantable": false,
     "needsLoading": false,
