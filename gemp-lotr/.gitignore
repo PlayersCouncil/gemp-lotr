@@ -1,6 +1,6 @@
 #Gradle stuff
 .gradle
-build/
+#build/
 
 #Idea folder
 .idea
