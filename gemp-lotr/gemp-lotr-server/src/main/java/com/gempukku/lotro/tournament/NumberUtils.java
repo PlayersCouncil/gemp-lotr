@@ -40,20 +40,4 @@ public class NumberUtils {
             return result;
         }
     }
-
-    public static void main(String[] args) {
-        int count = 3;
-        int maxNumber = 5;
-        
-        int iteration = 0;
-        while (true) {
-            int[] result = selectOrderedCombinationOfNumbers(count, maxNumber, iteration);
-            if (result == null) {
-                System.out.println("Combinations: "+iteration);
-                break;
-            }
-            System.out.println(Arrays.toString(result));
-            iteration++;
-        }
-    }
 }

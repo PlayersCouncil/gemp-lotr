@@ -178,8 +178,4 @@ public class DbTournamentDAO implements TournamentDAO {
             throw new RuntimeException(exp);
         }
     }
-
-    public static void main(String[] args) throws ParseException {
-        System.out.println(DateUtils.parseDateWithHour("2013-01-05 17:30:00").getTime());
-    }
 }

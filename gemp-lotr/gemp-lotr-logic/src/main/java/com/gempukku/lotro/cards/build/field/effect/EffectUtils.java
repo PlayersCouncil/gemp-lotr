@@ -34,9 +34,6 @@ public class EffectUtils {
 
         for (JSONObject effect : effectArray) {
             final EffectAppender effectAppender = effectAppenderFactory.getEffectAppender(effect, environment);
-            if (effectAppender == null) {
-                System.out.println("");
-            }
             if (effectAppender.isPlayabilityCheckedForEffect())
                 actionSource.addPlayRequirement(
                         (actionContext) -> effectAppender.isPlayableInFull(actionContext));

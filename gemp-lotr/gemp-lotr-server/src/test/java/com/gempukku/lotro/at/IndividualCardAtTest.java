@@ -1356,8 +1356,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(Zone.DISCARD, morgulBlade.getZone());
         assertEquals(Zone.ATTACHED, bladeTip.getZone());
-
-        System.out.println();
     }
 
     @Test
@@ -1407,8 +1405,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(Zone.DISCARD, morgulBlade.getZone());
         assertEquals(Zone.ATTACHED, bladeTip.getZone());
-
-        System.out.println();
     }
 
     @Test
