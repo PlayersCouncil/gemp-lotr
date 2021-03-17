@@ -147,8 +147,8 @@ public class ToilAtTest extends AbstractAtTest {
 
         AwaitingDecision toilExertion = _userFeedback.getAwaitingDecision(P2);
         assertEquals(AwaitingDecisionType.CARD_SELECTION, toilExertion.getDecisionType());
-        assertEquals("0", (String) toilExertion.getDecisionParameters().get("min"));
-        assertEquals("1", (String) toilExertion.getDecisionParameters().get("max"));
+        assertEquals("0", toilExertion.getDecisionParameters().get("min")[0]);
+        assertEquals("1", toilExertion.getDecisionParameters().get("max")[0]);
         validateContents(new String[]{"" + corpsOfHarad.getCardId()}, (String[]) toilExertion.getDecisionParameters().get("cardId"));
 
         playerDecided(P2, "" + corpsOfHarad.getCardId());
@@ -186,8 +186,8 @@ public class ToilAtTest extends AbstractAtTest {
 
         AwaitingDecision toilExertion = _userFeedback.getAwaitingDecision(P2);
         assertEquals(AwaitingDecisionType.CARD_SELECTION, toilExertion.getDecisionType());
-        assertEquals("0", (String) toilExertion.getDecisionParameters().get("min"));
-        assertEquals("1", (String) toilExertion.getDecisionParameters().get("max"));
+        assertEquals("0", toilExertion.getDecisionParameters().get("min")[0]);
+        assertEquals("1", (String) toilExertion.getDecisionParameters().get("max")[0]);
         validateContents(new String[]{"" + corpsOfHarad.getCardId()}, (String[]) toilExertion.getDecisionParameters().get("cardId"));
 
         playerDecided(P2, "");
@@ -227,8 +227,8 @@ public class ToilAtTest extends AbstractAtTest {
 
         AwaitingDecision toilExertion = _userFeedback.getAwaitingDecision(P2);
         assertEquals(AwaitingDecisionType.CARD_SELECTION, toilExertion.getDecisionType());
-        assertEquals("0", (String) toilExertion.getDecisionParameters().get("min"));
-        assertEquals("2", (String) toilExertion.getDecisionParameters().get("max"));
+        assertEquals("0", (String) toilExertion.getDecisionParameters().get("min")[0]);
+        assertEquals("2", (String) toilExertion.getDecisionParameters().get("max")[0]);
         validateContents(new String[]{"" + corpsOfHarad1.getCardId(), "" + corpsOfHarad2.getCardId()}, (String[]) toilExertion.getDecisionParameters().get("cardId"));
 
         playerDecided(P2, corpsOfHarad1.getCardId() + "," + corpsOfHarad2.getCardId());
@@ -269,8 +269,8 @@ public class ToilAtTest extends AbstractAtTest {
 
         AwaitingDecision toilExertion = _userFeedback.getAwaitingDecision(P2);
         assertEquals(AwaitingDecisionType.CARD_SELECTION, toilExertion.getDecisionType());
-        assertEquals("0", (String) toilExertion.getDecisionParameters().get("min"));
-        assertEquals("2", (String) toilExertion.getDecisionParameters().get("max"));
+        assertEquals("0", (String) toilExertion.getDecisionParameters().get("min")[0]);
+        assertEquals("2", (String) toilExertion.getDecisionParameters().get("max")[0]);
         validateContents(new String[]{"" + corpsOfHarad1.getCardId(), "" + corpsOfHarad2.getCardId()}, (String[]) toilExertion.getDecisionParameters().get("cardId"));
 
         playerDecided(P2, "" + corpsOfHarad1.getCardId());
@@ -317,8 +317,8 @@ public class ToilAtTest extends AbstractAtTest {
 
         AwaitingDecision toilExertion = _userFeedback.getAwaitingDecision(P2);
         assertEquals(AwaitingDecisionType.CARD_SELECTION, toilExertion.getDecisionType());
-        assertEquals("0", (String) toilExertion.getDecisionParameters().get("min"));
-        assertEquals("5", (String) toilExertion.getDecisionParameters().get("max"));
+        assertEquals("0", (String) toilExertion.getDecisionParameters().get("min")[0]);
+        assertEquals("5", (String) toilExertion.getDecisionParameters().get("max")[0]);
         validateContents(new String[]{"" + corpsOfHarad1.getCardId(), "" + corpsOfHarad2.getCardId(), "" + corpsOfHarad3.getCardId(), "" + corpsOfHarad4.getCardId(), "" + corpsOfHarad5.getCardId()}, (String[]) toilExertion.getDecisionParameters().get("cardId"));
 
         playerDecided(P2, corpsOfHarad1.getCardId() + "," + corpsOfHarad2.getCardId() + "," + corpsOfHarad3.getCardId() + "," + corpsOfHarad4.getCardId() + "," + corpsOfHarad5.getCardId());

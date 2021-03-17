@@ -9,7 +9,7 @@ public interface AwaitingDecision {
 
     public AwaitingDecisionType getDecisionType();
 
-    public Map<String, Object> getDecisionParameters();
+    public Map<String, String[]> getDecisionParameters();
 
     public void decisionMade(String result) throws DecisionResultInvalidException;
 }

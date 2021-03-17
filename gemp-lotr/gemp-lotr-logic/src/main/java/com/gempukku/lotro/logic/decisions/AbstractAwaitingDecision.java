@@ -7,7 +7,7 @@ public abstract class AbstractAwaitingDecision implements AwaitingDecision {
     private int _id;
     private String _text;
     private AwaitingDecisionType _decisionType;
-    private Map<String, Object> _params = new HashMap<String, Object>();
+    private Map<String, String[]> _params = new HashMap<String, String[]>();
 
     public AbstractAwaitingDecision(int id, String text, AwaitingDecisionType decisionType) {
         _id = id;
@@ -16,7 +16,7 @@ public abstract class AbstractAwaitingDecision implements AwaitingDecision {
     }
 
     protected void setParam(String name, String value) {
-        _params.put(name, value);
+        setParam(name, new String[] {value});
     }
 
     protected void setParam(String name, String[] value) {
@@ -39,7 +39,7 @@ public abstract class AbstractAwaitingDecision implements AwaitingDecision {
     }
 
     @Override
-    public Map<String, Object> getDecisionParameters() {
+    public Map<String, String[]> getDecisionParameters() {
         return _params;
     }
 }

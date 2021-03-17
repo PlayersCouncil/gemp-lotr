@@ -38,8 +38,8 @@ public class PlayCardFromDiscardAtTest extends AbstractAtTest {
 
         playerDecided(P2, getCardActionId(P2, "Use They Are Coming"));
 
-        Map<String, Object> decisionParameters = _userFeedback.getAwaitingDecision(P2).getDecisionParameters();
-        String[] cardId = (String[]) decisionParameters.get("cardId");
+        Map<String, String[]> decisionParameters = _userFeedback.getAwaitingDecision(P2).getDecisionParameters();
+        String[] cardId = decisionParameters.get("cardId");
         assertEquals(1, cardId.length);
         assertEquals(String.valueOf(goblinSneakInDiscard.getCardId()), cardId[0]);
     }

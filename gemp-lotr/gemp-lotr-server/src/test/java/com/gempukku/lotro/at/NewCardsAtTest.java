@@ -586,7 +586,7 @@ public class NewCardsAtTest extends AbstractAtTest {
 
         playerDecided(P1, "" + merry.getCardId());
         playerDecided(P1, getCardActionId(P1, "Use Bilbo's Pipe"));
-        assertEquals("2", _userFeedback.getAwaitingDecision(P1).getDecisionParameters().get("max"));
+        assertEquals("2", _userFeedback.getAwaitingDecision(P1).getDecisionParameters().get("max")[0]);
     }
 
     @Test

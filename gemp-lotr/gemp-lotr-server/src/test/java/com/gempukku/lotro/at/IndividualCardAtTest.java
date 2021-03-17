@@ -952,7 +952,7 @@ public class IndividualCardAtTest extends AbstractAtTest {
         playerDecided(P2, getCardActionId(playShadowAction, "Play Cave"));
 
         final AwaitingDecision discardGoblins = _userFeedback.getAwaitingDecision(P2);
-        assertEquals("3", discardGoblins.getDecisionParameters().get("min"));
+        assertEquals("3", discardGoblins.getDecisionParameters().get("min")[0]);
     }
 
     @Test
