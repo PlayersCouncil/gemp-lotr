@@ -1,23 +1,25 @@
 package com.gempukku.lotro.common;
 
 public enum Phase {
-    PUT_RING_BEARER("Put Ring-bearer", false),
-    PLAY_STARTING_FELLOWSHIP("Play starting fellowship", false),
-    FELLOWSHIP("Fellowship", true),
-    SHADOW("Shadow", true),
-    MANEUVER("Maneuver", true),
-    ARCHERY("Archery", true),
-    ASSIGNMENT("Assignment", true),
-    SKIRMISH("Skirmish", true),
-    REGROUP("Regroup", true),
-    BETWEEN_TURNS("Between turns", false);
+    PUT_RING_BEARER("Put Ring-bearer", false, false),
+    PLAY_STARTING_FELLOWSHIP("Play starting fellowship", false, true),
+    FELLOWSHIP("Fellowship", true, true),
+    SHADOW("Shadow", true, true),
+    MANEUVER("Maneuver", true, true),
+    ARCHERY("Archery", true, true),
+    ASSIGNMENT("Assignment", true, true),
+    SKIRMISH("Skirmish", true, true),
+    REGROUP("Regroup", true, true),
+    BETWEEN_TURNS("Between turns", false, false);
 
     private String humanReadable;
     private boolean realPhase;
+    private boolean cardsAffectGame;
 
-    private Phase(String humanReadable, boolean realPhase) {
+    Phase(String humanReadable, boolean realPhase, boolean cardsAffectGame) {
         this.humanReadable = humanReadable;
         this.realPhase = realPhase;
+        this.cardsAffectGame = cardsAffectGame;
     }
 
     public String getHumanReadable() {
@@ -26,5 +28,9 @@ public enum Phase {
 
     public boolean isRealPhase() {
         return realPhase;
+    }
+
+    public boolean isCardsAffectGame() {
+        return cardsAffectGame;
     }
 }

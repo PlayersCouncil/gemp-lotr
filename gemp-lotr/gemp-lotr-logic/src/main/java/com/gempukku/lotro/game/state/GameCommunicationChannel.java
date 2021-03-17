@@ -187,6 +187,12 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
             appendEvent(new GameEvent(DECISION).awaitingDecision(decision).participantId(playerId));
     }
 
+    @Override
+    public void sendWarning(String playerId, String warning) {
+        if (playerId.equals(_self))
+            appendEvent(new GameEvent(SEND_WARNING).message(warning));
+    }
+
     public List<GameEvent> consumeGameEvents() {
         updateLastAccess();
         List<GameEvent> result = _events;

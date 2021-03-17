@@ -489,7 +489,7 @@ public class GameState {
                 listener.cardCreated(card);
         }
 
-        if (_currentPhase != Phase.PUT_RING_BEARER) {
+        if (_currentPhase.isCardsAffectGame()) {
             if (zone.isInPlay())
                 if (card.getBlueprint().getCardType() != CardType.SITE || (getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP && getCurrentSite() == card))
                     startAffecting(game, card);
@@ -1040,5 +1040,10 @@ public class GameState {
     public void sendGameStats(GameStats gameStats) {
         for (GameStateListener listener : getAllGameStateListeners())
             listener.sendGameStats(gameStats);
+    }
+
+    public void sendWarning(String player, String warning) {
+        for (GameStateListener listener : getAllGameStateListeners())
+            listener.sendWarning(player, warning);
     }
 }

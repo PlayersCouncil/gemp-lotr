@@ -301,8 +301,7 @@ public class LotroGameMediator {
     }
 
     public void cancel(Player player) {
-        if (!_cancellable)
-            _userFeedback.sendWarning(player.getName(), "You can't cancel this game");
+        _lotroGame.getGameState().sendWarning(player.getName(), "You can't cancel this game");
 
         String playerId = player.getName();
         _writeLock.lock();
@@ -336,7 +335,7 @@ public class LotroGameMediator {
 
                             } catch (DecisionResultInvalidException decisionResultInvalidException) {
                                 // Participant provided wrong answer - send a warning message, and ask again for the same decision
-                                _userFeedback.sendWarning(playerName, decisionResultInvalidException.getWarningMessage());
+                                _lotroGame.getGameState().sendWarning(playerName, decisionResultInvalidException.getWarningMessage());
                                 _userFeedback.sendAwaitingDecision(playerName, awaitingDecision);
                             } catch (RuntimeException runtimeException) {
                                 LOG.error("Error processing game decision", runtimeException);
@@ -383,10 +382,6 @@ public class LotroGameMediator {
             visitor.visitChannelNumber(channelNumber);
             for (GameEvent gameEvent : communicationChannel.consumeGameEvents())
                 visitor.visitGameEvent(gameEvent);
-
-            String warning = _userFeedback.consumeWarning(playerName);
-            if (warning != null)
-                visitor.visitGameEvent(new GameEvent(GameEvent.Type.SEND_WARNING).message(warning));
 
             Map<String, Integer> secondsLeft = new HashMap<String, Integer>();
             for (Map.Entry<String, Integer> playerClock : _playerClocks.entrySet()) {

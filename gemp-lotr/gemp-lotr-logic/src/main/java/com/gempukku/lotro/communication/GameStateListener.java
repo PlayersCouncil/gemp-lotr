@@ -55,4 +55,6 @@ public interface GameStateListener {
     public void cardActivated(String playerPerforming, PhysicalCard card);
 
     public void decisionRequired(String playerId, AwaitingDecision awaitingDecision);
+
+    public void sendWarning(String playerId, String warning);
 }

@@ -1410,4 +1410,59 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         System.out.println();
     }
+
+    @Test
+    public void FarinStrengthBoostWhileSkirmishingOrc() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        initializeSimplestGame();
+
+        // Farin, Dwarven Emissary; 5 strength, "while skirmishing an Orc, Farin is strength +2"
+        final PhysicalCardImpl farin = createCard(P1, "1_11");
+        _game.getGameState().addCardToZone(_game, farin, Zone.FREE_CHARACTERS);
+
+        //Orc Scouting Band, 8 strength
+        final PhysicalCardImpl orc = createCard(P2, "1_270");
+        _game.getGameState().addCardToZone(_game, orc, Zone.SHADOW_CHARACTERS);
+
+        skipMulligans();
+
+        _game.getGameState().setTwilight(10);
+
+        playerDecided(P1, "");
+
+        // Pass in shadow
+        playerDecided(P2, "");
+
+        //Pass in maneuver
+        playerDecided(P1, "");
+        playerDecided(P2, "");
+
+        //Pass in archery
+        playerDecided(P1, "");
+        playerDecided(P2, "");
+
+        //Pass in assignment
+        playerDecided(P1, "");
+        playerDecided(P2, "");
+
+        // assign Farin to an Orc
+        playerDecided(P1, farin.getCardId() + " " + orc.getCardId());
+
+        //Farin's strength is still the base of 5
+        assertEquals(5, _game.getModifiersQuerying().getStrength(_game, farin));
+
+        //Choose to resolve Farin's skirmish
+        playerDecided(P1, "" + farin.getCardId());
+
+        //This test fails.  Farin has two instances of the ModifyStrength modifier applied for some reason,
+        // which puts him at 9 strength instead of the expected 7.
+        assertEquals(5 + 2, _game.getModifiersQuerying().getStrength(_game, farin));
+
+        playerDecided(P1, "");
+        playerDecided(P2, "");
+
+        // If the above test is commented out, then Farin wins the skirmish and applies skirmish wounds to the Orc
+        assertEquals(1, _game.getGameState().getWounds(farin));
+        assertEquals(0, _game.getGameState().getWounds(orc));
+    }
 }
