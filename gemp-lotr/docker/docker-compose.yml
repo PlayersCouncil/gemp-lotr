@@ -19,6 +19,9 @@ services:
       - target: 80
         # published is what's on the host machine
         published: "${APP_PORT}"
+        #These are the ports used for remote debugging the JRE
+      - target: 8000
+        published: 8052
     volumes:
        - type: bind
          source: ../gemp-lotr-async/src/main/web
