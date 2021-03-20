@@ -50,7 +50,7 @@ public class EventSerializer {
         return eventElem;
     }
 
-    private String arrayToCommaSeparated(int[] integers) {
+    private static String arrayToCommaSeparated(int[] integers) {
         int iMax = integers.length - 1;
         if (iMax == -1)
             return "";
@@ -60,10 +60,11 @@ public class EventSerializer {
             b.append(integers[i]);
             if (i == iMax)
                 return b.toString();
+            b.append(",");
         }
     }
 
-    private String listToCommaSeparated(List<String> strings) {
+    private static String listToCommaSeparated(List<String> strings) {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (String participantId : strings) {
@@ -142,5 +143,18 @@ public class EventSerializer {
 
         if (charStr.length() > 0)
             eventElem.setAttribute("charStats", charStr.toString());
+    }
+
+    public static void main(String[] args) {
+        int[] array = new int[] {0, 1};
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (int cardId : array) {
+            if (!first) sb.append(",");
+            sb.append(cardId);
+            first = false;
+        }
+        System.out.println(sb.toString());
+        System.out.println(arrayToCommaSeparated(array));
     }
 }
