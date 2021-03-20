@@ -84,7 +84,7 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
             uri = uri.substring(0, uri.indexOf("?"));
 
         final RequestInformation requestInformation = new RequestInformation(httpRequest.getUri(),
-                ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress(),
+                httpRequest.headers().get("[X-Forwarded-For]"),
                 System.currentTimeMillis());
 
         ResponseSender responseSender = new ResponseSender(ctx, httpRequest);
