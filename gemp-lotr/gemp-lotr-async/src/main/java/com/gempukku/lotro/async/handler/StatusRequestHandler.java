@@ -34,7 +34,7 @@ public class StatusRequestHandler extends LotroServerRequestHandler implements U
             int week = 1000 * 60 * 60 * 24 * 7;
             sb.append("Tables count: ").append(_hallServer.getTablesCount()).append(", players in hall: ").append(_chatServer.getChatRoom("Game Hall").getUsersInRoom(false).size())
                     .append(", games played in last 24 hours: ").append(_gameHistoryService.getGamesPlayedCount(System.currentTimeMillis() - day, day))
-                    .append(",<br/> active players in last week: ").append(_gameHistoryService.getActivePlayersCount(System.currentTimeMillis() - week, week));
+                    .append(", active players in last week: ").append(_gameHistoryService.getActivePlayersCount(System.currentTimeMillis() - week, week));
 
             responseWriter.writeHtmlResponse(sb.toString());
         } else {
