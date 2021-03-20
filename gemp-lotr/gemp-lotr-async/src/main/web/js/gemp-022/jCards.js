@@ -2,11 +2,11 @@ var cardCache = {};
 var cardScale = 357 / 497;
 var fixedImages = {
     // "Forth the Three Hunters!" cards, separate special images
-    "15_204": "http://lotrtcgwiki.com/images/LOTR15060D.jpg",
-    "15_205": "http://lotrtcgwiki.com/images/LOTR15060E.jpg",
-    "15_206": "http://lotrtcgwiki.com/images/LOTR15060G.jpg",
+    "15_204": "https://lotrtcgwiki.com/images/LOTR15060D.jpg",
+    "15_205": "https://lotrtcgwiki.com/images/LOTR15060E.jpg",
+    "15_206": "https://lotrtcgwiki.com/images/LOTR15060G.jpg",
     // Holidays Gandalf
-    "15_207": "http://lotrtcgwiki.com/images/LOTR15029H.jpg",
+    "15_207": "https://lotrtcgwiki.com/images/LOTR15029H.jpg",
     // Gemp-LotR promos
     "gl_theOneRing": "/gemp-lotr/images/cards/gl_theOneRing.png"
 };
@@ -359,7 +359,7 @@ var Card = Class.extend({
     },
 
     getMainLocation: function (setNo, cardNo) {
-        return "http://lotrtcgwiki.com/images/";
+        return "https://lotrtcgwiki.com/images/";
     },
 
     getMasterworksOffset: function (setNo) {
