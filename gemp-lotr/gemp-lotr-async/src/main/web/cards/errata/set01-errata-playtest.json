@@ -137,16 +137,21 @@
   "71_139": {
     "title": "Savagery To Match Their Numbers",
     "culture": "isengard",
-    "cost": 1,
+    "cost": 0,
     "type": "event",
     "keyword": "skirmish",
     "effects": {
       "type": "event",
-      "effect": [
+      "effect": {
+        "type": "choice",
+        "texts": [
+          "Make an Uruk-hai strength +2",
+          "Make an Uruk-hai strength +2 (and fierce until the regroup phase)"
+        ],
+        "effects": [
           {
             "type": "modifyStrength",
             "filter": "choose(uruk-hai)",
-            "memorize": "chosenUrukHai",
             "amount": 2
           },
           {
@@ -158,6 +163,12 @@
             },
             "effect": [
               {
+                "type": "modifyStrength",
+                "filter": "choose(uruk-hai)",
+                "amount": 2,
+                "memorize": "chosenUrukHai"
+              },
+              {
                 "type": "addKeyword",
                 "filter": "memory(chosenUrukHai)",
                 "keyword": "fierce",
@@ -166,7 +177,7 @@
             ]
           }
         ]
-
+      }
     }
   },
   "71_195": {
