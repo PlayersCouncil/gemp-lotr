@@ -152,7 +152,7 @@
   {
     "setId": "50",
     "setName": "PC Promo Errata",
-    "rarityFile": "/errata/set51-rarity.txt",
+    "rarityFile": "/errata/set50-rarity.txt",
     "originalSet": false,
     "merchantable": false,
     "needsLoading": false,
@@ -334,7 +334,7 @@
   {
     "setId": "70",
     "setName": "TEST-PC Promo Errata",
-    "rarityFile": "/errata/set71-rarity.txt",
+    "rarityFile": "/errata/set70-rarity.txt",
     "originalSet": false,
     "merchantable": false,
     "needsLoading": false,
