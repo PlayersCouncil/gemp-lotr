@@ -147,10 +147,21 @@
     "needsLoading": false,
     "playable": false
   },
+  
+  
+  {
+    "setId": "50",
+    "setName": "PC Promo Errata",
+    "rarityFile": "/errata/set51-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
   {
     "setId": "51",
     "setName": "PC FotR Errata",
-    "rarityFile": "/set51-rarity.txt",
+    "rarityFile": "/errata/set51-rarity.txt",
     "originalSet": false,
     "merchantable": false,
     "needsLoading": false,
@@ -159,7 +170,7 @@
   {
     "setId": "52",
     "setName": "PC MoM Errata",
-    "rarityFile": "/set52-rarity.txt",
+    "rarityFile": "/errata/set52-rarity.txt",
     "originalSet": false,
     "merchantable": false,
     "needsLoading": false,
@@ -168,10 +179,358 @@
   {
     "setId": "53",
     "setName": "PC RotEL Errata",
-    "rarityFile": "/set53-rarity.txt",
+    "rarityFile": "/errata/set53-rarity.txt",
     "originalSet": false,
     "merchantable": false,
     "needsLoading": false,
     "playable": true
-  }
+  },
+  {
+    "setId": "54",
+    "setName": "PC TTT Errata",
+    "rarityFile": "/errata/set54-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "55",
+    "setName": "PC BoHD Errata",
+    "rarityFile": "/errata/set55-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "56",
+    "setName": "PC EoF Errata",
+    "rarityFile": "/errata/set56-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "57",
+    "setName": "PC RotK Errata",
+    "rarityFile": "/errata/set57-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "58",
+    "setName": "PC SoG Errata",
+    "rarityFile": "/errata/set58-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "59",
+    "setName": "PC Reflections Errata",
+    "rarityFile": "/errata/set59-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  
+  
+  {
+    "setId": "80",
+    "setName": "PC MD Errata",
+    "rarityFile": "/errata/set80-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "81",
+    "setName": "PC Shadows Errata",
+    "rarityFile": "/errata/set81-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "82",
+    "setName": "PC BR Errata",
+    "rarityFile": "/errata/set82-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "83",
+    "setName": "PC Bloodlines Errata",
+    "rarityFile": "/errata/set83-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "84",
+    "setName": "PC EMM Errata",
+    "rarityFile": "/errata/set84-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "85",
+    "setName": "PC Hunters Errata",
+    "rarityFile": "/errata/set85-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "86",
+    "setName": "PC TWC Errata",
+    "rarityFile": "/errata/set86-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "87",
+    "setName": "PC RoS Errata",
+    "rarityFile": "/errata/set87-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "88",
+    "setName": "PC T&D Errata",
+    "rarityFile": "/errata/set88-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "89",
+    "setName": "PC AE Errata",
+    "rarityFile": "/errata/set89-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "70",
+    "setName": "TEST-PC Promo Errata",
+    "rarityFile": "/errata/set71-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "71",
+    "setName": "TEST-PC FotR Errata",
+    "rarityFile": "/errata/set71-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "72",
+    "setName": "TEST-PC MoM Errata",
+    "rarityFile": "/errata/set72-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "73",
+    "setName": "TEST-PC RotEL Errata",
+    "rarityFile": "/errata/set73-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "74",
+    "setName": "TEST-PC TTT Errata",
+    "rarityFile": "/errata/set74-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "75",
+    "setName": "TEST-PC BoHD Errata",
+    "rarityFile": "/errata/set75-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "76",
+    "setName": "TEST-PC EoF Errata",
+    "rarityFile": "/errata/set76-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "77",
+    "setName": "TEST-PC RotK Errata",
+    "rarityFile": "/errata/set77-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "78",
+    "setName": "TEST-PC SoG Errata",
+    "rarityFile": "/errata/set78-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "79",
+    "setName": "TEST-PC Reflections Errata",
+    "rarityFile": "/errata/set79-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "80",
+    "setName": "TEST-PC MD Errata",
+    "rarityFile": "/errata/set80-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "81",
+    "setName": "TEST-PC Shadows Errata",
+    "rarityFile": "/errata/set81-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "82",
+    "setName": "TEST-PC BR Errata",
+    "rarityFile": "/errata/set82-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "83",
+    "setName": "TEST-PC Bloodlines Errata",
+    "rarityFile": "/errata/set83-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "84",
+    "setName": "TEST-PC EMM Errata",
+    "rarityFile": "/errata/set84-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "85",
+    "setName": "TEST-PC Hunters Errata",
+    "rarityFile": "/errata/set85-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "86",
+    "setName": "TEST-PC TWC Errata",
+    "rarityFile": "/errata/set86-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "87",
+    "setName": "TEST-PC RoS Errata",
+    "rarityFile": "/errata/set87-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "88",
+    "setName": "TEST-PC T&D Errata",
+    "rarityFile": "/errata/set88-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  {
+    "setId": "89",
+    "setName": "TEST-PC AE Errata",
+    "rarityFile": "/errata/set89-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  
+  
+  {
+    "setId": "101",
+    "setName": "PC VSet1 - FOTR+",
+    "rarityFile": "/set101-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+  
+  {
+    "setId": "151",
+    "setName": "TEST-PC VSet1 - FOTR+",
+    "rarityFile": "/set151-rarity.txt",
+    "originalSet": false,
+    "merchantable": false,
+    "needsLoading": false,
+    "playable": true
+  },
+
 ]
