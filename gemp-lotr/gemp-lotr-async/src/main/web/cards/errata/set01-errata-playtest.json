@@ -1,0 +1,309 @@
+{
+    "71_45": {
+    "title": "*Galadriel",
+    "subtitle": "Lady of Light",
+    "culture": "elven",
+    "cost": 3,
+    "type": "ally",
+    "allyHome": "fellowship,6",
+    "race": "elf",
+    "strength": 3,
+    "vitality": 3,
+    "effects": [
+      {
+        "type": "trigger",
+        "trigger": {
+          "type": "startOfTurn"
+        },
+        "effect": {
+          "type": "heal",
+          "filter": "choose(ally,allyHome(fellowship,6))",
+          "count": "0-3"
+        }
+      },
+      {
+        "type": "activated",
+        "phase": "fellowship",
+        "cost": {
+          "type": "exert",
+          "filter": "self",
+          "times": 1
+        },
+        "effect": {
+          "type": "play",
+          "filter": "choose(elf)",
+          "cost": -1
+        }
+      }
+    ]
+  },
+  "71_80": {
+    "title": "*Ottar",
+    "subtitle": "Man of Laketown",
+    "culture": "gandalf",
+    "cost": 1,
+    "type": "ally",
+    "allyHome": "fellowship,3",
+    "race": "man",
+    "strength": 2,
+    "vitality": 2,
+    "condition": {
+      "type": "canSpot",
+      "filter": "name(Gandalf)"
+    },
+    "effects": {
+      "type": "activated",
+      "phase": "fellowship",
+      "cost": [
+        {
+          "type": "exert",
+          "filter": "self"
+        },
+        {
+          "type": "discardFromHand",
+          "forced": false
+        }
+      ],
+      "effect": {
+        "type": "drawCards"
+      }
+    }
+  },
+  "71_108": {
+    "title": "*No Stranger to the Shadows",
+    "culture": "gondor",
+    "cost": 0,
+    "type": "condition",
+    "keyword": [
+      "stealth"
+    ],
+    "target": "ranger",
+    "effects": {
+      "type": "modifier",
+      "modifier": {
+        "type": "modifyCost",
+        "filter": "site",
+        "amount": -1
+      }
+    }
+  },
+  "71_138": {
+    "title": "Saruman's Snows",
+    "culture": "isengard",
+    "cost": 2,
+    "type": "condition",
+    "keyword": [
+      "spell",
+      "weather"
+    ],
+    "target": "site",
+    "effects": [
+      {
+        "type": "extraCost",
+        "cost": {
+          "type": "exert",
+          "filter": "choose(culture(isengard),minion)"
+        }
+      },
+      {
+        "type": "modifier",
+        "modifier": {
+          "type": "cantPlayPhaseEventsOrPhaseSpecialAbilities",
+          "condition": [
+            {
+              "type": "location",
+              "filter": "hasAttached(self)"
+            },
+            {
+              "type": "canSpot",
+              "filter": "culture(isengard),minion,inSkirmish"
+            }
+          ],
+          "phase": "skirmish"
+        }
+      },
+      {
+        "type": "trigger",
+        "trigger": {
+          "type": "endOfTurn"
+        },
+        "effect": {
+          "type": "discard",
+          "filter": "self"
+        }
+      }
+    ]
+  },
+  "71_139": {
+    "title": "Savagery To Match Their Numbers",
+    "culture": "isengard",
+    "cost": 1,
+    "type": "event",
+    "keyword": "skirmish",
+    "effects": {
+      "type": "event",
+      "effect": [
+          {
+            "type": "modifyStrength",
+            "filter": "choose(uruk-hai)",
+            "memorize": "chosenUrukHai",
+            "amount": 2
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "canSpot",
+              "count": 5,
+              "filter": "companion"
+            },
+            "effect": [
+              {
+                "type": "addKeyword",
+                "filter": "memory(chosenUrukHai)",
+                "keyword": "fierce",
+                "until": "start(regroup)"
+              }
+            ]
+          }
+        ]
+
+    }
+  },
+  "71_195": {
+    "title": "*Relics of Moria",
+    "culture": "moria",
+    "cost": 1,
+    "type": "condition",
+    "keyword": "support area",
+    "effects": {
+      "type": "activated",
+      "phase": "shadow",
+      "cost": {
+        "type": "removeTwilight",
+        "amount": 2
+      },
+      "effect": {
+        "type": "playCardFromDiscard",
+        "removedTwilight": 2,
+        "filter": "choose(culture(moria),possession)"
+      }
+    }
+  },
+  "71_234": {
+    "title": "*Úlairë Nertëa",
+    "subtitle": "Messenger of Dol Guldur",
+    "culture": "wraith",
+    "cost": 4,
+    "type": "minion",
+    "race": "nazgul",
+    "strength": 9,
+    "vitality": 2,
+    "site": 3,
+    "effects": {
+      "type": "trigger",
+      "trigger": {
+        "type": "played",
+        "filter": "self"
+      },
+      "effect": {
+        "type": "duplicate",
+        "amount": {
+          "type": "forEachYouCanSpot",
+          "filter": "companion",
+          "over": 4
+        },
+        "effect": {
+          "type": "optional",
+          "text": "Would you like to play a wraith minion from your discard?",
+          "effect": {
+            "type": "playCardFromDiscard",
+            "filter": "choose(culture(wraith),minion)"
+          }
+        }
+      }
+    }
+  },
+  "71_248": {
+    "title": "Forces of Mordor",
+    "culture": "sauron",
+    "cost": 0,
+    "type": "event",
+    "keyword": "shadow",
+    "effects": {
+      "type": "event",
+      "cost": {
+        "type": "exert",
+        "filter": "choose(culture(sauron),minion)"
+      },
+      "effect": {
+        "type": "addTwilight",
+        "amount": {
+          "type": "forEachYouCanSpot",
+          "filter": "culture(sauron),orc",
+          "limit": 3
+        }
+      }
+    }
+  },
+  
+  "71_313": {
+    "title": "*Sting",
+    "culture": "shire",
+    "cost": 1,
+    "type": "possession",
+    "possession": "hand weapon",
+    "strength": 2,
+    "target": "name(Frodo)",
+    "effects": {
+      "type": "activated",
+      "phase": [
+        "fellowship",
+        "regroup"
+      ],
+      "cost": {
+        "type": "exert",
+        "filter": "bearer"
+      },
+      "effect": [
+        {
+          "type": "revealrandomcardsfromhand",
+          "hand": "shadowPlayer",
+          "forced": true,
+          "memorize": "revealedCards",
+          "count": 4
+        },
+        {
+          "type": "removeTwilight",
+          "amount": {
+            "type": "cardPhaseLimit",
+            "limit": 2,
+            "amount": {
+              "type": "forEachMatchingInMemory",
+              "memory": "revealedCards",
+              "filter": "orc",
+              "limit": 2
+            }
+          }
+        }
+      ]
+    }
+  },
+  "71_316": {
+    "title": "A Talent for Not Being Seen",
+    "culture": "shire",
+    "cost": 0,
+    "type": "condition",
+    "target": "or(name(Merry),name(Pippin)),not(hasAttached(name(A Talent for Not Being Seen)))",
+    "keyword": [
+      "stealth"
+    ],
+    "effects": {
+      "type": "modifier",
+      "modifier": {
+        "type": "modifyCost",
+        "filter": "site",
+        "amount": -1
+      }
+    }
+  }
+}

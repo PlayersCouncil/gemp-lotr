@@ -1,0 +1,201 @@
+{
+  "73_17": {
+    "title": "*Galadriel",
+    "subtitle": "Lady of the Golden Wood",
+    "culture": "elven",
+    "cost": 3,
+    "type": "ally",
+    "allyHome": "fellowship,6",
+    "race": "elf",
+    "strength": 3,
+    "vitality": 3,
+    "effects": [
+      {
+        "type": "trigger",
+        "optional": true,
+        "trigger": {
+          "type": "startOfTurn"
+        },
+        "effect": {
+          "type": "heal",
+          "filter": "choose(another,elf)"
+        }
+      },
+      {
+        "type": "activated",
+        "phase": "fellowship",
+        "cost": {
+          "type": "exert",
+          "filter": "self",
+          "times": 2
+        },
+        "effect": {
+          "type": "playNextSite",
+          "filter": "forest"
+        }
+      }
+    ]
+  },
+  "73_38": {
+    "title": "*Aragorn",
+    "subtitle": "Heir to the White City",
+    "culture": "Gondor",
+    "type": "companion",
+    "race": "Man",
+    "cost": 4,
+    "strength": 8,
+    "vitality": 4,
+    "resistance": 6,
+    "signet": "frodo",
+    "keyword": [
+      "Ranger"
+    ],
+    "effects": {
+      "type": "trigger",
+      "trigger": {
+        "type": "moves"
+      },
+      "condition": {
+        "type": "phase",
+        "phase": "fellowship"
+      },
+      "effect": {
+        "type": "removeTwilight",
+        "amount": 1
+      }
+    }
+  },
+  
+  "73_67": {
+    "title": "*The Palantir of Orthanc",
+    "culture": "isengard",
+    "cost": 0,
+    "type": "artifact",
+    "possession": "palantir",
+    "keyword": "support area",
+    "condition": {
+      "type": "canSpot",
+      "filter": "culture(isengard),minion"
+    },
+    "effects": {
+      "type": "activated",
+      "phase": "shadow",
+      "cost": [
+        {
+          "type": "removeTwilight",
+          "amount": 2
+        }
+      ],
+      "condition": {
+          "type": "canSpot",
+          "filter": "culture(isengard),minion",
+          "count": 2,
+        },
+      "effect": [
+        {
+          "type": "revealRandomCardsFromHand",
+          "forced": true,
+          "hand": "fp",
+          "count": 1,
+          "memorize": "revealedCard"
+        },
+        {
+          "type": "putCardsFromHandOnTopOfDeck",
+          "filter": "choose(memory(revealedCard))"
+        }
+      ]
+    }
+  },
+  
+  "73_106": {
+    "title": "*Bill the Pony",
+    "culture": "Shire",
+    "side": "free_people",
+    "cost": 0,
+    "type": "possession",
+    "keyword": [
+      "stealth"
+    ],
+    "target": "name(Sam)",
+    "effects": [
+      {
+        "type": "modifier",
+        "modifier": {
+          "type": "modifyCost",
+          "filter": "site",
+          "amount": -1
+        }
+      },
+      {
+        "type": "trigger",
+        "trigger": {
+          "type": "condition",
+          "condition": {
+            "type": "location",
+            "filter": "underground"
+          }
+        },
+        "effect": {
+          "type": "discard",
+          "filter": "self"
+        }
+      }
+    ]
+  },
+  "73_108": {
+    "title": "Frying Pan",
+    "culture": "Shire",
+    "cost": 1,
+    "type": "possession",
+    "possession": "hand weapon",
+    "strength": 1,
+    "target": "hobbit",
+    "effects": {
+      "type": "activated",
+      "phase": "skirmish",
+      "cost": {
+        "type": "exert",
+        "filter": "bearer"
+      },
+      "effect": {
+        "type": "wound",
+        "filter": "choose(orc,inSkirmishAgainst(bearer))"
+      }
+    }
+  },
+  "73_113": {
+    "title": "*The Shire Countryside",
+    "culture": "shire",
+    "cost": 1,
+    "type": "condition",
+    "keyword": "support area",
+    "condition": {
+      "type": "canSpot",
+      "count": 2,
+      "filter": "culture(shire),companion"
+    },
+    "effects": {
+      "type": "trigger",
+      "optional": true,
+      "trigger": {
+        "type": "removesBurden",
+        "filter": "not(hobbit)"
+      },
+      "condition": {
+        "type": "perPhaseLimit",
+        "limit": 1
+      },
+      "effect": [
+        {
+          "type": "incrementPerPhaseLimit",
+          "limit": 1
+        },
+        {
+          "type": "heal",
+          "count": "0-2",
+          "filter": "choose(companion)"
+        }
+      ]
+    }
+  }
+}
