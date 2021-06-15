@@ -47,38 +47,5 @@
         ]
       }
     ]
-  },
-  "79_14": {
-    "title": "*Galadriel",
-    "subtitle": "Bearer of Wisdom",
-    "culture": "elven",
-    "cost": 3,
-    "type": "companion",
-    "race": "elf",
-    "strength": 3,
-    "vitality": 3,
-    "resistance": 3,
-    "keyword": "can start with ring",
-    "effects": [
-      {
-        "type": "modifier",
-        "modifier": {
-          "type": "modifyResistance",
-          "filter": "self,hasAttached(or(artifact,name(The One Ring)))",
-          "amount": {
-            "type": "forEachYouCanSpot",
-            "filter": "culture(elven),companion"
-          }
-        }
-      },
-      {
-        "type": "modifier",
-        "modifier": {
-          "type": "cantBear",
-          "filter": "self",
-          "cardFilter": "ranged weapon"
-        }
-      }
-    ]
   }
 }
