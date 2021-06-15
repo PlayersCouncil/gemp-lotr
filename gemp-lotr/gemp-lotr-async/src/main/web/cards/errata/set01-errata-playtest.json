@@ -143,7 +143,6 @@
       },
       {
         "type": "trigger",
-        "optional": true,
         "trigger": {
           "type": "usesspecialability",
           "filter": "side(free people)"
