@@ -20,7 +20,7 @@ import com.gempukku.lotro.logic.cardtype.AbstractMinion;
  */
 public class Card6_003 extends AbstractMinion {
     public Card6_003() {
-        super(5, 11, 2, 3, Race.MAN, Culture.DUNLAND, "Dunlending Footman");
+        super(5, 11, 2, 3, Race.MAN, Culture.DUNLAND, "Dunlending Footmen");
     }
 
     @Override
