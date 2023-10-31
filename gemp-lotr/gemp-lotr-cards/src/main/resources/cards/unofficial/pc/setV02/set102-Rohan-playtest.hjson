@@ -1,0 +1,637 @@
+{
+
+	102_43: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_43.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_43
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2R43
+			rarity: R
+			setNum: "V2"
+			cardNum: 43
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Theoden
+		subtitle: Last of his House
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		#keyword: damage+1
+		strength: 6
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Valiant.<br>Theoden is strength +1 for each valiant companion assigned to a skirmish.
+		lore: "His beard was laid like snow upon his knees; but his eyes still burned with a bright light, glinting as he gazed..."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_44: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_44.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_44
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2R44
+			rarity: R
+			setNum: "V2"
+			cardNum: 44
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Erkenbrand
+		subtitle: Kinsman of the House of Eorl
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 5
+		type: Companion
+		race: Man
+		#keyword: damage+1
+		strength: 7
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play Erkenbrand, remove up to 3 non-unique [rohan] companions in the dead pile from the game. <br>Each exhausted companion gains <b>valiant</b>.
+		lore: "'He was a mighty man. In him lived again the valour of Helm the Hammerhand.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_45: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_45.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_45
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2R45
+			rarity: R
+			setNum: "V2"
+			cardNum: 45
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Royal Attendant
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Ally
+		allyHome: fellowship,3T
+		race: Man
+		#keyword: damage+1
+		strength: 3
+		vitality: 3
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot Theoden (or 3 [rohan] Men).<br>Skirmish: If a Hobbit companion is skirmishing, add this ally's strength to that Hobbit and make that Hobbit gain <b>valiant</b> until the regroup phase (limit once per phase). At the end of that skirmish, wound this ally.
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_46: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_46.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_46
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U46
+			rarity: U
+			setNum: "V2"
+			cardNum: 46
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Now for Ruin
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time a minion is killed, spot 2 valiant companions to add a [rohan] token here.<br>Each time there are 3 [rohan] tokens here, remove all tokens here to play a [rohan] condition or event from your discard pile. The Shadow player may then play a minion from their discard pile. 
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_47: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_47.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_47
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U47
+			rarity: U
+			setNum: "V2"
+			cardNum: 47
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Now for Wrath
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time a [rohan] item or [rohan] ally is discarded or killed, add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove a [rohan] token here and exert a valiant companion to wound that minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_48: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_48.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_48
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U48
+			rarity: U
+			setNum: "V2"
+			cardNum: 48
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: And the Red Dawn
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Maneuver: Spot 3 valiant companions to discard your hand. For every Shadow card discarded, exert a minion. For every Free Peoples card discarded, heal a valiant or [rohan] companion. You may not make any more Maneuver actions.
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_49: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_49.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_49
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2R49
+			rarity: R
+			setNum: "V2"
+			cardNum: 49
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Guthwine
+		subtitle: Eomer's Blade
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		strength: 2
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] companion.<br>If bearer is Eomer, he is damage +1.<br>If bearer is Eomer, each time he wins a skirmish, you may reinforce a [rohan] token.
+		lore: "The swords flashed from the sheath as one."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_50: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_50.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_50
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U50
+			rarity: U
+			setNum: "V2"
+			cardNum: 50
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Let This Be the Hour
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		keyword: Assignment
+		/*requires: [
+			
+		]
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert a valiant companion to make that companion defender +1. That companion is strength +1 for each minion skirmishing them until the regroup phase.
+		lore: "At his right hand was Aragorn, Elendil's heir, behind him rode the lords of the House of Eorl the Young."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_51: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_51.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_51
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2C51
+			rarity: C
+			setNum: "V2"
+			cardNum: 51
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: To the King
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Event
+		keyword: Skirmish
+		/*requires: [
+			
+		]
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot a valiant companion to have that companion replace a minion assigned to skirmish an unbound companion (and make them damage +1 if that unbound companion is Theoden). 
+		lore: "'Helm for Théoden King!'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_52: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_52.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_52
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2C52
+			rarity: C
+			setNum: "V2"
+			cardNum: 52
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Do Not Trust to Hope
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		strength: 2
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] companion.<br> Bearer is <b>valiant</b>.<br>At the start of the regroup phase, wound bearer or discard this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_53: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_53.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_53
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U53
+			rarity: U
+			setNum: "V2"
+			cardNum: 53
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: An End Worthy of Remembrance
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: [
+			
+		]
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Remove 2 tokens from X [rohan] conditions to make 3 valiant companions strength +X until the regroup phase.
+		lore: "Captains and champions fell or fled before them. Neither orc nor man withstood them."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+}

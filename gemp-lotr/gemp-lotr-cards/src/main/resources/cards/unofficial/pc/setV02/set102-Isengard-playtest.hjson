@@ -1,0 +1,1033 @@
+{
+
+	102_20: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_20.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_20
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2R20
+			rarity: R
+			setNum: "V2"
+			cardNum: 20
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Isengard Foreman
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Orc
+		#keyword: damage+1
+		strength: 7
+		vitality: 3
+		site: 4
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion you may play an [isengard] orc from your discard pile, it is strength +1 until the regroup phase.<br>Regroup: Discard this minion to add two threats.
+		lore: "'He has taken up with foul folk, with the Orcs.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_21: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_21.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_21
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U21
+			rarity: U
+			setNum: "V2"
+			cardNum: 21
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Machinery of War
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this condition, spot an [isengard] Orc or a Wizard to add 2 [isengard] tokens here.<br>Each time an [isengard] Orc is defeated in a skirmish, you may discard this condition (or remove an [isengard] token here) to cancel a skirmish assignment involving another <br>[isengard] Orc.
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_22: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_22.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_22
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U22
+			rarity: U
+			setNum: "V2"
+			cardNum: 22
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Fires of Industry
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this condition, spot 2 [Isengard] Orcs or a Wizard to add 2 [isengard] tokens here.<br>At the start of the regroup phase, you may discard this condition (or remove an [isengard] token here), to heal an [Isengard] Orc.
+		lore: "'For bole and bough are burning now, the furnace roars...'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_23: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_23.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_23
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2C23
+			rarity: C
+			setNum: "V2"
+			cardNum: 23
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Isengard Grunt
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Orc
+		#keyword: damage+1
+		strength: 5
+		vitality: 3
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Skirmish: Exert this minion to prevent an [isengard] Orc from being overwhelmed unless its strength is tripled.
+		lore: "...Saruman was mustering a great force on his own account, in rivalry of Sauron and not in his service yet."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_24: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_24.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_24
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2R24
+			rarity: R
+			setNum: "V2"
+			cardNum: 24
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Wolf Pit
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this possession, you may stack two [isengard] mounts here from your draw deck or discard pile.<br>Shadow: Exert an [Isengard] minion to play an [Isengard] mount stacked here as if from hand. 
+		lore: "Horsemen were galloping on the grass of Rohan; wolves poured from Isengard."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_25: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_25.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_25
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U25
+			rarity: U
+			setNum: "V2"
+			cardNum: 25
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Strength of the Pack
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Mounted [Isengard] Orcs are strength +1.<br>While you can spot 2 mounted [isengard] Orcs, your [isengard] mounts are twilight cost -1. 
+		lore: "At a gap in the circle a great dark wolf-shape could be seen halted, gazing at them. A shuddering howl broke from him, as if he were a captain summoning his pack to the assault."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_26: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_26.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_26
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2C26
+			rarity: C
+			setNum: "V2"
+			cardNum: 26
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Hound of Isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		strength: 1
+		vitality: 1
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Warg-rider.<br>Shadow: Play this possession from hand on an [isengard] Orc to take an [isengard] skirmish event into hand from your discard pile.
+		lore: "'He has taken Orcs into his service, and Wolf-riders, and evil Men...'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_27: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_27.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_27
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U27
+			rarity: U
+			setNum: "V2"
+			cardNum: 27
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Uruk Shield Wall
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Machine.<br>While you can spot X [isengard] tokens here, each time an [isengard] Uruk-hai costing X is about to take a wound, exert it instead.<br>Maneuver: Exert an Uruk-hai to add an [isengard] token here.  
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_28: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_28.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_28
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2R28
+			rarity: R
+			setNum: "V2"
+			cardNum: 28
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Berserk Deathseeker
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		#keyword: damage+1
+		strength: 10
+		vitality: 3
+		site: 5
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Damage +1.<br>This minion is strength +1 for each wound on each character in its skirmish.<br>When this minion is killed, add up to 3 [isengard] tokens to an [isengard] machine.
+		lore: "The foremost fell with Legolas' last arrow in his throat. but the rest sprang over him."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_29: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_29.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_29
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2C29
+			rarity: C
+			setNum: "V2"
+			cardNum: 29
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Berserk Fanatic
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		#keyword: damage+1
+		strength: 8
+		vitality: 3
+		site: 5
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Damage +1. <br>The minion is strength+1 for each wound on each character in its skirmish.<br>When this minion dies in a skirmish, you may remove 2 [isengard] tokens from a machine to wound a character it was skirmishing. 
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_30: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_30.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_30
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U30
+			rarity: U
+			setNum: "V2"
+			cardNum: 30
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Breaching Shot
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		keyword: Assignment
+		/*requires: [
+			
+		]
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Remove X tokens from a machine to assign an Uruk-hai costing X or less to an ally or unbound companion. 
+		lore: "'They have crept in the culvert again, while we talked, and they have lit the fire of Orthanc beneath our feet.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_31: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_31.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_31
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U31
+			rarity: U
+			setNum: "V2"
+			cardNum: 31
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Uruk Occupier
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		#keyword: damage+1
+		strength: 8
+		vitality: 3
+		site: 5
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Damage +1.<br>This minion is strength +1 for each battleground you control.<br>Shadow: If you control 3 battlegrounds, you may discard a card from hand to play this minion from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_32: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_32.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_32
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2C32
+			rarity: C
+			setNum: "V2"
+			cardNum: 32
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Trail of Savagery
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each site you control gains <b>battleground</b>.<br>Skirmish: Remove 2 [isengard] tokens from a machine to cancel a skirmish involving an Uruk-hai.
+		lore: "'They are burning or despoiling all that is left in the vale.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_33: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_33.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_33
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2R33
+			rarity: R
+			setNum: "V2"
+			cardNum: 33
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Legion of Isengard
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 8
+		type: Minion
+		race: Uruk-hai
+		#keyword: damage+1
+		strength: 15
+		vitality: 4
+		site: 5
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Damage +1.<br>While you control a battleground, this minion is damage +1.<br>While at a battleground, skirmish special abilities cannot be used during skirmishes involving this minion.
+		lore: "...blazoned upon every helm and shield the ghastly hand of Isengard was seen..."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_34: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_34.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_34
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U34
+			rarity: U
+			setNum: "V2"
+			cardNum: 34
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Mind of Metal and Wheels
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Wizard
+		#keyword: damage+1
+		strength: 8
+		vitality: 4
+		site: 4
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.<br>Regroup: Exert Saruman and discard an [Isengard] Uruk-hai to take control of a site. The Free Peoples player may reinforce 2 [Isengard] tokens to prevent this.
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_35: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_35.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_35
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U35
+			rarity: U
+			setNum: "V2"
+			cardNum: 35
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Back on the Menu
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Skirmish: Discard a [Sauron] tracker to make an [Isengard] tracker strength +2.<br>Skirmish: Exert an [isengard] tracker to make a [sauron] tracker fierce. 
+		lore: "Five dead Orcs lay there. They had been hewn with many cruel strokes, and two had been beheaded."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_36: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_36.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_36
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2C36
+			rarity: C
+			setNum: "V2"
+			cardNum: 36
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Uruk Prowler
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		#keyword: damage+1
+		strength: 7
+		vitality: 1
+		site: 5
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Tracker. Fierce.<br>Each time this minion is assigned to a skirmish, you may spot a [sauron] tracker and discard this minion to wound that companion. 
+		lore: "'We came out of Isengard, and led you here, and we shall lead you back by the way we choose.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_37: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_37.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_37
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2C37
+			rarity: C
+			setNum: "V2"
+			cardNum: 37
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Uneasy Alliance
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Search.<br>While you can spot an [Isengard] tracker and a [Sauron] tracker, trackers are strength +1.<br>Shadow: Discard a [sauron] tracker from hand to play an [isengard] tracker from your discard pile. Discard this condition.
+		lore: "...a quarrel seemed on the point of breaking out again between the Northerners and the Isengarders."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+}

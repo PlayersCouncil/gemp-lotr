@@ -1,0 +1,285 @@
+{
+
+	102_38: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_38.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_38
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2R38
+			rarity: R
+			setNum: "V2"
+			cardNum: 38
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: The Balrog
+		subtitle: Lieutenant of Morgoth
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 14
+		type: Minion
+		race: Balrog
+		#keyword: damage+1
+		strength: 17
+		vitality: 5
+		site: 4
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Fierce. Damage +1.<br>Each time a minion takes a wound, add a threat.<br>Each time the Free Peoples player uses a skirmish special ability during a skirmish involving the Balrog, you may exert a companion it is skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_39: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_39.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_39
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U39
+			rarity: U
+			setNum: "V2"
+			cardNum: 39
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: From Deepest Dungeon
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time the fellowship moves, you may reveal The Balrog from your hand to add a threat.<br>Shadow: Remove X threats to play the Balrog from your discard pile, its twilight cost is -1 for each threat removed. 
+		lore: "'Far, far below the deepest delving of the Dwarves, the world is gnawed by nameless things.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_40: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_40.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_40
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2U40
+			rarity: U
+			setNum: "V2"
+			cardNum: 40
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: To Highest Peak
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Event
+		keyword: Regroup
+		/*requires: [
+			
+		]
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Discard X [Moria] minions to add X threats. The Free Peoples player may exert X companions to prevent this.
+		lore: "'There was none to see, or perhaps in after ages songs would still be sung of the Battle of the Peak.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_41: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_41.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_41
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2C41
+			rarity: C
+			setNum: "V2"
+			cardNum: 41
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Through Fire and Water
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time a unique [moria] minion wins a skirmish, you may exert it to add a threat.
+		lore: "'His fire was quenched, but now he was a thing of slime, stronger than a strangling snake.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_42: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/102_42.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 102_42
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: promos/placeholder
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 0
+			collInfo: V2R42
+			rarity: R
+			setNum: "V2"
+			cardNum: 42
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Ancient Evil
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time a [moria] minion wins a skirmish, you may stack it here.<br>Shadow: Play a unique minion stacked here, it is twilight cost -1 for each card stacked here. Discard this condition.
+		lore: "'...I found myself suddenly faced by something that I have not met before.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+}
