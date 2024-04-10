@@ -5,10 +5,9 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.packs.SetDefinition;
-import org.hjson.JsonValue;
+import org.hjson.JsonArray;
+import org.hjson.JsonObject;
 import org.hjson.Stringify;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -32,7 +31,7 @@ public class CreateCardStubs {
 
         File path = new File(projectRoot);
 
-        int[] sets = {2};//, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 15, 17, 18, 31};
+        int[] sets = {3};//, 4, 5, 6, 7, 8, 10, 11, 12, 13, 15, 17, 18, 31};
         for (int set : sets) {
             produceForSet(path, set);
         }
@@ -70,44 +69,46 @@ public class CreateCardStubs {
             String type = cardsOfType.getKey();
             File typePath = new File(setPath, "set" + set + "-" + type + ".hjson");
             if (!typePath.exists()) {
-                Map<String, JSONObject> cardJsons = new TreeMap<>();
+                Map<String, JsonObject> cardJsons = new TreeMap<>();
 
                 Map<String, LotroCardBlueprint> cards = cardsOfType.getValue();
                 for (Map.Entry<String, LotroCardBlueprint> cardEntry : cards.entrySet()) {
                     String blueprintId = cardEntry.getKey();
                     LotroCardBlueprint card = cardEntry.getValue();
 
-                    JSONObject cardJson = new JSONObject();
-                    cardJson.put("title", (card.isUnique() ? "*" : "") + card.getTitle());
+                    JsonObject cardJson = new JsonObject();
+                    cardJson.add("title", card.getTitle());
                     if (card.getSubtitle() != null)
-                        cardJson.put("subtitle", card.getSubtitle());
+                        cardJson.add("subtitle", card.getSubtitle());
+                    if (card.isUnique())
+                        cardJson.add("unique", true);
                     if (card.getSide() != null)
-                        cardJson.put("side", card.getSide().name().toLowerCase());
+                        cardJson.add("side", card.getSide().name().toLowerCase());
                     if (card.getCulture() != null)
-                        cardJson.put("culture", card.getCulture().getHumanReadable());
-                    cardJson.put("twilight", card.getTwilightCost());
-                    cardJson.put("type", card.getCardType().name().toLowerCase());
+                        cardJson.add("culture", card.getCulture().getHumanReadable());
+                    cardJson.add("twilight", card.getTwilightCost());
+                    cardJson.add("type", card.getCardType().name().toLowerCase());
                     if (card.getRace() != null)
-                        cardJson.put("race", card.getRace().getHumanReadable());
+                        cardJson.add("race", card.getRace().getHumanReadable());
                     if (card.getPossessionClasses() != null) {
-                        JSONArray array = new JSONArray();
+                        JsonArray array = new JsonArray();
                         for (PossessionClass possessionClass : card.getPossessionClasses()) {
                             array.add(possessionClass.getHumanReadable());
                         }
 
                         if (array.size() == 1)
-                            cardJson.put("itemclass", array.get(0));
+                            cardJson.add("itemclass", array.get(0).asString());
                         else
-                            cardJson.put("itemclass", array);
+                            cardJson.add("itemclass", array);
                     }
                     if (card.getSignet() != null)
-                        cardJson.put("signet", card.getSignet().name().toLowerCase());
+                        cardJson.add("signet", card.getSignet().name().toLowerCase());
                     if (card.getStrength() != 0)
-                        cardJson.put("strength", card.getStrength());
+                        cardJson.add("strength", card.getStrength());
                     if (card.getVitality() != 0)
-                        cardJson.put("vitality", card.getVitality());
+                        cardJson.add("vitality", card.getVitality());
                     if (card.getResistance() != 0)
-                        cardJson.put("resistance", card.getResistance());
+                        cardJson.add("resistance", card.getResistance());
                     if (card.getCardType() == CardType.ALLY) {
                         if (card.getAllyHomeSiteBlock() != null) {
                             String home = card.getAllyHomeSiteBlock().getHumanReadable();
@@ -115,18 +116,18 @@ public class CreateCardStubs {
                                 home += "," + allyHomeSiteNumber;
                             }
 
-                            cardJson.put("allyHome", home);
+                            cardJson.add("allyHome", home);
                         }
                     }
                     if (card.getCardType() == CardType.SITE)
-                        cardJson.put("block", card.getSiteBlock().getHumanReadable());
+                        cardJson.add("block", card.getSiteBlock().getHumanReadable());
                     if (card.getSiteNumber() != 0)
-                        cardJson.put("site", card.getSiteNumber());
+                        cardJson.add("site", card.getSiteNumber());
                     if (card.getCardType() == CardType.SITE)
-                        cardJson.put("direction", card.getSiteDirection().name().toLowerCase());
+                        cardJson.add("direction", card.getSiteDirection().name().toLowerCase());
 
                     // Keywords handling
-                    JSONArray keywords = new JSONArray();
+                    JsonArray keywords = new JsonArray();
                     for (Keyword keyword : Keyword.values()) {
                         if (card.hasKeyword(keyword)) {
                             int count = card.getKeywordCount(keyword);
@@ -138,9 +139,9 @@ public class CreateCardStubs {
                     }
 
                     if (keywords.size() == 1)
-                        cardJson.put("keyword", keywords.get(0));
+                        cardJson.add("keyword", keywords.get(0).asString());
                     if (keywords.size() > 1)
-                        cardJson.put("keyword", keywords);
+                        cardJson.add("keyword", keywords);
 
                     cardJsons.put(blueprintId, cardJson);
                 }
@@ -149,9 +150,9 @@ public class CreateCardStubs {
                 //Write JSON file
                 try (FileWriter file = new FileWriter(typePath)) {
                     file.write("{\n");
-                    for (Map.Entry<String, JSONObject> cardJson : cardJsons.entrySet()) {
-                        file.write(cardJson.getKey()+": ");
-                        file.write(JsonValue.readHjson(cardJson.getValue().toJSONString()).toString(Stringify.HJSON));
+                    for (Map.Entry<String, JsonObject> cardJson : cardJsons.entrySet()) {
+                        file.write(cardJson.getKey() + ": ");
+                        file.write(cardJson.getValue().toString(Stringify.HJSON));
                         file.write("\n");
                     }
                     file.write("}\n");
