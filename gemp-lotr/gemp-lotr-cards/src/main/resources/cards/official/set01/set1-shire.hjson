@@ -123,7 +123,7 @@
 		}
 	}
 	1_289: {
-		title: *Frodo
+		title: Frodo
 		subtitle: Old Bilbo's Heir
 		unique: true
 		culture: shire
@@ -148,7 +148,7 @@
 		}
 	}
 	1_290: {
-		title: *Frodo
+		title: Frodo
 		subtitle: Son of Drogo
 		unique: true
 		culture: shire
