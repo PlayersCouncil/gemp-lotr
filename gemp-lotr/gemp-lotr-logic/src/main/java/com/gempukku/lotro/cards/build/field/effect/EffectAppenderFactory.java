@@ -26,6 +26,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("cancelallassignments", new CancelAllAssignments());
         effectAppenderProducers.put("cancelevent", new CancelEvent());
         effectAppenderProducers.put("cancelskirmish", new CancelSkirmish());
+        effectAppenderProducers.put("cancelskirmishbetween", new CancelSkirmishBetween());
         effectAppenderProducers.put("choice", new Choice());
         effectAppenderProducers.put("chooseactivecards", new ChooseActiveCards());
         effectAppenderProducers.put("chooseakeyword", new ChooseAKeyword());

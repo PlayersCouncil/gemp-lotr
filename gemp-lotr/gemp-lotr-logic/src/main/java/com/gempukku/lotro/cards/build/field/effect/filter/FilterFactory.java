@@ -39,6 +39,7 @@ public class FilterFactory {
                 });
         simpleFilters.put("bearer", (actionContext -> Filters.hasAttached(actionContext.getSource())));
         simpleFilters.put("character", (actionContext) -> Filters.character);
+        simpleFilters.put("canexert", (actionContext -> Filters.canExert(actionContext.getSource())));
         simpleFilters.put("controlledsite",
                 (actionContext -> Filters.siteControlled(actionContext.getPerformingPlayer())));
         simpleFilters.put("currentsite",
