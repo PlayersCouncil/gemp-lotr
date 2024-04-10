@@ -45,6 +45,7 @@ public class RequirementFactory {
         requirementProducers.put("isowner", new IsOwnerRequirementProducer());
         requirementProducers.put("isside", new IsSideRequirementProducer());
         requirementProducers.put("location", new Location());
+        requirementProducers.put("lostskirmishthisturn", new LostSkirmishThisTurn());
         requirementProducers.put("memoryis", new MemoryIs());
         requirementProducers.put("memorylike", new MemoryLike());
         requirementProducers.put("memorymatches", new MemoryMatches());
