@@ -50,6 +50,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("removedfromplay", new RemovedFromPlay());
         triggerCheckers.put("removesburden", new RemovesBurden());
         triggerCheckers.put("revealscardfromtopofdrawdeck", new RevealsCardFromTopOfDrawDeck());
+        triggerCheckers.put("skirmishabouttoend", new SkirmishAboutToEnd());
         triggerCheckers.put("startofphase", new StartOfPhase());
         triggerCheckers.put("startofturn", new StartOfTurn());
         triggerCheckers.put("takesoffring", new TakesOffRing());

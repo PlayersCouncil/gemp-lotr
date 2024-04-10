@@ -5,6 +5,8 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.packs.SetDefinition;
+import org.hjson.JsonValue;
+import org.hjson.Stringify;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -28,18 +30,23 @@ public class CreateCardStubs {
         final String property = System.getProperty("user.dir");
         String projectRoot = new File(property).getAbsolutePath();
 
-        File path = new File(projectRoot + "/gemp-lotr-async/src/main/web/cards-stub");
+        File path = new File(projectRoot);
 
-        int[] sets = {2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 15, 17, 18, 31};
+        int[] sets = {2};//, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 15, 17, 18, 31};
         for (int set : sets) {
             produceForSet(path, set);
         }
     }
 
-    private static void produceForSet(File root, int set) {
-        File setPath = new File(root, "set" + set);
+    private static void produceForSet(File projectRoot, int set) {
+        File setPath = new File(projectRoot, "/gemp-lotr-cards/src/main/resources/cards-stub/set" + set);
 
-        LotroCardBlueprintLibrary library = new LotroCardBlueprintLibrary();
+        File cardsPath = new File(projectRoot, "/gemp-lotr-cards/src/main/resources/cards");
+        File cardsMapping = new File(projectRoot, "/gemp-lotr-cards/src/main/resources/blueprintMapping.txt");
+        File setConfig = new File(projectRoot, "/gemp-lotr-cards/src/main/resources/setConfig.hjson");
+        File rarities = new File(projectRoot, "/gemp-lotr-cards/src/main/resources/rarities");
+
+        LotroCardBlueprintLibrary library = new LotroCardBlueprintLibrary(cardsPath, cardsMapping, setConfig, rarities);
         Map<String, Map<String, LotroCardBlueprint>> cardsByFileName = new HashMap<>();
 
         SetDefinition setDefinition = library.getSetDefinitions().get("" + set);
@@ -61,9 +68,9 @@ public class CreateCardStubs {
 
         for (Map.Entry<String, Map<String, LotroCardBlueprint>> cardsOfType : cardsByFileName.entrySet()) {
             String type = cardsOfType.getKey();
-            File typePath = new File(setPath, "set" + set + "-" + type + ".json");
+            File typePath = new File(setPath, "set" + set + "-" + type + ".hjson");
             if (!typePath.exists()) {
-                JSONObject jsonObject = new JSONObject();
+                Map<String, JSONObject> cardJsons = new TreeMap<>();
 
                 Map<String, LotroCardBlueprint> cards = cardsOfType.getValue();
                 for (Map.Entry<String, LotroCardBlueprint> cardEntry : cards.entrySet()) {
@@ -78,7 +85,7 @@ public class CreateCardStubs {
                         cardJson.put("side", card.getSide().name().toLowerCase());
                     if (card.getCulture() != null)
                         cardJson.put("culture", card.getCulture().getHumanReadable());
-                    cardJson.put("cost", card.getTwilightCost());
+                    cardJson.put("twilight", card.getTwilightCost());
                     cardJson.put("type", card.getCardType().name().toLowerCase());
                     if (card.getRace() != null)
                         cardJson.put("race", card.getRace().getHumanReadable());
@@ -89,9 +96,9 @@ public class CreateCardStubs {
                         }
 
                         if (array.size() == 1)
-                            cardJson.put("possession", array.get(0));
+                            cardJson.put("itemclass", array.get(0));
                         else
-                            cardJson.put("possession", array);
+                            cardJson.put("itemclass", array);
                     }
                     if (card.getSignet() != null)
                         cardJson.put("signet", card.getSignet().name().toLowerCase());
@@ -135,14 +142,19 @@ public class CreateCardStubs {
                     if (keywords.size() > 1)
                         cardJson.put("keyword", keywords);
 
-                    jsonObject.put(blueprintId, cardJson);
+                    cardJsons.put(blueprintId, cardJson);
                 }
 
                 typePath.getParentFile().mkdirs();
                 //Write JSON file
                 try (FileWriter file = new FileWriter(typePath)) {
-
-                    file.write(jsonObject.toJSONString());
+                    file.write("{\n");
+                    for (Map.Entry<String, JSONObject> cardJson : cardJsons.entrySet()) {
+                        file.write(cardJson.getKey()+": ");
+                        file.write(JsonValue.readHjson(cardJson.getValue().toJSONString()).toString(Stringify.HJSON));
+                        file.write("\n");
+                    }
+                    file.write("}\n");
                     file.flush();
 
                 } catch (IOException e) {

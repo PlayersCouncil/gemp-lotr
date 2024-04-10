@@ -1,6 +1,7 @@
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.game.LotroCardBlueprint;
+import org.hjson.JsonValue;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -15,7 +16,7 @@ public class ValidateCards {
         final String property = System.getProperty("user.dir");
         String projectRoot = new File(property).getAbsolutePath();
 
-        File path = new File(projectRoot + "/gemp-lotr-async/src/main/web/cards");
+        File path = new File(projectRoot + "/gemp-lotr-cards/src/main/resources/cards");
 
         processPath(cardBlueprintBuilder, path);
     }
@@ -34,7 +35,8 @@ public class ValidateCards {
     private static void loadCardsFromFile(LotroCardBlueprintBuilder cardBlueprintBuilder, File file) {
         JSONParser parser = new JSONParser();
         try (FileReader reader = new FileReader(file)) {
-            final JSONObject cardsFile = (JSONObject) parser.parse(reader);
+            String json = JsonValue.readHjson(reader).toString();
+            final JSONObject cardsFile = (JSONObject) parser.parse(json);
             final Set<Map.Entry<String, JSONObject>> cardsInFile = cardsFile.entrySet();
             for (Map.Entry<String, JSONObject> cardEntry : cardsInFile) {
                 String blueprint = cardEntry.getKey();
