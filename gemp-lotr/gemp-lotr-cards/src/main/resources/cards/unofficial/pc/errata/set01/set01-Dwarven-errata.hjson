@@ -32,9 +32,12 @@
 		strength: 5
 		vitality: 2
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: dwarf
+		effects: {
+		    type: toPlay
+            requires: {
+                type: canSpot
+                filter: dwarf
+            }
 		}
 		gametext: To play, spot a Dwarf.
 		lore: Dwarves from Dain's people are stout companions, trustworthy and loyal.
@@ -155,18 +158,23 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: dwarf
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyStrength
-				filter: self,inSkirmishAgainst(orc)
-				amount: 2
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: dwarf
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyStrength
+                    filter: self,inSkirmishAgainst(orc)
+                    amount: 2
+                }
+            }
+        ]
 		gametext: To play, spot a Dwarf.<br>While skirmishing an Orc, Farin is strength +2.
 		lore: Among the envoys sent to represent the Dwarves of Erebor at the Council of Elrond was Farin, a young but wise Dwarf, and a fierce foe in battle.
 		promotext: ""

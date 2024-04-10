@@ -517,12 +517,12 @@
 		twilight: 0
 		type: event
 		keyword: shadow
-		requires: {
-			type: canSpot
-			filter: culture(moria),goblin
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(moria),goblin
+            }
 			cost: {
 				type: spot
 				filter: choose(companion)
@@ -755,12 +755,12 @@
 		twilight: 0
 		type: event
 		keyword: shadow
-		requires: {
-			type: canSpot
-			filter: culture(moria),condition,hasStacked(goblin)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(moria),condition,hasStacked(goblin)
+            }
 			effect: {
 				type: addTwilight
 				amount: {

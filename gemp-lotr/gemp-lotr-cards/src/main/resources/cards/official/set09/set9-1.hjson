@@ -509,24 +509,29 @@
 		culture: elven
 		twilight: 1
 		type: possession
-		requires: {
-			type: canSpot
-			filter: elf
-		}
 		target: or(elf,hobbit)
-		effects: {
-			type: activated
-			phase: maneuver
-			cost: {
-				type: discard
-				filter: self
-			}
-			effect: {
-				type: returnToHand
-				player: shadowPlayer
-				filter: choose(minion,strengthLessThan(7))
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                }
+		    }
+            {
+                type: activated
+                phase: maneuver
+                cost: {
+                    type: discard
+                    filter: self
+                }
+                effect: {
+                    type: returnToHand
+                    player: shadowPlayer
+                    filter: choose(minion,strengthLessThan(7))
+                }
+            }
+        ]
 	}
 	9_14: {
 		title: Galadriel
@@ -563,23 +568,28 @@
 		strength: 9
 		vitality: 4
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: culture(elven),companion
-			count: 2
-		}
-		effects: {
-			type: activated
-			phase: regroup
-			cost: {
-				type: exert
-				filter: self
-			}
-			effect: {
-				type: wound
-				filter: all(wounded,minion)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(elven),companion
+                    count: 2
+                }
+		    }
+            {
+                type: activated
+                phase: regroup
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: {
+                    type: wound
+                    filter: all(wounded,minion)
+                }
+            }
+        ]
 	}
 	9_16: {
 		title: Glorfindel
@@ -832,11 +842,14 @@
 		twilight: 1
 		type: possession
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: dwarf
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: dwarf
+                }
+		    }
 			{
 				type: trigger
 				trigger: {
@@ -939,25 +952,30 @@
 		twilight: 1
 		type: condition
 		vitality: 1
-		requires: {
-			type: canSpot
-			filter: ent
-		}
 		target: companion,not(hasAttached(name(Ent Draught)))
-		effects: {
-			type: activated
-			phase: skirmish
-			cost: {
-				type: exert
-				filter: bearer
-				memorize: bearer
-			}
-			effect: {
-				type: addKeyword
-				filter: memory(bearer)
-				keyword: damage+1
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: ent
+                }
+		    }
+            {
+                type: activated
+                phase: skirmish
+                cost: {
+                    type: exert
+                    filter: bearer
+                    memorize: bearer
+                }
+                effect: {
+                    type: addKeyword
+                    filter: memory(bearer)
+                    keyword: damage+1
+                }
+            }
+        ]
 	}
 	9_25: {
 		title: Huorn

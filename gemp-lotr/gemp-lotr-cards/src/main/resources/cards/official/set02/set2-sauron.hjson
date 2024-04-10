@@ -172,33 +172,38 @@
         Search
       ]
       twilight: 1
-      requires: {
-        type: canSpot
-        filter: culture(sauron),orc
-      }
-      effects: {
-        type: trigger
-        optional: true
-        trigger: {
-            type: moves
-        }
-        requires: {
-            type: phase
-            phase: regroup
-        }
-        effect: {
-            type: drawCards
-            count: {
-                type: condition
-                condition: {
-                    type: canSpot
-                    filter: culture(sauron),tracker
-                }
-                true: 2
-                false: 1
+      effects: [
+          {
+            type: toPlay
+              requires: {
+                type: canSpot
+                filter: culture(sauron),orc
+              }
+          }
+          {
+            type: trigger
+            optional: true
+            trigger: {
+                type: moves
             }
-        }
-      }
+            requires: {
+                type: phase
+                phase: regroup
+            }
+            effect: {
+                type: drawCards
+                count: {
+                    type: condition
+                    condition: {
+                        type: canSpot
+                        filter: culture(sauron),tracker
+                    }
+                    true: 2
+                    false: 1
+                }
+            }
+          }
+      ]
     }
     2_93: {
       side: shadow

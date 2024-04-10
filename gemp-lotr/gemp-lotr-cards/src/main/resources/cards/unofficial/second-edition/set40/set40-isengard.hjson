@@ -138,12 +138,12 @@
 			skirmish
 			spell
 		]
-		requires: {
-			type: canSpot
-			filter: name(Saruman)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: name(Saruman)
+            }
 			effect: {
 				type: modifyStrength
 				filter: choose(unbound,companion)
@@ -278,11 +278,14 @@
 		twilight: 0
 		type: artifact
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: culture(isengard),minion
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(isengard),minion
+                }
+		    }
 			{
 				type: activatedTrigger
 				trigger: {
@@ -603,12 +606,12 @@
 			maneuver
 			spell
 		]
-		requires: {
-			type: canSpot
-			filter: name(Saruman)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: name(Saruman)
+            }
 			cost: {
 				type: spot
 				filter: choose(exhausted,companion)

@@ -547,12 +547,12 @@
 		twilight: 0
 		type: event
 		keyword: regroup
-		requires: {
-			type: canSpot
-			filter: orc
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: orc
+            }
 			effect: [
 				{
 					type: playCardFromDiscard

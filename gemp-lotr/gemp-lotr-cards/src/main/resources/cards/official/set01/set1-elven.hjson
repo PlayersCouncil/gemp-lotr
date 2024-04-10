@@ -179,12 +179,12 @@
 		twilight: 2
 		type: event
 		keyword: fellowship
-		requires: {
-			type: canSpot
-			filter: elf
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: elf
+            }
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(tale)
@@ -265,12 +265,12 @@
 		twilight: 0
 		type: event
 		keyword: archery
-		requires: {
-			type: canSpot
-			filter: elf,archer,companion
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: elf,archer,companion
+            }
 			effect: {
 				type: modifyArcheryTotal
 				side: free people
@@ -284,12 +284,12 @@
 		twilight: 1
 		type: event
 		keyword: fellowship
-		requires: {
-			type: canSpot
-			filter: elf
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: elf
+            }
 			effect: {
 				type: removeBurdens
 			}
@@ -306,11 +306,14 @@
 		race: elf
 		strength: 8
 		vitality: 4
-		requires: {
-			type: canSpot
-			filter: or(name(Gandalf),elf)
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: or(name(Gandalf),elf)
+                }
+		    }
 			{
 				type: trigger
 				trigger: {
@@ -356,19 +359,24 @@
 		twilight: 1
 		type: possession
 		itemclass: cloak
-		requires: {
-			type: canSpot
-			filter: elf
-		}
 		target: companion
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyArcheryTotal
-				side: shadow
-				amount: -1
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyArcheryTotal
+                    side: shadow
+                    amount: -1
+                }
+            }
+        ]
 	}
 	1_43: {
 		title: Far-seeing Eyes
@@ -569,22 +577,27 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: elf
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyStrength
-				amount: 2
-				requires: {
-					type: location
-					filter: siteBlock(fellowship),or(siteNumber(6),siteNumber(7),siteNumber(8))
-				}
-				filter: self
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyStrength
+                    amount: 2
+                    requires: {
+                        type: location
+                        filter: siteBlock(fellowship),or(siteNumber(6),siteNumber(7),siteNumber(8))
+                    }
+                    filter: self
+                }
+            }
+        ]
 	}
 	1_49: {
 		title: The Last Alliance of Elves and Men
@@ -666,12 +679,12 @@
 		twilight: 0
 		type: event
 		keyword: archery
-		requires: {
-			type: canSpot
-			filter: elf,companion
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: elf,companion
+            }
 			effect: {
 				type: modifyArcheryTotal
 				side: shadow
@@ -688,9 +701,12 @@
 		strength: 4
 		vitality: 2
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: elf
+		effects: {
+		    type: toPlay
+            requires: {
+                type: canSpot
+                filter: elf
+            }
 		}
 	}
 	1_54: {

@@ -10,22 +10,27 @@
 		race: man
 		strength: 3
 		vitality: 3
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
-		effects: {
-			type: activated
-			phase: maneuver
-			cost: {
-				type: exert
-				filter: self
-			}
-			effect: {
-				type: discard
-				filter: choose(condition,or(culture(isengard),culture(moria)))
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+            {
+                type: activated
+                phase: maneuver
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: {
+                    type: discard
+                    filter: choose(condition,or(culture(isengard),culture(moria)))
+                }
+            }
+        ]
 	}
 	1_70: {
 		title: Barliman Butterbur
@@ -57,22 +62,22 @@
 		twilight: 2
 		type: event
 		keyword: fellowship
-		requires: [
-			{
-				type: canSpot
-				filter: name(Gandalf)
-			}
-			{
-				type: canSpot
-				filter: dwarf
-			}
-			{
-				type: canSpot
-				filter: elf
-			}
-		]
 		effects: {
 			type: event
+            requires: [
+                {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+                {
+                    type: canSpot
+                    filter: dwarf
+                }
+                {
+                    type: canSpot
+                    filter: elf
+                }
+            ]
 			effect: {
 				type: addModifier
 				modifier: {
@@ -307,12 +312,12 @@
 			spell
 			response
 		]
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                filter: name(Gandalf)
+            }
 			trigger: {
 				type: aboutToTakeWound
 				filter: companion
@@ -377,19 +382,24 @@
 		culture: gandalf
 		twilight: 1
 		type: condition
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
 		keyword: support area
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyCost
-				filter: companion,race(cannotSpot)
-				amount: -2
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyCost
+                    filter: companion,race(cannotSpot)
+                    amount: -2
+                }
+            }
+        ]
 	}
 	1_80: {
 		title: Ottar
@@ -402,33 +412,38 @@
 		race: man
 		strength: 2
 		vitality: 2
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
-		effects: {
-			type: activated
-			phase: fellowship
-			cost: {
-				type: exert
-				filter: self
-			}
-			effect: [
-				{
-					type: discardFromHand
-					forced: false
-					count: 0-3
-					memorize: discardedCards
-				}
-				{
-					type: drawCards
-					count: {
-						type: forEachInMemory
-						memory: discardedCards
-					}
-				}
-			]
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+            {
+                type: activated
+                phase: fellowship
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: [
+                    {
+                        type: discardFromHand
+                        forced: false
+                        count: 0-3
+                        memorize: discardedCards
+                    }
+                    {
+                        type: drawCards
+                        count: {
+                            type: forEachInMemory
+                            memory: discardedCards
+                        }
+                    }
+                ]
+            }
+        ]
 	}
 	1_81: {
 		title: Questions That Need Answering
@@ -439,18 +454,18 @@
 			spell
 			fellowship
 		]
-		requires: [
-			{
-				type: twilightPoolLessThan
-				amount: 3
-			}
-			{
-				type: canSpot
-				filter: name(Gandalf)
-			}
-		]
 		effects: {
 			type: event
+            requires: [
+                {
+                    type: twilightPoolLessThan
+                    amount: 3
+                }
+                {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+            ]
 			effect: [
 				{
 					type: LookAtTopCardsOfDrawDeck
@@ -480,18 +495,18 @@
 			spell
 			fellowship
 		]
-		requires: [
-			{
-				type: twilightPoolLessThan
-				amount: 2
-			}
-			{
-				type: canSpot
-				filter: name(Gandalf)
-			}
-		]
 		effects: {
 			type: event
+            requires: [
+                {
+                    type: twilightPoolLessThan
+                    amount: 2
+                }
+                {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+            ]
 			effect: [
 				{
 					type: LookAtTopCardsOfDrawDeck
@@ -521,12 +536,12 @@
 			spell
 			skirmish
 		]
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: name(Gandalf)
+            }
 			effect: {
 				type: modifyStrength
 				filter: choose(minion)
@@ -564,12 +579,12 @@
 			spell
 			response
 		]
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                filter: name(Gandalf)
+            }
 			trigger: {
 				type: aboutToExert
 				filter: companion
@@ -589,12 +604,12 @@
 			spell
 			fellowship
 		]
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: name(Gandalf)
+            }
 			effect: {
 				type: revealHand
 				hand: shadowPlayer

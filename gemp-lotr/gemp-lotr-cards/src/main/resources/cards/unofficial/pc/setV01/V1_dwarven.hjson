@@ -195,12 +195,12 @@
 		twilight: 1
 		type: event
 		keyword: maneuver
-		requires: {
-			type: canSpot
-			filter: dwarf,hasAttachedCount(2,item)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: dwarf,hasAttachedCount(2,item)
+            }
 			effect: [
 				{
 					type: chooseActiveCards

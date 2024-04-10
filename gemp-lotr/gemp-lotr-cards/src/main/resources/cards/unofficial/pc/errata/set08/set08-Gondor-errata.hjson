@@ -36,12 +36,15 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: culture(gondor),wraith
-			count: 2
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(gondor),wraith
+                    count: 2
+                }
+		    }
 			{
 				type: ExtraCost
 				cost: {

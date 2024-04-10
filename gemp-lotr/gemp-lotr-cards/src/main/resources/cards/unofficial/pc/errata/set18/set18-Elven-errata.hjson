@@ -29,11 +29,14 @@
 		twilight: 2
 		type: artifact
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: or(title(Galadriel),title(Celeborn))
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: or(title(Galadriel),title(Celeborn))
+                }
+		    }
 			{
 				type: modifier
 				modifier: {
@@ -126,12 +129,15 @@
 		strength: 9
 		vitality: 4
 		resistance: 7
-		requires: {
-			type: canSpot
-			filter: elf,companion
-			count:2
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf,companion
+                    count:2
+                }
+		    }
 			{
 				type: activated
 				phase: maneuver

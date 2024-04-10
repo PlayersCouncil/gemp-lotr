@@ -35,27 +35,32 @@
 		race: Man
 		strength: 2
 		vitality: 4
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
-		effects: {
-			type: activated
-			phase: fellowship
-			cost: [
-				{
-					type: exert
-					filter: self
-				}
-				{
-					type: discardFromHand
-					forced: false
-				}
-			]
-			effect: {
-				type: drawCards
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+            {
+                type: activated
+                phase: fellowship
+                cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: discardFromHand
+                        forced: false
+                    }
+                ]
+                effect: {
+                    type: drawCards
+                }
+            }
+        ]
 		gametext: To play, spot Gandalf.<br><b>Fellowship:</b> Exert Ottar and discard a card from hand to draw a card.
 		lore: The Men of Laketown come from the North, where they trade with the Dwarves of the Lonely Mountain.
 		promotext: ""

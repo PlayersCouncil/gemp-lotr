@@ -251,18 +251,18 @@
 		twilight: 2
 		type: event
 		keyword: fellowship
-		requires: [
-			{
-				type: canSpot
-				filter: name(Merry)
-			}
-			{
-				type: canSpot
-				filter: name(Pippin)
-			}
-		]
 		effects: {
 			type: event
+            requires: [
+                {
+                    type: canSpot
+                    filter: name(Merry)
+                }
+                {
+                    type: canSpot
+                    filter: name(Pippin)
+                }
+            ]
 			effect: {
 				type: heal
 				count: 2

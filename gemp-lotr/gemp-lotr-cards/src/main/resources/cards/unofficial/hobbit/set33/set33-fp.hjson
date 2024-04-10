@@ -249,18 +249,18 @@
     twilight: 1
     type: event
     keyword: response
-    requires: [
-      {
-        type: canSpot
-        filter: culture(dwarven),follower
-      }
-      {
-        type: phase
-        phase: regroup
-      }
-    ]
     effects: {
       type: responseEvent
+        requires: [
+          {
+            type: canSpot
+            filter: culture(dwarven),follower
+          }
+          {
+            type: phase
+            phase: regroup
+          }
+        ]
       trigger: {
         type: moves
       }
@@ -302,12 +302,15 @@
       support area
       fortification
     ]
-    requires: {
-      type: canSpot
-      count: 2
-      filter: culture(dwarven),follower
-    }
     effects: [
+        {
+            type: toPlay
+            requires: {
+              type: canSpot
+              count: 2
+              filter: culture(dwarven),follower
+            }
+        }
       {
         type: modifier
         modifier: {
@@ -675,12 +678,12 @@
     twilight: 2
     type: event
     keyword: fellowship
-    requires: {
-      type: canSpot
-      filter: name(Elrond)
-    }
     effects: {
       type: event
+        requires: {
+          type: canSpot
+          filter: name(Elrond)
+        }
       effect: [
         {
           type: drawCards

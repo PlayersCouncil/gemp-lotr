@@ -6,12 +6,12 @@
 		twilight: 2
 		type: event
 		keyword: Shadow
-		requires: {
-			type: canSpot
-			filter: nazgul
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: nazgul
+            }
 			cost: {
 				type: chooseAndRemoveTwilight
 				memorize: X

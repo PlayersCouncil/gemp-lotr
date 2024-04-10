@@ -280,12 +280,12 @@
 		twilight: 0
 		type: Event
 		keyword: Maneuver
-		requires: {
-			type: canSpot
-			filter: unique,culture(sauron),minion,not(exhausted)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: unique,culture(sauron),minion,not(exhausted)
+            }
 			cost: {
 				type: exert
 				filter: choose(unique,culture(sauron),minion,not(exhausted))
@@ -576,14 +576,14 @@
 		keyword: [
 			maneuver
 		]
-		requires: [
-			{
-				type: CanSpot
-				filter: culture(Sauron),minion
-			}
-		]
 		effects: {
 			type: event
+            requires: [
+                {
+                    type: CanSpot
+                    filter: culture(Sauron),minion
+                }
+            ]
 			effect:	[
 				{
 					type: conditional

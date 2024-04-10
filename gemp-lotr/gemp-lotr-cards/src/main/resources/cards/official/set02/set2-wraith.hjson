@@ -48,24 +48,29 @@
       title: Helpless
       type: condition
       twilight: 0
-      requires: [
-        {
-            type: canSpot
-            filter: name(Frodo)
-        }
-        {
-            type: canSpot
-            filter: nazgul
-        }
-      ]
       target: name(Sam)
-      effects: {
-        type: modifier
-        modifier: {
-            type: disableGameText
-            filter: hasAttached(self)
-        }
-      }
+      effects: [
+          {
+              type: toPlay
+              requires: [
+                {
+                    type: canSpot
+                    filter: name(Frodo)
+                }
+                {
+                    type: canSpot
+                    filter: nazgul
+                }
+              ]
+          }
+          {
+            type: modifier
+            modifier: {
+                type: disableGameText
+                filter: hasAttached(self)
+            }
+          }
+      ]
     }
     2_77: {
       side: shadow

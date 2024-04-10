@@ -5,12 +5,12 @@
 		twilight: 0
 		type: event
 		keyword: regroup
-		requires: {
-			type: canSpot
-			filter: ranger
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: ranger
+            }
 			requiresRanger: true
 			effect: {
 				type: removeTwilight
@@ -560,12 +560,12 @@
 			fellowship
 			regroup
 		]
-		requires: {
-			type: canSpot
-			filter: ranger
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: ranger
+            }
 			requiresRanger: true
 			effect: {
 				type: playNextSite
@@ -615,12 +615,12 @@
 		twilight: 1
 		type: event
 		keyword: maneuver
-		requires: {
-			type: location
-			filter: or(river,forest)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: location
+                filter: or(river,forest)
+            }
 			requiresRanger: true
 			cost: {
 				type: exert
@@ -668,12 +668,12 @@
 		twilight: 0
 		type: event
 		keyword: response
-		requires: {
-			type: canSpot
-			filter: culture(gondor),man,inSkirmish
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                filter: culture(gondor),man,inSkirmish
+            }
 			trigger: {
 				type: played
 				filter: skirmish,event
@@ -762,12 +762,12 @@
 		twilight: 1
 		type: event
 		keyword: maneuver
-		requires: {
-			type: canSpot
-			filter: ranger
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: ranger
+            }
 			requiresRanger: true
 			effect: {
 				type: discard

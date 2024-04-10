@@ -96,11 +96,14 @@
 		keyword: [
 			Support Area
 		]
-		requires: {
-			type: CanSpot
-			filter: culture(Orc),minion
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: CanSpot
+                    filter: culture(Orc),minion
+                }
+		    }
 			{
 				type: trigger
 				trigger: {

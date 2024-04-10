@@ -49,6 +49,7 @@ public class ValidateCards {
                 }
             }
         } catch (Exception exp) {
+            System.out.println("Unable to load set from file: " + file.getName());
             exp.printStackTrace();
         }
     }

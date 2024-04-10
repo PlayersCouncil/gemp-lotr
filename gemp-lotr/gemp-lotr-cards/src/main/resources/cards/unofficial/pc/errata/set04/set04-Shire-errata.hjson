@@ -29,22 +29,22 @@
 		twilight: 0
 		type: event
 		keyword: fellowship
-		requires: {
-			type: or
-			requires: [
-				{
-					type: canSpot
-					filter: name(smeagol)
-				}
-				{
-					type: canSpot
-					filter: ring bound,hobbit
-					count: 2
-				}
-			]
-		}
 		effects: {
 			type: event
+            requires: {
+                type: or
+                requires: [
+                    {
+                        type: canSpot
+                        filter: name(smeagol)
+                    }
+                    {
+                        type: canSpot
+                        filter: ring bound,hobbit
+                        count: 2
+                    }
+                ]
+            }
 			cost: {
 				type: addBurdens
 				amount: 2

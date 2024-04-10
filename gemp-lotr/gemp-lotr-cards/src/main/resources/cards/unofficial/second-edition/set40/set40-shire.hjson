@@ -91,24 +91,29 @@
 		strength: 2
 		vitality: 2
 		allyHome: second ed,1
-		requires: {
-			type: canSpot
-			count: 2
-			filter: hobbit,companion
-		}
-		effects: {
-			type: activated
-			phase: skirmish
-			cost: {
-				type: exert
-				filter: self
-			}
-			effect: {
-				type: AlterOverwhelmMultiplier
-				filter: choose(hobbit)
-				multiplier: 3
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    count: 2
+                    filter: hobbit,companion
+                }
+		    }
+            {
+                type: activated
+                phase: skirmish
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: {
+                    type: AlterOverwhelmMultiplier
+                    filter: choose(hobbit)
+                    multiplier: 3
+                }
+            }
+        ]
 	}
 	40_247: {
 		title: Farmer Maggot
@@ -647,12 +652,15 @@
 		strength: 2
 		vitality: 2
 		allyHome: second ed,1
-		requires: {
-			type: canSpot
-			count: 2
-			filter: hobbit,companion
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    count: 2
+                    filter: hobbit,companion
+                }
+		    }
 			{
 				type: activated
 				phase: skirmish

@@ -119,11 +119,14 @@
 		twilight: 1
 		type: Condition
 		target: or(companion,ally)
-		requires: {
-			type: CanSpot
-			filter: or(and(culture(sauron),minion),title(Gollum))
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: CanSpot
+                    filter: or(and(culture(sauron),minion),title(Gollum))
+                }
+		    }
 			{
 				type: Trigger
 				trigger: {

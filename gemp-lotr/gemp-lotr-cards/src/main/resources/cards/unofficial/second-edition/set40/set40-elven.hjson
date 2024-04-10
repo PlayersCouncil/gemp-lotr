@@ -5,10 +5,6 @@
 		twilight: 2
 		type: event
 		keyword: archery
-		requires: {
-			type: canSpot
-			filter: elf,archer,companion
-		}
 		gametext: [
 			To play, spot an Elf archer companion.
 			Make a fellowship archery total -X (to a minimum of 0) to discard X shadow conditions.
@@ -16,6 +12,10 @@
 		lore: The arrows of the Galadhrim can pierce more than just flesh.
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: elf,archer,companion
+            }
 			cost: {
 				type: reduceArcheryTotal
 				side: free people
@@ -146,10 +146,6 @@
 		twilight: 1
 		type: condition
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: elf,companion
-		}
 		gametext: [
 			To play, spot an Elf companion.
 			Each time a Nazgûl is played, that Nazgûl must exert.
@@ -157,6 +153,13 @@
 		]
 		lore: “Nin o Chithaeglir, lasto beth daer, Rimmo nin Bruinen, dan in Ulair!”
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf,companion
+                }
+		    }
 			{
 				type: trigger
 				trigger: {
@@ -288,10 +291,6 @@
 		twilight: 2
 		type: event
 		keyword: maneuver
-		requires: {
-			type: canSpot
-			filter: elf
-		}
 		gametext: [
 			To play spot an Elf.
 			Until the regroup phase, each wounded minion loses [keyword]fierce[/keyword] and cannot gain [keyword]fierce[/keyword].
@@ -299,6 +298,10 @@
 		lore: “Bring him down!”
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: elf
+            }
 			effect: {
 				type: removeKeyword
 				until: start(regroup)
@@ -462,44 +465,49 @@
 		twilight: 0
 		type: condition
 		keyword: support area
-		requires: {
-			type: canSpot
-			count: 2
-			filter: elf
-		}
 		gametext: [
 			To play, spot 2 Elves.
 			\[keyword]Fellowship:[/keyword] Add {1} to look at the top card of your draw deck. You may discard this condition to discard that card.
 		]
 		lore: “The White Wizard approaches...”
-		effects: {
-			type: activated
-			phase: fellowship
-			cost: {
-				type: addTwilight
-				amount: 1
-			}
-			effect: [
-				{
-					type: lookAtTopCardsOfDrawDeck
-				}
-				{
-					type: optional
-					text: Would you like to discard this condition to discard that card?
-					effect: {
-						type: costToEffect
-						cost: {
-							type: discard
-							filter: self
-						}
-						effect: {
-							type: discardTopCardsFromDeck
-							forced: false
-						}
-					}
-				}
-			]
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    count: 2
+                    filter: elf
+                }
+		    }
+            {
+                type: activated
+                phase: fellowship
+                cost: {
+                    type: addTwilight
+                    amount: 1
+                }
+                effect: [
+                    {
+                        type: lookAtTopCardsOfDrawDeck
+                    }
+                    {
+                        type: optional
+                        text: Would you like to discard this condition to discard that card?
+                        effect: {
+                            type: costToEffect
+                            cost: {
+                                type: discard
+                                filter: self
+                            }
+                            effect: {
+                                type: discardTopCardsFromDeck
+                                forced: false
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
 	}
 	40_45: {
 		title: Galadriel
@@ -617,11 +625,6 @@
 		strength: 9
 		vitality: 3
 		resistance: 9
-		requires: {
-			type: canSpot
-			count: 3
-			filter: elf
-		}
 		gametext: [
 			To play, spot 3 Elves.
 			While skirmishing a Nazgûl, Glorfindel is not overwhelmed unless his strength is tripled.
@@ -629,6 +632,14 @@
 		]
 		lore: “... on his brow sat wisdom, and in his hand was strength.”
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    count: 3
+                    filter: elf
+                }
+		    }
 			{
 				type: modifier
 				modifier: {
@@ -664,33 +675,38 @@
 		strength: 4
 		vitality: 3
 		allyHome: second ed,3
-		requires: {
-			type: canSpot
-			filter: elf
-		}
 		gametext: [
 			To play, spot an Elf.
 			Each time you reveal an {elven} card from the top of your draw deck, you may exert Golradir to make an Orc strength -2 until the regroup phase.
 		]
 		lore: Golradir was among those on hand when the fellowship departed Imladris.
-		effects: {
-			type: trigger
-			trigger: {
-				type: revealsCardFromTopOfDrawDeck
-				filter: culture(elven)
-			}
-			optional: true
-			cost: {
-				type: exert
-				filter: self
-			}
-			effect: {
-				type: modifyStrength
-				filter: choose(orc)
-				amount: -2
-				until: start(regroup)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                }
+		    }
+            {
+                type: trigger
+                trigger: {
+                    type: revealsCardFromTopOfDrawDeck
+                    filter: culture(elven)
+                }
+                optional: true
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: {
+                    type: modifyStrength
+                    filter: choose(orc)
+                    amount: -2
+                    until: start(regroup)
+                }
+            }
+        ]
 	}
 	40_49: {
 		title: Gwemegil
@@ -733,15 +749,15 @@
 		twilight: 1
 		type: event
 		keyword: skirmish
-		requires: {
-			type: canSpot
-			count: 3
-			filter: elf
-		}
 		gametext: Spot 3 Elves to make a minion skirmishing and Elf strength -3.
 		lore: “We still remember, we who dwell...”
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                count: 3
+                filter: elf
+            }
 			effect: {
 				type: modifyStrength
 				filter: choose(minion,inSkirmishAgainst(elf))
@@ -831,40 +847,45 @@
     twilight: 1
     type: condition
     keyword: support area
-    requires: {
-      type: canSpot
-      filter: elf
-    }
     gametext: [
       To play, spot an Elf.
       Each time the fellowship moves to a sanctuary, you may exert an Elf to remove a burden (or 2 burdens if that Elf is Galadriel).
     ]
     lore: “Do not let your hearts be troubled. Tonight you will sleep in peace.”
-    effects: {
-      type: trigger
-      trigger: {
-        type: movesTo
-        filter: sanctuary
-      }
-      cost: {
-        type: exert
-        filter: choose(elf)
-        memorize: exertedElf
-      }
-      effect: {
-        type: removeBurdens
-        amount: {
-          type: requires
-          requires: {
-            type: memoryMatches
-            memory: exertedElf
-            filter: name(Galadriel)
-          }
-          true: 2
-          false: 1
+    effects: [
+        {
+            type: toPlay
+            requires: {
+              type: canSpot
+              filter: elf
+            }
         }
-      }
-    }
+        {
+          type: trigger
+          trigger: {
+            type: movesTo
+            filter: sanctuary
+          }
+          cost: {
+            type: exert
+            filter: choose(elf)
+            memorize: exertedElf
+          }
+          effect: {
+            type: removeBurdens
+            amount: {
+              type: requires
+              requires: {
+                type: memoryMatches
+                memory: exertedElf
+                filter: name(Galadriel)
+              }
+              true: 2
+              false: 1
+            }
+          }
+        }
+    ]
   }
   40_54: {
     title: Long-knives of Legolas
@@ -1166,15 +1187,15 @@
     twilight: 2
     type: event
     keyword: archery
-    requires: {
-      type: canSpot
-      count: 2
-      filter: elf,archer
-    }
     gametext: Spot 2 Elf archers to make the fellowship archery total +2 (or +3 if at a forest).
     lore: “The Dwarf breathes so loud...”
     effects: {
       type: event
+        requires: {
+          type: canSpot
+          count: 2
+          filter: elf,archer
+        }
       effect: {
         type: modifyArcheryTotal
         side: free people

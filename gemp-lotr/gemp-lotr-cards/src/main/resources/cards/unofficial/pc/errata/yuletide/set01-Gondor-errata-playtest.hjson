@@ -190,12 +190,12 @@
 		twilight: 0
 		type: Event
 		keyword: Response
-		requires: {
-			type: canSpot
-			filter: culture(gondor),companion,inSkirmish
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                filter: culture(gondor),companion,inSkirmish
+            }
 			trigger: {
 				type: played
 				filter: skirmish,event

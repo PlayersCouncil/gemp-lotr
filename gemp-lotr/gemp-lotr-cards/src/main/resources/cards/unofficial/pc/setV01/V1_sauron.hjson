@@ -104,11 +104,14 @@
 		twilight: 1
 		type: event
 		keyword: regroup
-		requires: {
-			type: canSpotburdens
-			amount: 5
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpotburdens
+                    amount: 5
+                }
+		    }
 			{
 				type: extraCost
 				cost: {

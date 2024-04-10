@@ -101,13 +101,13 @@
 			weather
 			maneuver
 		]
-		requires: {
-			type: canSpot
-			count: 5
-			filter: companion
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                count: 5
+                filter: companion
+            }
 			cost: {
 				type: exert
 				filter: choose(culture(isengard),minion)
@@ -158,28 +158,33 @@
 		culture: isengard
 		twilight: 1
 		type: condition
-		requires: {
-			type: canSpot
-			filter: uruk-hai
-		}
 		keyword: support area
-		effects: {
-			type: activated
-			phase: maneuver
-			requires: {
-				type: canSpot
-				count: 6
-				filter: companion
-			}
-			cost: {
-				type: removeTwilight
-				amount: 2
-			}
-			effect: {
-				type: wound
-				filter: choose(companion,not(ring bearer))
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: uruk-hai
+                }
+		    }
+            {
+                type: activated
+                phase: maneuver
+                requires: {
+                    type: canSpot
+                    count: 6
+                    filter: companion
+                }
+                cost: {
+                    type: removeTwilight
+                    amount: 2
+                }
+                effect: {
+                    type: wound
+                    filter: choose(companion,not(ring bearer))
+                }
+            }
+        ]
 	}
 	1_126: {
 		title: Hunt Them Down!
@@ -317,12 +322,12 @@
 		twilight: 2
 		type: event
 		keyword: maneuver
-		requires: {
-			type: canSpot
-			filter: uruk-hai
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: uruk-hai
+            }
 			effect: [
 				{
 					type: chooseActiveCards
@@ -641,18 +646,23 @@
 		twilight: 1
 		type: condition
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: or(name(Saruman),uruk-hai)
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyStrength
-				filter: archer,or(companion,ally)
-				amount: -1
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: or(name(Saruman),uruk-hai)
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyStrength
+                    filter: archer,or(companion,ally)
+                    amount: -1
+                }
+            }
+        ]
 	}
 	1_142: {
 		title: Traitor's Voice
@@ -663,49 +673,54 @@
 			search
 			support area
 		]
-		requires: {
-			type: canSpot
-			filter: uruk-hai
-		}
-		effects: {
-			type: trigger
-			trigger: {
-				type: ConstantlyCheck
-				requires: [
-					{
-						type: perTurnLimit
-						limit: 1
-					}
-					{
-						type: or
-						requires: [
-							{
-								type: canSpotBurdens
-								amount: 5
-							}
-							{
-								type: canSpot
-								filter: exhausted,ring bearer
-							}
-						]
-					}
-				]
-			}
-			effect: [
-				{
-					type: incrementPerTurnLimit
-					limit: 1
-				}
-				{
-					type: addModifier
-					modifier: {
-						type: modifyMoveLimit
-						amount: -1
-					}
-					until: endOfTurn
-				}
-			]
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: uruk-hai
+                }
+		    }
+            {
+                type: trigger
+                trigger: {
+                    type: ConstantlyCheck
+                    requires: [
+                        {
+                            type: perTurnLimit
+                            limit: 1
+                        }
+                        {
+                            type: or
+                            requires: [
+                                {
+                                    type: canSpotBurdens
+                                    amount: 5
+                                }
+                                {
+                                    type: canSpot
+                                    filter: exhausted,ring bearer
+                                }
+                            ]
+                        }
+                    ]
+                }
+                effect: [
+                    {
+                        type: incrementPerTurnLimit
+                        limit: 1
+                    }
+                    {
+                        type: addModifier
+                        modifier: {
+                            type: modifyMoveLimit
+                            amount: -1
+                        }
+                        until: endOfTurn
+                    }
+                ]
+            }
+        ]
 	}
 	1_143: {
 		title: Troop of Uruk-hai
@@ -1105,29 +1120,34 @@
 		culture: isengard
 		twilight: 0
 		type: condition
-		requires: {
-			type: canSpot
-			filter: uruk-hai
-		}
 		keyword: support area
-		effects: {
-			type: activatedTrigger
-			trigger: {
-				type: winsSkirmish
-				filter: uruk-hai
-				memorize: winner
-			}
-			cost: {
-				type: removeTwilight
-				amount: 3
-			}
-			effect: {
-				type: addKeyword
-				filter: memory(winner)
-				keyword: fierce
-				until: start(regroup)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: uruk-hai
+                }
+		    }
+            {
+                type: activatedTrigger
+                trigger: {
+                    type: winsSkirmish
+                    filter: uruk-hai
+                    memorize: winner
+                }
+                cost: {
+                    type: removeTwilight
+                    amount: 3
+                }
+                effect: {
+                    type: addKeyword
+                    filter: memory(winner)
+                    keyword: fierce
+                    until: start(regroup)
+                }
+            }
+        ]
 	}
 	1_160: {
 		title: Uruk-hai Sword

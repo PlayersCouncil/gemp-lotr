@@ -510,22 +510,27 @@
 		type: possession
 		itemclass: hand weapon
 		strength: 2
-		requires: {
-			type: canSpot
-			filter: culture(moria)
-		}
 		target: orc
-		effects: {
-			type: trigger
-			optional: true
-			trigger: {
-				type: played
-				filter: self
-			}
-			effect: {
-				type: drawCards
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(moria)
+                }
+		    }
+            {
+                type: trigger
+                optional: true
+                trigger: {
+                    type: played
+                    filter: self
+                }
+                effect: {
+                    type: drawCards
+                }
+            }
+        ]
 	}
 	31_32: {
 		title: Goblin Sneak
@@ -598,11 +603,14 @@
     twilight: 1
     type: condition
     keyword: support area
-    requires: {
-      type: canSpot
-      filter: culture(moria)
-    }
     effects: [
+        {
+            type: toPlay
+            requires: {
+              type: canSpot
+              filter: culture(moria)
+            }
+        }
       {
         type: activatedTrigger
         trigger: {
@@ -632,11 +640,14 @@
     twilight: 0
     type: condition
     keyword: support area
-    requires: {
-      type: canSpot
-      filter: culture(moria)
-    }
     effects: [
+        {
+            type: toPlay
+            requires: {
+              type: canSpot
+              filter: culture(moria)
+            }
+        }
       {
         type: trigger
         trigger: {
@@ -1048,53 +1059,58 @@
     twilight: 2
     type: condition
     keyword: support area
-    requires: {
-      type: canSpot
-      filter: spider
-    }
-    effects: {
-      type: activated
-      phase: assignment
-      cost: {
-        type: discard
-        filter: choose(orc)
-      }
-      effect: {
-        type: choice
-        texts: [
-          Play a Spider from your draw deck
-          Play a Spider from your discard pile
-        ]
-        effects: [
-          {
-            type: playCardFromDrawDeck
-            filter: choose(spider)
-            cost: {
-              type: requires
-              requires: {
-                type: location
-                filter: forest
-              }
-              true: -4
-              false: -2
+    effects: [
+        {
+            type: toPlay
+            requires: {
+              type: canSpot
+              filter: spider
             }
+        }
+        {
+          type: activated
+          phase: assignment
+          cost: {
+            type: discard
+            filter: choose(orc)
           }
-          {
-            type: playCardFromDiscard
-            filter: choose(spider)
-            cost: {
-              type: requires
-              requires: {
-                type: location
-                filter: forest
+          effect: {
+            type: choice
+            texts: [
+              Play a Spider from your draw deck
+              Play a Spider from your discard pile
+            ]
+            effects: [
+              {
+                type: playCardFromDrawDeck
+                filter: choose(spider)
+                cost: {
+                  type: requires
+                  requires: {
+                    type: location
+                    filter: forest
+                  }
+                  true: -4
+                  false: -2
+                }
               }
-              true: -4
-              false: -2
-            }
+              {
+                type: playCardFromDiscard
+                filter: choose(spider)
+                cost: {
+                  type: requires
+                  requires: {
+                    type: location
+                    filter: forest
+                  }
+                  true: -4
+                  false: -2
+                }
+              }
+            ]
           }
-        ]
-      }
-    }
+        }
+    ]
   }
   31_55: {
     title: Wicked Spider
@@ -1277,23 +1293,28 @@
     twilight: 2
     type: condition
     keyword: support area
-    requires: {
-      type: canSpot
-      filter: troll
-    }
-    effects: {
-      type: activated
-      phase: shadow
-      cost: {
-        type: discardFromHand
-        forced: false
-        count: 2
-      }
-      effect: {
-        type: playCardFromDiscard
-        filter: choose(minion)
-      }
-    }
+    effects: [
+        {
+            type: toPlay
+            requires: {
+              type: canSpot
+              filter: troll
+            }
+        }
+        {
+          type: activated
+          phase: shadow
+          cost: {
+            type: discardFromHand
+            forced: false
+            count: 2
+          }
+          effect: {
+            type: playCardFromDiscard
+            filter: choose(minion)
+          }
+        }
+    ]
   }
   31_60: {
     title: Troll Knife

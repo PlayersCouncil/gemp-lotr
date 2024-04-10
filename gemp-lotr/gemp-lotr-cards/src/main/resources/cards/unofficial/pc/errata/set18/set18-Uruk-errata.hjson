@@ -28,12 +28,12 @@
 		twilight: 4
 		type: event
 		keyword: skirmish
-		requires: {
-			type: CanSpot
-			filter: your,Uruk-hai,InSkirmishAgainst(companion)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: CanSpot
+                filter: your,Uruk-hai,InSkirmishAgainst(companion)
+            }
 			effect: [
 				{
 					type: addModifier

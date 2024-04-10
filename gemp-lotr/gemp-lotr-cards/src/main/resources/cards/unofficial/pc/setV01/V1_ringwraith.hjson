@@ -184,11 +184,14 @@
 		twilight: 1
 		type: condition
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: twilight,nazgul
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: twilight,nazgul
+                }
+		    }
 			{
 				type: trigger
 				trigger: {

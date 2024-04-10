@@ -10,18 +10,23 @@
 		race: man
 		strength: 5
 		vitality: 2
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: cantLookOrRevealHand
-				player: shadowPlayer
-				hand: owner
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: cantLookOrRevealHand
+                    player: shadowPlayer
+                    hand: owner
+                }
+            }
+        ]
 	}
 	2_22: {
 		title: Gandalf's Staff
@@ -83,34 +88,39 @@
 		race: man
 		strength: 4
 		vitality: 2
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
-		effects: {
-			type: activated
-			phase: fellowship
-			cost: {
-				type: exert
-				filter: self
-			}
-			effect: [
-				{
-					type: chooseCardsFromDiscard
-					filter: choose(side(free people))
-					memorize: chosenCard
-					text: Choose card to reveal and put beneath your deck
-				}
-				{
-					type: revealCards
-					filter: memory(chosenCard)
-				}
-				{
-					type: putCardsFromDiscardOnBottomOfDeck
-					filter: memory(chosenCard)
-				}
-			]
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+            {
+                type: activated
+                phase: fellowship
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: [
+                    {
+                        type: chooseCardsFromDiscard
+                        filter: choose(side(free people))
+                        memorize: chosenCard
+                        text: Choose card to reveal and put beneath your deck
+                    }
+                    {
+                        type: revealCards
+                        filter: memory(chosenCard)
+                    }
+                    {
+                        type: putCardsFromDiscardOnBottomOfDeck
+                        filter: memory(chosenCard)
+                    }
+                ]
+            }
+        ]
 	}
 	2_25: {
 		title: Jarnsmid
@@ -123,18 +133,23 @@
 		race: man
 		strength: 4
 		vitality: 2
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyCost
-				amount: -1
-				filter: your,or(shield,armor,helm,hand weapon)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyCost
+                    amount: -1
+                    filter: your,or(shield,armor,helm,hand weapon)
+                }
+            }
+        ]
 	}
 	2_26: {
 		title: Speak \Friend\ and Enter
@@ -145,12 +160,12 @@
 			fellowship
 			regroup
 		]
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: name(Gandalf)
+            }
 			effect: [
 				{
 					type: playNextSite
@@ -207,12 +222,12 @@
 			spell
 			maneuver
 		]
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: name(Gandalf)
+            }
 			effect: {
 				type: preventable
 				text: Remove (3) to prevent giving companion Defender +1
@@ -262,12 +277,12 @@
 			spell
 			maneuver
 		]
-		requires: {
-			type: canSpot
-			filter: name(Gandalf),hasAttached(staff)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: name(Gandalf),hasAttached(staff)
+            }
 			effect: {
 				type: removeKeyword
 				keyword: fierce

@@ -4,12 +4,15 @@
 		culture: elven
 		twilight: 1
 		type: condition
-		requires: {
-			type: canSpot
-			filter: elf
-		}
 		keyword: support area
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                }
+		    }
 			{
 				type: modifier
 				modifier: {

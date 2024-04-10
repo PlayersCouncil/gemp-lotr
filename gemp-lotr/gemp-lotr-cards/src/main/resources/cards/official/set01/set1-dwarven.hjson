@@ -100,9 +100,12 @@
 		strength: 4
 		vitality: 2
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: dwarf
+		effects: {
+		    type: toPlay
+            requires: {
+                type: canSpot
+                filter: dwarf
+            }
 		}
 	}
 	1_8: {
@@ -211,18 +214,23 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: dwarf
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyStrength
-				filter: self,inSkirmishAgainst(orc)
-				amount: 2
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: dwarf
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyStrength
+                    filter: self,inSkirmishAgainst(orc)
+                    amount: 2
+                }
+            }
+        ]
 	}
 	1_12: {
 		title: Gimli
@@ -792,12 +800,12 @@
 		twilight: 2
 		type: event
 		keyword: fellowship
-		requires: {
-			type: canSpot
-			filter: dwarf
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: dwarf
+            }
 			effect: [
 				{
 					type: revealTopCardsOfDrawDeck

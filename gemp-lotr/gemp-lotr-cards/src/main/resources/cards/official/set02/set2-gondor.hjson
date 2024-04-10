@@ -143,22 +143,27 @@
 		title: Natural Cover
 		type: condition
 		keyword: Support Area
-		requires: {
-			type: canSpot
-			filter: ranger
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyArcheryTotal
-				requires: {
-					type: location
-					filter: forest
-				}
-				side: shadow
-				amount: -2
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: ranger
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyArcheryTotal
+                    requires: {
+                        type: location
+                        filter: forest
+                    }
+                    side: shadow
+                    amount: -2
+                }
+            }
+        ]
 	}
 	2_36: {
 		side: free_people
