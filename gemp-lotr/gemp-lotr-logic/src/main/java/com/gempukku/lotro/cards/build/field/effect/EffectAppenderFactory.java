@@ -68,6 +68,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("foreachshadowplayer", new ForEachShadowPlayer());
         effectAppenderProducers.put("getcardsfromtopofdeck", new GetCardsFromTopOfDeck());
         effectAppenderProducers.put("heal", new Heal());
+        effectAppenderProducers.put("if", new IfEffect());
         effectAppenderProducers.put("incrementperphaselimit", new IncrementPerPhaseLimit());
         effectAppenderProducers.put("incrementperturnlimit", new IncrementPerTurnLimit());
         effectAppenderProducers.put("kill", new Kill());
