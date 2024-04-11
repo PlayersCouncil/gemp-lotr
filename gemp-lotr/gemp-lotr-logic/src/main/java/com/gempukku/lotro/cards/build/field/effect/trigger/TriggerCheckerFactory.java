@@ -12,6 +12,8 @@ public class TriggerCheckerFactory {
     private final Map<String, TriggerCheckerProducer> triggerCheckers = new HashMap<>();
 
     public TriggerCheckerFactory() {
+        triggerCheckers.put("abouttoaddburden", new AboutToAddBurden());
+        triggerCheckers.put("abouttoaddtwilight", new AboutToAddBurden());
         triggerCheckers.put("abouttobekilled", new AboutToBeKilled());
         triggerCheckers.put("abouttodiscard", new AboutToDiscardFromPlay());
         triggerCheckers.put("abouttoexert", new AboutToExert());
