@@ -1,0 +1,91 @@
+{
+
+	12_79: {
+		cardInfo: {
+			imagePath: decipher/LOTR12079.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R79
+			rarity: R
+			setNum: "12"
+			cardNum: 79
+			style: Standard
+		}
+		title: The Balrog
+		subtitle: The Terror of Khazad-dûm
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 12
+		type: Minion
+		race: Balrog
+		strength: 17
+		vitality: 5
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While The Balrog is at an underground site, it is <b>fierce</b> and cannot take wounds or be exerted.
+		lore: The fire in it seemed to die, but the darkness grew.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_80: {
+		cardInfo: {
+			imagePath: decipher/LOTR12080.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R80
+			rarity: R
+			setNum: "12"
+			cardNum: 80
+			style: Standard
+		}
+		title: Whip of Many Thongs
+		subtitle: Weapon of Flame and Shadow
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Artifact
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be The Balrog.<br>It is <b>fierce</b>.<br>When you play this artifact, the Free Peoples player reveals his or her hand and discards all Free Peoples cards from hand that have a twilight cost of 1 or less.
+		lore: ...it swung its whip, and the thongs lashed....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

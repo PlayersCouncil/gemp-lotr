@@ -1,0 +1,860 @@
+{
+
+	13_158: {
+		cardInfo: {
+			imagePath: decipher/LOTR13158.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R158
+			rarity: R
+			setNum: "13"
+			cardNum: 158
+			style: Standard
+		}
+		title: Assault Commander
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Exert this minion and spot a Free Peoples condition to make an unbound companion resistance -1 for each card that has the same card title as that condition.
+		lore: Fear is a potent weapon in the hands of an Uruk-hai.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_159: {
+		cardInfo: {
+			imagePath: decipher/LOTR13159.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C159
+			rarity: C
+			setNum: "13"
+			cardNum: 159
+			style: Standard
+		}
+		title: Assault Denizen
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>This minion is strength +1 for each Free Peoples culture token you can spot.
+		lore: Theories and tactics of warfare were tested upon the battlefields of Middle-earth.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_160: {
+		cardInfo: {
+			imagePath: decipher/LOTR13160.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C160
+			rarity: C
+			setNum: "13"
+			cardNum: 160
+			style: Standard
+		}
+		title: Cavern Denizen
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 6
+		vitality: 1
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While you can spot a Free Peoples culture token, this minion cannot take wounds except during skirmishes.
+		lore: Saruman uses the enemy's strength to his own advantage.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_161: {
+		cardInfo: {
+			imagePath: decipher/LOTR13161.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C161
+			rarity: C
+			setNum: "13"
+			cardNum: 161
+			style: Standard
+		}
+		title: Endless Assault
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Discard this condition to make an [uruk-hai] minion strength +1 for each of the following that is true: it is at a battleground site; it is skirmishing a companion who has resistance 4 or less; it is bearing a possession; you can spot an [uruk-hai] minion not assigned to a skirmish.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_162: {
+		cardInfo: {
+			imagePath: decipher/LOTR13162.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C162
+			rarity: C
+			setNum: "13"
+			cardNum: 162
+			style: Standard
+		}
+		title: Enemy Without Number
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 [uruk-hai] minions.<br><b>Shadow:</b> Discard 2 cards from hand to add (1).<br><b>Regroup:</b> Spot an [uruk-hai] minion and discard this condition from play to add (3).
+		lore: Valour could not prevent the breach of the Deeping Wall.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_163: {
+		cardInfo: {
+			imagePath: decipher/LOTR13163.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C163
+			rarity: C
+			setNum: "13"
+			cardNum: 163
+			style: Standard
+		}
+		title: Entranced Uruk
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Possessions borne by this minion cannot be discarded by Free Peoples cards.
+		lore: An Uruk is disarmed only when it hurls its weapon.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_164: {
+		cardInfo: {
+			imagePath: decipher/LOTR13164.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C164
+			rarity: C
+			setNum: "13"
+			cardNum: 164
+			style: Standard
+		}
+		title: Fearless Approach
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an [uruk-hai] minion.<br>When you play this, if you spot a battleground site on the adventure path, reinforce 3 [uruk-hai] tokens.<br>Each time the Free Peoples player plays the fellowship's next site, you may discard a condition from play.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_165: {
+		cardInfo: {
+			imagePath: decipher/LOTR13165.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U165
+			rarity: U
+			setNum: "13"
+			cardNum: 165
+			style: Standard
+		}
+		title: Isengard Infiltrator
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 1
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While the fellowship is at a forest site, the fellowship archery total is -1.<br>Each [elven] companion skirmishing this minion is strength -2.
+		lore: The Uruk-hai trained to engage the enemy in its own territory.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_166: {
+		cardInfo: {
+			imagePath: decipher/LOTR13166.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U166
+			rarity: U
+			setNum: "13"
+			cardNum: 166
+			style: Standard
+		}
+		title: New Enemy
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: You may remove from the game 4 [uruk-hai] cards in your discard pile instead of paying the twilight cost for this card.<br>Make your [uruk-hai] minion skirmishing a companion with resistance 4 or less strength +2.
+		lore: ...goblin-soldiers of greater stature.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_167: {
+		cardInfo: {
+			imagePath: decipher/LOTR13167.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U167
+			rarity: U
+			setNum: "13"
+			cardNum: 167
+			style: Standard
+		}
+		title: Signs of War
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot 3 [uruk-hai] lurker minions, at the start of each skirmish involving an [uruk-hai] lurker minion, each companion skirmishing that minion must exert.
+		lore: Horsemen were galloping on the grass of Rohan; wolves poured from Isengard.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_168: {
+		cardInfo: {
+			imagePath: decipher/LOTR13168.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C168
+			rarity: C
+			setNum: "13"
+			cardNum: 168
+			style: Standard
+		}
+		title: Uruk Aggressor
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>When you play this, you may spot a companion who has resistance 0 to make this minion twilight cost -2.
+		lore: The defenses of the Hornburg were exploited, exposing their weakest points.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_169: {
+		cardInfo: {
+			imagePath: decipher/LOTR13169.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R169
+			rarity: R
+			setNum: "13"
+			cardNum: 169
+			style: Standard
+		}
+		title: Uruk Blitz
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 12
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an [uruk-hai] minion.<br>While the fellowship is in region 1, each Uruk-hai is <b>damage +1</b>.<br>While the fellowship is in region 2, each companion is strength -1.<br>While the fellowship is in region 3, each unbound companion is resistance -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_170: {
+		cardInfo: {
+			imagePath: decipher/LOTR13170.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U170
+			rarity: U
+			setNum: "13"
+			cardNum: 170
+			style: Standard
+		}
+		title: Uruk Distractor
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> If this minion is not assigned to a skirmish, you may exert it to discard a possession borne by a companion skirmishing another [uruk-hai] minion.
+		lore: Wounds do not always remove the Uruk-hai from their assault.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_171: {
+		cardInfo: {
+			imagePath: decipher/LOTR13171.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R171
+			rarity: R
+			setNum: "13"
+			cardNum: 171
+			style: Standard
+		}
+		title: Uruk Invader
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>This minion is twilight cost -1 for each companion who has resistance 2 or less.
+		lore: To sense weakness is to assume victory.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_172: {
+		cardInfo: {
+			imagePath: decipher/LOTR13172.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C172
+			rarity: C
+			setNum: "13"
+			cardNum: 172
+			style: Standard
+		}
+		title: Uruk Outrider
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 15
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: This minion is <b>damage +1</b> for each character in the dead pile.
+		lore: The lesser the enemy, the greater the rage.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_173: {
+		cardInfo: {
+			imagePath: decipher/LOTR13173.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C173
+			rarity: C
+			setNum: "13"
+			cardNum: 173
+			style: Standard
+		}
+		title: Uruk Reserve
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time your [uruk-hai] minion is about to be killed in a skirmish, you may place that minion on the bottom of your draw deck instead.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_174: {
+		cardInfo: {
+			imagePath: decipher/LOTR13174.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R174
+			rarity: R
+			setNum: "13"
+			cardNum: 174
+			style: Standard
+		}
+		title: Uruk Rogue
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 12
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> If no other minions are assigned to a skirmish, exert this minion twice to make it <b>fierce</b> and strength +4 until the regroup phase.
+		lore: Some minions prefer to fight alone.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_175: {
+		cardInfo: {
+			imagePath: decipher/LOTR13175.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C175
+			rarity: C
+			setNum: "13"
+			cardNum: 175
+			style: Standard
+		}
+		title: Uruk Tactician
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert this minion to make a companion skirmishing an [uruk-hai] lurker minion strength -2.
+		lore: Select warriors had been tasked with advancing the assault beyond the Deeping Wall.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_176: {
+		cardInfo: {
+			imagePath: decipher/LOTR13176.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C176
+			rarity: C
+			setNum: "13"
+			cardNum: 176
+			style: Standard
+		}
+		title: War Machine
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert your [uruk-hai] lurker minion to play an [uruk-hai] hand weapon from your discard pile on your [uruk-hai] minion.
+		lore: ...on the front of their iron helms was set an S-rune, wrought of some white metal.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_177: {
+		cardInfo: {
+			imagePath: decipher/LOTR13177.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U177
+			rarity: U
+			setNum: "13"
+			cardNum: 177
+			style: Standard
+		}
+		title: Weapons of Control
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this, add an [uruk-hai] token here for each wounded companion.<br><b>Skirmish:</b> Discard this from play or remove 2 tokens from here to make a companion skirmishing an [uruk-hai] minion strength -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

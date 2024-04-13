@@ -1,0 +1,1704 @@
+{
+
+	1_163: {
+		cardInfo: {
+			imagePath: decipher/LOTR01163.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R163
+			rarity: R
+			setNum: "1"
+			cardNum: 163
+			style: Standard
+		}
+		title: Ancient Chieftain
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: For each other [moria] Orc you can spot, Ancient Chieftain is strength +1.
+		lore: ...a huge orc-chieftain, almost man-high, clad in black mail from head to foot, leaped into the chamber; behind him his followers clustered in the doorway.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_164: {
+		cardInfo: {
+			imagePath: decipher/LOTR01164.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U164
+			rarity: U
+			setNum: "1"
+			cardNum: 164
+			style: Standard
+		}
+		title: Bitter Hatred
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Archery:</b> Spot a [moria] archer to wound an Elf.
+		lore: Bitter and long is the hatred of the Orcs for the Elves, and thus they prefer Elves as targets.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_165: {
+		cardInfo: {
+			imagePath: decipher/LOTR01165.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R165
+			rarity: R
+			setNum: "1"
+			cardNum: 165
+			style: Standard
+		}
+		title: Cave Troll of Moria
+		subtitle: Scourge of the Black Pit
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 10
+		type: Minion
+		race: Troll
+		strength: 15
+		vitality: 4
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot a [moria] Orc.<br>At an underground site, Cave Troll of Moria's twilight cost is -3.
+		lore: Frodo's quest nearly ended before his companions halted the Cave Troll's ferocious attack.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_166: {
+		cardInfo: {
+			imagePath: decipher/LOTR01166.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R166
+			rarity: R
+			setNum: "1"
+			cardNum: 166
+			style: Standard
+		}
+		title: Cave Troll's Hammer
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Cave Troll of Moria.<br>Cave Troll of Moria is <b>damage +1</b>.
+		lore: Suddenly the door burst into fragments and the Cave Troll was among them, his huge hammer striking like thunder.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_167: {
+		cardInfo: {
+			imagePath: decipher/LOTR01167.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R167
+			rarity: R
+			setNum: "1"
+			cardNum: 167
+			style: Standard
+		}
+		title: Denizens Enraged
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Make a [moria] Orc strength +1 for each other [moria] Orc you spot (limit +4).
+		lore: ...there came a great noise: a rolling Boom that seemed to come from depths far below, and to tremble in the stone at their feet.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_168: {
+		cardInfo: {
+			imagePath: decipher/LOTR01168.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C168
+			rarity: C
+			setNum: "1"
+			cardNum: 168
+			style: Standard
+		}
+		title: Drums in the Deep
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Make a [moria] Orc strength +2 (or +4 if skirmishing a Dwarf).
+		lore: The drum-beats broke out wildly: doom-boom, doom-boom, and then stopped... Doom, doom went the drum-beats again....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_169: {
+		cardInfo: {
+			imagePath: decipher/LOTR01169.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R169
+			rarity: R
+			setNum: "1"
+			cardNum: 169
+			style: Standard
+		}
+		title: The End Comes
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Assignment:</b> Spot 5 [moria] minions to make the Free Peoples player assign the Ring-bearer to a skirmish.
+		lore: They have taken the Bridge and the second hall; we have barred the gates – but cannot hold them for long....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_170: {
+		cardInfo: {
+			imagePath: decipher/LOTR01170.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R170
+			rarity: R
+			setNum: "1"
+			cardNum: 170
+			style: Standard
+		}
+		title: Fool of a Took!
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Shadow:</b> Spot a Hobbit (except the Ring-bearer) to reveal cards from the top of your draw deck until you reveal one that is not a [moria] minion. Take the revealed cards into hand.
+		lore: Fool of a Took! Throw yourself in next time and rid us of your stupidity!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_171: {
+		cardInfo: {
+			imagePath: decipher/LOTR01171.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C171
+			rarity: C
+			setNum: "1"
+			cardNum: 171
+			style: Standard
+		}
+		title: Frenzy
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Assignment:</b> Assign an exhausted companion (except the Ring-bearer) to skirmish a [moria] Orc.
+		lore: The Goblins of the Misty Mountains, like all of their race, use their teeming numbers to slaughter their foes.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_172: {
+		cardInfo: {
+			imagePath: decipher/LOTR01172.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R172
+			rarity: R
+			setNum: "1"
+			cardNum: 172
+			style: Standard
+		}
+		title: Goblin Archer
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 4
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>.<br>While you can spot another [moria] Orc, the fellowship archery total is -6.
+		lore: An arrow whistled over Frodo's head.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_173: {
+		cardInfo: {
+			imagePath: decipher/LOTR01173.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R173
+			rarity: R
+			setNum: "1"
+			cardNum: 173
+			style: Standard
+		}
+		title: Goblin Armory
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each time you play a [moria] weapon, add (1).<br><b>Response:</b> If a [moria] Orc is about to take a wound, discard this condition to prevent that wound.
+		lore: For scavenging vermin, the weapons of fallen foes are prized possessions.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_174: {
+		cardInfo: {
+			imagePath: decipher/LOTR01174.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C174
+			rarity: C
+			setNum: "1"
+			cardNum: 174
+			style: Standard
+		}
+		title: Goblin Backstabber
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Minion
+		race: Orc
+		strength: 5
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: This minion is <b>damage +2</b> while in the same skirmish as another [moria] Orc.
+		lore: An attack from behind provides a cowardly Goblin with a boldness much like courage.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_175: {
+		cardInfo: {
+			imagePath: decipher/LOTR01175.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R175
+			rarity: R
+			setNum: "1"
+			cardNum: 175
+			style: Standard
+		}
+		title: Goblin Domain
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Search</b>. To play, spot a [moria] minion. Plays to your support area.<br>Each time a companion is played to site 4 or higher, that companion comes into play exhausted.
+		lore: The once beautiful kingdom of Khazad-dûm has become Moria, the black pit.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_176: {
+		cardInfo: {
+			imagePath: decipher/LOTR01176.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C176
+			rarity: C
+			setNum: "1"
+			cardNum: 176
+			style: Standard
+		}
+		title: Goblin Marksman
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>. <helper>(Add 1 to the minion archery total.)</helper>
+		lore: Arrows fell among them. One struck Frodo and sprang back. Another pierced Gandalf's hat and stuck there like a black feather.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_177: {
+		cardInfo: {
+			imagePath: decipher/LOTR01177.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C177
+			rarity: C
+			setNum: "1"
+			cardNum: 177
+			style: Standard
+		}
+		title: Goblin Patrol Troop
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 6
+		type: Minion
+		race: Orc
+		strength: 13
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: &nbsp;
+		lore: As they ran they heard the beat and echo of many hurrying feet behind. A shrill yell went up: they had been seen. There was a ring and clash of steel.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_178: {
+		cardInfo: {
+			imagePath: decipher/LOTR01178.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U178
+			rarity: U
+			setNum: "1"
+			cardNum: 178
+			style: Standard
+		}
+		title: Goblin Runner
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Minion
+		race: Orc
+		strength: 5
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, you may add (2).
+		lore: ...a great horn was blown in the hall, and answering horns and harsh cries were heard further off. There was a hurrying sound of many feet.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_179: {
+		cardInfo: {
+			imagePath: decipher/LOTR01179.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C179
+			rarity: C
+			setNum: "1"
+			cardNum: 179
+			style: Standard
+		}
+		title: Goblin Scavengers
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, you may play a weapon from your discard pile on your [moria] Orc.
+		lore: The Orcs have often plundered Moria; there is nothing left in the upper halls.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_180: {
+		cardInfo: {
+			imagePath: decipher/LOTR01180.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C180
+			rarity: C
+			setNum: "1"
+			cardNum: 180
+			style: Standard
+		}
+		title: Goblin Scimitar
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [moria] Orc.<br>When you play this possession, you may draw a card.
+		lore: Some of the swords were crooked: orc-scimitars with blackened blades.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_181: {
+		cardInfo: {
+			imagePath: decipher/LOTR01181.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U181
+			rarity: U
+			setNum: "1"
+			cardNum: 181
+			style: Standard
+		}
+		title: Goblin Sneak
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Minion
+		race: Orc
+		strength: 5
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, you may place a [moria] Orc from your discard pile beneath your draw deck.
+		lore: Their limber forms allow the Goblins of Moria to slither past barred doors and collapsed passageways.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_182: {
+		cardInfo: {
+			imagePath: decipher/LOTR01182.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C182
+			rarity: C
+			setNum: "1"
+			cardNum: 182
+			style: Standard
+		}
+		title: Goblin Spear
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [moria] minion.<br>If bearer kills a companion in a skirmish, add 1 burden (or 2 burdens if that companion was a Hobbit).
+		lore: Simple creatures with simple weapons can be as deadly as an armoured warrior with fine sword.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_183: {
+		cardInfo: {
+			imagePath: decipher/LOTR01183.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R183
+			rarity: R
+			setNum: "1"
+			cardNum: 183
+			style: Standard
+		}
+		title: Goblin Swarms
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Response:</b> If your [moria] Orc wins a skirmish, discard cards and wounds on that Orc and stack that Orc on this condition.<br><b>Shadow:</b> Play an Orc stacked here as if played from hand.
+		lore: Beyond the fire he saw swarming black figures....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_184: {
+		cardInfo: {
+			imagePath: decipher/LOTR01184.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C184
+			rarity: C
+			setNum: "1"
+			cardNum: 184
+			style: Standard
+		}
+		title: Goblin Wallcrawler
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While at an underground site, this minion is strength +2.<br>While you can spot another [moria] Orc, the fellowship archery total is -1.
+		lore: Skittering along the walls of Moria, Goblins attack without warning.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_185: {
+		cardInfo: {
+			imagePath: decipher/LOTR01185.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C185
+			rarity: C
+			setNum: "1"
+			cardNum: 185
+			style: Standard
+		}
+		title: Goblin Warrior
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, you may discard a [dwarven] ally or [dwarven] condition.
+		lore: The ancient enmity between Goblins and Dwarves burns brightly still.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_186: {
+		cardInfo: {
+			imagePath: decipher/LOTR01186.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R186
+			rarity: R
+			setNum: "1"
+			cardNum: 186
+			style: Standard
+		}
+		title: Guard Commander
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Remove (3) to make a [moria] Orc strength +2.
+		lore: His broad flat face was swart, his eyes were like coals and his tongue was red....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_187: {
+		cardInfo: {
+			imagePath: decipher/LOTR01187.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C187
+			rarity: C
+			setNum: "1"
+			cardNum: 187
+			style: Standard
+		}
+		title: Host of Thousands
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Shadow:</b> Play a [moria] Orc from your discard pile.
+		lore: Killing one is no victory, since a dozen from the warrens below will take his place.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_188: {
+		cardInfo: {
+			imagePath: decipher/LOTR01188.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U188
+			rarity: U
+			setNum: "1"
+			cardNum: 188
+			style: Standard
+		}
+		title: The Long Dark
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>When the fellowship moves to site 4 or 5, add (2) for each Dwarf companion.<br><b>Skirmish:</b> Discard this condition to make your [moria] Orc strength +2.
+		lore: So ended the attempt to retake Moria! It was valiant but foolish. The time is not come yet.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_189: {
+		cardInfo: {
+			imagePath: decipher/LOTR01189.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R189
+			rarity: R
+			setNum: "1"
+			cardNum: 189
+			style: Standard
+		}
+		title: Lost to the Goblins
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Response:</b> If the Ring-bearer exerts or takes a wound, discard a card from the top of your draw deck for each [moria] minion you spot. For each Shadow card discarded in this way, add a burden (limit 3 burdens).
+		lore: Dwarven graves stood open in plundered disarray.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_190: {
+		cardInfo: {
+			imagePath: decipher/LOTR01190.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R190
+			rarity: R
+			setNum: "1"
+			cardNum: 190
+			style: Standard
+		}
+		title: Moria Axe
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [moria] Orc.<br>Bearer is <b>damage +1</b>.<br><b>Skirmish:</b> Exert bearer to make him strength +2.
+		lore: Goblins without scimitars wrest axes from the remains of fallen Dwarves.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_191: {
+		cardInfo: {
+			imagePath: decipher/LOTR01191.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C191
+			rarity: C
+			setNum: "1"
+			cardNum: 191
+			style: Standard
+		}
+		title: Moria Scout
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, spot an Elf to add (2).
+		lore: Like their kindred in the North, the Orcs of Moria have keen noses, often following their prey by scent.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_192: {
+		cardInfo: {
+			imagePath: decipher/LOTR01192.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C192
+			rarity: C
+			setNum: "1"
+			cardNum: 192
+			style: Standard
+		}
+		title: Pinned Down
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>While you can spot a [moria] archer, the fellowship archery total is -1.
+		lore: Arrows whined and whistled down the corridor as he sprang back.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_193: {
+		cardInfo: {
+			imagePath: decipher/LOTR01193.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C193
+			rarity: C
+			setNum: "1"
+			cardNum: 193
+			style: Standard
+		}
+		title: Plundered Armories
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Response:</b> If your [moria] weapon is discarded, play it from your discard pile (that weapon's twilight cost is -1).
+		lore: The Goblins of Moria have oft plundered the deep armouries of Durin's folk.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_194: {
+		cardInfo: {
+			imagePath: decipher/LOTR01194.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U194
+			rarity: U
+			setNum: "1"
+			cardNum: 194
+			style: Standard
+		}
+		title: Relentless
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Search</b>.<br><b>Response:</b> If a stealth event is played, spot 3 [moria] minions to cancel that event.
+		lore: Then dig a hole in the ground,' said Legolas, 'if that is more after the fashion of your kind. But you must dig swift and deep, if you wish to hide from Orcs.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_195: {
+		cardInfo: {
+			imagePath: decipher/LOTR01195.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R195
+			rarity: R
+			setNum: "1"
+			cardNum: 195
+			style: Standard
+		}
+		title: Relics of Moria
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Shadow:</b> Remove (2) to play a [moria] possession from your discard pile.
+		lore: By both the doors they could now see that many bones were lying, and among them were broken swords and axe-heads, and cloven shields and helms.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_196: {
+		cardInfo: {
+			imagePath: decipher/LOTR01196.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C196
+			rarity: C
+			setNum: "1"
+			cardNum: 196
+			style: Standard
+		}
+		title: They Are Coming
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 3
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Shadow:</b> Discard 3 cards from hand to play a [moria] Orc from your discard pile.
+		lore: The last thing written is in a trailing scrawl of elf-letters: they are coming.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_197: {
+		cardInfo: {
+			imagePath: decipher/LOTR01197.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C197
+			rarity: C
+			setNum: "1"
+			cardNum: 197
+			style: Standard
+		}
+		title: Threat of the Unknown
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Shadow:</b> Exert your [moria] Orc to draw 2 cards.
+		lore: The danger of what lay hidden in the dark was more terrifying than the known perils of Moria.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_198: {
+		cardInfo: {
+			imagePath: decipher/LOTR01198.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U198
+			rarity: U
+			setNum: "1"
+			cardNum: 198
+			style: Standard
+		}
+		title: Through the<br>Misty Mountains
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Search</b>. To play, exert a [moria] minion. Plays to your support area.<br>Each time the fellowship moves to site 4, 5, or 6 and contains a Dwarf or Elf, the Free Peoples player discards 2 cards at random from hand.
+		lore: One must tread the path that need chooses.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_199: {
+		cardInfo: {
+			imagePath: decipher/LOTR01199.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R199
+			rarity: R
+			setNum: "1"
+			cardNum: 199
+			style: Standard
+		}
+		title: Troll's Keyward
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Cave Troll of Moria's twilight cost is -2.
+		lore: Though shorter than a Man, the Troll's Keyward is a deadly adversary.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_200: {
+		cardInfo: {
+			imagePath: decipher/LOTR01200.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R200
+			rarity: R
+			setNum: "1"
+			cardNum: 200
+			style: Standard
+		}
+		title: The Underdeeps of Moria
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Shadow:</b> Remove (3) to reveal the bottom card of your draw deck. If it is a [moria] Orc, take it into hand. Otherwise, discard it.
+		lore: I am afraid Balin is buried deep, and maybe something else is buried there too.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_201: {
+		cardInfo: {
+			imagePath: decipher/LOTR01201.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C201
+			rarity: C
+			setNum: "1"
+			cardNum: 201
+			style: Standard
+		}
+		title: Unfamiliar Territory
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Make a [moria] Orc strength +2 (or +4 if skirmishing an archer).
+		lore: Knowing the dark terrain of Moria gives Orcs a strategic advantage when attacking their foes.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_202: {
+		cardInfo: {
+			imagePath: decipher/LOTR01202.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U202
+			rarity: U
+			setNum: "1"
+			cardNum: 202
+			style: Standard
+		}
+		title: What Is This New Devilry?
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Search</b>. To play, exert a [moria] Orc. Plays to your support area.<br>While the fellowship is at site 5 or higher, each companion's twilight cost is +2.
+		lore: This foe is beyond any of you! Run!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

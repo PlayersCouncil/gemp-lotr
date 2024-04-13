@@ -1,0 +1,680 @@
+{
+
+	13_142: {
+		cardInfo: {
+			imagePath: decipher/LOTR13142.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R142
+			rarity: R
+			setNum: "13"
+			cardNum: 142
+			style: Standard
+		}
+		title: Bilbo
+		subtitle: Aged Ring-bearer
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>.<br>While Bilbo is not assigned to a skirmish, each Ring-bound Hobbit is strength +1.<br>At the start of each skirmish involving Bilbo, you may remove a burden for each other Ring-bound Hobbit you can spot.
+		lore: ...I am quite ready to go on another journey....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_143: {
+		cardInfo: {
+			imagePath: decipher/LOTR13143.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R143
+			rarity: R
+			setNum: "13"
+			cardNum: 143
+			style: Standard
+		}
+		title: Bill the Pony
+		subtitle: Dearly-loved
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Ring-bound Hobbit.<br>When you play Bill the Pony, you may reinforce a [shire] token.<br><b>Regroup:</b> Spot 2 minions and remove 2 [shire] tokens to make a Shadow player discard a minion from play.
+		lore: Sam would not go to bed until he had visited Bill....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_144: {
+		cardInfo: {
+			imagePath: decipher/LOTR13144.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U144
+			rarity: U
+			setNum: "13"
+			cardNum: 144
+			style: Standard
+		}
+		title: Daddy Twofoot
+		subtitle: Next-door Neighbor
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Follower
+		resistance: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Aid</b> – Add a burden. <helper>(At the start of the maneuver phase, you may add a burden to transfer this to a companion.)</helper><br>Each time you transfer this to a companion, you may take a [shire] event into hand from your discard pile.
+		lore: That's a dark bad place, if half the tales be true.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_145: {
+		cardInfo: {
+			imagePath: decipher/LOTR13145.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C145
+			rarity: C
+			setNum: "13"
+			cardNum: 145
+			style: Standard
+		}
+		title: Don't Let Go
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Discard this condition to make a Hobbit strength +1 for each of the following that is true: he or she is participating in a fierce skirmish; he or she has resistance 7 or more; he or she is at a dwelling site; you can spot an unwounded Hobbit.
+		lore: Don't you give up on me Mr. Frodo!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_146: {
+		cardInfo: {
+			imagePath: decipher/LOTR13146.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U146
+			rarity: U
+			setNum: "13"
+			cardNum: 146
+			style: Standard
+		}
+		title: Everything but My Bones
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: You may remove from the game 4 other [shire] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make your Hobbit at a dwelling or forest site strength +3.
+		lore: ...I'll carry Mr. Frodo up myself....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_147: {
+		cardInfo: {
+			imagePath: decipher/LOTR13147.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C147
+			rarity: C
+			setNum: "13"
+			cardNum: 147
+			style: Standard
+		}
+		title: Faith in Friendship
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this, add a [shire] token here.<br>At the start of the regroup phase, you may discard this from play or remove a token from here to heal a [shire] companion.
+		lore: I'm going to take care of you.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_148: {
+		cardInfo: {
+			imagePath: decipher/LOTR13148.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U148
+			rarity: U
+			setNum: "13"
+			cardNum: 148
+			style: Standard
+		}
+		title: Fates Entwined
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time a Hobbit wins a skirmish, you may heal another Hobbit once (or heal another Hobbit twice if the Hobbit that won the skirmish was Frodo or Bilbo).
+		lore: Yes, I am coming... The Ring-bearers should go together.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_149: {
+		cardInfo: {
+			imagePath: decipher/LOTR13149.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R149
+			rarity: R
+			setNum: "13"
+			cardNum: 149
+			style: Standard
+		}
+		title: Frodo
+		subtitle: Frenzied Fighter
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>.<br>While you can spot more minions than companions, Frodo cannot be overwhelmed unless his strength is tripled.<br><b>Skirmish:</b> If Frodo is not assigned to a skirmish, exert Frodo to have him replace a Ring-bound companion skirmishing a minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_150: {
+		cardInfo: {
+			imagePath: decipher/LOTR13150.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U150
+			rarity: U
+			setNum: "13"
+			cardNum: 150
+			style: Standard
+		}
+		title: Frodo Gamgee
+		subtitle: Son of Samwise
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Follower
+		vitality: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Aid</b> – Add 2 burdens. <helper>(At the start of the maneuver phase, you may add 2 burdens to transfer this to a companion.)</helper><br>To play, spot a Ring-bound Hobbit.<br>Bearer is strength +1 for each Ring-bound Hobbit you can spot.
+		lore: ...Rose and me had settled to call him Frodo, with your leave....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_151: {
+		cardInfo: {
+			imagePath: decipher/LOTR13151.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U151
+			rarity: U
+			setNum: "13"
+			cardNum: 151
+			style: Standard
+		}
+		title: The Gaffer
+		subtitle: Master Gardener
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Follower
+		strength: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Aid</b> – Add a burden. <helper>(At the start of the maneuver phase, you may add a burden to transfer this to a companion.)</helper><br>When you transfer The Gaffer to a [shire] companion, heal bearer (or heal bearer twice if he or she is at a dwelling site).
+		lore: ...the Gaffer was recognized as the leading authority....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_152: {
+		cardInfo: {
+			imagePath: decipher/LOTR13152.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R152
+			rarity: R
+			setNum: "13"
+			cardNum: 152
+			style: Standard
+		}
+		title: Humble Homestead
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 Hobbits.<br>When you play this, add a [shire] token here for each forest site and each dwelling site on the adventure path.<br><b>Skirmish:</b> Discard this from play or remove 3 tokens from here to cancel a skirmish involving a Hobbit.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_153: {
+		cardInfo: {
+			imagePath: decipher/LOTR13153.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R153
+			rarity: R
+			setNum: "13"
+			cardNum: 153
+			style: Standard
+		}
+		title: Mithril-coat
+		subtitle: Dwarf-mail
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Artifact
+		itemclass: Armor
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Ring-bound Hobbit.<br>Each minion skirmishing bearer loses all <b>damage</b> bonuses.<br><b>Skirmish:</b> Exert bearer to make each minion he is skirmishing lose <b>fierce</b> and unable to gain fierce until the regroup phase.
+		lore: ...cold as ice, and harder than steel.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_154: {
+		cardInfo: {
+			imagePath: decipher/LOTR13154.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U154
+			rarity: U
+			setNum: "13"
+			cardNum: 154
+			style: Standard
+		}
+		title: New Chapter
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 Hobbits.<br>Each time you play a follower, you may heal a companion (or heal Sam twice).
+		lore: And so it was settled. Sam Gamgee married Rosie Cotton in the spring of 1420....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_155: {
+		cardInfo: {
+			imagePath: decipher/LOTR13155.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R155
+			rarity: R
+			setNum: "13"
+			cardNum: 155
+			style: Standard
+		}
+		title: Phial of Galadriel
+		subtitle: The Light of Eärendil
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Artifact
+		resistance: 1
+		itemclass: Phial
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Ring-bound Hobbit.<br>While bearer is in region 1, bearer gains <b>muster</b>.<br>While bearer is in region 2, each of your [shire] companions gains <b>muster</b>.<br>While bearer is in region 3, each character gains <b>muster</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_156: {
+		cardInfo: {
+			imagePath: decipher/LOTR13156.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R156
+			rarity: R
+			setNum: "13"
+			cardNum: 156
+			style: Standard
+		}
+		title: Sam
+		subtitle: Bearer of Great Need
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>.<br>Sam is resistance +1 for each Hobbit you can spot.<br><b>Regroup:</b> Exert Sam and transfer a follower he is bearing to your support area to discard a minion from play.
+		lore: ...the last of all the Company. The errand must not fail.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_157: {
+		cardInfo: {
+			imagePath: decipher/LOTR13157.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C157
+			rarity: C
+			setNum: "13"
+			cardNum: 157
+			style: Standard
+		}
+		title: Westfarthing Businessman
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: This companion is strength +1 for each [shire] card that has a culture token on it.
+		lore: There's a tidy bit of money tucked away up there, I hear tell....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

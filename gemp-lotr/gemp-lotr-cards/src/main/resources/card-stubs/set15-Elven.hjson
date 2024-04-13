@@ -1,0 +1,727 @@
+{
+
+	15_11: {
+		cardInfo: {
+			imagePath: decipher/LOTR15011.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15R11
+			rarity: R
+			setNum: "15"
+			cardNum: 11
+			style: Standard
+		}
+		title: Arwen
+		subtitle: She-Elf
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot Aragorn, Arwen is strength +1 and resistance +2.<br><b>Skirmish:</b> Remove an [elven] token to make a minion skirmishing Arwen strength -2.
+		lore: I do not fear them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_12: {
+		cardInfo: {
+			imagePath: decipher/LOTR15012.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15R12
+			rarity: R
+			setNum: "15"
+			cardNum: 12
+			style: Standard
+		}
+		title: Dínendal
+		subtitle: Mirkwood Archer
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Follower
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Aid</b> – (3). <helper>(At the start of the maneuver phase, you may add (3) to transfer this to a companion.)</helper><br>Each time you transfer this to a companion, except an [elven] companion, exert bearer.<br>Bearer is an <b>archer</b>.
+		lore: Elven archers were seldom seen before it was too late.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_13: {
+		cardInfo: {
+			imagePath: decipher/LOTR15013.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15C13
+			rarity: C
+			setNum: "15"
+			cardNum: 13
+			style: Standard
+		}
+		title: Elven Bow
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		itemclass: Ranged weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Elf.<br>Bearer is an <b>archer</b>.
+		lore: No finer bows could defend Helm's Deep than those of the Golden Wood.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_14: {
+		cardInfo: {
+			imagePath: decipher/LOTR15014.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15C14
+			rarity: C
+			setNum: "15"
+			cardNum: 14
+			style: Standard
+		}
+		title: Elven Warrior
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While this companion is bearing a possession, he is strength +2.<br><b>Maneuver:</b> Exert this companion to place an [elven] card from your discard pile on the bottom of your draw deck.
+		lore: Elven warriors used their strength and wisdom equally in battle.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_15: {
+		cardInfo: {
+			imagePath: decipher/LOTR15015.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15C15
+			rarity: C
+			setNum: "15"
+			cardNum: 15
+			style: Standard
+		}
+		title: Focus
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time Legolas wins a skirmish, you may heal a hunter [dwarven] Dwarf or hunter [gondor] Man.<br><b>Skirmish:</b> Discard this condition to make an [elven] Elf strength +2.
+		lore: ...not even my eyes can see him, my good Legolas....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_16: {
+		cardInfo: {
+			imagePath: decipher/LOTR15016.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15U16
+			rarity: U
+			setNum: "15"
+			cardNum: 16
+			style: Standard
+		}
+		title: Gift of the Evenstar
+		subtitle: Blessed Light
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Artifact
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time an Elf wins a skirmish, you may exert that Elf or Aragorn to place an [elven] token here.<br>At the start of each maneuver phase, you may remove an [elven] token here to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_17: {
+		cardInfo: {
+			imagePath: decipher/LOTR15017.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15U17
+			rarity: U
+			setNum: "15"
+			cardNum: 17
+			style: Standard
+		}
+		title: Haldir
+		subtitle: Sentry of the Golden Wood
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an Elf.<br>While the fellowship is at a battleground site, Haldir is strength +2.<br>While the fellowship is at a forest site, Haldir is an <b>archer</b>.
+		lore: ...since you come with an Elf of our kindred, we are willing to befriend you, as Elrond asked....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_18: {
+		cardInfo: {
+			imagePath: decipher/LOTR15018.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15S18
+			rarity: S
+			setNum: "15"
+			cardNum: 18
+			style: Standard
+		}
+		title: Legolas
+		subtitle: Fleet-footed Hunter
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Regroup:</b> Exert 2 hunter companions to draw a card.
+		lore: We have already overtaken some of those that we are hunting....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_19: {
+		cardInfo: {
+			imagePath: decipher/LOTR15019.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15R19
+			rarity: R
+			setNum: "15"
+			cardNum: 19
+			style: Standard
+		}
+		title: Legolas
+		subtitle: Of the Woodland Realm
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Archery:</b> Exert Legolas to make the fellowship archery total +1 for each hunter minion you can spot (limit +3).
+		lore: You would die before your stroke fell!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_20: {
+		cardInfo: {
+			imagePath: decipher/LOTR15020.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15U20
+			rarity: U
+			setNum: "15"
+			cardNum: 20
+			style: Standard
+		}
+		title: Lórien's Blessing
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		keyword: Archery
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot an [elven] follower to make the minion archery total -3.
+		lore: We have drunk the cup of parting...and the shadows fall between us.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_21: {
+		cardInfo: {
+			imagePath: decipher/LOTR15021.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15U21
+			rarity: U
+			setNum: "15"
+			cardNum: 21
+			style: Standard
+		}
+		title: Mighty Shot
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		keyword: Archery
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot an Elf to make the fellowship archery total +1 for each minion with a twilight cost of 2 or less that you can spot.
+		lore: But who can say what it hit?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_22: {
+		cardInfo: {
+			imagePath: decipher/LOTR15022.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15R22
+			rarity: R
+			setNum: "15"
+			cardNum: 22
+			style: Standard
+		}
+		title: The Mirror of Galadriel
+		subtitle: Dangerous Guide
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Artifact
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 3 Elves.<br>Each time you are about to draw a card, you may exert an Elf to look at the top three cards of your draw deck instead. Take a Free Peoples card into your hand and place the other cards on the bottom of your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_23: {
+		cardInfo: {
+			imagePath: decipher/LOTR15023.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15C23
+			rarity: C
+			setNum: "15"
+			cardNum: 23
+			style: Standard
+		}
+		title: Point Blank Range
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make an Elf strength +2 (or +4 if you can spot 3 archers).
+		lore: How many there were the company could not count.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_24: {
+		cardInfo: {
+			imagePath: decipher/LOTR15024.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15R24
+			rarity: R
+			setNum: "15"
+			cardNum: 24
+			style: Standard
+		}
+		title: Spied From Afar
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 3 Elves.<br>While you can spot an [elven] follower, the twilight cost of each Shadow possession is +1.<br><b>Skirmish:</b> Discard this condition to make an [elven] companion strength +1 for each archer companion you can spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR15025.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15C25
+			rarity: C
+			setNum: "15"
+			cardNum: 25
+			style: Standard
+		}
+		title: Sword of the Fallen
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Elf.<br>Each minion skirmishing bearer is strength -1 for each wound on that minion.<br><b>Skirmish:</b> Exert bearer to exert a minion skirmishing bearer.
+		lore: Elven weapons remain in use for centuries.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR15026.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15U26
+			rarity: U
+			setNum: "15"
+			cardNum: 26
+			style: Standard
+		}
+		title: Uruviel
+		subtitle: Woodland Maid
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Follower
+		resistance: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, you may add (1) to transfer this to a companion.)</helper><br>Each time you transfer this to a companion, you may exert an Elf to make the fellowship's current site a <b>forest</b> until the end of the turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_60: {
+		cardInfo: {
+			imagePath: decipher/LOTR15060.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15C60
+			rarity: C
+			setNum: "15"
+			cardNum: 60
+			style: Standard
+		}
+		title: Forth the Three Hunters!
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archery:</b> Exert Legolas and exert Aragorn to wound a minion.<br><b>Skirmish:</b> Exert Aragorn and spot Gimli to make a minion strength -1 (or -3 if Aragorn and Gimli are hunters).<br><b>Regroup:</b> Exert Gimli and spot Legolas to draw a card (or 2 cards if Gimli and Legolas are hunters).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

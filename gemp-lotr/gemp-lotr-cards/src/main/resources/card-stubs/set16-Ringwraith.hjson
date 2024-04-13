@@ -1,0 +1,266 @@
+{
+
+	16_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR16001.jpg
+			javaClass: true
+			version: 0
+			collInfo: 16R1
+			rarity: R
+			setNum: "16"
+			cardNum: 1
+			style: Standard
+		}
+		title: Barrow-wight Stalker
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Wraith
+		strength: 11
+		vitality: 4
+		site: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Enduring</b>. Each [wraith] Wraith cannot take wounds (except during skirmishes).<br><b>Shadow:</b> Remove a burden to play a [wraith] Wraith. That minion's twilight cost is -2.
+		lore: The icy touch froze his bones, and he remembered no more.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	16_2: {
+		cardInfo: {
+			imagePath: decipher/LOTR16002.jpg
+			javaClass: true
+			version: 0
+			collInfo: 16R2
+			rarity: R
+			setNum: "16"
+			cardNum: 2
+			style: Standard
+		}
+		title: Candle Corpses
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 3
+		type: Minion
+		race: Wraith
+		strength: 8
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Enduring</b>. Each time the Free Peoples player assigns this minion to a companion, you may spot another [wraith] Wraith and remove (2) to wound that companion.
+		lore: ...here and there they twisted like ghostly sheets unfurled by hidden hands.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	16_3: {
+		cardInfo: {
+			imagePath: decipher/LOTR16003.jpg
+			javaClass: true
+			version: 0
+			collInfo: 16R3
+			rarity: R
+			setNum: "16"
+			cardNum: 3
+			style: Standard
+		}
+		title: Covetous Wisp
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Minion
+		race: Wraith
+		strength: 4
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Enduring</b>. Each time the Free Peoples player assigns Covetous Wisp to a companion, you may spot another [wraith] Wraith and remove (2) to add a burden.
+		lore: Only shapes to see, perhaps, not to touch.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	16_4: {
+		cardInfo: {
+			imagePath: decipher/LOTR16004.jpg
+			javaClass: true
+			version: 0
+			collInfo: 16R4
+			rarity: R
+			setNum: "16"
+			cardNum: 4
+			style: Standard
+		}
+		title: Dead Faces
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Minion
+		race: Wraith
+		strength: 4
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Enduring</b>. Each time the Free Peoples player assigns this minion to a companion, you may spot another [wraith] Wraith and remove (2) to discard a condition.
+		lore: There are dead things, dead faces in the water!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	16_5: {
+		cardInfo: {
+			imagePath: decipher/LOTR16005.jpg
+			javaClass: true
+			version: 0
+			collInfo: 16R5
+			rarity: R
+			setNum: "16"
+			cardNum: 5
+			style: Standard
+		}
+		title: Spirit of Dread
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 7
+		type: Minion
+		race: Wraith
+		strength: 14
+		vitality: 3
+		site: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Enduring</b>. While you can spot another [wraith] Wraith, wounds cannot be healed and burdens can not be removed (except by Wraiths).<br><b>Skirmish:</b> Exert Spirit of Dread to make another [wraith] Wraith strength +1.
+		lore: ...across their three necks lay one long naked sword.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	16_6: {
+		cardInfo: {
+			imagePath: decipher/LOTR16006.jpg
+			javaClass: true
+			version: 0
+			collInfo: 16R6
+			rarity: R
+			setNum: "16"
+			cardNum: 6
+			style: Standard
+		}
+		title: Undead of Angmar
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Wraith
+		strength: 9
+		vitality: 3
+		site: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Enduring</b>. While you can spot another [wraith] Wraith, each wounded companion is resistance -2.<br><b>Shadow:</b> Exert Undead of Angmar twice to play a [wraith] Wraith from your draw deck, then reshuffle.
+		lore: In the dark there was a snarling noise.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

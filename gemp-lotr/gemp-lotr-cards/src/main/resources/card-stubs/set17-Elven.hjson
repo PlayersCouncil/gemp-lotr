@@ -1,0 +1,345 @@
+{
+
+	17_7: {
+		cardInfo: {
+			imagePath: decipher/LOTR17007.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17S7
+			rarity: S
+			setNum: "17"
+			cardNum: 7
+			style: Standard
+		}
+		title: Elven Guardian
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While this companion is skirmishing a wounded minion, he is strength +2.<br><b>Maneuver:</b> Exert this companion to heal another hunter.
+		lore: We are proud to fight alongside men, once more.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_8: {
+		cardInfo: {
+			imagePath: decipher/LOTR17008.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U8
+			rarity: U
+			setNum: "17"
+			cardNum: 8
+			style: Standard
+		}
+		title: Hearth and Hall
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Event
+		keyword: Regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot an [elven] hunter and choose one: draw a card for each hunter you can spot or reinforce an [elven] token for each hunter you can spot.
+		lore: Until at last our toil be past / our journey done, our errand sped.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_9: {
+		cardInfo: {
+			imagePath: decipher/LOTR17009.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U9
+			rarity: U
+			setNum: "17"
+			cardNum: 9
+			style: Standard
+		}
+		title: Lothlórien Guides
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot 2 Elves (or an Elf and an [elven] follower) to discard a condition (or discard two conditions if you can spot 4 or more Shadow conditions).
+		lore: The road is very dangerous.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_10: {
+		cardInfo: {
+			imagePath: decipher/LOTR17010.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U10
+			rarity: U
+			setNum: "17"
+			cardNum: 10
+			style: Standard
+		}
+		title: Namárië
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this, add an [elven] token here for each hunter you can spot.<br><b>Maneuver:</b> Discard this or remove a token from here and spot an [elven] hunter to discard a condition.
+		lore: We shall not meet again, Elessar.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_11: {
+		cardInfo: {
+			imagePath: decipher/LOTR17011.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17S11
+			rarity: S
+			setNum: "17"
+			cardNum: 11
+			style: Standard
+		}
+		title: Orophin
+		subtitle: Silvan Elf
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While Orophin is skirmishing a wounded minion, he is strength +3.<br><b>Archery:</b> Exert another [elven] hunter and add a threat to wound a minion.
+		lore: Guardian of the Golden Wood.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_12: {
+		cardInfo: {
+			imagePath: decipher/LOTR17012.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17S12
+			rarity: S
+			setNum: "17"
+			cardNum: 12
+			style: Standard
+		}
+		title: Rúmil
+		subtitle: Silvan Elf
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While you can spot a wounded minion, Rúmil is strength +1 and gains <b>archer</b>.<br><b>Archery:</b> Exert another [elven] hunter and add a threat to wound a minion.
+		lore: Guardian of Nimrodel.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_13: {
+		cardInfo: {
+			imagePath: decipher/LOTR17013.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R13
+			rarity: R
+			setNum: "17"
+			cardNum: 13
+			style: Standard
+		}
+		title: The World Ahead
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 5
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an Elf.<br>Each time the fellowship moves to a region one site, add a threat.<br>Each time the fellowship moves to a region two site, heal an Elf.<br>Each time the fellowship moves to a region three site, draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_14: {
+		cardInfo: {
+			imagePath: decipher/LOTR17014.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U14
+			rarity: U
+			setNum: "17"
+			cardNum: 14
+			style: Standard
+		}
+		title: Weapons of Lothlórien
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		keyword: Archery
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot an [elven] archer and add a threat to wound a minion (or add three threats to exert three minions).
+		lore: Leithio i philinn!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

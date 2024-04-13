@@ -1,0 +1,310 @@
+{
+
+	5_10: {
+		cardInfo: {
+			imagePath: decipher/LOTR05010.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5U10
+			rarity: U
+			setNum: "5"
+			cardNum: 10
+			style: Standard
+		}
+		title: Balglin
+		subtitle: Elven Warrior
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an Elf.<br>While skirmishing a wounded minion, Balglin takes no more than 1 wound during each skirmish phase.
+		lore: He is a strong fighter. He asks for no quarter and gives none.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_11: {
+		cardInfo: {
+			imagePath: decipher/LOTR05011.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5R11
+			rarity: R
+			setNum: "5"
+			cardNum: 11
+			style: Standard
+		}
+		title: Break the Charge
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Archery:</b> Exert 3 Elf companions to make the fellowship archery total +2.
+		lore: A storm of white arrows answered the attacking hand of Isengard.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_12: {
+		cardInfo: {
+			imagePath: decipher/LOTR05012.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5U12
+			rarity: U
+			setNum: "5"
+			cardNum: 12
+			style: Standard
+		}
+		title: Legolas' Sword
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Legolas.<br>Each time the fellowship moves, you may spot a wounded minion to heal Legolas.
+		lore: Legolas wielded a longsword to strike from horseback.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_13: {
+		cardInfo: {
+			imagePath: decipher/LOTR05013.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5U13
+			rarity: U
+			setNum: "5"
+			cardNum: 13
+			style: Standard
+		}
+		title: Taurnil
+		subtitle: Sharp-eyed Bowman
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an Elf.<br>While Taurnil bears a ranged weapon, the twilight cost of each Shadow possession is +2, and he does not add to the fellowship archery total.
+		lore: Taurnil's careful aim can disarm his enemies at long range.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_14: {
+		cardInfo: {
+			imagePath: decipher/LOTR05014.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5C14
+			rarity: C
+			setNum: "5"
+			cardNum: 14
+			style: Standard
+		}
+		title: That Is No Orc Horn
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Regroup:</b> Spot 3 Elf companions to heal a companion and liberate a site.
+		lore: Anxious defenders cheered the welcome sound of Elvish trumpets.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_121: {
+		cardInfo: {
+			imagePath: decipher/LOTR05121.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5P121
+			rarity: P
+			setNum: "5"
+			cardNum: 121
+			style: Standard
+		}
+		title: Legolas
+		subtitle: Archer of Mirkwood
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>.<br>Each time Legolas wins a skirmish, you may heal a Dwarf companion or another Elf companion.
+		lore: ...even more would I give for a hundred good archers of Mirkwood. We shall need them.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_124: {
+		cardInfo: {
+			imagePath: decipher/LOTR05124.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5R124
+			rarity: R
+			setNum: "5"
+			cardNum: 124
+			style: Standard
+		}
+		title: Break the Charge
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Archery:</b> Exert 3 Elf companions to make the fellowship archery total +2.
+		lore: A wall of Elven arrows met the attackers before they reached the Hornburg itself.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

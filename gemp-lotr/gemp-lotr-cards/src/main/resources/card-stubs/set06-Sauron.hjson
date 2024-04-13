@@ -1,0 +1,524 @@
+{
+
+	6_98: {
+		cardInfo: {
+			imagePath: decipher/LOTR06098.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6C98
+			rarity: C
+			setNum: "6"
+			cardNum: 98
+			style: Standard
+		}
+		title: Banner of the Eye
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [sauron] Orc.<br>Each time bearer wins a skirmish, you may add (1) for each site you control.
+		lore: Stony-faced they were, with dark window-holes staring north and east and west, and each window was full of sleepless eyes.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_99: {
+		cardInfo: {
+			imagePath: decipher/LOTR06099.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6C99
+			rarity: C
+			setNum: "6"
+			cardNum: 99
+			style: Standard
+		}
+		title: Corpse Lights
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Wraith
+		strength: 7
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Twilight</b>.<br><b>Skirmish:</b> Exert this minion to make a [sauron] or twilight minion strength +1 for each twilight minion you can spot.
+		lore: I tried once; but you cannot reach them. Only shapes to see, perhaps, not to touch.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_100: {
+		cardInfo: {
+			imagePath: decipher/LOTR06100.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6C100
+			rarity: C
+			setNum: "6"
+			cardNum: 100
+			style: Standard
+		}
+		title: Dead Ones
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Minion
+		race: Wraith
+		strength: 5
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Twilight</b>. <b>Damage +1</b>.<br>To play this minion, remove a burden or spot a twilight minion.
+		lore: The Dead can't really be there! Is it some devilry hatched in the Dark Land?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_101: {
+		cardInfo: {
+			imagePath: decipher/LOTR06101.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6R101
+			rarity: R
+			setNum: "6"
+			cardNum: 101
+			style: Standard
+		}
+		title: Gate Picket
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Maneuver:</b> Exert this minion twice to make the Free Peoples player name 3 cultures. Wound each companion and ally not of a named culture.
+		lore: Now the watch-towers, which had fallen into decay, were repaired, and filled with arms, and garrisoned with ceaseless vigilance.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_102: {
+		cardInfo: {
+			imagePath: decipher/LOTR06102.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6C102
+			rarity: C
+			setNum: "6"
+			cardNum: 102
+			style: Standard
+		}
+		title: Gate Sentry
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Maneuver:</b> Exert this minion twice and spot another [sauron] minion to discard a condition.
+		lore: In it there was a single gate of iron, and upon its battlement sentinels paced unceasingly.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_103: {
+		cardInfo: {
+			imagePath: decipher/LOTR06103.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6R103
+			rarity: R
+			setNum: "6"
+			cardNum: 103
+			style: Standard
+		}
+		title: Gate Troll
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 8
+		type: Minion
+		race: Troll
+		strength: 13
+		vitality: 4
+		site: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>While you can spot a Troll, Gate Troll's twilight cost is -4.<br>For each other [sauron] minion you can spot, this minion is strength +1.
+		lore: This was Cirith Gorgor, the Haunted Pass, the entrance to the land of the Enemy.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_104: {
+		cardInfo: {
+			imagePath: decipher/LOTR06104.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6U104
+			rarity: U
+			setNum: "6"
+			cardNum: 104
+			style: Standard
+		}
+		title: Orc Insurgent
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Shadow:</b> Exert this minion to draw X cards and add (X), where X is the number of Free Peoples cultures you spot over 2.
+		lore: You've spoken more than enough, Uglúk,' sneered the evil voice. 'I wonder how they would like it in Lugbúrz.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_105: {
+		cardInfo: {
+			imagePath: decipher/LOTR06105.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6U105
+			rarity: U
+			setNum: "6"
+			cardNum: 105
+			style: Standard
+		}
+		title: Peril
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Regroup:</b> Exert a [sauron] Orc to play a Nazgûl or [sauron] minion. Its twilight cost is -4 and it comes into play exhausted.
+		lore: A winged Nazgûl awaits us northward on the east-bank.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_106: {
+		cardInfo: {
+			imagePath: decipher/LOTR06106.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6R106
+			rarity: R
+			setNum: "6"
+			cardNum: 106
+			style: Standard
+		}
+		title: Troll of Udûn
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 10
+		type: Minion
+		race: Troll
+		strength: 14
+		vitality: 5
+		site: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>While you can spot a Troll, this minion's twilight cost is -4.<br><b>Skirmish:</b> Discard a [sauron] card from hand to make this minion strength +1.
+		lore: ...Trolls are only counterfeits, made by the Enemy in the Great Darkness, in mockery of Ents....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_107: {
+		cardInfo: {
+			imagePath: decipher/LOTR06107.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6U107
+			rarity: U
+			setNum: "6"
+			cardNum: 107
+			style: Standard
+		}
+		title: Troll's Chain
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [sauron] Troll.<br>When you play this possession, you may draw a card.
+		lore: Trolls they were, but filled with the evil will of their master.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_108: {
+		cardInfo: {
+			imagePath: decipher/LOTR06108.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6C108
+			rarity: C
+			setNum: "6"
+			cardNum: 108
+			style: Standard
+		}
+		title: Wisp of Pale Sheen
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Wraith
+		strength: 8
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Twilight</b>.<br><b>Regroup:</b> Spot another [sauron] or twilight minion and discard this minion to add a burden.
+		lore: They do not see what lies ahead / When Sun has failed and Moon is dead.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_128: {
+		cardInfo: {
+			imagePath: decipher/LOTR06128.jpg
+			javaClass: true
+			version: 0
+			collInfo: 6R128
+			rarity: R
+			setNum: "6"
+			cardNum: 128
+			style: Standard
+		}
+		title: Gate Troll
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 8
+		type: Minion
+		race: Troll
+		strength: 13
+		vitality: 4
+		site: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>While you can spot a Troll, Gate Troll's twilight cost is -4.<br>For each other [sauron] minion you can spot, this minion is strength +1.
+		lore: ...what the plague did you bring us here for?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

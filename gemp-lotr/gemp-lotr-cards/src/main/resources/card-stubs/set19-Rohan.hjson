@@ -1,0 +1,133 @@
+{
+
+	19_24: {
+		cardInfo: {
+			imagePath: decipher/LOTR19024.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P24
+			rarity: P
+			setNum: "19"
+			cardNum: 24
+			style: Standard
+		}
+		title: Brought Down from Inside
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Condition
+		strength: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish you may transfer this condition to a [rohan] Man.<br>At the end of each turn, if bearer did not win a skirmish this turn, return this condition to hand.
+		lore: Bring it down! Bring it down! Bring it down!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR19025.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P25
+			rarity: P
+			setNum: "19"
+			cardNum: 25
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Éored Captain
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br>Éomer is strength +2 for each wound on each minion he is skirmishing.
+		lore: Now is the hour, Riders of Rohan, oaths you have taken! Now, fulfill them all! To Lord and Land!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR19026.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P26
+			rarity: P
+			setNum: "19"
+			cardNum: 26
+			style: Standard
+		}
+		title: Éowyn
+		subtitle: Lady of the Mark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br><b>Fellowship:</b> Play a [rohan] companion with a twilight cost of 3 or more; his or her twilight cost is -1.
+		lore: It's tradition for the women of the court to farewell the men.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

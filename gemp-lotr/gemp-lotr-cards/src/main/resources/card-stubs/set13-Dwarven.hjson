@@ -1,0 +1,346 @@
+{
+
+	13_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR13001.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R1
+			rarity: R
+			setNum: "13"
+			cardNum: 1
+			style: Standard
+		}
+		title: Arod
+		subtitle: Rohirrim Steed
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Possession
+		resistance: 1
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Dwarf.<br>When you play Arod, you may reinforce a [dwarven] token.<br><b>Response:</b> If bearer is about to take a wound during a skirmish, remove 2 [dwarven] tokens to prevent that.
+		lore: A smaller and lighter horse, but restive and fiery....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_2: {
+		cardInfo: {
+			imagePath: decipher/LOTR13002.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C2
+			rarity: C
+			setNum: "13"
+			cardNum: 2
+			style: Standard
+		}
+		title: Awkward Moment
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a Dwarf strength +3 (or +4 and <b>damage +1</b> if you can spot a [dwarven] token).
+		lore: It's a long way.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_3: {
+		cardInfo: {
+			imagePath: decipher/LOTR13003.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U3
+			rarity: U
+			setNum: "13"
+			cardNum: 3
+			style: Standard
+		}
+		title: Deep Hatred
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time the fellowship moves, add (2).<br><b>Skirmish:</b> Exert a Dwarf who is not assigned to a skirmish to wound 2 Orcs (or to wound 1 Orc twice).<br>Discard this from play if the fellowship is ahead on the adventure path.
+		lore: ...the War of the Dwarves and the Orcs....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_4: {
+		cardInfo: {
+			imagePath: decipher/LOTR13004.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U4
+			rarity: U
+			setNum: "13"
+			cardNum: 4
+			style: Standard
+		}
+		title: Dwarf-lords
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: You may remove from the game 4 other [dwarven] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make your Dwarf bearing a hand weapon strength +3.
+		lore: ...Seven for the Dwarf-lords in their halls of stone....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_5: {
+		cardInfo: {
+			imagePath: decipher/LOTR13005.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R5
+			rarity: R
+			setNum: "13"
+			cardNum: 5
+			style: Standard
+		}
+		title: Gimli
+		subtitle: Lord of the Glittering Caves
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>Gimli is strength +1 for each minion assigned to a skirmish.<br><b>Assignment:</b> Exert Gimli and spot a lurker minion to make that minion lose <b>lurker</b> until the regroup phase.
+		lore: <span style="word-spacing:-0.01em;font-size:97%">"He and his people did great works in Gondor and Rohan."</span>
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_6: {
+		cardInfo: {
+			imagePath: decipher/LOTR13006.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C6
+			rarity: C
+			setNum: "13"
+			cardNum: 6
+			style: Standard
+		}
+		title: Honoring His Kinfolk
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		keyword: Response
+		/*requires: {
+			
+		}
+		effects: {
+			type: responseEvent
+			trigger: {
+				
+			}
+			cost: {
+				
+			}
+			effect: [
+				{
+					
+				}
+			]
+		]*/
+		gametext: If a Dwarf wins a fierce skirmish, play a [dwarven] possession from your discard pile and you may reinforce a [dwarven] token.
+		lore: ...but Gimli had to be dragged away by Legolas....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_7: {
+		cardInfo: {
+			imagePath: decipher/LOTR13007.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C7
+			rarity: C
+			setNum: "13"
+			cardNum: 7
+			style: Standard
+		}
+		title: Sorrow Shared
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Remove a [dwarven] token to heal a Dwarf.
+		lore: Gimli was saddened by Éowyn's despair.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_8: {
+		cardInfo: {
+			imagePath: decipher/LOTR13008.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R8
+			rarity: R
+			setNum: "13"
+			cardNum: 8
+			style: Standard
+		}
+		title: Subterranean Homestead
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, exert 2 Dwarves.<br>When you play this, add a [dwarven] token here for each mountain site and each underground site on the adventure path.<br><b>Skirmish:</b> Discard this from play or remove 2 tokens from here to make a Shadow player discard the top card of his or her draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

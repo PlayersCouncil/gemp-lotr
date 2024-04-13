@@ -1,0 +1,523 @@
+{
+
+	9_12: {
+		cardInfo: {
+			imagePath: decipher/LOTR09012.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R+12
+			rarity: R+
+			setNum: "9"
+			cardNum: 12
+			style: Standard
+		}
+		title: Aiglos
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Artifact
+		vitality: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Elf.<br>If bearer is Gil-galad, he is strength +1 for each [elven] artifact you can spot (limit +6).<br><b>Regroup:</b> Discard Aiglos to wound a minion for each Elf you spot.
+		lore: ...for the spear of Gil-galad... none could withstand.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_13: {
+		cardInfo: {
+			imagePath: decipher/LOTR09013.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R13
+			rarity: R
+			setNum: "9"
+			cardNum: 13
+			style: Standard
+		}
+		title: Elven Rope
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an Elf. Bearer must be an Elf or Hobbit.<br><b>Maneuver:</b> Discard this possession to make a Shadow player return a minion with strength 6 or less to its owner's hand.
+		lore: It freezes, it bites! Elves twisted it, curse them!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_14: {
+		cardInfo: {
+			imagePath: decipher/LOTR09014.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R+14
+			rarity: R+
+			setNum: "9"
+			cardNum: 14
+			style: Standard
+		}
+		title: Galadriel
+		subtitle: Bearer of Wisdom
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Companion
+		race: Elf
+		strength: 3
+		vitality: 3
+		resistance: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While Galadriel bears an artifact or The One Ring, she is resistance +1 for each [elven] companion you can spot.
+		lore: ...I shall not be dark, but beautiful and terrible as the Morning and the Night!... Dreadful as the Storm and the Lightning!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_15: {
+		cardInfo: {
+			imagePath: decipher/LOTR09015.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R+15
+			rarity: R+
+			setNum: "9"
+			cardNum: 15
+			style: Standard
+		}
+		title: Gil-galad
+		subtitle: Elven High King
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 5
+		type: Companion
+		race: Elf
+		strength: 9
+		vitality: 4
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 [elven] companions.<br><b>Regroup:</b> Exert Gil-galad to wound each wounded minion.
+		lore: Gil-galad was an Elven-king. / Of him the harpers sadly sing: / the last whose realm was fair and free / between the Mountains and the Sea.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_16: {
+		cardInfo: {
+			imagePath: decipher/LOTR09016.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R+16
+			rarity: R+
+			setNum: "9"
+			cardNum: 16
+			style: Standard
+		}
+		title: Glorfindel
+		subtitle: Revealed in Wrath
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 4
+		type: Companion
+		race: Elf
+		strength: 9
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When Glorfindel is in your starting fellowship, his twilight cost is -2.<br><b>Skirmish:</b> Reveal the top card of your draw deck. You may exert Glorfindel to make a Nazgûl he is skirmishing strength -X, where X is the twilight cost of the card revealed.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_17: {
+		cardInfo: {
+			imagePath: decipher/LOTR09017.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R+17
+			rarity: R+
+			setNum: "9"
+			cardNum: 17
+			style: Standard
+		}
+		title: Knife of the Galadhrim
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [gondor] Man. If bearer is Aragorn, he may bear this hand weapon in addition to 1 other hand weapon.<br><b>Skirmish:</b> Discard this weapon to wound a minion bearer is skirmishing.
+		lore: It was overlaid with a tracery of flowers and leaves wrought of silver and gold....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_18: {
+		cardInfo: {
+			imagePath: decipher/LOTR09018.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R18
+			rarity: R
+			setNum: "9"
+			cardNum: 18
+			style: Standard
+		}
+		title: Merry's Dagger
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Merry.<br><b>Skirmish:</b> Exert Merry twice or discard this possession to wound a minion he is skirmishing. Any Shadow player may remove (1) to prevent this.
+		lore: They have already seen service in war.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_19: {
+		cardInfo: {
+			imagePath: decipher/LOTR09019.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R19
+			rarity: R
+			setNum: "9"
+			cardNum: 19
+			style: Standard
+		}
+		title: Narya
+		subtitle: Ring of Fire
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Artifact
+		vitality: 1
+		itemclass: Ring
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Círdan or Gandalf.<br><b>Fellowship:</b> Remove X culture tokens, where X is equal to bearer's vitality. Discard this artifact.
+		lore: ...the Third Ring, Narya the Great, and the stone upon it was red as fire.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_20: {
+		cardInfo: {
+			imagePath: decipher/LOTR09020.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R20
+			rarity: R
+			setNum: "9"
+			cardNum: 20
+			style: Standard
+		}
+		title: Nenya
+		subtitle: Ring of Adamant
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Artifact
+		vitality: 1
+		itemclass: Ring
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Galadriel.<br><b>Maneuver:</b> Heal 2 companions and place up to 2 cards from your hand on top of your draw deck. Discard this artifact.
+		lore: ...Nenya, the ring wrought of mithril, that bore a single white stone flickering like a frosty star.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_21: {
+		cardInfo: {
+			imagePath: decipher/LOTR09021.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R21
+			rarity: R
+			setNum: "9"
+			cardNum: 21
+			style: Standard
+		}
+		title: Pippin's Dagger
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Pippin.<br><b>Skirmish:</b> Exert Pippin twice or discard this possession to wound a minion an Elf is skirmishing. Any Shadow player may remove (1) to prevent this.
+		lore: These are the daggers of the Noldorin.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_22: {
+		cardInfo: {
+			imagePath: decipher/LOTR09022.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R22
+			rarity: R
+			setNum: "9"
+			cardNum: 22
+			style: Standard
+		}
+		title: Strands of Elven Hair
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a Dwarf.<br>When you play this possession, add 2 [elven] tokens here.<br><b>Fellowship:</b> Discard this possession or remove an [elven] token from here to reveal the top card of your draw deck. If it is a [dwarven] or [elven] card, you may take it into hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_23: {
+		cardInfo: {
+			imagePath: decipher/LOTR09023.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R23
+			rarity: R
+			setNum: "9"
+			cardNum: 23
+			style: Standard
+		}
+		title: Vilya
+		subtitle: Ring of Air
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Artifact
+		vitality: 1
+		itemclass: Ring
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Elrond or Gil-galad.<br><b>Skirmish:</b> Discard the top card of your draw deck. Make a minion skirmishing an Elf strength -X, where X is the twilight cost of the discarded card. Discard this artifact.
+		lore: Gil-galad before he died gave his ring to Elrond....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

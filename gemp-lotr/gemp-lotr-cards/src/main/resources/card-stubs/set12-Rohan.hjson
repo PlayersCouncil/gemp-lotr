@@ -1,0 +1,475 @@
+{
+
+	12_107: {
+		cardInfo: {
+			imagePath: decipher/LOTR12107.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C107
+			rarity: C
+			setNum: "12"
+			cardNum: 107
+			style: Standard
+		}
+		title: Aldred
+		subtitle: Éored Soldier
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: At the start of each skirmish involving Aldred, you may discard a possession borne by a minion he is skirmishing.
+		lore: We counted all the slain and despoiled them....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_108: {
+		cardInfo: {
+			imagePath: decipher/LOTR12108.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R108
+			rarity: R
+			setNum: "12"
+			cardNum: 108
+			style: Standard
+		}
+		title: Cast Out
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 4
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Toil 2</b>. <helper>(For each [rohan] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Maneuver:</b> Spot a [rohan] Man and discard this condition to exert a minion.<br><b>Maneuver:</b> Spot a mounted [rohan] Man and discard this condition to return an exhausted minion to its owner's hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_109: {
+		cardInfo: {
+			imagePath: decipher/LOTR12109.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C109
+			rarity: C
+			setNum: "12"
+			cardNum: 109
+			style: Standard
+		}
+		title: Challenging the Orc-host
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a [rohan] companion strength +2 (or +1 for each minion you can spot if that companion has resistance 5 or more).
+		lore: ...we overtook the Orcs at nightfall two days ago, near to the borders of the Entwood. There we surrounded them, and gave battle....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_110: {
+		cardInfo: {
+			imagePath: decipher/LOTR12110.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C110
+			rarity: C
+			setNum: "12"
+			cardNum: 110
+			style: Standard
+		}
+		title: Cleaving a Path
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Discard this condition to make a [rohan] companion strength +1 for each of the following that is true: he or she is at a plains site; he or she has resistance 4 or more; he or she is bearing armor; he or she is skirmishing a wounded minion.
+		lore: Captains and champions fell or fled before them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_111: {
+		cardInfo: {
+			imagePath: decipher/LOTR12111.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R111
+			rarity: R
+			setNum: "12"
+			cardNum: 111
+			style: Standard
+		}
+		title: Coif
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Possession
+		vitality: 1
+		itemclass: Armor
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>Each time a Shadow card adds any number of twilight tokens, you may exert bearer to prevent that.<br>Each time the fellowship moves from a forest site, exert a companion.
+		lore: ...the Hornburg still held fast, like an island in a sea.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_112: {
+		cardInfo: {
+			imagePath: decipher/LOTR12112.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U112
+			rarity: U
+			setNum: "12"
+			cardNum: 112
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Éored Leader
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br><b>Maneuver:</b> If you can spot more minions than companions, exert Éomer to play a [rohan] companion from your draw deck.
+		lore: ...the front of the first éored roared like a breaker foaming to the shore....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_113: {
+		cardInfo: {
+			imagePath: decipher/LOTR12113.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12S113
+			rarity: S
+			setNum: "12"
+			cardNum: 113
+			style: Standard
+		}
+		title: Éored Warrior
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While this companion is at a battleground or plains site, he is strength +3.
+		lore: ...suspecting what I most fear, a league between Orthanc and the Dark Tower, I led forth my éored, men of my own household....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_114: {
+		cardInfo: {
+			imagePath: decipher/LOTR12114.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C114
+			rarity: C
+			setNum: "12"
+			cardNum: 114
+			style: Standard
+		}
+		title: For the Mark
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Event
+		keyword: Regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot a [rohan] Man to discard a possession from play.<br>You may exert a [rohan] Man who has resistance 3 or more to play this event during the maneuver phase.
+		lore: South strode Éomer and men fled before his face, and they were caught between the hammer and the anvil.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_115: {
+		cardInfo: {
+			imagePath: decipher/LOTR12115.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C115
+			rarity: C
+			setNum: "12"
+			cardNum: 115
+			style: Standard
+		}
+		title: Golden Glimmer
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Response:</b> If a companion is about to take a wound, spot a [rohan] companion and add 2 burdens to prevent that.
+		lore: Dark is the hour, yet maybe we shall return to the Golden Hall.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_116: {
+		cardInfo: {
+			imagePath: decipher/LOTR12116.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R116
+			rarity: R
+			setNum: "12"
+			cardNum: 116
+			style: Standard
+		}
+		title: Haethen
+		subtitle: Veteran Fighter
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Haethen cannot take wounds during fierce skirmishes.<br><b>Skirmish:</b> Exert Haethen to make him strength +1.
+		lore: His years as a Rider of Rohan were long behind him, but the threat to Helm's Deep demanded this old warrior again take up arms.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_117: {
+		cardInfo: {
+			imagePath: decipher/LOTR12117.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U117
+			rarity: U
+			setNum: "12"
+			cardNum: 117
+			style: Standard
+		}
+		title: Léofric
+		subtitle: Defender of the Mark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> If Léofric is in a skirmish, exert him to play a [rohan] skirmish event from your draw deck.
+		lore: There is trouble now on all our borders, and we are threatened....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,130 @@
+{
+
+	17_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR17037.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R37
+			rarity: R
+			setNum: "17"
+			cardNum: 37
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Instigator of Insurrection
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Saruman cannot be assigned to a skirmish.<br>While you can spot 6 companions, each minion gains <b>hunter 2</b>.<br><b>Response:</b> If a hunter minion is about to take a wound, exert Saruman to prevent that.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_38: {
+		cardInfo: {
+			imagePath: decipher/LOTR17038.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R38
+			rarity: R
+			setNum: "17"
+			cardNum: 38
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Servant of Sauron
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Follower
+		strength: 2
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, <span style="word-spacing:-0.08em">you may remove (1) to transfer this to a minion.)</span></helper><br>Each time bearer wins a skirmish, you may exert a companion.
+		lore: I gave you the chance of aiding me willingly, but you have elected the way of pain.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_39: {
+		cardInfo: {
+			imagePath: decipher/LOTR17039.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R39
+			rarity: R
+			setNum: "17"
+			cardNum: 39
+			style: Standard
+		}
+		title: Throne of Isengard
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Artifact
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time you play Saruman, spot a minion. That minion is <b>fierce</b> until the start of the regroup phase.<br>Each Wizard is strength +3 and <b>damage +1</b>.
+		lore: From the heights of Orthanc, Saruman spied on Middle-earth and plotted his rise to power.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

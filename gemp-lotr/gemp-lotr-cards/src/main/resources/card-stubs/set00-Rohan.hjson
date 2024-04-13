@@ -1,0 +1,92 @@
+{
+
+	0_59: {
+		cardInfo: {
+			imagePath: decipher/LOTR00059.jpg
+			javaClass: true
+			version: 0
+			collInfo: 0P59
+			rarity: P
+			setNum: "0"
+			cardNum: 59
+			style: Standard
+		}
+		title: Erkenbrand
+		subtitle: Master of Westfold
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: If you can spot a [rohan] Man, you may play Erkenbrand any time you could play a skirmish event.<br>When you play Erkenbrand, you may discard a Shadow possession.
+		lore: As he came to the valley's brink, he set to his lips a great black horn and blew a ringing blast.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	0_66: {
+		cardInfo: {
+			imagePath: decipher/LOTR00066.jpg
+			javaClass: true
+			version: 0
+			collInfo: 0P66
+			rarity: P
+			setNum: "0"
+			cardNum: 66
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Forthwith Banished
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>. <b>Damage +1</b>.<br>While you can spot a [rohan] Man, Éomer's twilight cost is -1.
+		lore: Do I hope in vain that you have been sent to me for a help in doubt and need?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

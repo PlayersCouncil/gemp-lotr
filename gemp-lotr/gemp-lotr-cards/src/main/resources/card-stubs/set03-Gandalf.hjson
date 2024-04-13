@@ -1,0 +1,337 @@
+{
+
+	3_29: {
+		cardInfo: {
+			imagePath: decipher/LOTR03029.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3R29
+			rarity: R
+			setNum: "3"
+			cardNum: 29
+			style: Standard
+		}
+		title: Betrayal of Isengard
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each time an opponent draws a card (or takes a card into hand) during the Shadow phase, you may remove (1).<br><b>Maneuver:</b> Exert Gandalf to wound Saruman twice.
+		lore: There is only one Lord of the Ring.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_30: {
+		cardInfo: {
+			imagePath: decipher/LOTR03030.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C30
+			rarity: C
+			setNum: "3"
+			cardNum: 30
+			style: Standard
+		}
+		title: Deep in Thought
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Spot Gandalf and 4 twilight tokens to discard all Shadow conditions.
+		lore: He was... trying to recall every memory of his former journey in the Mines, and considering anxiously the next course that he should take....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR03031.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C31
+			rarity: C
+			setNum: "3"
+			cardNum: 31
+			style: Standard
+		}
+		title: Depart Silently
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Stealth</b>.<br><b>Maneuver:</b> At sites 1 to 5, spot Gandalf to prevent Hobbits from being assigned to skirmishes until the regroup phase. At any other site, spot Gandalf to make a Hobbit strength +3 until the regroup phase.
+		lore: Be careful, both of you.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR03032.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C32
+			rarity: C
+			setNum: "3"
+			cardNum: 32
+			style: Standard
+		}
+		title: Fireworks
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>.<br><b>Fellowship:</b> Spot Gandalf to shuffle up to 2 [gandalf] or up to 2 [shire] cards from your discard pile into your draw deck.
+		lore: The finest rockets ever seen: / they burst in stars of blue and green....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR03033.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C33
+			rarity: C
+			setNum: "3"
+			cardNum: 33
+			style: Standard
+		}
+		title: His First Serious Check
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Spot Gandalf to reveal a card at random from an opponent's hand. You may add (X) to discard that card, where X is the twilight cost of the card revealed.
+		lore: ...a false turn now might be disastrous.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR03034.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3R34
+			rarity: R
+			setNum: "3"
+			cardNum: 34
+			style: Standard
+		}
+		title: Narya
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Artifact
+		vitality: 1
+		itemclass: Ring
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Gandalf.<br>At the start of each of your turns, you may add (3) to remove a burden.
+		lore: For this is the Ring of Fire, and with it you may rekindle hearts in a world that grows chill.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR03035.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3U35
+			rarity: U
+			setNum: "3"
+			cardNum: 35
+			style: Standard
+		}
+		title: Trust Me as You Once Did
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Exert Gandalf to make a companion strength +1 for each companion with the Gandalf signet you can spot (limit +3).
+		lore: Do not take me for some conjurer of cheap tricks! I am not trying to rob you. I am trying to help you.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR03036.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C36
+			rarity: C
+			setNum: "3"
+			cardNum: 36
+			style: Standard
+		}
+		title: Unknown Perils
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Response:</b> If a companion is about to take a wound, spot 4 twilight tokens and exert Gandalf to prevent that wound.
+		lore: Suddenly he stopped as if listening. Frodo became aware that all was very quiet, inside and outside.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

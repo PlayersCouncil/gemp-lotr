@@ -1,0 +1,1781 @@
+{
+
+	7_222: {
+		cardInfo: {
+			imagePath: decipher/LOTR07222.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C222
+			rarity: C
+			setNum: "7"
+			cardNum: 222
+			style: Standard
+		}
+		title: Déor
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: fellowship,3T
+		race: Man
+		strength: 4
+		vitality: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Villager</b>.<br><b>Skirmish:</b> If you have initiative, discard a card from hand to make a [rohan] Man strength +1.
+		lore: As the king approached many men sprang up out of the rocks....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_223: {
+		cardInfo: {
+			imagePath: decipher/LOTR07223.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R223
+			rarity: R
+			setNum: "7"
+			cardNum: 223
+			style: Standard
+		}
+		title: Death They Cried
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot a mounted [rohan] Man to exert a minion. That minion's owner may exert a companion and if he or she does so, you may exert a minion; repeat this until a player does not exert a character.
+		lore: But the Rohirrim sang no more. Death they cried with one voice....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_224: {
+		cardInfo: {
+			imagePath: decipher/LOTR07224.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U224
+			rarity: U
+			setNum: "7"
+			cardNum: 224
+			style: Standard
+		}
+		title: Elfhelm
+		subtitle: Marshal of Rohan
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br><b>Skirmish:</b> Exert Elfhelm to make him strength +1 for each uncontrolled plains site you can spot.
+		lore: There seemed to be some understanding between Dernhelm and Elfhelm, the Marshal who commanded the éored in which they were riding.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_225: {
+		cardInfo: {
+			imagePath: decipher/LOTR07225.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C225
+			rarity: C
+			setNum: "7"
+			cardNum: 225
+			style: Standard
+		}
+		title: Elite Rider
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When this companion is in your starting fellowship, his twilight cost is -1.<br>While skirmishing a wounded minion, this companion is strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_226: {
+		cardInfo: {
+			imagePath: decipher/LOTR07226.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C226
+			rarity: C
+			setNum: "7"
+			cardNum: 226
+			style: Standard
+		}
+		title: Enraged Horseman
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot another [rohan] Man and this companion is skirmishing a wounded minion, this companion is strength +2 and <b>damage +1</b>.
+		lore: Doom drove them on. Darkness took them, / horse and horseman; hoofbeats afar / sank into silence: so the songs tell us.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_227: {
+		cardInfo: {
+			imagePath: decipher/LOTR07227.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R227
+			rarity: R
+			setNum: "7"
+			cardNum: 227
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Skilled Tactician
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>. While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br><b>Fellowship:</b> Play a [rohan] companion to take a [rohan] possession or [rohan] skirmish event into hand from your discard pile.
+		lore: ...call the heralds, Éomer.... Let the Riders be marshalled!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_228: {
+		cardInfo: {
+			imagePath: decipher/LOTR07228.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R228
+			rarity: R
+			setNum: "7"
+			cardNum: 228
+			style: Standard
+		}
+		title: Éowyn
+		subtitle: Dernhelm
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br>While skirmishing a mounted minion, Éowyn is strength +2.<br>While skirmishing a fierce minion, Éowyn is strength +2.
+		lore: Do you not? Then call me Dernhelm.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_229: {
+		cardInfo: {
+			imagePath: decipher/LOTR07229.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C229
+			rarity: C
+			setNum: "7"
+			cardNum: 229
+			style: Standard
+		}
+		title: Éowyn
+		subtitle: Restless Maiden
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Discard a possession borne by Éowyn to make her strength +2.
+		lore: He turned and saw her as a glimmer... for she was clad in white; but her eyes were on fire.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_230: {
+		cardInfo: {
+			imagePath: decipher/LOTR07230.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R230
+			rarity: R
+			setNum: "7"
+			cardNum: 230
+			style: Standard
+		}
+		title: Éowyn's Sword
+		subtitle: Dernhelm's Blade
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Éowyn.<br>You may play this possession any time you could play a skirmish event.<br>When you play this possession, you may wound a minion Éowyn is skirmishing.
+		lore: A swift stroke she dealt, skilled and deadly.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_231: {
+		cardInfo: {
+			imagePath: decipher/LOTR07231.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U231
+			rarity: U
+			setNum: "7"
+			cardNum: 231
+			style: Standard
+		}
+		title: Fey He Seemed
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a [rohan] Man strength +2 (or +3 and <b>damage +1</b> if skirmishing a wounded minion).
+		lore: ...the battle-fury of his fathers ran like new fire in his veins....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_232: {
+		cardInfo: {
+			imagePath: decipher/LOTR07232.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R232
+			rarity: R
+			setNum: "7"
+			cardNum: 232
+			style: Standard
+		}
+		title: Firefoot
+		subtitle: Éomer's Steed
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br><b>Regroup:</b> If bearer is Éomer, exert him to discard a condition. Any Shadow player may remove (1) to prevent this.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_233: {
+		cardInfo: {
+			imagePath: decipher/LOTR07233.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R233
+			rarity: R
+			setNum: "7"
+			cardNum: 233
+			style: Standard
+		}
+		title: Grimbold
+		subtitle: Marshal of Rohan
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br><b>Skirmish:</b> Replace the fellowship's site with your plains site of the same number to discard a card from hand.
+		lore: And Grimbold shall lead his towards the left.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_234: {
+		cardInfo: {
+			imagePath: decipher/LOTR07234.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U234
+			rarity: U
+			setNum: "7"
+			cardNum: 234
+			style: Standard
+		}
+		title: Guarded Fastness
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: If you have initiative, discard 2 cards from hand to heal all [rohan] allies.
+		lore: ...for I will not leave my strongholds all unguarded.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_235: {
+		cardInfo: {
+			imagePath: decipher/LOTR07235.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C235
+			rarity: C
+			setNum: "7"
+			cardNum: 235
+			style: Standard
+		}
+		title: Guthláf
+		subtitle: Herald
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Discard a [rohan] condition to make Guthláf strength +1.
+		lore: And straightaway all the horns in the host were lifted up in music....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_236: {
+		cardInfo: {
+			imagePath: decipher/LOTR07236.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R236
+			rarity: R
+			setNum: "7"
+			cardNum: 236
+			style: Standard
+		}
+		title: Herugrim
+		subtitle: Sword of the Mark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Possession
+		strength: 2
+		vitality: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Théoden.<br>He is <b>damage +1</b>.<br><b>Response:</b> If Théoden is about to take a wound and you cannot spot 3 threats, add 2 threats to prevent that wound.
+		lore: Out swept his sword, and he spurred to the standard, hewed staff and bearer....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_237: {
+		cardInfo: {
+			imagePath: decipher/LOTR07237.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C237
+			rarity: C
+			setNum: "7"
+			cardNum: 237
+			style: Standard
+		}
+		title: His Golden Shield
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Event
+		keyword: Regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot 3 [rohan] Men to make an opponent remove (1) or place a random card from hand beneath his or her draw deck. Do this once for each card in that player's hand when you play this event.
+		lore: ...even as Oromë the Great in the battle of the Valar when the world was young.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_238: {
+		cardInfo: {
+			imagePath: decipher/LOTR07238.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U238
+			rarity: U
+			setNum: "7"
+			cardNum: 238
+			style: Standard
+		}
+		title: Knights of His House
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Choose an opponent. For each mounted companion you spot, that opponent must remove (1) or place a random card from hand beneath his or her draw deck.
+		lore: Éomer rode there, and the white horsetail on his helm floating in his speed....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_239: {
+		cardInfo: {
+			imagePath: decipher/LOTR07239.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R239
+			rarity: R
+			setNum: "7"
+			cardNum: 239
+			style: Standard
+		}
+		title: Léowyn
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: fellowship,3T
+		race: Man
+		strength: 4
+		vitality: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Villager</b>.<br><b>Fellowship:</b> If you have initiative, discard 2 cards from hand to heal a [rohan] Man.
+		lore: ...when they saw the king they cried with glad voices: 'Théoden King! Théoden King!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_240: {
+		cardInfo: {
+			imagePath: decipher/LOTR07240.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C240
+			rarity: C
+			setNum: "7"
+			cardNum: 240
+			style: Standard
+		}
+		title: Long Spear
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>You may add a threat to play this possession any time you could play a skirmish event.
+		lore: ...more skilled was their knighthood with long spears....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_241: {
+		cardInfo: {
+			imagePath: decipher/LOTR07241.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R241
+			rarity: R
+			setNum: "7"
+			cardNum: 241
+			style: Standard
+		}
+		title: Merry's Armor
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Possession
+		strength: 2
+		vitality: -1
+		itemclass: Armor
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Merry.<br>While you can spot 3 [rohan] Men, Merry cannot be overwhelmed unless his strength is tripled.
+		lore: Rise now, Meriadoc, esquire of Rohan of the household of Meduseld!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_242: {
+		cardInfo: {
+			imagePath: decipher/LOTR07242.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R242
+			rarity: R
+			setNum: "7"
+			cardNum: 242
+			style: Standard
+		}
+		title: Merry's Sword
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Merry.<br><b>Maneuver:</b> Exert Merry twice to exert a minion once for each [rohan] companion you spot.
+		lore: Merry's sword had stabbed him from behind, shearing through the black mantle....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_243: {
+		cardInfo: {
+			imagePath: decipher/LOTR07243.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C243
+			rarity: C
+			setNum: "7"
+			cardNum: 243
+			style: Standard
+		}
+		title: Morning Came
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a [rohan] Man strength +4. Any Shadow player may place a random card from hand beneath his or her draw deck to make that Man strength +2 instead.
+		lore: ...morning and a wind from the sea; and darkness was removed, and the hosts of Mordor wailed....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_244: {
+		cardInfo: {
+			imagePath: decipher/LOTR07244.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U244
+			rarity: U
+			setNum: "7"
+			cardNum: 244
+			style: Standard
+		}
+		title: Mustering for Battle
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 3 [rohan] Men.<br><b>Maneuver:</b> Exert a [rohan] companion twice or discard this condition to play a [rohan] possession from your discard pile.
+		lore: For we are already at war, as you may have seen, and you do not find us all unprepared.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_245: {
+		cardInfo: {
+			imagePath: decipher/LOTR07245.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U245
+			rarity: U
+			setNum: "7"
+			cardNum: 245
+			style: Standard
+		}
+		title: Riding Armor
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Armor
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br><b>Response:</b> If you have initiative and bearer is about to take a wound in a skirmish, discard 3 cards from hand to prevent that wound.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_246: {
+		cardInfo: {
+			imagePath: decipher/LOTR07246.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C246
+			rarity: C
+			setNum: "7"
+			cardNum: 246
+			style: Standard
+		}
+		title: Rohirrim Guard
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Discard a card from hand to exert a minion skirmishing this companion.
+		lore: ...and strengthened his host by some three score of Riders that came late to the weapontake.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_247: {
+		cardInfo: {
+			imagePath: decipher/LOTR07247.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C247
+			rarity: C
+			setNum: "7"
+			cardNum: 247
+			style: Standard
+		}
+		title: Rohirrim Herdsman
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: fellowship,3T
+		race: Man
+		strength: 4
+		vitality: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Villager</b>. To play, spot 2 [rohan] Men.<br><b>Regroup:</b> Discard 3 cards from hand to remove a threat.
+		lore: ...he found the remaining strength of his people already assembled....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_248: {
+		cardInfo: {
+			imagePath: decipher/LOTR07248.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C248
+			rarity: C
+			setNum: "7"
+			cardNum: 248
+			style: Standard
+		}
+		title: Rohirrim Javelin
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Ranged weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br><b>Archery:</b> Discard this possession to make the fellowship archery total +1.
+		lore: ...the Rohirrim went hither and thither at their will.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_249: {
+		cardInfo: {
+			imagePath: decipher/LOTR07249.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R249
+			rarity: R
+			setNum: "7"
+			cardNum: 249
+			style: Standard
+		}
+		title: Seeking New Foes
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Skirmishes are resolved in an order decided by the first Shadow player.<br>Each time a [rohan] Man wins a skirmish, place a [rohan] token here. Each [rohan] Man is strength +1 for each token here.<br>Discard this condition during the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_250: {
+		cardInfo: {
+			imagePath: decipher/LOTR07250.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R250
+			rarity: R
+			setNum: "7"
+			cardNum: 250
+			style: Standard
+		}
+		title: Snowmane
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br><b>Regroup:</b> If bearer is Théoden, exert him to liberate a site. Any Shadow player may remove (2) to prevent this.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_251: {
+		cardInfo: {
+			imagePath: decipher/LOTR07251.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R251
+			rarity: R
+			setNum: "7"
+			cardNum: 251
+			style: Standard
+		}
+		title: Stern People
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 [rohan] Men.<br><b>Regroup:</b> Discard cards from hand equal to the number of cards in an opponent's hand to make the move limit +1 for this turn. Each Shadow player may take up to 4 cards into hand from his or her discard pile. Discard this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_252: {
+		cardInfo: {
+			imagePath: decipher/LOTR07252.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U252
+			rarity: U
+			setNum: "7"
+			cardNum: 252
+			style: Standard
+		}
+		title: Strong Arms
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a [rohan] Man. Plays on a site.<br>This site is a <b>plains</b>.<br>Each [rohan] Man is strength +1 at this site.
+		lore: But he knows that we are a people who fight rather upon horseback and in the open....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_253: {
+		cardInfo: {
+			imagePath: decipher/LOTR07253.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C253
+			rarity: C
+			setNum: "7"
+			cardNum: 253
+			style: Standard
+		}
+		title: Swift Steed
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>While at a plains site, bearer takes no more than 1 wound during each skirmish.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_254: {
+		cardInfo: {
+			imagePath: decipher/LOTR07254.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U254
+			rarity: U
+			setNum: "7"
+			cardNum: 254
+			style: Standard
+		}
+		title: Théoden
+		subtitle: Leader of Spears
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>. While you can spot a [rohan] Man, Théoden's twilight cost is -1.<br>Each time the fellowship moves, you may exert a [rohan] companion to exert a minion.
+		lore: Forth rode Théoden. Five nights and days / east and onward rode the Eorlingas....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_255: {
+		cardInfo: {
+			imagePath: decipher/LOTR07255.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R255
+			rarity: R
+			setNum: "7"
+			cardNum: 255
+			style: Standard
+		}
+		title: Théoden
+		subtitle: Rekindled King
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot a [rohan] Man, Théoden's twilight cost is -1.<br><b>Fellowship:</b> If the twilight pool has fewer than 2 twilight tokens, play a [rohan] possession on Théoden and add (2) to heal another [rohan] companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_256: {
+		cardInfo: {
+			imagePath: decipher/LOTR07256.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C256
+			rarity: C
+			setNum: "7"
+			cardNum: 256
+			style: Standard
+		}
+		title: They Sang as They Slew
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keyword: Regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert X mounted companions to wound X minions.
+		lore: ...for the joy of battle was on them, and the sound of their singing that was fair and terrible came even to the City.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_257: {
+		cardInfo: {
+			imagePath: decipher/LOTR07257.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C257
+			rarity: C
+			setNum: "7"
+			cardNum: 257
+			style: Standard
+		}
+		title: Veteran Horseman
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Exert this companion to make him strength +1 for each mounted companion you spot.
+		lore: ...through Folde and Fenmarch and the Firienwood, six thousand spears to Sunlending....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_258: {
+		cardInfo: {
+			imagePath: decipher/LOTR07258.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U258
+			rarity: U
+			setNum: "7"
+			cardNum: 258
+			style: Standard
+		}
+		title: White Hot Fury
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a mounted [rohan] Man strength +1 for each mounted companion. If that Man is skirmishing a [raider] minion, also make him or her strength +2 and <b>damage +2</b>.
+		lore: Fewer were they but they clove through the Southrons like a fire-bolt in a forest.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_259: {
+		cardInfo: {
+			imagePath: decipher/LOTR07259.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C259
+			rarity: C
+			setNum: "7"
+			cardNum: 259
+			style: Standard
+		}
+		title: Wind in His Face
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a [rohan] Man strength +2. If that Man is mounted, choose an opponent who must place a random card from hand beneath his or her draw deck.
+		lore: Far, far away, in the South the clouds could be dimly seen as remote grey shapes, rolling up, drifting: morning lay beyond them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_260: {
+		cardInfo: {
+			imagePath: decipher/LOTR07260.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R260
+			rarity: R
+			setNum: "7"
+			cardNum: 260
+			style: Standard
+		}
+		title: Windfola
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br><b>Skirmish:</b> If bearer is Éowyn, exert her twice to wound a fierce minion she is skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_261: {
+		cardInfo: {
+			imagePath: decipher/LOTR07261.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R261
+			rarity: R
+			setNum: "7"
+			cardNum: 261
+			style: Standard
+		}
+		title: With Strength to Fight
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a [rohan] companion.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to heal up to 2 [rohan] companions.
+		lore: ...it is a long road....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_365: {
+		cardInfo: {
+			imagePath: decipher/LOTR07365.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7P365
+			rarity: P
+			setNum: "7"
+			cardNum: 365
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Valiant Warchief
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>. While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br><b>Skirmish:</b> If you have initiative, discard 3 cards from hand to make Éomer strength +1 for each valiant companion you spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,89 @@
+{
+
+	9_39: {
+		cardInfo: {
+			imagePath: decipher/LOTR09039.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R+39
+			rarity: R+
+			setNum: "9"
+			cardNum: 39
+			style: Standard
+		}
+		title: Library of Orthanc
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Artifact
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Shadow:</b> Play an [isengard] minion to stack the top card of your draw deck on this card.<br><b>Skirmish:</b> Remove (1) and discard a Free Peoples card stacked here to make an [isengard] minion strength +1.<br><b>Regroup:</b> Remove (1) to take an [isengard] card stacked here into hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_40: {
+		cardInfo: {
+			imagePath: decipher/LOTR09040.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R40
+			rarity: R
+			setNum: "9"
+			cardNum: 40
+			style: Standard
+		}
+		title: Sack of the Shire
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Event
+		keyword: Response
+		/*requires: {
+			
+		}
+		effects: {
+			type: responseEvent
+			trigger: {
+				
+			}
+			cost: {
+				
+			}
+			effect: [
+				{
+					
+				}
+			]
+		]*/
+		gametext: If an [isengard] minion wins a skirmish, until the regroup phase, make that minion strength +1 for each site you control and <b>fierce</b>.
+		lore: There's some devilry at work in the Shire....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

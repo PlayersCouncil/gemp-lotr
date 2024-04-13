@@ -1,0 +1,134 @@
+{
+
+	10_72: {
+		cardInfo: {
+			imagePath: decipher/LOTR10072.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10R72
+			rarity: R
+			setNum: "10"
+			cardNum: 72
+			style: Standard
+		}
+		title: Éowyn
+		subtitle: Lady of Ithilien
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Exert Éowyn to choose an opponent. That opponent must wound a minion for each wound on each minion skirmishing Éowyn.
+		lore: Yet now that I have leave to depart, I would remain. For this House has become to me of all dwellings the most blessed.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_73: {
+		cardInfo: {
+			imagePath: decipher/LOTR10073.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U73
+			rarity: U
+			setNum: "10"
+			cardNum: 73
+			style: Standard
+		}
+		title: Fell Deeds Awake
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a [rohan] Man.<br>Each time you lose initiative, you may liberate a site.
+		lore: ...he seized a great horn from Guthláf his banner-bearer, and he blew such a blast upon it that it burst asunder.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_74: {
+		cardInfo: {
+			imagePath: decipher/LOTR10074.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U74
+			rarity: U
+			setNum: "10"
+			cardNum: 74
+			style: Standard
+		}
+		title: Unyielding
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keyword: Response
+		/*requires: {
+			
+		}
+		effects: {
+			type: responseEvent
+			trigger: {
+				
+			}
+			cost: {
+				
+			}
+			effect: [
+				{
+					
+				}
+			]
+		]*/
+		gametext: If your [rohan] Man wins a skirmish, discard a [rohan] possession to wound a minion or to liberate a site.
+		lore: ...they gathered and rallied and fought until the day wore away.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

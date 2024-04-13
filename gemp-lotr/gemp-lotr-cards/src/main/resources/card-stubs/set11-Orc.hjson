@@ -1,0 +1,1652 @@
+{
+
+	11_106: {
+		cardInfo: {
+			imagePath: decipher/LOTR11106.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U106
+			rarity: U
+			setNum: "11"
+			cardNum: 106
+			style: Standard
+		}
+		title: Armed for Battle
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot your [orc] minion to play an [orc] possession from your discard pile (or, if that minion is at a battleground site, from your draw deck or discard pile).
+		lore: Fashioned by the hands of Orcs, or plundered from the hands of defeated enemies, the weaponry of Mordor is bounteous.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_107: {
+		cardInfo: {
+			imagePath: decipher/LOTR11107.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C107
+			rarity: C
+			setNum: "11"
+			cardNum: 107
+			style: Standard
+		}
+		title: Barbarous Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Exert another [orc] minion to make this minion strength +2 (or +4 if this minion is skirmishing a companion who has resistance 4 or less).
+		lore: Fiercely tribal, rival Orc bands unite only against a more hated enemy.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_108: {
+		cardInfo: {
+			imagePath: decipher/LOTR11108.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R108
+			rarity: R
+			setNum: "11"
+			cardNum: 108
+			style: Standard
+		}
+		title: Beastly Olog-hai
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 6
+		type: Minion
+		race: Troll
+		strength: 13
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot an [orc] minion.<br><b>Assignment:</b> Exert this minion to assign it to a companion bearing an artifact. The Free Peoples player may discard an artifact from play to prevent this.
+		lore: Some held that they were not Trolls, but giant Orcs....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_109: {
+		cardInfo: {
+			imagePath: decipher/LOTR11109.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U109
+			rarity: U
+			setNum: "11"
+			cardNum: 109
+			style: Standard
+		}
+		title: Bladed Gauntlets
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Possession
+		itemclass: Armor
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [orc] minion.<br>Bearer is a <b>lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Exert bearer to make an [orc] minion strength +2.
+		lore: One cannot easily discern Orc armor from weapon.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_110: {
+		cardInfo: {
+			imagePath: decipher/LOTR11110.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U110
+			rarity: U
+			setNum: "11"
+			cardNum: 110
+			style: Standard
+		}
+		title: Bound to its Fate
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot an [orc] minion to reveal the Free Peoples player's hand. The Free Peoples player chooses to either discard a revealed Free Peoples event or add a burden.
+		lore: Now it comes to it, I don't like parting with it at all, I may say.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_111: {
+		cardInfo: {
+			imagePath: decipher/LOTR11111.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C111
+			rarity: C
+			setNum: "11"
+			cardNum: 111
+			style: Standard
+		}
+		title: Champion Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 13
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Toil 2</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -2.)</helper>
+		lore: A few Orcs are veterans of single combats to settle disputes in the mountain tribes.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_112: {
+		cardInfo: {
+			imagePath: decipher/LOTR11112.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S112
+			rarity: S
+			setNum: "11"
+			cardNum: 112
+			style: Standard
+		}
+		title: Conquered Halls
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make an [orc] minion strength +1 for each underground site you can spot.
+		lore: They brandished spears and scimitars which shone red as blood in the firelight.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_113: {
+		cardInfo: {
+			imagePath: decipher/LOTR11113.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C113
+			rarity: C
+			setNum: "11"
+			cardNum: 113
+			style: Standard
+		}
+		title: Cutthroat Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: This minion is strength +1 for each companion who has resistance 5 or less.
+		lore: The smell of human flesh is often enough to frenzy an Orc warrior.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_114: {
+		cardInfo: {
+			imagePath: decipher/LOTR11114.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U114
+			rarity: U
+			setNum: "11"
+			cardNum: 114
+			style: Standard
+		}
+		title: Demoralized
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an [orc] minion.<br>Each time a companion exerts, you may add (1) (or (2) if you can spot 6 companions).
+		lore: But soon there were few left in Minas Tirith who had the heart to stand up and defy the hosts of Mordor.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_115: {
+		cardInfo: {
+			imagePath: decipher/LOTR11115.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S115
+			rarity: S
+			setNum: "11"
+			cardNum: 115
+			style: Standard
+		}
+		title: Denizen of Khazad-dûm
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While this minion is at an underground site, it is strength +2.
+		lore: The spiny helms forged by the Orcs of Moria can inflict as much damage as their scimitars.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_116: {
+		cardInfo: {
+			imagePath: decipher/LOTR11116.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S116
+			rarity: S
+			setNum: "11"
+			cardNum: 116
+			style: Standard
+		}
+		title: Denizen of Moria
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While this minion is at an underground site, it is strength +3.
+		lore: The vast tunnels of Khazad-dûm are the veins through which a foul Orc ichor can flow unchecked.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_117: {
+		cardInfo: {
+			imagePath: decipher/LOTR11117.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S117
+			rarity: S
+			setNum: "11"
+			cardNum: 117
+			style: Standard
+		}
+		title: Denizen of the Black Pit
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While this minion is at an underground site, it is strength +2.
+		lore: The great Dwarf mansion of Khazad-dûm is now more commonly known by other, darker names.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR11118.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U118
+			rarity: U
+			setNum: "11"
+			cardNum: 118
+			style: Standard
+		}
+		title: Dread and Despair
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot 2 [orc] minions to discard a condition from play. The Free Peoples player may discard the top 6 cards of his or her draw deck to prevent this.
+		lore: ...yet another weapon, swifter than hunger, the Lord of the Dark Tower had....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_119: {
+		cardInfo: {
+			imagePath: decipher/LOTR11119.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R119
+			rarity: R
+			setNum: "11"
+			cardNum: 119
+			style: Standard
+		}
+		title: Emboldened Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>This minion is strength +1 for each companion who is not assigned to a skirmish.
+		lore: Orcs are seldom intimidated, and often goaded, by superior forces.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR11120.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C120
+			rarity: C
+			setNum: "11"
+			cardNum: 120
+			style: Standard
+		}
+		title: Entrapping Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Assignment:</b> Assign this minion to an unbound companion who has resistance 4 or less.
+		lore: Orcs relish the kill more than the fight itself, and will often rush to engage a weakened foe.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_121: {
+		cardInfo: {
+			imagePath: decipher/LOTR11121.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C121
+			rarity: C
+			setNum: "11"
+			cardNum: 121
+			style: Standard
+		}
+		title: Foraging Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, you may spot another [orc] minion and a companion who has resistance 3 or less to add (2).
+		lore: Though most Orcs are small in stature, seldom can one be found without another nearby.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_122: {
+		cardInfo: {
+			imagePath: decipher/LOTR11122.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C122
+			rarity: C
+			setNum: "11"
+			cardNum: 122
+			style: Standard
+		}
+		title: Frenzied Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While this minion is at an underground site, each character skirmishing it is strength -2.<br>While you can spot 6 companions, each character skirmishing an [orc] minion is strength -2.
+		lore: More enemies seem only to further fuel their rage.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_123: {
+		cardInfo: {
+			imagePath: decipher/LOTR11123.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R123
+			rarity: R
+			setNum: "11"
+			cardNum: 123
+			style: Standard
+		}
+		title: Goblin Hordes
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an [orc] minion.<br>Each time the fellowship moves from an underground site, you may take an [orc] minion from your discard pile into hand.
+		lore: ...he saw swarming black figures: there seemed to be hundreds of orcs.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_124: {
+		cardInfo: {
+			imagePath: decipher/LOTR11124.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U124
+			rarity: U
+			setNum: "11"
+			cardNum: 124
+			style: Standard
+		}
+		title: Hill Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 12
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time this minion wins a skirmish, you may exert each companion who has resistance 4 or less.
+		lore: The foul Orcs who slaughtered the last of Balin's followers still thrive in the halls of Khazad-dûm and the surrounding countryside.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_125: {
+		cardInfo: {
+			imagePath: decipher/LOTR11125.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C125
+			rarity: C
+			setNum: "11"
+			cardNum: 125
+			style: Standard
+		}
+		title: Isengard Underling
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, you may take an [orc] event from your discard pile into hand.
+		lore: Saruman's workers would exploit any resource to prepare for the coming battle.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_126: {
+		cardInfo: {
+			imagePath: decipher/LOTR11126.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S126
+			rarity: S
+			setNum: "11"
+			cardNum: 126
+			style: Standard
+		}
+		title: Marauding Orcs
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you cannot spot another [orc] minion, discard this minion from play.
+		lore: Orcs that would only seek out violence at random on their own were brought together to serve Sauron's purpose.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_127: {
+		cardInfo: {
+			imagePath: decipher/LOTR11127.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C127
+			rarity: C
+			setNum: "11"
+			cardNum: 127
+			style: Standard
+		}
+		title: Mocking Goblin
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 12
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time this minion wins a skirmish, add a burden unless the Free Peoples player discards a Free Peoples event from hand.
+		lore: There was a rush of hoarse laughter, like the fall of sliding stones into a pit....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_128: {
+		cardInfo: {
+			imagePath: decipher/LOTR11128.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C128
+			rarity: C
+			setNum: "11"
+			cardNum: 128
+			style: Standard
+		}
+		title: Mordor Scimitar
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [orc] minion.<br>Each time bearer is assigned to skirmish a companion, you may exert that companion.
+		lore: Though Orcs will employ a wide variety of weaponry, they tend to favor long, curved blades.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_129: {
+		cardInfo: {
+			imagePath: decipher/LOTR11129.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C129
+			rarity: C
+			setNum: "11"
+			cardNum: 129
+			style: Standard
+		}
+		title: Mountain Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time this minion is assigned to skirmish a companion who has resistance 5 or less, exert that companion.
+		lore: Larger Orcs are strong enough to run for many miles, and can tire out their prey before attacking.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_130: {
+		cardInfo: {
+			imagePath: decipher/LOTR11130.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S130
+			rarity: S
+			setNum: "11"
+			cardNum: 130
+			style: Standard
+		}
+		title: Orc Hammer
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [orc] Orc.<br>When you play this possession, you may exert a companion.
+		lore: The strongest members of an Orc tribe often wield hammers rather than blades.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_131: {
+		cardInfo: {
+			imagePath: decipher/LOTR11131.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C131
+			rarity: C
+			setNum: "11"
+			cardNum: 131
+			style: Standard
+		}
+		title: Orc Miscreant
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an [orc] minion.<br><b>Regroup:</b> Exert this minion to add a burden.
+		lore: Some of the trees they just cut down and leave to rot – orc-mischief that....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_132: {
+		cardInfo: {
+			imagePath: decipher/LOTR11132.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C132
+			rarity: C
+			setNum: "11"
+			cardNum: 132
+			style: Standard
+		}
+		title: Orkish Smith
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, you may take an [orc] condition from your discard pile into hand.
+		lore: There is always a smoke rising from Isengard these days.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_133: {
+		cardInfo: {
+			imagePath: decipher/LOTR11133.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R133
+			rarity: R
+			setNum: "11"
+			cardNum: 133
+			style: Standard
+		}
+		title: Orkish Worker
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, you may spot another [orc] minion to reveal the top card of the Free Peoples player's deck. If it is a Shadow card, add (X), where X is its twilight cost.
+		lore: Saruman's Orcs labor day and night to provide him with the resources he needs to wage war.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_134: {
+		cardInfo: {
+			imagePath: decipher/LOTR11134.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R134
+			rarity: R
+			setNum: "11"
+			cardNum: 134
+			style: Standard
+		}
+		title: Persistent Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time this minion is about to be killed or discarded from play, you may spot another [orc] card to place this minion on top of your draw deck instead.
+		lore: An enemy can do little worse to an Orc than what it would willingly have done to itself.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_135: {
+		cardInfo: {
+			imagePath: decipher/LOTR11135.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R135
+			rarity: R
+			setNum: "11"
+			cardNum: 135
+			style: Standard
+		}
+		title: Porter Troll
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 7
+		type: Minion
+		race: Troll
+		strength: 15
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot an [orc] minion.<br>When you play this minion, add a burden unless the Free Peoples player reveals a Free Peoples event from his or her hand.
+		lore: The mammoth battering ram Grond required equally mammoth strength to wield it.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_136: {
+		cardInfo: {
+			imagePath: decipher/LOTR11136.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C136
+			rarity: C
+			setNum: "11"
+			cardNum: 136
+			style: Standard
+		}
+		title: Prowling Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Remove (2) to make an [orc] minion strength +1.
+		lore: Orcs use numbers to fell a powerful foe, though it would be generous to think of it as working together.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_137: {
+		cardInfo: {
+			imagePath: decipher/LOTR11137.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U137
+			rarity: U
+			setNum: "11"
+			cardNum: 137
+			style: Standard
+		}
+		title: Scurrying Goblin
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Minion
+		race: Orc
+		strength: 5
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion at an underground site, you may spot another [orc] minion to add (2).
+		lore: But it was not an echo, for when they halted it pattered on for a little all by itself, and then grew still.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_138: {
+		cardInfo: {
+			imagePath: decipher/LOTR11138.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S138
+			rarity: S
+			setNum: "11"
+			cardNum: 138
+			style: Standard
+		}
+		title: Skulking Goblin
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: The fellowship's current site gains <b>underground</b>.
+		lore: It is a mark of evil things that came in the Great Darkness that they cannot abide the Sun....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_139: {
+		cardInfo: {
+			imagePath: decipher/LOTR11139.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U139
+			rarity: U
+			setNum: "11"
+			cardNum: 139
+			style: Standard
+		}
+		title: Spurred to Battle
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, exert an [orc] minion.<br>At the start of the Shadow phase, add (1).
+		lore: Even victory does not long slake the Orkish thirst for blood. It merely drives them onward to a new confrontation.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_140: {
+		cardInfo: {
+			imagePath: decipher/LOTR11140.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C140
+			rarity: C
+			setNum: "11"
+			cardNum: 140
+			style: Standard
+		}
+		title: Strength in Shadows
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make an [orc] minion strength +2 (or +4 if it is a lurker).
+		lore: Weakened by the Sun, Orcs thrive in darkness and shadow.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_141: {
+		cardInfo: {
+			imagePath: decipher/LOTR11141.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R141
+			rarity: R
+			setNum: "11"
+			cardNum: 141
+			style: Standard
+		}
+		title: Undisciplined
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 8
+		type: Event
+		keyword: Assignment
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Toil 3</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -3.)</helper><br>Assign an [orc] minion to a companion (except the Ring-bearer).
+		lore: Easily caught by the heat of battle, Orc soldiers often break formation and attack where their bloodlust takes them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_142: {
+		cardInfo: {
+			imagePath: decipher/LOTR11142.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S142
+			rarity: S
+			setNum: "11"
+			cardNum: 142
+			style: Standard
+		}
+		title: Unyielding Goblin
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 5
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> If this minion is at an underground site, exert it to exert a companion it is skirmishing.
+		lore: In the rush of battle, some Orcs can carry on heedless of their own wounds until their enemy is vanquished.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_143: {
+		cardInfo: {
+			imagePath: decipher/LOTR11143.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R143
+			rarity: R
+			setNum: "11"
+			cardNum: 143
+			style: Standard
+		}
+		title: Watchful Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, you may spot another [orc] minion to replace the fellowship's current site with an underground site from your adventure deck.
+		lore: Some Orcs have learned basic tracking skills.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

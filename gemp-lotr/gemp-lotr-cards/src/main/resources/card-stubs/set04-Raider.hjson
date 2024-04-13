@@ -1,0 +1,1985 @@
+{
+
+	4_216: {
+		cardInfo: {
+			imagePath: decipher/LOTR04216.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U216
+			rarity: U
+			setNum: "4"
+			cardNum: 216
+			style: Standard
+		}
+		title: Arrow From the South
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving a [raider] Man, you may place a [raider] token here.<br><b>Archery:</b> Heal a [raider] archer for each [raider] token here. Discard this condition.
+		lore: Haradrim is the Gondorian name for Southrons.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_217: {
+		cardInfo: {
+			imagePath: decipher/LOTR04217.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U217
+			rarity: U
+			setNum: "4"
+			cardNum: 217
+			style: Standard
+		}
+		title: Desert Lancers
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. To play, spot a [raider] Man.<br><b>Regroup:</b> Exert Desert Lancers twice to take control of a site.
+		lore: Mordor has allied itself with... the cruel Haradrim....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_218: {
+		cardInfo: {
+			imagePath: decipher/LOTR04218.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R218
+			rarity: R
+			setNum: "4"
+			cardNum: 218
+			style: Standard
+		}
+		title: Desert Legion
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 13
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>While you can spot 4 burdens, this minion is strength +5.<br>While you can spot 5 burdens, this minion is <b>fierce</b>.<br>While you can spot 6 burdens, this minion is <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_219: {
+		cardInfo: {
+			imagePath: decipher/LOTR04219.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R219
+			rarity: R
+			setNum: "4"
+			cardNum: 219
+			style: Standard
+		}
+		title: Desert Lord
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Exert Desert Lord to exert a companion (except the Ring-bearer); Desert Lord does not add to the minion archery total.
+		lore: Southron legends tell of powerful warrior leaders and the kingdoms they have conquered.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_220: {
+		cardInfo: {
+			imagePath: decipher/LOTR04220.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U220
+			rarity: U
+			setNum: "4"
+			cardNum: 220
+			style: Standard
+		}
+		title: Desert Soldier
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
+		lore: Not nice; very cruel wicked Men they look.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_221: {
+		cardInfo: {
+			imagePath: decipher/LOTR04221.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C221
+			rarity: C
+			setNum: "4"
+			cardNum: 221
+			style: Standard
+		}
+		title: Desert Spearman
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
+		lore: Long spears are used by Southrons to attack while riding desert beasts.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_222: {
+		cardInfo: {
+			imagePath: decipher/LOTR04222.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C222
+			rarity: C
+			setNum: "4"
+			cardNum: 222
+			style: Standard
+		}
+		title: Desert Warrior
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
+		lore: The Haradrim wear cloaks and head wraps to survive the deserts of their homeland.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_223: {
+		cardInfo: {
+			imagePath: decipher/LOTR04223.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R223
+			rarity: R
+			setNum: "4"
+			cardNum: 223
+			style: Standard
+		}
+		title: Discovered
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Exert a [raider] Man to discard a Free Peoples condition (or 2 Free Peoples conditions if you spot 3 burdens).
+		lore: The voices and the clink of weapons and harness were very close.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_224: {
+		cardInfo: {
+			imagePath: decipher/LOTR04224.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C224
+			rarity: C
+			setNum: "4"
+			cardNum: 224
+			style: Standard
+		}
+		title: Easterling Axeman
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Easterling</b>.<br>While you can spot 2 burdens, this minion is strength +3 and <b>fierce</b>.
+		lore: Poleaxes wielded by tall Easterling warriors cut through armor and bone.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_225: {
+		cardInfo: {
+			imagePath: decipher/LOTR04225.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R225
+			rarity: R
+			setNum: "4"
+			cardNum: 225
+			style: Standard
+		}
+		title: Easterling Captain
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Easterling</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Spot 2 burdens and remove (2) to make an Easterling strength +2.<br><b>Skirmish:</b> Spot 4 burdens and remove (2) to make an Easterling strength +3.<br><b>Skirmish:</b> Spot 6 burdens and remove (2) to make an Easterling strength +4.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_226: {
+		cardInfo: {
+			imagePath: decipher/LOTR04226.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C226
+			rarity: C
+			setNum: "4"
+			cardNum: 226
+			style: Standard
+		}
+		title: Easterling Guard
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Easterling</b>.<br>Each time this minion is assigned to an unbound companion, you may exert him to add a burden.
+		lore: Armored Easterlings protect their commanders from enemy assaults.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_227: {
+		cardInfo: {
+			imagePath: decipher/LOTR04227.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C227
+			rarity: C
+			setNum: "4"
+			cardNum: 227
+			style: Standard
+		}
+		title: Easterling Infantry
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Easterling</b>.<br>While you can spot 3 burdens, this minion is <b>fierce</b> and <b>damage +1</b>.
+		lore: Sometimes called the Men of Rhûn, the Easterlings hated Gondor for her riches.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_228: {
+		cardInfo: {
+			imagePath: decipher/LOTR04228.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C228
+			rarity: C
+			setNum: "4"
+			cardNum: 228
+			style: Standard
+		}
+		title: Easterling Lieutenant
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Easterling</b>.<br>Each time this minion is assigned to an unbound companion, you may exert him to add a burden.
+		lore: Easterlings... have passed through the Black Gate....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_229: {
+		cardInfo: {
+			imagePath: decipher/LOTR04229.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R229
+			rarity: R
+			setNum: "4"
+			cardNum: 229
+			style: Standard
+		}
+		title: Easterling Skirmisher
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Minion
+		race: Man
+		strength: 5
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Easterling</b>.<br>When you play this minion, you may spot another Easterling to add (1) for each burden (limit (4)).
+		lore: Enemy formations are threatened by the spears of Easterling light troops.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_230: {
+		cardInfo: {
+			imagePath: decipher/LOTR04230.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U230
+			rarity: U
+			setNum: "4"
+			cardNum: 230
+			style: Standard
+		}
+		title: Easterling Trooper
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Easterling</b>.<br>While you can spot 3 burdens, this minion is <b>fierce</b> and <b>damage +1</b>.
+		lore: Trained Easterling fighters formed ranks of axes and spears to charge the knights of Gondor.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_231: {
+		cardInfo: {
+			imagePath: decipher/LOTR04231.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R231
+			rarity: R
+			setNum: "4"
+			cardNum: 231
+			style: Standard
+		}
+		title: Eastern Emyn Muil
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each Ring-bound companion moving from site 2[T] must exert twice.<br><b>Maneuver:</b> Discard this condition and exert a [raider] Man to exert a Ring-bound companion.
+		lore: The Emyn Muil was a strange, twisted knot of hills.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_232: {
+		cardInfo: {
+			imagePath: decipher/LOTR04232.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U232
+			rarity: U
+			setNum: "4"
+			cardNum: 232
+			style: Standard
+		}
+		title: Elite Archer
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Exert this minion to exert a companion (except the Ring-bearer); this minion does not add to the minion archery total.
+		lore: Veteran bowmen are highly valued in the kingdoms of the South.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_233: {
+		cardInfo: {
+			imagePath: decipher/LOTR04233.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U233
+			rarity: U
+			setNum: "4"
+			cardNum: 233
+			style: Standard
+		}
+		title: Fearless
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Make a Southron strength +1 for each burden you spot (limit +5), or make a [raider] Man strength +2.
+		lore: Despite their foreign ways, the Men from the South and East were formidable fighters.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_234: {
+		cardInfo: {
+			imagePath: decipher/LOTR04234.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U234
+			rarity: U
+			setNum: "4"
+			cardNum: 234
+			style: Standard
+		}
+		title: Flanking Attack
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver</b> <i>or</i> <b>Skirmish:</b> Exert a Southron to add (3).
+		lore: Our scouts report more Haradrim making their way up here....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_235: {
+		cardInfo: {
+			imagePath: decipher/LOTR04235.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C235
+			rarity: C
+			setNum: "4"
+			cardNum: 235
+			style: Standard
+		}
+		title: Gathering to the Summons
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Spot a [raider] Man skirmishing a Ring-bound companion to add a burden.
+		lore: These were Men of other race, out of the wide Eastlands....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_236: {
+		cardInfo: {
+			imagePath: decipher/LOTR04236.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U236
+			rarity: U
+			setNum: "4"
+			cardNum: 236
+			style: Standard
+		}
+		title: Howl of Harad
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving a Southron, you may remove (4) to make the Free Peoples player wound a Ring-bound companion.
+		lore: Blood-curdling cries rout the Southrons' enemies from the battlefield.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_237: {
+		cardInfo: {
+			imagePath: decipher/LOTR04237.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R237
+			rarity: R
+			setNum: "4"
+			cardNum: 237
+			style: Standard
+		}
+		title: Ithilien Wilderness
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>At the end of each phase during which the fellowship has moved to 7[T], 8[T], or 9[T] and the twilight pool has fewer than 7 twilight tokens, you may add (8).<br><b>Skirmish:</b> Discard this condition to make a [raider] Man strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_238: {
+		cardInfo: {
+			imagePath: decipher/LOTR04238.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R238
+			rarity: R
+			setNum: "4"
+			cardNum: 238
+			style: Standard
+		}
+		title: Men of Harad
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Shadow:</b> Spot a site you control, spot 3 Southrons and remove (2) to draw a card.
+		lore: The savage Haradrim, men from the kingdoms south of Gondor and Mordor, were called Southrons.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_239: {
+		cardInfo: {
+			imagePath: decipher/LOTR04239.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C239
+			rarity: C
+			setNum: "4"
+			cardNum: 239
+			style: Standard
+		}
+		title: Men of Rhûn
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Make a [raider] Man strength +3 (or +4 if you spot 4 burdens).
+		lore: Sudden war came upon Gondor out of Rhûn, land of the East.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_240: {
+		cardInfo: {
+			imagePath: decipher/LOTR04240.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R240
+			rarity: R
+			setNum: "4"
+			cardNum: 240
+			style: Standard
+		}
+		title: New Fear
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Regroup:</b> Exert a [raider] Man to add a burden for each companion over 4. The Free Peoples player may discard 2 companions (except the Ring-bearer) to prevent this.
+		lore: They heard singing and coarse shouting. At first it seemed a long way off, but it drew nearer....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_241: {
+		cardInfo: {
+			imagePath: decipher/LOTR04241.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C241
+			rarity: C
+			setNum: "4"
+			cardNum: 241
+			style: Standard
+		}
+		title: On the March
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Make a [raider] Man strength +3 (or +5 if you spot 6 companions).
+		lore: Easterlings traveled up the ancient roads of Gondor to swell the hosts of the Dark Tower.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_242: {
+		cardInfo: {
+			imagePath: decipher/LOTR04242.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U242
+			rarity: U
+			setNum: "4"
+			cardNum: 242
+			style: Standard
+		}
+		title: Raiders From the East
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Shadow:</b> Remove (3) and exert a [raider] Man to place a [raider] token here.<br><b>Maneuver:</b> Remove a [raider] token here to add (1).
+		lore: The Easterlings raid their enemies to gather supplies and equipment.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_243: {
+		cardInfo: {
+			imagePath: decipher/LOTR04243.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R243
+			rarity: R
+			setNum: "4"
+			cardNum: 243
+			style: Standard
+		}
+		title: Rapid Fire
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Archery:</b> Exert a [raider] archer to make the minion archery total +1 for each burden (limit +5).
+		lore: Wars between the southern kingdoms taught speed and precision to the archers of the Haradrim.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_244: {
+		cardInfo: {
+			imagePath: decipher/LOTR04244.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R244
+			rarity: R
+			setNum: "4"
+			cardNum: 244
+			style: Standard
+		}
+		title: Regiment of Haradrim
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 8
+		type: Minion
+		race: Man
+		strength: 16
+		vitality: 4
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. To play, spot a [raider] Man.<br><b>Regroup:</b> Exert Regiment of Haradrim twice to take control of a site.
+		lore: One of their regiments is due by our reckoning to pass by, some time ere noon....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_245: {
+		cardInfo: {
+			imagePath: decipher/LOTR04245.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R245
+			rarity: R
+			setNum: "4"
+			cardNum: 245
+			style: Standard
+		}
+		title: Southron Archer
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you can spot another Southron, the minion archery total is +1 for each site you control.
+		lore: They have passed on to the Black Gate; but more may follow.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_246: {
+		cardInfo: {
+			imagePath: decipher/LOTR04246.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R246
+			rarity: R
+			setNum: "4"
+			cardNum: 246
+			style: Standard
+		}
+		title: Southron Assassin
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>.<br>Each time a companion or ally loses a skirmish involving a Southron, you may remove (1) to make the Free Peoples player wound a Ring-bound companion.
+		lore: Some of the Southrons have broken from the trap and are flying from the road.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_247: {
+		cardInfo: {
+			imagePath: decipher/LOTR04247.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R247
+			rarity: R
+			setNum: "4"
+			cardNum: 247
+			style: Standard
+		}
+		title: Southron Bow
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Possession
+		itemclass: Ranged weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [raider] Man.<br>Bearer is an <b>archer</b>.<br>While you can spot another [raider] Man, the minion archery total is +1.
+		lore: Volleys from Southron bows are deadly in large numbers.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_248: {
+		cardInfo: {
+			imagePath: decipher/LOTR04248.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C248
+			rarity: C
+			setNum: "4"
+			cardNum: 248
+			style: Standard
+		}
+		title: Southron Bowman
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Exert this minion to exert a companion (except the Ring-bearer); this minion does not add to the minion archery total.
+		lore: The Southron armies deploy archers to harass enemy troop formations.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_249: {
+		cardInfo: {
+			imagePath: decipher/LOTR04249.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U249
+			rarity: U
+			setNum: "4"
+			cardNum: 249
+			style: Standard
+		}
+		title: Southron Commander
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Assignment:</b> Spot 6 companions to assign this minion to the Ring-bearer. The Free Peoples player may discard an unbound companion to prevent this.
+		lore: Almost as bad as Orcs, and much bigger.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_250: {
+		cardInfo: {
+			imagePath: decipher/LOTR04250.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U250
+			rarity: U
+			setNum: "4"
+			cardNum: 250
+			style: Standard
+		}
+		title: Southron Explorer
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 5
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>.<br><b>Regroup:</b> Exert this minion and remove (5) to take control of a site.
+		lore: Scouts find oases for Southron armies as they cross the deserts of Harad.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_251: {
+		cardInfo: {
+			imagePath: decipher/LOTR04251.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R251
+			rarity: R
+			setNum: "4"
+			cardNum: 251
+			style: Standard
+		}
+		title: Southron Fighter
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Maneuver:</b> Exert this minion and spot 5 companions to make the Free Peoples player exert a companion.
+		lore: ...they have come out of the South beyond the Great River's end....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_252: {
+		cardInfo: {
+			imagePath: decipher/LOTR04252.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C252
+			rarity: C
+			setNum: "4"
+			cardNum: 252
+			style: Standard
+		}
+		title: Southron Scout
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Minion
+		race: Man
+		strength: 3
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Ambush (2)</b>.
+		lore: They have black eyes, and long black hair, and gold rings in their ears....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_253: {
+		cardInfo: {
+			imagePath: decipher/LOTR04253.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U253
+			rarity: U
+			setNum: "4"
+			cardNum: 253
+			style: Standard
+		}
+		title: Southron Sentry
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>.<br><b>Maneuver:</b> Exert this minion to add (2) for each site you control.
+		lore: Pickets guarded the borders of the Southron encampment.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_254: {
+		cardInfo: {
+			imagePath: decipher/LOTR04254.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C254
+			rarity: C
+			setNum: "4"
+			cardNum: 254
+			style: Standard
+		}
+		title: Southron Soldier
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 4
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Ambush (2)</b>.
+		lore: The kingdoms of Harad fight countless wars and train thousands of warriors.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_255: {
+		cardInfo: {
+			imagePath: decipher/LOTR04255.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C255
+			rarity: C
+			setNum: "4"
+			cardNum: 255
+			style: Standard
+		}
+		title: Southron Spear
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Southron.<br><b>Skirmish:</b> Remove (4) and exert bearer to wound a companion or ally bearer is skirmishing.
+		lore: Long pikes defend the Southrons against the armored knights of Gondor.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_256: {
+		cardInfo: {
+			imagePath: decipher/LOTR04256.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R256
+			rarity: R
+			setNum: "4"
+			cardNum: 256
+			style: Standard
+		}
+		title: Southron Troop
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 7
+		type: Minion
+		race: Man
+		strength: 14
+		vitality: 4
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Archer</b>. <b>Ambush (1)</b>. To play, spot a Southron.<br><b>Assignment:</b> Spot 7 companions to assign this minion to the Ring-bearer. The Free Peoples player may make you discard a companion (except the Ring-bearer) to prevent this.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_257: {
+		cardInfo: {
+			imagePath: decipher/LOTR04257.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R257
+			rarity: R
+			setNum: "4"
+			cardNum: 257
+			style: Standard
+		}
+		title: Southron Veterans
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Maneuver:</b> Exert this minion and spot 6 companions to make the Free Peoples player exert 2 companions.
+		lore: He caught a glimpse of swarthy men... running down the slope some way off....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_258: {
+		cardInfo: {
+			imagePath: decipher/LOTR04258.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C258
+			rarity: C
+			setNum: "4"
+			cardNum: 258
+			style: Standard
+		}
+		title: Southron Wanderer
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Assignment:</b> Exert this minion and spot 5 companions to assign this minion to the Ring-bearer. The Free Peoples player may add (4) to prevent this.
+		lore: Some desert warriors have no allegiance and work for any faction that will pay them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_259: {
+		cardInfo: {
+			imagePath: decipher/LOTR04259.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R259
+			rarity: R
+			setNum: "4"
+			cardNum: 259
+			style: Standard
+		}
+		title: Vision From Afar
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Assignment:</b> Assign an Easterling to the Ring-bearer. The Free Peoples player may add a burden to prevent this.
+		lore: Then he knew that the hope that had for one wild moment stirred in his heart was vain.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_260: {
+		cardInfo: {
+			imagePath: decipher/LOTR04260.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C260
+			rarity: C
+			setNum: "4"
+			cardNum: 260
+			style: Standard
+		}
+		title: Whirling Strike
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Wound a companion or ally skirmishing a [raider] Man.
+		lore: The Southrons fight with tactics the men of Gondor have never before seen.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_261: {
+		cardInfo: {
+			imagePath: decipher/LOTR04261.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R261
+			rarity: R
+			setNum: "4"
+			cardNum: 261
+			style: Standard
+		}
+		title: Wrath of Harad
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>While you can spot a [raider] Man, each Free Peoples event that spots or exerts a ranger gains this cost: "wound a companion."<br><b>Skirmish:</b> Discard this condition to make a [raider] Man strength +2.
+		lore: Massed Southron troops prepared to attack Gondor.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,947 @@
+{
+
+	7_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR07031.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C31
+			rarity: C
+			setNum: "7"
+			cardNum: 31
+			style: Standard
+		}
+		title: All Save One
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make Gandalf strength +2 (or +4 and <b>damage +1</b> if you have initiative).
+		lore: You cannot enter here....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR07032.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R32
+			rarity: R
+			setNum: "7"
+			cardNum: 32
+			style: Standard
+		}
+		title: The Board Is Set
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Event
+		keyword: Response
+		/*requires: {
+			
+		}
+		effects: {
+			type: responseEvent
+			trigger: {
+				
+			}
+			cost: {
+				
+			}
+			effect: [
+				{
+					
+				}
+			]
+		]*/
+		gametext: <b>Spell</b>.<br>If an event is played, exert Gandalf to make that opponent remove (2) or cancel that event.
+		lore: We come to it at last... the greatest battle of our time.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR07033.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R33
+			rarity: R
+			setNum: "7"
+			cardNum: 33
+			style: Standard
+		}
+		title: Citadel to Gate
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 5
+		type: Event
+		keyword: Fellowship
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert Gandalf twice to remove all threats and to heal all companions of one culture (except [gandalf]).
+		lore: Wherever he came men's hearts would lift again, and the winged shadows pass from memory.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR07034.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C34
+			rarity: C
+			setNum: "7"
+			cardNum: 34
+			style: Standard
+		}
+		title: Echoes of Valinor
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time Gandalf wins a skirmish, you may exert him to draw 2 cards.
+		lore: Here in the Court of the Kings, Isildur grew a white tree, from a seed brought over the waters....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR07035.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U35
+			rarity: U
+			setNum: "7"
+			cardNum: 35
+			style: Standard
+		}
+		title: Fool's Hope
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		keyword: Fellowship
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot Gandalf and discard 2 cards from hand to make an opponent discard all but 2 Shadow conditions.
+		lore: There never was much hope....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR07036.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C36
+			rarity: C
+			setNum: "7"
+			cardNum: 36
+			style: Standard
+		}
+		title: Gandalf
+		subtitle: Defender of the West
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 9
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you cannot spot 3 companions of the same culture, Gandalf is strength -2.
+		lore: I come with counsel and tidings in this dark hour.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR07037.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R37
+			rarity: R
+			setNum: "7"
+			cardNum: 37
+			style: Standard
+		}
+		title: Gandalf
+		subtitle: Manager of Wizards
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 7
+		vitality: 4
+		signet: Theoden
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Place 3 cards from hand on top of your draw deck to make a minion skirmishing an unbound companion strength -3. Any Shadow player may place 3 cards from his or her hand on top of his or her draw deck to prevent this.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_38: {
+		cardInfo: {
+			imagePath: decipher/LOTR07038.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R38
+			rarity: R
+			setNum: "7"
+			cardNum: 38
+			style: Standard
+		}
+		title: Gandalf's Staff
+		subtitle: Focus of Power
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Artifact
+		vitality: 1
+		itemclass: Staff
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Gandalf.<br>While you can spot 4 twilight tokens, Gandalf is strength +1.
+		lore: But for Gandalf Stormcrow you would have seen a host of foes coming out of Anórien....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_39: {
+		cardInfo: {
+			imagePath: decipher/LOTR07039.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R39
+			rarity: R
+			setNum: "7"
+			cardNum: 39
+			style: Standard
+		}
+		title: Glamdring
+		subtitle: Elven Blade
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Gandalf.<br>He is <b>damage +1</b>.<br><b>Skirmish:</b> If you have more cards in hand than each opponent, discard 2 cards from hand to make an opponent exert a minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_40: {
+		cardInfo: {
+			imagePath: decipher/LOTR07040.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C40
+			rarity: C
+			setNum: "7"
+			cardNum: 40
+			style: Standard
+		}
+		title: Have Patience
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		keyword: Fellowship
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot Gandalf to heal an unbound companion twice.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_41: {
+		cardInfo: {
+			imagePath: decipher/LOTR07041.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C41
+			rarity: C
+			setNum: "7"
+			cardNum: 41
+			style: Standard
+		}
+		title: Intimidate
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		keyword: Response
+		/*requires: {
+			
+		}
+		effects: {
+			type: responseEvent
+			trigger: {
+				
+			}
+			cost: {
+				
+			}
+			effect: [
+				{
+					
+				}
+			]
+		]*/
+		gametext: <b>Spell</b>.<br>If a companion is about to take a wound, spot Gandalf to prevent that wound.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_42: {
+		cardInfo: {
+			imagePath: decipher/LOTR07042.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U42
+			rarity: U
+			setNum: "7"
+			cardNum: 42
+			style: Standard
+		}
+		title: King's Advisor
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert Gandalf twice to make an opponent exert a minion for each [rohan] companion you spot.
+		lore: Will they answer the summons, think you?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_43: {
+		cardInfo: {
+			imagePath: decipher/LOTR07043.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R43
+			rarity: R
+			setNum: "7"
+			cardNum: 43
+			style: Standard
+		}
+		title: Light the Beacons
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert Gandalf three times (or twice if you have initiative) to make all unbound companions of one culture (except [gandalf]) strength +3 until the regroup phase.
+		lore: Théoden will honour your old alliance and come with a mighty army.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_44: {
+		cardInfo: {
+			imagePath: decipher/LOTR07044.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R44
+			rarity: R
+			setNum: "7"
+			cardNum: 44
+			style: Standard
+		}
+		title: Moment of Respite
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: At the start of your regroup phase, you may discard 2 cards from hand to heal Gandalf.
+		lore: ...Gandalf says you must go ere nightfall, and the Lord of the Mark is eager for his own house.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_45: {
+		cardInfo: {
+			imagePath: decipher/LOTR07045.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U45
+			rarity: U
+			setNum: "7"
+			cardNum: 45
+			style: Standard
+		}
+		title: Númenor's Pride
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot Gandalf and add 3 threats.<br>Gandalf is <b>defender +1</b> and cannot take wounds.<br>Discard this condition at the start of the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_46: {
+		cardInfo: {
+			imagePath: decipher/LOTR07046.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C46
+			rarity: C
+			setNum: "7"
+			cardNum: 46
+			style: Standard
+		}
+		title: Peace of Mind
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Event
+		keyword: Regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot Gandalf to heal an unbound Hobbit 3 times.
+		lore: All Wizards should have a Hobbit or two in their care... to teach them the meaning of humility!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_47: {
+		cardInfo: {
+			imagePath: decipher/LOTR07047.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U47
+			rarity: U
+			setNum: "7"
+			cardNum: 47
+			style: Standard
+		}
+		title: Sharpen Your Swords
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot Gandalf to make a [gondor] companion strength +1 for each [gondor] companion you spot (limit +4).
+		lore: Courage will now be your best defence against the storm that is at hand....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_48: {
+		cardInfo: {
+			imagePath: decipher/LOTR07048.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R48
+			rarity: R
+			setNum: "7"
+			cardNum: 48
+			style: Standard
+		}
+		title: Stay This Madness
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot Gandalf.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to wound 2 minions.
+		lore: So it was that Gandalf took command of the last defence of the City of Gondor.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_49: {
+		cardInfo: {
+			imagePath: decipher/LOTR07049.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U49
+			rarity: U
+			setNum: "7"
+			cardNum: 49
+			style: Standard
+		}
+		title: Steadfast Champion
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Gandalf.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to Gandalf."<br><b>Regroup:</b> Discard this condition to discard a minion and heal a companion 3 times.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_50: {
+		cardInfo: {
+			imagePath: decipher/LOTR07050.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R50
+			rarity: R
+			setNum: "7"
+			cardNum: 50
+			style: Standard
+		}
+		title: Terrible and Evil
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>.<br>Exert Gandalf X times to wound a minion X times. If that minion is a Nazgûl, wound it again.
+		lore: Minas Morgul is their lair.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_51: {
+		cardInfo: {
+			imagePath: decipher/LOTR07051.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C51
+			rarity: C
+			setNum: "7"
+			cardNum: 51
+			style: Standard
+		}
+		title: Undaunted
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert Gandalf to make him strength +1 for each twilight token you spot (limit +8).
+		lore: ...here the hammerstroke will fall hardest....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_52: {
+		cardInfo: {
+			imagePath: decipher/LOTR07052.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C52
+			rarity: C
+			setNum: "7"
+			cardNum: 52
+			style: Standard
+		}
+		title: Wizard Staff
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		strength: 1
+		itemclass: Staff
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Wizard.<br><b>Skirmish:</b> Exert bearer twice to make a minion strength -3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

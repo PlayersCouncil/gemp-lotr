@@ -1,0 +1,384 @@
+{
+
+	8_22: {
+		cardInfo: {
+			imagePath: decipher/LOTR08022.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8C22
+			rarity: C
+			setNum: "8"
+			cardNum: 22
+			style: Standard
+		}
+		title: Hidden Even From Her
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Gollum is <b>fierce</b>.<br><b>Shadow:</b> Spot 6 companions to play Gollum from your discard pile and exert a companion. Place this condition on top of your draw deck.
+		lore: ...even when he had come to her again and had bowed low....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_23: {
+		cardInfo: {
+			imagePath: decipher/LOTR08023.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8U23
+			rarity: U
+			setNum: "8"
+			cardNum: 23
+			style: Standard
+		}
+		title: Larder
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 1
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a [gollum] minion.<br><b>Regroup:</b> Discard an Orc from hand to add a [gollum] token here.<br><b>Skirmish:</b> Remove a [gollum] token here to make Shelob strength +3 (limit +6).
+		lore: When she binds with cords, she's after meat.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_24: {
+		cardInfo: {
+			imagePath: decipher/LOTR08024.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8R24
+			rarity: R
+			setNum: "8"
+			cardNum: 24
+			style: Standard
+		}
+		title: Promise Keeping
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 4
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time a companion takes a wound during a skirmish that involves a [gollum] minion, exert a companion.
+		lore: And we'll save the Precious, as we promised.... Then we'll pay everyone back!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR08025.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8R25
+			rarity: R
+			setNum: "8"
+			cardNum: 25
+			style: Standard
+		}
+		title: Shelob
+		subtitle: Eater of Light
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 6
+		type: Minion
+		race: Spider
+		strength: 8
+		vitality: 8
+		site: 8
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>When you play Shelob, you may play a [gollum] possession from your draw deck.<br>Shelob is strength +3 for each minion stacked on a [gollum] possession.
+		lore: ...who only desired death for all others....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR08026.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8C26
+			rarity: C
+			setNum: "8"
+			cardNum: 26
+			style: Standard
+		}
+		title: Shelob
+		subtitle: Last Child of Ungoliant
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 6
+		type: Minion
+		race: Spider
+		strength: 8
+		vitality: 8
+		site: 8
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Enduring</b>. <b>Fierce</b>.<br>While in a fierce skirmish, Shelob is <b>damage +1</b>.
+		lore: ...for all living things were her food, and her vomit darkness.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_27: {
+		cardInfo: {
+			imagePath: decipher/LOTR08027.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8R27
+			rarity: R
+			setNum: "8"
+			cardNum: 27
+			style: Standard
+		}
+		title: Sméagol
+		subtitle: Slippery Sneak
+		unique: true
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Companion
+		race: 
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> Add threats equal to the total vitality of the minions Sméagol is skirmishing to discard Sméagol.<br><b>Regroup:</b> Discard Sméagol to take a [gollum] minion from your discard pile into hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_28: {
+		cardInfo: {
+			imagePath: decipher/LOTR08028.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8C28
+			rarity: C
+			setNum: "8"
+			cardNum: 28
+			style: Standard
+		}
+		title: Spider Poison
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 1
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Remove a threat or a burden to transfer this possession to a companion skirmishing Shelob.<br>Each time bearer is assigned to a skirmish, bearer must exert.
+		lore: He lay now pale, and heard no voice, and did not move.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_29: {
+		cardInfo: {
+			imagePath: decipher/LOTR08029.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8U29
+			rarity: U
+			setNum: "8"
+			cardNum: 29
+			style: Standard
+		}
+		title: Still Far Ahead
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Event
+		keyword: Fellowship or regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot Sméagol to play the fellowship's next site (replacing opponent's site if necessary). The Shadow number of the fellowship's next site is -1 until the end of the turn.
+		lore: ...the very crown of this bitter road.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_30: {
+		cardInfo: {
+			imagePath: decipher/LOTR08030.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8C30
+			rarity: C
+			setNum: "8"
+			cardNum: 30
+			style: Standard
+		}
+		title: Web
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 1
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Regroup:</b> If there are fewer than 3 cards stacked here, spot your Orc or [gollum] minion to stack that minion here.<br><b>Shadow:</b> Play a [gollum] minion stacked here as if played from hand.
+		lore: Caught in a web. Soon he'll be eaten!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,40 @@
+{
+
+	19_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR19001.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P1
+			rarity: P
+			setNum: "19"
+			cardNum: 1
+			style: Standard
+		}
+		title: The One Ring
+		subtitle: The Great Ring
+		unique: true
+		twilight: 0
+		type: The One Ring
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While wearing The One Ring, each time bearer is about to take a wound, add a burden instead.<br><b>Maneuver:</b> Wear The One Ring until the regroup phase.<br><b>Skirmish:</b> Add a burden to make the Ring-bearer strength +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

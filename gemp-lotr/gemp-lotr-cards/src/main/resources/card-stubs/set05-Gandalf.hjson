@@ -1,0 +1,265 @@
+{
+
+	5_15: {
+		cardInfo: {
+			imagePath: decipher/LOTR05015.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5U15
+			rarity: U
+			setNum: "5"
+			cardNum: 15
+			style: Standard
+		}
+		title: Birchseed
+		subtitle: Tall Statesman
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Companion
+		race: Ent
+		strength: 8
+		vitality: 4
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow Birchseed to skirmish.<br><b>Fellowship:</b> Exert Birchseed to heal an unbound Hobbit.
+		lore: Slender and royal, he presided over many Entmoots.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_16: {
+		cardInfo: {
+			imagePath: decipher/LOTR05016.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5R16
+			rarity: R
+			setNum: "5"
+			cardNum: 16
+			style: Standard
+		}
+		title: Down From the Hills
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 5
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Exert Gandalf 3 times to make an unbound companion with the Gandalf signet strength +5, <b>defender +1</b>, <b>damage +2</b>, and unable to take wounds until the regroup phase.
+		lore: Down leaped Shadowfax, like a deer....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_17: {
+		cardInfo: {
+			imagePath: decipher/LOTR05017.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5C17
+			rarity: C
+			setNum: "5"
+			cardNum: 17
+			style: Standard
+		}
+		title: Forest Guardian
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Companion
+		race: Ent
+		strength: 8
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow this companion to skirmish.
+		lore: We keep off strangers and the foolhardy; and we train and we teach, we walk and we weed.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_18: {
+		cardInfo: {
+			imagePath: decipher/LOTR05018.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5R18
+			rarity: R
+			setNum: "5"
+			cardNum: 18
+			style: Standard
+		}
+		title: Fury of the White Rider
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Spot 3 twilight tokens and exert Gandalf to wound a minion twice.
+		lore: The White Rider was upon them, and the terror of his coming filled the enemy with madness.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_19: {
+		cardInfo: {
+			imagePath: decipher/LOTR05019.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5R19
+			rarity: R
+			setNum: "5"
+			cardNum: 19
+			style: Standard
+		}
+		title: Lindenroot
+		subtitle: Elder Shepherd
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Ent
+		strength: 10
+		vitality: 4
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow Lindenroot to skirmish.<br><b>Skirmish:</b> Exert Lindenroot to wound an [isengard] minion he is skirmishing.
+		lore: A most well-founded and considerate Ent.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_20: {
+		cardInfo: {
+			imagePath: decipher/LOTR05020.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5U20
+			rarity: U
+			setNum: "5"
+			cardNum: 20
+			style: Standard
+		}
+		title: Turn of the Tide
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Exert Gandalf to discard up to 2 Shadow possessions. Any Shadow player may discard a minion to prevent this.
+		lore: Indeed my friends, none of you have any weapon that could hurt me.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

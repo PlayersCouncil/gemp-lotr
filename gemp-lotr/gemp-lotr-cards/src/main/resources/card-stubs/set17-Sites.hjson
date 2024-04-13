@@ -1,0 +1,162 @@
+{
+
+	17_145: {
+		cardInfo: {
+			imagePath: decipher/LOTR17145.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U145
+			rarity: U
+			setNum: "17"
+			cardNum: 145
+			style: Standard
+		}
+		title: Dol Guldur
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Regroup:</b> Exert your minion and remove a threat to make the Free Peoples player discard one of his or her conditions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_146: {
+		cardInfo: {
+			imagePath: decipher/LOTR17146.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U146
+			rarity: U
+			setNum: "17"
+			cardNum: 146
+			style: Standard
+		}
+		title: Falls of Rauros
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>River</b>. When the Fellowship moves to this site in region 2, the Free Peoples player places a card from the dead pile out of play.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_147: {
+		cardInfo: {
+			imagePath: decipher/LOTR17147.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U147
+			rarity: U
+			setNum: "17"
+			cardNum: 147
+			style: Standard
+		}
+		title: Imladris
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>River</b>. When the fellowship moves to this site, if it is a sanctuary, remove 2 burdens.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_148: {
+		cardInfo: {
+			imagePath: decipher/LOTR17148.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U148
+			rarity: U
+			setNum: "17"
+			cardNum: 148
+			style: Standard
+		}
+		title: Nurn
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. While you control this site, each of your hunter minions is strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

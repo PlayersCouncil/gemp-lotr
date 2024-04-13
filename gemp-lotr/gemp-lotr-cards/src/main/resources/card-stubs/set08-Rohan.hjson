@@ -1,0 +1,349 @@
+{
+
+	8_85: {
+		cardInfo: {
+			imagePath: decipher/LOTR08085.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8U85
+			rarity: U
+			setNum: "8"
+			cardNum: 85
+			style: Standard
+		}
+		title: Charged Headlong
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: If you have initiative, discard a [rohan] possession to play a [rohan] possession from your discard pile.
+		lore: ...and the black serpent foundered.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_86: {
+		cardInfo: {
+			imagePath: decipher/LOTR08086.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8U86
+			rarity: U
+			setNum: "8"
+			cardNum: 86
+			style: Standard
+		}
+		title: Doom Drove Them
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fellowship:</b> Exert a [rohan] companion and either a [gondor] Man or a [shire] companion to add a [rohan] token here.<br><b>Skirmish:</b> Remove a [rohan] token here to exert a minion skirmishing a companion.
+		lore: Sea-kings' city in the South-kingdom / foe- beleaguered, fire-encircled.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_87: {
+		cardInfo: {
+			imagePath: decipher/LOTR08087.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8C87
+			rarity: C
+			setNum: "8"
+			cardNum: 87
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Keeper of Oaths
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br>When you play Éomer (except in your starting fellowship), you may reveal the top 10 cards of your draw deck. You may play each [rohan] possession revealed. Shuffle your draw deck.
+		lore: Need brooks no delay, yet late is better than never....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_88: {
+		cardInfo: {
+			imagePath: decipher/LOTR08088.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8R88
+			rarity: R
+			setNum: "8"
+			cardNum: 88
+			style: Standard
+		}
+		title: Éowyn's Shield
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Shield
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>The minion archery total is -1.<br><b>Skirmish:</b> If bearer is Éowyn, add a threat and discard Éowyn's Shield to discard a hand weapon borne by a minion she is skirmishing.
+		lore: ...spear shall be shaken, shield shall be splintered....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_89: {
+		cardInfo: {
+			imagePath: decipher/LOTR08089.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8C89
+			rarity: C
+			setNum: "8"
+			cardNum: 89
+			style: Standard
+		}
+		title: Fury of the Northmen
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert a minion skirmishing a mounted [rohan] Man.
+		lore: Death! Ride, ride to ruin and the world's ending!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_90: {
+		cardInfo: {
+			imagePath: decipher/LOTR08090.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8C90
+			rarity: C
+			setNum: "8"
+			cardNum: 90
+			style: Standard
+		}
+		title: No Living Man
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert Théoden to exert a minion for each Théoden signet you spot.
+		lore: Begone, foul dwimmerlaik, lord of carrion!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_91: {
+		cardInfo: {
+			imagePath: decipher/LOTR08091.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8R91
+			rarity: R
+			setNum: "8"
+			cardNum: 91
+			style: Standard
+		}
+		title: Rohirrim Army
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 9
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 3 [rohan] companions.<br>You may play Rohirrim Army any time you could play a regroup event.<br>When you play Rohirrim Army, you may discard a minion.
+		lore: ...like a storm upon the plain and a thunder in the mountains.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_92: {
+		cardInfo: {
+			imagePath: decipher/LOTR08092.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8R92
+			rarity: R
+			setNum: "8"
+			cardNum: 92
+			style: Standard
+		}
+		title: Théoden
+		subtitle: Tall and Proud
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br>While you can spot a [rohan] Man, Théoden's twilight cost is -1.<br>When Théoden is killed, you may play a [rohan] companion from your discard pile or draw deck.
+		lore: Up Eorlingas! Fear no darkness!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

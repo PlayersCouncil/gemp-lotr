@@ -1,0 +1,431 @@
+{
+
+	18_28: {
+		cardInfo: {
+			imagePath: decipher/LOTR18028.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R28
+			rarity: R
+			setNum: "18"
+			cardNum: 28
+			style: Standard
+		}
+		title: Countless Cords
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot Shelob to make a minion strength +1 for each threat you can spot.
+		lore: But don't go on, master! Don't go down to that den! Now's our only chance. Now let's get out of this foul hole!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_29: {
+		cardInfo: {
+			imagePath: decipher/LOTR18029.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R29
+			rarity: R
+			setNum: "18"
+			cardNum: 29
+			style: Standard
+		}
+		title: Deceit
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Response:</b> If a Free Peoples player's card is about to discard your other [gollum] condition, remove (1) to prevent that.
+		lore: Presently they were under the shadow, and there in the midst of it they saw the opening of a cave. 'This is the way in,' said Gollum softly.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_30: {
+		cardInfo: {
+			imagePath: decipher/LOTR18030.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U30
+			rarity: U
+			setNum: "18"
+			cardNum: 30
+			style: Standard
+		}
+		title: Enemy in Your Midst
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 0
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Heal a Ring-bound companion to reinforce a [gollum] token.
+		lore: Earning pity and trust was the first step of Gollum's plan to reclaim his precious.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR18031.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R31
+			rarity: R
+			setNum: "18"
+			cardNum: 31
+			style: Standard
+		}
+		title: It Draws Him
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 0
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot a [gollum] card to play a minion. Its twilight cost -1 (or -3 if it is roaming).
+		lore: He will never be rid of his need for it. He hates and loves the Ring, as he hates and loves himself.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR18032.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R32
+			rarity: R
+			setNum: "18"
+			cardNum: 32
+			style: Standard
+		}
+		title: Not Easily Avoided
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 3
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Shadow:</b> Remove (3) to take a [gollum] card into hand from your draw deck, then randomly discard a card from your hand.<br><b>Skirmish:</b> Discard a [gollum] card from hand to make a [gollum] minion strength +2.
+		lore: But I still feel that they are looking at me, or thinking about me: making some other plan, perhaps.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR18033.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U33
+			rarity: U
+			setNum: "18"
+			cardNum: 33
+			style: Standard
+		}
+		title: Set Up
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot Gollum or Sméagol to return a follower to its owner's hand.
+		lore: He took it!! I've seen him. He is always stuffing his face when Master is not looking.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR18034.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R34
+			rarity: R
+			setNum: "18"
+			cardNum: 34
+			style: Standard
+		}
+		title: Shelob
+		subtitle: Menace
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 6
+		type: Minion
+		race: Spider
+		strength: 8
+		vitality: 8
+		site: 8
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Each time Shelob wins a skirmish, you may add threats up to the number of burdens you can spot.<br>Each time Shelob wins a skirmish, you may play Gollum from your discard pile; he is strength +3 and <b>fierce</b> until the end of turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR18035.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R35
+			rarity: R
+			setNum: "18"
+			cardNum: 35
+			style: Standard
+		}
+		title: Sting of Shelob
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 10
+		type: Event
+		keyword: Regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: To play, spot Shelob.<br>The Free Peoples player must choose two companions in play (except the Ring- bearer). He or she then chooses to place one of those companions in the dead pile and return the other to his or her hand.
+		lore: Poison frothed and bubbled....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR18036.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C36
+			rarity: C
+			setNum: "18"
+			cardNum: 36
+			style: Standard
+		}
+		title: Time for Food
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Event
+		keyword: Response
+		/*requires: {
+			
+		}
+		effects: {
+			type: responseEvent
+			trigger: {
+				
+			}
+			cost: {
+				
+			}
+			effect: [
+				{
+					
+				}
+			]
+		]*/
+		gametext: If a skirmish event is played, spot Sméagol to cancel that event.
+		lore: Oh yes we could! Spoil nice fish. Give it to usss rrraw... and wrrriggling! You keep nasty chips.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR18037.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U37
+			rarity: U
+			setNum: "18"
+			cardNum: 37
+			style: Standard
+		}
+		title: Trusted Promise
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Reinforce a [gollum] token. Each Shadow player may draw a card.
+		lore: We swears to serve the master of the preciousss. We will swear on... on the precious.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

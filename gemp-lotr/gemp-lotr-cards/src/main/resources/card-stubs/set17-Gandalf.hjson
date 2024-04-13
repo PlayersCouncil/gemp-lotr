@@ -1,0 +1,519 @@
+{
+
+	17_15: {
+		cardInfo: {
+			imagePath: decipher/LOTR17015.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U15
+			rarity: U
+			setNum: "17"
+			cardNum: 15
+			style: Standard
+		}
+		title: A New Light
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		keyword: Fellowship
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>. Spot a [gandalf] Wizard to search a Shadow player's discard pile and choose a minion, then return that minion to its owner's hand. If you do, you may reveal that Shadow player's hand and discard a minion found there.
+		lore: I once knew every spell in all the tongues of Elves or Men or Orcs....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_16: {
+		cardInfo: {
+			imagePath: decipher/LOTR17016.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U16
+			rarity: U
+			setNum: "17"
+			cardNum: 16
+			style: Standard
+		}
+		title: Barliman Butterbur
+		subtitle: Red-faced Landlord
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 4
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Barliman Butterbur is strength +1 for each attached [gandalf] follower.<br><b>Maneuver:</b> Exert Barliman Butterbur to reveal the top 2 cards of your deck. Take any [gandalf] cards into hand and discard the rest.
+		lore: Barliman Butterbur at your service!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_17: {
+		cardInfo: {
+			imagePath: decipher/LOTR17017.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R17
+			rarity: R
+			setNum: "17"
+			cardNum: 17
+			style: Standard
+		}
+		title: Gandalf
+		subtitle: Returned
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 7
+		vitality: 4
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play Gandalf (except in your starting fellowship), you may play a [gandalf] possession on him from your draw deck or discard pile.<br>Each time Gandalf wins a skirmish, you may reinforce a Free Peoples token.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_18: {
+		cardInfo: {
+			imagePath: decipher/LOTR17018.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R18
+			rarity: R
+			setNum: "17"
+			cardNum: 18
+			style: Standard
+		}
+		title: Glamdring
+		subtitle: Orc Beater
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Gandalf.<br>Bearer is <b>damage +1</b>.<br>Each time a companion is about to take a wound, you may discard a companion from hand to prevent that.
+		lore: ...in his other hand Glamdring gleamed, cold and white.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_19: {
+		cardInfo: {
+			imagePath: decipher/LOTR17019.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U19
+			rarity: U
+			setNum: "17"
+			cardNum: 19
+			style: Standard
+		}
+		title: Guidance of the Istari
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a [gandalf] companion strength +1 for each [gandalf] Man you can spot.
+		lore: Hold them back. Do not give in to fear! Stand your posts! Fight!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_20: {
+		cardInfo: {
+			imagePath: decipher/LOTR17020.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R20
+			rarity: R
+			setNum: "17"
+			cardNum: 20
+			style: Standard
+		}
+		title: Gwaihir
+		subtitle: The Windlord
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Follower
+		strength: 1
+		resistance: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Aid</b> – Add a threat. <helper>(At the start of the maneuver phase, you may add a threat to transfer this to a companion.)</helper><br>If bearer is a [gandalf] Wizard, each time bearer wins a skirmish, you may exert a minion (if that minion is a Wizard, wound it instead).
+		lore: ...swiftest of the Great Eagles....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_21: {
+		cardInfo: {
+			imagePath: decipher/LOTR17021.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U21
+			rarity: U
+			setNum: "17"
+			cardNum: 21
+			style: Standard
+		}
+		title: Long-stemmed Pipe
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Pipeweed</b>. When you play this, you may search your deck for a [gandalf] card and place it in your discard pile.<br><b>Regroup:</b> Discard another pipeweed from play to discard a condition. Discard this condition.
+		lore: The smoke from his pipe drifted up, obscuring his face.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_22: {
+		cardInfo: {
+			imagePath: decipher/LOTR17022.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U22
+			rarity: U
+			setNum: "17"
+			cardNum: 22
+			style: Standard
+		}
+		title: Meneldor
+		subtitle: Misty Mountain Eagle
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Follower
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, you may add (1) to transfer this to a companion.)</helper><br>To play, spot a [gandalf] follower.<br>Bearer is strength +1 for each other [gandalf] follower you can spot.
+		lore: To many he was known as the Swift.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_23: {
+		cardInfo: {
+			imagePath: decipher/LOTR17023.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R23
+			rarity: R
+			setNum: "17"
+			cardNum: 23
+			style: Standard
+		}
+		title: Scintillating Bird
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Spell</b>.<br><b>Fellowship:</b> Exert your Wizard and choose an opponent to name either Free Peoples or Shadow. Reveal the top three cards of your deck. If you revealed at least two of the chosen card type, take those cards into hand, otherwise, discard those cards.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_24: {
+		cardInfo: {
+			imagePath: decipher/LOTR17024.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R24
+			rarity: R
+			setNum: "17"
+			cardNum: 24
+			style: Standard
+		}
+		title: Shadowfax
+		subtitle: Greatest of the Mearas
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		strength: 1
+		vitality: 1
+		resistance: 1
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [gandalf] Wizard. Discard all other possessions on bearer and bearer may not bear a hand weapon.<br><b>Fellowship:</b> Add a threat to remove a burden.
+		lore: There are no horses like those that are bred in that great vale between the Misty Mountains and the White.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR17025.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U25
+			rarity: U
+			setNum: "17"
+			cardNum: 25
+			style: Standard
+		}
+		title: The Sap is in the Bough
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Discard a companion from hand to make a [gandalf] companion strength +3 (or +4 if you can spot 3 Ents).
+		lore: Together we will take the road that leads into the west / and far away, we'll find a land where both our hearts may rest.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR17026.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U26
+			rarity: U
+			setNum: "17"
+			cardNum: 26
+			style: Standard
+		}
+		title: Woodland Onod
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Ent
+		strength: 7
+		vitality: 4
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Discard a companion from hand to make an Ent strength +2.
+		lore: Ent the earthborn, old as mountains....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

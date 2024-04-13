@@ -1,0 +1,260 @@
+{
+
+	15_181: {
+		cardInfo: {
+			imagePath: decipher/LOTR15181.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15U181
+			rarity: U
+			setNum: "15"
+			cardNum: 181
+			style: Standard
+		}
+		title: Later Than You Think
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Remove 2 threats to play a Nazgûl. That Nazgûl is twilight cost -2 and gains <b>hunter 2</b> <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper> until the start of the regroup phase.
+		lore: The Nine have left Minas Morgul.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_182: {
+		cardInfo: {
+			imagePath: decipher/LOTR15182.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15R182
+			rarity: R
+			setNum: "15"
+			cardNum: 182
+			style: Standard
+		}
+		title: A Shadow Fell Over Them
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time a Nazgûl wins a skirmish, you may exert 2 Nazgûl (or a Nazgûl twice) to add a threat.<br><b>Assignment:</b> Spot a Nazgûl and remove (4) to play a Nazgûl from your discard pile.
+		lore: ...a blind fear and a deadly cold fell on them. Cowering they looked up.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_183: {
+		cardInfo: {
+			imagePath: decipher/LOTR15183.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15U183
+			rarity: U
+			setNum: "15"
+			cardNum: 183
+			style: Standard
+		}
+		title: They Feel The Precious
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Response:</b> If a Nazgûl is about to take a wound, remove a threat to prevent that wound.
+		lore: Three times is a threat. They feel us here....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_184: {
+		cardInfo: {
+			imagePath: decipher/LOTR15184.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15R184
+			rarity: R
+			setNum: "15"
+			cardNum: 184
+			style: Standard
+		}
+		title: Úlairë Attëa
+		subtitle: Desirous of Power
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 12
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Úlairë Attëa is strength +1 for every 3 twilight tokens you can spot.
+		lore: The Nazgûl were strongest, and most terrifying, at night.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_185: {
+		cardInfo: {
+			imagePath: decipher/LOTR15185.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15R185
+			rarity: R
+			setNum: "15"
+			cardNum: 185
+			style: Standard
+		}
+		title: Úlairë Lemenya
+		subtitle: Eternally Threatening
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>When you play Úlairë Lemenya, you may remove (1) to add a threat for each Free Peoples culture you can spot.
+		lore: Soon there could be no doubt: three or four tall black figures were standing on the slope, looking down on them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_186: {
+		cardInfo: {
+			imagePath: decipher/LOTR15186.jpg
+			javaClass: true
+			version: 0
+			collInfo: 15R186
+			rarity: R
+			setNum: "15"
+			cardNum: 186
+			style: Standard
+		}
+		title: Úlairë Nelya
+		subtitle: Fell Rider
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgûl
+		strength: 10
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>While you can spot 6 companions, [wraith] minions cannot take wounds (except during skirmish phases).<br><b>Skirmish:</b> If this minion is mounted, exert him twice to wound a companion bearing a [wraith] condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

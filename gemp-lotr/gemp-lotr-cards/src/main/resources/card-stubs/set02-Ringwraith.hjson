@@ -1,0 +1,522 @@
+{
+
+	2_75: {
+		cardInfo: {
+			imagePath: decipher/LOTR02075.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R75
+			rarity: R
+			setNum: "2"
+			cardNum: 75
+			style: Standard
+		}
+		title: Bill Ferny
+		subtitle: Swarthy Sneering Fellow
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 4
+		vitality: 1
+		site: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Nazgûl are not roaming.<br>The Free Peoples player may not assign a character to skirmish Bill Ferny. Discard Bill Ferny if underground.
+		lore: ...as for Ferny, he would sell anything to anybody; or make mischief for amusement.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_76: {
+		cardInfo: {
+			imagePath: decipher/LOTR02076.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U76
+			rarity: U
+			setNum: "2"
+			cardNum: 76
+			style: Standard
+		}
+		title: Helpless
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot Frodo and a Nazgûl. Plays on Sam.<br>Sam's game text does not apply.
+		lore: He heard Frodo's voice, but it seemed to come from a great distance, or from under the earth, crying out strange words.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_77: {
+		cardInfo: {
+			imagePath: decipher/LOTR02077.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R77
+			rarity: R
+			setNum: "2"
+			cardNum: 77
+			style: Standard
+		}
+		title: His Terrible Servants
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Response:</b> If a twilight Nazgûl is about to take a wound, remove (1) to prevent that wound.
+		lore: ...in the dark they perceive many signs and forms that are hidden from us: then they are most to be feared.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_78: {
+		cardInfo: {
+			imagePath: decipher/LOTR02078.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U78
+			rarity: U
+			setNum: "2"
+			cardNum: 78
+			style: Standard
+		}
+		title: It Wants to be Found
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Spot a twilight Nazgûl to add a burden.
+		lore: ...perhaps it had tried to reveal itself in response to some wish or command that was felt in the room.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_79: {
+		cardInfo: {
+			imagePath: decipher/LOTR02079.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U79
+			rarity: U
+			setNum: "2"
+			cardNum: 79
+			style: Standard
+		}
+		title: Resistance Becomes<br>Unbearable
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Exert a twilight Nazgûl to exert the Ring-bearer. If the Ring-bearer is then exhausted, he puts on The One Ring until the regroup phase.
+		lore: Not with the hope of escape, or of doing anything, either good or bad: he simply felt that he must take the Ring and put it on his finger.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_80: {
+		cardInfo: {
+			imagePath: decipher/LOTR02080.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R80
+			rarity: R
+			setNum: "2"
+			cardNum: 80
+			style: Standard
+		}
+		title: Stricken Dumb
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Exert The Witch-king to discard a tale or weapon.
+		lore: He felt his tongue cleave to his mouth and his heart labouring. His sword broke and fell out of his shaking hand.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_81: {
+		cardInfo: {
+			imagePath: decipher/LOTR02081.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U81
+			rarity: U
+			setNum: "2"
+			cardNum: 81
+			style: Standard
+		}
+		title: They Will Find the Ring
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Exert 2 Nazgûl and spot X burdens to exert X companions.
+		lore: ...to the dismay of Frodo and his friends out from the trees and rocks away on the left four other Riders came flying.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_82: {
+		cardInfo: {
+			imagePath: decipher/LOTR02082.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U82
+			rarity: U
+			setNum: "2"
+			cardNum: 82
+			style: Standard
+		}
+		title: Úlairë Attëa
+		subtitle: The Easterling
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 12
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Twilight</b>.<br>When you play Úlairë Attëa, you may wound an ally.
+		lore: They had words with Harry at Westgate on Monday.... He was white and shaking when they left him.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_83: {
+		cardInfo: {
+			imagePath: decipher/LOTR02083.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U83
+			rarity: U
+			setNum: "2"
+			cardNum: 83
+			style: Standard
+		}
+		title: Úlairë Enquëa
+		subtitle: Ringwraith in Twilight
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 11
+		vitality: 4
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Twilight</b>.<br>Each time Úlairë Enquëa wins a skirmish, you may exert him to wound the Ring-bearer once (or twice if you can spot 5 burdens).
+		lore: In their white faces burned keen and merciless eyes....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_84: {
+		cardInfo: {
+			imagePath: decipher/LOTR02084.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R84
+			rarity: R
+			setNum: "2"
+			cardNum: 84
+			style: Standard
+		}
+		title: Úlairë Nelya
+		subtitle: Ringwraith in Twilight
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgûl
+		strength: 10
+		vitality: 3
+		site: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Twilight</b>.<br>While you can spot 2 burdens or 2 wounds on the Ring-bearer, Úlairë Nelya is <b>fierce</b> and <b>damage +1</b>.
+		lore: Over the lip of the little dell, on the side away from the hill, they felt, rather then saw, a shadow rise, one shadow or more than one.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_85: {
+		cardInfo: {
+			imagePath: decipher/LOTR02085.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R85
+			rarity: R
+			setNum: "2"
+			cardNum: 85
+			style: Standard
+		}
+		title: The Witch-king
+		subtitle: Lord of the Nazgûl
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 8
+		type: Minion
+		race: Nazgûl
+		strength: 14
+		vitality: 4
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Twilight</b>.<br>Return to Its Master may not be played.<br>Each time The Witch-king wins a skirmish, you may exert him to wound the Ring-bearer twice.
+		lore: A great king and sorcerer was he of old, and now he wields a deadly fear.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_86: {
+		cardInfo: {
+			imagePath: decipher/LOTR02086.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R86
+			rarity: R
+			setNum: "2"
+			cardNum: 86
+			style: Standard
+		}
+		title: Wraith-world
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Spot a twilight Nazgûl and the Ring-bearer wearing The One Ring to add 3 burdens.
+		lore: He is passing into the shadow world, he will soon become a wraith like them.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

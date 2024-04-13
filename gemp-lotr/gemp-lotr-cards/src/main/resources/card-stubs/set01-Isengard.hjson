@@ -1,0 +1,1823 @@
+{
+
+	1_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR01120.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R120
+			rarity: R
+			setNum: "1"
+			cardNum: 120
+			style: Standard
+		}
+		title: Alive and Unspoiled
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, exert an Uruk-hai. Plays to your support area.<br><b>Shadow:</b> Remove (3) and spot X burdens to make the Free Peoples player reveal X cards at random from hand. You may discard 1 revealed card.
+		lore: Bring them to me.... Kill the others....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_121: {
+		cardInfo: {
+			imagePath: decipher/LOTR01121.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C121
+			rarity: C
+			setNum: "1"
+			cardNum: 121
+			style: Standard
+		}
+		title: Bred for Battle
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Exert an Uruk-hai to make it strength +3.
+		lore: You are the Uruk-hai of Isengard!... you do not know pain, you do not know fear.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_122: {
+		cardInfo: {
+			imagePath: decipher/LOTR01122.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C122
+			rarity: C
+			setNum: "1"
+			cardNum: 122
+			style: Standard
+		}
+		title: Breeding Pit
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Response:</b> If you play an Uruk-hai, take all copies of that card in your discard pile and place them beneath your draw deck.
+		lore: He is breeding an army in the Caverns of Isengard. An army that can move in sunlight and cover great distance at speed.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_123: {
+		cardInfo: {
+			imagePath: decipher/LOTR01123.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R123
+			rarity: R
+			setNum: "1"
+			cardNum: 123
+			style: Standard
+		}
+		title: Caradhras Has Not<br>Forgiven Us
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>. <b>Weather</b>.<br><b>Maneuver:</b> Exert an [isengard] minion and spot 5 companions to discard an exhausted companion (except the Ring-bearer).
+		lore: It was no ordinary storm. It is the ill will of Caradhras.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_124: {
+		cardInfo: {
+			imagePath: decipher/LOTR01124.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R124
+			rarity: R
+			setNum: "1"
+			cardNum: 124
+			style: Standard
+		}
+		title: Cruel Caradhras
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>. <b>Weather</b>.<br><b>Maneuver:</b> Exert an [isengard] minion to make the opponent choose to either exert the Ring-bearer or add a burden.
+		lore: Yonder stands Barazinbar, the Redhorn, cruel Caradhras....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_125: {
+		cardInfo: {
+			imagePath: decipher/LOTR01125.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R125
+			rarity: R
+			setNum: "1"
+			cardNum: 125
+			style: Standard
+		}
+		title: Greed
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an Uruk-hai. Plays to your support area.<br><b>Maneuver:</b> Spot 6 companions and remove (2) to wound a companion (except the Ring-bearer).
+		lore: It is a strange fate that we should suffer so much fear and doubt over so small a thing....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_126: {
+		cardInfo: {
+			imagePath: decipher/LOTR01126.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U126
+			rarity: U
+			setNum: "1"
+			cardNum: 126
+			style: Standard
+		}
+		title: Hunt Them Down!
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Make an Uruk-hai <b>fierce</b> until the regroup phase.
+		lore: Do not stop until they are found!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_127: {
+		cardInfo: {
+			imagePath: decipher/LOTR01127.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R127
+			rarity: R
+			setNum: "1"
+			cardNum: 127
+			style: Standard
+		}
+		title: Lurtz
+		subtitle: Servant of Isengard
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 7
+		type: Minion
+		race: Uruk-hai
+		strength: 13
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>. <b>Damage +1</b>.<br><b>Maneuver:</b> Spot another Uruk-hai to make Lurtz <b>fierce</b> until the regroup phase.
+		lore: And now... perfected. Grown beyond the height of Men – straight-limbed and strong, fearing nothing.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_128: {
+		cardInfo: {
+			imagePath: decipher/LOTR01128.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R128
+			rarity: R
+			setNum: "1"
+			cardNum: 128
+			style: Standard
+		}
+		title: Lurtz's Battle Cry
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Make an Uruk-hai strength -1 and <b>damage +1</b>.
+		lore: Find the Halflings!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_129: {
+		cardInfo: {
+			imagePath: decipher/LOTR01129.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R129
+			rarity: R
+			setNum: "1"
+			cardNum: 129
+			style: Standard
+		}
+		title: The Misadventure of<br>Mr. Underhill
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, exert an Uruk-hai. Plays to your support area.<br>The twilight cost of each companion played to a site which is not a sanctuary is +2.
+		lore: You're drawing far too much attention to yourself... Mr. Underhill.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_130: {
+		cardInfo: {
+			imagePath: decipher/LOTR01130.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U130
+			rarity: U
+			setNum: "1"
+			cardNum: 130
+			style: Standard
+		}
+		title: No Ordinary Storm
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each time you play a weather condition, exert a [gandalf] companion or [gandalf] ally.
+		lore: So Gandalf... you try to lead them over Caradhras. And if that fails – where then will you go?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_131: {
+		cardInfo: {
+			imagePath: decipher/LOTR01131.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R131
+			rarity: R
+			setNum: "1"
+			cardNum: 131
+			style: Standard
+		}
+		title: Orthanc Assassin
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 10
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>. <b>Damage +1</b>.
+		lore: Black-feathered arrows from Uruk-hai bows reign over the corpses of Saruman's enemies.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_132: {
+		cardInfo: {
+			imagePath: decipher/LOTR01132.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R132
+			rarity: R
+			setNum: "1"
+			cardNum: 132
+			style: Standard
+		}
+		title: Parry
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Spot an Uruk-hai to cancel the strength bonus from a possession until the regroup phase.
+		lore: Even the sword of a powerful warrior can be parried by the strength of an Uruk-hai.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_133: {
+		cardInfo: {
+			imagePath: decipher/LOTR01133.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C133
+			rarity: C
+			setNum: "1"
+			cardNum: 133
+			style: Standard
+		}
+		title: Saruman's Ambition
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>The twilight cost of your [isengard] events is -1.<br><b>Skirmish:</b> Discard this condition to make an Uruk-hai strength +2.
+		lore: I did not expect you to show wisdom, even in your own behalf; but I gave you the chance of aiding me willingly, and so saving yourself much trouble and pain.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_134: {
+		cardInfo: {
+			imagePath: decipher/LOTR01134.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C134
+			rarity: C
+			setNum: "1"
+			cardNum: 134
+			style: Standard
+		}
+		title: Saruman's Chill
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Spell</b>. <b>Weather</b>. To play, exert an [isengard] minion. Plays on a site. Limit 1 per site.<br>Each Hobbit who moves from this site must exert. Discard this condition at the end of the turn.
+		lore: Saruman's hand can control the chill of winter.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_135: {
+		cardInfo: {
+			imagePath: decipher/LOTR01135.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U135
+			rarity: U
+			setNum: "1"
+			cardNum: 135
+			style: Standard
+		}
+		title: Saruman's Frost
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Spell</b>. <b>Weather</b>. To play, exert an [isengard] minion. Plays on a site. Limit 1 per site.<br>Each Hobbit at this site is strength -2. Discard this condition at the end of the turn.
+		lore: The small and weak suffer first from the White Wizard's powerful sorcery.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_136: {
+		cardInfo: {
+			imagePath: decipher/LOTR01136.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U136
+			rarity: U
+			setNum: "1"
+			cardNum: 136
+			style: Standard
+		}
+		title: Saruman's Power
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>.<br><b>Shadow:</b> Exert an [isengard] minion to discard all conditions.
+		lore: The Uruks of Saruman are bred to be the instruments of his will, destroying his enemies with foul cruelty.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_137: {
+		cardInfo: {
+			imagePath: decipher/LOTR01137.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R137
+			rarity: R
+			setNum: "1"
+			cardNum: 137
+			style: Standard
+		}
+		title: Saruman's Reach
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Search</b>.<br><b>Maneuver:</b> Exert an Uruk-hai to make the opponent choose to either exert 2 companions or make the Ring-bearer put on The One Ring until the regroup phase.
+		lore: Saruman used both magic and minions to impose his will.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_138: {
+		cardInfo: {
+			imagePath: decipher/LOTR01138.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C138
+			rarity: C
+			setNum: "1"
+			cardNum: 138
+			style: Standard
+		}
+		title: Saruman's Snows
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Spell</b>. <b>Weather</b>. To play, exert an [isengard] minion. Plays on a site.<br>No player may play skirmish events or use skirmish special abilities during skirmishes at this site. Discard this condition at the end of the turn.
+		lore: Saruman's spells can hinder even the wary.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_139: {
+		cardInfo: {
+			imagePath: decipher/LOTR01139.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R139
+			rarity: R
+			setNum: "1"
+			cardNum: 139
+			style: Standard
+		}
+		title: Savagery to Match<br>Their Numbers
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2, or spot 5 companions to make an Uruk-hai strength +4 and <b>fierce</b> until the regroup phase.
+		lore: Uruk-hai match their enemies' strength with their own feral rage.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_140: {
+		cardInfo: {
+			imagePath: decipher/LOTR01140.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R140
+			rarity: R
+			setNum: "1"
+			cardNum: 140
+			style: Standard
+		}
+		title: Spies of Saruman
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, exert an [isengard] minion. Plays on a site.<br>While the fellowship is at this site, skip the archery phase. Discard this condition at the end of the turn.
+		lore: ...they are crebain out of Fangorn or Dunland. I do not know what they are about....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_141: {
+		cardInfo: {
+			imagePath: decipher/LOTR01141.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C141
+			rarity: C
+			setNum: "1"
+			cardNum: 141
+			style: Standard
+		}
+		title: Their Arrows Enrage
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot Saruman or an Uruk-hai. Plays to your support area.<br>Each archer companion and archer ally is strength -1.
+		lore: The ferocious charge of the Uruk-hai catches enemy archers groping for their swords.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_142: {
+		cardInfo: {
+			imagePath: decipher/LOTR01142.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U142
+			rarity: U
+			setNum: "1"
+			cardNum: 142
+			style: Standard
+		}
+		title: Traitor's Voice
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Search</b>. To play, spot an Uruk-hai. Plays to your support area.<br>While the Ring-bearer is exhausted or you can spot 5 burdens, the move limit for this turn is -1 (to a minimum of 1).
+		lore: In all the long wars with the Dark Tower treason has ever been our greatest foe.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_143: {
+		cardInfo: {
+			imagePath: decipher/LOTR01143.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R143
+			rarity: R
+			setNum: "1"
+			cardNum: 143
+			style: Standard
+		}
+		title: Troop of Uruk-hai
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 4
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>A character skirmishing this minion does not gain strength bonuses from weapons.
+		lore: Attacking in swarming hordes, the Uruk-hai close with the enemy rapidly to make weapons useless.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_144: {
+		cardInfo: {
+			imagePath: decipher/LOTR01144.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C144
+			rarity: C
+			setNum: "1"
+			cardNum: 144
+			style: Standard
+		}
+		title: Uruk Bloodlust
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Response:</b> If your Uruk-hai wins a skirmish, remove (1) to heal him.
+		lore: Take them alive!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_145: {
+		cardInfo: {
+			imagePath: decipher/LOTR01145.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C145
+			rarity: C
+			setNum: "1"
+			cardNum: 145
+			style: Standard
+		}
+		title: Uruk Brood
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Remove (2) to make this minion strength +1 for each other Uruk-hai you spot.
+		lore: He does not see the caverns hidden deep beneath this tower... nor does he know what is growing there.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_146: {
+		cardInfo: {
+			imagePath: decipher/LOTR01146.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C146
+			rarity: C
+			setNum: "1"
+			cardNum: 146
+			style: Standard
+		}
+		title: Uruk Fighter
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 5 companions to make this minion <b>fierce</b> until the regroup phase.
+		lore: Not stealth or cunning, but strength and ferocity are the weapons of Saruman's army of abominations.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_147: {
+		cardInfo: {
+			imagePath: decipher/LOTR01147.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R147
+			rarity: R
+			setNum: "1"
+			cardNum: 147
+			style: Standard
+		}
+		title: Uruk Guard
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Assignment:</b> Exert this minion and spot a companion to prevent the opponent from assigning that companion to this minion.
+		lore: Wolves and orcs were housed in Isengard, for Saruman was mustering a great force....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_148: {
+		cardInfo: {
+			imagePath: decipher/LOTR01148.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R148
+			rarity: R
+			setNum: "1"
+			cardNum: 148
+			style: Standard
+		}
+		title: Uruk Lieutenant
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>This minion is strength +1 for each other Uruk-hai you can spot.
+		lore: Uruk-hai leaders gain savagery from their following hordes to maintain the rule of the strong.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_149: {
+		cardInfo: {
+			imagePath: decipher/LOTR01149.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C149
+			rarity: C
+			setNum: "1"
+			cardNum: 149
+			style: Standard
+		}
+		title: Uruk Messenger
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 6
+		vitality: 1
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While you can spot a weather condition, this minion is strength +3.
+		lore: Saruman uses his Uruks abroad to gain information on the movements – and weaknesses – of his many enemies.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_150: {
+		cardInfo: {
+			imagePath: decipher/LOTR01150.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C150
+			rarity: C
+			setNum: "1"
+			cardNum: 150
+			style: Standard
+		}
+		title: Uruk Rager
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>Each time this minion wins a skirmish, the Free Peoples player must discard the top 2 cards of his or her draw deck.
+		lore: A bloodthirsty bellow from a huge Uruk can win a skirmish before it begins.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_151: {
+		cardInfo: {
+			imagePath: decipher/LOTR01151.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C151
+			rarity: C
+			setNum: "1"
+			cardNum: 151
+			style: Standard
+		}
+		title: Uruk Savage
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 5
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. <helper>(When this minion wins a skirmish, add 1 extra wound to the defender.)</helper>
+		lore: The friendship of Saruman is not lightly thrown aside. One ill turn deserves another.... We have work to do.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_152: {
+		cardInfo: {
+			imagePath: decipher/LOTR01152.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C152
+			rarity: C
+			setNum: "1"
+			cardNum: 152
+			style: Standard
+		}
+		title: Uruk Shaman
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Remove (2) to heal an Uruk-hai.
+		lore: Uruk shamans know the arts of healing as well as those of battle.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_153: {
+		cardInfo: {
+			imagePath: decipher/LOTR01153.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U153
+			rarity: U
+			setNum: "1"
+			cardNum: 153
+			style: Standard
+		}
+		title: Uruk Slayer
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Remove (1) to make this minion strength +1 (limit +3).
+		lore: A foe who is willing to kill or die outright is a foe to be feared indeed.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_154: {
+		cardInfo: {
+			imagePath: decipher/LOTR01154.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C154
+			rarity: C
+			setNum: "1"
+			cardNum: 154
+			style: Standard
+		}
+		title: Uruk Soldier
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 1
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>When you play this minion, you may make the Free Peoples player discard the top card of his draw deck.
+		lore: Saruman's Uruk-hai band together as an extremely effective fighting unit.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_155: {
+		cardInfo: {
+			imagePath: decipher/LOTR01155.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1R155
+			rarity: R
+			setNum: "1"
+			cardNum: 155
+			style: Standard
+		}
+		title: Uruk Spy
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Response:</b> If the Ring-bearer puts on The One Ring, exert this minion. Discard a card from the top of your draw deck for each [isengard] minion you spot. Add a burden for each Shadow card discarded in this way.
+		lore: A wary eye on the mission could undo the quest.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_156: {
+		cardInfo: {
+			imagePath: decipher/LOTR01156.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C156
+			rarity: C
+			setNum: "1"
+			cardNum: 156
+			style: Standard
+		}
+		title: Uruk Warrior
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 6 companions to make this minion <b>fierce</b> until the regroup phase.
+		lore: Powerful and fearless, Uruk-hai warriors are not intimidated by the weapons or numbers of their enemies.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_157: {
+		cardInfo: {
+			imagePath: decipher/LOTR01157.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C157
+			rarity: C
+			setNum: "1"
+			cardNum: 157
+			style: Standard
+		}
+		title: Uruk-hai Armory
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>While you can spot an Uruk-hai, the fellowship archery total is -1.
+		lore: The ranks of Saruman's army include forgers of weapons and armour.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_158: {
+		cardInfo: {
+			imagePath: decipher/LOTR01158.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C158
+			rarity: C
+			setNum: "1"
+			cardNum: 158
+			style: Standard
+		}
+		title: Uruk-hai Raiding Party
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. <helper>(When this minion wins a skirmish, add 1 extra wound to the defender.)</helper>
+		lore: Imagine, Gandalf, an army – born from the earth of Isengard.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_159: {
+		cardInfo: {
+			imagePath: decipher/LOTR01159.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U159
+			rarity: U
+			setNum: "1"
+			cardNum: 159
+			style: Standard
+		}
+		title: Uruk-hai Rampage
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an Uruk-hai. Plays to your support area.<br><b>Response:</b> If your Uruk-hai wins a skirmish, remove (3) to make him <b>fierce</b> until the regroup phase.
+		lore: Victory breeds rage in Saruman's foul creations.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_160: {
+		cardInfo: {
+			imagePath: decipher/LOTR01160.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1C160
+			rarity: C
+			setNum: "1"
+			cardNum: 160
+			style: Standard
+		}
+		title: Uruk-hai Sword
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Uruk-hai.<br>Each time bearer wins a skirmish, the Free Peoples player must discard the top card of his or her draw deck.
+		lore: Their malevolent strength worsens the wounds from the gruesome weapons of the Uruks.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_161: {
+		cardInfo: {
+			imagePath: decipher/LOTR01161.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U161
+			rarity: U
+			setNum: "1"
+			cardNum: 161
+			style: Standard
+		}
+		title: Wariness
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Search</b>.<br><b>Response:</b> If a stealth event is played, exert or discard your Uruk-hai to cancel that event.
+		lore: Even Hobbits have trouble evading the Uruk-hai.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_162: {
+		cardInfo: {
+			imagePath: decipher/LOTR01162.jpg
+			javaClass: true
+			version: 0
+			collInfo: 1U162
+			rarity: U
+			setNum: "1"
+			cardNum: 162
+			style: Standard
+		}
+		title: Worry
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, exert an Uruk-hai. Plays to your support area.<br>Each time a companion or ally loses a skirmish involving an Uruk-hai, the opponent must choose to either exert the Ring-bearer or add a burden.
+		lore: One by one, regardless of their strength to good or evil... they fell.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,47 @@
+{
+
+	0_63: {
+		cardInfo: {
+			imagePath: decipher/LOTR00063.jpg
+			javaClass: true
+			version: 0
+			collInfo: 0P63
+			rarity: P
+			setNum: "0"
+			cardNum: 63
+			style: Standard
+		}
+		title: Arwen
+		subtitle: Maiden of Rivendell
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ranger</b>.<br><b>Skirmish:</b> Exert Arwen to make a minion skirmishing an Elf strength -2.
+		lore: ...and she was called Undómiel, for she was the Evenstar of her people.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

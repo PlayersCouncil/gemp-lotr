@@ -1,0 +1,174 @@
+{
+
+	19_12: {
+		cardInfo: {
+			imagePath: decipher/LOTR19012.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P12
+			rarity: P
+			setNum: "19"
+			cardNum: 12
+			style: Standard
+		}
+		title: Aragorn
+		subtitle: Well-traveled Guide
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		resistance: 8
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fellowship</b>. <b>Ranger</b>.<br>While the Ring-bearer is the only other companion you can spot, Aragorn is an <b>archer</b>, <b>defender +1</b>, and can take no more than 1 wound each skirmish.
+		lore: The skill of the Elves can reforge the sword of Kings, but only you have the power to wield it.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_13: {
+		cardInfo: {
+			imagePath: decipher/LOTR19013.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P13
+			rarity: P
+			setNum: "19"
+			cardNum: 13
+			style: Standard
+		}
+		title: Boromir
+		subtitle: Destined Guide
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fellowship</b>. <b>Ranger</b>.<br>While you can spot two unbound Hobbits, Boromir's twilight cost is -1.<br>Each time Boromir wins a skirmish, you may exert an unbound Hobbit to discard each minion he is skirmishing from play.
+		lore: In a dream, I saw the eastern sky grow dark.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_14: {
+		cardInfo: {
+			imagePath: decipher/LOTR19014.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P14
+			rarity: P
+			setNum: "19"
+			cardNum: 14
+			style: Standard
+		}
+		title: Not Bound to His Fate
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		strength: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [gondor] Man.<br>Each time bearer wins a skirmish, you may transfer this condition to another [gondor] Man.<br>At the end of each turn, if bearer is not Aragorn, return this condition to hand.
+		lore: Your time will come. You will face the same evil....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_15: {
+		cardInfo: {
+			imagePath: decipher/LOTR19015.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P15
+			rarity: P
+			setNum: "19"
+			cardNum: 15
+			style: Standard
+		}
+		title: Strength in My Blood
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		strength: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a fellowship companion.<br>While bearer is a [gondor] companion, he or she is <b>damage +1</b>.
+		lore: I would have followed you my Brother... my Captain... my King!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

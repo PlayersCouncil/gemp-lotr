@@ -1,0 +1,562 @@
+{
+
+	11_15: {
+		cardInfo: {
+			imagePath: decipher/LOTR11015.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U15
+			rarity: U
+			setNum: "11"
+			cardNum: 15
+			style: Standard
+		}
+		title: Arwen
+		subtitle: Staunch Defender
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each minion skirmishing Arwen is strength -1 for each forest site on the adventure path.
+		lore: What grace is given me, let it pass to him. Let him be spared. Save him.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_16: {
+		cardInfo: {
+			imagePath: decipher/LOTR11016.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U16
+			rarity: U
+			setNum: "11"
+			cardNum: 16
+			style: Standard
+		}
+		title: Blade of Lindon
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Elf.<br>While bearer is at a forest or river site, each minion he or she is skirmishing is strength -1.
+		lore: To this day, many Elven weapons are forged in the fashion of those wielded by Gil-galad's forces.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_17: {
+		cardInfo: {
+			imagePath: decipher/LOTR11017.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R17
+			rarity: R
+			setNum: "11"
+			cardNum: 17
+			style: Standard
+		}
+		title: Elven Marksmanship
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 6
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an Elf.<br><b>Toil 2</b>. <helper>(For each [elven] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Archery:</b> Discard this condition to make the fellowship archery total +2.
+		lore: Sighted by keen vision and loosed with blinding swiftness, Elven arrows rarely miss their targets.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_18: {
+		cardInfo: {
+			imagePath: decipher/LOTR11018.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S18
+			rarity: S
+			setNum: "11"
+			cardNum: 18
+			style: Standard
+		}
+		title: Elven Scout
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot another Elf, this companion has <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
+		lore: None who draw within a league of the Celebrant escape unnoticed the patrols from Caras Galadhon.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_19: {
+		cardInfo: {
+			imagePath: decipher/LOTR11019.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C19
+			rarity: C
+			setNum: "11"
+			cardNum: 19
+			style: Standard
+		}
+		title: Farewell to Lórien
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Event
+		keyword: Fellowship
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot an Elf to heal each companion who has resistance 5 or more.
+		lore: ...the memory of Lothlórien shall remain ever clear and unstained in your heart, and shall neither fade nor grow stale.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_20: {
+		cardInfo: {
+			imagePath: decipher/LOTR11020.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S20
+			rarity: S
+			setNum: "11"
+			cardNum: 20
+			style: Standard
+		}
+		title: The Lady's Blessing
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make an Elf strength +2 (or +3 at a river site).
+		lore: We have come to bid our last farewell,' she said, 'and to speed you with blessings from our land.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_21: {
+		cardInfo: {
+			imagePath: decipher/LOTR11021.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S21
+			rarity: S
+			setNum: "11"
+			cardNum: 21
+			style: Standard
+		}
+		title: Legolas
+		subtitle: Companion of the Ring
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While Legolas is at a battleground or forest site, he is strength +2 and resistance +2.
+		lore: I am one of the Nine Companions who set out with Mithrandir from Imladris... and with this Dwarf, my friend, I came with the Lord Aragorn.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_22: {
+		cardInfo: {
+			imagePath: decipher/LOTR11022.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R22
+			rarity: R
+			setNum: "11"
+			cardNum: 22
+			style: Standard
+		}
+		title: Legolas
+		subtitle: Woodland Emissary
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: At the start of the archery phase, you may spot another Elf to exert a minion.
+		lore: Travelling to the council at Imladris was only the beginning of a much greater journey for the Elven Prince. "'Few can foresee whither their road will lead them, till they come to its end.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_23: {
+		cardInfo: {
+			imagePath: decipher/LOTR11023.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R23
+			rarity: R
+			setNum: "11"
+			cardNum: 23
+			style: Standard
+		}
+		title: Legolas' Bow
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		itemclass: Ranged weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Elf.<br>Bearer is an <b>archer</b>.<br>If bearer is Legolas, each time you exert him to play an [elven] condition or [elven] event, you may heal him (limit once per phase).
+		lore: Though not as sturdy as the bows of the Galadhrim, a Mirkwood bow is no less dangerous in skilled hands.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_24: {
+		cardInfo: {
+			imagePath: decipher/LOTR11024.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R24
+			rarity: R
+			setNum: "11"
+			cardNum: 24
+			style: Standard
+		}
+		title: Might of the Elf-lords
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert an Elf to reveal the top card of your draw deck. If that card's twilight cost is 3 or less, make a minion strength -3.
+		lore: Dimly Frodo saw the river below him rise, and down along its course there came a plumed cavalry of waves.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR11025.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U25
+			rarity: U
+			setNum: "11"
+			cardNum: 25
+			style: Standard
+		}
+		title: Nocked
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		keyword: Archery
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert an Elf who has resistance 4 or more to wound a minion.
+		lore: Legolas can fit an arrow to his bowstring faster than most can clear a blade from its scabbard.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR11026.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U26
+			rarity: U
+			setNum: "11"
+			cardNum: 26
+			style: Standard
+		}
+		title: Uncertain Future
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this condition, spot an Elf to add 3 [elven] tokens here.<br><b>Maneuver:</b> Discard this condition or remove an [elven] token from here to reveal the top card of your draw deck. You may place that card beneath your draw deck.
+		lore: What did you see?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_27: {
+		cardInfo: {
+			imagePath: decipher/LOTR11027.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C27
+			rarity: C
+			setNum: "11"
+			cardNum: 27
+			style: Standard
+		}
+		title: Woodland Sentinel
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While this companion is at a forest site, he is strength +2.
+		lore: We drove them off after some time; they were many and fierce, but they came from over the mountains, and were unused to the woods.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

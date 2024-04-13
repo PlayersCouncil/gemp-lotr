@@ -1,0 +1,92 @@
+{
+
+	0_58: {
+		cardInfo: {
+			imagePath: decipher/LOTR00058.jpg
+			javaClass: true
+			version: 0
+			collInfo: 0P58
+			rarity: P
+			setNum: "0"
+			cardNum: 58
+			style: Standard
+		}
+		title: Anárion
+		subtitle: Lord of Anórien
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Play a [gondor] skirmish event to make each minion skirmishing Anárion strength -X, where X is Anárion's vitality.
+		lore: ...Elendil the Tall and his mighty sons, Isildur and Anárion, became great lords....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	0_65: {
+		cardInfo: {
+			imagePath: decipher/LOTR00065.jpg
+			javaClass: true
+			version: 0
+			collInfo: 0P65
+			rarity: P
+			setNum: "0"
+			cardNum: 65
+			style: Standard
+		}
+		title: Boromir
+		subtitle: Steward's Heir
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>. <b>Knight</b>. <b>Ranger</b>.
+		lore: ...but at once, Boromir stood up, tall and proud before them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

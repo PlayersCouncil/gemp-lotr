@@ -1,0 +1,384 @@
+{
+
+	3_106: {
+		cardInfo: {
+			imagePath: decipher/LOTR03106.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3U106
+			rarity: U
+			setNum: "3"
+			cardNum: 106
+			style: Standard
+		}
+		title: Bill the Pony
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Hobbit companion.<br>The Shadow number of each site is -1.<br>Discard Bill the Pony when at an underground site.
+		lore: That animal can nearly talk.... He gave me a look as plain as Mr. Pippin could speak....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_107: {
+		cardInfo: {
+			imagePath: decipher/LOTR03107.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3U107
+			rarity: U
+			setNum: "3"
+			cardNum: 107
+			style: Standard
+		}
+		title: Frodo's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Frodo.<br><b>Fellowship:</b> Discard a pipeweed possession and spot X pipes to heal a companion with the Frodo signet X times.
+		lore: All the same, observations that I have made on my own many journeys south have convinced me that the weed itself is not native to our parts of the world.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_108: {
+		cardInfo: {
+			imagePath: decipher/LOTR03108.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C108
+			rarity: C
+			setNum: "3"
+			cardNum: 108
+			style: Standard
+		}
+		title: Frying Pan
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Hobbit.<br><b>Skirmish:</b> Exert bearer to wound an Orc he or she is skirmishing.
+		lore: I think I'm getting the hang of this!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_109: {
+		cardInfo: {
+			imagePath: decipher/LOTR03109.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C109
+			rarity: C
+			setNum: "3"
+			cardNum: 109
+			style: Standard
+		}
+		title: Meant to Be Alone
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Fellowship:</b> Spot a Hobbit companion (except the Ring-bearer) to reveal a card at random from an opponent's hand. Remove (X), where X is the twilight cost of the card revealed.
+		lore: You are a Ring-bearer, Frodo... to bear a Ring of Power is to be alone.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_110: {
+		cardInfo: {
+			imagePath: decipher/LOTR03110.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3R110
+			rarity: R
+			setNum: "3"
+			cardNum: 110
+			style: Standard
+		}
+		title: Melilot Brandybuck
+		subtitle: Merry Dancer
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Ally
+		allyHome: fellowship,1
+		race: Hobbit
+		strength: 2
+		vitality: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Response:</b> If a burden is about to be added by a Shadow card, exert Melilot Brandybuck to prevent that burden.
+		lore: Master Everard Took and Miss Melilot Brandybuck got on a table and with bells in their hands began to dance the Springle-ring: a pretty dance, but rather vigorous.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_111: {
+		cardInfo: {
+			imagePath: decipher/LOTR03111.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C111
+			rarity: C
+			setNum: "3"
+			cardNum: 111
+			style: Standard
+		}
+		title: Old Noakes
+		subtitle: Purveyor of Wisdoms
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Ally
+		allyHome: fellowship,1
+		race: Hobbit
+		strength: 1
+		vitality: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time a Shadow card makes you discard a card from hand, you may also discard a minion or Shadow condition.
+		lore: There's been some strange folk crossing the Shire – Dwarves and others of a less than savoury nature.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_112: {
+		cardInfo: {
+			imagePath: decipher/LOTR03112.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C112
+			rarity: C
+			setNum: "3"
+			cardNum: 112
+			style: Standard
+		}
+		title: Seek and Hide
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Stealth</b>.<br><b>Skirmish:</b> Spot 2 [shire] companions to make a minion lose all <b>damage</b> bonuses.
+		lore: A Hobbit's best friends in Moria are the very pillars that support its structure.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_113: {
+		cardInfo: {
+			imagePath: decipher/LOTR03113.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3R113
+			rarity: R
+			setNum: "3"
+			cardNum: 113
+			style: Standard
+		}
+		title: The Shire Countryside
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 [shire] companions. Plays to your support area.<br>Each time you remove a burden (except by a Hobbit's game text), you may heal a companion.
+		lore: Life in the wide world goes on... scarcely even aware of the existence of hobbits....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_114: {
+		cardInfo: {
+			imagePath: decipher/LOTR03114.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C114
+			rarity: C
+			setNum: "3"
+			cardNum: 114
+			style: Standard
+		}
+		title: Three Monstrous Trolls
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tale</b>. Plays to your support area.<br><b>Response:</b> If a Shadow card is about to add any number of twilight tokens, exert a Hobbit ally to prevent this.
+		lore: Great big nasty twenty foot high smelly things – and they're arguing... arguing about how they were going to cook us!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

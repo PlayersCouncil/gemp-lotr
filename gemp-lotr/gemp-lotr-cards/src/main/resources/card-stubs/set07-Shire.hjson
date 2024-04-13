@@ -1,0 +1,536 @@
+{
+
+	7_317: {
+		cardInfo: {
+			imagePath: decipher/LOTR07317.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C317
+			rarity: C
+			setNum: "7"
+			cardNum: 317
+			style: Standard
+		}
+		title: Frodo
+		subtitle: Hope of Free Peoples
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br>Each time the fellowship moves, you may add (3) to remove a threat.
+		lore: Aiya Eärendil Elenion Ancalima!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_318: {
+		cardInfo: {
+			imagePath: decipher/LOTR07318.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R318
+			rarity: R
+			setNum: "7"
+			cardNum: 318
+			style: Standard
+		}
+		title: Frodo
+		subtitle: Wicked Masster!
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br><b>Skirmish:</b> At sites 6[K] to 8[K], add 4 burdens to wound a minion skirmishing Frodo.
+		lore: Wicked masster cheats us; cheats Sméagol, gollum.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_319: {
+		cardInfo: {
+			imagePath: decipher/LOTR07319.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C319
+			rarity: C
+			setNum: "7"
+			cardNum: 319
+			style: Standard
+		}
+		title: Hobbit Sword
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Hobbit.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_320: {
+		cardInfo: {
+			imagePath: decipher/LOTR07320.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C320
+			rarity: C
+			setNum: "7"
+			cardNum: 320
+			style: Standard
+		}
+		title: Merry
+		subtitle: Rohirrim Squire
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> If you cannot spot 3 threats, add a threat to make Merry strength +2.
+		lore: I will be ready... even if you bid me ride with you on the Paths of the Dead.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_321: {
+		cardInfo: {
+			imagePath: decipher/LOTR07321.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R321
+			rarity: R
+			setNum: "7"
+			cardNum: 321
+			style: Standard
+		}
+		title: Merry
+		subtitle: Swordthain
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Theoden
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> If Merry is not assigned to a skirmish, return him to your hand to play up to 2 [rohan] possessions from your discard pile.
+		lore: And I would not have it said of me in song only that I was always left behind!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_322: {
+		cardInfo: {
+			imagePath: decipher/LOTR07322.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C322
+			rarity: C
+			setNum: "7"
+			cardNum: 322
+			style: Standard
+		}
+		title: Noble Intentions
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert a companion (except a Hobbit) to make a Hobbit strength +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_323: {
+		cardInfo: {
+			imagePath: decipher/LOTR07323.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C323
+			rarity: C
+			setNum: "7"
+			cardNum: 323
+			style: Standard
+		}
+		title: Pippin
+		subtitle: Sworn to Service
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you cannot spot 4 threats, Pippin is strength +1 for each threat you can spot.
+		lore: I do not know what put it into your head, or your heart, to do that. But it was well done.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_324: {
+		cardInfo: {
+			imagePath: decipher/LOTR07324.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R324
+			rarity: R
+			setNum: "7"
+			cardNum: 324
+			style: Standard
+		}
+		title: Pippin
+		subtitle: Wearer of Black and Silver
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> If Pippin is not assigned to a skirmish, return him to your hand to wound a roaming minion twice.
+		lore: And as for orders, I think you have a madman to deal with, not a lord.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_325: {
+		cardInfo: {
+			imagePath: decipher/LOTR07325.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R325
+			rarity: R
+			setNum: "7"
+			cardNum: 325
+			style: Standard
+		}
+		title: Pressing On
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 Hobbits.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition and exert a Hobbit companion to play the fellowship's next site (replacing opponent's site if necessary).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_326: {
+		cardInfo: {
+			imagePath: decipher/LOTR07326.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7C326
+			rarity: C
+			setNum: "7"
+			cardNum: 326
+			style: Standard
+		}
+		title: Sam
+		subtitle: Needer of Vittles
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>.<br><b>Fellowship:</b> Play a Hobbit companion to remove a burden.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
+		lore: ...but where there's life there's hope, as my Gaffer used to say....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_327: {
+		cardInfo: {
+			imagePath: decipher/LOTR07327.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7R327
+			rarity: R
+			setNum: "7"
+			cardNum: 327
+			style: Standard
+		}
+		title: Sam
+		subtitle: Resolute Halfling
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>.<br><b>Fellowship:</b> If you have initiative, discard a card from hand to heal Sam.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
+		lore: The news that his master was still alive roused him....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_328: {
+		cardInfo: {
+			imagePath: decipher/LOTR07328.jpg
+			javaClass: true
+			version: 0
+			collInfo: 7U328
+			rarity: U
+			setNum: "7"
+			cardNum: 328
+			style: Standard
+		}
+		title: Slow-kindled Courage
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Merry or Pippin.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Slow-kindled Courage."<br><b>Regroup:</b> Discard this condition to discard a minion and remove 2 burdens.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

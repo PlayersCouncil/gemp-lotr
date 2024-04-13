@@ -1,0 +1,603 @@
+{
+
+	18_4: {
+		cardInfo: {
+			imagePath: decipher/LOTR18004.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R4
+			rarity: R
+			setNum: "18"
+			cardNum: 4
+			style: Standard
+		}
+		title: Arwen's Bow
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		strength: 1
+		itemclass: Ranged weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [elven] companion.<br><b>Archery:</b> If bearer is Arwen, discard 2 [elven] cards from hand to wound a minion.
+		lore: Arwen had skill with a bow matched only by her beauty.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_5: {
+		cardInfo: {
+			imagePath: decipher/LOTR18005.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R5
+			rarity: R
+			setNum: "18"
+			cardNum: 5
+			style: Standard
+		}
+		title: Arwen's Dagger
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [elven] companion.<br>Bearer may bear this hand weapon in addition to 1 other hand weapon.<br><b>Maneuver:</b> If bearer is Arwen, exert her to draw 2 cards.
+		lore: Woe be to any against whom she wielded it.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_6: {
+		cardInfo: {
+			imagePath: decipher/LOTR18006.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R6
+			rarity: R
+			setNum: "18"
+			cardNum: 6
+			style: Standard
+		}
+		title: Back to the Light
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: To play, exert an [elven] companion or spot Arwen. Examine the top 5 cards of your draw deck and place any number of them aside. Shuffle the remaining cards into your draw deck and place those cards set aside on top of your draw deck in any order.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_7: {
+		cardInfo: {
+			imagePath: decipher/LOTR18007.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R7
+			rarity: R
+			setNum: "18"
+			cardNum: 7
+			style: Standard
+		}
+		title: Celebring
+		subtitle: Elven-smith
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Follower
+		strength: 2
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper><br>To play, spot 2 [elven] companions.<br>When you play Celebring, you may play an [elven] artifact from your deck.
+		lore: ...renewed shall be the blade that was broken.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_8: {
+		cardInfo: {
+			imagePath: decipher/LOTR18008.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U8
+			rarity: U
+			setNum: "18"
+			cardNum: 8
+			style: Standard
+		}
+		title: Elven Armaments
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		strength: 2
+		vitality: 1
+		itemclass: Hand weapon/shield
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, bearer must not be bearing any possessions. Bearer must be an [elven] companion.<br>Bearer cannot bear any other possessions.<br>While a unique companion bears this possession, the Free Peoples player may not use archery special abilities and the minion archery total is -1.
+		lore: Tangado haid!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_9: {
+		cardInfo: {
+			imagePath: decipher/LOTR18009.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C9
+			rarity: C
+			setNum: "18"
+			cardNum: 9
+			style: Standard
+		}
+		title: Elven Defender
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot an [elven] token, this companion is strength +2.
+		lore: While they may prefer to avoid conflict, the elves can be ferocious warriors in defense of their ideals.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_10: {
+		cardInfo: {
+			imagePath: decipher/LOTR18010.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U10
+			rarity: U
+			setNum: "18"
+			cardNum: 10
+			style: Standard
+		}
+		title: Elven Supplies
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fellowship:</b> Remove a culture token from a Free Peoples card to add an [elven] token here.<br><b>Skirmish:</b> Remove 2 [elven] tokens from here to make a minion skirmishing an [elven] companion strength -1.
+		lore: By river you have the chance of outrunning the enemy....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_11: {
+		cardInfo: {
+			imagePath: decipher/LOTR18011.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R11
+			rarity: R
+			setNum: "18"
+			cardNum: 11
+			style: Standard
+		}
+		title: Galadriel's Silver Ewer
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Artifact
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot Galadriel or Celeborn.<br>While Galadriel is the Ring-bearer, she is strength +2 and resistance +2.<br>Each time you play an [elven] skirmish event, you may reinforce an [elven] token.
+		lore: Will you look into the mirror?
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_12: {
+		cardInfo: {
+			imagePath: decipher/LOTR18012.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R12
+			rarity: R
+			setNum: "18"
+			cardNum: 12
+			style: Standard
+		}
+		title: Gil-galad
+		subtitle: High King of the Noldor
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 5
+		type: Companion
+		race: Elf
+		strength: 9
+		vitality: 4
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 [elven] companions.<br><b>Maneuver:</b> Add a threat to take an [elven] skirmish event into hand from your discard pile.<br><b>Regroup:</b> Remove an [elven] token to play an [elven] condition from your discard pile.
+		lore: ...the power of Gil-galad has increased in his absence.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_13: {
+		cardInfo: {
+			imagePath: decipher/LOTR18013.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R13
+			rarity: R
+			setNum: "18"
+			cardNum: 13
+			style: Standard
+		}
+		title: Glorfindel
+		subtitle: Eldarin Lord
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 4
+		type: Companion
+		race: Elf
+		strength: 9
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ranger</b>.<br>To play, spot 2 [elven] companions.<br>Minions skirmishing Glorfindel cannot gain strength bonuses from possessions.<br>Each time Glorfindel wins a skirmish, you may remove a threat.
+		lore: Yet oft in lies truth is hidden....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_14: {
+		cardInfo: {
+			imagePath: decipher/LOTR18014.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R14
+			rarity: R
+			setNum: "18"
+			cardNum: 14
+			style: Standard
+		}
+		title: Haldir
+		subtitle: Warrior Messenger
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Exert Haldir or discard an [elven] card from hand to make a minion skirmishing Haldir strength -2.
+		lore: I bring word from Elrond of Rivendell.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_15: {
+		cardInfo: {
+			imagePath: decipher/LOTR18015.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R15
+			rarity: R
+			setNum: "18"
+			cardNum: 15
+			style: Standard
+		}
+		title: Lembas Bread
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 [elven] companions. Bearer must be a companion.<br><b>Regroup:</b> Discard this possession from play to reconcile your hand.
+		lore: Sam thought that it tasted far better, somehow, than it had for a good while....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_16: {
+		cardInfo: {
+			imagePath: decipher/LOTR18016.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C16
+			rarity: C
+			setNum: "18"
+			cardNum: 16
+			style: Standard
+		}
+		title: Miruvóre
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		keyword: Fellowship
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Add 2 threats to heal an [elven] companion.
+		lore: The long years have passed like swift draughts of sweet mead in lofty halls beyond the West....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_17: {
+		cardInfo: {
+			imagePath: decipher/LOTR18017.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C17
+			rarity: C
+			setNum: "18"
+			cardNum: 17
+			style: Standard
+		}
+		title: Woodhall Elf
+		subtitle: Exile
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Follower
+		resistance: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper><br>When you transfer this to an [elven] companion, you may draw 3 cards.
+		lore: Go not to the Elves for counsel, for they will say both no and yes.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,282 @@
+{
+
+	18_134: {
+		cardInfo: {
+			imagePath: decipher/LOTR18134.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U134
+			rarity: U
+			setNum: "18"
+			cardNum: 134
+			style: Standard
+		}
+		title: Doorway to Doom
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Mountain</b>. When the fellowship moves to this site, each player wounds two of his or her characters.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_135: {
+		cardInfo: {
+			imagePath: decipher/LOTR18135.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U135
+			rarity: U
+			setNum: "18"
+			cardNum: 135
+			style: Standard
+		}
+		title: Foot of Mount Doom
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Mountain</b>. Each card that is about to be placed into the discard pile is removed from the game instead.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_136: {
+		cardInfo: {
+			imagePath: decipher/LOTR18136.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U136
+			rarity: U
+			setNum: "18"
+			cardNum: 136
+			style: Standard
+		}
+		title: Mithlond
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>River</b>. When the fellowship moves to this site, each player heals each of his or her characters.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_137: {
+		cardInfo: {
+			imagePath: decipher/LOTR18137.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U137
+			rarity: U
+			setNum: "18"
+			cardNum: 137
+			style: Standard
+		}
+		title: Morannon Plains
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. <b>Plains</b>. When the fellowship moves to this site, each player may reinforce a culture token.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_138: {
+		cardInfo: {
+			imagePath: decipher/LOTR18138.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U138
+			rarity: U
+			setNum: "18"
+			cardNum: 138
+			style: Standard
+		}
+		title: Sirannon Ruins
+		unique: false
+		twilight: 4
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>River</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_139: {
+		cardInfo: {
+			imagePath: decipher/LOTR18139.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U139
+			rarity: U
+			setNum: "18"
+			cardNum: 139
+			style: Standard
+		}
+		title: Steward's Tomb
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Wounds cannot be prevented or healed. Burdens cannot be removed.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_140: {
+		cardInfo: {
+			imagePath: decipher/LOTR18140.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U140
+			rarity: U
+			setNum: "18"
+			cardNum: 140
+			style: Standard
+		}
+		title: Streets of Bree
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Dwelling</b>. While the fellowship is at this site, followers cannot be transferred to a character.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

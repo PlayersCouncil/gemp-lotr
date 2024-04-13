@@ -1,0 +1,173 @@
+{
+
+	9_24: {
+		cardInfo: {
+			imagePath: decipher/LOTR09024.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R24
+			rarity: R
+			setNum: "9"
+			cardNum: 24
+			style: Standard
+		}
+		title: Ent Draught
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		vitality: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an Ent. Bearer must be a companion. Limit 1 per bearer.<br><b>Skirmish:</b> Exert bearer to make him or her <b>damage +1</b>.
+		lore: Indeed the hobbits felt that the hair on their heads was actually standing up, waving and curling and growing.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR09025.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R25
+			rarity: R
+			setNum: "9"
+			cardNum: 25
+			style: Standard
+		}
+		title: Huorn
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Companion
+		race: Tree
+		strength: 6
+		vitality: 4
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>This companion is strength +1 for each Ent you can spot.<br><b>Response:</b> If this companion is about to take a wound, exert an Ent to prevent that.
+		lore: ...the Forest itself was moving behind us.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR09026.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R+26
+			rarity: R+
+			setNum: "9"
+			cardNum: 26
+			style: Standard
+		}
+		title: Radagast
+		subtitle: The Brown
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: The move limit is +1.<br>Each time the fellowship moves during the regroup phase, each opponent may discard 2 cards from hand to draw 2 cards.
+		lore: ...a master of shapes and changes of hue; and he has much lore of herbs and beasts....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_27: {
+		cardInfo: {
+			imagePath: decipher/LOTR09027.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R27
+			rarity: R
+			setNum: "9"
+			cardNum: 27
+			style: Standard
+		}
+		title: Sent Back
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Discard this condition to discard each minion skirmishing a Wizard. Place that Wizard in your dead pile.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Play a Wizard (even if another copy of that Wizard is in your dead pile).
+		lore: The Sun shines through you.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

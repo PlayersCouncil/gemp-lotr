@@ -1,0 +1,698 @@
+{
+
+	18_78: {
+		cardInfo: {
+			imagePath: decipher/LOTR18078.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U78
+			rarity: U
+			setNum: "18"
+			cardNum: 78
+			style: Standard
+		}
+		title: Destroyers and Usurpers
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot an [orc] minion and fewer minions than companions, each companion loses all <b>defender</b> bonuses and cannot gain defender bonuses.<br><b>Maneuver:</b> Spot 2 [orc] minions to make the fellowship's current site gain <b>battleground</b> until the regroup phase.
+		lore: They come with fire, they come with axes.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_79: {
+		cardInfo: {
+			imagePath: decipher/LOTR18079.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U79
+			rarity: U
+			setNum: "18"
+			cardNum: 79
+			style: Standard
+		}
+		title: Frenzy of Arrows
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Event
+		keyword: Archery
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot an [orc] archer minion to add 2 to the minion archery total. If you do, you may add an additional 2 to the minion archery total for each follower you can spot.
+		lore: The black fletched arrows of Sauron's armies found many targets.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_80: {
+		cardInfo: {
+			imagePath: decipher/LOTR18080.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R80
+			rarity: R
+			setNum: "18"
+			cardNum: 80
+			style: Standard
+		}
+		title: Gothmog
+		subtitle: Morgul Leader
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 6
+		type: Minion
+		race: Orc
+		strength: 15
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each of the fellowship and minion archery totals is +3.<br><b>Regroup:</b> Remove (2) to play an [orc] minion from your discard pile. That minion comes into play exhausted.
+		lore: Fear. The city is rank with it.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_81: {
+		cardInfo: {
+			imagePath: decipher/LOTR18081.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R81
+			rarity: R
+			setNum: "18"
+			cardNum: 81
+			style: Standard
+		}
+		title: Gothmog's Warg
+		subtitle: Leader's Mount
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Possession
+		strength: 1
+		vitality: 1
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [orc] Orc with strength 9 or less (or bearer must be Gothmog).<br>Bearer is <b>fierce</b>.<br>While bearer is Gothmog, he is <b>damage +1</b> in fierce skirmishes.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_82: {
+		cardInfo: {
+			imagePath: decipher/LOTR18082.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R82
+			rarity: R
+			setNum: "18"
+			cardNum: 82
+			style: Standard
+		}
+		title: Grond
+		subtitle: Forged With Black Steel
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an [orc] minion.<br>Each time the fellowship moves in the regroup phase, you may discard this possession to search the Free Peoples player's draw deck and choose 2 Free Peoples cards found there. Remove those cards from the game.
+		lore: Grond! Grond! Grond! Grond! Grond! Grond!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_83: {
+		cardInfo: {
+			imagePath: decipher/LOTR18083.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R83
+			rarity: R
+			setNum: "18"
+			cardNum: 83
+			style: Standard
+		}
+		title: Gruesome Meal
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a companion skirmishing an [orc] minion strength -2 (or -3 if he or she is an archer).
+		lore: They dined on the flesh of all that lived and breathed in Middle-earth.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_84: {
+		cardInfo: {
+			imagePath: decipher/LOTR18084.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C84
+			rarity: C
+			setNum: "18"
+			cardNum: 84
+			style: Standard
+		}
+		title: Orkish Ax
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [orc] Orc.<br>Each time bearer wins a skirmish, you may add a threat.
+		lore: Crude blood rusted steel axes were dragged by Orcs from battle to battle.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_85: {
+		cardInfo: {
+			imagePath: decipher/LOTR18085.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C85
+			rarity: C
+			setNum: "18"
+			cardNum: 85
+			style: Standard
+		}
+		title: Orkish Aggressor
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While at a battleground, this minion is strength +2.
+		lore: Enraged by Sauron, the frenzied Orcs streamed to the battlefields.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_86: {
+		cardInfo: {
+			imagePath: decipher/LOTR18086.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U86
+			rarity: U
+			setNum: "18"
+			cardNum: 86
+			style: Standard
+		}
+		title: Orkish Archer Troop
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an [orc] card.<br>The minion archery total is +1 for each hunter companion you can spot.
+		lore: ...the enemy is moving. Sauron's forces are massing in the east....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_87: {
+		cardInfo: {
+			imagePath: decipher/LOTR18087.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C87
+			rarity: C
+			setNum: "18"
+			cardNum: 87
+			style: Standard
+		}
+		title: Orkish Breeder
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Shadow:</b> Exert this minion to play an [uruk-hai] hunter at twilight cost -2.
+		lore: Deep in the Isengard pits, Orcs tended the mud from which the Uruk-hai were pulled from.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_88: {
+		cardInfo: {
+			imagePath: decipher/LOTR18088.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C88
+			rarity: C
+			setNum: "18"
+			cardNum: 88
+			style: Standard
+		}
+		title: Orkish Defender
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While the fellowship is at a battleground or underground site, this minion cannot take wounds in the archery phase.
+		lore: Many Elves and many mighty Men, and many of their friends, had perished in the war.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_89: {
+		cardInfo: {
+			imagePath: decipher/LOTR18089.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C89
+			rarity: C
+			setNum: "18"
+			cardNum: 89
+			style: Standard
+		}
+		title: Orkish Headsman
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>This minion is strength +3 for each companion in the dead pile (limit +6).
+		lore: As the free people of Middle-earth fell, Mordor's strength grew.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_90: {
+		cardInfo: {
+			imagePath: decipher/LOTR18090.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C90
+			rarity: C
+			setNum: "18"
+			cardNum: 90
+			style: Standard
+		}
+		title: Orkish Skirmisher
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time this minion wins a skirmish, you may exert him twice to wound a companion.
+		lore: Pain. Pain was part of each Orc's life.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_91: {
+		cardInfo: {
+			imagePath: decipher/LOTR18091.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C91
+			rarity: C
+			setNum: "18"
+			cardNum: 91
+			style: Standard
+		}
+		title: Orkish Sneak
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 1
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Assignment:</b> Spot another [orc] Orc to assign this minion to skirmish a non-[shire] Ring-bearer. The Free Peoples player may add a burden or exert the Ring-bearer twice to discard this minion.
+		lore: The Orcs attacked the Alliance, rushing across the field that separated the armies.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_92: {
+		cardInfo: {
+			imagePath: decipher/LOTR18092.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U92
+			rarity: U
+			setNum: "18"
+			cardNum: 92
+			style: Standard
+		}
+		title: War Preparations
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Remove a threat to reinforce an [orc] token.
+		lore: The old world will burn in the fires of industry. The forests will fall. A new order will rise. We will drive the machine of war with the sword and the spear and the iron fists of the Orc. We have only to remove those who oppose us.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_93: {
+		cardInfo: {
+			imagePath: decipher/LOTR18093.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U93
+			rarity: U
+			setNum: "18"
+			cardNum: 93
+			style: Standard
+		}
+		title: Wary Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: This minion is strength +1 for each hunter companion you can spot.
+		lore: War is brewing. The mountains are fair teeming with goblins.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

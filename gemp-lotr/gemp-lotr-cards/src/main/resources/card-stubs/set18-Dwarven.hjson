@@ -1,0 +1,127 @@
+{
+
+	18_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR18001.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R1
+			rarity: R
+			setNum: "18"
+			cardNum: 1
+			style: Standard
+		}
+		title: Gimli
+		subtitle: Sprinter
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>Each time Gimli wins a skirmish, you may add a threat to wound a minion (or wound a hunter minion twice).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_2: {
+		cardInfo: {
+			imagePath: decipher/LOTR18002.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U2
+			rarity: U
+			setNum: "18"
+			cardNum: 2
+			style: Standard
+		}
+		title: Run Until Found
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this condition, place a [dwarven] token here.<br><b>Skirmish:</b> Discard this condition from play or remove a [dwarven] token from here to make a [dwarven] companion gain <b>hunter 1</b>.
+		lore: Let us hunt some Orc!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_3: {
+		cardInfo: {
+			imagePath: decipher/LOTR18003.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C3
+			rarity: C
+			setNum: "18"
+			cardNum: 3
+			style: Standard
+		}
+		title: Thorin's Harp
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tale</b>.<br><b>Maneuver:</b> Exert a [dwarven] companion to make the fellowship's current site gain <b>mountain</b> until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

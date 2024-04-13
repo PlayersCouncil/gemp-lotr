@@ -1,0 +1,402 @@
+{
+
+	13_185: {
+		cardInfo: {
+			imagePath: decipher/LOTR13185.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U185
+			rarity: U
+			setNum: "13"
+			cardNum: 185
+			style: Standard
+		}
+		title: Abandoned Mine Shaft
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Underground</b>. If this site is not in region 1 when the fellowship moves from here during the regroup phase, add a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_186: {
+		cardInfo: {
+			imagePath: decipher/LOTR13186.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13S186
+			rarity: S
+			setNum: "13"
+			cardNum: 186
+			style: Standard
+		}
+		title: Caves of Aglarond
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Underground</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may remove 2 burdens.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_187: {
+		cardInfo: {
+			imagePath: decipher/LOTR13187.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U187
+			rarity: U
+			setNum: "13"
+			cardNum: 187
+			style: Standard
+		}
+		title: City of Kings
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_188: {
+		cardInfo: {
+			imagePath: decipher/LOTR13188.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U188
+			rarity: U
+			setNum: "13"
+			cardNum: 188
+			style: Standard
+		}
+		title: Courtyard Parapet
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Dwelling</b>. When the fellowship moves to this site, the first Shadow player may discard 2 cards from hand to add a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_189: {
+		cardInfo: {
+			imagePath: decipher/LOTR13189.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13S189
+			rarity: S
+			setNum: "13"
+			cardNum: 189
+			style: Standard
+		}
+		title: Crossroads of the Fallen Kings
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <span style="word-spacing:-0.02em;font-size:98%"><b>Forest</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may heal a companion of each culture.</span>
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_190: {
+		cardInfo: {
+			imagePath: decipher/LOTR13190.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U190
+			rarity: U
+			setNum: "13"
+			cardNum: 190
+			style: Standard
+		}
+		title: Doors of Durin
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Marsh</b>. Each companion of each race that has the most companions is strength -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_191: {
+		cardInfo: {
+			imagePath: decipher/LOTR13191.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13S191
+			rarity: S
+			setNum: "13"
+			cardNum: 191
+			style: Standard
+		}
+		title: Fords of Isen
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>River</b>. Each character is strength +1 for each card borne by that character.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_192: {
+		cardInfo: {
+			imagePath: decipher/LOTR13192.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13S192
+			rarity: S
+			setNum: "13"
+			cardNum: 192
+			style: Standard
+		}
+		title: The Great Gates
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. While a player can spot more companions than minions, each minion is strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_193: {
+		cardInfo: {
+			imagePath: decipher/LOTR13193.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U193
+			rarity: U
+			setNum: "13"
+			cardNum: 193
+			style: Standard
+		}
+		title: Isenwash
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. <b>Plains</b>. At the start of the regroup phase, each Shadow player may exert a minion to exert a companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_194: {
+		cardInfo: {
+			imagePath: decipher/LOTR13194.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U194
+			rarity: U
+			setNum: "13"
+			cardNum: 194
+			style: Standard
+		}
+		title: Redhorn Pass
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Mountain</b>. Culture tokens cannot be added, removed, or reinforced.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

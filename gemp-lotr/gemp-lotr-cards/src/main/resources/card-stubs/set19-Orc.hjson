@@ -1,0 +1,91 @@
+{
+
+	19_22: {
+		cardInfo: {
+			imagePath: decipher/LOTR19022.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P22
+			rarity: P
+			setNum: "19"
+			cardNum: 22
+			style: Standard
+		}
+		title: Pit Troll
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 7
+		type: Minion
+		race: Troll
+		strength: 13
+		vitality: 4
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Hunter 2</b>. <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper><br>To play, spot an [orc] Orc.<br>When you play this minion, add 2 threats. The Free Peoples player may exert the Ring-bearer to prevent this.
+		lore: Black blood. Flat feet. Scaly skin.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_23: {
+		cardInfo: {
+			imagePath: decipher/LOTR19023.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P23
+			rarity: P
+			setNum: "19"
+			cardNum: 23
+			style: Standard
+		}
+		title: Troll of the Deep
+		subtitle: Cave Troll
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 6
+		type: Minion
+		race: Troll
+		strength: 13
+		vitality: 3
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an [orc] Orc.<br><b>Skirmish:</b> Remove a threat to make an [orc] minion strength +2.
+		lore: Stones to move. Bridges to be rebuilt.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

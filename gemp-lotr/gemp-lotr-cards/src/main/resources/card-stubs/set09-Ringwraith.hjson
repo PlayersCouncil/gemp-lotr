@@ -1,0 +1,131 @@
+{
+
+	9_42: {
+		cardInfo: {
+			imagePath: decipher/LOTR09042.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R42
+			rarity: R
+			setNum: "9"
+			cardNum: 42
+			style: Standard
+		}
+		title: Ring of Asperity
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Artifact
+		strength: 1
+		itemclass: Ring
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Nazgûl.<br>When you play this artifact, you may wound an unwounded companion.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
+		lore: The Nine, the Seven, and the Three... had each their proper gem.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_43: {
+		cardInfo: {
+			imagePath: decipher/LOTR09043.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R+43
+			rarity: R+
+			setNum: "9"
+			cardNum: 43
+			style: Standard
+		}
+		title: Ring of Ire
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Artifact
+		strength: 1
+		itemclass: Ring
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be The Witch-king.<br><b>Skirmish:</b> Exert bearer twice to make a [wraith] minion <b>damage +1</b>.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
+		lore: Nine he gave to Mortal Men, proud and great, and so ensnared them.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_44: {
+		cardInfo: {
+			imagePath: decipher/LOTR09044.jpg
+			javaClass: true
+			version: 0
+			collInfo: 9R44
+			rarity: R
+			setNum: "9"
+			cardNum: 44
+			style: Standard
+		}
+		title: Ring of Rancor
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Artifact
+		vitality: 1
+		itemclass: Ring
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Nazgûl.<br><b>Maneuver:</b> Remove a burden to heal each Nazgûl.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
+		lore: So it is now: the Nine he has gathered to himself....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,402 @@
+{
+
+	12_185: {
+		cardInfo: {
+			imagePath: decipher/LOTR12185.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U185
+			rarity: U
+			setNum: "12"
+			cardNum: 185
+			style: Standard
+		}
+		title: The Angle
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Forest</b>. <b>Shadow:</b> Play a Nazgûl (or spot 6 companions and discard 2 cards from hand) to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_186: {
+		cardInfo: {
+			imagePath: decipher/LOTR12186.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U186
+			rarity: U
+			setNum: "12"
+			cardNum: 186
+			style: Standard
+		}
+		title: The Bridge of Khazad-dûm
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. <b>Underground</b>. The Balrog is twilight cost -3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_187: {
+		cardInfo: {
+			imagePath: decipher/LOTR12187.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12S187
+			rarity: S
+			setNum: "12"
+			cardNum: 187
+			style: Standard
+		}
+		title: Emyn Muil
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Mountain</b>. <b>Maneuver:</b> Remove (2) and exert your minion that is not fierce to make that minion <b>fierce</b> until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_188: {
+		cardInfo: {
+			imagePath: decipher/LOTR12188.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12S188
+			rarity: S
+			setNum: "12"
+			cardNum: 188
+			style: Standard
+		}
+		title: Hill of Sight
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. <b>Forest</b>. While you can spot 3 minions (or 6 companions), each unbound companion is resistance -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_189: {
+		cardInfo: {
+			imagePath: decipher/LOTR12189.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12S189
+			rarity: S
+			setNum: "12"
+			cardNum: 189
+			style: Standard
+		}
+		title: Hobbiton Market
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Dwelling</b>. When the fellowship moves from this site, wound each minion that is not a lurker.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_190: {
+		cardInfo: {
+			imagePath: decipher/LOTR12190.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12S190
+			rarity: S
+			setNum: "12"
+			cardNum: 190
+			style: Standard
+		}
+		title: Northern Pelennor
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. <b>Plains</b>. <b>Shadow:</b> Make your lurker minion lose <b>lurker</b> until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_191: {
+		cardInfo: {
+			imagePath: decipher/LOTR12191.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U191
+			rarity: U
+			setNum: "12"
+			cardNum: 191
+			style: Standard
+		}
+		title: Shores of Nen Hithoel
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>River</b>. <b>Shadow:</b> Spot 5 [orc] Orcs to prevent the fellowship from moving again this turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_192: {
+		cardInfo: {
+			imagePath: decipher/LOTR12192.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U192
+			rarity: U
+			setNum: "12"
+			cardNum: 192
+			style: Standard
+		}
+		title: Slopes of Orodruin
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Mountain</b>. <b>Shadow:</b> Remove (2) and discard 2 Free Peoples cards from hand to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_193: {
+		cardInfo: {
+			imagePath: decipher/LOTR12193.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U193
+			rarity: U
+			setNum: "12"
+			cardNum: 193
+			style: Standard
+		}
+		title: Starkhorn
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Mountain</b>. Each time your Dwarf wins a skirmish, you may draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_194: {
+		cardInfo: {
+			imagePath: decipher/LOTR12194.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U194
+			rarity: U
+			setNum: "12"
+			cardNum: 194
+			style: Standard
+		}
+		title: Wold Battlefield
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. <b>Skirmish:</b> Exert your Man (except an enduring Man) to make him or her <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

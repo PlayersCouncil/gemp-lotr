@@ -1,0 +1,125 @@
+{
+
+	5_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR05118.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5U118
+			rarity: U
+			setNum: "5"
+			cardNum: 118
+			style: Standard
+		}
+		title: Hornburg Wall
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Regroup:</b> Spot your minion and remove (9) to make the fellowship move again this turn (if the move limit allows).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_119: {
+		cardInfo: {
+			imagePath: decipher/LOTR05119.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5U119
+			rarity: U
+			setNum: "5"
+			cardNum: 119
+			style: Standard
+		}
+		title: Nan Curunír
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. <b>Response:</b> If your mounted minion is about to take a wound, remove (2) to prevent that wound.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR05120.jpg
+			javaClass: true
+			version: 0
+			collInfo: 5U120
+			rarity: U
+			setNum: "5"
+			cardNum: 120
+			style: Standard
+		}
+		title: Caverns of Isengard
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Underground</b>. The Free Peoples player wins the game only if the Ring-bearer survives until Shadow players reconcile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

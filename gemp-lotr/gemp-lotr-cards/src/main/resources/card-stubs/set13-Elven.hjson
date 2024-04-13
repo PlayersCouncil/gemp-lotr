@@ -1,0 +1,812 @@
+{
+
+	13_9: {
+		cardInfo: {
+			imagePath: decipher/LOTR13009.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13S9
+			rarity: S
+			setNum: "13"
+			cardNum: 9
+			style: Standard
+		}
+		title: Arwen
+		subtitle: Reflection of Lúthien
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While the fellowship is at a forest site, each of your other [elven] companions is resistance +1.<br><b>Skirmish:</b> Exert Arwen to make a minion she is skirmishing strength -1 for each other companion assigned to a skirmish.
+		lore: Arwen vanimelda, namarië!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_10: {
+		cardInfo: {
+			imagePath: decipher/LOTR13010.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R10
+			rarity: R
+			setNum: "13"
+			cardNum: 10
+			style: Standard
+		}
+		title: Asfaloth
+		subtitle: Swift Blossom
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		resistance: 1
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Elf.<br>When you play Asfaloth, you may reinforce an [elven] token.<br><b>Skirmish:</b> Remove 2 [elven] tokens to heal bearer (or heal bearer and heal another Elf if bearer is in a fierce skirmish).
+		lore: ...my horse will not let any rider fall....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_11: {
+		cardInfo: {
+			imagePath: decipher/LOTR13011.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R11
+			rarity: R
+			setNum: "13"
+			cardNum: 11
+			style: Standard
+		}
+		title: Celeborn
+		subtitle: The Wise
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While the fellowship is at a forest site, each Elf who has resistance 7 or more gains <b>muster</b>.<br>Each time the fellowship moves during the regroup phase, you may take an [elven] event into hand from your discard pile.
+		lore: I did not know that your plight was so evil.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_12: {
+		cardInfo: {
+			imagePath: decipher/LOTR13012.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C12
+			rarity: C
+			setNum: "13"
+			cardNum: 12
+			style: Standard
+		}
+		title: City of the Trees
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: At the end of your turn, discard this from play if the fellowship did not move more than once this turn.<br>At the start of each skirmish involving an Elf and a wounded minion, you may draw a card.
+		lore: Many stairs they climbed to meet the Galadhrim.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_13: {
+		cardInfo: {
+			imagePath: decipher/LOTR13013.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C13
+			rarity: C
+			setNum: "13"
+			cardNum: 13
+			style: Standard
+		}
+		title: Crashing Cavalry
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Assignment:</b> Discard this from play and assign a minion to an [elven] companion. Those characters cannot use skirmish special abilities until the start of the regroup phase.
+		lore: At that moment there came a roaring and a rushing: a noise of loud waters rolling many stones.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_14: {
+		cardInfo: {
+			imagePath: decipher/LOTR13014.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C14
+			rarity: C
+			setNum: "13"
+			cardNum: 14
+			style: Standard
+		}
+		title: Final Shot
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make an [elven] companion strength +2 (or +5 if the fellowship has moved more than once this turn).
+		lore: Redoubling their efforts, the Company at last felled the Cave Troll.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_15: {
+		cardInfo: {
+			imagePath: decipher/LOTR13015.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R15
+			rarity: R
+			setNum: "13"
+			cardNum: 15
+			style: Standard
+		}
+		title: Galadriel
+		subtitle: Sorceress of the Hidden Land
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Companion
+		race: Elf
+		strength: 3
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 3 Elves.<br>Each time the fellowship moves during the regroup phase, you may reveal a card from the top of your draw deck for each forest on the adventure path to heal an Elf for each [elven] card revealed.
+		lore: Do not let your hearts be troubled....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_16: {
+		cardInfo: {
+			imagePath: decipher/LOTR13016.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C16
+			rarity: C
+			setNum: "13"
+			cardNum: 16
+			style: Standard
+		}
+		title: Inside a Song
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert an Elf to take an [elven] skirmish event into hand from your discard pile and you may reinforce an [elven] token.
+		lore: I thought that Elves were all for moon and stars; but this is more elvish than anything I ever heard tell of.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_17: {
+		cardInfo: {
+			imagePath: decipher/LOTR13017.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U17
+			rarity: U
+			setNum: "13"
+			cardNum: 17
+			style: Standard
+		}
+		title: Kindreds Estranged
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: You may remove from the game 4 other [elven] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make a minion skirmishing your Elf at a forest or river site strength -3.
+		lore: Men multiply and the Firstborn decrease....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_18: {
+		cardInfo: {
+			imagePath: decipher/LOTR13018.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R18
+			rarity: R
+			setNum: "13"
+			cardNum: 18
+			style: Standard
+		}
+		title: Legolas
+		subtitle: Of the Grey Company
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>.<br>At the start of each archery phase, you may reveal the top card of your draw deck. If it is an [elven] card, wound a minion.
+		lore: My heart bids me go on... but we must hold together. I will follow your counsel.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_19: {
+		cardInfo: {
+			imagePath: decipher/LOTR13019.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U19
+			rarity: U
+			setNum: "13"
+			cardNum: 19
+			style: Standard
+		}
+		title: Let Fly
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 4
+		type: Event
+		keyword: Archery
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot 3 Elves, spot a Shadow race, and choose a Shadow player to wound each of that player's minions which is not of that race.
+		lore: Yet I make my tale twenty at the least. But that is only a few leaves in a forest.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_20: {
+		cardInfo: {
+			imagePath: decipher/LOTR13020.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13S20
+			rarity: S
+			setNum: "13"
+			cardNum: 20
+			style: Standard
+		}
+		title: Lórien Protector
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While another companion is assigned to a skirmish, during each skirmish, prevent all wounds to this companion after the first wound.
+		lore: There was a sound of soft laughter over their heads, and then another clear voice spoke in an elven-tongue.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_21: {
+		cardInfo: {
+			imagePath: decipher/LOTR13021.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C21
+			rarity: C
+			setNum: "13"
+			cardNum: 21
+			style: Standard
+		}
+		title: Many Miles
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		keyword: Archery
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot 2 Elf archers to make the fellowship archery total +1 (or +2 if a Shadow player has replaced the fellowship's current site this turn).
+		lore: I can see a darkness. There are shapes moving in it, great shapes far away upon the bank of the river; but what they are I cannot tell.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_22: {
+		cardInfo: {
+			imagePath: decipher/LOTR13022.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R22
+			rarity: R
+			setNum: "13"
+			cardNum: 22
+			style: Standard
+		}
+		title: Secluded Homestead
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 Elves.<br>When you play this, add an [elven] token here for each forest site and each river site on the adventure path.<br><b>Regroup:</b> Discard this from play or remove 2 tokens from here to reconcile your hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_23: {
+		cardInfo: {
+			imagePath: decipher/LOTR13023.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C23
+			rarity: C
+			setNum: "13"
+			cardNum: 23
+			style: Standard
+		}
+		title: Shrouded Elf
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Response:</b> If you play an event during a skirmish involving this companion, exert this companion to place that event on top of your draw deck.
+		lore: Cloaked by Elven garments and by darkness, warriors led by Haldir reinforced Helm's Deep.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_24: {
+		cardInfo: {
+			imagePath: decipher/LOTR13024.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C24
+			rarity: C
+			setNum: "13"
+			cardNum: 24
+			style: Standard
+		}
+		title: Spring Forth Nimbly
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make an Elf strength +1 for each card that has an [elven] token on it.
+		lore: ...the Elf had no boots, but wore only light shoes, as he always did....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR13025.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C25
+			rarity: C
+			setNum: "13"
+			cardNum: 25
+			style: Standard
+		}
+		title: Standing Tall
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Discard this condition from play to make a minion skirmishing an Elf strength -1 for each of the following that is true: it is skirmishing a companion who has resistance 4 or more; it is wounded; you can spot an Elf archer; the fellowship is at a forest site.
+		lore: Yrch,' said Legolas, falling into his own tongue.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR13026.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R26
+			rarity: R
+			setNum: "13"
+			cardNum: 26
+			style: Standard
+		}
+		title: Take Up the Bow
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 6
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Toil 2</b>. <helper>(For each [elven] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Archery:</b> Discard this from play and spot 3 Elf archers to discard a minion from play. Each of those archers loses <b>archer</b> and cannot gain archer.
+		lore: Stringing the bow and fitting an arrow....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_27: {
+		cardInfo: {
+			imagePath: decipher/LOTR13027.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U27
+			rarity: U
+			setNum: "13"
+			cardNum: 27
+			style: Standard
+		}
+		title: Wells of Deep Memory
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: At the end of your turn, discard this from play if the fellowship did not move more than once this turn.<br>Each time the fellowship moves during the regroup phase, you may draw a card for each of the following you can spot: Arwen, Celeborn, or Galadriel.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

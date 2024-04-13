@@ -1,0 +1,166 @@
+{
+
+	8_117: {
+		cardInfo: {
+			imagePath: decipher/LOTR08117.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8U117
+			rarity: U
+			setNum: "8"
+			cardNum: 117
+			style: Standard
+		}
+		title: The Dimholt
+		unique: false
+		twilight: 1
+		type: Site
+		site: 3K
+		block: King
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Underground</b>. <b>Sanctuary</b>. <b>Fellowship:</b> Add 3 threats to play an enduring companion from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR08118.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8U118
+			rarity: U
+			setNum: "8"
+			cardNum: 118
+			style: Standard
+		}
+		title: City of the Dead
+		unique: false
+		twilight: 4
+		type: Site
+		site: 4K
+		block: King
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Underground</b>. <b>Shadow:</b> Remove 2 burdens to play an enduring minion from your draw deck or discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_119: {
+		cardInfo: {
+			imagePath: decipher/LOTR08119.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8U119
+			rarity: U
+			setNum: "8"
+			cardNum: 119
+			style: Standard
+		}
+		title: Crashed Gate
+		unique: false
+		twilight: 7
+		type: Site
+		site: 5K
+		block: King
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: At the start of the regroup phase, the Free Peoples player must add 3 threats or choose an opponent who may take control of a site.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR08120.jpg
+			javaClass: true
+			version: 0
+			collInfo: 8U120
+			rarity: U
+			setNum: "8"
+			cardNum: 120
+			style: Standard
+		}
+		title: Osgiliath Channel
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7K
+		block: King
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>River</b>. <b>Regroup:</b> Spot your minion and 6 companions to make the Free Peoples player choose to move again this turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,166 @@
+{
+
+	10_117: {
+		cardInfo: {
+			imagePath: decipher/LOTR10117.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U117
+			rarity: U
+			setNum: "10"
+			cardNum: 117
+			style: Standard
+		}
+		title: Base of Mindolluin
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3K
+		block: King
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 2 threats, add a threat to play a fortification from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR10118.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U118
+			rarity: U
+			setNum: "10"
+			cardNum: 118
+			style: Standard
+		}
+		title: Pelennor Prairie
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4K
+		block: King
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. <b>Shadow:</b> Exert a minion and remove a burden to make the Free Peoples player discard one of his or her conditions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_119: {
+		cardInfo: {
+			imagePath: decipher/LOTR10119.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U119
+			rarity: U
+			setNum: "10"
+			cardNum: 119
+			style: Standard
+		}
+		title: Steward's Tomb
+		unique: false
+		twilight: 8
+		type: Site
+		site: 5K
+		block: King
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Wounds cannot be prevented or healed. Burdens cannot be removed.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR10120.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U120
+			rarity: U
+			setNum: "10"
+			cardNum: 120
+			style: Standard
+		}
+		title: Watchers of Cirith Ungol
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8K
+		block: King
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Spot your [wraith] Orc and remove 2 threats to make that [wraith] Orc strength +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

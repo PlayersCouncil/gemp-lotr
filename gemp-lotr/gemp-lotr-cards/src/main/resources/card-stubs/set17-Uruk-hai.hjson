@@ -1,0 +1,1178 @@
+{
+
+	17_112: {
+		cardInfo: {
+			imagePath: decipher/LOTR17112.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U112
+			rarity: U
+			setNum: "17"
+			cardNum: 112
+			style: Standard
+		}
+		title: Blade of the White Hand
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [uruk-hai] Uruk-hai.<br>While you can spot 2 controlled sites, this minion is <b>damage +1</b>.<br>While you can spot 4 controlled sites, this minion is <b>damage +3</b>.
+		lore: The servants of the White Hand laid waste to the pride of Gondor.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_113: {
+		cardInfo: {
+			imagePath: decipher/LOTR17113.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C113
+			rarity: C
+			setNum: "17"
+			cardNum: 113
+			style: Standard
+		}
+		title: Deathly Roar
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time the Free Peoples player plays a possession or artifact, place an [uruk-hai] token here.<br>Each time an [uruk-hai] minion wins a skirmish, you may remove an [uruk-hai] token to exert a companion.
+		lore: The Uruk-hai assault on Helm's Deep was relentless.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_114: {
+		cardInfo: {
+			imagePath: decipher/LOTR17114.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R114
+			rarity: R
+			setNum: "17"
+			cardNum: 114
+			style: Standard
+		}
+		title: Land Had Changed
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make an Uruk-hai strength +2 (or spot a site you control to make that Uruk- hai strength +3 instead). You may then liberate a site to make that Uruk-hai strength +2 and <b>damage +1</b>.
+		lore: The Deeping Wall is taken, lord, and all the defense swept away....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_115: {
+		cardInfo: {
+			imagePath: decipher/LOTR17115.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17S115
+			rarity: S
+			setNum: "17"
+			cardNum: 115
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Curunír
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time an [uruk-hai] hunter wins a skirmish, heal a different [uruk-hai] minion.<br><b>Skirmish:</b> Exert Saruman twice to make a companion lose the <b>hunter</b> keyword until the start of the regroup phase.
+		lore: He has claimed lordship over all this land....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_116: {
+		cardInfo: {
+			imagePath: decipher/LOTR17116.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R116
+			rarity: R
+			setNum: "17"
+			cardNum: 116
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Master of the White Hand
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		site: 4
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each companion is resistance -1.<br><b>Skirmish:</b> Exert Saruman to discard a condition borne by a companion skirmishing an [uruk-hai] minion.
+		lore: A new power is rising. Its victory is at hand.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_117: {
+		cardInfo: {
+			imagePath: decipher/LOTR17117.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U117
+			rarity: U
+			setNum: "17"
+			cardNum: 117
+			style: Standard
+		}
+		title: Spear of the White Hand
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 0
+		type: Possession
+		strength: 1
+		vitality: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [uruk-hai] Uruk-hai.
+		lore: We will drive the machine of war with the sword and the spear....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR17118.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C118
+			rarity: C
+			setNum: "17"
+			cardNum: 118
+			style: Standard
+		}
+		title: Vile Pit
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an [uruk-hai] hunter.<br>At the start of each Shadow phase, you may discard 2 [uruk-hai] cards from hand to play an [uruk-hai] hunter from your discard pile.<br><b>Regroup:</b> Discard this possession to return an [uruk-hai] hunter from play to your hand.
+		lore: Saruman gazed on his creations with great pride.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_119: {
+		cardInfo: {
+			imagePath: decipher/LOTR17119.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C119
+			rarity: C
+			setNum: "17"
+			cardNum: 119
+			style: Standard
+		}
+		title: White Hand Aggressor
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 13
+		vitality: 1
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While you control a site, this minion cannot take wounds, except during the skirmish phase.
+		lore: It's Saruman's army! The war has started.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR17120.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C120
+			rarity: C
+			setNum: "17"
+			cardNum: 120
+			style: Standard
+		}
+		title: White Hand Attacker
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While this minion is assigned to a skirmish, each site on the adventure path gains each terrain keyword from each site you control.
+		lore: You will taste Man-flesh.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_121: {
+		cardInfo: {
+			imagePath: decipher/LOTR17121.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R121
+			rarity: R
+			setNum: "17"
+			cardNum: 121
+			style: Standard
+		}
+		title: White Hand Berserker
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 10
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>At the start of the archery phase, if you control a site, you may add 2 to the minion archery total for each Free Peoples culture you can spot over 2.
+		lore: ...there was a crash and a flash of flame and smoke.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_122: {
+		cardInfo: {
+			imagePath: decipher/LOTR17122.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C122
+			rarity: C
+			setNum: "17"
+			cardNum: 122
+			style: Standard
+		}
+		title: White Hand Butcher
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 5
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Hunter 6</b>. <helper>(While skirmishing a non-hunter character, this character is strength +6.)</helper>
+		lore: Bring out your skulking king!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_123: {
+		cardInfo: {
+			imagePath: decipher/LOTR17123.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R123
+			rarity: R
+			setNum: "17"
+			cardNum: 123
+			style: Standard
+		}
+		title: White Hand Captain
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 12
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>While this minion is assigned to a skirmish, each hunter character is strength +1.
+		lore: They wore black armor and mail that was marked with the white hand of Saruman.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_124: {
+		cardInfo: {
+			imagePath: decipher/LOTR17124.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R124
+			rarity: R
+			setNum: "17"
+			cardNum: 124
+			style: Standard
+		}
+		title: White Hand Destroyer
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 10
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>This minion gains <b>hunter 3</b> for each site you control.
+		lore: This is no parley. You have nothing to say.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_125: {
+		cardInfo: {
+			imagePath: decipher/LOTR17125.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C125
+			rarity: C
+			setNum: "17"
+			cardNum: 125
+			style: Standard
+		}
+		title: White Hand Enforcer
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>When you play this minion, you may liberate a site to add (X), where X is the Shadow number of the liberated site.
+		lore: The Uruks were tireless in the pursuit of their prey.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_126: {
+		cardInfo: {
+			imagePath: decipher/LOTR17126.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C126
+			rarity: C
+			setNum: "17"
+			cardNum: 126
+			style: Standard
+		}
+		title: White Hand Guard
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Skirmish:</b> Exert this minion to make an [uruk-hai] hunter minion strength +2.
+		lore: Under the banner of the white hand, they came in great numbers.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_127: {
+		cardInfo: {
+			imagePath: decipher/LOTR17127.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C127
+			rarity: C
+			setNum: "17"
+			cardNum: 127
+			style: Standard
+		}
+		title: White Hand Intruder
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>Each time this minion wins a skirmish, if you do not control a site, you may take control of a site.
+		lore: March to Helm's Deep!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_128: {
+		cardInfo: {
+			imagePath: decipher/LOTR17128.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C128
+			rarity: C
+			setNum: "17"
+			cardNum: 128
+			style: Standard
+		}
+		title: White Hand Invader
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>When you play this minion, exert a companion for each site you control.
+		lore: There will be no dawn for men.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_129: {
+		cardInfo: {
+			imagePath: decipher/LOTR17129.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R129
+			rarity: R
+			setNum: "17"
+			cardNum: 129
+			style: Standard
+		}
+		title: White Hand Legion
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 6
+		type: Minion
+		race: Uruk-hai
+		strength: 17
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>To play, remove 2 threats.
+		lore: The Orcs yelled and jeered.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_130: {
+		cardInfo: {
+			imagePath: decipher/LOTR17130.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C130
+			rarity: C
+			setNum: "17"
+			cardNum: 130
+			style: Standard
+		}
+		title: White Hand Scout
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 5
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. <b>Hunter 2</b>. <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper><br>The roaming penalty for each [uruk-hai] minion you play is -1.
+		lore: You've got no guts outside your own sties.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_131: {
+		cardInfo: {
+			imagePath: decipher/LOTR17131.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C131
+			rarity: C
+			setNum: "17"
+			cardNum: 131
+			style: Standard
+		}
+		title: White Hand Slayer
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 6
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Each time a player plays an event in a skirmish involving this minion, that player may exert a non-hunter character.
+		lore: ...and there has been war between us for many months.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_132: {
+		cardInfo: {
+			imagePath: decipher/LOTR17132.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R132
+			rarity: R
+			setNum: "17"
+			cardNum: 132
+			style: Standard
+		}
+		title: White Hand Taskmaster
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>When you play this minion, you may spot another [uruk-hai] minion to add a threat for each Free Peoples culture you can spot.
+		lore: White Hand warriors fell to evil deeds with a passion.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_133: {
+		cardInfo: {
+			imagePath: decipher/LOTR17133.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C133
+			rarity: C
+			setNum: "17"
+			cardNum: 133
+			style: Standard
+		}
+		title: White Hand Trooper
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>While this minion is assigned to a skirmish, each hunter companion loses its special abilities and skirmish events can not be played in those companions skirmishes.
+		lore: ...the West is no longer safe.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_134: {
+		cardInfo: {
+			imagePath: decipher/LOTR17134.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C134
+			rarity: C
+			setNum: "17"
+			cardNum: 134
+			style: Standard
+		}
+		title: White Hand Vanquisher
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>This minion is <b>damage +1</b> for each [uruk-hai] hunter assigned to a skirmish.
+		lore: They have a blasting fire, and with it they took the Wall.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_135: {
+		cardInfo: {
+			imagePath: decipher/LOTR17135.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R135
+			rarity: R
+			setNum: "17"
+			cardNum: 135
+			style: Standard
+		}
+		title: White Hand Veteran
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>When you play this minion, if you control a site, you may take an [uruk-hai] event into hand from your discard pile.
+		lore: To War!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_136: {
+		cardInfo: {
+			imagePath: decipher/LOTR17136.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17C136
+			rarity: C
+			setNum: "17"
+			cardNum: 136
+			style: Standard
+		}
+		title: White Hand Warrior
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 6
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>. <b>Hunter 4</b>. <helper>(While skirmishing a non-hunter character, this character is strength +4.)</helper><br>Each time this minion is assigned to a non-hunter companion, you may heal a hunter.
+		lore: Leave none alive!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_137: {
+		cardInfo: {
+			imagePath: decipher/LOTR17137.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R137
+			rarity: R
+			setNum: "17"
+			cardNum: 137
+			style: Standard
+		}
+		title: You Do Not Know Fear
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Discard a condition for each [uruk-hai] minion you can spot.
+		lore: Endangering and entangling all those that stood before them, the Uruk-hai shrunk before none.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_138: {
+		cardInfo: {
+			imagePath: decipher/LOTR17138.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U138
+			rarity: U
+			setNum: "17"
+			cardNum: 138
+			style: Standard
+		}
+		title: You Do Not Know Pain
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time you take control of a site, you may spot 3 [uruk-hai] minions to exert an unbound companion.<br><b>Skirmish:</b> Liberate a site to make an [uruk-hai] minion <b>damage +1</b>.
+		lore: If the wall is breached, Helm's Deep will fall.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

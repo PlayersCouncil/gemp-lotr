@@ -1,0 +1,313 @@
+{
+
+	19_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR19034.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P34
+			rarity: P
+			setNum: "19"
+			cardNum: 34
+			style: Standard
+		}
+		title: In Twilight
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		strength: 2
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [wraith] minion.<br>When you play this, you may draw a card.<br>Each time bearer wins a skirmish, you may transfer this condition to another [wraith] minion.
+		lore: The Nazgûl's true forms were revealed to him, shining like ghostly Kings.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR19035.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P35
+			rarity: P
+			setNum: "19"
+			cardNum: 35
+			style: Standard
+		}
+		title: Úlairë Attëa
+		subtitle: Dark Predator
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 12
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>While you can spot 5 twilight tokens in the twilight pool and another [wraith] card, Úlairë Attëa is strength +3.
+		lore: Those that knew the most power as kings were placed in particular ways for the will of Sauron.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR19036.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P36
+			rarity: P
+			setNum: "19"
+			cardNum: 36
+			style: Standard
+		}
+		title: Úlairë Enquëa
+		subtitle: Dark Threat
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 11
+		vitality: 4
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br><b>Maneuver:</b> Spot 6 companions and discard a Nazgûl from hand to wound an unbound companion.
+		lore: The Nine Riders were embodiments of Sauron's will, searching all of Middle-earth for his prize.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR19037.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P37
+			rarity: P
+			setNum: "19"
+			cardNum: 37
+			style: Standard
+		}
+		title: Úlairë Lemenya
+		subtitle: Dark Enemy
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Úlairë Lemenya is strength +1 for each [wraith] possession in your discard pile.
+		lore: Do you wish them to find you? They are terrible!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_38: {
+		cardInfo: {
+			imagePath: decipher/LOTR19038.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P38
+			rarity: P
+			setNum: "19"
+			cardNum: 38
+			style: Standard
+		}
+		title: Úlairë Nertëa
+		subtitle: Dark Horseman
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>When you play Úlairë Nertëa, name a race. The Free Peoples player cannot assign Úlairë Nertëa to skirmish a companion of the named race.
+		lore: Some accepted Sauron's gift for glory and a notion of great deeds.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_39: {
+		cardInfo: {
+			imagePath: decipher/LOTR19039.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P39
+			rarity: P
+			setNum: "19"
+			cardNum: 39
+			style: Standard
+		}
+		title: Úlairë Toldëa
+		subtitle: Dark Shadow
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 12
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Úlairë Toldëa cannot be assigned to skirmish the same companion in a fierce skirmish that he has already been assigned to this turn.
+		lore: Open, in the name of Mordor!' said a voice thin and menacing.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_40: {
+		cardInfo: {
+			imagePath: decipher/LOTR19040.jpg
+			javaClass: true
+			version: 0
+			collInfo: 19P40
+			rarity: P
+			setNum: "19"
+			cardNum: 40
+			style: Standard
+		}
+		title: The Witch-king
+		subtitle: Dark Lord
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 8
+		type: Minion
+		race: Nazgûl
+		strength: 14
+		vitality: 4
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Discard a Nazgûl from hand to make The Witch-king strength +1 (or strength +2 if you can spot that discarded Nazgûl).
+		lore: A great king and sorcerer he was of old, and now he wields a deadly fear.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

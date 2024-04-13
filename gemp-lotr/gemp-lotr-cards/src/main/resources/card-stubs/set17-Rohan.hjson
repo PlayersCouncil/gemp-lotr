@@ -1,0 +1,519 @@
+{
+
+	17_93: {
+		cardInfo: {
+			imagePath: decipher/LOTR17093.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R93
+			rarity: R
+			setNum: "17"
+			cardNum: 93
+			style: Standard
+		}
+		title: Aragorn
+		subtitle: Defender of Rohan
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>. While the Ring-bearer is assigned to a skirmish, each [rohan] companion gains <b>hunter 1</b>.
+		lore: No enemy has yet taken the Hornburg. Depart, or not one of you will be spared.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_94: {
+		cardInfo: {
+			imagePath: decipher/LOTR17094.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U94
+			rarity: U
+			setNum: "17"
+			cardNum: 94
+			style: Standard
+		}
+		title: Dispatched With Haste
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While at a plains site, each mounted companion is strength +1.<br><b>Regroup:</b> Spot 2 [rohan] Men and discard a [rohan] possession to discard a possession.
+		lore: Assemble the army at Dunharrow, as many men as can be found.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_95: {
+		cardInfo: {
+			imagePath: decipher/LOTR17095.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R95
+			rarity: R
+			setNum: "17"
+			cardNum: 95
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Northman
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While the Ring-bearer is assigned to a skirmish, Éomer is strength +3.<br><b>Maneuver:</b> If Éomer is mounted, exert him to make him <b>defender +1</b> until the end of turn.
+		lore: We cannot achieve victory through strength of arms.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_96: {
+		cardInfo: {
+			imagePath: decipher/LOTR17096.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R96
+			rarity: R
+			setNum: "17"
+			cardNum: 96
+			style: Standard
+		}
+		title: Éowyn
+		subtitle: Northwoman
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While the Ring-bearer is assigned to a skirmish, Éowyn cannot take wounds while skirmishing.<br><b>Assignment:</b> Exert Éowyn and assign a minion to the Ring-bearer to make that minion lose all game text keywords and unable to gain game text keywords until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_97: {
+		cardInfo: {
+			imagePath: decipher/LOTR17097.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U97
+			rarity: U
+			setNum: "17"
+			cardNum: 97
+			style: Standard
+		}
+		title: For Death and Glory
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While the Ring-bearer is assigned to a skirmish, each minion skirmishing a [rohan] companion loses <b>hunter</b> and is unable to gain hunter.<br><b>Skirmish:</b> Exert a [rohan] companion to make that companion gain <b>hunter 1</b> until the start of the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_98: {
+		cardInfo: {
+			imagePath: decipher/LOTR17098.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R98
+			rarity: R
+			setNum: "17"
+			cardNum: 98
+			style: Standard
+		}
+		title: Throne of the Golden Hall
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Artifact
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot Théoden (or 2 [rohan] companions).<br>Saruman and Gríma cannot be assigned to skirmishes.<br><b>Response:</b> If a [rohan] Man is about to take a wound, exert another [rohan] Man and add (2) to prevent that.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_99: {
+		cardInfo: {
+			imagePath: decipher/LOTR17099.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R99
+			rarity: R
+			setNum: "17"
+			cardNum: 99
+			style: Standard
+		}
+		title: Háma
+		subtitle: Northman
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While the Ring-bearer is assigned to a skirmish, each minion skirmishing Háma loses strength bonuses and <b>damage</b> bonuses from possessions.
+		lore: Hail, Théoden King!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_100: {
+		cardInfo: {
+			imagePath: decipher/LOTR17100.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U100
+			rarity: U
+			setNum: "17"
+			cardNum: 100
+			style: Standard
+		}
+		title: Into the Caves
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 3 [rohan] companions.<br><b>Assignment:</b> Assign a minion to Frodo to make that minion lose all game text keywords of your choice and unable to gain game text keywords until the regroup phase.
+		lore: Saruman's arm will have grown long indeed if he thinks he can reach us here.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_101: {
+		cardInfo: {
+			imagePath: decipher/LOTR17101.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U101
+			rarity: U
+			setNum: "17"
+			cardNum: 101
+			style: Standard
+		}
+		title: Soldier of Rohan
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While the Ring-bearer is assigned to a skirmish, this companion is strength +2.
+		lore: For ages, the people of Rohan have been allied to Gondor.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_102: {
+		cardInfo: {
+			imagePath: decipher/LOTR17102.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R102
+			rarity: R
+			setNum: "17"
+			cardNum: 102
+			style: Standard
+		}
+		title: Théoden
+		subtitle: Northman, King of Rohan
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While the Ring-bearer is assigned to a skirmish, each [rohan] companion is strength +1.<br><b>Regroup:</b> Spot 2 [rohan] followers and exert Théoden to liberate a site.
+		lore: When last I looked, Théoden, was King of Rohan.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_103: {
+		cardInfo: {
+			imagePath: decipher/LOTR17103.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U103
+			rarity: U
+			setNum: "17"
+			cardNum: 103
+			style: Standard
+		}
+		title: Where Now The Horse
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot a [rohan] companion to make Frodo strength +5. If Frodo loses the skirmish, discard that [rohan] companion.
+		lore: They have passed like rain in the mountains, like the wind in the meadow.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_104: {
+		cardInfo: {
+			imagePath: decipher/LOTR17104.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17U104
+			rarity: U
+			setNum: "17"
+			cardNum: 104
+			style: Standard
+		}
+		title: Warrior of Rohan
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Possessions cannot be transferred from this companion to another character.<br><b>Fellowship:</b> Play a possession on this companion to liberate a site.
+		lore: Rohirrim territories are not easily taken.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

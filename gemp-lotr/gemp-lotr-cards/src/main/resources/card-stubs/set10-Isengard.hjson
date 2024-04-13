@@ -1,0 +1,42 @@
+{
+
+	10_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR10035.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U35
+			rarity: U
+			setNum: "10"
+			cardNum: 35
+			style: Standard
+		}
+		title: Suffered Much Loss
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each site on the adventure path is a <b>battleground</b>.<br>While you have initiative, each Uruk-hai is strength +1.
+		lore: For we are already at war, as you may have seen....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

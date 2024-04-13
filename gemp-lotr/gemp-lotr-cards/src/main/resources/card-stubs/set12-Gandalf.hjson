@@ -1,0 +1,508 @@
+{
+
+	12_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR12025.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U25
+			rarity: U
+			setNum: "12"
+			cardNum: 25
+			style: Standard
+		}
+		title: Betrayal of Isengard
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time an opponent draws a card (or takes a card into hand) during the Shadow phase, you may remove (1).<br><b>Maneuver:</b> Exert Gandalf to wound Saruman twice.
+		lore: There is only one Lord of the Ring.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR12026.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R26
+			rarity: R
+			setNum: "12"
+			cardNum: 26
+			style: Standard
+		}
+		title: Discoveries
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 7
+		type: Event
+		keyword: Fellowship
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>. <b>Toil 3</b>. <helper>(For each [gandalf] character you exert when playing this, its twilight cost is -3.)</helper><br>Spot a [gandalf] Wizard and X other companions to examine the top X cards of your draw deck. Replace those cards in any order.
+		lore: I have come back from dark journeys and long search....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_27: {
+		cardInfo: {
+			imagePath: decipher/LOTR12027.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R27
+			rarity: R
+			setNum: "12"
+			cardNum: 27
+			style: Standard
+		}
+		title: Gandalf
+		subtitle: The White Rider
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 7
+		vitality: 4
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> If Gandalf is not assigned to a skirmish, exert him and another unbound companion skirmishing a minion to make Gandalf strength +3 and have him replace that companion in that skirmish.
+		lore: Look to my coming at first light on the fifth day.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_28: {
+		cardInfo: {
+			imagePath: decipher/LOTR12028.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R28
+			rarity: R
+			setNum: "12"
+			cardNum: 28
+			style: Standard
+		}
+		title: Gandalf's Hat
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Gandalf.<br>Each time the fellowship moves from a battleground site, add a burden.<br><b>Regroup:</b> Add 2 burdens to remove all twilight tokens from the twilight pool.
+		lore: He wore a tall pointed blue hat....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_29: {
+		cardInfo: {
+			imagePath: decipher/LOTR12029.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U29
+			rarity: U
+			setNum: "12"
+			cardNum: 29
+			style: Standard
+		}
+		title: Introspection
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		keyword: Fellowship
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>. Choose one: Spot a [gandalf] Wizard to choose an opponent who must discard one of his or her conditions from play; or spot a [gandalf] Wizard at a battleground site to discard a condition from play.
+		lore: ...I do not know the word – yet. But we shall soon see.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_30: {
+		cardInfo: {
+			imagePath: decipher/LOTR12030.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R30
+			rarity: R
+			setNum: "12"
+			cardNum: 30
+			style: Standard
+		}
+		title: Járnsmid
+		subtitle: Barding Emissary
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 4
+		vitality: 3
+		resistance: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: At the start of each skirmish involving Járnsmid, you may remove a burden (or 2 burdens if you can spot another [gandalf] companion).
+		lore: Sauron's Easterling allies were another trial for the Bardings, still keenly aware of the great efforts to rebuild Dale.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR12031.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C31
+			rarity: C
+			setNum: "12"
+			cardNum: 31
+			style: Standard
+		}
+		title: Mysterious Wizard
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Spell</b>. Make Gandalf strength +2 (or +4 if you cannot spot 5 burdens).
+		lore: ...there are older and fouler things than Orcs in the deep places of the world.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR12032.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C32
+			rarity: C
+			setNum: "12"
+			cardNum: 32
+			style: Standard
+		}
+		title: Salve
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Spell</b>. To play, spot a [gandalf] Wizard. Bearer must be a companion. Limit 1 per bearer.<br><b>Response:</b> If bearer is about to take a wound that would kill him or her, discard this condition to prevent that wound.
+		lore: ...the whole hall became suddenly dark as night.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR12033.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C33
+			rarity: C
+			setNum: "12"
+			cardNum: 33
+			style: Standard
+		}
+		title: The Terror of His Coming
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a [gandalf] companion strength +2. Then, if that companion is at a battleground or dwelling site, you may take a [gandalf] condition from your discard pile into hand.
+		lore: The Orcs reeled and screamed and cast aside both sword and spear.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR12034.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C34
+			rarity: C
+			setNum: "12"
+			cardNum: 34
+			style: Standard
+		}
+		title: Traveled Leader
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		keyword: Maneuver or regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot a [gandalf] Wizard to replace a site in the fellowship's current region with a site from your adventure deck.
+		lore: ...the question is: who will follow me, if I lead you there?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR12035.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R35
+			rarity: R
+			setNum: "12"
+			cardNum: 35
+			style: Standard
+		}
+		title: Watch and Wait
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a [gandalf] companion. Bearer must be a companion (except the Ring-bearer). Limit 1 per bearer.<br>Each time bearer wins a skirmish, you may remove a burden.
+		lore: I could not take it from him without doing greater harm; and I had no right to do so anyway.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR12036.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U36
+			rarity: U
+			setNum: "12"
+			cardNum: 36
+			style: Standard
+		}
+		title: With Doom We Come
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While Gandalf is at an underground site, he gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>While the fellowship is at a battleground site, each [gandalf] character gains <b>muster</b>.
+		lore: We come, we come with roll of drum....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

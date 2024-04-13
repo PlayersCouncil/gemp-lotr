@@ -1,0 +1,267 @@
+{
+
+	17_139: {
+		cardInfo: {
+			imagePath: decipher/LOTR17139.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R139
+			rarity: R
+			setNum: "17"
+			cardNum: 139
+			style: Standard
+		}
+		title: Úlairë Cantëa
+		subtitle: Duplicitous Assassin
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgûl
+		strength: 10
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Each unbound companion is resistance -1 for each card he or she bears.<br><b>Skirmish:</b> Exert Úlairë Cantëa to exert a companion with resistance 2 or less.
+		lore: Drawn to the power of the one. They will never stop hunting you.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_140: {
+		cardInfo: {
+			imagePath: decipher/LOTR17140.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R140
+			rarity: R
+			setNum: "17"
+			cardNum: 140
+			style: Standard
+		}
+		title: Úlairë Enquëa
+		subtitle: Duplicitous Lieutenant
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 11
+		vitality: 4
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Each time the Free Peoples player heals a companion, you may add a burden.<br><b>Maneuver:</b> Exert Úlairë Enquëa twice to discard a condition (or two conditions if you can spot 5 Free Peoples player's conditions).
+		lore: At all times they feel the presence of the ring.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_141: {
+		cardInfo: {
+			imagePath: decipher/LOTR17141.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R141
+			rarity: R
+			setNum: "17"
+			cardNum: 141
+			style: Standard
+		}
+		title: Úlairë Otsëa
+		subtitle: Duplicitous Specter
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>When you play Úlairë Otsëa, you may spot another Nazgûl to draw a card for each wounded companion you can spot.<br><b>Regroup:</b> Exert Úlairë Otsëa and discard a [wraith] card from hand to add a burden.
+		lore: Blinded by their greed, they took them without question.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_142: {
+		cardInfo: {
+			imagePath: decipher/LOTR17142.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R142
+			rarity: R
+			setNum: "17"
+			cardNum: 142
+			style: Standard
+		}
+		title: Ring of Savagery
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Artifact
+		strength: 1
+		itemclass: Ring
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Nazgûl.<br>Each time bearer wins a skirmish, the Free Peoples player must either add a burden or exert a companion.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_143: {
+		cardInfo: {
+			imagePath: decipher/LOTR17143.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R143
+			rarity: R
+			setNum: "17"
+			cardNum: 143
+			style: Standard
+		}
+		title: Ring of Terror
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Artifact
+		itemclass: Ring
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Nazgûl. Bearer is <b>damage +1</b>.<br>When you play this artifact, you may remove two threats to take a [wraith] card into hand from your discard pile.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_144: {
+		cardInfo: {
+			imagePath: decipher/LOTR17144.jpg
+			javaClass: true
+			version: 0
+			collInfo: 17R144
+			rarity: R
+			setNum: "17"
+			cardNum: 144
+			style: Standard
+		}
+		title: The Witch-king
+		subtitle: Conqueror of Arthedain
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 8
+		type: Minion
+		race: Nazgûl
+		strength: 14
+		vitality: 4
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Each time the Witch-king wins a fierce skirmish, you may exert a companion for each companion you can spot over 4.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

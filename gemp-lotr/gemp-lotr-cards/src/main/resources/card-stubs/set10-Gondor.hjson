@@ -1,0 +1,434 @@
+{
+
+	10_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR10025.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10R25
+			rarity: R
+			setNum: "10"
+			cardNum: 25
+			style: Standard
+		}
+		title: Aragorn
+		subtitle: Elessar Telcontar
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 9
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play Aragorn, you may heal another companion.<br>At the start of each fellowship phase, you may exert a companion of one culture to heal a companion of another culture.
+		lore: Now come the days of the King, and may they be blessed while the thrones of the Valar endure!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR10026.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U26
+			rarity: U
+			setNum: "10"
+			cardNum: 26
+			style: Standard
+		}
+		title: Cursed of Erech
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Wraith
+		strength: 7
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Enduring</b>. To play, add a threat.<br>When you play Cursed of Erech, exert him twice.<br>At the start of the maneuver phase, you may exert another [gondor] Wraith to make Cursed of Erech <b>defender +1</b> until the regroup phase.
+		lore: ...a black dread fell on them....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_27: {
+		cardInfo: {
+			imagePath: decipher/LOTR10027.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10C27
+			rarity: C
+			setNum: "10"
+			cardNum: 27
+			style: Standard
+		}
+		title: Dead Man of Dunharrow
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Wraith
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Enduring</b>. To play, add a threat.<br>When you play this companion, exert him twice.
+		lore: ...the Shadow Host pressed behind and fear went on before them....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_28: {
+		cardInfo: {
+			imagePath: decipher/LOTR10028.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10R28
+			rarity: R
+			setNum: "10"
+			cardNum: 28
+			style: Standard
+		}
+		title: Denethor
+		subtitle: Lord of Minas Tirith
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] card into hand from your draw deck, then reshuffle. Choose an opponent who may draw 2 cards.
+		lore: There Denethor sat in a grey gloom, like an old patient spider....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_29: {
+		cardInfo: {
+			imagePath: decipher/LOTR10029.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10R29
+			rarity: R
+			setNum: "10"
+			cardNum: 29
+			style: Standard
+		}
+		title: Drawing His Eye
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Event
+		keyword: Fellowship
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: For each [gondor] companion you spot, reveal 1 card at random from a Shadow player's hand. Choose a revealed Shadow card to be discarded, then its owner draws a card.
+		lore: We cannot achieve victory by arms, but by arms we can give the Ring-bearer his only chance, frail though it be.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_30: {
+		cardInfo: {
+			imagePath: decipher/LOTR10030.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10C30
+			rarity: C
+			setNum: "10"
+			cardNum: 30
+			style: Standard
+		}
+		title: End of the Game
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make an exhausted [gondor] companion strength +2. If that companion wins this skirmish, heal that companion or make him or her <b>damage +1</b>.
+		lore: ...he drew Andúril and held it up glittering in the sun. 'You shall not be sheathed again until the last battle is fought,' he said.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR10031.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10C31
+			rarity: C
+			setNum: "10"
+			cardNum: 31
+			style: Standard
+		}
+		title: Every Little is a Gain
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot a [gondor] Man to discard a stacked Shadow card or to wound a minion bearing a fortification.
+		lore: And so the companies came and were hailed and cheered and passed through the Gate, men of the Outlands marching to defend the City of Gondor in a dark hour....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR10032.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U32
+			rarity: U
+			setNum: "10"
+			cardNum: 32
+			style: Standard
+		}
+		title: Fifth Level
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fortification</b>. Bearer is strength -1 for each fortification you can spot.<br><b>Maneuver:</b> Exert 2 [gondor] Men or spot 3 knights to transfer this condition to a minion.
+		lore: A strong citadel it was indeed....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR10033.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U33
+			rarity: U
+			setNum: "10"
+			cardNum: 33
+			style: Standard
+		}
+		title: Hardy Garrison
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 [gondor] Men.<br>Each time you lose initiative, you may wound a minion.
+		lore: All before the walls on either side of the Gate the ground was choked with wreck and with bodies of the slain....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR10034.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10C34
+			rarity: C
+			setNum: "10"
+			cardNum: 34
+			style: Standard
+		}
+		title: Last Throw
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 5
+		type: Event
+		keyword: Regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: If no opponent controls a site, spot 2 [gondor] Men to make the move limit +1 for this turn.
+		lore: We must push Sauron... We must march out to meet him at once.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,134 @@
+{
+
+	10_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR10001.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10R1
+			rarity: R
+			setNum: "10"
+			cardNum: 1
+			style: Standard
+		}
+		title: Great Day, Great Hour
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 3
+		type: Event
+		keyword: Response
+		/*requires: {
+			
+		}
+		effects: {
+			type: responseEvent
+			trigger: {
+				
+			}
+			cost: {
+				
+			}
+			effect: [
+				{
+					
+				}
+			]
+		]*/
+		gametext: If an opponent plays a minion, exert a Dwarf who is damage +X to exert that minion X times.
+		lore: Oft hope is born, when all is forlorn.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_2: {
+		cardInfo: {
+			imagePath: decipher/LOTR10002.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10U2
+			rarity: U
+			setNum: "10"
+			cardNum: 2
+			style: Standard
+		}
+		title: Memories of Darkness
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a Dwarf.<br>Each time you lose initiative (except during the fellowship phase), you may play a [dwarven] condition from hand or from your discard pile.
+		lore: Had I known what was before me, I think that not for any friendship would I have taken the Paths of the Dead.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_3: {
+		cardInfo: {
+			imagePath: decipher/LOTR10003.jpg
+			javaClass: true
+			version: 0
+			collInfo: 10R3
+			rarity: R
+			setNum: "10"
+			cardNum: 3
+			style: Standard
+		}
+		title: More Yet to Come
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		keyword: Response
+		/*requires: {
+			
+		}
+		effects: {
+			type: responseEvent
+			trigger: {
+				
+			}
+			cost: {
+				
+			}
+			effect: [
+				{
+					
+				}
+			]
+		]*/
+		gametext: If a Dwarf kills a minion in a skirmish and that minion did not take all wounds caused by that Dwarf's damage bonus, assign those remaining wounds to minions not assigned to a skirmish.
+		lore: ...whatever is still to do, I hope to have a part in it, for the honour of the folk of the Lonely Mountain.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

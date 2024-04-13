@@ -1,0 +1,248 @@
+{
+
+	3_115: {
+		cardInfo: {
+			imagePath: decipher/LOTR03115.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3U115
+			rarity: U
+			setNum: "3"
+			cardNum: 115
+			style: Standard
+		}
+		title: Caras Galadhon
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: Fellowship
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Forest</b>. <b>Sanctuary</b>. While the fellowship is at Caras Galadhon, no more than one minion may be assigned to each skirmish.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_116: {
+		cardInfo: {
+			imagePath: decipher/LOTR03116.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3U116
+			rarity: U
+			setNum: "3"
+			cardNum: 116
+			style: Standard
+		}
+		title: Eregion Hills
+		unique: false
+		twilight: 2
+		type: Site
+		site: 4
+		block: Fellowship
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When the fellowship moves to Eregion Hills, add a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_117: {
+		cardInfo: {
+			imagePath: decipher/LOTR03117.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C117
+			rarity: C
+			setNum: "3"
+			cardNum: 117
+			style: Standard
+		}
+		title: Gates of Argonath
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: Fellowship
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>River</b>. Maneuver events may not be played.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR03118.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C118
+			rarity: C
+			setNum: "3"
+			cardNum: 118
+			style: Standard
+		}
+		title: The Great River
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7
+		block: Fellowship
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>River</b>. While the fellowship is at The Great River, cards may not be played from draw decks or discard piles.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_119: {
+		cardInfo: {
+			imagePath: decipher/LOTR03119.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3U119
+			rarity: U
+			setNum: "3"
+			cardNum: 119
+			style: Standard
+		}
+		title: House of Elrond
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: Fellowship
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Sanctuary</b>. When the fellowship moves to House of Elrond, the Free Peoples player may spot 2 Elves to remove a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR03120.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3U120
+			rarity: U
+			setNum: "3"
+			cardNum: 120
+			style: Standard
+		}
+		title: Wastes of Emyn Muil
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: Fellowship
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Maneuver:</b> Spot 4 companions and exert your [isengard] Orc to make the Free Peoples player wound a companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

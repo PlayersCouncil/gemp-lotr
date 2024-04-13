@@ -1,0 +1,815 @@
+{
+
+	2_96: {
+		cardInfo: {
+			imagePath: decipher/LOTR02096.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U96
+			rarity: U
+			setNum: "2"
+			cardNum: 96
+			style: Standard
+		}
+		title: Bilbo
+		subtitle: Well-spoken Gentlehobbit
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Ally
+		allyHome: fellowship,1
+		race: Hobbit
+		strength: 2
+		vitality: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fellowship:</b> Exert Bilbo and discard a tale to discard a Shadow condition from an opponent's support area.
+		lore: ...as Mr. Baggins was generous with his money, most people were willing to forgive him his oddities and his good fortune.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_97: {
+		cardInfo: {
+			imagePath: decipher/LOTR02097.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R97
+			rarity: R
+			setNum: "2"
+			cardNum: 97
+			style: Standard
+		}
+		title: Consorting With Wizards
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tale</b>. Bearer must be Bilbo.<br>Bilbo may not take wounds (except during the archery phase).<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Exert Bilbo or discard this condition to remove (1).
+		lore: He wasn't always this peculiar! When I were a lad, old Bilbo was a most respectable Hobbit.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_98: {
+		cardInfo: {
+			imagePath: decipher/LOTR02098.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U98
+			rarity: U
+			setNum: "2"
+			cardNum: 98
+			style: Standard
+		}
+		title: Dear Friends
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Fellowship:</b> Exert a companion to place a Free Peoples card from your discard pile beneath your draw deck (or 2 Free Peoples cards if that companion has the Frodo signet).
+		lore: He pressed him for news of himself and of the wide world... and they stayed up far into the night.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_99: {
+		cardInfo: {
+			imagePath: decipher/LOTR02099.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2C99
+			rarity: C
+			setNum: "2"
+			cardNum: 99
+			style: Standard
+		}
+		title: Deft in Their Movements
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Stealth</b>.<br><b>Regroup:</b> Spot 2 Hobbits to make each site's Shadow number -2 until the end of the turn.
+		lore: They possessed from the first the art of disappearing swiftly and silently, when large folk who they do not wish to meet come blundering by.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_100: {
+		cardInfo: {
+			imagePath: decipher/LOTR02100.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R100
+			rarity: R
+			setNum: "2"
+			cardNum: 100
+			style: Standard
+		}
+		title: Fearing the Worst
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Stealth</b>. To play, exert 2 Hobbits. Plays to your support area.<br>The twilight cost of each search card and each tracker is +2.
+		lore: Even if we are allowed to leave Bree unhindered, we can hardly hope now to leave it unnoticed.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_101: {
+		cardInfo: {
+			imagePath: decipher/LOTR02101.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2C101
+			rarity: C
+			setNum: "2"
+			cardNum: 101
+			style: Standard
+		}
+		title: Filibert Bolger
+		subtitle: Wily Rascal
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Ally
+		allyHome: fellowship,1
+		race: Hobbit
+		strength: 1
+		vitality: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Exert a Hobbit companion twice to cancel a fierce skirmish involving that Hobbit.
+		lore: Filibert knows paths and tracks that few have trodden. He is not adventurous by nature, but his escapades often require rapid departures.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_102: {
+		cardInfo: {
+			imagePath: decipher/LOTR02102.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2C102
+			rarity: C
+			setNum: "2"
+			cardNum: 102
+			style: Standard
+		}
+		title: Frodo
+		subtitle: Reluctant Adventurer
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bearer (resistance 10).</b><br>The cost of each artifact, possession, and [shire] tale played on Frodo is -1.
+		lore: I am not made for perilous quests. I wish I had never seen the Ring! Why did it come to me? Why was I chosen?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_103: {
+		cardInfo: {
+			imagePath: decipher/LOTR02103.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U103
+			rarity: U
+			setNum: "2"
+			cardNum: 103
+			style: Standard
+		}
+		title: Hobbit Sword-play
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Exert a Hobbit bearing a weapon to wound a minion. That minion's owner may remove (3) to prevent this.
+		lore: Boromir sensed that a blade in a Halfling's hand would surprise a larger foe.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_104: {
+		cardInfo: {
+			imagePath: decipher/LOTR02104.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2C104
+			rarity: C
+			setNum: "2"
+			cardNum: 104
+			style: Standard
+		}
+		title: Merry
+		subtitle: Horticulturalist
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fellowship:</b> Exert Merry to play Farmer Maggot from your draw deck.
+		lore: Ow... I think I've broken something.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_105: {
+		cardInfo: {
+			imagePath: decipher/LOTR02105.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R105
+			rarity: R
+			setNum: "2"
+			cardNum: 105
+			style: Standard
+		}
+		title: Mithril-coat
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Artifact
+		itemclass: Armor
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Frodo.<br>The minion archery total is -1.<br>Each minion skirmishing Frodo does not gain strength bonuses from weapons and loses all <b>damage</b> bonuses.
+		lore: ...its worth was greater than the value of the whole Shire and everything in it.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_106: {
+		cardInfo: {
+			imagePath: decipher/LOTR02106.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U106
+			rarity: U
+			setNum: "2"
+			cardNum: 106
+			style: Standard
+		}
+		title: Nice Imitation
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Stealth</b>. Plays to your support area.<br><b>Response:</b> If a Hobbit is about to take a wound, discard this condition to prevent that wound.
+		lore: Very life-like!... But what will happen when they have penetrated the disguise?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_107: {
+		cardInfo: {
+			imagePath: decipher/LOTR02107.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U107
+			rarity: U
+			setNum: "2"
+			cardNum: 107
+			style: Standard
+		}
+		title: Not Feared in Sunlight
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 Hobbits. Plays to your support area.<br>Each Nazgûl is strength -4. Discard this condition during the regroup phase.
+		lore: ...our shapes cast shadows in their minds, which only the noon sun destroys....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_108: {
+		cardInfo: {
+			imagePath: decipher/LOTR02108.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R108
+			rarity: R
+			setNum: "2"
+			cardNum: 108
+			style: Standard
+		}
+		title: O Elbereth! Gilthoniel!
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		strength: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tale</b>. Bearer must be the Ring-bearer.<br><b>Skirmish:</b> Discard this condition to take off The One Ring or to cancel a skirmish involving the Ring-bearer and a Nazgûl.
+		lore: With a last effort Frodo... slipped the Ring from his finger and closed his right hand tight upon it.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_109: {
+		cardInfo: {
+			imagePath: decipher/LOTR02109.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R109
+			rarity: R
+			setNum: "2"
+			cardNum: 109
+			style: Standard
+		}
+		title: Orc-bane
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Spot Sting or Glamdring and exert its bearer X times to wound X Orcs or X Uruk-hai.
+		lore: Glamdring shone with a pale light, and Sting glinted at the edges.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_110: {
+		cardInfo: {
+			imagePath: decipher/LOTR02110.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2C110
+			rarity: C
+			setNum: "2"
+			cardNum: 110
+			style: Standard
+		}
+		title: Pippin
+		subtitle: Mr. Took
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fellowship:</b> Play Gandalf or Aragorn; his twilight cost is -2.
+		lore: Pippin was evidently much enjoying the attention he was getting, and had become quire forgetful of their danger.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_111: {
+		cardInfo: {
+			imagePath: decipher/LOTR02111.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2U111
+			rarity: U
+			setNum: "2"
+			cardNum: 111
+			style: Standard
+		}
+		title: Practically Everyone<br>Was Invited
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Fellowship:</b> Exert Bilbo to play a Hobbit from your draw deck.
+		lore: Thank you, I shall certainly come.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_112: {
+		cardInfo: {
+			imagePath: decipher/LOTR02112.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R112
+			rarity: R
+			setNum: "2"
+			cardNum: 112
+			style: Standard
+		}
+		title: A Promise
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>While you can spot Frodo and Sam and neither is exhausted, each is strength +1.
+		lore: But I'm glad, Sam. I cannot tell you how glad. Come along! It is plain that we were meant to go together.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_113: {
+		cardInfo: {
+			imagePath: decipher/LOTR02113.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2R113
+			rarity: R
+			setNum: "2"
+			cardNum: 113
+			style: Standard
+		}
+		title: Red Book of Westmarch
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Possession
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tale</b>. Plays to your support area.<br>Each time you play a tale, you may spot Bilbo to draw a card.
+		lore: Don't adventures ever have an end? I suppose not. Someone else always has to carry on the story.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_114: {
+		cardInfo: {
+			imagePath: decipher/LOTR02114.jpg
+			javaClass: true
+			version: 0
+			collInfo: 2C114
+			rarity: C
+			setNum: "2"
+			cardNum: 114
+			style: Standard
+		}
+		title: Sam
+		subtitle: Proper Poet
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Maneuver:</b> Exert Sam twice to make him <b>defender +1</b> until the regroup phase.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
+		lore: First he was a conspirator, now he's a jester. He'll end up by becoming a wizard – or a warrior!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

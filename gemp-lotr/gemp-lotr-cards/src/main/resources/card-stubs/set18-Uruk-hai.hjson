@@ -1,0 +1,780 @@
+{
+
+	18_114: {
+		cardInfo: {
+			imagePath: decipher/LOTR18114.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R114
+			rarity: R
+			setNum: "18"
+			cardNum: 114
+			style: Standard
+		}
+		title: Cleaved
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Condition
+		vitality: -1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Regroup:</b> Exert an [uruk-hai] hunter twice to transfer this condition from your support area to an unbound companion.<br><b>Archery:</b> Spot an [uruk-hai] minion to transfer this condition from your support area to a Free Peoples archer.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_115: {
+		cardInfo: {
+			imagePath: decipher/LOTR18115.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R115
+			rarity: R
+			setNum: "18"
+			cardNum: 115
+			style: Standard
+		}
+		title: Final Triumph
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spot your Uruk-hai skirmishing a companion to use vitality to resolve that skirmish instead of strength.
+		lore: Now left alone, it stopped before its foe. With a snarl it pulled back the bow, ready to deliver the last blow.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_116: {
+		cardInfo: {
+			imagePath: decipher/LOTR18116.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C116
+			rarity: C
+			setNum: "18"
+			cardNum: 116
+			style: Standard
+		}
+		title: Fury of the Evil Army
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 0
+		type: Condition
+		strength: 1
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [uruk-hai] minion.<br>Each time bearer wins a skirmish, you may choose one: discard a follower from play; heal an [uruk-hai] minion; or control a site.
+		lore: What can men do against such reckless hate?
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_117: {
+		cardInfo: {
+			imagePath: decipher/LOTR18117.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C117
+			rarity: C
+			setNum: "18"
+			cardNum: 117
+			style: Standard
+		}
+		title: Ghastly Wound
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make an [uruk-hai] minion strength +2 and <b>damage +1</b>.
+		lore: That force of ten-thousand Uruk-hai was designed for the downfall of Man – and all those that allied with them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR18118.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R118
+			rarity: R
+			setNum: "18"
+			cardNum: 118
+			style: Standard
+		}
+		title: Lurtz
+		subtitle: Halfling Hunter
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 7
+		type: Minion
+		race: Uruk-hai
+		strength: 13
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>. <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 6 companions to make Lurtz <b>fierce</b> until the regroup phase.<br><b>Assignment:</b> Exert Lurtz twice to assign it to an unbound companion. The Free Peoples player may exert that companion or add a burden to prevent this.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_119: {
+		cardInfo: {
+			imagePath: decipher/LOTR18119.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R119
+			rarity: R
+			setNum: "18"
+			cardNum: 119
+			style: Standard
+		}
+		title: Lurtz's Bow
+		subtitle: Black-fletch Bow
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 1
+		type: Possession
+		strength: 1
+		vitality: 1
+		itemclass: Ranged weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Uruk-hai.<br>When you play this possession on Lurtz, you may draw a card.<br><b>Archery:</b> If bearer is Lurtz, discard 2 [uruk-hai] cards from hand to exert an unbound companion.
+		lore: The bow of the Uruk captain dealt a powerful blow.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR18120.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U120
+			rarity: U
+			setNum: "18"
+			cardNum: 120
+			style: Standard
+		}
+		title: New Forges Built
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 0
+		type: Event
+		keyword: Maneuver
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert an [uruk-hai] minion to reinforce an [uruk-hai] token.
+		lore: I looked on it and saw that, whereas it had once been green and fair, it was now filled with pits and forges.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_121: {
+		cardInfo: {
+			imagePath: decipher/LOTR18121.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U121
+			rarity: U
+			setNum: "18"
+			cardNum: 121
+			style: Standard
+		}
+		title: Pikes Upon Pikes
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each [uruk-hai] minion bearing a hand weapon cannot take wounds during the archery phase.<br><b>Skirmish:</b> Discard this condition from play to make an [uruk-hai] minion bearing a possession strength +2.
+		lore: Many a crude weapon was forged for his forces.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_122: {
+		cardInfo: {
+			imagePath: decipher/LOTR18122.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R122
+			rarity: R
+			setNum: "18"
+			cardNum: 122
+			style: Standard
+		}
+		title: Shagrat
+		subtitle: Tower Captain
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 13
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While you can spot 7 possessions, Shagrat is <b>fierce</b> and cannot take wounds (except during skirmish phases).
+		lore: I don't take orders from stinking Morgul rats!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_123: {
+		cardInfo: {
+			imagePath: decipher/LOTR18123.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U123
+			rarity: U
+			setNum: "18"
+			cardNum: 123
+			style: Standard
+		}
+		title: Tracking the Prize
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot 3 [uruk-hai] hunters, at the start of each skirmish involving an [uruk-hai] hunter, each companion skirmishing that minion must exert.
+		lore: Though bred for battle, the Uruks could track prey like the best of hunters.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_124: {
+		cardInfo: {
+			imagePath: decipher/LOTR18124.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C124
+			rarity: C
+			setNum: "18"
+			cardNum: 124
+			style: Standard
+		}
+		title: White Hand Attacker
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While at a battleground, this minion is strength +2.
+		lore: The Uruk-hai army stopped and growled in anticipation of the upcoming battle.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_125: {
+		cardInfo: {
+			imagePath: decipher/LOTR18125.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C125
+			rarity: C
+			setNum: "18"
+			cardNum: 125
+			style: Standard
+		}
+		title: White Hand Exorciser
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 6
+		vitality: 1
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>When you play this minion, you may heal an [uruk-hai] minion.
+		lore: March to Helm's Deep! Leave none alive!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_126: {
+		cardInfo: {
+			imagePath: decipher/LOTR18126.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R126
+			rarity: R
+			setNum: "18"
+			cardNum: 126
+			style: Standard
+		}
+		title: White Hand Marchers
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>This minion is strength +1 for each other [uruk-hai] minion you can spot.
+		lore: The enormous Uruk-hai armies marched with great speed.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_127: {
+		cardInfo: {
+			imagePath: decipher/LOTR18127.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18R127
+			rarity: R
+			setNum: "18"
+			cardNum: 127
+			style: Standard
+		}
+		title: White Hand Marshal
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 11
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>Each time this minion wins a skirmish, you may control a site.
+		lore: The Men and Elves looked out into the darkness, and through the rain they saw, lit by the thousands of torches, the huge advancing Uruk-hai army.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_128: {
+		cardInfo: {
+			imagePath: decipher/LOTR18128.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C128
+			rarity: C
+			setNum: "18"
+			cardNum: 128
+			style: Standard
+		}
+		title: White Hand Mystic
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Response:</b> If an [uruk-hai] minion is about to take a wound, exert this minion to prevent that wound.
+		lore: The Uruk-hai... resilient... imposing....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_129: {
+		cardInfo: {
+			imagePath: decipher/LOTR18129.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C129
+			rarity: C
+			setNum: "18"
+			cardNum: 129
+			style: Standard
+		}
+		title: White Hand Sieger
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 0
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 1
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>To play, spot an [uruk-hai] minion and you must control a site.
+		lore: The flood of Uruk-hai storming the Deeping Wall seemed to be unstoppable.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_130: {
+		cardInfo: {
+			imagePath: decipher/LOTR18130.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18U130
+			rarity: U
+			setNum: "18"
+			cardNum: 130
+			style: Standard
+		}
+		title: White Hand Traveler
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Spot 2 other [uruk-hai] minions and remove (2) to make this minion strength +1 and <b>damage +1</b>.
+		lore: The Uruk-hai troop snuck along through the forest following the three boats carrying the Fellowship.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_131: {
+		cardInfo: {
+			imagePath: decipher/LOTR18131.jpg
+			javaClass: true
+			version: 0
+			collInfo: 18C131
+			rarity: C
+			setNum: "18"
+			cardNum: 131
+			style: Standard
+		}
+		title: White Hand Uruk
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 10
+		vitality: 2
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>To play, spot an [uruk-hai] minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,1683 @@
+{
+
+	4_323: {
+		cardInfo: {
+			imagePath: decipher/LOTR04323.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U323
+			rarity: U
+			setNum: "4"
+			cardNum: 323
+			style: Standard
+		}
+		title: East Wall of Rohan
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When the fellowship moves from East Wall of Rohan, add (2).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_324: {
+		cardInfo: {
+			imagePath: decipher/LOTR04324.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U324
+			rarity: U
+			setNum: "4"
+			cardNum: 324
+			style: Standard
+		}
+		title: Eastemnet Downs
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time you play a companion here, you must discard 2 cards from hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_325: {
+		cardInfo: {
+			imagePath: decipher/LOTR04325.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U325
+			rarity: U
+			setNum: "4"
+			cardNum: 325
+			style: Standard
+		}
+		title: Eastemnet Gullies
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fellowship:</b> Exert 2 unbound companions to play Legolas from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_326: {
+		cardInfo: {
+			imagePath: decipher/LOTR04326.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U326
+			rarity: U
+			setNum: "4"
+			cardNum: 326
+			style: Standard
+		}
+		title: Horse-country
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. While you can spot a [rohan] mount at Horse-country, the move limit is +1 for this turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_327: {
+		cardInfo: {
+			imagePath: decipher/LOTR04327.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U327
+			rarity: U
+			setNum: "4"
+			cardNum: 327
+			style: Standard
+		}
+		title: Plains of Rohan
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. <b>Fellowship:</b> Exert 2 unbound companions to play Gimli from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_328: {
+		cardInfo: {
+			imagePath: decipher/LOTR04328.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U328
+			rarity: U
+			setNum: "4"
+			cardNum: 328
+			style: Standard
+		}
+		title: The Riddermark
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. <b>Fellowship:</b> Exert 2 unbound companions to play Aragorn from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_329: {
+		cardInfo: {
+			imagePath: decipher/LOTR04329.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U329
+			rarity: U
+			setNum: "4"
+			cardNum: 329
+			style: Standard
+		}
+		title: Western Emyn Muil
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When the Fellowship moves from Western Emyn Muil, each Ring-bound companion must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_330: {
+		cardInfo: {
+			imagePath: decipher/LOTR04330.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U330
+			rarity: U
+			setNum: "4"
+			cardNum: 330
+			style: Standard
+		}
+		title: Derndingle
+		unique: false
+		twilight: 2
+		type: Site
+		site: 2T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Forest</b>. While you can spot an unbound Hobbit at Derndingle, the move limit is +1 for this turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_331: {
+		cardInfo: {
+			imagePath: decipher/LOTR04331.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U331
+			rarity: U
+			setNum: "4"
+			cardNum: 331
+			style: Standard
+		}
+		title: Eastfold
+		unique: false
+		twilight: 2
+		type: Site
+		site: 2T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. <b>Shadow:</b> Spot 3 [isengard] trackers to prevent the fellowship from moving again this turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_332: {
+		cardInfo: {
+			imagePath: decipher/LOTR04332.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U332
+			rarity: U
+			setNum: "4"
+			cardNum: 332
+			style: Standard
+		}
+		title: Fangorn Forest
+		unique: false
+		twilight: 2
+		type: Site
+		site: 2T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Forest</b>. <b>Fellowship:</b> Play Treebeard from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_333: {
+		cardInfo: {
+			imagePath: decipher/LOTR04333.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U333
+			rarity: U
+			setNum: "4"
+			cardNum: 333
+			style: Standard
+		}
+		title: Plains of Rohan Camp
+		unique: false
+		twilight: 1
+		type: Site
+		site: 2T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. At the start of each fellowship phase, heal up to 3 wounds from companions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_334: {
+		cardInfo: {
+			imagePath: decipher/LOTR04334.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U334
+			rarity: U
+			setNum: "4"
+			cardNum: 334
+			style: Standard
+		}
+		title: Rohirrim Village
+		unique: false
+		twilight: 3
+		type: Site
+		site: 2T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each [dunland] Man may not take wounds during the archery phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_335: {
+		cardInfo: {
+			imagePath: decipher/LOTR04335.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U335
+			rarity: U
+			setNum: "4"
+			cardNum: 335
+			style: Standard
+		}
+		title: Uruk Camp
+		unique: false
+		twilight: 1
+		type: Site
+		site: 2T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. <b>Plains</b>. Each time an Uruk-hai is played, that minion must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_336: {
+		cardInfo: {
+			imagePath: decipher/LOTR04336.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U336
+			rarity: U
+			setNum: "4"
+			cardNum: 336
+			style: Standard
+		}
+		title: Wold of Rohan
+		unique: false
+		twilight: 3
+		type: Site
+		site: 2T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. Each time the Free Peoples player assigns a companion or ally to a skirmish, add (1).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_337: {
+		cardInfo: {
+			imagePath: decipher/LOTR04337.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U337
+			rarity: U
+			setNum: "4"
+			cardNum: 337
+			style: Standard
+		}
+		title: Barrows of Edoras
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Place your hand beneath your draw deck and draw 4 cards.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_338: {
+		cardInfo: {
+			imagePath: decipher/LOTR04338.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U338
+			rarity: U
+			setNum: "4"
+			cardNum: 338
+			style: Standard
+		}
+		title: Golden Hall
+		unique: false
+		twilight: 1
+		type: Site
+		site: 3T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Sanctuary</b>. When the fellowship moves to Golden Hall, all Free Peoples weapons must be discarded.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_339: {
+		cardInfo: {
+			imagePath: decipher/LOTR04339.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U339
+			rarity: U
+			setNum: "4"
+			cardNum: 339
+			style: Standard
+		}
+		title: Stables
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Exert a [rohan] Man to play a [rohan] mount from your draw deck (limit once per turn).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_340: {
+		cardInfo: {
+			imagePath: decipher/LOTR04340.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U340
+			rarity: U
+			setNum: "4"
+			cardNum: 340
+			style: Standard
+		}
+		title: Streets of Edoras
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Sanctuary</b>. Each [rohan] ally may not participate in archery fire or skirmishes at Streets of Edoras.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_341: {
+		cardInfo: {
+			imagePath: decipher/LOTR04341.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U341
+			rarity: U
+			setNum: "4"
+			cardNum: 341
+			style: Standard
+		}
+		title: Throne Room
+		unique: false
+		twilight: 1
+		type: Site
+		site: 3T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Play Théoden from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_342: {
+		cardInfo: {
+			imagePath: decipher/LOTR04342.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U342
+			rarity: U
+			setNum: "4"
+			cardNum: 342
+			style: Standard
+		}
+		title: Westemnet Plains
+		unique: false
+		twilight: 1
+		type: Site
+		site: 3T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. <b>Sanctuary</b>. Each [dunland] Man may not take wounds during the archery phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_343: {
+		cardInfo: {
+			imagePath: decipher/LOTR04343.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U343
+			rarity: U
+			setNum: "4"
+			cardNum: 343
+			style: Standard
+		}
+		title: Ered Nimrais
+		unique: false
+		twilight: 2
+		type: Site
+		site: 4T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Mountain</b>. The twilight cost of each companion and ally played at Ered Nimrais is +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_344: {
+		cardInfo: {
+			imagePath: decipher/LOTR04344.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U344
+			rarity: U
+			setNum: "4"
+			cardNum: 344
+			style: Standard
+		}
+		title: Westemnet Hills
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Plains</b>. When the fellowship moves to Westemnet Hills, heal each mounted companion and mounted ally.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_345: {
+		cardInfo: {
+			imagePath: decipher/LOTR04345.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U345
+			rarity: U
+			setNum: "4"
+			cardNum: 345
+			style: Standard
+		}
+		title: White Mountains
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Mountain</b>. When the fellowship moves to White Mountains, Théoden or 2 other companions must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_346: {
+		cardInfo: {
+			imagePath: decipher/LOTR04346.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U346
+			rarity: U
+			setNum: "4"
+			cardNum: 346
+			style: Standard
+		}
+		title: White Rocks
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. The Shadow number of this site is +1 for each mounted companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_347: {
+		cardInfo: {
+			imagePath: decipher/LOTR04347.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U347
+			rarity: U
+			setNum: "4"
+			cardNum: 347
+			style: Standard
+		}
+		title: Deep of Helm
+		unique: false
+		twilight: 6
+		type: Site
+		site: 5T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. <b>Plains</b>. The twilight cost of the first Uruk-hai played at Deep of Helm each turn is -3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_348: {
+		cardInfo: {
+			imagePath: decipher/LOTR04348.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U348
+			rarity: U
+			setNum: "4"
+			cardNum: 348
+			style: Standard
+		}
+		title: Deeping Wall
+		unique: false
+		twilight: 7
+		type: Site
+		site: 5T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. <b>Shadow:</b> Play Saruman from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_349: {
+		cardInfo: {
+			imagePath: decipher/LOTR04349.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U349
+			rarity: U
+			setNum: "4"
+			cardNum: 349
+			style: Standard
+		}
+		title: Helm's Gate
+		unique: false
+		twilight: 6
+		type: Site
+		site: 5T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. Each companion and minion bearing a hand weapon is strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_350: {
+		cardInfo: {
+			imagePath: decipher/LOTR04350.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U350
+			rarity: U
+			setNum: "4"
+			cardNum: 350
+			style: Standard
+		}
+		title: Hornburg Courtyard
+		unique: false
+		twilight: 8
+		type: Site
+		site: 5T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. While you can spot Aragorn, the Shadow number of Hornburg Courtyard is -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_351: {
+		cardInfo: {
+			imagePath: decipher/LOTR04351.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U351
+			rarity: U
+			setNum: "4"
+			cardNum: 351
+			style: Standard
+		}
+		title: Hornburg Parapet
+		unique: false
+		twilight: 8
+		type: Site
+		site: 5T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. The fellowship archery total is +1. The minion archery total is -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_352: {
+		cardInfo: {
+			imagePath: decipher/LOTR04352.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U352
+			rarity: U
+			setNum: "4"
+			cardNum: 352
+			style: Standard
+		}
+		title: Caves of Aglarond
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Underground</b>. <b>Sanctuary</b>. <b>Maneuver:</b> Remove (2) and spot your Uruk-hai to make it <b>fierce</b> until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_353: {
+		cardInfo: {
+			imagePath: decipher/LOTR04353.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U353
+			rarity: U
+			setNum: "4"
+			cardNum: 353
+			style: Standard
+		}
+		title: Great Hall
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. <b>Sanctuary</b>. Each [rohan] ally may participate in archery fire and skirmishes at Great Hall.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_354: {
+		cardInfo: {
+			imagePath: decipher/LOTR04354.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U354
+			rarity: U
+			setNum: "4"
+			cardNum: 354
+			style: Standard
+		}
+		title: Hornburg Armory
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Play a possession to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_355: {
+		cardInfo: {
+			imagePath: decipher/LOTR04355.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U355
+			rarity: U
+			setNum: "4"
+			cardNum: 355
+			style: Standard
+		}
+		title: Cavern Entrance
+		unique: false
+		twilight: 7
+		type: Site
+		site: 7T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Underground</b>. Skirmish events may not be played and skirmish special abilities may not be used.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_356: {
+		cardInfo: {
+			imagePath: decipher/LOTR04356.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U356
+			rarity: U
+			setNum: "4"
+			cardNum: 356
+			style: Standard
+		}
+		title: Hornburg Causeway
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. The minion archery total is +2 for each unbound companion over 3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_357: {
+		cardInfo: {
+			imagePath: decipher/LOTR04357.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U357
+			rarity: U
+			setNum: "4"
+			cardNum: 357
+			style: Standard
+		}
+		title: King's Room
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When the fellowship moves to King's Room without a [rohan] companion, each unbound companion must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_358: {
+		cardInfo: {
+			imagePath: decipher/LOTR04358.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U358
+			rarity: U
+			setNum: "4"
+			cardNum: 358
+			style: Standard
+		}
+		title: Ring of Isengard
+		unique: false
+		twilight: 7
+		type: Site
+		site: 8T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Shadow:</b> Play a [dunland] minion to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_359: {
+		cardInfo: {
+			imagePath: decipher/LOTR04359.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U359
+			rarity: U
+			setNum: "4"
+			cardNum: 359
+			style: Standard
+		}
+		title: Wizard's Vale
+		unique: false
+		twilight: 6
+		type: Site
+		site: 8T
+		block: Towers
+		direction: Right
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: At the start of the first Shadow phase, if the twilight pool has fewer than 9 twilight tokens, add (4) (limit once per turn).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_360: {
+		cardInfo: {
+			imagePath: decipher/LOTR04360.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U360
+			rarity: U
+			setNum: "4"
+			cardNum: 360
+			style: Standard
+		}
+		title: Fortress of Orthanc
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. The Shadow number of Fortress of Orthanc is +2 for each companion over 4.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_361: {
+		cardInfo: {
+			imagePath: decipher/LOTR04361.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U361
+			rarity: U
+			setNum: "4"
+			cardNum: 361
+			style: Standard
+		}
+		title: Orthanc Balcony
+		unique: false
+		twilight: 8
+		type: Site
+		site: 9T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Battleground</b>. <b>Shadow:</b> Play Saruman from your discard pile; his twilight cost is -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_362: {
+		cardInfo: {
+			imagePath: decipher/LOTR04362.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U362
+			rarity: U
+			setNum: "4"
+			cardNum: 362
+			style: Standard
+		}
+		title: Orthanc Library
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When the fellowship moves to Orthanc Library, each Shadow player may draw a card for each companion over 4.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_363: {
+		cardInfo: {
+			imagePath: decipher/LOTR04363.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4U363
+			rarity: U
+			setNum: "4"
+			cardNum: 363
+			style: Standard
+		}
+		title: Palantír Chamber
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9T
+		block: Towers
+		direction: Left
+		#keyword: mountain;
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Shadow:</b> Remove 2 burdens to play a minion from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

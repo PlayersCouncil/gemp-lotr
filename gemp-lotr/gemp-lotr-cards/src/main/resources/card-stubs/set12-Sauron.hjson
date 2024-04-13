@@ -1,0 +1,47 @@
+{
+
+	12_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR12118.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R118
+			rarity: R
+			setNum: "12"
+			cardNum: 118
+			style: Standard
+		}
+		title: The Mouth of Sauron
+		subtitle: Lieutenant of Barad-dûr
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 3
+		site: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Assignment:</b> Assign The Mouth of Sauron to the companion who has the highest strength. (If two or more are tied for highest, choose one.)
+		lore: Is there anyone in this rout with authority to treat with me?' he asked. 'Or indeed with wit to understand me?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

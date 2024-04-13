@@ -1,0 +1,306 @@
+{
+
+	13_178: {
+		cardInfo: {
+			imagePath: decipher/LOTR13178.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R178
+			rarity: R
+			setNum: "13"
+			cardNum: 178
+			style: Standard
+		}
+		title: Dark Fell About Him
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 3
+		type: Event
+		keyword: Regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: To play, exert your Nazgûl twice and spot an exhausted companion.<br>Heal that companion to add a burden. If the fellowship is not in region 1, you may repeat this for each other wound on that companion.
+		lore: Men cast from the saddle lay grovelling on the ground.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_179: {
+		cardInfo: {
+			imagePath: decipher/LOTR13179.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U179
+			rarity: U
+			setNum: "13"
+			cardNum: 179
+			style: Standard
+		}
+		title: From Hideous Eyrie
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: You may remove from the game 4 [wraith] cards in your discard pile instead of paying the twilight cost for this card.<br>Make your Nazgûl in a fierce skirmish strength +2.
+		lore: Down, down it came, and then, folding its fingered webs, it gave a croaking cry....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_180: {
+		cardInfo: {
+			imagePath: decipher/LOTR13180.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R180
+			rarity: R
+			setNum: "13"
+			cardNum: 180
+			style: Standard
+		}
+		title: Shadow in the East
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Toil 1</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -1.)</helper><br>To play, spot a [wraith] card in your support area.<br>Spot a companion to draw a card for each wound on that companion (and draw an additional card if you can spot a Nazgûl).
+		lore: ...it is called Minas Morgul, the Tower of Sorcery.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_181: {
+		cardInfo: {
+			imagePath: decipher/LOTR13181.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U181
+			rarity: U
+			setNum: "13"
+			cardNum: 181
+			style: Standard
+		}
+		title: They Came From Mordor
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this, you may add a [wraith] token here for each [wraith] card in your support area.<br><b>Shadow:</b> Discard this from play or remove 2 tokens from here to play a [wraith] mount from your draw deck on your [wraith] minion.
+		lore: That is the worst news that has come to Bree....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_182: {
+		cardInfo: {
+			imagePath: decipher/LOTR13182.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13R182
+			rarity: R
+			setNum: "13"
+			cardNum: 182
+			style: Standard
+		}
+		title: Úlairë Enquëa
+		subtitle: Sixth of the Nine Riders
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 11
+		vitality: 4
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>When you play Úlairë Enquëa, if you can spot 2 other Nazgûl, you may exert 2 unbound companions (or exert each companion if you can spot 6 companions).
+		lore: It is many a year since the Nine walked abroad.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_183: {
+		cardInfo: {
+			imagePath: decipher/LOTR13183.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13U183
+			rarity: U
+			setNum: "13"
+			cardNum: 183
+			style: Standard
+		}
+		title: Úlairë Lemenya
+		subtitle: Servant of the Shadow
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br><b>Shadow:</b> Exert Úlairë Lemenya and discard a Nazgûl from your hand to discard a condition from play.
+		lore: As the Shadow grows once more, they too may walk again.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_184: {
+		cardInfo: {
+			imagePath: decipher/LOTR13184.jpg
+			javaClass: true
+			version: 0
+			collInfo: 13C184
+			rarity: C
+			setNum: "13"
+			cardNum: 184
+			style: Standard
+		}
+		title: Úlairë Nertëa
+		subtitle: Servant of the Shadow
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>While you can spot a companion who has resistance 3 or less, Úlairë Nertëa is twilight cost -2.
+		lore: From inside the hood came a noise as of someone sniffling to catch an elusive scent....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,609 @@
+{
+
+	11_53: {
+		cardInfo: {
+			imagePath: decipher/LOTR11053.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S53
+			rarity: S
+			setNum: "11"
+			cardNum: 53
+			style: Standard
+		}
+		title: Aragorn
+		subtitle: Guide and Protector
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		resistance: 8
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ranger</b>.<br>Each time a Free Peoples skirmish event is played, you may exert Aragorn to wound a minion he is skirmishing.
+		lore: ...I know all the lands between the Shire and the Misty Mountains, for I have wandered over them for many years.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_54: {
+		cardInfo: {
+			imagePath: decipher/LOTR11054.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R54
+			rarity: R
+			setNum: "11"
+			cardNum: 54
+			style: Standard
+		}
+		title: Aragorn
+		subtitle: Strider
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		resistance: 8
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ranger</b>.<br>Each time the fellowship moves, add (1).
+		lore: ...in spite of the heat of the room he wore a hood that overshadowed his face; but the gleam of his eyes could be seen as he watched the hobbits.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_55: {
+		cardInfo: {
+			imagePath: decipher/LOTR11055.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U55
+			rarity: U
+			setNum: "11"
+			cardNum: 55
+			style: Standard
+		}
+		title: Armor of the Citadel
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Possession
+		itemclass: Armor
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [gondor] Man.<br>Each minion skirmishing bearer loses all <b>damage</b> bonuses.<br>While bearer is at a battleground site and unwounded, he or she is <b>defender +1</b>.
+		lore: Upon the black surcoats were embroidered in white a tree blossoming like snow....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_56: {
+		cardInfo: {
+			imagePath: decipher/LOTR11056.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S56
+			rarity: S
+			setNum: "11"
+			cardNum: 56
+			style: Standard
+		}
+		title: Battle Cry
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a ranger strength +2 (or +3 if he or she is skirmishing a minion who has a damage bonus).
+		lore: ...men were yelling and screaming, and one clear loud voice was calling 'Gondor! Gondor!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_57: {
+		cardInfo: {
+			imagePath: decipher/LOTR11057.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R57
+			rarity: R
+			setNum: "11"
+			cardNum: 57
+			style: Standard
+		}
+		title: Boromir
+		subtitle: Hero of Osgiliath
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 5
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Knight</b>.<br>Each time Boromir wins a skirmish, you may heal a [gondor] companion.
+		lore: Let the armies of Mordor know this: never again will the land of my people fall into enemy hands!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_58: {
+		cardInfo: {
+			imagePath: decipher/LOTR11058.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U58
+			rarity: U
+			setNum: "11"
+			cardNum: 58
+			style: Standard
+		}
+		title: Bow of Minas Tirith
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Ranged weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [gondor] Man.<br>At the start of the archery phase, if bearer is at a battleground site, you may exert him or her to make the fellowship archery total +1.
+		lore: From the ramparts of the Gondorian fortress, death rained down upon the servants of Sauron.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_59: {
+		cardInfo: {
+			imagePath: decipher/LOTR11059.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U59
+			rarity: U
+			setNum: "11"
+			cardNum: 59
+			style: Standard
+		}
+		title: Gondorian Blade
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [gondor] Man.<br>While bearer is a ranger or at a river site, he or she is <b>damage +1</b>.
+		lore: While many knights of Gondor favor hand-and-a-half swords, lighter weapons are often preferred by the rangers who patrol Ithilien.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_60: {
+		cardInfo: {
+			imagePath: decipher/LOTR11060.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R60
+			rarity: R
+			setNum: "11"
+			cardNum: 60
+			style: Standard
+		}
+		title: The Highest Quality
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Exert any number of [gondor] companions who have total resistance 12 or more to make a minion skirmishing a [gondor] companion strength -3 for each companion exerted this way.
+		lore: Captain Faramir, you have shown your quality, sir. The very highest.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_61: {
+		cardInfo: {
+			imagePath: decipher/LOTR11061.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11U61
+			rarity: U
+			setNum: "11"
+			cardNum: 61
+			style: Standard
+		}
+		title: Houses of Healing
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this condition, spot a [gondor] Man to add 3 [gondor] tokens here.<br><b>Fellowship:</b> Add (2) and either discard this condition or remove a [gondor] token from here to heal a [gondor] Man.
+		lore: ...the king was indeed come among them, and after war he brought healing....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_62: {
+		cardInfo: {
+			imagePath: decipher/LOTR11062.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C62
+			rarity: C
+			setNum: "11"
+			cardNum: 62
+			style: Standard
+		}
+		title: Madril
+		subtitle: Ranger of Ithilien
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 7
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ranger</b>.<br><b>Fellowship:</b> If Madril is at a forest site, exert him to play the fellowship's next site.
+		lore: ...we must look to our own borders. Faramir, Orcs are on the move.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_63: {
+		cardInfo: {
+			imagePath: decipher/LOTR11063.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11C63
+			rarity: C
+			setNum: "11"
+			cardNum: 63
+			style: Standard
+		}
+		title: Much-needed Rest
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Event
+		keyword: Fellowship
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Heal each [gondor] companion who has resistance 5 or more.
+		lore: A guest-house shall be made ready: there you shall sleep, when you have eaten.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_64: {
+		cardInfo: {
+			imagePath: decipher/LOTR11064.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S64
+			rarity: S
+			setNum: "11"
+			cardNum: 64
+			style: Standard
+		}
+		title: Pledge of Loyalty
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		keyword: Skirmish
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Make a [gondor] companion strength +2 (or +3 if he or she has resistance 4 or more).
+		lore: I ask leave once again to be your companion, Frodo.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_65: {
+		cardInfo: {
+			imagePath: decipher/LOTR11065.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11S65
+			rarity: S
+			setNum: "11"
+			cardNum: 65
+			style: Standard
+		}
+		title: Ranger of Westernesse
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ranger</b>.<br>When you play this companion, you may play the fellowship's next site.
+		lore: The road may pass, but they shall not!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_66: {
+		cardInfo: {
+			imagePath: decipher/LOTR11066.jpg
+			javaClass: true
+			version: 0
+			collInfo: 11R66
+			rarity: R
+			setNum: "11"
+			cardNum: 66
+			style: Standard
+		}
+		title: Well-traveled
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		keyword: Fellowship or regroup
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: To play, exert a  ranger.<br>If the fellowship is in region 1, play the fellowship's next 2 sites.<br>Otherwise, play the fellowship's next site.
+		lore: With a great many years' experience in the wilds of Middle-earth, Aragorn's skills as guide and tracker were unmatched.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

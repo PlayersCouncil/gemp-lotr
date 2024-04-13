@@ -1,0 +1,1039 @@
+{
+
+	12_161: {
+		cardInfo: {
+			imagePath: decipher/LOTR12161.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U161
+			rarity: U
+			setNum: "12"
+			cardNum: 161
+			style: Standard
+		}
+		title: Black Rider
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgûl
+		strength: 8
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>This minion is strength +1 for each companion you can spot.
+		lore: The Nine are abroad again. They have crossed the River secretly and are moving westward. They have taken the guise of riders in black.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_162: {
+		cardInfo: {
+			imagePath: decipher/LOTR12162.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R162
+			rarity: R
+			setNum: "12"
+			cardNum: 162
+			style: Standard
+		}
+		title: Dark Approach
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Play a Nazgûl. His twilight cost is -1 for each forest site you can spot (limit -4).
+		lore: Frodo hesitated for a second: curiosity or some other feeling was struggling with his desire to hide.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_163: {
+		cardInfo: {
+			imagePath: decipher/LOTR12163.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R163
+			rarity: R
+			setNum: "12"
+			cardNum: 163
+			style: Standard
+		}
+		title: Dark Temptation
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time you play a Nazgûl, you may heal the Ring-bearer twice to add a burden.
+		lore: He felt that he had only to slip it on, and then he would be safe.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_164: {
+		cardInfo: {
+			imagePath: decipher/LOTR12164.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C164
+			rarity: C
+			setNum: "12"
+			cardNum: 164
+			style: Standard
+		}
+		title: Echo of Hooves
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot your Nazgûl at a battleground or forest site to play a mount on him from your draw deck.
+		lore: ...the black horses leaped down the hill in pursuit, and from the Riders came a terrible cry....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_165: {
+		cardInfo: {
+			imagePath: decipher/LOTR12165.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U165
+			rarity: U
+			setNum: "12"
+			cardNum: 165
+			style: Standard
+		}
+		title: In the Ringwraith's Wake
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		keyword: Response
+		/*requires: {
+			
+		}
+		effects: {
+			type: responseEvent
+			trigger: {
+				
+			}
+			cost: {
+				
+			}
+			effect: [
+				{
+					
+				}
+			]
+		]*/
+		gametext: If a Nazgûl wins a skirmish, the Free Peoples player chooses to either exert the Ring-bearer or add a burden.
+		lore: He is fading.... We must get him to my father.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_166: {
+		cardInfo: {
+			imagePath: decipher/LOTR12166.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U166
+			rarity: U
+			setNum: "12"
+			cardNum: 166
+			style: Standard
+		}
+		title: Lingering Shadow
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Transfer this condition from your support area to a character skirmishing a Nazgûl.<br>Each time a wound is removed from bearer, add a burden.
+		lore: I am wounded... wounded; it will never really heal.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_167: {
+		cardInfo: {
+			imagePath: decipher/LOTR12167.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U167
+			rarity: U
+			setNum: "12"
+			cardNum: 167
+			style: Standard
+		}
+		title: Minas Morgul Answers
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Event
+		keyword: Shadow
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a Nazgûl to discard a Free Peoples condition from play.
+		lore: There was a flare of livid lightnings: forks of blue flame springing up from the tower and from the encircling hills into the sullen clouds.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_168: {
+		cardInfo: {
+			imagePath: decipher/LOTR12168.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C168
+			rarity: C
+			setNum: "12"
+			cardNum: 168
+			style: Standard
+		}
+		title: Nazgûl Blade
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Nazgûl.<br>While bearer is at a battleground or forest site, he is strength +1.
+		lore: Fear and terror may be the greatest weapons the Nazgûl wield, but their steel is just as perilous.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_169: {
+		cardInfo: {
+			imagePath: decipher/LOTR12169.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R169
+			rarity: R
+			setNum: "12"
+			cardNum: 169
+			style: Standard
+		}
+		title: Sauron's Gaze
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Transfer this condition from your support area to a character skirmishing a Nazgûl.<br>The Free Peoples player cannot use bearer's special abilities.
+		lore: Then suddenly he seemed to see me, and he laughed at me. It was cruel. It was like being stabbed with knives.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_170: {
+		cardInfo: {
+			imagePath: decipher/LOTR12170.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U170
+			rarity: U
+			setNum: "12"
+			cardNum: 170
+			style: Standard
+		}
+		title: Sense of Obligation
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a [wraith] minion. Bearer must be an unbound companion. Limit 1 per bearer.<br>At the end of each assignment phase, if bearer is not assigned to a skirmish and a companion who does not bear a [wraith] condition is, add a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_171: {
+		cardInfo: {
+			imagePath: decipher/LOTR12171.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R171
+			rarity: R
+			setNum: "12"
+			cardNum: 171
+			style: Standard
+		}
+		title: Shadowy Mount
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Possession
+		vitality: 1
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Nazgûl.<br>While bearer is at a battleground or forest site, he is <b>fierce</b>.<br><b>Assignment:</b> Make the Free Peoples player assign bearer to an unbound companion bearing a [wraith] condition.
+		lore: ...why do these black horses endure such riders?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_172: {
+		cardInfo: {
+			imagePath: decipher/LOTR12172.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C172
+			rarity: C
+			setNum: "12"
+			cardNum: 172
+			style: Standard
+		}
+		title: Steed of Mordor
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Possession
+		strength: 1
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Nazgûl.<br>Bearer gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>Each time bearer wins a skirmish, you may draw 2 cards.
+		lore: ... the Black Riders rode like a gale....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_173: {
+		cardInfo: {
+			imagePath: decipher/LOTR12173.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R173
+			rarity: R
+			setNum: "12"
+			cardNum: 173
+			style: Standard
+		}
+		title: Úlairë Attëa
+		subtitle: Black Predator
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 12
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Remove (2) and discard a [wraith] card from hand to make Úlairë Attëa strength +3.
+		lore: Frodo thought that he heard a faint hiss as of venomous breath and felt a thin piercing chill.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_174: {
+		cardInfo: {
+			imagePath: decipher/LOTR12174.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R174
+			rarity: R
+			setNum: "12"
+			cardNum: 174
+			style: Standard
+		}
+		title: Úlairë Cantëa
+		subtitle: Black Assassin
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgûl
+		strength: 10
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br><b>Assignment:</b> Assign Úlairë Cantëa to a companion who has resistance 0.<br><b>Skirmish:</b> Spot 6 companions and another [wraith] card to kill a companion Úlairë Cantëa is skirmishing.
+		lore: Flee them! Speak no words to them! They are deadly.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_175: {
+		cardInfo: {
+			imagePath: decipher/LOTR12175.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R175
+			rarity: R
+			setNum: "12"
+			cardNum: 175
+			style: Standard
+		}
+		title: Úlairë Enquëa
+		subtitle: Black Threat
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 11
+		vitality: 4
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>. <b>Toil 1</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -1.)</helper><br><b>Response:</b> If you are playing a [wraith] event that has toil X, exert Úlairë Enquëa to reduce that event's twilight cost by X.
+		lore: ...the Shire is no longer any protection to you.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_176: {
+		cardInfo: {
+			imagePath: decipher/LOTR12176.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U176
+			rarity: U
+			setNum: "12"
+			cardNum: 176
+			style: Standard
+		}
+		title: Úlairë Lemenya
+		subtitle: Black Enemy
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play Úlairë Lemenya, you may play a [wraith] mount from your discard pile.
+		lore: Out of the gate in the trees that they had just left rode a Black Rider.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_177: {
+		cardInfo: {
+			imagePath: decipher/LOTR12177.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C177
+			rarity: C
+			setNum: "12"
+			cardNum: 177
+			style: Standard
+		}
+		title: Úlairë Nelya
+		subtitle: Black Hunter
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgûl
+		strength: 10
+		vitality: 3
+		site: 2
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Each time Úlairë Nelya wins a skirmish, you may draw a card.
+		lore: ...peril is now both before you and behind you, and upon either side.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_178: {
+		cardInfo: {
+			imagePath: decipher/LOTR12178.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C178
+			rarity: C
+			setNum: "12"
+			cardNum: 178
+			style: Standard
+		}
+		title: Úlairë Nertëa
+		subtitle: Black Horseman
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 2
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: The twilight cost of each mount is -1.<br>While Úlairë Nertëa is mounted, each Nazgûl is strength +1 and has <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
+		lore: Watch every shadow! ...Black horsemen have passed through Bree.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_179: {
+		cardInfo: {
+			imagePath: decipher/LOTR12179.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R179
+			rarity: R
+			setNum: "12"
+			cardNum: 179
+			style: Standard
+		}
+		title: Úlairë Otsëa
+		subtitle: Black Specter
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Shadow:</b> Exert Úlairë Otsëa and discard a [wraith] condition from hand to discard a Free Peoples condition from play.
+		lore: We can feel their presence – it troubled our hearts, as soon as we came here, and before we saw them; they feel ours more keenly.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_180: {
+		cardInfo: {
+			imagePath: decipher/LOTR12180.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U180
+			rarity: U
+			setNum: "12"
+			cardNum: 180
+			style: Standard
+		}
+		title: Úlairë Toldëa
+		subtitle: Black Shadow
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 12
+		vitality: 3
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>When you play Úlairë Toldëa, you may exert him to take a [wraith] event from your discard pile into hand.
+		lore: So black were they that they seemed like black holes in the deep shade behind them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_181: {
+		cardInfo: {
+			imagePath: decipher/LOTR12181.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C181
+			rarity: C
+			setNum: "12"
+			cardNum: 181
+			style: Standard
+		}
+		title: Unending Life
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot 6 companions, each Nazgûl is strength +3.<br><b>Skirmish:</b> Discard this condition to heal a Nazgûl.
+		lore: The power of their master is in them, and they stand or fall by him.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_182: {
+		cardInfo: {
+			imagePath: decipher/LOTR12182.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12C182
+			rarity: C
+			setNum: "12"
+			cardNum: 182
+			style: Standard
+		}
+		title: Unimpeded
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> Discard this condition to make a Nazgûl strength +1 for each of the following that is true: he is at a battleground or forest site; he is skirmishing a companion who has resistance 4 or less; he is bearing a possession; he is in a fierce skirmish.
+		lore: Who goes there?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_183: {
+		cardInfo: {
+			imagePath: decipher/LOTR12183.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12R183
+			rarity: R
+			setNum: "12"
+			cardNum: 183
+			style: Standard
+		}
+		title: The Witch-king
+		subtitle: Black Lord
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 8
+		type: Minion
+		race: Nazgûl
+		strength: 14
+		vitality: 4
+		site: 3
+		#keyword: damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>The Witch-king is twilight cost -1 for each wound on the Ring-bearer.<br>Each time a companion is played, you may reveal this card from hand to exert the Ring-bearer.
+		lore: He sprang forward and bore down on Frodo.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_184: {
+		cardInfo: {
+			imagePath: decipher/LOTR12184.jpg
+			javaClass: true
+			version: 0
+			collInfo: 12U184
+			rarity: U
+			setNum: "12"
+			cardNum: 184
+			style: Standard
+		}
+		title: The Witch-king's Beast
+		subtitle: Fell Creature
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Mount
+		#target: name(Gimli)
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Nazgûl.<br>If bearer is The Witch-king, after all skirmishes and fierce skirmishes have been resolved, you may exert him twice to make him participate in one additional assignment and skirmish phase.
+		lore: The great shadow descended like a falling cloud.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,214 @@
+{
+
+	3_76: {
+		cardInfo: {
+			imagePath: decipher/LOTR03076.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C76
+			rarity: C
+			setNum: "3"
+			cardNum: 76
+			style: Standard
+		}
+		title: Dangerous Gamble
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Shadow:</b> Spot a [moria] minion to reveal a card at random from the Free Peoples player's hand. Add (X), where X is the twilight cost of the card revealed.
+		lore: Almost they began to hope that they would escape.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_77: {
+		cardInfo: {
+			imagePath: decipher/LOTR03077.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3R77
+			rarity: R
+			setNum: "3"
+			cardNum: 77
+			style: Standard
+		}
+		title: Depths of Moria
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		#keyword: support area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a [moria] Orc. Plays to your support area.<br>Each time the fellowship moves during the regroup phase, add (2).
+		lore: ...a great fissure had opened. Out of it a fierce red light came, and now and again flames licked at the brink.... Wisps of dark smoke wavered in the hot air.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_78: {
+		cardInfo: {
+			imagePath: decipher/LOTR03078.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3C78
+			rarity: C
+			setNum: "3"
+			cardNum: 78
+			style: Standard
+		}
+		title: Hide and Seek
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Search</b>.<br><b>Skirmish:</b> Spot 2 [shire] companions to make a [moria] minion <b>damage +1</b>.
+		lore: Which way shall we go?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_79: {
+		cardInfo: {
+			imagePath: decipher/LOTR03079.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3U79
+			rarity: U
+			setNum: "3"
+			cardNum: 79
+			style: Standard
+		}
+		title: Malice
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Archery:</b> Spot a [moria] Orc and a [sauron] Orc to wound an archer.
+		lore: Fueled by Sauron's hatred of living things, Orcs searched for the Ring of Power.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_80: {
+		cardInfo: {
+			imagePath: decipher/LOTR03080.jpg
+			javaClass: true
+			version: 0
+			collInfo: 3R80
+			rarity: R
+			setNum: "3"
+			cardNum: 80
+			style: Standard
+		}
+		title: Such a Little Thing
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		keyword: 
+		/*requires: {
+			
+		}
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: <b>Maneuver:</b> Spot a [moria] minion to wound Boromir 3 times. The Free Peoples player may discard 2 Free Peoples possessions to prevent this.
+		lore: Boromir... give the Ring to Frodo.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}
