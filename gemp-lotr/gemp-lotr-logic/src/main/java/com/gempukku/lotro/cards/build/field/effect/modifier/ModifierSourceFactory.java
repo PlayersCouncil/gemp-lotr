@@ -50,6 +50,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("fpculturespot", new FPCultureSpot());
         modifierProducers.put("fpusesresinsteadofstr", new FPUsesResInsteadOfStr());
         modifierProducers.put("fpusesvitinsteadofstr", new FPUsesVitInsteadOfStr());
+        modifierProducers.put("fpcantassigntoskirmish", new FPCantAssignToSkirmish());
         modifierProducers.put("hastomoveifable", new HasToMoveIfAble());
         modifierProducers.put("itemclassspot", new ItemClassSpot());
         modifierProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
@@ -68,8 +69,6 @@ public class ModifierSourceFactory {
         modifierProducers.put("shadowhasinitiative", new ShadowHasInitiative());
         modifierProducers.put("shadowusesvitinsteadofstr", new ShadowUsesVitInsteadOfStr());
         modifierProducers.put("skipphase", new SkipPhase());
-
-
     }
 
     public ModifierSource getModifier(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {

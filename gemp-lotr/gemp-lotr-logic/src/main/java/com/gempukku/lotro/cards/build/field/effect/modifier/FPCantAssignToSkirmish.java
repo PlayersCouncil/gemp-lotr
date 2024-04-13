@@ -2,11 +2,11 @@ package com.gempukku.lotro.cards.build.field.effect.modifier;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.logic.modifiers.CantBeAssignedToSkirmishModifier;
+import com.gempukku.lotro.logic.modifiers.FreePeoplePlayerMayNotAssignCharacterModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import org.json.simple.JSONObject;
 
-public class CantBeAssignedToSkirmish implements ModifierSourceProducer {
+public class FPCantAssignToSkirmish implements ModifierSourceProducer {
 
     @Override
     public ModifierSource getModifierSource(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
@@ -21,7 +21,7 @@ public class CantBeAssignedToSkirmish implements ModifierSourceProducer {
         return new ModifierSource() {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
-                return new CantBeAssignedToSkirmishModifier(actionContext.getSource(),
+                return new FreePeoplePlayerMayNotAssignCharacterModifier(actionContext.getSource(),
                         new RequirementCondition(requirements, actionContext),
                         filterableSource.getFilterable(actionContext));
             }

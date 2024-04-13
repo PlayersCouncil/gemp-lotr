@@ -43,17 +43,19 @@ public class LotroCardBlueprintLibrary {
     private final File _cardPath;
     private final File _mappingsPath;
     private final File _setDefsPath;
+    private final File _raritiesFolder;
 
     private final List<ICallback> _refreshCallbacks = new ArrayList<>();
 
     public LotroCardBlueprintLibrary() {
-        this(AppConfig.getCardsPath(), AppConfig.getMappingsPath(), AppConfig.getSetDefinitionsPath());
+        this(AppConfig.getCardsPath(), AppConfig.getMappingsPath(), AppConfig.getSetDefinitionsPath(), AppConfig.getResourceFile("rarities"));
     }
 
-    public LotroCardBlueprintLibrary(File cardsPath, File mappingsPath, File setDefinitionPath) {
+    public LotroCardBlueprintLibrary(File cardsPath, File mappingsPath, File setDefinitionPath, File raritiesFolder) {
         _cardPath = cardsPath;
         _mappingsPath = mappingsPath;
         _setDefsPath = setDefinitionPath;
+        _raritiesFolder = raritiesFolder;
         logger.info("Locking blueprint library in constructor");
         //This will be released after the library has been init'd; until then all functional uses should block
         collectionReady.acquireUninterruptibly();
@@ -465,7 +467,7 @@ public class LotroCardBlueprintLibrary {
     }
 
     private void readSetRarityFile(DefaultSetDefinition rarity, String setNo, String rarityFile) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(AppConfig.getResourceStream("rarities/" + rarityFile), StandardCharsets.UTF_8));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(_raritiesFolder, rarityFile)), StandardCharsets.UTF_8));
         try {
             String line;
 
@@ -486,6 +488,4 @@ public class LotroCardBlueprintLibrary {
             IOUtils.closeQuietly(bufferedReader);
         }
     }
-
-
 }

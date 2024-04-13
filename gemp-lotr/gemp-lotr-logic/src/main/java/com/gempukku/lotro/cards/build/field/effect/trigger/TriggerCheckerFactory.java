@@ -45,11 +45,13 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("movesto", new MovesTo());
         triggerCheckers.put("played", new PlayedTriggerCheckerProducer());
         triggerCheckers.put("playedfromstacked", new PlayedFromStacked());
+        triggerCheckers.put("playerdrawscard", new PlayerDrawsCard());
         triggerCheckers.put("putsonring", new PutsOnRing());
         triggerCheckers.put("reconciles", new Reconciles());
         triggerCheckers.put("removedfromplay", new RemovedFromPlay());
         triggerCheckers.put("removesburden", new RemovesBurden());
         triggerCheckers.put("revealscardfromtopofdrawdeck", new RevealsCardFromTopOfDrawDeck());
+        triggerCheckers.put("skirmishabouttoend", new SkirmishAboutToEnd());
         triggerCheckers.put("startofphase", new StartOfPhase());
         triggerCheckers.put("startofturn", new StartOfTurn());
         triggerCheckers.put("takesoffring", new TakesOffRing());

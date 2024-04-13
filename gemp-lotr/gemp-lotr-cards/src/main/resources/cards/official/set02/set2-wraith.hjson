@@ -1,0 +1,374 @@
+{
+    2_75: {
+      side: shadow
+      site: 2
+      race: Man
+      strength: 4
+      culture: Wraith
+      vitality: 1
+      subtitle: Swarthy Sneering Fellow
+      title: *Bill Ferny
+      type: minion
+      twilight: 2
+      effects: [
+        {
+            type: modifier
+            modifier: {
+                type: removeKeyword
+                filter: nazgul
+                keyword: roaming
+            }
+        }
+        {
+            type: modifier
+            modifier: {
+                type: fpCantAssignToSkirmish
+                filter: self
+            }
+        }
+        {
+            type: trigger
+            trigger: {
+                type: ConstantlyCheck
+                requires: {
+                    type: location
+                    filter: underground
+                }
+            }
+            effect: {
+                type: discard
+                filter: self
+            }
+        }
+      ]
+    }
+    2_76: {
+      side: shadow
+      culture: Wraith
+      title: Helpless
+      type: condition
+      twilight: 0
+      requires: [
+        {
+            type: canSpot
+            filter: name(Frodo)
+        }
+        {
+            type: canSpot
+            filter: nazgul
+        }
+      ]
+      target: name(Sam)
+      effects: {
+        type: modifier
+        modifier: {
+            type: disableGameText
+            filter: hasAttached(self)
+        }
+      }
+    }
+    2_77: {
+      side: shadow
+      culture: Wraith
+      title: His Terrible Servants
+      type: condition
+      keyword: Support Area
+      twilight: 2
+      effects: {
+        type: activatedTrigger
+        trigger: {
+            type: aboutToTakeWound
+            filter: twilight,nazgul
+        }
+        cost: {
+            type: removeTwilight
+            amount: 1
+        }
+        effect: {
+            type: preventWound
+            filter: choose(twilight,nazgul)
+        }
+      }
+    }
+    2_78: {
+      side: shadow
+      culture: Wraith
+      title: It Wants to be Found
+      type: event
+      keyword: Maneuver
+      twilight: 2
+      effects: {
+        type: event
+        requires: {
+            type: canSpot
+            filter: twilight,nazgul
+        }
+        effect: {
+            type: addBurdens
+            amount: 1
+        }
+      }
+    }
+    2_79: {
+      side: shadow
+      culture: Wraith
+      title: Resistance Becomes Unbearable
+      type: event
+      keyword: Maneuver
+      twilight: 1
+      effects: {
+        type: event
+        cost: {
+            type: exert
+            filter: choose(twilight,nazgul)
+        }
+        effect: [
+            {
+                type: exert
+                filter: choose(ringBearer)
+                memorize: ringBearer
+            }
+            {
+                type: conditional
+                requires: {
+                    type: canSpot
+                    filter: memory(ringBearer),exhausted
+                }
+                effect: {
+                    type: putOnRing
+                }
+            }
+        ]
+      }
+    }
+    2_80: {
+      side: shadow
+      culture: Wraith
+      title: Stricken Dumb
+      type: event
+      keyword: Maneuver
+      twilight: 2
+      effects: {
+        type: event
+        cost: {
+            type: exert
+            filter: choose(name(The Witch-king))
+        }
+        effect: {
+            type: discard
+            filter: choose(or(tale,weapon))
+        }
+      }
+    }
+    2_81: {
+      side: shadow
+      culture: Wraith
+      title: They Will Find the Ring
+      type: event
+      keyword: Maneuver
+      twilight: 1
+      effects: {
+        type: event
+        cost: [
+            {
+                type: exert
+                count: 2
+                filter: choose(nazgul)
+            }
+            {
+                type: exert
+                count: {
+                    type: forEachBurden
+                }
+                filter: choose(companion)
+            }
+        ]
+      }
+    }
+    2_82: {
+      side: shadow
+      site: 3
+      race: Nazgul
+      strength: 12
+      culture: Wraith
+      vitality: 3
+      subtitle: The Easterling
+      title: *Úlairë Attëa
+      type: minion
+      keyword: Twilight
+      twilight: 6
+      effects: {
+        type: trigger
+        optional: true
+        trigger: {
+            type: played
+            filter: self
+        }
+        effect: {
+            type: wound
+            filter: choose(ally)
+        }
+      }
+    }
+    2_83: {
+      side: shadow
+      site: 3
+      race: Nazgul
+      strength: 11
+      culture: Wraith
+      vitality: 4
+      subtitle: Ringwraith in Twilight
+      title: *Úlairë Enquëa
+      type: minion
+      keyword: Twilight
+      twilight: 6
+      effects: {
+        type: trigger
+        optional: true
+        trigger: {
+            type: winsSkirmish
+            filter: self
+        }
+        cost: {
+            type: exert
+            filter: self
+        }
+        effect: {
+            type: wound
+            filter: choose(ringBearer)
+            times: {
+                type: condition
+                condition: {
+                    type: canSpotBurdens
+                    amount: 5
+                }
+                true: 2
+                false: 1
+            }
+        }
+      }
+    }
+    2_84: {
+      side: shadow
+      site: 2
+      race: Nazgul
+      strength: 10
+      culture: Wraith
+      vitality: 3
+      subtitle: Ringwraith in Twilight
+      title: *Úlairë Nelya
+      type: minion
+      keyword: Twilight
+      twilight: 5
+      effects: [
+        {
+            type: modifier
+            modifier: {
+                type: addKeyword
+                requires: {
+                    type: or
+                    requires: [
+                        {
+                            type: canSpotBurdens
+                            amount: 2
+                        }
+                        {
+                            type: canSpotWounds
+                            filter: ringBearer
+                            amount: 2
+                        }
+                    ]
+                }
+                filter: self
+                keyword: fierce
+            }
+        }
+        {
+            type: modifier
+            modifier: {
+                type: addKeyword
+                requires: {
+                    type: or
+                    requires: [
+                        {
+                            type: canSpotBurdens
+                            amount: 2
+                        }
+                        {
+                            type: canSpotWounds
+                            filter: ringBearer
+                            amount: 2
+                        }
+                    ]
+                }
+                filter: self
+                keyword: damage
+                amount: 1
+            }
+        }
+      ]
+    }
+    2_85: {
+      side: shadow
+      site: 3
+      race: Nazgul
+      strength: 14
+      culture: Wraith
+      vitality: 4
+      subtitle: Lord of the Nazgul
+      title: *The Witch-king
+      type: minion
+      keyword: Twilight
+      twilight: 8
+      effects: [
+        {
+            type: modifier
+            modifier: {
+                type: cantPlayCards
+                filter: name(Return to Its Master)
+            }
+        }
+        {
+            type: trigger
+            optional: true
+            trigger: {
+                type: winsSkirmish
+                filter: self
+            }
+            cost: {
+                type: exert
+                filter: self
+            }
+            effect: {
+                type: wound
+                filter: choose(ringBearer)
+                times: 2
+            }
+        }
+      ]
+    }
+    2_86: {
+      side: shadow
+      culture: Wraith
+      title: Wraith-world
+      type: event
+      keyword: Skirmish
+      twilight: 1
+      effects: {
+        type: event
+        requires: [
+            {
+                type: ringIsOn
+            }
+            {
+                type: canSpot
+                filter: twilight,nazgul
+            }
+        ]
+        effect: {
+            type: addBurdens
+            amount: 3
+        }
+      }
+    }
+}

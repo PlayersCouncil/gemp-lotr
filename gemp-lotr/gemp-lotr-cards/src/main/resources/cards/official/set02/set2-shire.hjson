@@ -1,0 +1,621 @@
+{
+    2_96: {
+        side: free_people
+        race: Hobbit
+        strength: 2
+        culture: Shire
+        vitality: 3
+        subtitle: Well-spoken Gentlehobbit
+        title: *Bilbo
+        type: ally
+        keyword: Support Area
+        twilight: 2
+        allyHome: Fellowship,1
+        effects: {
+            type: activated
+            phase: fellowship
+            cost: [
+                {
+                    type: exert
+                    filter: self
+                }
+                {
+                    type: discard
+                    filter: choose(tale)
+                }
+            ]
+            effect: {
+                type: discard
+                filter: choose(shadow,condition,zone(support))
+            }
+        }
+    }
+    2_97: {
+        side: free_people
+        culture: Shire
+        title: Consorting With Wizards
+        type: condition
+        keyword: Tale
+        twilight: 0
+        target: name(Bilbo)
+        effects: [
+            {
+                type: modifier
+                modifier: {
+                    type: cantTakeWounds
+                    filter: name(Bilbo)
+                    requires: {
+                        type: not
+                        requires: {
+                            type: phase
+                            phase: archery
+                        }
+                    }
+                }
+            }
+            {
+                type: activated
+                phase: [
+                    fellowship
+                    regroup
+                ]
+                cost: {
+                    type: choice
+                    texts: [
+                        Exert Bilbo
+                        Discard this condition
+                    ]
+                    effects: [
+                        {
+                            type: exert
+                            filter: choose(name(Bilbo))
+                        }
+                        {
+                            type: discard
+                            filter: self
+                        }
+                    ]
+                }
+                effect: {
+                    type: removeTwilight
+                    amount: 1
+                }
+            }
+        ]
+    }
+    2_98: {
+        side: free_people
+        culture: Shire
+        title: Dear Friends
+        type: event
+        keyword: Fellowship
+        twilight: 0
+        effects: {
+            type: event
+            cost: {
+                type: exert
+                filter: choose(companion)
+                memorize: exertedCompanion
+            }
+            effect: {
+                type: putCardsFromDiscardOnBottomOfDeck
+                filter: choose(side(free))
+                count: {
+                    type: condition
+                    condition: {
+                        type: memoryMatches
+                        memory: exertedCompanion
+                        filter: signet(Frodo)
+                    }
+                    true: 2
+                    false: 1
+                }
+            }
+        }
+    }
+    2_99: {
+        side: free_people
+        culture: Shire
+        title: Deft in Their Movements
+        type: event
+        keyword:
+        [
+            Regroup
+            Stealth
+        ]
+        twilight: 0
+        effects: {
+            type: event
+            requires: {
+                type: canSpot
+                count: 2
+                filter: hobbit
+            }
+            effect: {
+                type: addModifier
+                modifier: {
+                    type: modifySiteNumber
+                    filter: site
+                    amount: -2
+                }
+                until: endOfTurn
+            }
+        }
+    }
+    2_100: {
+        side: free_people
+        culture: Shire
+        title: Fearing the Worst
+        type: condition
+        keyword:
+        [
+            Support Area
+            Stealth
+        ]
+        twilight: 0
+        effects: [
+            {
+                type: extraCost
+                cost: {
+                    type: exert
+                    filter: choose(hobbit)
+                    count: 2
+                }
+            }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyCost
+                    filter: or(search,tracker)
+                    amount: 2
+                }
+            }
+        ]
+    }
+    2_101: {
+        side: free_people
+        race: Hobbit
+        strength: 1
+        culture: Shire
+        vitality: 2
+        subtitle: Wily Rascal
+        title: *Filibert Bolger
+        type: ally
+        keyword: Support Area
+        twilight: 1
+        allyHome: Fellowship,1
+        effects: {
+            type: activated
+            phase: skirmish
+            cost: {
+                type: exert
+                filter: choose(hobbit,companion)
+                times: 2
+                memorize: exertedHobbit
+            }
+            effect: {
+                type: cancelSkirmish
+                fierceOnly: true
+                filter: memory(exertedHobbit)
+            }
+        }
+    }
+    2_102: {
+        side: free_people
+        race: Hobbit
+        strength: 3
+        culture: Shire
+        vitality: 4
+        subtitle: Reluctant Adventurer
+        signet: aragorn
+        title: *Frodo
+        type: companion
+        keyword: can start with ring
+        twilight: 0
+        resistance: 10
+        effects: {
+            type: modifier
+            modifier: {
+                type: modifyPlayOnCost
+                filter: or(artifact,possession,and(culture(shire),tale))
+                on: self
+                amount: -1
+            }
+        }
+    }
+    2_103: {
+        side: free_people
+        culture: Shire
+        title: Hobbit Sword-play
+        type: event
+        keyword: Maneuver
+        twilight: 0
+        effects: {
+            type: event
+            cost: {
+                type: exert
+                filter: choose(hobbit,hasAttached(weapon))
+            }
+            effect: [
+                {
+					type: chooseActiveCards
+					filter: choose(minion)
+					memorize: chosenMinion
+					text: Choose minion to wound
+				}
+				{
+                    type: preventable
+                    text: Would you like to remove (3) to prevent wounding {chosenMinion}
+                    player: ownerFromMemory(chosenMinion)
+                    cost: {
+                        type: removeTwilight
+                        amount: 3
+                    }
+                    effect: {
+                        type: wound
+                        filter: memory(chosenMinion)
+                    }
+                }
+            ]
+        }
+    }
+    2_104: {
+        side: free_people
+        race: Hobbit
+        strength: 3
+        culture: Shire
+        vitality: 4
+        subtitle: Horticulturalist
+        signet: gandalf
+        title: *Merry
+        type: companion
+        twilight: 1
+        resistance: 6
+        effects: {
+            type: activated
+            phase: fellowship
+            cost: {
+                type: exert
+                filter: self
+            }
+            effect: {
+                type: playCardFromDrawDeck
+                filter: choose(name(Farmer Maggot))
+            }
+        }
+    }
+    2_105: {
+        itemclass: Armor
+        side: free_people
+        culture: Shire
+        title: *Mithril-coat
+        type: artifact
+        twilight: 2
+        target: name(Frodo)
+        effects: [
+            {
+                type: modifier
+                modifier: {
+                    type: archeryTotal
+                    side: shadow
+                    amount: -1
+                }
+            }
+            {
+                type: modifier
+                modifier: {
+                    type: cancelStrengthBonusTo
+                    filter: minion,inSkirmishAgainst(bearer)
+                    from: weapon
+                }
+            }
+            {
+                type: modifier
+                modifier: {
+                    type: removeKeyword
+                    filter: minion,inSkirmishAgainst(bearer)
+                    keyword: damage
+                }
+            }
+        ]
+    }
+    2_106: {
+        side: free_people
+        culture: Shire
+        title: Nice Imitation
+        type: condition
+        keyword:
+        [
+            Support Area
+            Stealth
+        ]
+        twilight: 1
+        effects: {
+            type: activatedTrigger
+            trigger: {
+                type: aboutToTakeWound
+                filter: hobbit
+            }
+            cost: {
+                type: discard
+                filter: self
+            }
+            effect: {
+                type: preventWound
+                filter: choose(hobbit)
+            }
+        }
+    }
+    2_107: {
+        side: free_people
+        culture: Shire
+        title: Not Feared in Sunlight
+        type: condition
+        keyword: Support Area
+        twilight: 1
+        requires: {
+            type: canSpot
+            filter: hobbit
+            count: 2
+        }
+        effects: [
+            {
+                type: modifier
+                modifier: {
+                    type: modifyStrength
+                    filter: nazgul
+                    amount: -4
+                }
+            }
+            {
+                type: trigger
+                trigger: {
+                    type: startOfPhase
+                    phase: regroup
+                }
+                effect: {
+                    type: discard
+                    filter: self
+                }
+            }
+        ]
+    }
+    2_108: {
+        side: free_people
+        strength: 1
+        culture: Shire
+        title: *O Elbereth! Gilthoniel!
+        type: condition
+        keyword: Tale
+        twilight: 1
+        target: ringBearer
+        effects: {
+            type: activated
+            phase: skirmish
+            cost: {
+                type: discard
+                filter: self
+            }
+            effect: {
+                type: choice
+                texts: [
+                    Take off The One Ring
+                    Cancel a skirmish involving the Ring-bearer and a Nazgul
+                ]
+                effects: [
+                    {
+                        type: takeOffRing
+                    }
+                    {
+                        type: cancelSkirmishBetween
+                        fp: ringBearer
+                        shadow: nazgul
+                    }
+                ]
+            }
+        }
+    }
+    2_109: {
+        side: free_people
+        culture: Shire
+        title: Orc-bane
+        type: event
+        keyword: Maneuver
+        twilight: 0
+        effects: {
+            type: event
+            cost: [
+                {
+                    type: chooseActiveCards
+                    filter: choose(hasAttached(or(name(Sting),name(Glamdring))),canExert)
+                    text: Choose Sting or Glamdring bearer to exert
+                    memorize: weaponBearer
+                }
+                {
+                    type: chooseANumber
+                    text: Choose how many times to exert {weaponBearer}
+                    from: 1
+                    to: {
+                        type: subtract
+                        firstNumber: {
+                            type: forEachVitality
+                            filter: memory(weaponBearer)
+                        }
+                        secondNumber: 1
+                    }
+                    memorize: exertCount
+                }
+                {
+                    type: exert
+                    filter: memory(weaponBearer)
+                    times: {
+                        type: fromMemory
+                        memory: exertCount
+                    }
+                }
+            ]
+            effect: {
+                type: choice
+                texts: [
+                    Wound X Orcs
+                    Wound X Uruk-hai
+                ]
+                effects: [
+                    {
+                        type: wound
+                        filter: choose(orc)
+                        count: {
+                            type: fromMemory
+                            memory: exertCount
+                        }
+                    }
+                    {
+                        type: wound
+                        filter: choose(uruk_hai)
+                        count: {
+                            type: fromMemory
+                            memory: exertCount
+                        }
+                    }
+                ]
+            }
+        }
+    }
+    2_110: {
+        side: free_people
+        race: Hobbit
+        strength: 3
+        culture: Shire
+        vitality: 4
+        subtitle: Mr. Took
+        signet: aragorn
+        title: *Pippin
+        type: companion
+        twilight: 1
+        resistance: 6
+        effects: {
+            type: activated
+            phase: fellowship
+            effect: {
+                type: play
+                filter: choose(or(name(Gandalf),name(Aragorn)))
+                cost: -2
+            }
+        }
+    }
+    2_111: {
+        side: free_people
+        culture: Shire
+        title: Practically Everyone Was Invited
+        type: event
+        keyword: Fellowship
+        twilight: 0
+        effects: {
+            type: event
+            cost: {
+                type: exert
+                filter: choose(name(Bilbo))
+            }
+            effect: {
+                type: playCardFromDrawDeck
+                filter: choose(hobbit)
+            }
+        }
+    }
+    2_112: {
+        side: free_people
+        culture: Shire
+        title: A Promise
+        type: condition
+        keyword: Support Area
+        twilight: 0
+        effects: {
+            type: modifier
+            modifier: {
+                type: modifyStrength
+                requires: [
+                    {
+                        type: canSpot
+                        filter: name(Frodo),not(exhausted)
+                    }
+                    {
+                        type: canSpot
+                        filter: name(Sam),not(exhausted)
+                    }
+                ]
+                filter: or(name(Frodo),name(Sam))
+                amount: 1
+            }
+        }
+    }
+    2_113: {
+        side: free_people
+        culture: Shire
+        title: *Red Book of Westmarch
+        type: possession
+        keyword:
+        [
+            Support Area
+            Tale
+        ]
+        twilight: 2
+        effects: {
+            type: trigger
+            optional: true
+            trigger: {
+                type: played
+                filter: tale
+            }
+            requires: {
+                type: canSpot
+                filter: name(Bilbo)
+            }
+            effect: {
+                type: drawCards
+                count: 1
+            }
+        }
+    }
+    2_114: {
+        side: free_people
+        race: Hobbit
+        strength: 3
+        culture: Shire
+        vitality: 4
+        subtitle: Proper Poet
+        signet: gandalf
+        title: *Sam
+        type: companion
+        twilight: 2
+        resistance: 5
+        effects: [
+            {
+                type: activated
+                phase: maneuver
+                cost: {
+                    type: exert
+                    filter: self
+                    times: 2
+                }
+                effect: {
+                    type: addKeyword
+                    filter: self
+                    keyword: defender
+                    amount: 1
+                    until: start(Regroup)
+                }
+            }
+            {
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
+			}
+        ]
+    }
+}

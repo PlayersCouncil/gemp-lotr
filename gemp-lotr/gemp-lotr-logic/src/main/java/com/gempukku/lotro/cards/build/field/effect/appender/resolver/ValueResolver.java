@@ -88,6 +88,19 @@ public class ValueResolver {
                     }
                     return trueValue.getEvaluator(actionContext).evaluateExpression(game, cardAffected);
                 };
+            } else if (type.equalsIgnoreCase("condition")) {
+                FieldUtils.validateAllowedFields(object, "condition", "true", "false");
+                final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("condition"), "condition");
+                final Requirement[] conditions = environment.getRequirementFactory().getRequirements(conditionArray, environment);
+                ValueSource trueValue = resolveEvaluator(object.get("true"), environment);
+                ValueSource falseValue = resolveEvaluator(object.get("false"), environment);
+                return (actionContext) -> (Evaluator) (game, cardAffected) -> {
+                    for (Requirement condition : conditions) {
+                        if (!condition.accepts(actionContext))
+                            return falseValue.getEvaluator(actionContext).evaluateExpression(game, cardAffected);
+                    }
+                    return trueValue.getEvaluator(actionContext).evaluateExpression(game, cardAffected);
+                };
             } else if (type.equalsIgnoreCase("currentSiteNumber")) {
                 return actionContext -> (game, cardAffected) -> game.getGameState().getCurrentSiteNumber();
             } else if (type.equalsIgnoreCase("nextSiteNumber")) {
@@ -135,18 +148,18 @@ public class ValueResolver {
                 return (actionContext) -> {
                     if (filter.equals("any")) {
                         return new MultiplyEvaluator(multiplier,
-                            (game, cardAffected) -> actionContext.getGame().getGameState().getWounds(cardAffected));
+                                (game, cardAffected) -> actionContext.getGame().getGameState().getWounds(cardAffected));
                     } else {
                         return new MultiplyEvaluator(multiplier,
-                            (game, cardAffected) -> {
-                                final Filterable filterable = filterableSource.getFilterable(actionContext);
-                                int wounds = 0;
-                                for (PhysicalCard physicalCard : Filters.filterActive(game, filterable)) {
-                                    wounds += actionContext.getGame().getGameState().getWounds(physicalCard);
-                                }
+                                (game, cardAffected) -> {
+                                    final Filterable filterable = filterableSource.getFilterable(actionContext);
+                                    int wounds = 0;
+                                    for (PhysicalCard physicalCard : Filters.filterActive(game, filterable)) {
+                                        wounds += actionContext.getGame().getGameState().getWounds(physicalCard);
+                                    }
 
-                                return wounds;
-                            });
+                                    return wounds;
+                                });
                     }
                 };
             } else if (type.equalsIgnoreCase("forEachKeyword")) {
@@ -382,8 +395,7 @@ public class ValueResolver {
                     }
                     return result;
                 };
-            }
-            else if (type.equalsIgnoreCase("subtract")) {
+            } else if (type.equalsIgnoreCase("subtract")) {
                 FieldUtils.validateAllowedFields(object, "firstNumber", "secondNumber");
                 final ValueSource firstNumber = ValueResolver.resolveEvaluator(object.get("firstNumber"), 0, environment);
                 final ValueSource secondNumber = ValueResolver.resolveEvaluator(object.get("secondNumber"), 0, environment);

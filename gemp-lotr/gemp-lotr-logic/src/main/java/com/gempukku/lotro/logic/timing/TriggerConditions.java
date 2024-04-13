@@ -321,6 +321,14 @@ public class TriggerConditions {
         return false;
     }
 
+    public static boolean isSkirmishAboutToEnd(EffectResult effectResult, LotroGame game, Filterable... minionsInvolving) {
+        if (effectResult.getType() == EffectResult.Type.SKIRMISH_ABOUT_TO_END) {
+            SkirmishAboutToEndResult skirmishAboutToEnd = (SkirmishAboutToEndResult) effectResult;
+            return Filters.filter(skirmishAboutToEnd.getMinionsInvolved(), game, minionsInvolving).size() > 0;
+        }
+        return false;
+    }
+
     public static boolean isDrawingACard(Effect effect, LotroGame game, String playerId) {
         if (effect.getType() == Effect.Type.BEFORE_DRAW_CARD) {
             DrawOneCardEffect drawEffect = (DrawOneCardEffect) effect;
