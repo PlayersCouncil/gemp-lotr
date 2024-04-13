@@ -758,7 +758,8 @@
         culture: Moria
         vitality: 4
         subtitle: Keeper of Westgate
-        title: *Watcher in the Water
+        title: Watcher in the Water
+        unique: true
         type: minion
         keyword: Damage
         effects: [
@@ -822,7 +823,8 @@
         strength: 1
         culture: Moria
         itemclass: Hand Weapon
-        title: *Whip of Many Thongs
+        title: Whip of Many Thongs
+        unique: true
         type: artifact
         target: name(The Balrog)
         effects: {

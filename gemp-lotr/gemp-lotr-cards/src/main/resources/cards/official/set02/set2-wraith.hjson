@@ -7,7 +7,8 @@
       culture: Wraith
       vitality: 1
       subtitle: Swarthy Sneering Fellow
-      title: *Bill Ferny
+      title: Bill Ferny
+      unique: true
       type: minion
       twilight: 2
       effects: [
@@ -198,7 +199,8 @@
       culture: Wraith
       vitality: 3
       subtitle: The Easterling
-      title: *Úlairë Attëa
+      title: Úlairë Attëa
+      unique: true
       type: minion
       keyword: Twilight
       twilight: 6
@@ -223,7 +225,8 @@
       culture: Wraith
       vitality: 4
       subtitle: Ringwraith in Twilight
-      title: *Úlairë Enquëa
+      title: Úlairë Enquëa
+      unique: true
       type: minion
       keyword: Twilight
       twilight: 6
@@ -261,7 +264,8 @@
       culture: Wraith
       vitality: 3
       subtitle: Ringwraith in Twilight
-      title: *Úlairë Nelya
+      title: Úlairë Nelya
+      unique: true
       type: minion
       keyword: Twilight
       twilight: 5
@@ -321,7 +325,8 @@
       culture: Wraith
       vitality: 4
       subtitle: Lord of the Nazgul
-      title: *The Witch-king
+      title: The Witch-king
+      unique: true
       type: minion
       keyword: Twilight
       twilight: 8

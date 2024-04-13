@@ -212,7 +212,8 @@
       strength: 11
       culture: Sauron
       vitality: 3
-      title: *Tower Assassin
+      title: Tower Assassin
+      unique: true
       type: minion
       twilight: 4
       effects: {

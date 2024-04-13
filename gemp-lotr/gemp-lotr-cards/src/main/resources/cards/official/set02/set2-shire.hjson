@@ -6,7 +6,8 @@
         culture: Shire
         vitality: 3
         subtitle: Well-spoken Gentlehobbit
-        title: *Bilbo
+        title: Bilbo
+        unique: true
         type: ally
         keyword: Support Area
         twilight: 2
@@ -179,7 +180,8 @@
         culture: Shire
         vitality: 2
         subtitle: Wily Rascal
-        title: *Filibert Bolger
+        title: Filibert Bolger
+        unique: true
         type: ally
         keyword: Support Area
         twilight: 1
@@ -208,7 +210,8 @@
         vitality: 4
         subtitle: Reluctant Adventurer
         signet: aragorn
-        title: *Frodo
+        title: Frodo
+        unique: true
         type: companion
         keyword: can start with ring
         twilight: 0
@@ -267,7 +270,8 @@
         vitality: 4
         subtitle: Horticulturalist
         signet: gandalf
-        title: *Merry
+        title: Merry
+        unique: true
         type: companion
         twilight: 1
         resistance: 6
@@ -288,7 +292,8 @@
         itemclass: Armor
         side: free_people
         culture: Shire
-        title: *Mithril-coat
+        title: Mithril-coat
+        unique: true
         type: artifact
         twilight: 2
         target: name(Frodo)
@@ -387,7 +392,8 @@
         side: free_people
         strength: 1
         culture: Shire
-        title: *O Elbereth! Gilthoniel!
+        title: O Elbereth! Gilthoniel!
+        unique: true
         type: condition
         keyword: Tale
         twilight: 1
@@ -492,7 +498,8 @@
         vitality: 4
         subtitle: Mr. Took
         signet: aragorn
-        title: *Pippin
+        title: Pippin
+        unique: true
         type: companion
         twilight: 1
         resistance: 6
@@ -554,7 +561,8 @@
     2_113: {
         side: free_people
         culture: Shire
-        title: *Red Book of Westmarch
+        title: Red Book of Westmarch
+        unique: true
         type: possession
         keyword:
         [
@@ -587,7 +595,8 @@
         vitality: 4
         subtitle: Proper Poet
         signet: gandalf
-        title: *Sam
+        title: Sam
+        unique: true
         type: companion
         twilight: 2
         resistance: 5
