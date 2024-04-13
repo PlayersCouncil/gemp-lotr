@@ -32,13 +32,13 @@
 			fellowship
 			spell
 		]
-		requires: {
-			type: canSpot
-			filter: culture(gandalf),wizard
-		}
 		effects: [
 			{
 				type: event
+                requires: {
+                    type: canSpot
+                    filter: culture(gandalf),wizard
+                }
 				effect: [
 					{
 						type: PutCardsFromDiscardIntoHand

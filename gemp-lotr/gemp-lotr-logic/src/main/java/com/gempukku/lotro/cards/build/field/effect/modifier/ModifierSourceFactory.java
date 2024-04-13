@@ -37,7 +37,10 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantheal", new CantHeal());
         modifierProducers.put("cantlookorrevealhand", new CantLookOrRevealHand());
         modifierProducers.put("cantplaycards", new CantPlayCards());
+        modifierProducers.put("cantplaycardsfromdeckordiscardpile", new CantPlayCardsFromDeckOrDiscardPile());
+        modifierProducers.put("cantplayphaseevents", new CantPlayPhaseEvents());
         modifierProducers.put("cantplayphaseeventsorphasespecialabilities", new CantPlayPhaseEventsOrPhaseSpecialAbilities());
+        modifierProducers.put("cantplayphasespecialabilities", new CantPlayPhaseSpecialAbilities());
         modifierProducers.put("cantpreventwounds", new CantPreventWounds());
         modifierProducers.put("cantremoveburdens", new CantRemoveBurdens());
         modifierProducers.put("cantreplacesite", new CantReplaceSite());
@@ -62,6 +65,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("modifysanctuaryheal", new ModifySanctuaryHeal());
         modifierProducers.put("modifysitenumber", new ModifySiteNumber());
         modifierProducers.put("modifystrength", new ModifyStrength());
+        modifierProducers.put("nomorethanoneminionmaybeassignedtoeachskirmish", new NoMorethanOneMinionMayBeAssignedToEachSkirmish());
         modifierProducers.put("opponentmaynotdiscard", new OpponentMayNotDiscard());
         modifierProducers.put("removekeyword", new RemoveKeyword());
         modifierProducers.put("ringtextisinactive", new RingTextIsInactive());

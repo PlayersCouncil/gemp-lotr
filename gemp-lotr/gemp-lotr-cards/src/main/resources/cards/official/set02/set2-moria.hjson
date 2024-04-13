@@ -117,11 +117,14 @@
 			Damage
 			Fierce
 		]
-		requires: {
-			type: canSpot
-			filter: culture(moria),orc
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(moria),orc
+                }
+		    }
 			{
 				type: trigger
 				trigger: {
@@ -226,21 +229,26 @@
 		culture: Moria
 		title: Dark Fire
 		type: condition
-		requires: {
-			type: canSpot
-			filter: name(The Balrog)
-		}
 		target: name(Gandalf)
-		effects: {
-			type: trigger
-			trigger: {
-				type: moves
-			}
-			effect: {
-				type: exert
-				filter: all(name(Gandalf))
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(The Balrog)
+                }
+		    }
+            {
+                type: trigger
+                trigger: {
+                    type: moves
+                }
+                effect: {
+                    type: exert
+                    filter: all(name(Gandalf))
+                }
+            }
+        ]
 	}
 	2_55: {
 		side: shadow
@@ -697,19 +705,24 @@
         culture: Moria
         title: Throw Yourself in Next Time
         type: condition
-        requires: {
-            type: canSpot
-            filter: culture(moria),orc
-        }
         target: hobbit,companion
-        effects: {
-            type: modifier
-            modifier: {
-                type: cantBeExerted
-                filter: bearer
-                by: side(Free People)
+        effects: [
+            {
+                type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(moria),orc
+                }
             }
-        }
+            {
+                type: modifier
+                modifier: {
+                    type: cantBeExerted
+                    filter: bearer
+                    by: side(Free People)
+                }
+            }
+        ]
     }
     2_72: {
         side: shadow

@@ -242,12 +242,15 @@
 		strength: 8
 		vitality: 5
 		resistance: 6
-		requires: {
-			type: canSpot
-			count: 2
-			filter: culture(gondor),man
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    count: 2
+                    filter: culture(gondor),man
+                }
+		    }
 			{
 				type: activated
 				phase: fellowship
@@ -381,25 +384,30 @@
 		twilight: 1
 		type: artifact
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: unbound,culture(gondor),man
-		}
-		effects: {
-			type: activatedTrigger
-			trigger: {
-				type: aboutToTakeWound
-				filter: culture(gondor),man
-			}
-			cost: {
-				type: discard
-				filter: self
-			}
-			effect: {
-				type: preventWound
-				filter: choose(culture(gondor),man)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: unbound,culture(gondor),man
+                }
+		    }
+            {
+                type: activatedTrigger
+                trigger: {
+                    type: aboutToTakeWound
+                    filter: culture(gondor),man
+                }
+                cost: {
+                    type: discard
+                    filter: self
+                }
+                effect: {
+                    type: preventWound
+                    filter: choose(culture(gondor),man)
+                }
+            }
+        ]
 	}
 	9_36: {
 		title: Scroll of Isildur
@@ -411,11 +419,14 @@
 			support area
 			tale
 		]
-		requires: {
-			type: canSpot
-			filter: culture(gondor),man
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(gondor),man
+                }
+		    }
 			{
 				type: modifier
 				modifier: {

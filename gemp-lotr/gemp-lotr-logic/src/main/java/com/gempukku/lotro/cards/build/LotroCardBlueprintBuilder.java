@@ -43,7 +43,6 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("allyhome", new AllyHomeFieldProcessor());
         fieldProcessors.put("direction", new DirectionFieldProcessor());
         fieldProcessors.put("target", new TargetFieldProcessor());
-        fieldProcessors.put("requires", new RequirementFieldProcessor());
         fieldProcessors.put("effects", new EffectFieldProcessor());
 
         fieldProcessors.put("gametext", new NullProcessor());

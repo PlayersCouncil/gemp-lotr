@@ -518,12 +518,12 @@
 			maneuver
 			tale
 		]
-		requires: {
-			type: canSpot
-			filter: culture(gondor),companion
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(gondor),companion
+            }
 			effect: [
 				{
 					type: revealRandomCardsFromHand
@@ -551,12 +551,12 @@
 			fellowship
 			regroup
 		]
-		requires: {
-			type: canSpot
-			filter: ranger
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: ranger
+            }
 			requiresRanger: true
 			effect: {
 				type: playNextSite
@@ -857,11 +857,14 @@
     twilight: 1
     type: possession
     target: companion
-    requires: {
-      type: canSpot
-      filter: culture(gondor),man
-    }
     effects: [
+        {
+            type: toPlay
+            requires: {
+              type: canSpot
+              filter: culture(gondor),man
+            }
+        }
       {
         type: trigger
         trigger: {

@@ -133,12 +133,15 @@
 		twilight: 1
 		type: possession
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: culture(shire),companion
-			count: 2
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(shire),companion
+                    count: 2
+                }
+		    }
 			{
 				type: trigger
 				trigger: [

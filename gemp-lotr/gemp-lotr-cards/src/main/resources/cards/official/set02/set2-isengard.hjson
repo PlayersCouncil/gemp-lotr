@@ -47,21 +47,26 @@
 		title: Demands of the Sackville-Bagginses
 		type: condition
 		keyword: Support Area
-		requires: {
-			type: canSpot
-			filter: culture(isengard),minion
-		}
-		effects: {
-			type: trigger
-			trigger: {
-				type: exerts
-				filter: culture(shire),ally
-			}
-			effect: {
-				type: addTwilight
-				amount: 1
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(isengard),minion
+                }
+		    }
+            {
+                type: trigger
+                trigger: {
+                    type: exerts
+                    filter: culture(shire),ally
+                }
+                effect: {
+                    type: addTwilight
+                    amount: 1
+                }
+            }
+        ]
 	}
 	2_41: {
 		side: shadow
@@ -172,18 +177,23 @@
 		title: No Business of Ours
 		type: condition
 		keyword: Support Area
-		requires: {
-			type: canSpot
-			filter: culture(isengard),minion
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: cantLookOrRevealHand
-				player: fp
-				hand: shadowPlayer
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(isengard),minion
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: cantLookOrRevealHand
+                    player: fp
+                    hand: shadowPlayer
+                }
+            }
+        ]
 	}
 	2_45: {
 		side: shadow
@@ -192,12 +202,12 @@
 		title: Too Much Attention
 		type: event
 		keyword: Response
-		requires: {
-			type: canSpot
-			filter: culture(isengard),minion
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                filter: culture(isengard),minion
+            }
 			trigger: {
 				type: putsOnRing
 			}

@@ -1,4 +1,234 @@
 {
+    3_7: {
+        title: Arwen
+        subtitle: Elven Rider
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 2
+        type: companion
+        race: Elf
+        signet: frodo
+        strength: 6
+        vitality: 3
+        resistance: 6
+        keyword: Ranger
+        effects: {
+            type: activatedTrigger
+            trigger: {
+                type: aboutToTakeWound
+                filter: ringBearer
+            }
+            cost: {
+                type: discardFromHand
+                forced: false
+                count: 3
+            }
+            effect: {
+                type: preventWound
+                filter: choose(ringBearer)
+            }
+        }
+    }
+    3_8: {
+        title: Arwen
+        subtitle: Lady Undomiel
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 2
+        type: companion
+        race: Elf
+        signet: gandalf
+        strength: 6
+        vitality: 3
+        resistance: 6
+        effects: {
+            type: modifier
+            modifier: {
+                type: modifyStrength
+                requires: {
+                    type: canSpot
+                    count: 3
+                    filter: culture(elven),ally,allyHome(Fellowship,3)
+                }
+                filter: minion,inSkirmishAgainst(self)
+                amount: -3
+            }
+        }
+    }
+    3_9: {
+        title: Beren and Luthien
+        side: free_people
+        culture: Elven
+        twilight: 1
+        type: condition
+        keyword:
+        [
+            Support Area
+            Tale
+        ]
+        effects: {
+            type: activated
+            phase: skirmish
+            cost: {
+                type: exert
+                filter: choose(culture(elven),ally)
+            }
+            effect: [
+                {
+                    type: discardBottomCardsFromDeck
+                    forced: false
+                    memorize: discardedCard
+                }
+                {
+                    type: conditional
+                    requires: {
+                        type: memoryMatches
+                        memory: discardedCard
+                        filter: culture(elven)
+                    }
+                    effect: {
+                        type: modifyStrength
+                        filter: choose(minion,inSkirmishAgainst(elf))
+                        amount: -1
+                    }
+                }
+            ]
+        }
+    }
+    3_10: {
+        title: Calaglin
+        subtitle: Elf of Lorien
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 2
+        type: ally
+        race: Elf
+        strength: 3
+        vitality: 3
+        allyHome: Fellowship,6
+        keyword:
+        [
+            Support Area
+            Archer
+        ]
+        effects: {
+            type: activated
+            phase: regroup
+            cost: {
+                type: exert
+                filter: self
+            }
+            effect: {
+                type: wound
+                filter: choose(minion)
+            }
+        }
+    }
+    3_11: {
+        title: Cast It Into the Fire!
+        side: free_people
+        culture: Elven
+        twilight: 1
+        type: event
+        keyword: Maneuver
+        effects: {
+            type: event
+            requires: {
+                type: canSpot
+                filter: elf
+            }
+            effect: [
+                {
+                    type: discardFromHand
+                    forced: true
+                    hand: shadow
+                    player: shadow
+                    memorize: discardedCards
+                }
+                {
+                    type: drawCards
+                    count: {
+                        type: forEachInMemory
+                        memory: discardedCards
+                    }
+                }
+            ]
+        }
+    }
+    3_12: {
+        title: Dinendal
+        subtitle: Silent Scout
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 2
+        type: ally
+        race: Elf
+        strength: 3
+        vitality: 3
+        allyHome: Fellowship,6
+        keyword:
+        [
+            Support Area
+            Archer
+        ]
+        effects: {
+            type: activated
+            phase: regroup
+            cost: {
+                type: exert
+                filter: self
+            }
+            effect: {
+                type: removeTwilight
+                amount: 2
+            }
+        }
+    }
+    3_13: {
+        title: Elrond
+        subtitle: Herald to Gil-galad
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 4
+        type: ally
+        race: Elf
+        strength: 8
+        vitality: 4
+        allyHome: Fellowship,3
+        keyword: Support Area
+        effects: [
+            {
+                type: trigger
+                optional: true
+                trigger: {
+                    type: startOfTurn
+                }
+                effect: {
+                    type: heal
+                    filter: choose(ally,allyHome(Fellowship,3))
+                    times: 2
+                }
+            }
+            {
+                type: activated
+                phase: regroup
+                cost: {
+                    type: exert
+                    filter: self
+                    times: 2
+                }
+                effect: {
+                    type: heal
+                    filter: choose(companion)
+                }
+            }
+        ]
+    }
 	3_14: {
 		title: Erestor
 		subtitle: Chief Advisor to Elrond
@@ -10,28 +240,83 @@
 		race: elf
 		strength: 5
 		vitality: 2
-		requires: {
-			type: canSpot
-			filter: elf
-		}
-		effects: {
-			type: activatedTrigger
-			trigger: {
-				type: aboutToTakeWound
-				filter: elf
-				source: culture(sauron),or(minion,event)
-			}
-			cost: {
-				type: exert
-				filter: self
-			}
-			effect: {
-				type: preventWound
-				filter: choose(elf)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                }
+		    }
+            {
+                type: activatedTrigger
+                trigger: {
+                    type: aboutToTakeWound
+                    filter: elf
+                    source: culture(sauron),or(minion,event)
+                }
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: {
+                    type: preventWound
+                    filter: choose(elf)
+                }
+            }
+        ]
 	}
-	
+    3_15: {
+        title: Forests of Lothlorien
+        side: free_people
+        culture: Elven
+        twilight: 1
+        type: condition
+        keyword: Support Area
+        effects: {
+            type: trigger
+            optional: true
+            trigger: {
+                type: moves
+            }
+            requires: {
+                type: canSpot
+                filter: culture(elven),ally
+                count: 3
+            }
+            effect: {
+                type: wound
+                filter: choose(minion)
+            }
+        }
+    }
+    3_16: {
+        title: Friends of Old
+        side: free_people
+        culture: Elven
+        twilight: 1
+        type: event
+        keyword: Fellowship
+        effects: {
+            type: event
+            effect: [
+                {
+                    type: revealRandomCardsFromHand
+                    forced: true
+                    hand: shadow
+                    memorize: revealedCard
+                }
+                {
+                    type: heal
+                    filter: choose(culture(elven),ally)
+                    count: {
+                        type: twilightCostInMemory
+                        memory: revealedCard
+                    }
+                }
+            ]
+        }
+    }
 	3_17: {
 		cardInfo: {
 			//Either a full URL, or a subpath for the PC image server
@@ -43,7 +328,7 @@
 			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: null
 			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
+			// Can of course be ommitted if parent is null.
 			parentPath: null
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
@@ -104,4 +389,368 @@
 			}
 		}
 	}
+    3_18: {
+        title: Galdor
+        subtitle: Councilor From the West
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 2
+        type: ally
+        race: Elf
+        strength: 5
+        vitality: 2
+        allyHome: Fellowship,3
+        keyword: Support Area
+        effects: [
+            {
+                type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                }
+            }
+            {
+                type: activated
+                phase: regroup
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: {
+                    type: returnToHand
+                    filter: choose(minion)
+                }
+            }
+        ]
+    }
+    3_19: {
+        title: Gift of the Evenstar
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 1
+        type: condition
+        target: name(Aragorn)
+        effects: [
+            {
+                type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Arwen)
+                }
+            }
+            {
+                type: activated
+                phase: skirmish
+                cost: {
+                    type: choice
+                    texts: [
+                        Exert Aragorn
+                        Discard 2 cards from hand
+                    ]
+                    effects: [
+                        {
+                            type: exert
+                            filter: bearer
+                        }
+                        {
+                            type: discardFromHand
+                            forced: false
+                            count: 2
+                        }
+                    ]
+                }
+                effect: {
+                    type: modifyStrength
+                    filter: choose(minion,inSkirmishAgainst(bearer))
+                    amount: -1
+                }
+            }
+        ]
+    }
+    3_20: {
+        title: Golradir
+        subtitle: Councilor of Imladris
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 2
+        type: ally
+        race: Elf
+        strength: 4
+        vitality: 3
+        allyHome: Fellowship,3
+        keyword: Support Area
+        effects: [
+            {
+                type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                }
+            }
+            {
+                type: activated
+                phase: skirmish
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: {
+                    type: modifyStrength
+                    filter: choose(orc)
+                    amount: -1
+                }
+            }
+        ]
+    }
+    3_21: {
+        title: Long-knives of Legolas
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 1
+        type: possession
+        itemclass: Hand Weapon
+        strength: 1
+        target: name(Legolas)
+        effects: {
+            type: modifier
+            modifier: {
+                type: modifyStrength
+                filter: or(orc,urukHai),inSkirmishAgainst(bearer)
+                amount: -2
+            }
+        }
+    }
+    3_22: {
+        title: Master of Healing
+        side: free_people
+        culture: Elven
+        twilight: 1
+        type: event
+        keyword:
+        [
+            Fellowship
+            Regroup
+        ]
+        effects: {
+            type: event
+            requires: {
+                type: or
+                requires: [
+                    {
+                        type: canSpot
+                        filter: name(Elrond)
+                    }
+                    {
+                        type: canSpot
+                        filter: culture(elven),ally
+                        count: 2
+                    }
+                ]
+            }
+            effect: {
+                type: heal
+                filter: choose(or(companion,ally))
+            }
+        }
+    }
+    3_23: {
+        title: Nenya
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 0
+        type: artifact
+        itemclass: Ring
+        vitality: 1
+        target: name(Galadriel)
+        effects: {
+            type: trigger
+            optional: true
+            trigger: {
+                type: startOfPhase
+                phase: regroup
+            }
+            cost: {
+                type: discardFromHand
+                forced: false
+                count: 0-2
+                memorize: discardedCards
+            }
+            effect: {
+                type: drawCards
+                count: {
+                    type: forEachInMemory
+                    memory: discardedCards
+                }
+            }
+        }
+    }
+    3_24: {
+        title: Phial of Galadriel
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 0
+        type: possession
+        target: ringBearer
+        effects: [
+            {
+                type: extraCost
+                cost: {
+                    type: exert
+                    filter: choose(elf)
+                }
+            }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyResistance
+                    filter: bearer
+                    amount: 2
+                }
+            }
+        ]
+    }
+    3_25: {
+        title: Saelbeth
+        subtitle: Elven Councilor
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 2
+        type: ally
+        race: Elf
+        strength: 4
+        vitality: 3
+        allyHome: Fellowship,3
+        keyword: Support Area
+        effects: [
+            {
+                type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                }
+            }
+            {
+                type: activated
+                phase: skirmish
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: {
+                    type: modifyStrength
+                    filter: choose(urukHai)
+                    amount: -1
+                }
+            }
+        ]
+    }
+    3_26: {
+        title: Something Draws Near
+        side: free_people
+        culture: Elven
+        twilight: 0
+        type: event
+        keyword:
+        [
+            Fellowship
+            Maneuver
+        ]
+        effects: {
+            type: event
+            cost: {
+                type: exert
+                filter: choose(elf)
+            }
+            effect: {
+                type: discard
+                filter: choose(culture(isengard),or(possession,artifact))
+            }
+        }
+    }
+    3_27: {
+        title: Vilya
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 0
+        type: artifact
+        itemclass: Ring
+        vitality: 1
+        target: name(Elrond)
+        effects: {
+            type: activated
+            phase: maneuver
+            cost: {
+                type: exert
+                filter: bearer
+                times: 2
+            }
+            effect: {
+                type: returnToHand
+                filter: choose(shadow,condition)
+            }
+        }
+    }
+    3_28: {
+        title: Voice of Nimrodel
+        side: free_people
+        culture: Elven
+        twilight: 2
+        type: event
+        keyword:
+        [
+            Skirmish
+            Tale
+        ]
+        effects: {
+            type: event
+            requires: {
+                type: location
+                filter: or(river,forest)
+            }
+            cost: {
+                type: exert
+                filter: choose(elf)
+                memorize: exertedElf
+            }
+            effect: {
+                type: cancelSkirmish
+                filter: memory(exertedElf)
+            }
+        }
+    }
+    3_121: {
+        title: Legolas
+        subtitle: Son of Thranduil
+        unique: true
+        side: free_people
+        culture: Elven
+        twilight: 2
+        type: companion
+        race: Elf
+        signet: aragorn
+        strength: 6
+        vitality: 3
+        resistance: 6
+        keyword: Archer
+        effects: {
+            type: modifier
+            modifier: {
+                type: modifyArcheryTotal
+                requires: {
+                    type: location
+                    filter: or(river,forest)
+                }
+                side: free
+                amount: 1
+            }
+        }
+    }
 }

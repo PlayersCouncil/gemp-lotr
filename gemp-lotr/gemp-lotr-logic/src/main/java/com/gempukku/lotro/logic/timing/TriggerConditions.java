@@ -107,10 +107,11 @@ public class TriggerConditions {
         return false;
     }
 
-    public static boolean removedBurden(LotroGame game, EffectResult effectResult, Filterable... sourceFilters) {
+    public static boolean removedBurden(LotroGame game, EffectResult effectResult, String player, Filterable... sourceFilters) {
         if (effectResult.getType() == EffectResult.Type.REMOVE_BURDEN) {
             RemoveBurdenResult burdenResult = (RemoveBurdenResult) effectResult;
-            return (Filters.and(sourceFilters).accepts(game, burdenResult.getSource()));
+            return (player == null || burdenResult.getPerformingPlayerId().equals(player))
+                    && Filters.and(sourceFilters).accepts(game, burdenResult.getSource());
         }
         return false;
     }
@@ -201,11 +202,11 @@ public class TriggerConditions {
             return Filters.and(filters).accepts(game, ((DiscardCardFromDeckResult) effectResult).getDiscardedCard());
         return false;
     }
-    
+
     public static boolean forEachDiscardedFromHandBy(LotroGame game, EffectResult effectResult, Filterable discardedBy, Filterable... discarded) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_DISCARDED_FROM_HAND) {
             DiscardCardFromHandResult discardResult = (DiscardCardFromHandResult) effectResult;
-            if (discardResult.getSource() != null 
+            if (discardResult.getSource() != null
                     && Filters.and(discardedBy).accepts(game, discardResult.getSource()))
                 return Filters.and(discarded).accepts(game, discardResult.getDiscardedCard());
         }
@@ -214,7 +215,7 @@ public class TriggerConditions {
 
     public static boolean forEachWoundedBy(LotroGame game, EffectResult effectResult, Filterable woundedBy, Filterable... filters) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
-            var woundResult = (WoundResult)effectResult;
+            var woundResult = (WoundResult) effectResult;
 
             return Filters.filter(woundResult.getSources(), game, woundedBy).size() > 0 &&
                     Filters.and(filters).accepts(game, woundResult.getWoundedCard());
@@ -224,16 +225,16 @@ public class TriggerConditions {
 
     public static boolean forEachMortallyWoundedBy(LotroGame game, EffectResult effectResult, Filterable woundedBy, Filterable... filters) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
-            var woundResult = (WoundResult)effectResult;
+            var woundResult = (WoundResult) effectResult;
             var wounded = woundResult.getWoundedCard();
 
             return Filters.filter(woundResult.getSources(), game, woundedBy).size() > 0 &&
                     Filters.and(filters).accepts(game, woundResult.getWoundedCard()) &&
                     (
-                        ( Filters.or(CardType.ALLY, CardType.COMPANION).accepts(game, wounded) &&
-                            wounded.getZone() == Zone.DEAD ) ||
-                        ( Filters.and(CardType.MINION).accepts(game, wounded) &&
-                            wounded.getZone() != Zone.SHADOW_CHARACTERS)
+                            (Filters.or(CardType.ALLY, CardType.COMPANION).accepts(game, wounded) &&
+                                    wounded.getZone() == Zone.DEAD) ||
+                                    (Filters.and(CardType.MINION).accepts(game, wounded) &&
+                                            wounded.getZone() != Zone.SHADOW_CHARACTERS)
                     );
         }
         return false;
@@ -249,7 +250,7 @@ public class TriggerConditions {
         if (effectResult.getType() != EffectResult.Type.FOR_EACH_HEALED)
             return false;
 
-        HealResult healResult = (HealResult)effectResult;
+        HealResult healResult = (HealResult) effectResult;
         if (player == null || player.equals(healResult.getPerformingPlayer()))
             return Filters.and(filters).accepts(game, ((HealResult) effectResult).getHealedCard());
         else
@@ -355,17 +356,16 @@ public class TriggerConditions {
     }
 
     public static boolean forEachKilledBy(LotroGame game, EffectResult effectResult, Filterable killedBy, Filterable... killed) {
-        if(effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
             return forEachMortallyWoundedBy(game, effectResult, killedBy, killed);
-        }
-        else if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED) {
-            if(forEachKilledInASkirmish(game, effectResult, killedBy, killed))
+        } else if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED) {
+            if (forEachKilledInASkirmish(game, effectResult, killedBy, killed))
                 return true;
 
             ForEachKilledResult killResult = (ForEachKilledResult) effectResult;
             var killers = killResult.getKillers();
 
-            if(killers == null || killers.isEmpty() || killers.stream().allMatch(Objects::isNull))
+            if (killers == null || killers.isEmpty() || killers.stream().allMatch(Objects::isNull))
                 return false;
 
             return Filters.filter(killResult.getKillers(), game, killedBy).size() > 0 &&
@@ -377,7 +377,7 @@ public class TriggerConditions {
     public static boolean forEachKilledInASkirmish(LotroGame game, EffectResult effectResult, Filterable killedBy, Filterable... killed) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED
                 && game.getGameState().getCurrentPhase() == Phase.SKIRMISH
-                && Filters.countActive(game, Filters.inSkirmish, killedBy)>0) {
+                && Filters.countActive(game, Filters.inSkirmish, killedBy) > 0) {
             ForEachKilledResult killResult = (ForEachKilledResult) effectResult;
 
             return Filters.and(killed).accepts(game, killResult.getKilledCard());
@@ -523,7 +523,7 @@ public class TriggerConditions {
         return false;
     }
 
-    public static boolean skirmishCancelled(LotroGame game, EffectResult effectResult, Filterable ... fpCharacterFilter) {
+    public static boolean skirmishCancelled(LotroGame game, EffectResult effectResult, Filterable... fpCharacterFilter) {
         if (effectResult.getType() == EffectResult.Type.SKIRMISH_CANCELLED) {
             SkirmishCancelledResult cancelledResult = (SkirmishCancelledResult) effectResult;
             return Filters.and(fpCharacterFilter).accepts(game, cancelledResult.getFpCharacter());
@@ -540,8 +540,8 @@ public class TriggerConditions {
     }
 
     public static boolean freePlayerDecidedToMove(LotroGame game, EffectResult effectResult) {
-        if(effectResult.getType() == EffectResult.Type.FREE_PEOPLE_PLAYER_DECIDED_IF_MOVING) {
-            var result = (FreePlayerMoveDecisionResult)effectResult;
+        if (effectResult.getType() == EffectResult.Type.FREE_PEOPLE_PLAYER_DECIDED_IF_MOVING) {
+            var result = (FreePlayerMoveDecisionResult) effectResult;
             return result.IsMoving();
         }
 
@@ -549,8 +549,8 @@ public class TriggerConditions {
     }
 
     public static boolean freePlayerDecidedToStay(LotroGame game, EffectResult effectResult) {
-        if(effectResult.getType() == EffectResult.Type.FREE_PEOPLE_PLAYER_DECIDED_IF_MOVING) {
-            var result = (FreePlayerMoveDecisionResult)effectResult;
+        if (effectResult.getType() == EffectResult.Type.FREE_PEOPLE_PLAYER_DECIDED_IF_MOVING) {
+            var result = (FreePlayerMoveDecisionResult) effectResult;
             return result.IsStaying();
         }
 

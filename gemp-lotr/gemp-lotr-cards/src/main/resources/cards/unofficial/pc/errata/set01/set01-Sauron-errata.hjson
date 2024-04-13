@@ -101,12 +101,12 @@
 		twilight: 2
 		type: event
 		keyword: maneuver
-		requires: {
-			type: canSpot
-			filter: culture(sauron),orc
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(sauron),orc
+            }
 			cost: {
 				type: removeBurdens
 				amount: 1

@@ -137,12 +137,12 @@
 		twilight: 2
 		type: event
 		keyword: regroup
-		requires: {
-			type: canSpot
-			filter: name(Gimli)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: name(Gimli)
+            }
 			cost: {
 				type: exert
 				filter: choose(fellowship,companion)
@@ -310,12 +310,15 @@
 		twilight: 2
 		type: condition
 		strength: 2
-		requires: {
-			type: canSpot
-			filter: culture(gandalf),wizard
-		}
 		target: companion
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(gandalf),wizard
+                }
+		    }
 			{
 				type: trigger
 				optional: true
@@ -893,11 +896,14 @@
 		vitality: 4
 		site: 4
 		keyword: hunter+2
-		requires: {
-			type: canSpot
-			filter: culture(orc),orc
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(orc),orc
+                }
+		    }
 			{
 				type: trigger
 				trigger: {
@@ -931,22 +937,27 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		requires: {
-			type: canSpot
-			filter: culture(orc),orc
-		}
-		effects: {
-			type: activated
-			phase: skirmish
-			cost: {
-				type: removeThreats
-			}
-			effect: {
-				type: modifyStrength
-				filter: choose(culture(orc),minion)
-				amount: 2
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(orc),orc
+                }
+		    }
+            {
+                type: activated
+                phase: skirmish
+                cost: {
+                    type: removeThreats
+                }
+                effect: {
+                    type: modifyStrength
+                    filter: choose(culture(orc),minion)
+                    amount: 2
+                }
+            }
+        ]
 	}
 	19_24: {
 		title: Brought Down From Inside

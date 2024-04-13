@@ -353,12 +353,15 @@
         type: condition
         keyword: Support Area
         twilight: 1
-        requires: {
-            type: canSpot
-            filter: hobbit
-            count: 2
-        }
         effects: [
+            {
+                type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: hobbit
+                    count: 2
+                }
+            }
             {
                 type: modifier
                 modifier: {

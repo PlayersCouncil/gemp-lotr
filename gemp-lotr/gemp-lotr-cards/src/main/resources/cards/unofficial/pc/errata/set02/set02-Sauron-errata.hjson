@@ -29,12 +29,12 @@
 		title: Southern Spies
 		type: event
 		keyword: Response
-		requires: {
-			type: canSpot
-			filter: culture(sauron),minion
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                filter: culture(sauron),minion
+            }
 			trigger: {
 				type: putsOnRing
 			}

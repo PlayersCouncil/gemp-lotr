@@ -108,12 +108,12 @@
 		twilight: 0
 		type: event
 		keyword: skirmish
-		requires: {
-			type: canSpotBurdens
-			amount: 3
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpotBurdens
+                amount: 3
+            }
 			effect: [
 				{
 					type: modifyStrength
@@ -152,12 +152,12 @@
 		twilight: 1
 		type: event
 		keyword: regroup
-		requires: {
-			type: canSpot
-			filter: companion,resistanceLessThan(4)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: companion,resistanceLessThan(4)
+            }
 			cost: {
 				type: discard
 				filter: choose(nazgul)
@@ -182,15 +182,6 @@
 		twilight: 8
 		type: event
 		keyword: maneuver
-		requires: [
-			{
-				type: canSpot
-				filter: nazgul
-			}
-			{
-				type: ringIsOn
-			}
-		]
 		effects: [
 			{
 				type: modifyOwnCost
@@ -201,6 +192,15 @@
 			}
 			{
 				type: event
+                requires: [
+                    {
+                        type: canSpot
+                        filter: nazgul
+                    }
+                    {
+                        type: ringIsOn
+                    }
+                ]
 				effect: {
 					type: preventable
 					player: fp
@@ -533,12 +533,12 @@
 		twilight: 0
 		type: event
 		keyword: response
-		requires: {
-			type: phase
-			phase: regroup
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: phase
+                phase: regroup
+            }
 			trigger: {
 				type: moves
 			}

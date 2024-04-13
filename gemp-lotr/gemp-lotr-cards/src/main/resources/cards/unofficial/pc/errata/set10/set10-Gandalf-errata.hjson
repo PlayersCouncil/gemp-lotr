@@ -29,12 +29,12 @@
 		culture: Gandalf
 		type: event
 		keyword: response
-		requires: {
-			type: phase
-			phase: regroup
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: phase
+                phase: regroup
+            }
 			trigger: {
 				type: moves
 			}

@@ -165,18 +165,23 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: dwarf
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyStrength
-				filter: self,inSkirmishAgainst(uruk-hai)
-				amount: 3
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: dwarf
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyStrength
+                    filter: self,inSkirmishAgainst(uruk-hai)
+                    amount: 3
+                }
+            }
+        ]
 	}
 	2_7: {
 		title: Gloin
@@ -207,12 +212,15 @@
 		culture: dwarven
 		twilight: 0
 		type: condition
-		requires: {
-			type: canSpot
-			filter: dwarf
-		}
 		keyword: support area
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: dwarf
+                }
+		    }
 			{
 				type: modifier
 				modifier: {
@@ -372,12 +380,12 @@
 		twilight: 0
 		type: event
 		keyword: regroup
-		requires: {
-			type: canSpot
-			filter: dwarf
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: dwarf
+            }
 			effect: {
 				type: preventable
 				effect: {

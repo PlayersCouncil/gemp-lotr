@@ -1,0 +1,194 @@
+{
+    3_81: {
+        title: Gates of the Dead City
+        side: shadow
+        culture: Wraith
+        twilight: 1
+        type: condition
+        keyword: Support Area
+        effects: [
+            {
+                type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: nazgul
+                }
+            }
+            {
+                type: trigger
+                trigger: {
+                    type: addsBurden
+                    filter: culture(wraith)
+                }
+                effect: {
+                    type: exert
+                    player: fp
+                    filter: choose(companion)
+                }
+            }
+        ]
+    }
+    3_82: {
+        title: News of Mordor
+        side: shadow
+        culture: Wraith
+        twilight: 1
+        type: event
+        keyword: Skirmish
+        effects: {
+            type: event
+            requires: {
+                type: canSpot
+                filter: culture(isengard),minion
+            }
+            effect: {
+                type: addKeyword
+                filter: choose(nazgul)
+                keyword: damage
+                amount: 1
+            }
+        }
+    }
+    3_83: {
+        title: The Ring Draws Them
+        unique: true
+        side: shadow
+        culture: Wraith
+        twilight: 2
+        type: condition
+        keyword: Support Area
+        effects: [
+            {
+                type: trigger
+                trigger: {
+                    type: moves
+                }
+                effect: {
+                    type: addTwilight
+                    amount: {
+                        type: forEachBurden
+                    }
+                }
+            }
+            {
+                type: trigger
+                trigger: {
+                    type: endOfPhase
+                    phase: shadow
+                }
+                effect: {
+                    type: choice
+                    texts: [
+                        Exert a Nazgul
+                        Discard The Ring Draws Them
+                    ]
+                    effects: [
+                        {
+                            type: exert
+                            filter: choose(nazgul)
+                        }
+                        {
+                            type: discard
+                            filter: self
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+    3_84: {
+        title: They Will Never Stop Hunting You
+        side: shadow
+        culture: Wraith
+        twilight: 2
+        type: event
+        keyword: Maneuver
+        effects: {
+            type: event
+            requires: {
+                type: canSpot
+                filter: nazgul
+            }
+            effect: [
+                {
+                    type: revealRandomCardsFromHand
+                    forced: true
+                    hand: fp
+                    memorize: revealedCard
+                }
+                {
+                    type: exert
+                    filter: choose(companion,hasAttached(ranged weapon))
+                    times: {
+                        type: twilightCostInMemory
+                        memory: revealedCard
+                    }
+                }
+            ]
+        }
+    }
+    3_85: {
+        title: Too Great and Terrible
+        side: shadow
+        culture: Wraith
+        twilight: 0
+        type: event
+        keyword: Maneuver
+        effects: {
+            type: event
+            requires: {
+                type: canSpot
+                filter: nazgul
+            }
+            effect: {
+                type: preventable
+                text: Would you like to discard 2 GANDALF cards from hand to prevent wounding Gandalf twice?
+                player: fp
+                cost: {
+                    type: discardFromHand
+                    forced: false
+                    hand: fp
+                    player: fp
+                    filter: choose(culture(gandalf))
+                    count: 2
+                }
+                effect: {
+                    type: wound
+                    filter: choose(name(Gandalf))
+                    times: 2
+                }
+            }
+        }
+    }
+    3_86: {
+        title: Úlairë Otsëa
+        subtitle: Ringwraith in Twilight
+        unique: true
+        side: shadow
+        culture: Wraith
+        twilight: 4
+        type: minion
+        race: Nazgul
+        strength: 9
+        vitality: 3
+        site: 3
+        keyword: Twilight
+        effects: {
+            type: trigger
+            optional: true
+            trigger: {
+                type: winsSkirmish
+                filter: self
+            }
+            cost: {
+                type: exert
+                filter: self
+            }
+            effect: {
+                type: transfer
+                filter: choose(name(Blade Tip),zone(support))
+                where: choose(ringBearer)
+            }
+        }
+    }
+}

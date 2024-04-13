@@ -27,12 +27,12 @@
 		twilight: 1
 		type: event
 		keyword: archery
-		requires: {
-			type: canSpot
-			filter: culture(moria),archer
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(moria),archer
+            }
 			effect: {
 				type: wound
 				filter: choose(elf)
@@ -50,22 +50,27 @@
 		strength: 15
 		vitality: 4
 		site: 4
-		requires: {
-			type: canSpot
-			filter: culture(moria),orc
-		}
 		keyword: [
 			damage+1
 			fierce
 		]
-		effects: {
-			type: modifyOwnCost
-			requires: {
-				type: location
-				filter: underground
-			}
-			amount: -3
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(moria),orc
+                }
+		    }
+            {
+                type: modifyOwnCost
+                requires: {
+                    type: location
+                    filter: underground
+                }
+                amount: -3
+            }
+        ]
 	}
 	1_166: {
 		title: Cave Troll's Hammer
@@ -135,13 +140,13 @@
 		twilight: 0
 		type: event
 		keyword: assignment
-		requires: {
-			type: canSpot
-			count: 5
-			filter: culture(moria),minion
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                count: 5
+                filter: culture(moria),minion
+            }
 			effect: {
 				type: assignFpCharacterToSkirmish
 				player: fp
@@ -156,12 +161,12 @@
 		twilight: 0
 		type: event
 		keyword: shadow
-		requires: {
-			type: canSpot
-			filter: hobbit,not(ring bearer)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: hobbit,not(ring bearer)
+            }
 			effect: [
 				{
 					type: getCardsFromTopOfDeck
@@ -293,26 +298,31 @@
 			search
 			support area
 		]
-		requires: {
-			type: canSpot
-			filter: culture(moria),minion
-		}
-		effects: {
-			type: trigger
-			trigger: {
-				type: played
-				filter: companion
-				memorize: playedCompanion
-			}
-			requires: {
-				type: location
-				filter: siteBlock(fellowship),siteNumber(4-9)
-			}
-			effect: {
-				type: exhaust
-				filter: memory(playedCompanion)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(moria),minion
+                }
+		    }
+            {
+                type: trigger
+                trigger: {
+                    type: played
+                    filter: companion
+                    memorize: playedCompanion
+                }
+                requires: {
+                    type: location
+                    filter: siteBlock(fellowship),siteNumber(4-9)
+                }
+                effect: {
+                    type: exhaust
+                    filter: memory(playedCompanion)
+                }
+            }
+        ]
 	}
 	1_176: {
 		title: Goblin Marksman
@@ -787,13 +797,13 @@
 			search
 			response
 		]
-		requires: {
-			type: canSpot
-			count: 3
-			filter: culture(moria),minion
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                count: 3
+                filter: culture(moria),minion
+            }
 			trigger: {
 				type: played
 				filter: stealth,event

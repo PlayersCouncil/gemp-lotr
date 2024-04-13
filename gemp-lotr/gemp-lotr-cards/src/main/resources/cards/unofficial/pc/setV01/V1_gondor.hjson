@@ -261,33 +261,38 @@
 		type: condition
 		target: companion,signet(aragorn),not(name(Aragorn))
 		strength: 2
-		requires: {
-			type: canSpot
-			filter: name(aragorn)
-		}
-		effects: {
-			type: trigger
-			trigger: {
-				type: winsSkirmish
-				filter: bearer
-			}
-			effect: {
-				type: choice
-				texts: [
-					Exert Aragorn
-					Discard You Have My Sword
-				]
-				effects: [
-					{
-						type: exert
-						filter: choose(name(Aragorn))
-					}
-					{
-						type: discard
-						filter: self
-					}
-				]
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(aragorn)
+                }
+		    }
+            {
+                type: trigger
+                trigger: {
+                    type: winsSkirmish
+                    filter: bearer
+                }
+                effect: {
+                    type: choice
+                    texts: [
+                        Exert Aragorn
+                        Discard You Have My Sword
+                    ]
+                    effects: [
+                        {
+                            type: exert
+                            filter: choose(name(Aragorn))
+                        }
+                        {
+                            type: discard
+                            filter: self
+                        }
+                    ]
+                }
+            }
+        ]
 	}
 }

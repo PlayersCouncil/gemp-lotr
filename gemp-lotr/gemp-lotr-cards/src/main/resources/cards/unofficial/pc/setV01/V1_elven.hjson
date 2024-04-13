@@ -8,13 +8,12 @@
 			skirmish
 			tale
 		]
-		requires: {
-			type: canSpot
-			filter: elf,inskirmish
-		}
 		effects: {
 			type: event
-			
+            requires: {
+                type: canSpot
+                filter: elf,inskirmish
+            }
 			cost: {
 				type: discard
 				filter: choose(your,culture(elven),tale)
@@ -37,11 +36,14 @@
 		type: condition
 		keyword: support area
 		target: companion,unbound
-		requires: {
-			type: HasCardInDeadPile
-			filter: companion,unique
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: HasCardInDeadPile
+                    filter: companion,unique
+                }
+		    }
 			{
 				type: extraCost
 				cost: {

@@ -726,11 +726,11 @@
     type: event
     keyword: skirmish
     twilight: 1
-    requires: {
-      type: ringIsOn
-    }
     effects: {
       type: event
+      requires: {
+        type: ringIsOn
+      }
       effect: [
         {
           type: wound

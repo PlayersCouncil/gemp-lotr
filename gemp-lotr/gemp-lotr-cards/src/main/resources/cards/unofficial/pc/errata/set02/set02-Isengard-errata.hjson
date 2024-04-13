@@ -177,12 +177,12 @@
 		title: Too Much Attention
 		type: event
 		keyword: Response
-		requires: {
-			type: canSpot
-			filter: culture(isengard),minion
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                filter: culture(isengard),minion
+            }
 			trigger: {
 				type: putsOnRing
 			}

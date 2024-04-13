@@ -93,28 +93,33 @@
 		twilight: 1
 		type: condition
 		keyword: support area
-		requires: {
-			type: CanSpot
-			filter: Hobbit
-			count: 2
-		}
-		effects: {
-			type: activated
-			phase: fellowship
-			cost: {
-				type: discard
-				filter: self
-			}
-			effect: {
-				type: addModifier
-				modifier: {
-					type: ModifyStrength
-					amount: -4
-					filter: Nazgul
-				}
-				until: start(regroup)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: CanSpot
+                    filter: Hobbit
+                    count: 2
+                }
+		    }
+            {
+                type: activated
+                phase: fellowship
+                cost: {
+                    type: discard
+                    filter: self
+                }
+                effect: {
+                    type: addModifier
+                    modifier: {
+                        type: ModifyStrength
+                        amount: -4
+                        filter: Nazgul
+                    }
+                    until: start(regroup)
+                }
+            }
+        ]
 		gametext: To play, spot 2 Hobbits.\Fellowship: Discard this condition to make each Nazgûl strength -4 until the regroup phase.
 		lore: "'...our shapes cast shadows in their minds, which only the noon sun destroys....'"
 		promotext: ""

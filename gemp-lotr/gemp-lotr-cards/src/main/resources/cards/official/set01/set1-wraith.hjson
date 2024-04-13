@@ -272,12 +272,12 @@
 		twilight: 0
 		type: event
 		keyword: skirmish
-		requires: {
-			type: canSpotBurdens
-			amount: 3
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpotBurdens
+                amount: 3
+            }
 			effect: {
 				type: choice
 				texts: [
@@ -634,25 +634,30 @@
 			search
 			support area
 		]
-		requires: {
-			type: canSpot
-			filter: nazgul
-		}
-		effects: {
-			type: activated
-			phase: shadow
-			cost: {
-				type: removeTwilight
-				amount: 3
-			}
-			effect: {
-				type: playSite
-				block: fellowship
-				number: {
-					type: currentSiteNumber
-				}
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: nazgul
+                }
+		    }
+            {
+                type: activated
+                phase: shadow
+                cost: {
+                    type: removeTwilight
+                    amount: 3
+                }
+                effect: {
+                    type: playSite
+                    block: fellowship
+                    number: {
+                        type: currentSiteNumber
+                    }
+                }
+            }
+        ]
 	}
 	1_223: {
 		title: Relentless Charge
@@ -678,11 +683,11 @@
 		twilight: 0
 		type: event
 		keyword: response
-		requires: {
-			type: ringIsOn
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: ringIsOn
+            }
 			trigger: {
 				type: endOfPhase
 				phase: skirmish
@@ -1121,22 +1126,27 @@
 		culture: wraith
 		twilight: 0
 		type: condition
-		requires: {
-			type: canSpot
-			filter: nazgul
-		}
 		keyword: support area
-		effects: {
-			type: activated
-			phase: archery
-			cost: {
-				type: removeTwilight
-			}
-			effect: {
-				type: modifyArcheryTotal
-				side: free people
-				amount: -1
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: nazgul
+                }
+		    }
+            {
+                type: activated
+                phase: archery
+                cost: {
+                    type: removeTwilight
+                }
+                effect: {
+                    type: modifyArcheryTotal
+                    side: free people
+                    amount: -1
+                }
+            }
+        ]
 	}
 }

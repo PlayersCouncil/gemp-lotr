@@ -827,19 +827,24 @@
 		twilight: 2
 		type: condition
 		keyword: tale
-		requires: {
-			type: canSpot
-			filter: name(Bilbo)
-		}
 		target: character,not(hasAttached(name(Stone Trolls)))
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyStrength
-				filter: bearer,inSkirmishAgainst(or(troll,uruk-hai))
-				amount: 3
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Bilbo)
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyStrength
+                    filter: bearer,inSkirmishAgainst(or(troll,uruk-hai))
+                    amount: 3
+                }
+            }
+        ]
 	}
 	1_315: {
 		title: Stout and Sturdy

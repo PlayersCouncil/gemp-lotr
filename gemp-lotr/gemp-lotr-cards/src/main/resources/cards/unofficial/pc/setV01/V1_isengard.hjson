@@ -155,12 +155,14 @@
 		twilight: 1
 		type: condition
 		target: companion,not(hasAttached(name(Frostbite)))
-		requires: {
-			type: canSpot
-			filter: weather,condition
-		}
 		effects: [
-
+            {
+                type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: weather,condition
+                }
+            }
 			{
 				type: trigger
 				trigger: {

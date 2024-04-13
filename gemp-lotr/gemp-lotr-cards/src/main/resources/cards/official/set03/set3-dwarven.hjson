@@ -1,0 +1,169 @@
+{
+    3_1: {
+        title: Book of Mazarbul
+        unique: true
+        side: free_people
+        culture: Dwarven
+        twilight: 2
+        type: possession
+        keyword: Tale
+        target: dwarf
+        effects: {
+            type: trigger
+            optional: true
+            trigger: {
+                type: startOfPhase
+                phase: fellowship
+            }
+            requires: {
+                type: location
+                filter: siteNumber(4-100)
+            }
+            effect: {
+                type: drawCards
+                count: {
+                    type: forEachYouCanSpot
+                    filter: dwarf,companion
+                }
+            }
+        }
+    }
+    3_2: {
+        title: Gimli's Pipe
+        unique: true
+        side: free_people
+        culture: Dwarven
+        twilight: 1
+        type: possession
+        itemclass: Pipe
+        target: name(Gimli)
+        effects: {
+            type: activated
+            phase: fellowship
+            cost: {
+                type: exert
+                filter: choose(name(Gimli))
+            }
+            effect: {
+                type: addModifier
+                modifier: {
+                    type: itemClassSpot
+                    class: Pipe
+                }
+            }
+        }
+    }
+    3_3: {
+        title: Mines of Khazad-Dum
+        side: free_people
+        culture: Dwarven
+        twilight: 1
+        type: condition
+        keyword: Support Area
+        effects: {
+            type: trigger
+            optional: true
+            trigger: {
+                type: played
+                filter: culture(dwarven),tale
+            }
+            effect: {
+                type: heal
+                filter: choose(dwarf,companion)
+            }
+        }
+    }
+    3_4: {
+        title: A Royal Welcome
+        side: free_people
+        culture: Dwarven
+        twilight: 2
+        type: condition
+        keyword: Support Area
+        effects: {
+            type: activated
+            phase: regroup
+            cost: {
+                type: exert
+                filter: choose(dwarf, ally)
+            }
+            effect: {
+                type: heal
+                filter: choose(dwarf,companion)
+            }
+        }
+    }
+    3_5: {
+        title: Song of Durin
+        side: free_people
+        culture: Dwarven
+        twilight: 0
+        type: condition
+        keyword:
+        [
+            Support Area
+            Tale
+        ]
+        effects: [
+            {
+                type: extraCost
+                cost: {
+                    type: exert
+                    filter: choose(dwarf)
+                }
+            }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyCost
+                    filter: culture(moria),weapon
+                    amount: 2
+                }
+            }
+            {
+                type: activated
+                phase: fellowship
+                cost: {
+                    type: discard
+                    filter: self
+                }
+                effect: {
+                    type: discard
+                    filter: choose(culture(moria),condition)
+                    count: 0-2
+                }
+            }
+        ]
+    }
+    3_6: {
+        title: Storm of Argument
+        side: free_people
+        culture: Dwarven
+        twilight: 1
+        type: event
+        keyword: Fellowship
+        effects: {
+            type: event
+            effect: [
+                {
+                    type: revealCardsFromHand
+                    hand: shadow
+                    filter: random(1)
+                    memorize: revealedCard
+                }
+                {
+                    type: shuffleCardsFromDiscardIntoDrawDeck
+                    filter: choose(culture(dwarven))
+                    count: {
+                        type: range
+                        from: 0
+                        to: {
+                            type: twilightCostInMemory
+                            memory: revealedCard
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

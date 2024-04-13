@@ -990,12 +990,12 @@
     twilight: 2
     type: event
     keyword: maneuver
-    requires: {
-      type: canSpot
-      filter: name(Gandalf)
-    }
     effects: {
       type: event
+      requires: {
+        type: canSpot
+        filter: name(Gandalf)
+      }
       effect: {
         type: choice
         texts: [
@@ -1037,12 +1037,12 @@
       spell
       skirmish
     ]
-    requires: {
-      type: canSpot
-      filter: name(Gandalf)
-    }
     effects: {
       type: event
+      requires: {
+        type: canSpot
+        filter: name(Gandalf)
+      }
       effect: {
         type: modifyStrength
         filter: choose(minion)

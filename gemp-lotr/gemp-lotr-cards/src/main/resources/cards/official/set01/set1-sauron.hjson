@@ -8,19 +8,19 @@
 			search
 			maneuver
 		]
-		requires: [
-			{
-				type: canSpot
-				filter: culture(sauron),orc
-			}
-			{
-				type: canSpot
-				count: 5
-				filter: companion
-			}
-		]
 		effects: {
 			type: event
+            requires: [
+                {
+                    type: canSpot
+                    filter: culture(sauron),orc
+                }
+                {
+                    type: canSpot
+                    count: 5
+                    filter: companion
+                }
+            ]
 			effect: {
 				type: repeat
 				amount: {
@@ -68,12 +68,12 @@
 		twilight: 0
 		type: event
 		keyword: shadow
-		requires: {
-			type: canSpot
-			filter: culture(sauron),orc
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(sauron),orc
+            }
 			effect: {
 				type: discard
 				filter: choose(culture(elven),condition)
@@ -89,47 +89,52 @@
 			search
 			support area
 		]
-		requires: {
-			type: canSpot
-			filter: culture(sauron),orc
-		}
-		effects: {
-			type: activated
-			phase: shadow
-			cost: {
-				type: removeTwilight
-				amount: 3
-			}
-			effect: [
-				{
-					type: revealTopCardsOfDrawDeck
-					count: 1
-					memorize: revealedCards
-				}
-				{
-					type: putCardsFromDeckIntoHand
-					filter: all(memory(revealedCards),culture(sauron))
-					shuffle: false
-				}
-				{
-					type: discardCardsFromDrawDeck
-					filter: all(memory(revealedCards),not(culture(sauron)))
-				}
-				{
-					type: conditional
-					requires: {
-						type: memoryMatches
-						memory: revealedCards
-						filter: not(culture(sauron))
-					}
-					effect: {
-						type: discardFromHand
-						forced: false
-						count: 1
-					}
-				}
-			]
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(sauron),orc
+                }
+		    }
+            {
+                type: activated
+                phase: shadow
+                cost: {
+                    type: removeTwilight
+                    amount: 3
+                }
+                effect: [
+                    {
+                        type: revealTopCardsOfDrawDeck
+                        count: 1
+                        memorize: revealedCards
+                    }
+                    {
+                        type: putCardsFromDeckIntoHand
+                        filter: all(memory(revealedCards),culture(sauron))
+                        shuffle: false
+                    }
+                    {
+                        type: discardCardsFromDrawDeck
+                        filter: all(memory(revealedCards),not(culture(sauron)))
+                    }
+                    {
+                        type: conditional
+                        requires: {
+                            type: memoryMatches
+                            memory: revealedCards
+                            filter: not(culture(sauron))
+                        }
+                        effect: {
+                            type: discardFromHand
+                            forced: false
+                            count: 1
+                        }
+                    }
+                ]
+            }
+        ]
 	}
 	1_243: {
 		title: Despair
@@ -137,30 +142,30 @@
 		twilight: 2
 		type: event
 		keyword: maneuver
-		requires: [
-			{
-				type: isGreaterThan
-				firstNumber: {
-					type: sum
-					source: [
-						{
-							type: forEachInDeadPile
-							filter: companion
-						}
-						{
-							type: forEachBurden
-						}
-					]
-				}
-				secondNumber: 11
-			}
-			{
-				type: canSpot
-				filter: culture(sauron),orc
-			}
-		]
 		effects: {
 			type: event
+            requires: [
+                {
+                    type: isGreaterThan
+                    firstNumber: {
+                        type: sum
+                        source: [
+                            {
+                                type: forEachInDeadPile
+                                filter: companion
+                            }
+                            {
+                                type: forEachBurden
+                            }
+                        ]
+                    }
+                    secondNumber: 11
+                }
+                {
+                    type: canSpot
+                    filter: culture(sauron),orc
+                }
+            ]
 			effect: {
 				type: corruptRingBearer
 			}
@@ -213,12 +218,12 @@
 		twilight: 2
 		type: event
 		keyword: maneuver
-		requires: {
-			type: canSpot
-			filter: culture(sauron),orc
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(sauron),orc
+            }
 			cost: {
 				type: removeBurdens
 			}
@@ -351,19 +356,19 @@
 			search
 			maneuver
 		]
-		requires: [
-			{
-				type: canSpot
-				filter: culture(sauron),orc
-			}
-			{
-				type: canSpot
-				count: 6
-				filter: companion
-			}
-		]
 		effects: {
 			type: event
+            requires: [
+                {
+                    type: canSpot
+                    filter: culture(sauron),orc
+                }
+                {
+                    type: canSpot
+                    count: 6
+                    filter: companion
+                }
+            ]
 			effect: {
 				type: repeat
 				amount: {
@@ -743,12 +748,12 @@
 		twilight: 0
 		type: event
 		keyword: response
-		requires: {
-			type: canSpot
-			filter: culture(sauron),orc,inSkirmish
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                filter: culture(sauron),orc,inSkirmish
+            }
 			trigger: {
 				type: killed
 				filter: companion
@@ -955,12 +960,12 @@
 		twilight: 3
 		type: event
 		keyword: response
-		requires: {
-			type: canSpot
-			filter: culture(sauron),orc,inSkirmish
-		}
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                filter: culture(sauron),orc,inSkirmish
+            }
 			trigger: {
 				type: killed
 				filter: companion
@@ -1228,21 +1233,26 @@
 		culture: sauron
 		twilight: 1
 		type: condition
-		requires: {
-			type: canSpot
-			filter: culture(sauron),orc
-		}
 		target: companion,not(elf)
-		effects: {
-			type: modifier
-			modifier: {
-				type: cantHeal
-				filter: bearer
-				requires: {
-					type: location
-					filter: sanctuary
-				}
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(sauron),orc
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: cantHeal
+                    filter: bearer
+                    requires: {
+                        type: location
+                        filter: sanctuary
+                    }
+                }
+            }
+        ]
 	}
 }

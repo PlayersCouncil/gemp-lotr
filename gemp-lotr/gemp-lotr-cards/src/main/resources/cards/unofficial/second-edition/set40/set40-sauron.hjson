@@ -9,11 +9,14 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		requires: {
-			type: canSpot
-			filter: culture(sauron),minion
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(sauron),minion
+                }
+		    }
 			{
 				type: modifier
 				modifier: {
@@ -464,29 +467,34 @@
 		vitality: 1
 		site: 6
 		keyword: archer
-		requires: {
-			type: canSpot
-			filter: culture(sauron),minion
-		}
-		effects: {
-			type: activatedTrigger
-			trigger: {
-				type: aboutToBeKilled
-				filter: self
-			}
-			requires: {
-				type: phase
-				phase: archery
-			}
-			cost: {
-				type: discard
-				filter: self
-			}
-			effect: {
-				type: heal
-				filter: choose(another,culture(sauron),archer)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(sauron),minion
+                }
+		    }
+            {
+                type: activatedTrigger
+                trigger: {
+                    type: aboutToBeKilled
+                    filter: self
+                }
+                requires: {
+                    type: phase
+                    phase: archery
+                }
+                cost: {
+                    type: discard
+                    filter: self
+                }
+                effect: {
+                    type: heal
+                    filter: choose(another,culture(sauron),archer)
+                }
+            }
+        ]
 	}
 	40_226: {
 		title: Orc Brute
@@ -908,12 +916,12 @@
     twilight: 1
     type: event
     keyword: maneuver
-    requires: {
-      type: canSpot
-      filter: culture(sauron),minion
-    }
     effects: {
       type: event
+        requires: {
+          type: canSpot
+          filter: culture(sauron),minion
+        }
       effect: [
         {
           type: addThreats

@@ -30,28 +30,33 @@
 		twilight: 1
 		type: condition
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: dwarf
-		}
-		effects: {
-			type: trigger
-			trigger: {
-				type: losesInitiative
-				side: free people
-			}
-			requires: {
-				type: not
-				requires: {
-					type: phase
-					phase: fellowship
-				}
-			}
-			effect: {
-				type: play
-				filter: choose(culture(dwarven),or(condition,possession))
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: dwarf
+                }
+		    }
+            {
+                type: trigger
+                trigger: {
+                    type: losesInitiative
+                    side: free people
+                }
+                requires: {
+                    type: not
+                    requires: {
+                        type: phase
+                        phase: fellowship
+                    }
+                }
+                effect: {
+                    type: play
+                    filter: choose(culture(dwarven),or(condition,possession))
+                }
+            }
+        ]
 		gametext: To play, spot a Dwarf.<br>Each time you lose initiative (except during the fellowship phase), you may play a [Dwarven] condition or [Dwarven] possession from hand.
 		lore: "'Had I known what was before me, I think that not for any friendship would I have taken the Paths of the Dead.'"
 		promotext: ""

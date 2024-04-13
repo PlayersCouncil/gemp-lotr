@@ -68,6 +68,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("foreachshadowplayer", new ForEachShadowPlayer());
         effectAppenderProducers.put("getcardsfromtopofdeck", new GetCardsFromTopOfDeck());
         effectAppenderProducers.put("heal", new Heal());
+        effectAppenderProducers.put("if", new IfEffect());
         effectAppenderProducers.put("incrementperphaselimit", new IncrementPerPhaseLimit());
         effectAppenderProducers.put("incrementperturnlimit", new IncrementPerTurnLimit());
         effectAppenderProducers.put("kill", new Kill());
@@ -95,9 +96,11 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("playnextsite", new PlayNextSite());
         effectAppenderProducers.put("playsite", new PlaySite());
         effectAppenderProducers.put("preventable", new PreventableAppenderProducer());
+        effectAppenderProducers.put("preventburden", new PreventBurden());
         effectAppenderProducers.put("preventdiscard", new PreventCardEffectAppender());
         effectAppenderProducers.put("preventexert", new PreventExert());
         effectAppenderProducers.put("preventheal", new PreventCardEffectAppender());
+        effectAppenderProducers.put("preventtwilight", new PreventTwilight());
         effectAppenderProducers.put("preventwound", new PreventWound());
         effectAppenderProducers.put("putcardsfromdeckintohand", new PutCardsFromDeckIntoHand());
         effectAppenderProducers.put("putcardsfromdeckontopofdeck", new PutCardsFromDeckOnTopOfDeck());

@@ -35,6 +35,7 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("playedinotherphase", new PlayedInOtherPhase());
         effectProcessors.put("responseevent", new ResponseEventEffectProcessor());
         effectProcessors.put("trigger", new TriggerEffectProcessor());
+        effectProcessors.put("toplay", new ToPlay());
     }
 
     @Override

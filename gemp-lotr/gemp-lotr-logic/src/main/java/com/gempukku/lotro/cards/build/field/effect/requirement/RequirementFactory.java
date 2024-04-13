@@ -33,6 +33,7 @@ public class RequirementFactory {
         requirementProducers.put("hascardindiscard", new HasCardInDiscard());
         requirementProducers.put("hascardstacked", new HasCardStacked());
         requirementProducers.put("hascardinhand", new HasCardInHand());
+        requirementProducers.put("hasinmemory", new HasInMemory());
         requirementProducers.put("hasinzonedata", new HasInZoneData());
         requirementProducers.put("haveinitiative", new HaveInitiative());
         requirementProducers.put("isequal", new IsEqual());
@@ -44,6 +45,7 @@ public class RequirementFactory {
         requirementProducers.put("isowner", new IsOwnerRequirementProducer());
         requirementProducers.put("isside", new IsSideRequirementProducer());
         requirementProducers.put("location", new Location());
+        requirementProducers.put("lostskirmishthisturn", new LostSkirmishThisTurn());
         requirementProducers.put("memoryis", new MemoryIs());
         requirementProducers.put("memorylike", new MemoryLike());
         requirementProducers.put("memorymatches", new MemoryMatches());

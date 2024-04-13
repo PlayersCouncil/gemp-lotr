@@ -1036,12 +1036,12 @@
 		twilight: 0
 		type: event
 		keyword: assignment
-		requires: {
-			type: canSpot
-			filter: culture(sauron)
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(sauron)
+            }
 			effect: {
 				type: playCardFromDiscard
 				filter: choose(orc)
@@ -1207,13 +1207,13 @@
 		twilight: 2
 		type: event
 		keyword: skirmish
-		requires: {
-			type: canSpot
-			filter: culture(sauron),minion
-			count: 2
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(sauron),minion
+                count: 2
+            }
 			effect: [
 				{
 					type: shuffleCardsFromPlayIntoDrawDeck

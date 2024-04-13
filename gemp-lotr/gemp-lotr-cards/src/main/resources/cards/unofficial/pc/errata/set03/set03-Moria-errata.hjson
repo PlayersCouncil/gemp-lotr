@@ -28,18 +28,18 @@
 		twilight: 0
 		type: event
 		keyword: maneuver
-		requires: [
-			{
-				type: CanSpot
-				filter: culture(moria),Orc
-			}
-			{
-				type: CanSpot
-				filter: culture(sauron),Orc
-			}
-		]
 		effects: {
 			type: event
+            requires: [
+                {
+                    type: CanSpot
+                    filter: culture(moria),Orc
+                }
+                {
+                    type: CanSpot
+                    filter: culture(sauron),Orc
+                }
+            ]
 			effect: [
 				{
 					type: playCardFromDiscard
