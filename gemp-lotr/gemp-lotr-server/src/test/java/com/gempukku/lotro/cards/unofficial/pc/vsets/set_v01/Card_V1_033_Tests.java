@@ -123,13 +123,13 @@ public class Card_V1_033_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(ftentacle1);
-		scn.ShadowDeclineOptionalTrigger();
+		//scn.ShadowDeclineOptionalTrigger();
 		scn.ShadowPlayCard(ftentacle2);
-		scn.ShadowDeclineOptionalTrigger();
+		//scn.ShadowDeclineOptionalTrigger();
 
 		assertFalse(scn.ShadowActionAvailable("Thrashing Tentacle"));
 		scn.ShadowPlayCard(ftentacle3);
-		scn.ShadowDeclineOptionalTrigger();
+		//scn.ShadowDeclineOptionalTrigger();
 
 		assertTrue(scn.ShadowActionAvailable("Thrashing Tentacle"));
 		scn.ShadowUseCardAction(ttent);
