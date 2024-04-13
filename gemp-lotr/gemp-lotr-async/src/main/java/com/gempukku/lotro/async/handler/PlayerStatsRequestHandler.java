@@ -8,8 +8,8 @@ import com.gempukku.lotro.game.Player;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class PlayerStatsRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
     private final GameHistoryService _gameHistoryService;
 
-    private static final Logger _log = Logger.getLogger(PlayerStatsRequestHandler.class);
+    private static final Logger _log = LogManager.getLogger(PlayerStatsRequestHandler.class);
 
     public PlayerStatsRequestHandler(Map<Type, Object> context) {
         super(context);

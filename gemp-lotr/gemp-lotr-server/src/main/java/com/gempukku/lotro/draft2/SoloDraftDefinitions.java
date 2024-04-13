@@ -5,8 +5,8 @@ import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.draft2.builder.*;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
-import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 public class SoloDraftDefinitions {
-    private static final Logger _logger = Logger.getLogger(SoloDraftDefinitions.class);
+    private static final Logger _logger = LogManager.getLogger(SoloDraftDefinitions.class);
     private Map<String, SoloDraft> _draftTypes = new HashMap<>();
     private final DraftChoiceBuilder _draftChoiceBuilder;
     private final File _draftDefinitionPath;

@@ -2,8 +2,8 @@ package com.gempukku.lotro.async.handler;
 
 import com.gempukku.lotro.async.ResponseWriter;
 import io.netty.handler.codec.http.HttpRequest;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Type;
 import java.util.Map;
 

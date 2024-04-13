@@ -7,7 +7,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.gempukku.lotro</groupId>
     <artifactId>gemp-lotr-logic</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -25,12 +24,12 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
+            <version>2.16.1</version>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.23.1</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -39,14 +38,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.5</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
         </dependency>
         <dependency>
             <groupId>org.hjson</groupId>
             <artifactId>hjson</artifactId>
-            <version>3.0.0</version>
+            <version>3.1.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -54,5 +54,4 @@
             <version>2.0.7</version>
         </dependency>
     </dependencies>
-
 </project>

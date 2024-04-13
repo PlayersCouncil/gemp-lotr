@@ -14,12 +14,12 @@ import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.modifiers.ModifiersQuerying;
 import com.gempukku.lotro.logic.timing.rules.CharacterDeathRule;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.*;
 
 public class DefaultLotroGame implements LotroGame {
-    private static final Logger log = Logger.getLogger(DefaultLotroGame.class);
+    private static final Logger log = LogManager.getLogger(DefaultLotroGame.class);
 
     private final GameState _gameState;
     private final ModifiersLogic _modifiersLogic = new ModifiersLogic();

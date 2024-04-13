@@ -7,14 +7,14 @@ import com.gempukku.lotro.game.Player;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Type;
 import java.util.Map;
 
 public class PlayerInfoRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
 
-    private static final Logger _log = Logger.getLogger(PlayerInfoRequestHandler.class);
+    private static final Logger _log = LogManager.getLogger(PlayerInfoRequestHandler.class);
 
     public PlayerInfoRequestHandler(Map<Type, Object> context) {
         super(context);

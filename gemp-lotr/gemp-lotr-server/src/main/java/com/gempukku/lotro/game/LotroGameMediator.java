@@ -16,13 +16,13 @@ import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class LotroGameMediator {
-    private static final Logger LOG = Logger.getLogger(LotroGameMediator.class);
+    private static final Logger LOG = LogManager.getLogger(LotroGameMediator.class);
 
     private final Map<String, GameCommunicationChannel> _communicationChannels = Collections.synchronizedMap(new HashMap<>());
     private final DefaultUserFeedback _userFeedback;

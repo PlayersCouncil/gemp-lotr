@@ -70,8 +70,15 @@ public class DBDefs {
         public String product_variant;
         public String product;
         public String source;
-        public ZonedDateTime created_date;
-        public ZonedDateTime modified_date;
+        public LocalDateTime created_date;
+        public LocalDateTime modified_date;
+        public ZonedDateTime GetUTCCreatedDate() {
+            return ZonedDateTime.of(created_date, ZoneId.of("UTC"));
+        }
+
+        public ZonedDateTime GetUTCModifiedDate() {
+            return ZonedDateTime.of(modified_date, ZoneId.of("UTC"));
+        }
         public String notes;
     }
 

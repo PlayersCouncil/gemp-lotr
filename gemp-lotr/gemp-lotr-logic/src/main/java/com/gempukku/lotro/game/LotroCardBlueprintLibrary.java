@@ -9,8 +9,8 @@ import com.gempukku.lotro.game.packs.SetDefinition;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.util.JsonUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.hjson.JsonValue;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;import org.hjson.JsonValue;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 public class LotroCardBlueprintLibrary {
-    private static final Logger logger = Logger.getLogger(LotroCardBlueprintLibrary.class);
+    private static final Logger logger = LogManager.getLogger(LotroCardBlueprintLibrary.class);
 
     private final String[] _packageNames =
             new String[]{

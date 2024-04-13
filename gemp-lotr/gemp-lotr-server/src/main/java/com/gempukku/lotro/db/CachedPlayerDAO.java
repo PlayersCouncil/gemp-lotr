@@ -3,7 +3,7 @@ package com.gempukku.lotro.db;
 import com.gempukku.lotro.cache.Cached;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.game.Player;
-import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.collections4.map.LRUMap;
 
 import java.sql.SQLException;
 import java.util.*;

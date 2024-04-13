@@ -19,8 +19,8 @@ import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.tournament.*;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
@@ -66,7 +66,8 @@ public class HallServer extends AbstractServer {
     private final ChatRoomMediator _hallChat;
     private final GameResultListener _notifyHallListeners = new NotifyHallListenersGameResultListener();
 
-    private static final Logger _log = Logger.getLogger(HallServer.class);
+
+    private static final Logger _log = LogManager.getLogger(HallServer.class);
 
     public HallServer(IgnoreDAO ignoreDAO, LotroServer lotroServer, ChatServer chatServer, LeagueService leagueService, TournamentService tournamentService, LotroCardBlueprintLibrary library,
                       LotroFormatLibrary formatLibrary, ProductLibrary productLibrary, CollectionsManager collectionsManager, AdminService adminService) {

@@ -7,14 +7,14 @@ import com.gempukku.lotro.logic.PlayerOrder;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.GameStats;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GameState {
-    private static final Logger _log = Logger.getLogger(GameState.class);
+    private static final Logger _log = LogManager.getLogger(GameState.class);
     private static final int LAST_MESSAGE_STORED_COUNT = 15;
     private PlayerOrder _playerOrder;
 

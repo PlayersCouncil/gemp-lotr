@@ -3,8 +3,8 @@ package com.gempukku.lotro.hall;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.polling.LongPollableResource;
 import com.gempukku.polling.WaitingRequest;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.mutable.MutableObject;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.mutable.MutableObject;
 
 import java.util.*;
 

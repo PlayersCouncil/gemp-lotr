@@ -8,18 +8,18 @@ public class JSONDefs {
             SELECTION, PACK, RANDOM, TENGWAR, RANDOM_FOIL, BOOSTER
         }
 
-        public String Name;
-        public PackType Type;
-        public boolean Recursive = false;
-        public List<String> Items;
-        public Map<String, String> Data;
+        public String name;
+        public PackType type;
+        public boolean recursive = false;
+        public List<String> items;
+        public Map<String, String> data;
     }
 
     public static class SealedTemplate {
-        public String Name;
-        public String ID;
-        public String Format;
-        public List<List<String>> SeriesProduct;
+        public String name;
+        public String id;
+        public String format;
+        public List<List<String>> seriesProduct;
     }
 
     public static class ItemStub {

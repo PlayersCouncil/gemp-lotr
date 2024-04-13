@@ -8,15 +8,15 @@ import com.gempukku.lotro.db.DeckDAO;
 import com.gempukku.lotro.hall.GameSettings;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class LotroServer extends AbstractServer {
-    private static final Logger log = Logger.getLogger(LotroServer.class);
+    private static final Logger log = LogManager.getLogger(LotroServer.class);
 
     private final LotroCardBlueprintLibrary _lotroCardBlueprintLibrary;
 

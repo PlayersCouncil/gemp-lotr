@@ -1,11 +1,11 @@
 package com.gempukku.lotro.db;
 
 import com.gempukku.lotro.common.AppConfig;
-import org.apache.commons.dbcp.ConnectionFactory;
-import org.apache.commons.dbcp.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp.PoolableConnectionFactory;
-import org.apache.commons.dbcp.PoolingDataSource;
-import org.apache.commons.pool.impl.GenericObjectPool;
+import org.apache.commons.dbcp2.ConnectionFactory;
+import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
+import org.apache.commons.dbcp2.PoolableConnectionFactory;
+import org.apache.commons.dbcp2.PoolingDataSource;
+import org.apache.commons.pool2.impl.GenericObjectPool;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -49,25 +49,27 @@ public class DbAccess {
                 new DriverManagerConnectionFactory(connectURI, props);
 
         //
+        // Next we'll create the PoolableConnectionFactory, which wraps
+        // the "real" Connections created by the ConnectionFactory with
+        // the classes that implement the pooling functionality.
+        //
+        var poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
+        poolableConnectionFactory.setDefaultAutoCommit(true);
+        poolableConnectionFactory.setDefaultReadOnly(false);
+        poolableConnectionFactory.setValidationQuery(AppConfig.getProperty("db.connection.validateQuery"));
+
+        //
         // Now we'll need a ObjectPool that serves as the
         // actual pool of connections.
         //
         // We'll use a GenericObjectPool instance, although
         // any ObjectPool implementation will suffice.
         //
-        GenericObjectPool connectionPool =
-                new GenericObjectPool();
+        var connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
         connectionPool.setTestOnBorrow(true);
 
-        //
-        // Next we'll create the PoolableConnectionFactory, which wraps
-        // the "real" Connections created by the ConnectionFactory with
-        // the classes that implement the pooling functionality.
-        //
-        PoolableConnectionFactory poolableConnectionFactory =
-                new PoolableConnectionFactory(connectionFactory, connectionPool, null, AppConfig.getProperty("db.connection.validateQuery"), false, true);
-
-        connectionPool.setFactory(poolableConnectionFactory);
+        // Set the factory's pool property to the owning pool
+        poolableConnectionFactory.setPool(connectionPool);
 
         //
         // Finally, we create the PoolingDriver itself,

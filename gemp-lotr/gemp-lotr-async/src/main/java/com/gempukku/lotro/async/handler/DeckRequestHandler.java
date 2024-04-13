@@ -16,8 +16,9 @@ import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -39,7 +40,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private final SoloDraftDefinitions _draftLibrary;
     private final LotroServer _lotroServer;
 
-    private static final Logger _log = Logger.getLogger(DeckRequestHandler.class);
+    private static final Logger _log = LogManager.getLogger(DeckRequestHandler.class);
 
     public DeckRequestHandler(Map<Type, Object> context) {
         super(context);
@@ -100,7 +101,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                         .collect(Collectors.toMap(x-> x.code, x-> x));
                 data.SealedTemplates = _formatLibrary.GetAllSealedTemplates().values().stream()
                         .map(SealedLeagueDefinition::Serialize)
-                        .collect(Collectors.toMap(x-> x.Name, x-> x));
+                        .collect(Collectors.toMap(x-> x.name, x-> x));
                 data.DraftTemplates = _draftLibrary.getAllSoloDrafts().values().stream()
                         .map(soloDraft -> new JSONDefs.ItemStub(soloDraft.getCode(), soloDraft.getFormat()))
                         .collect(Collectors.toMap(x-> x.code, x-> x));
@@ -355,10 +356,10 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                         
     </style>
     <body>""");
-        result.append("<h1>" + StringEscapeUtils.escapeHtml(deck.getDeckName()) + "</h1>");
-        result.append("<h2>Format: " + StringEscapeUtils.escapeHtml(deck.getTargetFormat()) + "</h2>");
+        result.append("<h1>" + StringEscapeUtils.escapeHtml3(deck.getDeckName()) + "</h1>");
+        result.append("<h2>Format: " + StringEscapeUtils.escapeHtml3(deck.getTargetFormat()) + "</h2>");
         if(author != null) {
-            result.append("<h2>Author: " + StringEscapeUtils.escapeHtml(author) + "</h2>");
+            result.append("<h2>Author: " + StringEscapeUtils.escapeHtml3(author) + "</h2>");
         }
         String ringBearer = deck.getRingBearer();
         if (ringBearer != null)

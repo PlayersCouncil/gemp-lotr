@@ -1,13 +1,13 @@
 package com.gempukku.lotro;
 
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 public class ServerCleaner {
-    private static final Logger LOG = Logger.getLogger(ServerCleaner.class);
+    private static final Logger LOG = LogManager.getLogger(ServerCleaner.class);
     private final Set<AbstractServer> _servers = Collections.synchronizedSet(new HashSet<>());
     private CleaningThread _thr;
 

@@ -85,46 +85,46 @@ public class ProductLibrary {
                 PackBox result = null;
                 String[] rarities;
                 String[] sets;
-                switch (def.Type)
+                switch (def.type)
                 {
                     case RANDOM:
-                        if(def.Items == null || def.Items.isEmpty())
+                        if(def.items == null || def.items.isEmpty())
                             continue;
-                        if(def.Items.stream().anyMatch(x -> x.contains("%"))) {
-                            result = WeightedRandomPack.LoadFromArray(def.Items);
+                        if(def.items.stream().anyMatch(x -> x.contains("%"))) {
+                            result = WeightedRandomPack.LoadFromArray(def.items);
                         }
                         else {
-                            result = UnweightedRandomPack.LoadFromArray(def.Items);
+                            result = UnweightedRandomPack.LoadFromArray(def.items);
                         }
 
                         break;
                     case RANDOM_FOIL:
-                        if(def.Data == null || !def.Data.containsKey("rarities") || !def.Data.containsKey("sets")) {
-                            System.out.println(def.Name + " RANDOM_FOIL pack type must contain a definition for 'rarities' and 'sets' within data.");
+                        if(def.data == null || !def.data.containsKey("rarities") || !def.data.containsKey("sets")) {
+                            System.out.println(def.name + " RANDOM_FOIL pack type must contain a definition for 'rarities' and 'sets' within data.");
                             continue;
                         }
-                        rarities = def.Data.get("rarities").toUpperCase().split("\\s*,\\s*");
-                        sets = def.Data.get("sets").split("\\s*,\\s*");
+                        rarities = def.data.get("rarities").toUpperCase().split("\\s*,\\s*");
+                        sets = def.data.get("sets").split("\\s*,\\s*");
                         result = new RandomFoilPack(rarities, sets, _cardLibrary);
                         break;
                     case TENGWAR:
-                        if(def.Data == null || !def.Data.containsKey("sets")) {
-                            System.out.println(def.Name + " TENGWAR pack type must contain a definition for 'sets' within data.");
+                        if(def.data == null || !def.data.containsKey("sets")) {
+                            System.out.println(def.name + " TENGWAR pack type must contain a definition for 'sets' within data.");
                             continue;
                         }
-                        sets = def.Data.get("sets").split("\\s*,\\s*");
+                        sets = def.data.get("sets").split("\\s*,\\s*");
                         result = new TengwarPackBox(sets, _cardLibrary);
                         break;
                     case BOOSTER:
-                        if(def.Data == null || !def.Data.containsKey("set")) {
-                            System.out.println(def.Name + " BOOSTER pack type must contain a definition for 'set' within data.");
+                        if(def.data == null || !def.data.containsKey("set")) {
+                            System.out.println(def.name + " BOOSTER pack type must contain a definition for 'set' within data.");
                             continue;
                         }
-                        if(def.Data.get("set").contains(",")) {
-                            System.out.println(def.Name + " BOOSTER pack type must define exactly one set.");
+                        if(def.data.get("set").contains(",")) {
+                            System.out.println(def.name + " BOOSTER pack type must define exactly one set.");
                             continue;
                         }
-                        String set = def.Data.get("set").trim();
+                        String set = def.data.get("set").trim();
                         if(set.equals("9")) {
                             result = new ReflectionsPackBox(_cardLibrary);
                         }
@@ -134,14 +134,14 @@ public class ProductLibrary {
                         break;
                     case PACK:
                     case SELECTION:
-                        if(def.Items == null || def.Items.isEmpty())
+                        if(def.items == null || def.items.isEmpty())
                             continue;
-                        result = FixedPackBox.LoadFromArray(def.Items, def.Recursive);
+                        result = FixedPackBox.LoadFromArray(def.items, def.recursive);
                         break;
                 }
                 if(result == null)
                 {
-                    System.out.println("Unrecognized pack type: " + def.Type);
+                    System.out.println("Unrecognized pack type: " + def.type);
                     continue;
                 }
 
@@ -149,10 +149,10 @@ public class ProductLibrary {
 //                    var items = result.openPack().stream().map(CardCollection.Item::toString).toList();
 //                    result = FixedPackBox.LoadFromArray(items);
 //                }
-                if(_products.containsKey(def.Name)) {
-                    System.out.println("Overwriting existing pack '" + def.Name + "'!");
+                if(_products.containsKey(def.name)) {
+                    System.out.println("Overwriting existing pack '" + def.name + "'!");
                 }
-                _products.put(def.Name, result);
+                _products.put(def.name, result);
             }
 
 

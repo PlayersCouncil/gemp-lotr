@@ -8,8 +8,8 @@ import com.gempukku.lotro.game.Player;
 import com.google.common.collect.Iterables;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class DeliveryRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
     private final TransferDAO _transferDAO;
 
-    private static final Logger _log = Logger.getLogger(DeliveryRequestHandler.class);
+    private static final Logger _log = LogManager.getLogger(DeliveryRequestHandler.class);
 
     public DeliveryRequestHandler(Map<Type, Object> context) {
         super(context);
