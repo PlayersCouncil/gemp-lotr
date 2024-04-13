@@ -295,10 +295,10 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             for (String playerName : playerNames) {
                 Player player = _playerDao.getPlayer(playerName);
 
-            _collectionManager.addItemsToPlayerCollection(true, "Administrator action", player, createCollectionType(collectionType), productItems);
-        }
+                _collectionManager.addItemsToPlayerCollection(true, "Administrator action", player, createCollectionType(collectionType), productItems);
+            }
 
-        responseWriter.writeHtmlResponse("OK");
+            responseWriter.writeHtmlResponse("OK");
         } finally {
             postDecoder.destroy();
         }
@@ -816,6 +816,13 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         _hallServer.cleanup(true);
 
         responseWriter.writeHtmlResponse("Before: " + before + "<br><br>After: " + after);
+    }
+
+    private void clearCache() throws SQLException, IOException {
+        _leagueService.clearCache();
+        _tournamentService.clearCache();
+        _cacheManager.clearCaches();
+        _hallServer.cleanup(true);
     }
 
     private void validateAdmin(HttpRequest request) throws HttpProcessingException {

@@ -19,7 +19,8 @@ public class ChatServer extends AbstractServer {
         this.playerDAO = playerDAO;
     }
 
-    public ChatRoomMediator createChatRoom(String name, boolean muteJoinPartMessages, int secondsTimeoutPeriod, boolean allowIncognito, String welcomeMessage) {
+    public ChatRoomMediator createChatRoom(String name, boolean muteJoinPartMessages, int secondsTimeoutPeriod,
+            boolean allowIncognito, String welcomeMessage) {
         ChatRoomMediator chatRoom = new ChatRoomMediator(ignoreDAO, playerDAO, name, muteJoinPartMessages, secondsTimeoutPeriod, allowIncognito, welcomeMessage);
         try {
             chatRoom.sendMessage("System", "Welcome to room: " + name, true);

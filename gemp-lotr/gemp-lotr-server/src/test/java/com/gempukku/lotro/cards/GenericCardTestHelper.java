@@ -32,7 +32,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         put("site3", "1_337");
         put("site4", "1_343");
         put("site5", "1_349");
-        put("site6", "1_350");
+        put("site6", "1_351");
         put("site7", "1_353");
         put("site8", "1_356");
         put("site9", "1_360");

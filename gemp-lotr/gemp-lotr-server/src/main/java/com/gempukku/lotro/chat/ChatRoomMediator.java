@@ -34,11 +34,11 @@ public class ChatRoomMediator {
         this.welcomeMessage = welcomeMessage;
     }
 
-    public ChatRoomMediator(IgnoreDAO ignoreDAO, PlayerDAO playerDAO, String roomName, boolean muteJoinPartMessages, int secondsTimeoutPeriod, Set<String> allowedPlayers,
-                            boolean allowIncognito) {
+    public ChatRoomMediator(IgnoreDAO ignoreDAO, PlayerDAO playerDAO, String roomName, boolean muteJoinPartMessages,
+            int secondsTimeoutPeriod, Set<String> allowedPlayers, boolean allowIncognito) {
         this.ignoreDAO = ignoreDAO;
         this.playerDAO = playerDAO;
-        _logger = Logger.getLogger("chat."+roomName);
+        _logger = LogManager.getLogger("chat."+roomName);
         _allowedPlayers = allowedPlayers;
         _channelInactivityTimeoutPeriod = 1000 * secondsTimeoutPeriod;
         _chatRoom = new ChatRoom(muteJoinPartMessages, allowIncognito);
