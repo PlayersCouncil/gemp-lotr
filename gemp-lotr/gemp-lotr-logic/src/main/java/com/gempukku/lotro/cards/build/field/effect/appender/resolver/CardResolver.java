@@ -78,8 +78,9 @@ public class CardResolver {
 
         if (type.startsWith("memory(") && type.endsWith(")")) {
             return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
-        }
-        else if (type.startsWith("choose(") && type.endsWith(")")) {
+        } else if (type.equals("self")) {
+            return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
+        } else if (type.startsWith("choose(") && type.endsWith(")")) {
             final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
                 String choicePlayerId = playerSource.getPlayer(actionContext);

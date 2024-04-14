@@ -470,11 +470,12 @@ public class ValueResolver {
                                 second.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)
                         );
             } else if (type.equalsIgnoreCase("forEachToken")) {
-                FieldUtils.validateAllowedFields(object, "filter", "culture");
+                FieldUtils.validateAllowedFields(object, "filter", "culture", "limit");
 
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
                 final Culture culture = FieldUtils.getEnum(Culture.class, object.get("culture"), "culture");
                 final Token tokenForCulture = Token.findTokenForCulture(culture);
+                final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
 
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
@@ -485,7 +486,7 @@ public class ValueResolver {
                         result += game.getGameState().getTokenCount(physicalCard, tokenForCulture);
                     }
 
-                    return result;
+                    return Math.min(limit, result);
                 };
             }
             throw new InvalidCardDefinitionException("Unrecognized type of an evaluator " + type);

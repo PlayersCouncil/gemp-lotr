@@ -18,6 +18,7 @@ public class EffectFieldProcessor implements FieldProcessor {
 
     public EffectFieldProcessor() {
         effectProcessors.put("activated", new ActivatedEffectProcessor());
+        effectProcessors.put("activatedfromstacked", new ActivatedFromStackedEffectProcessor());
         effectProcessors.put("activatedindiscard", new ActivatedInDiscardEffectProcessor());
         effectProcessors.put("activatedtrigger", new ActivatedTriggerEffectProcessor());
         effectProcessors.put("aidcost", new AidCost());
