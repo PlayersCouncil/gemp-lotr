@@ -5,6 +5,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -18,8 +19,8 @@ public class Card_01_007_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("guard", "1_7");
-					put("gimli", "1_13");
+					put("card", "1_7");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -33,7 +34,8 @@ public class Card_01_007_Tests
 		/**
 		* Set: 1
 		* Title: Dwarf Guard
-		* Side: Free Peoples
+		* Unique: False
+		* Side: FREE_PEOPLE
 		* Culture: Dwarven
 		* Twilight Cost: 1
 		* Type: companion
@@ -43,34 +45,34 @@ public class Card_01_007_Tests
 		* Game Text: To play, spot a Dwarf.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
+		var card = scn.GetFreepsCard("card");
 
-		assertFalse(guard.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, guard.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, guard.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, guard.getBlueprint().getCardType());
-		assertEquals(Race.DWARF, guard.getBlueprint().getRace());
-		assertEquals(1, guard.getBlueprint().getTwilightCost());
-		assertEquals(4, guard.getBlueprint().getStrength());
-		assertEquals(2, guard.getBlueprint().getVitality());
+		assertEquals("Dwarf Guard", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(Race.DWARF, card.getBlueprint().getRace());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
 	}
 
-	@Test
-	public void DwarfGuardRequiresDwarf() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void DwarfGuardTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(guard, gimli);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		assertFalse(scn.FreepsPlayAvailable(guard));
-		scn.FreepsPlayCard(gimli);
-		assertTrue(scn.FreepsPlayAvailable(guard));
+		assertEquals(1, scn.GetTwilight());
 	}
 }

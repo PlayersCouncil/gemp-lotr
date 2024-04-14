@@ -508,6 +508,7 @@
 		site: 3
 		block: fellowship
 		direction: right
+		keywords: sanctuary
 		effects: {
 			type: trigger
 			trigger: {
@@ -526,8 +527,11 @@
 		type: site
 		site: 3
 		block: fellowship
-		keyword: river
 		direction: right
+		keywords: [
+			river
+			sanctuary
+		]
 		effects: [
 			{
 				type: modifier
@@ -595,6 +599,7 @@
 		site: 3
 		block: fellowship
 		direction: right
+		keywords: sanctuary
 		effects: {
 			type: activated
 			phase: fellowship
@@ -615,6 +620,7 @@
 		site: 3
 		block: fellowship
 		direction: right
+		keywords: sanctuary
 		effects: {
 			type: activated
 			phase: fellowship
@@ -635,6 +641,7 @@
 		site: 3
 		block: fellowship
 		direction: right
+		keywords: sanctuary
 		effects: {
 			type: activated
 			phase: fellowship
@@ -654,8 +661,11 @@
 		type: site
 		site: 3
 		block: fellowship
-		keyword: forest
 		direction: right
+		keywords: [
+			forest
+			sanctuary
+		]
 		effects: {
 			type: trigger
 			trigger: {
@@ -862,7 +872,7 @@
 		}
 	}
 	1_349: {
-		title: The Bridge of Khazad-dum
+		title: The Bridge of Khazad-dûm
 		twilight: 6
 		type: site
 		site: 5
@@ -900,6 +910,7 @@
 		site: 6
 		block: fellowship
 		direction: left
+		keywords: sanctuary
 		effects: [
 			{
 				type: modifier
@@ -954,6 +965,7 @@
 		site: 6
 		block: fellowship
 		direction: left
+		keywords: sanctuary
 		effects: {
 			type: activated
 			phase: fellowship
@@ -968,13 +980,16 @@
 		}
 	}
 	1_352: {
-		title: Lothlorien Woods
+		title: Lothlórien Woods
 		twilight: 3
 		type: site
 		site: 6
 		block: fellowship
-		keyword: forest
 		direction: left
+		keywords: [
+			forest
+			sanctuary
+		]
 		effects: {
 			type: modifier
 			modifier: {

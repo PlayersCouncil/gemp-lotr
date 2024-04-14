@@ -263,7 +263,7 @@
 	}
 	1_13: {
 		title: Gimli
-		subtitle: Son of Gloin
+		subtitle: Son of Glóin
 		unique: true
 		culture: dwarven
 		twilight: 2
@@ -710,7 +710,7 @@
 		}
 	}
 	1_24: {
-		title: Stairs of Khazad-dum
+		title: Stairs of Khazad-dûm
 		culture: dwarven
 		twilight: 0
 		type: condition

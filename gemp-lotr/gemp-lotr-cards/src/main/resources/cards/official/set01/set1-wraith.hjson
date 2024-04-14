@@ -40,7 +40,7 @@
 		}
 	}
 	1_205: {
-		title: Beauty is Fading
+		title: Beauty Is Fading
 		culture: wraith
 		twilight: 5
 		type: event
@@ -526,7 +526,7 @@
 		}
 	}
 	1_218: {
-		title: Nazgul Sword
+		title: Nazgûl Sword
 		culture: wraith
 		twilight: 1
 		type: possession
@@ -751,7 +751,7 @@
 		]
 	}
 	1_226: {
-		title: Their Power Is In Terror
+		title: Their Power Is in Terror
 		culture: wraith
 		twilight: 0
 		type: event

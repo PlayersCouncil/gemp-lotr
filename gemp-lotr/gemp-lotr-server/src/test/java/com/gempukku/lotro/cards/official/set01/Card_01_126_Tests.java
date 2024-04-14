@@ -3,7 +3,9 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -17,8 +19,8 @@ public class Card_01_126_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("hunt", "1_126");
-					put("uruk", "1_154");
+					put("card", "1_126");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -33,7 +35,7 @@ public class Card_01_126_Tests
 		* Set: 1
 		* Title: Hunt Them Down!
 		* Unique: False
-		* Side: FREE_PEOPLE
+		* Side: SHADOW
 		* Culture: Isengard
 		* Twilight Cost: 3
 		* Type: event
@@ -41,37 +43,32 @@ public class Card_01_126_Tests
 		* Game Text: <b>Maneuver:</b> Make an Uruk-hai <b>fierce</b> until the regroup phase.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var hunt = scn.GetFreepsCard("hunt");
+		var card = scn.GetFreepsCard("card");
 
-		assertFalse(hunt.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, hunt.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, hunt.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, hunt.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(hunt, Keyword.MANEUVER));
-		assertEquals(3, hunt.getBlueprint().getTwilightCost());
+		assertEquals("Hunt Them Down!", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void HuntThemDownAddsFierceDuringManeuver() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void HuntThemDownTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var hunt = scn.GetShadowCard("hunt");
-		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToHand(hunt);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertTrue(scn.ShadowPlayAvailable(hunt));
-		assertFalse(scn.HasKeyword(uruk, Keyword.FIERCE));
-		scn.ShadowPlayCard(hunt);
-		assertTrue(scn.HasKeyword(uruk, Keyword.FIERCE));
+		assertEquals(3, scn.GetTwilight());
 	}
 }

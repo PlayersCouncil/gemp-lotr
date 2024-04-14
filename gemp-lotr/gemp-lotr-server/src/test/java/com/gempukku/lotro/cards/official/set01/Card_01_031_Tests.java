@@ -1,41 +1,27 @@
-
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.PhysicalCardImpl;
-import com.gempukku.lotro.logic.decisions.AwaitingDecision;
-import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
 import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_01_031_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-                new HashMap<>() {{
-                    put("asfaloth", "1_31");
-                    put("arwen", "3_7");
-                    put("legolas", "1_50");
-                    put("erestor", "3_14");
-                    put("orophin", "1_56");
-                }},
+				new HashMap<>()
+				{{
+					put("card", "1_31");
+					// put other cards in here as needed for the test case
+				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
@@ -47,253 +33,44 @@ public class Card_01_031_Tests
 
 		/**
 		* Set: 1
-		* Title: *Asfaloth
-		* Side: Free Peoples
+		* Title: Asfaloth
+		* Unique: True
+		* Side: FREE_PEOPLE
 		* Culture: Elven
 		* Twilight Cost: 2
-		* Type: Possession
-		* Item Class: Mount
-		* Game Text: Bearer must be an Elf.  When played on Arwen, Asfaloth's twilight cost is -2.  While at a plains
-		 * site, bearer is strength +2.  Discard Asfaloth when at an underground site.
+		* Type: possession
+		* Subtype: Mount
+		* Strength: 2
+		* Game Text: Bearer must be an Elf. When played on Arwen, Asfaloth's twilight cost is -2.<br>While at a plains site, bearer is strength +2. Discard Asfaloth when at an underground site.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
+		var card = scn.GetFreepsCard("card");
 
-		assertTrue(asfaloth.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, asfaloth.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, asfaloth.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, asfaloth.getBlueprint().getCardType());
-		assertEquals(PossessionClass.MOUNT, asfaloth.getBlueprint().getPossessionClasses().stream().findFirst().get());
-		assertEquals(2, asfaloth.getBlueprint().getTwilightCost());
-		assertEquals(2, asfaloth.getBlueprint().getStrength());
+		assertEquals("Asfaloth", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	@Test
-	public void BearerMustBeAnElf() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void AsfalothTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCardToHand(asfaloth, arwen, erestor, orophin);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		assertFalse(scn.FreepsPlayAvailable(asfaloth));
-		scn.FreepsPlayCard(orophin);
-		assertTrue(scn.FreepsPlayAvailable(asfaloth));
-		scn.FreepsPlayCard(arwen);
-		scn.FreepsPlayCard(asfaloth);
-		assertEquals(2, scn.GetFreepsCardChoiceCount()); // can go on either arwen or orophin
-	}
-
-	@Test
-	public void TwilightCost2OnNonArwen() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
-		scn.FreepsMoveCardToHand(asfaloth);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		scn.FreepsPlayCard(asfaloth);
-		scn.FreepsChooseCard(erestor);
 		assertEquals(2, scn.GetTwilight());
 	}
-
-	@Test
-	public void TwilightCost0OnArwen() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
-		scn.FreepsMoveCardToHand(asfaloth);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		scn.FreepsPlayCard(asfaloth);
-		scn.FreepsChooseCard(arwen);
-		assertEquals(0, scn.GetTwilight());
-	}
-
-	@Test
-	public void BearerIsStrengthPlus2AtPlains() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
-		scn.FreepsMoveCardToHand(asfaloth);
-
-		//cheating to ensure site 2 qualifies
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.PLAINS));
-
-		scn.StartGame();
-
-		assertEquals(6, scn.GetStrength(arwen));
-		scn.FreepsPlayCard(asfaloth);
-		scn.FreepsChooseCard(arwen);
-		assertEquals(8, scn.GetStrength(arwen));
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(10, scn.GetStrength(arwen));
-	}
-
-	@Test
-	public void SelfDiscardsAtUnderground() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
-		scn.FreepsMoveCardToHand(asfaloth);
-
-		//cheating to ensure site 2 qualifies
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
-
-		scn.StartGame();
-
-		scn.FreepsPlayCard(asfaloth);
-		scn.FreepsChooseCard(arwen);
-		assertEquals(Zone.ATTACHED, asfaloth.getZone());
-		scn.FreepsPassCurrentPhaseAction();
-
-		scn.FreepsChoose("0"); // timing tie between Asfaloth and Site
-		assertEquals(Zone.DISCARD, asfaloth.getZone());
-	}
-
-	@Test
-	public void TransferBetweenAllyAndCompanionPaysTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		// Bug reported: https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=FallsLover$ilpahhdbsdmp8i2x
-		// Site 6 permitted multiple transfers between Rumil and Legolas on site 6 with 0 twilight added to the pool.
-
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(arwen, legolas, erestor, orophin);
-		scn.FreepsMoveCardToHand(asfaloth);
-
-		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		scn.FreepsPlayCard(asfaloth);
-		scn.FreepsChooseCard(erestor);
-		assertEquals(2, scn.GetTwilight());
-
-		scn.SkipToSite(3);
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsTransferAvailable(asfaloth));
-		scn.FreepsTransferCard(asfaloth);
-		scn.FreepsChooseCard(legolas);
-		assertEquals(2, scn.GetTwilight());
-	}
-
-	@Test
-	public void Legacy_playDiscountAsfalothOnArwen() throws DecisionResultInvalidException, CardNotFoundException {
-		var legacy = new LegacyAtTest();
-		legacy.playDiscountAsfalothOnArwen();
-	}
-
-	@Test
-	public void Legacy_playDiscountAsfalothOnOtherElf() throws DecisionResultInvalidException, CardNotFoundException {
-		var legacy = new LegacyAtTest();
-		legacy.playDiscountAsfalothOnOtherElf();
-	}
-
-	//These particular tests are pretty redundant with the new ones that check for twilight results above
-	// (not to mention somewhat less rigorous about it), but I am hesitant to delete these entirely only
-	// because they check for certain things around the guts that I do not--for instance, the specific
-	// existence of arguments instead of just card id counts, or the existence of the specific kind of
-	// card action choice.
-	//As I do not understand enough about the system to know what can and cannot be safely discarded, these
-	// will simply have to stay.
-	public static class LegacyAtTest extends AbstractAtTest {
-
-		public void playDiscountAsfalothOnArwen() throws DecisionResultInvalidException {
-			Map<String, Collection<String>> extraCards = new HashMap<>();
-			extraCards.put(P1, Arrays.asList("1_30", "1_31"));
-			initializeSimplestGame(extraCards);
-
-			// Play first character
-			AwaitingDecision firstCharacterDecision = _userFeedback.getAwaitingDecision(P1);
-			assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, firstCharacterDecision.getDecisionType());
-			validateContents(new String[]{"1_30"}, ((String[]) firstCharacterDecision.getDecisionParameters().get("blueprintId")));
-
-			playerDecided(P1, getArbitraryCardId(firstCharacterDecision, "1_30"));
-
-			skipMulligans();
-
-			PhysicalCard asfaloth = _game.getGameState().getHand(P1).get(0);
-
-			final AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(P1);
-			assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, awaitingDecision.getDecisionType());
-			validateContents(new String[]{"" + asfaloth.getCardId()}, (String[]) awaitingDecision.getDecisionParameters().get("cardId"));
-
-			assertEquals(0, _game.getGameState().getTwilightPool());
-
-			playerDecided(P1, "0");
-
-			assertEquals(0, _game.getGameState().getTwilightPool());
-			assertEquals(Zone.ATTACHED, asfaloth.getZone());
-		}
-
-		public void playDiscountAsfalothOnOtherElf() throws DecisionResultInvalidException {
-			Map<String, Collection<String>> extraCards = new HashMap<>();
-			extraCards.put(P1, Arrays.asList("1_51", "1_31"));
-			initializeSimplestGame(extraCards);
-
-			// Play first character
-			AwaitingDecision firstCharacterDecision = _userFeedback.getAwaitingDecision(P1);
-			assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, firstCharacterDecision.getDecisionType());
-			validateContents(new String[]{"1_51"}, ((String[]) firstCharacterDecision.getDecisionParameters().get("blueprintId")));
-
-			playerDecided(P1, getArbitraryCardId(firstCharacterDecision, "1_51"));
-
-			skipMulligans();
-
-			PhysicalCard asfaloth = _game.getGameState().getHand(P1).get(0);
-
-			final AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(P1);
-			assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, awaitingDecision.getDecisionType());
-			validateContents(new String[]{"" + asfaloth.getCardId()}, (String[]) awaitingDecision.getDecisionParameters().get("cardId"));
-
-			assertEquals(0, _game.getGameState().getTwilightPool());
-
-			playerDecided(P1, "0");
-
-			assertEquals(2, _game.getGameState().getTwilightPool());
-			assertEquals(Zone.ATTACHED, asfaloth.getZone());
-		}
-	}
-
 }

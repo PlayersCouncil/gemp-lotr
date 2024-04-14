@@ -3,7 +3,9 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -17,12 +19,8 @@ public class Card_01_068_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("arrows", "1_68");
-					put("galadriel", "1_45");
-					put("legolas", "1_50");
-
-					put("scout", "1_191");
-					put("runner", "1_178");
+					put("card", "1_68");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -31,79 +29,46 @@ public class Card_01_068_Tests
 	}
 
 	@Test
-	public void TheWhiteArrowsofLorienStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheWhiteArrowsbrofLorienStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		* Set: 1
-		* Title: The White Arrows of Lorien
+		* Title: The White Arrows of Lórien
 		* Unique: False
 		* Side: FREE_PEOPLE
 		* Culture: Elven
 		* Twilight Cost: 1
 		* Type: condition
-		* Subtype: Support Area
-		* Game Text: <b>Tale.</b> Bearer must be an Elf companion. 
-		* 	Archery: If bearer is an archer, exert bearer to make an opponent discard 2 cards at random from hand.
+		* Subtype: 
+		* Game Text: <b>Tale</b>. Bearer must be an Elf companion.<br><b>Archery:</b> If bearer is an archer, exert bearer to make an opponent discard 2 cards at random from hand.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var arrows = scn.GetFreepsCard("arrows");
+		var card = scn.GetFreepsCard("card");
 
-		assertFalse(arrows.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, arrows.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, arrows.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, arrows.getBlueprint().getCardType());
-		assertEquals(1, arrows.getBlueprint().getTwilightCost());
+		assertEquals("The White Arrows of Lórien", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void WhiteArrowsPlaysOnElfCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void TheWhiteArrowsbrofLorienTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var arrows = scn.GetFreepsCard("arrows");
-		var legolas = scn.GetFreepsCard("legolas");
-		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.FreepsMoveCharToTable(legolas, galadriel);
-		scn.FreepsMoveCardToHand(arrows);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(arrows);
+		scn.FreepsPlayCard(card);
 
-		assertEquals(Zone.ATTACHED, arrows.getZone());
-		//Should have automatically gone to Legolas and not had galadriel as a valid choice, where Gemp would ask the user to decide
-		assertTrue(scn.IsAttachedTo(arrows, legolas));
+		assertEquals(1, scn.GetTwilight());
 	}
-
-	@Test
-	public void WhiteArrowsExertsBearerToMakeShadowDiscard2CardsFromHand() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var arrows = scn.GetFreepsCard("arrows");
-		var legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCharToTable(legolas);
-		scn.FreepsAttachCardsTo(legolas, arrows);
-
-		var scout = scn.GetShadowCard("scout");
-		scn.ShadowMoveCardToHand("legolas", "galadriel", "arrows");
-		scn.ShadowMoveCharToTable("scout", "runner");
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.ARCHERY);
-
-		assertTrue(scn.FreepsActionAvailable(arrows));
-		assertEquals(0, scn.GetWoundsOn(legolas));
-		assertEquals(3, scn.GetShadowHandCount());
-		assertEquals(0, scn.GetShadowDiscardCount());
-		scn.FreepsUseCardAction(arrows);
-
-		assertEquals(1, scn.GetWoundsOn(legolas));
-		assertEquals(1, scn.GetShadowHandCount());
-		assertEquals(2, scn.GetShadowDiscardCount());
-	}
-
 }

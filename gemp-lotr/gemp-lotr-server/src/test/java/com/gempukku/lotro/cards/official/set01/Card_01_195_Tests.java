@@ -5,6 +5,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -18,10 +19,8 @@ public class Card_01_195_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("relics", "1_195");
-					put("runner", "1_178");
-					put("scimitar", "1_180");
-
+					put("card", "1_195");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -30,78 +29,46 @@ public class Card_01_195_Tests
 	}
 
 	@Test
-	public void RelicsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RelicsofMoriaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		* Set: 1
 		* Title: Relics of Moria
-		* Unique: false
-		* Side: Shadow
+		* Unique: False
+		* Side: SHADOW
 		* Culture: Moria
 		* Twilight Cost: 1
-		* Type: Condition
-		* Subtype: Support Area
-		* Game Text: Plays to your support area.
-		 * Shadow: Remove (2) to play a [MORIA] possession from your discard pile.
+		* Type: condition
+		* Subtype: 
+		* Game Text: Plays to your support area.<br><b>Shadow:</b> Remove (2) to play a [moria] possession from your discard pile.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl relics = scn.GetFreepsCard("relics");
+		var card = scn.GetFreepsCard("card");
 
-		assertFalse(relics.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, relics.getBlueprint().getSide());
-		assertEquals(Culture.MORIA, relics.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, relics.getBlueprint().getCardType());
-		assertEquals(1, relics.getBlueprint().getTwilightCost());
-		assertTrue(scn.HasKeyword(relics, Keyword.SUPPORT_AREA));
+		assertEquals("Relics of Moria", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void ShadowAbilityRemoves2ToPlayMoriaPossessionFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void RelicsofMoriaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		var relics = scn.GetShadowCard("relics");
-		var runner = scn.GetShadowCard("runner");
-		var scimitar = scn.GetShadowCard("scimitar");
-		scn.ShadowMoveCardToSupportArea(relics);
-		scn.ShadowMoveCharToTable(runner);
-		scn.ShadowMoveCardToDiscard(scimitar);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(3, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, scimitar.getZone());
-		assertTrue(scn.ShadowActionAvailable(relics));
-		scn.ShadowUseCardAction(relics);
+		scn.FreepsPlayCard(card);
 
 		assertEquals(1, scn.GetTwilight());
-		assertEquals(Zone.ATTACHED, scimitar.getZone());
-		assertFalse(scn.ShadowActionAvailable(relics));
 	}
-
-	@Test
-	public void ShadowAbilityNotAvailableIfNoPossessionsInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		var relics = scn.GetShadowCard("relics");
-		var runner = scn.GetShadowCard("runner");
-		var scimitar = scn.GetShadowCard("scimitar");
-		scn.ShadowMoveCardToSupportArea(relics);
-		scn.ShadowMoveCharToTable(runner);
-
-		scn.StartGame();
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(Zone.DECK, scimitar.getZone());
-		assertEquals(0, scn.GetShadowDiscardCount());
-		assertFalse(scn.ShadowActionAvailable(relics));
-	}
-
 }

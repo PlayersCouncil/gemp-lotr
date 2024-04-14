@@ -151,7 +151,7 @@
 	}
 	1_34: {
 		title: Celeborn
-		subtitle: Lord of Lorien
+		subtitle: Lord of Lórien
 		unique: true
 		culture: elven
 		twilight: 2
@@ -693,7 +693,7 @@
 		}
 	}
 	1_53: {
-		title: Lorien Elf
+		title: Lórien Elf
 		culture: elven
 		twilight: 1
 		type: companion
@@ -779,7 +779,7 @@
 	}
 	1_56: {
 		title: Orophin
-		subtitle: Lorien Bowman
+		subtitle: Lórien Bowman
 		unique: true
 		culture: elven
 		twilight: 2
@@ -1061,7 +1061,7 @@
 	}
 	1_67: {
 		title: Uruviel
-		subtitle: Maid of Lorien
+		subtitle: Maid of Lórien
 		unique: true
 		culture: elven
 		twilight: 2
@@ -1076,7 +1076,7 @@
 		}
 	}
 	1_68: {
-		title: The White Arrows of Lorien
+		title: The White Arrows of Lórien
 		culture: elven
 		twilight: 1
 		type: condition

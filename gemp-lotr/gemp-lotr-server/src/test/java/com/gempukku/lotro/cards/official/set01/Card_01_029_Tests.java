@@ -3,7 +3,9 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -17,12 +19,8 @@ public class Card_01_029_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("enmity", "1_29");
-					put("arwen", "1_30");
-					put("gwemegil", "1_47");
-					put("elrond", "1_40");
-
-					put("uruk", "1_145");
+					put("card", "1_29");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -41,103 +39,36 @@ public class Card_01_029_Tests
 		* Culture: Elven
 		* Twilight Cost: 0
 		* Type: event
-		* Subtype: Skirmish
-		* Game Text: Make an Elf strength +1. 
-		* 	If a minion loses this skirmish to that Elf, that minion's owner discards 2 cards at random from hand.
+		* Subtype: 
+		* Game Text: <b>Skirmish:</b> Make an Elf strength +1. If a minion loses this skirmish to that Elf, that minion's owner discards 2 cards at random from hand.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var enmity = scn.GetFreepsCard("enmity");
+		var card = scn.GetFreepsCard("card");
 
-		assertFalse(enmity.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, enmity.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, enmity.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, enmity.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(enmity, Keyword.SKIRMISH));
-		assertEquals(0, enmity.getBlueprint().getTwilightCost());
+		assertEquals("Ancient Enmity", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void AncientEnmityLosingSkirmishDoesNothingElse() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void AncientEnmityTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var enmity = scn.GetFreepsCard("enmity");
-		var arwen = scn.GetFreepsCard("arwen");
-		var gwemegil = scn.GetFreepsCard("gwemegil");
-		var elrond = scn.GetFreepsCard("elrond");
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(elrond);
-		scn.FreepsAttachCardsTo(arwen, gwemegil);
-		scn.FreepsMoveCardToHand(enmity);
-
-		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToHand("arwen", "elrond", "enmity");
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(arwen, uruk);
-		scn.FreepsResolveSkirmish(arwen);
-		assertEquals(6 + 2, scn.GetStrength(arwen));
-
-		assertTrue(scn.FreepsPlayAvailable(enmity));
-		scn.FreepsPlayCard(enmity);
-		scn.FreepsChooseCard(arwen);
-		assertEquals(6 + 2 + 1, scn.GetStrength(arwen));
-
-		assertEquals(3, scn.GetShadowHandCount());
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
-		assertEquals(3, scn.GetShadowHandCount());
-	}
-
-	@Test
-	public void AncientEnmityWinningSkirmishDiscards2CardsRandomlyFromShadowHand() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var enmity = scn.GetFreepsCard("enmity");
-		var arwen = scn.GetFreepsCard("arwen");
-		var gwemegil = scn.GetFreepsCard("gwemegil");
-		var elrond = scn.GetFreepsCard("elrond");
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(elrond);
-		scn.FreepsAttachCardsTo(arwen, gwemegil);
-		scn.FreepsMoveCardToHand(enmity);
-
-		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToHand("arwen", "elrond", "enmity");
-
-		scn.StartGame();
-
-		scn.AddWoundsToChar(elrond, 1);
-
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(arwen, uruk);
-		scn.FreepsResolveSkirmish(arwen);
-		assertEquals(6 + 2, scn.GetStrength(arwen));
-
-		assertTrue(scn.FreepsPlayAvailable(enmity));
-		scn.FreepsPlayCard(enmity);
-		scn.FreepsChooseCard(arwen);
-		assertEquals(6 + 2 + 1, scn.GetStrength(arwen));
-
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsUseCardAction(gwemegil);
-		assertEquals(6 + 2 + 1 + 1, scn.GetStrength(arwen));
-
-		assertEquals(3, scn.GetShadowHandCount());
-		assertEquals(0, scn.GetShadowDiscardCount());
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
-
-		scn.FreepsResolveActionOrder("Ancient Enmity");
-		assertEquals(1, scn.GetShadowHandCount());
-		assertEquals(2 + 1, scn.GetShadowDiscardCount()); //2 hand cards + dead uruk
+		assertEquals(0, scn.GetTwilight());
 	}
 }

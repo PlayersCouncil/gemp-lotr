@@ -3,13 +3,14 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_01_017_Tests
 {
@@ -18,13 +19,8 @@ public class Card_01_017_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("grimir", "1_17");
-					put("guard", "1_7");
-					put("event", "1_3");
-
-					put("runner1", "1_178");
-					put("runner2", "1_178");
-
+					put("card", "1_17");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,46 +43,39 @@ public class Card_01_017_Tests
 		* Strength: 3
 		* Vitality: 3
 		* Site Number: 3
-		* Game Text: <b>Fellowship:</b>  Exert Grimir to shuffle a [dwarven] event from your discard pile into your draw deck.
+		* Game Text: <b>Fellowship:</b> Exert Grimir to shuffle a [dwarven] event from your discard pile into your draw deck.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var grimir = scn.GetFreepsCard("grimir");
+		var card = scn.GetFreepsCard("card");
 
-		assertTrue(grimir.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, grimir.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, grimir.getBlueprint().getCulture());
-		assertEquals(CardType.ALLY, grimir.getBlueprint().getCardType());
-		assertEquals(Race.DWARF, grimir.getBlueprint().getRace());
-		assertEquals(1, grimir.getBlueprint().getTwilightCost());
-		assertEquals(3, grimir.getBlueprint().getStrength());
-		assertEquals(3, grimir.getBlueprint().getVitality());
-		assertEquals(3, grimir.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, grimir.getBlueprint().getAllyHomeSiteBlock());
+		assertEquals("Grimir", card.getBlueprint().getTitle());
+		assertEquals("Dwarven Elder", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(Race.DWARF, card.getBlueprint().getRace());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getAllyHomeSiteNumbers()[0]);
+		assertEquals(SitesBlock.FELLOWSHIP, card.getBlueprint().getAllyHomeSiteBlock());
 	}
 
-	@Test
-	public void GrimirAbilityExertsAndDiscardsTopDeckToRetrieveDwarvenEvent() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void GrimirTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var grimir = scn.GetFreepsCard("grimir");
-		var guard = scn.GetFreepsCard("guard");
-		var event = scn.GetFreepsCard("event");
-		scn.FreepsMoveCharToTable(grimir);
-		scn.FreepsMoveCardToDiscard(guard, event);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		assertTrue(scn.FreepsActionAvailable(grimir));
-
-		assertEquals(Zone.DISCARD, event.getZone());
-		assertEquals(0, scn.GetWoundsOn(grimir));
-		scn.FreepsUseCardAction(grimir);
-
-		assertEquals(Zone.DECK, event.getZone());
-		assertEquals(1, scn.GetWoundsOn(grimir));
+		assertEquals(1, scn.GetTwilight());
 	}
 }

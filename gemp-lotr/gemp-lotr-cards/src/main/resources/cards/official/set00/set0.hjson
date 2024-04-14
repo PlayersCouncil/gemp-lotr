@@ -64,8 +64,8 @@
 		}
 	}
 	0_58: {
-		title: Anarion
-		subtitle: Lord of Anorien
+		title: Anárion
+        subtitle: Lord of Anórien
 		unique: true
 		culture: gondor
 		twilight: 3

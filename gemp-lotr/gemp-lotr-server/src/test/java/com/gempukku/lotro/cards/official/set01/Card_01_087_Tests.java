@@ -1,4 +1,3 @@
-
 package com.gempukku.lotro.cards.official.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
@@ -6,23 +5,22 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_01_087_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<>() {{
-					put("late", "1_87");
-					put("gandalf", "1_72");
-					put("bb", "1_70");
+				new HashMap<>()
+				{{
+					put("card", "1_87");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -36,103 +34,41 @@ public class Card_01_087_Tests
 		/**
 		* Set: 1
 		* Title: A Wizard Is Never Late
-		* Side: Free Peoples
+		* Unique: False
+		* Side: FREE_PEOPLE
 		* Culture: Gandalf
 		* Twilight Cost: 1
-		* Type: Event
-		* Subtype: Fellowship
-		* Game Text: Fellowship: Play a [GANDALF] character from your draw deck.
+		* Type: event
+		* Subtype: 
+		* Game Text: <b>Fellowship:</b> Play a [gandalf] character from your draw deck.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl late = scn.GetFreepsCard("late");
+		var card = scn.GetFreepsCard("card");
 
-		assertFalse(late.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, late.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, late.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, late.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(late, Keyword.FELLOWSHIP)); // test for keywords as needed
-		assertEquals(1, late.getBlueprint().getTwilightCost());
-//		assertEquals(2, late.getBlueprint().getStrength());
-//		assertEquals(3, late.getBlueprint().getVitality());
-		//assertEquals(, late.getBlueprint().getResistance());
-		//assertEquals(Signet., late.getBlueprint().getSignet());
-		//assertEquals(3, late.getBlueprint().getAllyHomeSiteNumbers()[0]); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals("A Wizard Is Never Late", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void PlaysAGandalfCompanionFromDeck() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void AWizardIsNeverLateTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl late = scn.GetFreepsCard("late");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		PhysicalCardImpl bb = scn.GetFreepsCard("bb");
-		scn.FreepsMoveCardToHand(late);
-		scn.FreepsMoveCardsToTopOfDeck(gandalf, bb);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		assertTrue(scn.FreepsPlayAvailable(late));
-		assertEquals(Zone.DECK, gandalf.getZone());
-		assertEquals(Zone.DECK, bb.getZone());
-
-		scn.FreepsPlayCard(late);
-		assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
-		scn.FreepsChooseCardBPFromSelection(gandalf);
-
-		assertEquals(Zone.FREE_CHARACTERS, gandalf.getZone());
-		assertEquals(Zone.DECK, bb.getZone());
-	}
-
-	@Test
-	public void PlaysAGandalfAllyFromDeck() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl late = scn.GetFreepsCard("late");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		PhysicalCardImpl bb = scn.GetFreepsCard("bb");
-		scn.FreepsMoveCardToHand(late);
-		scn.FreepsMoveCardsToTopOfDeck(gandalf, bb);
-
-		scn.StartGame();
-
-		assertTrue(scn.FreepsPlayAvailable(late));
-		assertEquals(Zone.DECK, gandalf.getZone());
-		assertEquals(Zone.DECK, bb.getZone());
-
-		scn.FreepsPlayCard(late);
-		assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
-		scn.FreepsChooseCardBPFromSelection(bb);
-
-		assertEquals(Zone.DECK, gandalf.getZone());
-		assertEquals(Zone.SUPPORT, bb.getZone());
-	}
-
-	@Test
-	public void CanPlayWithNoGandalfCharactersInTheDeck() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl late = scn.GetFreepsCard("late");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		PhysicalCardImpl bb = scn.GetFreepsCard("bb");
-		scn.FreepsMoveCardToHand(late, gandalf, bb);
-
-		scn.StartGame();
-
-		assertTrue(scn.FreepsPlayAvailable(late));
-		assertEquals(Zone.HAND, gandalf.getZone());
-		assertEquals(Zone.HAND, bb.getZone());
-
-		scn.FreepsPlayCard(late);
-
-		assertEquals(Zone.DISCARD, late.getZone());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

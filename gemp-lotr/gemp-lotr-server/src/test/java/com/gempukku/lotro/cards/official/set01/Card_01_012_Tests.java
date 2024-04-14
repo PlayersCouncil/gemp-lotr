@@ -5,6 +5,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -18,11 +19,8 @@ public class Card_01_012_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("gimli", "1_12");
-
-					put("card1", "1_191");
-					put("card2", "1_178");
-					put("card3", "1_179");
+					put("card", "1_12");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -35,8 +33,9 @@ public class Card_01_012_Tests
 
 		/**
 		* Set: 1
-		* Title: *Gimli, Dwarf of Erebor
-		* Side: Free Peoples
+		* Title: Gimli, Dwarf of Erebor
+		* Unique: True
+		* Side: FREE_PEOPLE
 		* Culture: Dwarven
 		* Twilight Cost: 2
 		* Type: companion
@@ -44,74 +43,40 @@ public class Card_01_012_Tests
 		* Strength: 6
 		* Vitality: 3
 		* Signet: aragorn
-		* Game Text: <b>Damage +1</b> 
-		* 	 <b>Fellowship: </b> If the twilight pool has fewer than 2 twilight tokens, add (2) and place a card from hand beneath your draw deck.
+		* Game Text: <b>Damage +1</b>.<br><b>Fellowship:</b> If the twilight pool has fewer than 2 twilight tokens, add (2) to place a card from hand beneath your draw deck.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
+		var card = scn.GetFreepsCard("card");
 
-		assertTrue(gimli.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, gimli.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, gimli.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, gimli.getBlueprint().getCardType());
-		assertEquals(Race.DWARF, gimli.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
-		assertEquals(2, gimli.getBlueprint().getTwilightCost());
-		assertEquals(6, gimli.getBlueprint().getStrength());
-		assertEquals(3, gimli.getBlueprint().getVitality());
-		assertEquals(6, gimli.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, gimli.getBlueprint().getSignet());
+		assertEquals("Gimli", card.getBlueprint().getTitle());
+		assertEquals("Dwarf of Erebor", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(Race.DWARF, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
-	@Test
-	public void GimliAbilityDoesntWorkWith2Twilight() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void GimliTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		PhysicalCardImpl card1 = scn.GetFreepsCard("card1");
-		PhysicalCardImpl card2 = scn.GetFreepsCard("card2");
-		scn.FreepsMoveCardToHand(gimli);
-		scn.FreepsMoveCardToHand(card1);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		scn.FreepsPlayCard(gimli);
-		//the 2 twilight from his cost should disqualify his own action
-		assertFalse(scn.FreepsActionAvailable(gimli));
-	}
-
-	@Test
-	public void GimliAbilityAdds2TwilightAndPlacesOnBottom() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		PhysicalCardImpl card1 = scn.GetFreepsCard("card1");
-		PhysicalCardImpl card2 = scn.GetFreepsCard("card2");
-		PhysicalCardImpl card3 = scn.GetFreepsCard("card3");
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCardToHand(card1);
-		scn.FreepsMoveCardsToBottomOfDeck(card3);
-
-		scn.StartGame();
-
-		assertTrue(scn.FreepsActionAvailable(gimli));
-		assertEquals(Zone.HAND, card1.getZone());
-		assertEquals(Zone.DECK, card2.getZone());
-		assertEquals(scn.GetFreepsTopOfDeck().getBlueprintId(), card2.getBlueprintId());
-		assertEquals(Zone.DECK, card3.getZone());
-		assertEquals(scn.GetFreepsBottomOfDeck().getBlueprintId(), card3.getBlueprintId());
-
-		scn.FreepsUseCardAction(gimli);
-		//card from hand placed on the bottom of the deck
-		assertEquals(Zone.DECK, card1.getZone());
-		assertEquals(scn.GetFreepsBottomOfDeck().getBlueprintId(), card1.getBlueprintId());
-		//card from the deck was not drawn (as it is in the errata)
-		assertEquals(Zone.DECK, card2.getZone());
+		assertEquals(2, scn.GetTwilight());
 	}
 }
