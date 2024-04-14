@@ -68,6 +68,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("modifysitenumber", new ModifySiteNumber());
         modifierProducers.put("modifystrength", new ModifyStrength());
         modifierProducers.put("nomorethanoneminionmaybeassignedtoeachskirmish", new NoMorethanOneMinionMayBeAssignedToEachSkirmish());
+        modifierProducers.put("opponentscantplayphaseeventsorphasespecialabilities", new OpponentsCantPlayPhaseEventsOrPhaseSpecialAbilities());
         modifierProducers.put("opponentmaynotdiscard", new OpponentMayNotDiscard());
         modifierProducers.put("removekeyword", new RemoveKeyword());
         modifierProducers.put("ringtextisinactive", new RingTextIsInactive());
