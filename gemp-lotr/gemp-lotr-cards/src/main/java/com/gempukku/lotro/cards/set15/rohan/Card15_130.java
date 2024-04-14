@@ -41,6 +41,6 @@ public class Card15_130 extends AbstractCompanion {
 
     @Override
     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
-return Collections.singletonList(new StrengthModifier(self, self, new NotCondition(new SpotCondition(Filters.siteControlledByShadowPlayer(self.getOwner()))), 2));
+        return Collections.singletonList(new StrengthModifier(self, self, new NotCondition(new SpotCondition(Filters.siteControlledByOtherPlayer(self.getOwner()))), 2));
 }
 }

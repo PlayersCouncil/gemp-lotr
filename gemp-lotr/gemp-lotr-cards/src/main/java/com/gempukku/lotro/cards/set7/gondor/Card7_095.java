@@ -40,7 +40,7 @@ public class Card7_095 extends AbstractPermanent {
     @Override
     public List<RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult, PhysicalCard self) {
         if (TriggerConditions.startOfPhase(game, effectResult, Phase.REGROUP)
-                && Filters.countActive(game, Filters.siteControlledByShadowPlayer(self.getOwner())) == 0) {
+                && Filters.countActive(game, Filters.siteControlledByOtherPlayer(self.getOwner())) == 0) {
             RequiredTriggerAction action = new RequiredTriggerAction(self);
             action.appendEffect(
                     new ChooseAndWoundCharactersEffect(action, self.getOwner(), 1, 1, CardType.MINION));

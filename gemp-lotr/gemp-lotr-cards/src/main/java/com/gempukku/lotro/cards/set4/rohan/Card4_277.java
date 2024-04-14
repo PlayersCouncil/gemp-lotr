@@ -52,7 +52,7 @@ public class Card4_277 extends AbstractAlly {
     @Override
     public List<RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult, PhysicalCard self) {
         if (Filters.countActive(game,
-                Filters.siteControlledByShadowPlayer(self.getOwner()),
+                Filters.siteControlledByOtherPlayer(self.getOwner()),
                 Filters.siteNumber(4),
                 Filters.siteBlock(SitesBlock.TWO_TOWERS)) > 0) {
             RequiredTriggerAction action = new RequiredTriggerAction(self);

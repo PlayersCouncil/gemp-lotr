@@ -48,6 +48,23 @@ public class ValueResolver {
                         return max;
                     }
                 };
+            } else if (stringValue.equalsIgnoreCase("any")) {
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        throw new RuntimeException("Evaluator has resolved to range");
+                    }
+
+                    @Override
+                    public int getMinimum(ActionContext actionContext) {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getMaximum(ActionContext actionContext) {
+                        return Integer.MAX_VALUE;
+                    }
+                };
             } else {
                 int v = Integer.parseInt(stringValue);
                 return new ConstantEvaluator(v);
@@ -114,12 +131,13 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("regionNumber")) {
                 return (actionContext) -> (game, cardAffected) -> GameUtils.getRegion(actionContext.getGame());
             } else if (type.equalsIgnoreCase("forEachInMemory")) {
-                FieldUtils.validateAllowedFields(object, "memory", "limit");
+                FieldUtils.validateAllowedFields(object, "memory", "limit", "multiplier");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
                 final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
+                final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
                 return (actionContext) -> {
                     final int count = actionContext.getCardsFromMemory(memory).size();
-                    return new ConstantEvaluator(Math.min(limit, count));
+                    return new ConstantEvaluator(Math.min(limit, multiplier * count));
                 };
             } else if (type.equalsIgnoreCase("forEachMatchingInMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "filter", "limit");

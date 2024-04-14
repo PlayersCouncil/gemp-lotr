@@ -755,7 +755,7 @@
 				{
 					type: shuffleCardsFromPlayAndStackedOnThemIntoDrawDeck
 					filter: choose(culture(dwarven),condition)
-					count: 0-1000
+					count: any
 				}
 			]
 		}
