@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08109.jpg
 			javaClass: true
+			//parentId: 8_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C109
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08110.jpg
 			javaClass: true
+			//parentId: 8_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U110
 			rarity: U
@@ -57,7 +65,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -84,6 +92,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08111.jpg
 			javaClass: true
+			//parentId: 8_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C111
 			rarity: C
@@ -97,7 +109,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -127,6 +139,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08112.jpg
 			javaClass: true
+			//parentId: 8_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U112
 			rarity: U
@@ -140,7 +156,7 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -167,6 +183,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08113.jpg
 			javaClass: true
+			//parentId: 8_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R113
 			rarity: R
@@ -183,8 +203,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Frodo or Sam)
 		/*requires: {
 			
 		}
@@ -211,6 +230,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08114.jpg
 			javaClass: true
+			//parentId: 8_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C114
 			rarity: C
@@ -224,7 +247,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -254,6 +277,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08115.jpg
 			javaClass: true
+			//parentId: 8_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R115
 			rarity: R
@@ -267,7 +294,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -300,6 +327,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08116.jpg
 			javaClass: true
+			//parentId: 8_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C116
 			rarity: C
@@ -313,7 +344,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -346,6 +377,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08121.jpg
 			javaClass: true
+			//parentId: 8_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8P121
 			rarity: P
@@ -365,7 +400,6 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -392,6 +426,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08122.jpg
 			javaClass: true
+			//parentId: 8_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8P122
 			rarity: P
@@ -411,7 +449,6 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

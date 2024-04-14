@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05044.jpg
 			javaClass: true
+			//parentId: 5_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U44
 			rarity: U
@@ -17,7 +21,10 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Machine
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -44,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05045.jpg
 			javaClass: true
+			//parentId: 5_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U45
 			rarity: U
@@ -61,7 +72,7 @@
 		strength: 10
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -88,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05046.jpg
 			javaClass: true
+			//parentId: 5_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R46
 			rarity: R
@@ -105,7 +120,7 @@
 		strength: 12
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -132,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05047.jpg
 			javaClass: true
+			//parentId: 5_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R47
 			rarity: R
@@ -149,7 +168,7 @@
 		strength: 12
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -176,6 +195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05048.jpg
 			javaClass: true
+			//parentId: 5_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U48
 			rarity: U
@@ -189,7 +212,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -219,6 +242,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05049.jpg
 			javaClass: true
+			//parentId: 5_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R49
 			rarity: R
@@ -232,7 +259,10 @@
 		culture: Isengard
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Machine
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -259,6 +289,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05050.jpg
 			javaClass: true
+			//parentId: 5_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R50
 			rarity: R
@@ -276,7 +310,7 @@
 		strength: 9
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Warg-rider
 		/*requires: {
 			
 		}
@@ -303,6 +337,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05051.jpg
 			javaClass: true
+			//parentId: 5_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R51
 			rarity: R
@@ -321,7 +359,7 @@
 		strength: 4
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: hands
 		/*requires: {
 			
 		}
@@ -348,6 +386,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05052.jpg
 			javaClass: true
+			//parentId: 5_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C52
 			rarity: C
@@ -365,7 +407,7 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Warg-rider
 		/*requires: {
 			
 		}
@@ -392,6 +434,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05053.jpg
 			javaClass: true
+			//parentId: 5_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C53
 			rarity: C
@@ -409,7 +455,7 @@
 		strength: 8
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Warg-rider
 		/*requires: {
 			
 		}
@@ -436,6 +482,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05054.jpg
 			javaClass: true
+			//parentId: 5_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U54
 			rarity: U
@@ -451,8 +501,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [isengard] Orc)
 		/*requires: {
 			
 		}
@@ -479,6 +528,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05055.jpg
 			javaClass: true
+			//parentId: 5_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U55
 			rarity: U
@@ -496,7 +549,7 @@
 		strength: 5
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Warg-rider
 		/*requires: {
 			
 		}
@@ -523,6 +576,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05056.jpg
 			javaClass: true
+			//parentId: 5_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R56
 			rarity: R
@@ -541,7 +598,6 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -568,6 +624,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05057.jpg
 			javaClass: true
+			//parentId: 5_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U57
 			rarity: U
@@ -581,7 +641,10 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Machine
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -608,6 +671,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05058.jpg
 			javaClass: true
+			//parentId: 5_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R58
 			rarity: R
@@ -626,7 +693,7 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Warg-rider
 		/*requires: {
 			
 		}
@@ -653,6 +720,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05059.jpg
 			javaClass: true
+			//parentId: 5_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R59
 			rarity: R
@@ -669,8 +740,7 @@
 		strength: 5
 		vitality: 3
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a warg-rider
 		/*requires: {
 			
 		}
@@ -697,6 +767,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05060.jpg
 			javaClass: true
+			//parentId: 5_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U60
 			rarity: U
@@ -710,7 +784,10 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Machine
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -737,6 +814,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05061.jpg
 			javaClass: true
+			//parentId: 5_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C61
 			rarity: C
@@ -754,7 +835,7 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -781,6 +862,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05062.jpg
 			javaClass: true
+			//parentId: 5_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C62
 			rarity: C
@@ -798,7 +883,7 @@
 		strength: 6
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -825,6 +910,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05063.jpg
 			javaClass: true
+			//parentId: 5_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U63
 			rarity: U
@@ -842,7 +931,7 @@
 		strength: 7
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -869,6 +958,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05064.jpg
 			javaClass: true
+			//parentId: 5_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U64
 			rarity: U
@@ -885,8 +978,7 @@
 		strength: 4
 		vitality: 2
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a warg-rider
 		/*requires: {
 			
 		}
@@ -913,6 +1005,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05065.jpg
 			javaClass: true
+			//parentId: 5_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C65
 			rarity: C
@@ -929,8 +1025,7 @@
 		strength: 3
 		vitality: 1
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a warg-rider
 		/*requires: {
 			
 		}
@@ -957,6 +1052,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05066.jpg
 			javaClass: true
+			//parentId: 5_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C66
 			rarity: C
@@ -974,7 +1073,7 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Warg-rider
 		/*requires: {
 			
 		}
@@ -1001,6 +1100,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05067.jpg
 			javaClass: true
+			//parentId: 5_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C67
 			rarity: C
@@ -1018,7 +1121,7 @@
 		strength: 5
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Warg-rider
 		/*requires: {
 			
 		}
@@ -1045,6 +1148,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05068.jpg
 			javaClass: true
+			//parentId: 5_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C68
 			rarity: C
@@ -1058,7 +1165,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1088,6 +1195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05069.jpg
 			javaClass: true
+			//parentId: 5_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R69
 			rarity: R
@@ -1101,7 +1212,6 @@
 		culture: Isengard
 		twilight: 2
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -1128,6 +1238,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05125.jpg
 			javaClass: true
+			//parentId: 5_125
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R125
 			rarity: R
@@ -1145,7 +1259,7 @@
 		strength: 9
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Warg-rider
 		/*requires: {
 			
 		}

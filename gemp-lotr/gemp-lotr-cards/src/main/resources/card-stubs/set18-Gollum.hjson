@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18028.jpg
 			javaClass: true
+			//parentId: 18_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R28
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18029.jpg
 			javaClass: true
+			//parentId: 18_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R29
 			rarity: R
@@ -60,7 +68,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18030.jpg
 			javaClass: true
+			//parentId: 18_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U30
 			rarity: U
@@ -100,7 +112,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -130,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18031.jpg
 			javaClass: true
+			//parentId: 18_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R31
 			rarity: R
@@ -143,7 +159,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -173,6 +189,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18032.jpg
 			javaClass: true
+			//parentId: 18_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R32
 			rarity: R
@@ -186,7 +206,7 @@
 		culture: Gollum
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -213,6 +233,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18033.jpg
 			javaClass: true
+			//parentId: 18_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U33
 			rarity: U
@@ -226,7 +250,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -256,6 +280,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18034.jpg
 			javaClass: true
+			//parentId: 18_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R34
 			rarity: R
@@ -274,7 +302,7 @@
 		strength: 8
 		vitality: 8
 		site: 8
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -301,6 +329,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18035.jpg
 			javaClass: true
+			//parentId: 18_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R35
 			rarity: R
@@ -314,7 +346,7 @@
 		culture: Gollum
 		twilight: 10
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -344,6 +376,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18036.jpg
 			javaClass: true
+			//parentId: 18_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C36
 			rarity: C
@@ -357,7 +393,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -390,6 +426,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18037.jpg
 			javaClass: true
+			//parentId: 18_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U37
 			rarity: U
@@ -403,7 +443,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15155.jpg
 			javaClass: true
+			//parentId: 15_155
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R155
 			rarity: R
@@ -21,7 +25,7 @@
 		strength: 14
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -48,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15156.jpg
 			javaClass: true
+			//parentId: 15_156
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C156
 			rarity: C
@@ -65,7 +73,7 @@
 		strength: 7
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -92,6 +100,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15157.jpg
 			javaClass: true
+			//parentId: 15_157
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C157
 			rarity: C
@@ -109,7 +121,10 @@
 		strength: 10
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Fierce
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -136,6 +151,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15158.jpg
 			javaClass: true
+			//parentId: 15_158
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C158
 			rarity: C
@@ -153,7 +172,7 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -180,6 +199,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15159.jpg
 			javaClass: true
+			//parentId: 15_159
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U159
 			rarity: U
@@ -193,7 +216,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -220,6 +243,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15160.jpg
 			javaClass: true
+			//parentId: 15_160
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U160
 			rarity: U
@@ -237,7 +264,10 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Fierce
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -264,6 +294,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15161.jpg
 			javaClass: true
+			//parentId: 15_161
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C161
 			rarity: C
@@ -281,7 +315,6 @@
 		strength: 12
 		vitality: 2
 		site: 5
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -308,6 +341,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15162.jpg
 			javaClass: true
+			//parentId: 15_162
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R162
 			rarity: R
@@ -326,7 +363,7 @@
 		strength: 13
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -353,6 +390,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15163.jpg
 			javaClass: true
+			//parentId: 15_163
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R163
 			rarity: R
@@ -369,8 +410,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [uruk-hai] Uruk-hai)
 		/*requires: {
 			
 		}
@@ -397,6 +437,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15164.jpg
 			javaClass: true
+			//parentId: 15_164
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S164
 			rarity: S
@@ -415,7 +459,10 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Fierce
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -442,6 +489,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15165.jpg
 			javaClass: true
+			//parentId: 15_165
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R165
 			rarity: R
@@ -459,7 +510,7 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -486,6 +537,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15166.jpg
 			javaClass: true
+			//parentId: 15_166
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U166
 			rarity: U
@@ -499,7 +554,7 @@
 		culture: Uruk-hai
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -526,6 +581,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15167.jpg
 			javaClass: true
+			//parentId: 15_167
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C167
 			rarity: C
@@ -543,7 +602,7 @@
 		strength: 6
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -570,6 +629,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15168.jpg
 			javaClass: true
+			//parentId: 15_168
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U168
 			rarity: U
@@ -587,7 +650,10 @@
 		strength: 5
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Fierce
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -614,6 +680,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15169.jpg
 			javaClass: true
+			//parentId: 15_169
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C169
 			rarity: C
@@ -631,7 +701,10 @@
 		strength: 7
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Fierce
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -658,6 +731,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15170.jpg
 			javaClass: true
+			//parentId: 15_170
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R170
 			rarity: R
@@ -675,7 +752,6 @@
 		strength: 10
 		vitality: 3
 		site: 5
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -702,6 +778,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15171.jpg
 			javaClass: true
+			//parentId: 15_171
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S171
 			rarity: S
@@ -719,7 +799,7 @@
 		strength: 14
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Hunter 1
 		/*requires: {
 			
 		}
@@ -746,6 +826,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15172.jpg
 			javaClass: true
+			//parentId: 15_172
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R172
 			rarity: R
@@ -764,7 +848,10 @@
 		strength: 9
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Fierce
+			Hunter 3
+		]
 		/*requires: {
 			
 		}
@@ -791,6 +878,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15173.jpg
 			javaClass: true
+			//parentId: 15_173
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R173
 			rarity: R
@@ -807,8 +898,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [uruk-hai] Uruk-hai)
 		/*requires: {
 			
 		}
@@ -835,6 +925,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15174.jpg
 			javaClass: true
+			//parentId: 15_174
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R174
 			rarity: R
@@ -852,7 +946,7 @@
 		strength: 11
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -879,6 +973,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15175.jpg
 			javaClass: true
+			//parentId: 15_175
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U175
 			rarity: U
@@ -896,7 +994,7 @@
 		strength: 8
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -923,6 +1021,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15176.jpg
 			javaClass: true
+			//parentId: 15_176
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C176
 			rarity: C
@@ -940,7 +1042,7 @@
 		strength: 8
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -967,6 +1069,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15177.jpg
 			javaClass: true
+			//parentId: 15_177
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U177
 			rarity: U
@@ -984,7 +1090,7 @@
 		strength: 6
 		vitality: 1
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -1011,6 +1117,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15178.jpg
 			javaClass: true
+			//parentId: 15_178
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C178
 			rarity: C
@@ -1028,7 +1138,7 @@
 		strength: 10
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -1055,6 +1165,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15179.jpg
 			javaClass: true
+			//parentId: 15_179
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C179
 			rarity: C
@@ -1068,7 +1182,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1098,6 +1212,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15180.jpg
 			javaClass: true
+			//parentId: 15_180
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R180
 			rarity: R
@@ -1111,7 +1229,7 @@
 		culture: Uruk-hai
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15027.jpg
 			javaClass: true
+			//parentId: 15_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U27
 			rarity: U
@@ -17,7 +21,8 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -47,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15028.jpg
 			javaClass: true
+			//parentId: 15_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C28
 			rarity: C
@@ -64,7 +73,6 @@
 		strength: 6
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -91,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15029.jpg
 			javaClass: true
+			//parentId: 15_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R29
 			rarity: R
@@ -109,7 +121,6 @@
 		strength: 8
 		vitality: 4
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -136,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15030.jpg
 			javaClass: true
+			//parentId: 15_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R30
 			rarity: R
@@ -154,7 +169,6 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -181,6 +195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15031.jpg
 			javaClass: true
+			//parentId: 15_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U31
 			rarity: U
@@ -194,7 +212,7 @@
 		culture: Gandalf
 		twilight: 4
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -221,6 +239,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15032.jpg
 			javaClass: true
+			//parentId: 15_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U32
 			rarity: U
@@ -234,7 +256,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -264,6 +286,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15033.jpg
 			javaClass: true
+			//parentId: 15_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R33
 			rarity: R
@@ -277,7 +303,8 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -307,6 +334,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15034.jpg
 			javaClass: true
+			//parentId: 15_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R34
 			rarity: R
@@ -325,7 +356,6 @@
 		strength: 8
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -352,6 +382,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15035.jpg
 			javaClass: true
+			//parentId: 15_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U35
 			rarity: U
@@ -369,7 +403,6 @@
 		strength: 8
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -396,6 +429,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15036.jpg
 			javaClass: true
+			//parentId: 15_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R36
 			rarity: R
@@ -413,7 +450,6 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -440,6 +476,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15037.jpg
 			javaClass: true
+			//parentId: 15_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U37
 			rarity: U
@@ -458,7 +498,6 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -485,6 +524,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15038.jpg
 			javaClass: true
+			//parentId: 15_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R38
 			rarity: R
@@ -503,7 +546,6 @@
 		strength: 12
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

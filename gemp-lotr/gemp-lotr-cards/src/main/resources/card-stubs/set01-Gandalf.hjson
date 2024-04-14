@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01069.jpg
 			javaClass: true
+			//parentId: 1_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R69
 			rarity: R
@@ -22,7 +26,6 @@
 		race: Man
 		strength: 3
 		vitality: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01070.jpg
 			javaClass: true
+			//parentId: 1_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U70
 			rarity: U
@@ -67,7 +74,6 @@
 		race: Man
 		strength: 1
 		vitality: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -94,6 +100,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01071.jpg
 			javaClass: true
+			//parentId: 1_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R71
 			rarity: R
@@ -107,7 +117,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -137,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01072.jpg
 			javaClass: true
+			//parentId: 1_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R72
 			rarity: R
@@ -156,7 +170,6 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -183,6 +196,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01073.jpg
 			javaClass: true
+			//parentId: 1_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U73
 			rarity: U
@@ -196,8 +213,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -224,6 +240,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01074.jpg
 			javaClass: true
+			//parentId: 1_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U74
 			rarity: U
@@ -238,8 +258,7 @@
 		twilight: 0
 		type: Possession
 		itemclass: Pipe
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -266,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01075.jpg
 			javaClass: true
+			//parentId: 1_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R75
 			rarity: R
@@ -281,8 +304,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -309,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01076.jpg
 			javaClass: true
+			//parentId: 1_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C76
 			rarity: C
@@ -322,7 +348,8 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: 
+		#keywords: Regroup
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -352,6 +379,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01077.jpg
 			javaClass: true
+			//parentId: 1_77
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U77
 			rarity: U
@@ -365,7 +396,7 @@
 		culture: Gandalf
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -395,6 +426,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01078.jpg
 			javaClass: true
+			//parentId: 1_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C78
 			rarity: C
@@ -408,7 +443,8 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Skirmish
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -438,6 +474,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01079.jpg
 			javaClass: true
+			//parentId: 1_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R79
 			rarity: R
@@ -451,7 +491,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -478,6 +518,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01080.jpg
 			javaClass: true
+			//parentId: 1_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R80
 			rarity: R
@@ -496,7 +540,6 @@
 		race: Man
 		strength: 2
 		vitality: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -523,6 +566,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01081.jpg
 			javaClass: true
+			//parentId: 1_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R81
 			rarity: R
@@ -530,13 +577,14 @@
 			cardNum: 81
 			style: Standard
 		}
-		title: Questions That<br>Need Answering
+		title: Questions That Need Answering
 		unique: false
 		side: Free Peoples
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Fellowship
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -566,6 +614,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01082.jpg
 			javaClass: true
+			//parentId: 1_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C82
 			rarity: C
@@ -579,7 +631,8 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -609,6 +662,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01083.jpg
 			javaClass: true
+			//parentId: 1_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R83
 			rarity: R
@@ -622,7 +679,8 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -652,6 +710,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01084.jpg
 			javaClass: true
+			//parentId: 1_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C84
 			rarity: C
@@ -665,7 +727,8 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Fellowship
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -695,6 +758,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01085.jpg
 			javaClass: true
+			//parentId: 1_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C85
 			rarity: C
@@ -708,7 +775,8 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		#keywords: Regroup
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -738,6 +806,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01086.jpg
 			javaClass: true
+			//parentId: 1_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C86
 			rarity: C
@@ -745,13 +817,14 @@
 			cardNum: 86
 			style: Standard
 		}
-		title: Treachery Deeper Than<br>You Know
+		title: Treachery Deeper Than You Know
 		unique: false
 		side: Free Peoples
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -781,6 +854,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01087.jpg
 			javaClass: true
+			//parentId: 1_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R87
 			rarity: R
@@ -794,7 +871,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -824,6 +901,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01364.jpg
 			javaClass: true
+			//parentId: 1_364
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1P364
 			rarity: P
@@ -843,7 +924,6 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

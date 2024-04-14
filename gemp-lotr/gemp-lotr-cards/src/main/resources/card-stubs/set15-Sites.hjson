@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15187.jpg
 			javaClass: true
+			//parentId: 15_187
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U187
 			rarity: U
@@ -17,7 +21,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15188.jpg
 			javaClass: true
+			//parentId: 15_188
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S188
 			rarity: S
@@ -57,7 +65,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Underground
 		/*requires: {
 			
 		}
@@ -84,6 +92,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15189.jpg
 			javaClass: true
+			//parentId: 15_189
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S189
 			rarity: S
@@ -97,7 +109,6 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -124,6 +135,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15190.jpg
 			javaClass: true
+			//parentId: 15_190
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S190
 			rarity: S
@@ -137,7 +152,6 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -164,6 +178,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15191.jpg
 			javaClass: true
+			//parentId: 15_191
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S191
 			rarity: S
@@ -177,7 +195,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Battleground
 		/*requires: {
 			
 		}
@@ -204,6 +222,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15192.jpg
 			javaClass: true
+			//parentId: 15_192
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U192
 			rarity: U
@@ -217,7 +239,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Battleground
 		/*requires: {
 			
 		}
@@ -244,6 +266,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15193.jpg
 			javaClass: true
+			//parentId: 15_193
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R193
 			rarity: R
@@ -257,7 +283,11 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: [
+			Battleground
+			Mountain
+			Underground
+		]
 		/*requires: {
 			
 		}
@@ -284,6 +314,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15194.jpg
 			javaClass: true
+			//parentId: 15_194
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S194
 			rarity: S
@@ -297,7 +331,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}

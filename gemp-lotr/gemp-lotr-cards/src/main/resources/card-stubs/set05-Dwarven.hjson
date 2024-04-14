@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05005.jpg
 			javaClass: true
+			//parentId: 5_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R5
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05006.jpg
 			javaClass: true
+			//parentId: 5_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C6
 			rarity: C
@@ -60,7 +68,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05007.jpg
 			javaClass: true
+			//parentId: 5_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R7
 			rarity: R
@@ -109,7 +121,7 @@
 		vitality: 3
 		signet: Theoden
 		resistance: 6
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -136,6 +148,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05008.jpg
 			javaClass: true
+			//parentId: 5_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U8
 			rarity: U
@@ -149,8 +165,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -177,6 +192,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05009.jpg
 			javaClass: true
+			//parentId: 5_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U9
 			rarity: U
@@ -190,7 +209,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -217,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05123.jpg
 			javaClass: true
+			//parentId: 5_123
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R123
 			rarity: R
@@ -230,7 +253,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}

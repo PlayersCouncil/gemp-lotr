@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18060.jpg
 			javaClass: true
+			//parentId: 18_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U60
 			rarity: U
@@ -19,8 +23,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [men] minion
 		/*requires: {
 			
 		}
@@ -47,6 +50,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18061.jpg
 			javaClass: true
+			//parentId: 18_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U61
 			rarity: U
@@ -62,8 +69,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [men] minion
 		/*requires: {
 			
 		}
@@ -90,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18062.jpg
 			javaClass: true
+			//parentId: 18_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U62
 			rarity: U
@@ -105,8 +115,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [men] minion
 		/*requires: {
 			
 		}
@@ -133,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18063.jpg
 			javaClass: true
+			//parentId: 18_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U63
 			rarity: U
@@ -148,8 +161,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [men] minion
 		/*requires: {
 			
 		}
@@ -176,6 +188,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18064.jpg
 			javaClass: true
+			//parentId: 18_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U64
 			rarity: U
@@ -190,8 +206,7 @@
 		twilight: 2
 		type: Possession
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [men] minion
 		/*requires: {
 			
 		}
@@ -218,6 +233,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18065.jpg
 			javaClass: true
+			//parentId: 18_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C65
 			rarity: C
@@ -231,7 +250,7 @@
 		culture: Men
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -264,6 +283,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18066.jpg
 			javaClass: true
+			//parentId: 18_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R66
 			rarity: R
@@ -277,8 +300,7 @@
 		culture: Men
 		twilight: 3
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -305,6 +327,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18067.jpg
 			javaClass: true
+			//parentId: 18_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R67
 			rarity: R
@@ -323,7 +349,6 @@
 		strength: 4
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -350,6 +375,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18068.jpg
 			javaClass: true
+			//parentId: 18_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C68
 			rarity: C
@@ -367,7 +396,6 @@
 		strength: 6
 		vitality: 2
 		site: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -394,6 +422,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18069.jpg
 			javaClass: true
+			//parentId: 18_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R69
 			rarity: R
@@ -409,8 +441,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [men] minion
 		/*requires: {
 			
 		}
@@ -437,6 +468,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18070.jpg
 			javaClass: true
+			//parentId: 18_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C70
 			rarity: C
@@ -450,7 +485,7 @@
 		culture: Men
 		twilight: 2
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -480,6 +515,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18071.jpg
 			javaClass: true
+			//parentId: 18_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R71
 			rarity: R
@@ -498,7 +537,6 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -525,6 +563,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18072.jpg
 			javaClass: true
+			//parentId: 18_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C72
 			rarity: C
@@ -542,7 +584,6 @@
 		strength: 8
 		vitality: 1
 		site: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -569,6 +610,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18073.jpg
 			javaClass: true
+			//parentId: 18_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C73
 			rarity: C
@@ -586,7 +631,6 @@
 		strength: 10
 		vitality: 3
 		site: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -613,6 +657,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18074.jpg
 			javaClass: true
+			//parentId: 18_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C74
 			rarity: C
@@ -630,7 +678,6 @@
 		strength: 9
 		vitality: 2
 		site: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -657,6 +704,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18075.jpg
 			javaClass: true
+			//parentId: 18_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U75
 			rarity: U
@@ -675,7 +726,6 @@
 		strength: 3
 		vitality: 4
 		site: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -702,6 +752,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18076.jpg
 			javaClass: true
+			//parentId: 18_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R76
 			rarity: R
@@ -715,7 +769,7 @@
 		culture: Men
 		twilight: 3
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -745,6 +799,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18077.jpg
 			javaClass: true
+			//parentId: 18_77
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C77
 			rarity: C
@@ -758,7 +816,6 @@
 		culture: Men
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}

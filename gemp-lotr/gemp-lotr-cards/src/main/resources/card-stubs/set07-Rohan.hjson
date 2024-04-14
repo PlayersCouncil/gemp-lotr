@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07222.jpg
 			javaClass: true
+			//parentId: 7_222
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C222
 			rarity: C
@@ -17,11 +21,11 @@
 		culture: Rohan
 		twilight: 1
 		type: Ally
-		allyHome: fellowship,3T
+		allyHome: towers,3
 		race: Man
 		strength: 4
 		vitality: 2
-		#keyword: damage+1
+		keywords: Villager
 		/*requires: {
 			
 		}
@@ -48,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07223.jpg
 			javaClass: true
+			//parentId: 7_223
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R223
 			rarity: R
@@ -61,7 +69,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -91,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07224.jpg
 			javaClass: true
+			//parentId: 7_224
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U224
 			rarity: U
@@ -109,7 +121,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -136,6 +148,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07225.jpg
 			javaClass: true
+			//parentId: 7_225
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C225
 			rarity: C
@@ -153,7 +169,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -180,6 +195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07226.jpg
 			javaClass: true
+			//parentId: 7_226
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C226
 			rarity: C
@@ -197,7 +216,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -224,6 +242,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07227.jpg
 			javaClass: true
+			//parentId: 7_227
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R227
 			rarity: R
@@ -243,7 +265,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -270,6 +292,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07228.jpg
 			javaClass: true
+			//parentId: 7_228
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R228
 			rarity: R
@@ -289,7 +315,7 @@
 		vitality: 3
 		signet: Theoden
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -316,6 +342,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07229.jpg
 			javaClass: true
+			//parentId: 7_229
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C229
 			rarity: C
@@ -335,7 +365,6 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -362,6 +391,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07230.jpg
 			javaClass: true
+			//parentId: 7_230
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R230
 			rarity: R
@@ -378,8 +411,7 @@
 		type: Possession
 		strength: 3
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Éowyn)
 		/*requires: {
 			
 		}
@@ -406,6 +438,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07231.jpg
 			javaClass: true
+			//parentId: 7_231
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U231
 			rarity: U
@@ -419,7 +455,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -449,6 +485,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07232.jpg
 			javaClass: true
+			//parentId: 7_232
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R232
 			rarity: R
@@ -464,8 +504,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -492,6 +531,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07233.jpg
 			javaClass: true
+			//parentId: 7_233
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R233
 			rarity: R
@@ -510,7 +553,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -537,6 +580,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07234.jpg
 			javaClass: true
+			//parentId: 7_234
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U234
 			rarity: U
@@ -550,7 +597,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -580,6 +627,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07235.jpg
 			javaClass: true
+			//parentId: 7_235
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C235
 			rarity: C
@@ -598,7 +649,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -625,6 +675,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07236.jpg
 			javaClass: true
+			//parentId: 7_236
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R236
 			rarity: R
@@ -642,8 +696,7 @@
 		strength: 2
 		vitality: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Théoden)
 		/*requires: {
 			
 		}
@@ -670,6 +723,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07237.jpg
 			javaClass: true
+			//parentId: 7_237
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C237
 			rarity: C
@@ -683,7 +740,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -713,6 +770,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07238.jpg
 			javaClass: true
+			//parentId: 7_238
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U238
 			rarity: U
@@ -726,7 +787,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -756,6 +817,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07239.jpg
 			javaClass: true
+			//parentId: 7_239
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R239
 			rarity: R
@@ -769,11 +834,11 @@
 		culture: Rohan
 		twilight: 1
 		type: Ally
-		allyHome: fellowship,3T
+		allyHome: towers,3
 		race: Man
 		strength: 4
 		vitality: 2
-		#keyword: damage+1
+		keywords: Villager
 		/*requires: {
 			
 		}
@@ -800,6 +865,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07240.jpg
 			javaClass: true
+			//parentId: 7_240
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C240
 			rarity: C
@@ -815,8 +884,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -843,6 +911,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07241.jpg
 			javaClass: true
+			//parentId: 7_241
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R241
 			rarity: R
@@ -859,8 +931,7 @@
 		strength: 2
 		vitality: -1
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Merry)
 		/*requires: {
 			
 		}
@@ -887,6 +958,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07242.jpg
 			javaClass: true
+			//parentId: 7_242
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R242
 			rarity: R
@@ -902,8 +977,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Merry)
 		/*requires: {
 			
 		}
@@ -930,6 +1004,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07243.jpg
 			javaClass: true
+			//parentId: 7_243
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C243
 			rarity: C
@@ -943,7 +1021,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -973,6 +1051,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07244.jpg
 			javaClass: true
+			//parentId: 7_244
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U244
 			rarity: U
@@ -986,7 +1068,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1013,6 +1095,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07245.jpg
 			javaClass: true
+			//parentId: 7_245
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U245
 			rarity: U
@@ -1027,8 +1113,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -1055,6 +1140,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07246.jpg
 			javaClass: true
+			//parentId: 7_246
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C246
 			rarity: C
@@ -1072,7 +1161,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1099,6 +1187,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07247.jpg
 			javaClass: true
+			//parentId: 7_247
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C247
 			rarity: C
@@ -1112,11 +1204,11 @@
 		culture: Rohan
 		twilight: 1
 		type: Ally
-		allyHome: fellowship,3T
+		allyHome: towers,3
 		race: Man
 		strength: 4
 		vitality: 2
-		#keyword: damage+1
+		keywords: Villager
 		/*requires: {
 			
 		}
@@ -1143,6 +1235,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07248.jpg
 			javaClass: true
+			//parentId: 7_248
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C248
 			rarity: C
@@ -1158,8 +1254,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -1186,6 +1281,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07249.jpg
 			javaClass: true
+			//parentId: 7_249
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R249
 			rarity: R
@@ -1199,7 +1298,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1226,6 +1325,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07250.jpg
 			javaClass: true
+			//parentId: 7_250
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R250
 			rarity: R
@@ -1240,8 +1343,7 @@
 		twilight: 2
 		type: Possession
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -1268,6 +1370,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07251.jpg
 			javaClass: true
+			//parentId: 7_251
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R251
 			rarity: R
@@ -1281,7 +1387,7 @@
 		culture: Rohan
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1308,6 +1414,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07252.jpg
 			javaClass: true
+			//parentId: 7_252
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U252
 			rarity: U
@@ -1321,7 +1431,6 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -1348,6 +1457,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07253.jpg
 			javaClass: true
+			//parentId: 7_253
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C253
 			rarity: C
@@ -1362,8 +1475,7 @@
 		twilight: 2
 		type: Possession
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -1390,6 +1502,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07254.jpg
 			javaClass: true
+			//parentId: 7_254
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U254
 			rarity: U
@@ -1409,7 +1525,7 @@
 		vitality: 3
 		signet: Theoden
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -1436,6 +1552,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07255.jpg
 			javaClass: true
+			//parentId: 7_255
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R255
 			rarity: R
@@ -1455,7 +1575,6 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1482,6 +1601,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07256.jpg
 			javaClass: true
+			//parentId: 7_256
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C256
 			rarity: C
@@ -1495,7 +1618,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1525,6 +1648,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07257.jpg
 			javaClass: true
+			//parentId: 7_257
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C257
 			rarity: C
@@ -1542,7 +1669,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1569,6 +1695,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07258.jpg
 			javaClass: true
+			//parentId: 7_258
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U258
 			rarity: U
@@ -1582,7 +1712,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1612,6 +1742,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07259.jpg
 			javaClass: true
+			//parentId: 7_259
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C259
 			rarity: C
@@ -1625,7 +1759,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1655,6 +1789,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07260.jpg
 			javaClass: true
+			//parentId: 7_260
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R260
 			rarity: R
@@ -1669,8 +1807,7 @@
 		twilight: 2
 		type: Possession
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -1697,6 +1834,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07261.jpg
 			javaClass: true
+			//parentId: 7_261
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R261
 			rarity: R
@@ -1710,7 +1851,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1737,6 +1878,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07365.jpg
 			javaClass: true
+			//parentId: 7_365
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7P365
 			rarity: P
@@ -1756,7 +1901,7 @@
 		vitality: 3
 		signet: Theoden
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}

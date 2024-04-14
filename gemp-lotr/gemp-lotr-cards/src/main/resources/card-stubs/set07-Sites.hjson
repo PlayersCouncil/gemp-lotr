@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07329.jpg
 			javaClass: true
+			//parentId: 7_329
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U329
 			rarity: U
@@ -18,7 +22,6 @@
 		site: 1K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07330.jpg
 			javaClass: true
+			//parentId: 7_330
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U330
 			rarity: U
@@ -59,7 +66,6 @@
 		site: 1K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -86,6 +92,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07331.jpg
 			javaClass: true
+			//parentId: 7_331
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U331
 			rarity: U
@@ -100,7 +110,6 @@
 		site: 1K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -127,6 +136,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07332.jpg
 			javaClass: true
+			//parentId: 7_332
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U332
 			rarity: U
@@ -141,7 +154,6 @@
 		site: 1K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -168,6 +180,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07333.jpg
 			javaClass: true
+			//parentId: 7_333
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U333
 			rarity: U
@@ -182,7 +198,6 @@
 		site: 1K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -209,6 +224,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07334.jpg
 			javaClass: true
+			//parentId: 7_334
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U334
 			rarity: U
@@ -223,7 +242,6 @@
 		site: 1K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -250,6 +268,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07335.jpg
 			javaClass: true
+			//parentId: 7_335
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U335
 			rarity: U
@@ -264,7 +286,6 @@
 		site: 2K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -291,6 +312,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07336.jpg
 			javaClass: true
+			//parentId: 7_336
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U336
 			rarity: U
@@ -305,7 +330,7 @@
 		site: 2K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -332,6 +357,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07337.jpg
 			javaClass: true
+			//parentId: 7_337
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U337
 			rarity: U
@@ -346,7 +375,7 @@
 		site: 2K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -373,6 +402,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07338.jpg
 			javaClass: true
+			//parentId: 7_338
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U338
 			rarity: U
@@ -387,7 +420,7 @@
 		site: 3K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -414,6 +447,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07339.jpg
 			javaClass: true
+			//parentId: 7_339
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U339
 			rarity: U
@@ -428,7 +465,7 @@
 		site: 3K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -455,6 +492,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07340.jpg
 			javaClass: true
+			//parentId: 7_340
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U340
 			rarity: U
@@ -469,7 +510,7 @@
 		site: 3K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -496,6 +537,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07341.jpg
 			javaClass: true
+			//parentId: 7_341
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U341
 			rarity: U
@@ -510,7 +555,7 @@
 		site: 4K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -537,6 +582,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07342.jpg
 			javaClass: true
+			//parentId: 7_342
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U342
 			rarity: U
@@ -551,7 +600,6 @@
 		site: 4K
 		block: King
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -578,6 +626,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07343.jpg
 			javaClass: true
+			//parentId: 7_343
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U343
 			rarity: U
@@ -592,7 +644,7 @@
 		site: 4K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -619,6 +671,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07344.jpg
 			javaClass: true
+			//parentId: 7_344
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U344
 			rarity: U
@@ -633,7 +689,6 @@
 		site: 5K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -660,6 +715,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07345.jpg
 			javaClass: true
+			//parentId: 7_345
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U345
 			rarity: U
@@ -674,7 +733,7 @@
 		site: 5K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -701,6 +760,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07346.jpg
 			javaClass: true
+			//parentId: 7_346
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U346
 			rarity: U
@@ -715,7 +778,7 @@
 		site: 6K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -742,6 +805,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07347.jpg
 			javaClass: true
+			//parentId: 7_347
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U347
 			rarity: U
@@ -756,7 +823,7 @@
 		site: 6K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -783,6 +850,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07348.jpg
 			javaClass: true
+			//parentId: 7_348
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U348
 			rarity: U
@@ -797,7 +868,7 @@
 		site: 6K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -824,6 +895,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07349.jpg
 			javaClass: true
+			//parentId: 7_349
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U349
 			rarity: U
@@ -838,7 +913,7 @@
 		site: 6K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -865,6 +940,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07350.jpg
 			javaClass: true
+			//parentId: 7_350
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U350
 			rarity: U
@@ -879,7 +958,7 @@
 		site: 6K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -906,6 +985,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07351.jpg
 			javaClass: true
+			//parentId: 7_351
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U351
 			rarity: U
@@ -920,7 +1003,7 @@
 		site: 6K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -947,6 +1030,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07352.jpg
 			javaClass: true
+			//parentId: 7_352
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U352
 			rarity: U
@@ -961,7 +1048,7 @@
 		site: 6K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -988,6 +1075,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07353.jpg
 			javaClass: true
+			//parentId: 7_353
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U353
 			rarity: U
@@ -1002,7 +1093,7 @@
 		site: 7K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -1029,6 +1120,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07354.jpg
 			javaClass: true
+			//parentId: 7_354
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U354
 			rarity: U
@@ -1043,7 +1138,7 @@
 		site: 7K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -1070,6 +1165,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07355.jpg
 			javaClass: true
+			//parentId: 7_355
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U355
 			rarity: U
@@ -1084,7 +1183,7 @@
 		site: 7K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -1111,6 +1210,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07356.jpg
 			javaClass: true
+			//parentId: 7_356
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U356
 			rarity: U
@@ -1125,7 +1228,6 @@
 		site: 8K
 		block: King
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -1152,6 +1254,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07357.jpg
 			javaClass: true
+			//parentId: 7_357
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U357
 			rarity: U
@@ -1166,7 +1272,6 @@
 		site: 8K
 		block: King
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -1193,6 +1298,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07358.jpg
 			javaClass: true
+			//parentId: 7_358
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U358
 			rarity: U
@@ -1207,7 +1316,6 @@
 		site: 8K
 		block: King
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -1234,6 +1342,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07359.jpg
 			javaClass: true
+			//parentId: 7_359
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U359
 			rarity: U
@@ -1248,7 +1360,6 @@
 		site: 8K
 		block: King
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -1275,6 +1386,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07360.jpg
 			javaClass: true
+			//parentId: 7_360
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U360
 			rarity: U
@@ -1289,7 +1404,7 @@
 		site: 9K
 		block: King
 		direction: Left
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -1316,6 +1431,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07361.jpg
 			javaClass: true
+			//parentId: 7_361
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U361
 			rarity: U
@@ -1330,7 +1449,6 @@
 		site: 9K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -1357,6 +1475,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07362.jpg
 			javaClass: true
+			//parentId: 7_362
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U362
 			rarity: U
@@ -1371,7 +1493,6 @@
 		site: 9K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -1398,6 +1519,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07363.jpg
 			javaClass: true
+			//parentId: 7_363
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U363
 			rarity: U
@@ -1412,7 +1537,6 @@
 		site: 9K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}

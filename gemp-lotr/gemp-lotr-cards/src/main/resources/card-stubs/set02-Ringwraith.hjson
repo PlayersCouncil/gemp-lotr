@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02075.jpg
 			javaClass: true
+			//parentId: 2_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R75
 			rarity: R
@@ -22,7 +26,6 @@
 		strength: 4
 		vitality: 1
 		site: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02076.jpg
 			javaClass: true
+			//parentId: 2_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U76
 			rarity: U
@@ -62,7 +69,6 @@
 		culture: Wraith
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -89,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02077.jpg
 			javaClass: true
+			//parentId: 2_77
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R77
 			rarity: R
@@ -102,7 +112,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -129,6 +139,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02078.jpg
 			javaClass: true
+			//parentId: 2_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U78
 			rarity: U
@@ -142,7 +156,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -172,6 +186,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02079.jpg
 			javaClass: true
+			//parentId: 2_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U79
 			rarity: U
@@ -179,13 +197,13 @@
 			cardNum: 79
 			style: Standard
 		}
-		title: Resistance Becomes<br>Unbearable
+		title: Resistance Becomes Unbearable
 		unique: false
 		side: Shadow
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -215,6 +233,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02080.jpg
 			javaClass: true
+			//parentId: 2_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R80
 			rarity: R
@@ -228,7 +250,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -258,6 +280,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02081.jpg
 			javaClass: true
+			//parentId: 2_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U81
 			rarity: U
@@ -271,7 +297,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -301,6 +327,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02082.jpg
 			javaClass: true
+			//parentId: 2_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U82
 			rarity: U
@@ -319,7 +349,7 @@
 		strength: 12
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Twilight
 		/*requires: {
 			
 		}
@@ -346,6 +376,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02083.jpg
 			javaClass: true
+			//parentId: 2_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U83
 			rarity: U
@@ -364,7 +398,7 @@
 		strength: 11
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Twilight
 		/*requires: {
 			
 		}
@@ -391,6 +425,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02084.jpg
 			javaClass: true
+			//parentId: 2_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R84
 			rarity: R
@@ -409,7 +447,7 @@
 		strength: 10
 		vitality: 3
 		site: 2
-		#keyword: damage+1
+		keywords: Twilight
 		/*requires: {
 			
 		}
@@ -436,6 +474,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02085.jpg
 			javaClass: true
+			//parentId: 2_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R85
 			rarity: R
@@ -454,7 +496,7 @@
 		strength: 14
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Twilight
 		/*requires: {
 			
 		}
@@ -481,6 +523,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02086.jpg
 			javaClass: true
+			//parentId: 2_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R86
 			rarity: R
@@ -494,7 +540,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}

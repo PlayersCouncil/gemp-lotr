@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19024.jpg
 			javaClass: true
+			//parentId: 19_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P24
 			rarity: P
@@ -18,7 +22,6 @@
 		twilight: 2
 		type: Condition
 		strength: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19025.jpg
 			javaClass: true
+			//parentId: 19_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P25
 			rarity: P
@@ -63,7 +70,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -90,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19026.jpg
 			javaClass: true
+			//parentId: 19_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P26
 			rarity: P
@@ -108,7 +119,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}

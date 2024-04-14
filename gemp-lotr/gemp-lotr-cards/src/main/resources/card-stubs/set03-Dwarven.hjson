@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03001.jpg
 			javaClass: true
+			//parentId: 3_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R1
 			rarity: R
@@ -17,8 +21,8 @@
 		culture: Dwarven
 		twilight: 2
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -45,6 +49,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03002.jpg
 			javaClass: true
+			//parentId: 3_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U2
 			rarity: U
@@ -59,8 +67,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Pipe
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gimli)
 		/*requires: {
 			
 		}
@@ -87,6 +94,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03003.jpg
 			javaClass: true
+			//parentId: 3_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R3
 			rarity: R
@@ -100,7 +111,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -127,6 +138,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03004.jpg
 			javaClass: true
+			//parentId: 3_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U4
 			rarity: U
@@ -140,7 +155,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -167,6 +182,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03005.jpg
 			javaClass: true
+			//parentId: 3_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U5
 			rarity: U
@@ -180,7 +199,10 @@
 		culture: Dwarven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -207,6 +229,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03006.jpg
 			javaClass: true
+			//parentId: 3_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C6
 			rarity: C
@@ -220,7 +246,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}

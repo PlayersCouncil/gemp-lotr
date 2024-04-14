@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05031.jpg
 			javaClass: true
+			//parentId: 5_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R31
 			rarity: R
@@ -22,7 +26,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -49,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05032.jpg
 			javaClass: true
+			//parentId: 5_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C32
 			rarity: C
@@ -64,7 +72,10 @@
 		type: Condition
 		strength: -2
 		vitality: -1
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -91,6 +102,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05033.jpg
 			javaClass: true
+			//parentId: 5_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C33
 			rarity: C
@@ -105,7 +120,10 @@
 		twilight: 1
 		type: Condition
 		strength: -3
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -132,6 +150,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05034.jpg
 			javaClass: true
+			//parentId: 5_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U34
 			rarity: U
@@ -145,7 +167,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -175,6 +197,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05035.jpg
 			javaClass: true
+			//parentId: 5_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C35
 			rarity: C
@@ -192,7 +218,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -219,6 +245,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05036.jpg
 			javaClass: true
+			//parentId: 5_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C36
 			rarity: C
@@ -236,7 +266,7 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -263,6 +293,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05037.jpg
 			javaClass: true
+			//parentId: 5_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C37
 			rarity: C
@@ -276,7 +310,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -306,6 +340,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05038.jpg
 			javaClass: true
+			//parentId: 5_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U38
 			rarity: U
@@ -319,7 +357,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -346,6 +384,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05039.jpg
 			javaClass: true
+			//parentId: 5_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R39
 			rarity: R
@@ -360,7 +402,10 @@
 		twilight: 1
 		type: Condition
 		vitality: -2
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -387,6 +432,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05040.jpg
 			javaClass: true
+			//parentId: 5_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C40
 			rarity: C
@@ -400,7 +449,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -430,6 +479,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05041.jpg
 			javaClass: true
+			//parentId: 5_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R41
 			rarity: R
@@ -443,7 +496,7 @@
 		culture: Gondor
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -473,6 +526,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05042.jpg
 			javaClass: true
+			//parentId: 5_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U42
 			rarity: U
@@ -491,7 +548,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -518,6 +575,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05043.jpg
 			javaClass: true
+			//parentId: 5_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C43
 			rarity: C
@@ -531,7 +592,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}

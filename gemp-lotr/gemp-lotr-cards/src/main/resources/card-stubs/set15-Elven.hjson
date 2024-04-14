@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15011.jpg
 			javaClass: true
+			//parentId: 15_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R11
 			rarity: R
@@ -22,7 +26,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15012.jpg
 			javaClass: true
+			//parentId: 15_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R12
 			rarity: R
@@ -63,7 +70,6 @@
 		culture: Elven
 		twilight: 2
 		type: Follower
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -90,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15013.jpg
 			javaClass: true
+			//parentId: 15_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C13
 			rarity: C
@@ -104,8 +114,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Elf)
 		/*requires: {
 			
 		}
@@ -132,6 +141,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15014.jpg
 			javaClass: true
+			//parentId: 15_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C14
 			rarity: C
@@ -149,7 +162,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -176,6 +188,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15015.jpg
 			javaClass: true
+			//parentId: 15_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C15
 			rarity: C
@@ -189,7 +205,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -216,6 +232,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15016.jpg
 			javaClass: true
+			//parentId: 15_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U16
 			rarity: U
@@ -230,8 +250,7 @@
 		culture: Elven
 		twilight: 2
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -258,6 +277,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15017.jpg
 			javaClass: true
+			//parentId: 15_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U17
 			rarity: U
@@ -276,7 +299,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -303,6 +325,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15018.jpg
 			javaClass: true
+			//parentId: 15_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S18
 			rarity: S
@@ -321,7 +347,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Hunter 1
 		/*requires: {
 			
 		}
@@ -348,6 +374,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15019.jpg
 			javaClass: true
+			//parentId: 15_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R19
 			rarity: R
@@ -366,7 +396,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Archer
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -393,6 +426,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15020.jpg
 			javaClass: true
+			//parentId: 15_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U20
 			rarity: U
@@ -406,7 +443,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -436,6 +473,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15021.jpg
 			javaClass: true
+			//parentId: 15_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U21
 			rarity: U
@@ -449,7 +490,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -479,6 +520,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15022.jpg
 			javaClass: true
+			//parentId: 15_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R22
 			rarity: R
@@ -493,8 +538,7 @@
 		culture: Elven
 		twilight: 2
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -521,6 +565,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15023.jpg
 			javaClass: true
+			//parentId: 15_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C23
 			rarity: C
@@ -534,7 +582,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -564,6 +612,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15024.jpg
 			javaClass: true
+			//parentId: 15_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R24
 			rarity: R
@@ -577,7 +629,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -604,6 +656,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15025.jpg
 			javaClass: true
+			//parentId: 15_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C25
 			rarity: C
@@ -619,8 +675,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Elf)
 		/*requires: {
 			
 		}
@@ -647,6 +702,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15026.jpg
 			javaClass: true
+			//parentId: 15_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U26
 			rarity: U
@@ -662,7 +721,6 @@
 		twilight: 2
 		type: Follower
 		resistance: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -689,6 +747,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15060.jpg
 			javaClass: true
+			//parentId: 15_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C60
 			rarity: C
@@ -702,7 +764,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

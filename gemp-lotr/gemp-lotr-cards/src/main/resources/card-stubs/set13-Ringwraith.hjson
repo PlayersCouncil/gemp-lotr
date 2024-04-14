@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13178.jpg
 			javaClass: true
+			//parentId: 13_178
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R178
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Wraith
 		twilight: 3
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13179.jpg
 			javaClass: true
+			//parentId: 13_179
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U179
 			rarity: U
@@ -60,7 +68,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13180.jpg
 			javaClass: true
+			//parentId: 13_180
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R180
 			rarity: R
@@ -103,7 +115,8 @@
 		culture: Wraith
 		twilight: 4
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
+		keywords: Toil 1
 		/*requires: {
 			
 		}
@@ -133,6 +146,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13181.jpg
 			javaClass: true
+			//parentId: 13_181
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U181
 			rarity: U
@@ -146,7 +163,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -173,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13182.jpg
 			javaClass: true
+			//parentId: 13_182
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R182
 			rarity: R
@@ -191,7 +212,7 @@
 		strength: 11
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -218,6 +239,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13183.jpg
 			javaClass: true
+			//parentId: 13_183
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U183
 			rarity: U
@@ -236,7 +261,7 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -263,6 +288,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13184.jpg
 			javaClass: true
+			//parentId: 13_184
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C184
 			rarity: C
@@ -281,7 +310,7 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}

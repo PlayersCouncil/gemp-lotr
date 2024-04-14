@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19033.jpg
 			javaClass: true
+			//parentId: 19_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P33
 			rarity: P
@@ -22,7 +26,10 @@
 		strength: 13
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Archer
+			Damage+1
+		]
 		/*requires: {
 			
 		}

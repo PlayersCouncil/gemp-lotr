@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10117.jpg
 			javaClass: true
+			//parentId: 10_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U117
 			rarity: U
@@ -18,7 +22,7 @@
 		site: 3K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -45,6 +49,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10118.jpg
 			javaClass: true
+			//parentId: 10_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U118
 			rarity: U
@@ -59,7 +67,7 @@
 		site: 4K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -86,6 +94,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10119.jpg
 			javaClass: true
+			//parentId: 10_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U119
 			rarity: U
@@ -100,7 +112,6 @@
 		site: 5K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -127,6 +138,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10120.jpg
 			javaClass: true
+			//parentId: 10_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U120
 			rarity: U
@@ -141,7 +156,6 @@
 		site: 8K
 		block: King
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}

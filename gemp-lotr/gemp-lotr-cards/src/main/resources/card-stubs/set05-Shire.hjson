@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05111.jpg
 			javaClass: true
+			//parentId: 5_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U111
 			rarity: U
@@ -23,7 +27,6 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -50,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05112.jpg
 			javaClass: true
+			//parentId: 5_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R112
 			rarity: R
@@ -63,7 +70,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -93,6 +100,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05113.jpg
 			javaClass: true
+			//parentId: 5_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R113
 			rarity: R
@@ -106,7 +117,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -136,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05114.jpg
 			javaClass: true
+			//parentId: 5_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U114
 			rarity: U
@@ -150,7 +165,6 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -177,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05115.jpg
 			javaClass: true
+			//parentId: 5_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U115
 			rarity: U
@@ -196,7 +214,7 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -223,6 +241,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05116.jpg
 			javaClass: true
+			//parentId: 5_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R116
 			rarity: R
@@ -239,8 +261,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Frodo)
 		/*requires: {
 			
 		}
@@ -267,6 +288,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05117.jpg
 			javaClass: true
+			//parentId: 5_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C117
 			rarity: C
@@ -280,7 +305,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}

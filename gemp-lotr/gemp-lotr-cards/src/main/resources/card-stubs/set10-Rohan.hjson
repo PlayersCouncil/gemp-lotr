@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10072.jpg
 			javaClass: true
+			//parentId: 10_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R72
 			rarity: R
@@ -23,7 +27,6 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -50,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10073.jpg
 			javaClass: true
+			//parentId: 10_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U73
 			rarity: U
@@ -63,7 +70,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -90,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10074.jpg
 			javaClass: true
+			//parentId: 10_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U74
 			rarity: U
@@ -103,7 +114,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}

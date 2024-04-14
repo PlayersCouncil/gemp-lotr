@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17040.jpg
 			javaClass: true
+			//parentId: 17_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U40
 			rarity: U
@@ -19,8 +23,7 @@
 		type: Possession
 		strength: 3
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [men] Man
 		/*requires: {
 			
 		}
@@ -47,6 +50,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17041.jpg
 			javaClass: true
+			//parentId: 17_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R41
 			rarity: R
@@ -60,8 +67,7 @@
 		culture: Men
 		twilight: 2
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -88,6 +94,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17042.jpg
 			javaClass: true
+			//parentId: 17_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U42
 			rarity: U
@@ -105,7 +115,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -132,6 +141,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17043.jpg
 			javaClass: true
+			//parentId: 17_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R43
 			rarity: R
@@ -149,7 +162,6 @@
 		strength: 15
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -176,6 +188,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17044.jpg
 			javaClass: true
+			//parentId: 17_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R44
 			rarity: R
@@ -191,8 +207,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [men] Man
 		/*requires: {
 			
 		}
@@ -219,6 +234,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17045.jpg
 			javaClass: true
+			//parentId: 17_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R45
 			rarity: R
@@ -232,7 +251,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -262,6 +281,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17046.jpg
 			javaClass: true
+			//parentId: 17_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C46
 			rarity: C
@@ -275,7 +298,7 @@
 		culture: Men
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -305,6 +328,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17047.jpg
 			javaClass: true
+			//parentId: 17_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C47
 			rarity: C
@@ -320,8 +347,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [men] minion
 		/*requires: {
 			
 		}
@@ -348,6 +374,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17048.jpg
 			javaClass: true
+			//parentId: 17_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17S48
 			rarity: S
@@ -366,7 +396,6 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -393,6 +422,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17049.jpg
 			javaClass: true
+			//parentId: 17_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R49
 			rarity: R
@@ -410,7 +443,10 @@
 		strength: 17
 		vitality: 4
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Damage+1
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -437,6 +473,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17050.jpg
 			javaClass: true
+			//parentId: 17_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C50
 			rarity: C
@@ -454,7 +494,6 @@
 		strength: 7
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -481,6 +520,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17051.jpg
 			javaClass: true
+			//parentId: 17_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C51
 			rarity: C
@@ -498,7 +541,6 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -525,6 +567,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17052.jpg
 			javaClass: true
+			//parentId: 17_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R52
 			rarity: R
@@ -542,7 +588,6 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -569,6 +614,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17053.jpg
 			javaClass: true
+			//parentId: 17_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C53
 			rarity: C
@@ -586,7 +635,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -613,6 +661,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17054.jpg
 			javaClass: true
+			//parentId: 17_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C54
 			rarity: C
@@ -630,7 +682,7 @@
 		strength: 11
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -657,6 +709,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17055.jpg
 			javaClass: true
+			//parentId: 17_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C55
 			rarity: C
@@ -674,7 +730,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -701,6 +756,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17056.jpg
 			javaClass: true
+			//parentId: 17_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R56
 			rarity: R
@@ -718,7 +777,6 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -745,6 +803,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17057.jpg
 			javaClass: true
+			//parentId: 17_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C57
 			rarity: C
@@ -762,7 +824,6 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -789,6 +850,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17058.jpg
 			javaClass: true
+			//parentId: 17_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R58
 			rarity: R
@@ -806,7 +871,6 @@
 		strength: 14
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -833,6 +897,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17059.jpg
 			javaClass: true
+			//parentId: 17_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C59
 			rarity: C
@@ -850,7 +918,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -877,6 +944,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17060.jpg
 			javaClass: true
+			//parentId: 17_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C60
 			rarity: C
@@ -894,7 +965,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -921,6 +991,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17061.jpg
 			javaClass: true
+			//parentId: 17_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R61
 			rarity: R
@@ -938,7 +1012,6 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -965,6 +1038,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17062.jpg
 			javaClass: true
+			//parentId: 17_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C62
 			rarity: C
@@ -982,7 +1059,6 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1009,6 +1085,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17063.jpg
 			javaClass: true
+			//parentId: 17_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C63
 			rarity: C
@@ -1026,7 +1106,6 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1053,6 +1132,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17064.jpg
 			javaClass: true
+			//parentId: 17_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C64
 			rarity: C
@@ -1070,7 +1153,6 @@
 		strength: 15
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1097,6 +1179,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17065.jpg
 			javaClass: true
+			//parentId: 17_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R65
 			rarity: R
@@ -1114,7 +1200,6 @@
 		strength: 15
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1141,6 +1226,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17066.jpg
 			javaClass: true
+			//parentId: 17_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17C66
 			rarity: C
@@ -1154,8 +1243,7 @@
 		culture: Men
 		twilight: 2
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

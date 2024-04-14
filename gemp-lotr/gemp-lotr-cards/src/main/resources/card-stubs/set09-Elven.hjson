@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09012.jpg
 			javaClass: true
+			//parentId: 9_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+12
 			rarity: R+
@@ -19,8 +23,7 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Elf)
 		/*requires: {
 			
 		}
@@ -47,6 +50,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09013.jpg
 			javaClass: true
+			//parentId: 9_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R13
 			rarity: R
@@ -60,8 +67,7 @@
 		culture: Elven
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Elf or Hobbit)
 		/*requires: {
 			
 		}
@@ -88,6 +94,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09014.jpg
 			javaClass: true
+			//parentId: 9_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+14
 			rarity: R+
@@ -106,7 +116,7 @@
 		strength: 3
 		vitality: 3
 		resistance: 3
-		#keyword: damage+1
+		keywords: Can-bear-ring
 		/*requires: {
 			
 		}
@@ -133,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09015.jpg
 			javaClass: true
+			//parentId: 9_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+15
 			rarity: R+
@@ -151,7 +165,6 @@
 		strength: 9
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -178,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09016.jpg
 			javaClass: true
+			//parentId: 9_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+16
 			rarity: R+
@@ -196,7 +213,6 @@
 		strength: 9
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -223,6 +239,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09017.jpg
 			javaClass: true
+			//parentId: 9_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+17
 			rarity: R+
@@ -238,8 +258,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -266,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09018.jpg
 			javaClass: true
+			//parentId: 9_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R18
 			rarity: R
@@ -281,8 +304,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Merry)
 		/*requires: {
 			
 		}
@@ -309,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09019.jpg
 			javaClass: true
+			//parentId: 9_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R19
 			rarity: R
@@ -325,8 +351,7 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Círdan or Gandalf)
 		/*requires: {
 			
 		}
@@ -353,6 +378,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09020.jpg
 			javaClass: true
+			//parentId: 9_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R20
 			rarity: R
@@ -369,8 +398,7 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Galadriel)
 		/*requires: {
 			
 		}
@@ -397,6 +425,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09021.jpg
 			javaClass: true
+			//parentId: 9_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R21
 			rarity: R
@@ -412,8 +444,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Pippin)
 		/*requires: {
 			
 		}
@@ -440,6 +471,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09022.jpg
 			javaClass: true
+			//parentId: 9_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R22
 			rarity: R
@@ -453,8 +488,7 @@
 		culture: Elven
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -481,6 +515,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09023.jpg
 			javaClass: true
+			//parentId: 9_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R23
 			rarity: R
@@ -497,8 +535,7 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Elrond or Gil-galad)
 		/*requires: {
 			
 		}

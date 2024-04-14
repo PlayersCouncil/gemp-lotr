@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17139.jpg
 			javaClass: true
+			//parentId: 17_139
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R139
 			rarity: R
@@ -22,7 +26,7 @@
 		strength: 10
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -49,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17140.jpg
 			javaClass: true
+			//parentId: 17_140
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R140
 			rarity: R
@@ -67,7 +75,7 @@
 		strength: 11
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -94,6 +102,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17141.jpg
 			javaClass: true
+			//parentId: 17_141
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R141
 			rarity: R
@@ -112,7 +124,7 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -139,6 +151,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17142.jpg
 			javaClass: true
+			//parentId: 17_142
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R142
 			rarity: R
@@ -154,8 +170,7 @@
 		type: Artifact
 		strength: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}
@@ -182,6 +197,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17143.jpg
 			javaClass: true
+			//parentId: 17_143
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R143
 			rarity: R
@@ -196,8 +215,7 @@
 		twilight: 0
 		type: Artifact
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}
@@ -224,6 +242,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17144.jpg
 			javaClass: true
+			//parentId: 17_144
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R144
 			rarity: R
@@ -242,7 +264,7 @@
 		strength: 14
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}

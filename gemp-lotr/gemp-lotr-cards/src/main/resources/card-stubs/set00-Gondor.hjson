@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR00058.jpg
 			javaClass: true
+			//parentId: 0_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 0P58
 			rarity: P
@@ -22,7 +26,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR00065.jpg
 			javaClass: true
+			//parentId: 0_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 0P65
 			rarity: P
@@ -67,7 +74,11 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ring-bound
+			Knight
+			Ranger
+		]
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11161.jpg
 			javaClass: true
+			//parentId: 11_161
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S161
 			rarity: S
@@ -17,7 +21,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11162.jpg
 			javaClass: true
+			//parentId: 11_162
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C162
 			rarity: C
@@ -60,7 +68,8 @@
 		culture: Shire
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -90,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11163.jpg
 			javaClass: true
+			//parentId: 11_163
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U163
 			rarity: U
@@ -108,7 +121,6 @@
 		strength: 3
 		vitality: 3
 		resistance: 8
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -135,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11164.jpg
 			javaClass: true
+			//parentId: 11_164
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S164
 			rarity: S
@@ -153,7 +169,11 @@
 		strength: 3
 		vitality: 4
 		resistance: 10
-		#keyword: damage+1
+		keywords: [
+			Ring-bearer
+			Ring-bound
+			Can-bear-ring
+		]
 		/*requires: {
 			
 		}
@@ -180,6 +200,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11165.jpg
 			javaClass: true
+			//parentId: 11_165
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R165
 			rarity: R
@@ -193,7 +217,7 @@
 		culture: Shire
 		twilight: 4
 		type: Condition
-		#keyword: support area
+		keywords: Toil 2
 		/*requires: {
 			
 		}
@@ -220,6 +244,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11166.jpg
 			javaClass: true
+			//parentId: 11_166
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S166
 			rarity: S
@@ -235,8 +263,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Hobbit
 		/*requires: {
 			
 		}
@@ -263,6 +290,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11167.jpg
 			javaClass: true
+			//parentId: 11_167
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C167
 			rarity: C
@@ -276,7 +307,8 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -306,6 +338,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11168.jpg
 			javaClass: true
+			//parentId: 11_168
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C168
 			rarity: C
@@ -324,7 +360,6 @@
 		strength: 3
 		vitality: 4
 		resistance: 9
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -351,6 +386,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11169.jpg
 			javaClass: true
+			//parentId: 11_169
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C169
 			rarity: C
@@ -364,7 +403,8 @@
 		culture: Shire
 		twilight: 6
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
+		keywords: Toil 2
 		/*requires: {
 			
 		}
@@ -394,6 +434,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11170.jpg
 			javaClass: true
+			//parentId: 11_170
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R170
 			rarity: R
@@ -412,7 +456,6 @@
 		strength: 3
 		vitality: 4
 		resistance: 9
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -439,6 +482,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11171.jpg
 			javaClass: true
+			//parentId: 11_171
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R171
 			rarity: R
@@ -454,8 +501,7 @@
 		type: Possession
 		resistance: 2
 		itemclass: Box
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Hobbit
 		/*requires: {
 			
 		}
@@ -482,6 +528,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11172.jpg
 			javaClass: true
+			//parentId: 11_172
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U172
 			rarity: U
@@ -500,7 +550,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 10
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -527,6 +577,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11173.jpg
 			javaClass: true
+			//parentId: 11_173
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R173
 			rarity: R
@@ -543,8 +597,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Bilbo, Frodo, or Sam)
 		/*requires: {
 			
 		}
@@ -571,6 +624,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11174.jpg
 			javaClass: true
+			//parentId: 11_174
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S174
 			rarity: S
@@ -584,7 +641,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -614,6 +671,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11175.jpg
 			javaClass: true
+			//parentId: 11_175
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U175
 			rarity: U
@@ -627,7 +688,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -657,6 +718,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11176.jpg
 			javaClass: true
+			//parentId: 11_176
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S176
 			rarity: S
@@ -670,7 +735,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}

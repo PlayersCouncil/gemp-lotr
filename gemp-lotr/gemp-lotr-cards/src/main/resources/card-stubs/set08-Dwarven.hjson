@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08001.jpg
 			javaClass: true
+			//parentId: 8_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C1
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08002.jpg
 			javaClass: true
+			//parentId: 8_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R2
 			rarity: R
@@ -57,7 +65,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08003.jpg
 			javaClass: true
+			//parentId: 8_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R3
 			rarity: R
@@ -100,7 +112,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -130,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08004.jpg
 			javaClass: true
+			//parentId: 8_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U4
 			rarity: U
@@ -143,7 +159,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -173,6 +189,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08005.jpg
 			javaClass: true
+			//parentId: 8_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C5
 			rarity: C
@@ -192,7 +212,7 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -219,6 +239,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08006.jpg
 			javaClass: true
+			//parentId: 8_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C6
 			rarity: C
@@ -232,7 +256,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -262,6 +286,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08007.jpg
 			javaClass: true
+			//parentId: 8_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R7
 			rarity: R
@@ -275,7 +303,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -308,6 +336,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08008.jpg
 			javaClass: true
+			//parentId: 8_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U8
 			rarity: U
@@ -321,7 +353,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

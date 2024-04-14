@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03081.jpg
 			javaClass: true
+			//parentId: 3_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R81
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03082.jpg
 			javaClass: true
+			//parentId: 3_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U82
 			rarity: U
@@ -57,7 +65,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03083.jpg
 			javaClass: true
+			//parentId: 3_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U83
 			rarity: U
@@ -100,7 +112,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -127,6 +139,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03084.jpg
 			javaClass: true
+			//parentId: 3_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C84
 			rarity: C
@@ -134,13 +150,13 @@
 			cardNum: 84
 			style: Standard
 		}
-		title: They Will Never Stop<br>Hunting You
+		title: They Will Never Stop Hunting You
 		unique: false
 		side: Shadow
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -170,6 +186,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03085.jpg
 			javaClass: true
+			//parentId: 3_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R85
 			rarity: R
@@ -183,7 +203,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -213,6 +233,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03086.jpg
 			javaClass: true
+			//parentId: 3_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U86
 			rarity: U
@@ -231,7 +255,7 @@
 		strength: 9
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Twilight
 		/*requires: {
 			
 		}

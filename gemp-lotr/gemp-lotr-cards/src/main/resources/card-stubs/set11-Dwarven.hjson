@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11003.jpg
 			javaClass: true
+			//parentId: 11_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U3
 			rarity: U
@@ -19,8 +23,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -47,6 +50,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11004.jpg
 			javaClass: true
+			//parentId: 11_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C4
 			rarity: C
@@ -60,7 +67,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -90,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11005.jpg
 			javaClass: true
+			//parentId: 11_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C5
 			rarity: C
@@ -103,7 +114,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -130,6 +141,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11006.jpg
 			javaClass: true
+			//parentId: 11_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U6
 			rarity: U
@@ -143,7 +158,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -173,6 +188,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11007.jpg
 			javaClass: true
+			//parentId: 11_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C7
 			rarity: C
@@ -191,7 +210,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -218,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11008.jpg
 			javaClass: true
+			//parentId: 11_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U8
 			rarity: U
@@ -236,7 +258,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -263,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11009.jpg
 			javaClass: true
+			//parentId: 11_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R9
 			rarity: R
@@ -279,8 +305,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -307,6 +332,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11010.jpg
 			javaClass: true
+			//parentId: 11_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R10
 			rarity: R
@@ -325,7 +354,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -352,6 +380,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11011.jpg
 			javaClass: true
+			//parentId: 11_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R11
 			rarity: R
@@ -365,7 +397,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -392,6 +424,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11012.jpg
 			javaClass: true
+			//parentId: 11_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U12
 			rarity: U
@@ -405,7 +441,7 @@
 		culture: Dwarven
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -432,6 +468,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11013.jpg
 			javaClass: true
+			//parentId: 11_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C13
 			rarity: C
@@ -445,7 +485,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -478,6 +518,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11014.jpg
 			javaClass: true
+			//parentId: 11_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R14
 			rarity: R
@@ -491,7 +535,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}

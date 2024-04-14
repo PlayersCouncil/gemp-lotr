@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09031.jpg
 			javaClass: true
+			//parentId: 9_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+31
 			rarity: R+
@@ -22,7 +26,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Can-bear-ring
 		/*requires: {
 			
 		}
@@ -49,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09032.jpg
 			javaClass: true
+			//parentId: 9_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+32
 			rarity: R+
@@ -67,7 +75,6 @@
 		strength: 8
 		vitality: 5
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -94,6 +101,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09033.jpg
 			javaClass: true
+			//parentId: 9_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+33
 			rarity: R+
@@ -112,7 +123,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Can-bear-ring
 		/*requires: {
 			
 		}
@@ -139,6 +150,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09034.jpg
 			javaClass: true
+			//parentId: 9_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+34
 			rarity: R+
@@ -155,8 +170,7 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -183,6 +197,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09035.jpg
 			javaClass: true
+			//parentId: 9_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R35
 			rarity: R
@@ -196,8 +214,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -224,6 +241,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09036.jpg
 			javaClass: true
+			//parentId: 9_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R36
 			rarity: R
@@ -237,8 +258,10 @@
 		culture: Gondor
 		twilight: 1
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -265,6 +288,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09037.jpg
 			javaClass: true
+			//parentId: 9_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R37
 			rarity: R
@@ -278,8 +305,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -306,6 +332,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09038.jpg
 			javaClass: true
+			//parentId: 9_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R38
 			rarity: R
@@ -319,8 +349,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10019.jpg
 			javaClass: true
+			//parentId: 10_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R19
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -50,6 +54,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10020.jpg
 			javaClass: true
+			//parentId: 10_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U20
 			rarity: U
@@ -63,7 +71,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10021.jpg
 			javaClass: true
+			//parentId: 10_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R21
 			rarity: R
@@ -108,7 +120,6 @@
 		strength: 5
 		vitality: 4
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -135,6 +146,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10022.jpg
 			javaClass: true
+			//parentId: 10_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U22
 			rarity: U
@@ -148,7 +163,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -175,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10023.jpg
 			javaClass: true
+			//parentId: 10_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R23
 			rarity: R
@@ -193,7 +212,10 @@
 		strength: 8
 		vitality: 8
 		site: 8
-		#keyword: damage+1
+		keywords: [
+			Enduring
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -220,6 +242,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10024.jpg
 			javaClass: true
+			//parentId: 10_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C24
 			rarity: C
@@ -233,7 +259,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

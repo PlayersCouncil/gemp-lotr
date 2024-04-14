@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12118.jpg
 			javaClass: true
+			//parentId: 12_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R118
 			rarity: R
@@ -22,7 +26,6 @@
 		strength: 9
 		vitality: 3
 		site: 5
-		#keyword: damage+1
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05079.jpg
 			javaClass: true
+			//parentId: 5_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U79
 			rarity: U
@@ -17,7 +21,10 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -44,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05080.jpg
 			javaClass: true
+			//parentId: 5_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U80
 			rarity: U
@@ -57,7 +68,10 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -84,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05081.jpg
 			javaClass: true
+			//parentId: 5_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C81
 			rarity: C
@@ -98,11 +116,11 @@
 		culture: Rohan
 		twilight: 1
 		type: Ally
-		allyHome: fellowship,4T
+		allyHome: towers,4
 		race: Man
 		strength: 4
 		vitality: 2
-		#keyword: damage+1
+		keywords: Villager
 		/*requires: {
 			
 		}
@@ -129,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05082.jpg
 			javaClass: true
+			//parentId: 5_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R82
 			rarity: R
@@ -147,7 +169,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -174,6 +196,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05083.jpg
 			javaClass: true
+			//parentId: 5_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C83
 			rarity: C
@@ -191,7 +217,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -218,6 +244,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05084.jpg
 			javaClass: true
+			//parentId: 5_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R84
 			rarity: R
@@ -231,7 +261,7 @@
 		culture: Rohan
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -261,6 +291,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05085.jpg
 			javaClass: true
+			//parentId: 5_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C85
 			rarity: C
@@ -274,7 +308,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -304,6 +338,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05086.jpg
 			javaClass: true
+			//parentId: 5_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R86
 			rarity: R
@@ -317,7 +355,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -347,6 +385,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05087.jpg
 			javaClass: true
+			//parentId: 5_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U87
 			rarity: U
@@ -360,7 +402,10 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -387,6 +432,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05088.jpg
 			javaClass: true
+			//parentId: 5_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C88
 			rarity: C
@@ -402,8 +451,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -430,6 +478,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05089.jpg
 			javaClass: true
+			//parentId: 5_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R89
 			rarity: R
@@ -444,8 +496,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Helm
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -472,6 +523,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05090.jpg
 			javaClass: true
+			//parentId: 5_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C90
 			rarity: C
@@ -489,7 +544,7 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -516,6 +571,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05091.jpg
 			javaClass: true
+			//parentId: 5_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C91
 			rarity: C
@@ -530,8 +589,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Shield
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -558,6 +616,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05092.jpg
 			javaClass: true
+			//parentId: 5_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U92
 			rarity: U
@@ -572,11 +634,11 @@
 		culture: Rohan
 		twilight: 1
 		type: Ally
-		allyHome: fellowship,4T
+		allyHome: towers,4
 		race: Man
 		strength: 4
 		vitality: 2
-		#keyword: damage+1
+		keywords: Villager
 		/*requires: {
 			
 		}
@@ -603,6 +665,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05093.jpg
 			javaClass: true
+			//parentId: 5_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C93
 			rarity: C
@@ -622,7 +688,7 @@
 		vitality: 2
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -649,6 +715,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05094.jpg
 			javaClass: true
+			//parentId: 5_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R94
 			rarity: R
@@ -662,7 +732,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -689,6 +759,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05122.jpg
 			javaClass: true
+			//parentId: 5_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5P122
 			rarity: P
@@ -708,7 +782,7 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -735,6 +809,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05127.jpg
 			javaClass: true
+			//parentId: 5_127
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R127
 			rarity: R
@@ -749,8 +827,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Helm
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -777,6 +854,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05128.jpg
 			javaClass: true
+			//parentId: 5_128
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R128
 			rarity: R
@@ -790,7 +871,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

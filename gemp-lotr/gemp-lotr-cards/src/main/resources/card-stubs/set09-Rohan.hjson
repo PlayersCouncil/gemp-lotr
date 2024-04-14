@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09045.jpg
 			javaClass: true
+			//parentId: 9_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R45
 			rarity: R
@@ -18,8 +22,7 @@
 		twilight: 1
 		type: Possession
 		strength: 1
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Merry or Pippin)
 		/*requires: {
 			
 		}
@@ -46,6 +49,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09046.jpg
 			javaClass: true
+			//parentId: 9_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R46
 			rarity: R
@@ -59,8 +66,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

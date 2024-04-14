@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR16001.jpg
 			javaClass: true
+			//parentId: 16_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 16R1
 			rarity: R
@@ -21,7 +25,7 @@
 		strength: 11
 		vitality: 4
 		site: 2
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -48,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR16002.jpg
 			javaClass: true
+			//parentId: 16_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 16R2
 			rarity: R
@@ -65,7 +73,7 @@
 		strength: 8
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -92,6 +100,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR16003.jpg
 			javaClass: true
+			//parentId: 16_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 16R3
 			rarity: R
@@ -109,7 +121,7 @@
 		strength: 4
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -136,6 +148,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR16004.jpg
 			javaClass: true
+			//parentId: 16_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 16R4
 			rarity: R
@@ -153,7 +169,7 @@
 		strength: 4
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -180,6 +196,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR16005.jpg
 			javaClass: true
+			//parentId: 16_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 16R5
 			rarity: R
@@ -197,7 +217,7 @@
 		strength: 14
 		vitality: 3
 		site: 2
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -224,6 +244,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR16006.jpg
 			javaClass: true
+			//parentId: 16_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 16R6
 			rarity: R
@@ -241,7 +265,7 @@
 		strength: 9
 		vitality: 3
 		site: 2
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}

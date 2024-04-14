@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10053.jpg
 			javaClass: true
+			//parentId: 10_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U53
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10054.jpg
 			javaClass: true
+			//parentId: 10_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U54
 			rarity: U
@@ -61,7 +69,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -88,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10055.jpg
 			javaClass: true
+			//parentId: 10_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C55
 			rarity: C
@@ -105,7 +116,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -132,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10056.jpg
 			javaClass: true
+			//parentId: 10_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C56
 			rarity: C
@@ -149,7 +163,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -176,6 +189,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10057.jpg
 			javaClass: true
+			//parentId: 10_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U57
 			rarity: U
@@ -193,7 +210,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -220,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10058.jpg
 			javaClass: true
+			//parentId: 10_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R58
 			rarity: R
@@ -233,7 +253,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -263,6 +283,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10059.jpg
 			javaClass: true
+			//parentId: 10_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R59
 			rarity: R
@@ -281,7 +305,6 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -308,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10060.jpg
 			javaClass: true
+			//parentId: 10_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R60
 			rarity: R
@@ -323,8 +350,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [wraith] Orc
 		/*requires: {
 			
 		}
@@ -351,6 +377,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10061.jpg
 			javaClass: true
+			//parentId: 10_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C61
 			rarity: C
@@ -364,7 +394,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -394,6 +424,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10062.jpg
 			javaClass: true
+			//parentId: 10_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C62
 			rarity: C
@@ -411,7 +445,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -438,6 +471,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10063.jpg
 			javaClass: true
+			//parentId: 10_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R63
 			rarity: R
@@ -455,7 +492,6 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -482,6 +518,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10064.jpg
 			javaClass: true
+			//parentId: 10_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C64
 			rarity: C
@@ -495,7 +535,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -522,6 +562,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10065.jpg
 			javaClass: true
+			//parentId: 10_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C65
 			rarity: C
@@ -535,7 +579,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -562,6 +606,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10066.jpg
 			javaClass: true
+			//parentId: 10_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C66
 			rarity: C
@@ -575,7 +623,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -605,6 +653,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10067.jpg
 			javaClass: true
+			//parentId: 10_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R67
 			rarity: R
@@ -623,7 +675,10 @@
 		strength: 10
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: [
+			Enduring
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -650,6 +705,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10068.jpg
 			javaClass: true
+			//parentId: 10_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R68
 			rarity: R
@@ -668,7 +727,7 @@
 		strength: 11
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -695,6 +754,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10069.jpg
 			javaClass: true
+			//parentId: 10_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U69
 			rarity: U
@@ -713,7 +776,10 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: [
+			Enduring
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -740,6 +806,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10070.jpg
 			javaClass: true
+			//parentId: 10_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U70
 			rarity: U
@@ -758,7 +828,10 @@
 		strength: 10
 		vitality: 3
 		site: 2
-		#keyword: damage+1
+		keywords: [
+			Enduring
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -785,6 +858,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10071.jpg
 			javaClass: true
+			//parentId: 10_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R71
 			rarity: R
@@ -803,7 +880,7 @@
 		strength: 12
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}

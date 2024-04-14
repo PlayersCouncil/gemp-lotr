@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08093.jpg
 			javaClass: true
+			//parentId: 8_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R93
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Sauron
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08094.jpg
 			javaClass: true
+			//parentId: 8_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U94
 			rarity: U
@@ -61,7 +69,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -88,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08095.jpg
 			javaClass: true
+			//parentId: 8_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R95
 			rarity: R
@@ -105,7 +117,7 @@
 		strength: 7
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -132,6 +144,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08096.jpg
 			javaClass: true
+			//parentId: 8_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R96
 			rarity: R
@@ -149,7 +165,10 @@
 		strength: 12
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Besieger
+			Enduring
+		]
 		/*requires: {
 			
 		}
@@ -176,6 +195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08097.jpg
 			javaClass: true
+			//parentId: 8_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U97
 			rarity: U
@@ -193,7 +216,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -220,6 +243,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08098.jpg
 			javaClass: true
+			//parentId: 8_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U98
 			rarity: U
@@ -237,7 +264,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -264,6 +291,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08099.jpg
 			javaClass: true
+			//parentId: 8_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U99
 			rarity: U
@@ -281,7 +312,7 @@
 		strength: 10
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -308,6 +339,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08100.jpg
 			javaClass: true
+			//parentId: 8_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U100
 			rarity: U
@@ -325,7 +360,7 @@
 		strength: 10
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -352,6 +387,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08101.jpg
 			javaClass: true
+			//parentId: 8_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C101
 			rarity: C
@@ -369,7 +408,7 @@
 		strength: 10
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -396,6 +435,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08102.jpg
 			javaClass: true
+			//parentId: 8_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C102
 			rarity: C
@@ -413,7 +456,10 @@
 		strength: 16
 		vitality: 4
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Besieger
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -440,6 +486,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08103.jpg
 			javaClass: true
+			//parentId: 8_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R103
 			rarity: R
@@ -454,8 +504,10 @@
 		culture: Sauron
 		twilight: 3
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: [
+			Engine
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -482,6 +534,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08104.jpg
 			javaClass: true
+			//parentId: 8_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C104
 			rarity: C
@@ -495,7 +551,7 @@
 		culture: Sauron
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -522,6 +578,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08105.jpg
 			javaClass: true
+			//parentId: 8_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R105
 			rarity: R
@@ -539,7 +599,10 @@
 		strength: 18
 		vitality: 4
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Besieger
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -566,6 +629,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08106.jpg
 			javaClass: true
+			//parentId: 8_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C106
 			rarity: C
@@ -583,7 +650,7 @@
 		strength: 20
 		vitality: 4
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -610,6 +677,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08107.jpg
 			javaClass: true
+			//parentId: 8_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U107
 			rarity: U
@@ -623,7 +694,10 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Engine
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -650,6 +724,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08108.jpg
 			javaClass: true
+			//parentId: 8_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R108
 			rarity: R
@@ -668,7 +746,10 @@
 		strength: 14
 		vitality: 4
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Besieger
+			Fierce
+		]
 		/*requires: {
 			
 		}

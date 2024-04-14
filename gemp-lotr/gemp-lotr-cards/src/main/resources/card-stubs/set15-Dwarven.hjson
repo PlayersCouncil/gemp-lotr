@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15003.jpg
 			javaClass: true
+			//parentId: 15_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U3
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15004.jpg
 			javaClass: true
+			//parentId: 15_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U4
 			rarity: U
@@ -51,13 +59,13 @@
 			cardNum: 4
 			style: Standard
 		}
-		title: The Fortunes of Balin's<br>Folk
+		title: The Fortunes of Balin's Folk
 		unique: false
 		side: Free Peoples
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15005.jpg
 			javaClass: true
+			//parentId: 15_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C5
 			rarity: C
@@ -105,7 +117,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Damage+1
+			Hunter 3
+		]
 		/*requires: {
 			
 		}
@@ -132,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15006.jpg
 			javaClass: true
+			//parentId: 15_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R6
 			rarity: R
@@ -150,7 +169,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -177,6 +195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15007.jpg
 			javaClass: true
+			//parentId: 15_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U7
 			rarity: U
@@ -192,8 +214,7 @@
 		type: Possession
 		strength: 3
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -220,6 +241,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15008.jpg
 			javaClass: true
+			//parentId: 15_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C8
 			rarity: C
@@ -233,7 +258,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -263,6 +288,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15009.jpg
 			javaClass: true
+			//parentId: 15_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R9
 			rarity: R
@@ -277,8 +306,7 @@
 		twilight: 2
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -305,6 +333,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15010.jpg
 			javaClass: true
+			//parentId: 15_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C10
 			rarity: C
@@ -318,7 +350,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -345,6 +377,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15060.jpg
 			javaClass: true
+			//parentId: 15_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C60
 			rarity: C
@@ -358,7 +394,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10001.jpg
 			javaClass: true
+			//parentId: 10_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R1
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Dwarven
 		twilight: 3
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -50,6 +54,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10002.jpg
 			javaClass: true
+			//parentId: 10_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U2
 			rarity: U
@@ -63,7 +71,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10003.jpg
 			javaClass: true
+			//parentId: 10_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R3
 			rarity: R
@@ -103,7 +115,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}

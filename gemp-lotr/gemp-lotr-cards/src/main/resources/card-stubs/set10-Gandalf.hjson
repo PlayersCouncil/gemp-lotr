@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10014.jpg
 			javaClass: true
+			//parentId: 10_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R14
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10015.jpg
 			javaClass: true
+			//parentId: 10_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U15
 			rarity: U
@@ -60,7 +68,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10016.jpg
 			javaClass: true
+			//parentId: 10_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C16
 			rarity: C
@@ -100,7 +112,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -130,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10017.jpg
 			javaClass: true
+			//parentId: 10_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R17
 			rarity: R
@@ -143,7 +159,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -176,6 +192,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10018.jpg
 			javaClass: true
+			//parentId: 10_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R18
 			rarity: R
@@ -194,7 +214,6 @@
 		strength: 12
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

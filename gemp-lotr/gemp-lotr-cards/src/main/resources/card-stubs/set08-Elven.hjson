@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08009.jpg
 			javaClass: true
+			//parentId: 8_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U9
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08010.jpg
 			javaClass: true
+			//parentId: 8_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C10
 			rarity: C
@@ -66,7 +74,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -93,6 +101,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08011.jpg
 			javaClass: true
+			//parentId: 8_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R11
 			rarity: R
@@ -106,7 +118,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -136,6 +148,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08012.jpg
 			javaClass: true
+			//parentId: 8_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R12
 			rarity: R
@@ -149,7 +165,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -179,6 +195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08013.jpg
 			javaClass: true
+			//parentId: 8_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U13
 			rarity: U
@@ -192,7 +212,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

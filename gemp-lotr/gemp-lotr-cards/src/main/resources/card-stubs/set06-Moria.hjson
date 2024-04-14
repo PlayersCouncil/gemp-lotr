@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06076.jpg
 			javaClass: true
+			//parentId: 6_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R76
 			rarity: R
@@ -22,7 +26,7 @@
 		strength: 17
 		vitality: 5
 		site: 4
-		#keyword: damage+1
+		keywords: Damage+2
 		/*requires: {
 			
 		}
@@ -49,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06077.jpg
 			javaClass: true
+			//parentId: 6_77
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R77
 			rarity: R
@@ -62,7 +70,7 @@
 		culture: Moria
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

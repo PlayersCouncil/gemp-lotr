@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17037.jpg
 			javaClass: true
+			//parentId: 17_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R37
 			rarity: R
@@ -22,7 +26,6 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17038.jpg
 			javaClass: true
+			//parentId: 17_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R38
 			rarity: R
@@ -64,7 +71,6 @@
 		twilight: 1
 		type: Follower
 		strength: 2
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -91,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17039.jpg
 			javaClass: true
+			//parentId: 17_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R39
 			rarity: R
@@ -104,8 +114,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

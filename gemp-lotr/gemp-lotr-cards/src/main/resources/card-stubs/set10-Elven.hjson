@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10004.jpg
 			javaClass: true
+			//parentId: 10_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U4
 			rarity: U
@@ -22,7 +26,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10005.jpg
 			javaClass: true
+			//parentId: 10_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U5
 			rarity: U
@@ -68,7 +75,6 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -95,6 +101,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10006.jpg
 			javaClass: true
+			//parentId: 10_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R6
 			rarity: R
@@ -114,7 +124,6 @@
 		vitality: 3
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -141,6 +150,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10007.jpg
 			javaClass: true
+			//parentId: 10_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R7
 			rarity: R
@@ -159,7 +172,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -186,6 +198,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10008.jpg
 			javaClass: true
+			//parentId: 10_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R8
 			rarity: R
@@ -204,7 +220,6 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -231,6 +246,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10009.jpg
 			javaClass: true
+			//parentId: 10_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R9
 			rarity: R
@@ -249,7 +268,6 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -276,6 +294,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10010.jpg
 			javaClass: true
+			//parentId: 10_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C10
 			rarity: C
@@ -289,7 +311,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -319,6 +341,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10011.jpg
 			javaClass: true
+			//parentId: 10_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R11
 			rarity: R
@@ -337,7 +363,6 @@
 		strength: 3
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -364,6 +389,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10012.jpg
 			javaClass: true
+			//parentId: 10_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U12
 			rarity: U
@@ -377,7 +406,7 @@
 		culture: Elven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -404,6 +433,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10013.jpg
 			javaClass: true
+			//parentId: 10_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R13
 			rarity: R
@@ -418,8 +451,7 @@
 		culture: Elven
 		twilight: 0
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Hobbit
 		/*requires: {
 			
 		}

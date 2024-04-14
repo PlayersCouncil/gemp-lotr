@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03029.jpg
 			javaClass: true
+			//parentId: 3_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R29
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03030.jpg
 			javaClass: true
+			//parentId: 3_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C30
 			rarity: C
@@ -57,7 +65,8 @@
 		culture: Gandalf
 		twilight: 4
 		type: Event
-		keyword: 
+		keywords: Maneuver
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -87,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03031.jpg
 			javaClass: true
+			//parentId: 3_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C31
 			rarity: C
@@ -100,7 +113,8 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -130,6 +144,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03032.jpg
 			javaClass: true
+			//parentId: 3_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C32
 			rarity: C
@@ -143,7 +161,8 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -173,6 +192,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03033.jpg
 			javaClass: true
+			//parentId: 3_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C33
 			rarity: C
@@ -186,7 +209,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -216,6 +239,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03034.jpg
 			javaClass: true
+			//parentId: 3_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R34
 			rarity: R
@@ -231,8 +258,7 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -259,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03035.jpg
 			javaClass: true
+			//parentId: 3_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U35
 			rarity: U
@@ -272,7 +302,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -299,6 +329,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03036.jpg
 			javaClass: true
+			//parentId: 3_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C36
 			rarity: C
@@ -312,7 +346,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02001.jpg
 			javaClass: true
+			//parentId: 2_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R1
 			rarity: R
@@ -17,7 +21,10 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -44,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02002.jpg
 			javaClass: true
+			//parentId: 2_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C2
 			rarity: C
@@ -57,7 +68,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -87,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02003.jpg
 			javaClass: true
+			//parentId: 2_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U3
 			rarity: U
@@ -102,8 +117,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Bracers
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -130,6 +144,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02004.jpg
 			javaClass: true
+			//parentId: 2_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U4
 			rarity: U
@@ -144,7 +162,6 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -171,6 +188,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02005.jpg
 			javaClass: true
+			//parentId: 2_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C5
 			rarity: C
@@ -184,7 +205,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -214,6 +235,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02006.jpg
 			javaClass: true
+			//parentId: 2_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C6
 			rarity: C
@@ -232,7 +257,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -259,6 +283,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02007.jpg
 			javaClass: true
+			//parentId: 2_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R7
 			rarity: R
@@ -277,7 +305,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -304,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02008.jpg
 			javaClass: true
+			//parentId: 2_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U8
 			rarity: U
@@ -317,7 +348,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -344,6 +375,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02009.jpg
 			javaClass: true
+			//parentId: 2_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C9
 			rarity: C
@@ -357,7 +392,10 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -384,6 +422,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02010.jpg
 			javaClass: true
+			//parentId: 2_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C10
 			rarity: C
@@ -399,8 +441,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -427,6 +468,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02011.jpg
 			javaClass: true
+			//parentId: 2_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R11
 			rarity: R
@@ -440,7 +485,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -467,6 +512,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02012.jpg
 			javaClass: true
+			//parentId: 2_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R12
 			rarity: R
@@ -480,7 +529,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -507,6 +556,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02013.jpg
 			javaClass: true
+			//parentId: 2_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U13
 			rarity: U
@@ -520,7 +573,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -550,6 +603,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02014.jpg
 			javaClass: true
+			//parentId: 2_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C14
 			rarity: C
@@ -563,7 +620,10 @@
 		culture: Dwarven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -590,6 +650,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02015.jpg
 			javaClass: true
+			//parentId: 2_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R15
 			rarity: R
@@ -603,7 +667,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -633,6 +697,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02121.jpg
 			javaClass: true
+			//parentId: 2_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2P121
 			rarity: P
@@ -652,7 +720,7 @@
 		vitality: 3
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}

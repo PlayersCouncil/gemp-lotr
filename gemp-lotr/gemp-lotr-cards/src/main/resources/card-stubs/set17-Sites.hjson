@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17145.jpg
 			javaClass: true
+			//parentId: 17_145
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U145
 			rarity: U
@@ -17,7 +21,6 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -44,6 +47,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17146.jpg
 			javaClass: true
+			//parentId: 17_146
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U146
 			rarity: U
@@ -57,7 +64,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -84,6 +91,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17147.jpg
 			javaClass: true
+			//parentId: 17_147
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U147
 			rarity: U
@@ -97,7 +108,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -124,6 +135,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17148.jpg
 			javaClass: true
+			//parentId: 17_148
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U148
 			rarity: U
@@ -137,7 +152,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}

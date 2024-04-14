@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09039.jpg
 			javaClass: true
+			//parentId: 9_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+39
 			rarity: R+
@@ -17,8 +21,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09040.jpg
 			javaClass: true
+			//parentId: 9_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R40
 			rarity: R
@@ -58,7 +65,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}

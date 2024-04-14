@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19028.jpg
 			javaClass: true
+			//parentId: 19_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P28
 			rarity: P
@@ -22,7 +26,12 @@
 		strength: 3
 		vitality: 4
 		resistance: 10
-		#keyword: damage+1
+		keywords: [
+			Ring-bearer
+			Ring-bound
+			Fellowship
+			Can-bear-ring
+		]
 		/*requires: {
 			
 		}
@@ -49,6 +58,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19029.jpg
 			javaClass: true
+			//parentId: 19_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P29
 			rarity: P
@@ -67,7 +80,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 8
-		#keyword: damage+1
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -94,6 +107,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19030.jpg
 			javaClass: true
+			//parentId: 19_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P30
 			rarity: P
@@ -112,7 +129,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 8
-		#keyword: damage+1
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -139,6 +156,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19031.jpg
 			javaClass: true
+			//parentId: 19_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P31
 			rarity: P
@@ -152,7 +173,6 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -179,6 +199,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19032.jpg
 			javaClass: true
+			//parentId: 19_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P32
 			rarity: P
@@ -197,7 +221,10 @@
 		strength: 3
 		vitality: 4
 		resistance: 9
-		#keyword: damage+1
+		keywords: [
+			Ring-bound
+			Fellowship
+		]
 		/*requires: {
 			
 		}

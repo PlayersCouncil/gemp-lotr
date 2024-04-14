@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03076.jpg
 			javaClass: true
+			//parentId: 3_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C76
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Moria
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03077.jpg
 			javaClass: true
+			//parentId: 3_77
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R77
 			rarity: R
@@ -60,7 +68,7 @@
 		culture: Moria
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03078.jpg
 			javaClass: true
+			//parentId: 3_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C78
 			rarity: C
@@ -100,7 +112,8 @@
 		culture: Moria
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
+		keywords: Search
 		/*requires: {
 			
 		}
@@ -130,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03079.jpg
 			javaClass: true
+			//parentId: 3_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U79
 			rarity: U
@@ -143,7 +160,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -173,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03080.jpg
 			javaClass: true
+			//parentId: 3_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R80
 			rarity: R
@@ -186,7 +207,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}

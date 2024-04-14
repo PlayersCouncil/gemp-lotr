@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11106.jpg
 			javaClass: true
+			//parentId: 11_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U106
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11107.jpg
 			javaClass: true
+			//parentId: 11_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C107
 			rarity: C
@@ -64,7 +72,6 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -91,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11108.jpg
 			javaClass: true
+			//parentId: 11_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R108
 			rarity: R
@@ -108,7 +119,10 @@
 		strength: 13
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Damage+1
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -135,6 +149,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11109.jpg
 			javaClass: true
+			//parentId: 11_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U109
 			rarity: U
@@ -149,8 +167,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [orc] minion)
 		/*requires: {
 			
 		}
@@ -177,6 +194,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11110.jpg
 			javaClass: true
+			//parentId: 11_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U110
 			rarity: U
@@ -190,7 +211,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -220,6 +241,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11111.jpg
 			javaClass: true
+			//parentId: 11_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C111
 			rarity: C
@@ -237,7 +262,7 @@
 		strength: 13
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Toil 2
 		/*requires: {
 			
 		}
@@ -264,6 +289,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11112.jpg
 			javaClass: true
+			//parentId: 11_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S112
 			rarity: S
@@ -277,7 +306,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -307,6 +336,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11113.jpg
 			javaClass: true
+			//parentId: 11_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C113
 			rarity: C
@@ -324,7 +357,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -351,6 +383,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11114.jpg
 			javaClass: true
+			//parentId: 11_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U114
 			rarity: U
@@ -364,7 +400,7 @@
 		culture: Orc
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -391,6 +427,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11115.jpg
 			javaClass: true
+			//parentId: 11_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S115
 			rarity: S
@@ -408,7 +448,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -435,6 +474,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11116.jpg
 			javaClass: true
+			//parentId: 11_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S116
 			rarity: S
@@ -452,7 +495,6 @@
 		strength: 7
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -479,6 +521,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11117.jpg
 			javaClass: true
+			//parentId: 11_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S117
 			rarity: S
@@ -496,7 +542,6 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -523,6 +568,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11118.jpg
 			javaClass: true
+			//parentId: 11_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U118
 			rarity: U
@@ -536,7 +585,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -566,6 +615,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11119.jpg
 			javaClass: true
+			//parentId: 11_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R119
 			rarity: R
@@ -583,7 +636,7 @@
 		strength: 11
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Lurker
 		/*requires: {
 			
 		}
@@ -610,6 +663,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11120.jpg
 			javaClass: true
+			//parentId: 11_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C120
 			rarity: C
@@ -627,7 +684,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -654,6 +710,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11121.jpg
 			javaClass: true
+			//parentId: 11_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C121
 			rarity: C
@@ -671,7 +731,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -698,6 +757,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11122.jpg
 			javaClass: true
+			//parentId: 11_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C122
 			rarity: C
@@ -715,7 +778,6 @@
 		strength: 8
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -742,6 +804,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11123.jpg
 			javaClass: true
+			//parentId: 11_123
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R123
 			rarity: R
@@ -755,7 +821,7 @@
 		culture: Orc
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -782,6 +848,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11124.jpg
 			javaClass: true
+			//parentId: 11_124
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U124
 			rarity: U
@@ -799,7 +869,6 @@
 		strength: 12
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -826,6 +895,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11125.jpg
 			javaClass: true
+			//parentId: 11_125
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C125
 			rarity: C
@@ -843,7 +916,6 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -870,6 +942,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11126.jpg
 			javaClass: true
+			//parentId: 11_126
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S126
 			rarity: S
@@ -887,7 +963,6 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -914,6 +989,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11127.jpg
 			javaClass: true
+			//parentId: 11_127
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C127
 			rarity: C
@@ -931,7 +1010,6 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -958,6 +1036,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11128.jpg
 			javaClass: true
+			//parentId: 11_128
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C128
 			rarity: C
@@ -973,8 +1055,7 @@
 		type: Possession
 		strength: 3
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [orc] minion)
 		/*requires: {
 			
 		}
@@ -1001,6 +1082,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11129.jpg
 			javaClass: true
+			//parentId: 11_129
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C129
 			rarity: C
@@ -1018,7 +1103,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1045,6 +1129,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11130.jpg
 			javaClass: true
+			//parentId: 11_130
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S130
 			rarity: S
@@ -1060,8 +1148,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [orc] Orc)
 		/*requires: {
 			
 		}
@@ -1088,6 +1175,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11131.jpg
 			javaClass: true
+			//parentId: 11_131
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C131
 			rarity: C
@@ -1105,7 +1196,6 @@
 		strength: 7
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1132,6 +1222,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11132.jpg
 			javaClass: true
+			//parentId: 11_132
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C132
 			rarity: C
@@ -1149,7 +1243,6 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1176,6 +1269,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11133.jpg
 			javaClass: true
+			//parentId: 11_133
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R133
 			rarity: R
@@ -1193,7 +1290,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1220,6 +1316,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11134.jpg
 			javaClass: true
+			//parentId: 11_134
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R134
 			rarity: R
@@ -1237,7 +1337,6 @@
 		strength: 7
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1264,6 +1363,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11135.jpg
 			javaClass: true
+			//parentId: 11_135
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R135
 			rarity: R
@@ -1281,7 +1384,10 @@
 		strength: 15
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Damage+1
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -1308,6 +1414,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11136.jpg
 			javaClass: true
+			//parentId: 11_136
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C136
 			rarity: C
@@ -1325,7 +1435,7 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Lurker
 		/*requires: {
 			
 		}
@@ -1352,6 +1462,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11137.jpg
 			javaClass: true
+			//parentId: 11_137
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U137
 			rarity: U
@@ -1369,7 +1483,6 @@
 		strength: 5
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1396,6 +1509,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11138.jpg
 			javaClass: true
+			//parentId: 11_138
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S138
 			rarity: S
@@ -1413,7 +1530,6 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1440,6 +1556,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11139.jpg
 			javaClass: true
+			//parentId: 11_139
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U139
 			rarity: U
@@ -1453,7 +1573,7 @@
 		culture: Orc
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1480,6 +1600,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11140.jpg
 			javaClass: true
+			//parentId: 11_140
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C140
 			rarity: C
@@ -1493,7 +1617,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1523,6 +1647,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11141.jpg
 			javaClass: true
+			//parentId: 11_141
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R141
 			rarity: R
@@ -1536,7 +1664,8 @@
 		culture: Orc
 		twilight: 8
 		type: Event
-		keyword: Assignment
+		#keywords: Regroup
+		keywords: Toil 3
 		/*requires: {
 			
 		}
@@ -1566,6 +1695,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11142.jpg
 			javaClass: true
+			//parentId: 11_142
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S142
 			rarity: S
@@ -1583,7 +1716,6 @@
 		strength: 5
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1610,6 +1742,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11143.jpg
 			javaClass: true
+			//parentId: 11_143
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R143
 			rarity: R
@@ -1627,7 +1763,6 @@
 		strength: 8
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}

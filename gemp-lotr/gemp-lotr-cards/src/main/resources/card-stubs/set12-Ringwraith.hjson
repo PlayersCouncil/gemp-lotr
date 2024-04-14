@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12161.jpg
 			javaClass: true
+			//parentId: 12_161
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U161
 			rarity: U
@@ -21,7 +25,7 @@
 		strength: 8
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -48,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12162.jpg
 			javaClass: true
+			//parentId: 12_162
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R162
 			rarity: R
@@ -61,7 +69,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -91,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12163.jpg
 			javaClass: true
+			//parentId: 12_163
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R163
 			rarity: R
@@ -104,7 +116,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -131,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12164.jpg
 			javaClass: true
+			//parentId: 12_164
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C164
 			rarity: C
@@ -144,7 +160,8 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
+		keywords: Toil 2
 		/*requires: {
 			
 		}
@@ -174,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12165.jpg
 			javaClass: true
+			//parentId: 12_165
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U165
 			rarity: U
@@ -187,7 +208,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -220,6 +241,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12166.jpg
 			javaClass: true
+			//parentId: 12_166
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U166
 			rarity: U
@@ -233,7 +258,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -260,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12167.jpg
 			javaClass: true
+			//parentId: 12_167
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U167
 			rarity: U
@@ -273,7 +302,8 @@
 		culture: Wraith
 		twilight: 4
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
+		keywords: Toil 2
 		/*requires: {
 			
 		}
@@ -303,6 +333,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12168.jpg
 			javaClass: true
+			//parentId: 12_168
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C168
 			rarity: C
@@ -318,8 +352,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}
@@ -346,6 +379,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12169.jpg
 			javaClass: true
+			//parentId: 12_169
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R169
 			rarity: R
@@ -359,7 +396,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -386,6 +423,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12170.jpg
 			javaClass: true
+			//parentId: 12_170
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U170
 			rarity: U
@@ -399,7 +440,6 @@
 		culture: Wraith
 		twilight: 2
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -426,6 +466,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12171.jpg
 			javaClass: true
+			//parentId: 12_171
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R171
 			rarity: R
@@ -441,8 +485,7 @@
 		type: Possession
 		vitality: 1
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}
@@ -469,6 +512,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12172.jpg
 			javaClass: true
+			//parentId: 12_172
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C172
 			rarity: C
@@ -484,8 +531,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}
@@ -512,6 +558,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12173.jpg
 			javaClass: true
+			//parentId: 12_173
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R173
 			rarity: R
@@ -530,7 +580,7 @@
 		strength: 12
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -557,6 +607,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12174.jpg
 			javaClass: true
+			//parentId: 12_174
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R174
 			rarity: R
@@ -575,7 +629,7 @@
 		strength: 10
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -602,6 +656,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12175.jpg
 			javaClass: true
+			//parentId: 12_175
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R175
 			rarity: R
@@ -620,7 +678,10 @@
 		strength: 11
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: [
+			Fierce
+			Toil 1
+		]
 		/*requires: {
 			
 		}
@@ -647,6 +708,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12176.jpg
 			javaClass: true
+			//parentId: 12_176
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U176
 			rarity: U
@@ -665,7 +730,6 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -692,6 +756,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12177.jpg
 			javaClass: true
+			//parentId: 12_177
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C177
 			rarity: C
@@ -710,7 +778,7 @@
 		strength: 10
 		vitality: 3
 		site: 2
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -737,6 +805,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12178.jpg
 			javaClass: true
+			//parentId: 12_178
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C178
 			rarity: C
@@ -755,7 +827,6 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -782,6 +853,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12179.jpg
 			javaClass: true
+			//parentId: 12_179
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R179
 			rarity: R
@@ -800,7 +875,6 @@
 		strength: 9
 		vitality: 3
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -827,6 +901,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12180.jpg
 			javaClass: true
+			//parentId: 12_180
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U180
 			rarity: U
@@ -845,7 +923,7 @@
 		strength: 12
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -872,6 +950,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12181.jpg
 			javaClass: true
+			//parentId: 12_181
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C181
 			rarity: C
@@ -885,7 +967,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -912,6 +994,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12182.jpg
 			javaClass: true
+			//parentId: 12_182
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C182
 			rarity: C
@@ -925,7 +1011,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -952,6 +1038,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12183.jpg
 			javaClass: true
+			//parentId: 12_183
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R183
 			rarity: R
@@ -970,7 +1060,7 @@
 		strength: 14
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -997,6 +1087,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12184.jpg
 			javaClass: true
+			//parentId: 12_184
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U184
 			rarity: U
@@ -1013,8 +1107,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}

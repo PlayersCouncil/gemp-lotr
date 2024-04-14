@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR14001.jpg
 			javaClass: true
+			//parentId: 14_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 14R1
 			rarity: R
@@ -22,7 +26,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

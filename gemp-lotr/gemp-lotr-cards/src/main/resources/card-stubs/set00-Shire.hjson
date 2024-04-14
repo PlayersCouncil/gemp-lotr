@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR00060.jpg
 			javaClass: true
+			//parentId: 0_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 0P60
 			rarity: P
@@ -17,8 +21,7 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR00067.jpg
 			javaClass: true
+			//parentId: 0_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 0P67
 			rarity: P
@@ -64,7 +71,6 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

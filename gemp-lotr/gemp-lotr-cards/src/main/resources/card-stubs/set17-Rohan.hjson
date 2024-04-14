@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17093.jpg
 			javaClass: true
+			//parentId: 17_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R93
 			rarity: R
@@ -22,7 +26,7 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -49,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17094.jpg
 			javaClass: true
+			//parentId: 17_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U94
 			rarity: U
@@ -62,7 +70,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -89,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17095.jpg
 			javaClass: true
+			//parentId: 17_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R95
 			rarity: R
@@ -107,7 +119,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -134,6 +146,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17096.jpg
 			javaClass: true
+			//parentId: 17_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R96
 			rarity: R
@@ -152,7 +168,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -179,6 +194,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17097.jpg
 			javaClass: true
+			//parentId: 17_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U97
 			rarity: U
@@ -192,7 +211,7 @@
 		culture: Rohan
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -219,6 +238,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17098.jpg
 			javaClass: true
+			//parentId: 17_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R98
 			rarity: R
@@ -232,8 +255,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -260,6 +282,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17099.jpg
 			javaClass: true
+			//parentId: 17_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R99
 			rarity: R
@@ -278,7 +304,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -305,6 +330,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17100.jpg
 			javaClass: true
+			//parentId: 17_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U100
 			rarity: U
@@ -318,7 +347,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -345,6 +374,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17101.jpg
 			javaClass: true
+			//parentId: 17_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U101
 			rarity: U
@@ -362,7 +395,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 5
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -389,6 +421,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17102.jpg
 			javaClass: true
+			//parentId: 17_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R102
 			rarity: R
@@ -407,7 +443,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -434,6 +469,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17103.jpg
 			javaClass: true
+			//parentId: 17_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U103
 			rarity: U
@@ -447,7 +486,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -477,6 +516,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17104.jpg
 			javaClass: true
+			//parentId: 17_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U104
 			rarity: U
@@ -494,7 +537,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

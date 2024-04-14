@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12016.jpg
 			javaClass: true
+			//parentId: 12_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C16
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12017.jpg
 			javaClass: true
+			//parentId: 12_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R17
 			rarity: R
@@ -65,7 +73,6 @@
 		strength: 8
 		vitality: 4
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -92,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12018.jpg
 			javaClass: true
+			//parentId: 12_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R18
 			rarity: R
@@ -107,8 +118,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Arwen or Elrond)
 		/*requires: {
 			
 		}
@@ -135,6 +145,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12019.jpg
 			javaClass: true
+			//parentId: 12_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R19
 			rarity: R
@@ -150,8 +164,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Legolas)
 		/*requires: {
 			
 		}
@@ -178,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12020.jpg
 			javaClass: true
+			//parentId: 12_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C20
 			rarity: C
@@ -196,7 +213,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -223,6 +239,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12021.jpg
 			javaClass: true
+			//parentId: 12_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U21
 			rarity: U
@@ -236,7 +256,7 @@
 		culture: Elven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -263,6 +283,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12022.jpg
 			javaClass: true
+			//parentId: 12_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C22
 			rarity: C
@@ -281,7 +305,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -308,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12023.jpg
 			javaClass: true
+			//parentId: 12_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U23
 			rarity: U
@@ -321,7 +348,8 @@
 		culture: Elven
 		twilight: 3
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
+		keywords: Toil 2
 		/*requires: {
 			
 		}
@@ -351,6 +379,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12024.jpg
 			javaClass: true
+			//parentId: 12_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U24
 			rarity: U
@@ -364,7 +396,10 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Toil 1
+			Support Area
+		]
 		/*requires: {
 			
 		}

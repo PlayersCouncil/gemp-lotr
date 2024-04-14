@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18106.jpg
 			javaClass: true
+			//parentId: 18_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C106
 			rarity: C
@@ -17,7 +21,10 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -44,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18107.jpg
 			javaClass: true
+			//parentId: 18_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R107
 			rarity: R
@@ -62,7 +73,6 @@
 		strength: 3
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -89,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18108.jpg
 			javaClass: true
+			//parentId: 18_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U108
 			rarity: U
@@ -102,8 +116,7 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -130,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18109.jpg
 			javaClass: true
+			//parentId: 18_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C109
 			rarity: C
@@ -143,7 +160,7 @@
 		culture: Shire
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -173,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18110.jpg
 			javaClass: true
+			//parentId: 18_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U110
 			rarity: U
@@ -186,7 +207,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -213,6 +234,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18111.jpg
 			javaClass: true
+			//parentId: 18_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U111
 			rarity: U
@@ -228,7 +253,6 @@
 		twilight: 2
 		type: Follower
 		resistance: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -255,6 +279,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18112.jpg
 			javaClass: true
+			//parentId: 18_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R112
 			rarity: R
@@ -268,7 +296,10 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -295,6 +326,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18113.jpg
 			javaClass: true
+			//parentId: 18_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R113
 			rarity: R
@@ -313,8 +348,7 @@
 		vitality: 1
 		resistance: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Bilbo or Frodo)
 		/*requires: {
 			
 		}

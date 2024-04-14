@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18038.jpg
 			javaClass: true
+			//parentId: 18_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R38
 			rarity: R
@@ -22,7 +26,7 @@
 		strength: 8
 		vitality: 4
 		resistance: 8
-		#keyword: damage+1
+		keywords: Hunter 2
 		/*requires: {
 			
 		}
@@ -49,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18039.jpg
 			javaClass: true
+			//parentId: 18_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C39
 			rarity: C
@@ -64,8 +72,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -92,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18040.jpg
 			javaClass: true
+			//parentId: 18_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R40
 			rarity: R
@@ -110,7 +121,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 5
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -137,6 +148,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18041.jpg
 			javaClass: true
+			//parentId: 18_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R41
 			rarity: R
@@ -150,8 +165,7 @@
 		culture: Gondor
 		twilight: 4
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -178,6 +192,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18042.jpg
 			javaClass: true
+			//parentId: 18_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R42
 			rarity: R
@@ -196,7 +214,6 @@
 		strength: 8
 		vitality: 3
 		resistance: 5
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -223,6 +240,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18043.jpg
 			javaClass: true
+			//parentId: 18_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R43
 			rarity: R
@@ -238,8 +259,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -266,6 +286,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18044.jpg
 			javaClass: true
+			//parentId: 18_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C44
 			rarity: C
@@ -279,7 +303,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -309,6 +333,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18045.jpg
 			javaClass: true
+			//parentId: 18_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U45
 			rarity: U
@@ -324,8 +352,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] ranger
 		/*requires: {
 			
 		}
@@ -352,6 +379,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18046.jpg
 			javaClass: true
+			//parentId: 18_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U46
 			rarity: U
@@ -366,7 +397,7 @@
 		twilight: 2
 		type: Condition
 		strength: -1
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -393,6 +424,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18047.jpg
 			javaClass: true
+			//parentId: 18_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R47
 			rarity: R
@@ -407,7 +442,6 @@
 		twilight: 0
 		type: Follower
 		strength: 2
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -434,6 +468,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18048.jpg
 			javaClass: true
+			//parentId: 18_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R48
 			rarity: R
@@ -452,7 +490,10 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 2
+		]
 		/*requires: {
 			
 		}
@@ -479,6 +520,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18049.jpg
 			javaClass: true
+			//parentId: 18_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C49
 			rarity: C
@@ -492,7 +537,6 @@
 		culture: Gondor
 		twilight: 1
 		type: Follower
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -519,6 +563,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18050.jpg
 			javaClass: true
+			//parentId: 18_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R50
 			rarity: R
@@ -532,7 +580,7 @@
 		culture: Gondor
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -559,6 +607,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18051.jpg
 			javaClass: true
+			//parentId: 18_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C51
 			rarity: C
@@ -572,7 +624,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -602,6 +654,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18052.jpg
 			javaClass: true
+			//parentId: 18_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R52
 			rarity: R
@@ -617,7 +673,6 @@
 		twilight: 0
 		type: Follower
 		resistance: 3
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -644,6 +699,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18053.jpg
 			javaClass: true
+			//parentId: 18_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R53
 			rarity: R
@@ -659,8 +718,7 @@
 		twilight: 0
 		type: Possession
 		resistance: 1
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -687,6 +745,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18054.jpg
 			javaClass: true
+			//parentId: 18_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R54
 			rarity: R
@@ -705,7 +767,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 1
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -732,6 +794,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18055.jpg
 			javaClass: true
+			//parentId: 18_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R55
 			rarity: R
@@ -745,7 +811,6 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -772,6 +837,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18056.jpg
 			javaClass: true
+			//parentId: 18_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C56
 			rarity: C
@@ -789,7 +858,7 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -816,6 +885,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18057.jpg
 			javaClass: true
+			//parentId: 18_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C57
 			rarity: C
@@ -830,8 +903,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Shield
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -858,6 +930,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18058.jpg
 			javaClass: true
+			//parentId: 18_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U58
 			rarity: U
@@ -872,7 +948,10 @@
 		twilight: 2
 		type: Condition
 		site: 3
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -899,6 +978,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18059.jpg
 			javaClass: true
+			//parentId: 18_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R59
 			rarity: R
@@ -917,7 +1000,7 @@
 		strength: 5
 		vitality: 3
 		resistance: 8
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}

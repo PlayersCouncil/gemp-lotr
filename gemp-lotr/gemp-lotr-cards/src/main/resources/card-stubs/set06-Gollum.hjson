@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06038.jpg
 			javaClass: true
+			//parentId: 6_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C38
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06039.jpg
 			javaClass: true
+			//parentId: 6_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R39
 			rarity: R
@@ -60,7 +68,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06040.jpg
 			javaClass: true
+			//parentId: 6_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C40
 			rarity: C
@@ -105,7 +117,6 @@
 		strength: 5
 		vitality: 4
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -132,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06041.jpg
 			javaClass: true
+			//parentId: 6_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R41
 			rarity: R
@@ -145,7 +160,7 @@
 		culture: Gollum
 		twilight: 5
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -175,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06042.jpg
 			javaClass: true
+			//parentId: 6_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C42
 			rarity: C
@@ -188,7 +207,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -218,6 +237,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06043.jpg
 			javaClass: true
+			//parentId: 6_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C43
 			rarity: C
@@ -231,7 +254,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -261,6 +284,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06044.jpg
 			javaClass: true
+			//parentId: 6_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R44
 			rarity: R
@@ -274,7 +301,7 @@
 		culture: Gollum
 		twilight: 5
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -304,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06045.jpg
 			javaClass: true
+			//parentId: 6_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C45
 			rarity: C
@@ -323,7 +354,7 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -350,6 +381,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06046.jpg
 			javaClass: true
+			//parentId: 6_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R46
 			rarity: R
@@ -363,7 +398,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -390,6 +425,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06047.jpg
 			javaClass: true
+			//parentId: 6_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C47
 			rarity: C
@@ -403,7 +442,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -433,6 +472,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06125.jpg
 			javaClass: true
+			//parentId: 6_125
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R125
 			rarity: R
@@ -446,7 +489,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

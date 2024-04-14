@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12025.jpg
 			javaClass: true
+			//parentId: 12_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U25
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12026.jpg
 			javaClass: true
+			//parentId: 12_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R26
 			rarity: R
@@ -57,7 +65,11 @@
 		culture: Gandalf
 		twilight: 7
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
+		keywords: [
+			Spell
+			Toil 3
+		]
 		/*requires: {
 			
 		}
@@ -87,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12027.jpg
 			javaClass: true
+			//parentId: 12_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R27
 			rarity: R
@@ -105,7 +121,6 @@
 		strength: 7
 		vitality: 4
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -132,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12028.jpg
 			javaClass: true
+			//parentId: 12_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R28
 			rarity: R
@@ -145,8 +164,7 @@
 		culture: Gandalf
 		twilight: 0
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -173,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12029.jpg
 			javaClass: true
+			//parentId: 12_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U29
 			rarity: U
@@ -186,7 +208,8 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -216,6 +239,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12030.jpg
 			javaClass: true
+			//parentId: 12_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R30
 			rarity: R
@@ -234,7 +261,6 @@
 		strength: 4
 		vitality: 3
 		resistance: 5
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -261,6 +287,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12031.jpg
 			javaClass: true
+			//parentId: 12_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C31
 			rarity: C
@@ -274,7 +304,8 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -304,6 +335,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12032.jpg
 			javaClass: true
+			//parentId: 12_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C32
 			rarity: C
@@ -317,7 +352,7 @@
 		culture: Gandalf
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -344,6 +379,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12033.jpg
 			javaClass: true
+			//parentId: 12_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C33
 			rarity: C
@@ -357,7 +396,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -387,6 +426,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12034.jpg
 			javaClass: true
+			//parentId: 12_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C34
 			rarity: C
@@ -400,7 +443,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: Maneuver or regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -430,6 +473,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12035.jpg
 			javaClass: true
+			//parentId: 12_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R35
 			rarity: R
@@ -443,7 +490,6 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -470,6 +516,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12036.jpg
 			javaClass: true
+			//parentId: 12_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U36
 			rarity: U
@@ -483,7 +533,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

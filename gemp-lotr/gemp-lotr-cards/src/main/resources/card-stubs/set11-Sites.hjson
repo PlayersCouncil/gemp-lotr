@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11227.jpg
 			javaClass: true
+			//parentId: 11_227
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U227
 			rarity: U
@@ -17,7 +21,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11228.jpg
 			javaClass: true
+			//parentId: 11_228
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S228
 			rarity: S
@@ -57,7 +65,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -84,6 +92,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11229.jpg
 			javaClass: true
+			//parentId: 11_229
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S229
 			rarity: S
@@ -97,7 +109,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Mountain
 		/*requires: {
 			
 		}
@@ -124,6 +136,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11230.jpg
 			javaClass: true
+			//parentId: 11_230
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S230
 			rarity: S
@@ -137,7 +153,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Dwelling
 		/*requires: {
 			
 		}
@@ -164,6 +180,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11231.jpg
 			javaClass: true
+			//parentId: 11_231
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S231
 			rarity: S
@@ -177,7 +197,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Forest
 		/*requires: {
 			
 		}
@@ -204,6 +224,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11232.jpg
 			javaClass: true
+			//parentId: 11_232
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S232
 			rarity: S
@@ -217,7 +241,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Underground
 		/*requires: {
 			
 		}
@@ -244,6 +268,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11233.jpg
 			javaClass: true
+			//parentId: 11_233
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S233
 			rarity: S
@@ -257,7 +285,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Underground
 		/*requires: {
 			
 		}
@@ -284,6 +312,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11234.jpg
 			javaClass: true
+			//parentId: 11_234
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S234
 			rarity: S
@@ -297,7 +329,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Mountain
 		/*requires: {
 			
 		}
@@ -324,6 +356,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11235.jpg
 			javaClass: true
+			//parentId: 11_235
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U235
 			rarity: U
@@ -337,7 +373,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Marsh
 		/*requires: {
 			
 		}
@@ -364,6 +400,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11236.jpg
 			javaClass: true
+			//parentId: 11_236
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S236
 			rarity: S
@@ -377,7 +417,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Forest
 		/*requires: {
 			
 		}
@@ -404,6 +444,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11237.jpg
 			javaClass: true
+			//parentId: 11_237
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S237
 			rarity: S
@@ -417,7 +461,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -444,6 +488,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11238.jpg
 			javaClass: true
+			//parentId: 11_238
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S238
 			rarity: S
@@ -457,7 +505,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Marsh
 		/*requires: {
 			
 		}
@@ -484,6 +532,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11239.jpg
 			javaClass: true
+			//parentId: 11_239
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S239
 			rarity: S
@@ -497,7 +549,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Forest
 		/*requires: {
 			
 		}
@@ -524,6 +576,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11240.jpg
 			javaClass: true
+			//parentId: 11_240
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S240
 			rarity: S
@@ -537,7 +593,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -564,6 +620,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11241.jpg
 			javaClass: true
+			//parentId: 11_241
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S241
 			rarity: S
@@ -577,7 +637,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Battleground
 		/*requires: {
 			
 		}
@@ -604,6 +664,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11242.jpg
 			javaClass: true
+			//parentId: 11_242
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S242
 			rarity: S
@@ -617,7 +681,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Dwelling
 		/*requires: {
 			
 		}
@@ -644,6 +708,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11243.jpg
 			javaClass: true
+			//parentId: 11_243
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S243
 			rarity: S
@@ -657,7 +725,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -684,6 +752,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11244.jpg
 			javaClass: true
+			//parentId: 11_244
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U244
 			rarity: U
@@ -697,7 +769,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Battleground
 		/*requires: {
 			
 		}
@@ -724,6 +796,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11245.jpg
 			javaClass: true
+			//parentId: 11_245
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S245
 			rarity: S
@@ -737,7 +813,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Battleground
 		/*requires: {
 			
 		}
@@ -764,6 +840,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11246.jpg
 			javaClass: true
+			//parentId: 11_246
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U246
 			rarity: U
@@ -777,7 +857,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Marsh
 		/*requires: {
 			
 		}
@@ -804,6 +884,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11247.jpg
 			javaClass: true
+			//parentId: 11_247
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S247
 			rarity: S
@@ -817,7 +901,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Underground
 		/*requires: {
 			
 		}
@@ -844,6 +928,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11248.jpg
 			javaClass: true
+			//parentId: 11_248
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S248
 			rarity: S
@@ -857,7 +945,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Underground
 		/*requires: {
 			
 		}
@@ -884,6 +972,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11249.jpg
 			javaClass: true
+			//parentId: 11_249
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S249
 			rarity: S
@@ -897,7 +989,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Marsh
 		/*requires: {
 			
 		}
@@ -924,6 +1016,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11250.jpg
 			javaClass: true
+			//parentId: 11_250
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S250
 			rarity: S
@@ -937,7 +1033,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -964,6 +1060,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11251.jpg
 			javaClass: true
+			//parentId: 11_251
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S251
 			rarity: S
@@ -977,7 +1077,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Forest
 		/*requires: {
 			
 		}
@@ -1004,6 +1104,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11252.jpg
 			javaClass: true
+			//parentId: 11_252
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S252
 			rarity: S
@@ -1017,7 +1121,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Battleground
 		/*requires: {
 			
 		}
@@ -1044,6 +1148,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11253.jpg
 			javaClass: true
+			//parentId: 11_253
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S253
 			rarity: S
@@ -1057,7 +1165,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -1084,6 +1192,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11254.jpg
 			javaClass: true
+			//parentId: 11_254
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S254
 			rarity: S
@@ -1097,7 +1209,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -1124,6 +1236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11255.jpg
 			javaClass: true
+			//parentId: 11_255
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S255
 			rarity: S
@@ -1137,7 +1253,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Mountain
 		/*requires: {
 			
 		}
@@ -1164,6 +1280,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11256.jpg
 			javaClass: true
+			//parentId: 11_256
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S256
 			rarity: S
@@ -1177,7 +1297,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Dwelling
 		/*requires: {
 			
 		}
@@ -1204,6 +1324,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11257.jpg
 			javaClass: true
+			//parentId: 11_257
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S257
 			rarity: S
@@ -1217,7 +1341,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -1244,6 +1368,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11258.jpg
 			javaClass: true
+			//parentId: 11_258
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S258
 			rarity: S
@@ -1257,7 +1385,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Battleground
 		/*requires: {
 			
 		}
@@ -1284,6 +1412,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11259.jpg
 			javaClass: true
+			//parentId: 11_259
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S259
 			rarity: S
@@ -1297,7 +1429,6 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -1324,6 +1455,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11260.jpg
 			javaClass: true
+			//parentId: 11_260
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S260
 			rarity: S
@@ -1337,7 +1472,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Forest
 		/*requires: {
 			
 		}
@@ -1364,6 +1499,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11261.jpg
 			javaClass: true
+			//parentId: 11_261
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S261
 			rarity: S
@@ -1377,7 +1516,10 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: [
+			Dwelling
+			River
+		]
 		/*requires: {
 			
 		}
@@ -1404,6 +1546,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11262.jpg
 			javaClass: true
+			//parentId: 11_262
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S262
 			rarity: S
@@ -1417,7 +1563,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Mountain
 		/*requires: {
 			
 		}
@@ -1444,6 +1590,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11263.jpg
 			javaClass: true
+			//parentId: 11_263
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S263
 			rarity: S
@@ -1457,7 +1607,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Underground
 		/*requires: {
 			
 		}
@@ -1484,6 +1634,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11264.jpg
 			javaClass: true
+			//parentId: 11_264
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S264
 			rarity: S
@@ -1497,7 +1651,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Dwelling
 		/*requires: {
 			
 		}
@@ -1524,6 +1678,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11265.jpg
 			javaClass: true
+			//parentId: 11_265
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S265
 			rarity: S
@@ -1537,7 +1695,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Underground
 		/*requires: {
 			
 		}
@@ -1564,6 +1722,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11266.jpg
 			javaClass: true
+			//parentId: 11_266
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S266
 			rarity: S
@@ -1577,7 +1739,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Forest
 		/*requires: {
 			
 		}

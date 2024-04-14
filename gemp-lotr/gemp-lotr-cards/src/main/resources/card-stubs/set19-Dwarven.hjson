@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19002.jpg
 			javaClass: true
+			//parentId: 19_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P2
 			rarity: P
@@ -22,7 +26,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Fellowship
+			Damage+1
+		]
 		/*requires: {
 			
 		}
@@ -49,6 +56,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19003.jpg
 			javaClass: true
+			//parentId: 19_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P3
 			rarity: P
@@ -62,7 +73,6 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -89,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19004.jpg
 			javaClass: true
+			//parentId: 19_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P4
 			rarity: P
@@ -102,7 +116,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}

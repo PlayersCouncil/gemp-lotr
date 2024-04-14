@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07015.jpg
 			javaClass: true
+			//parentId: 7_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U15
 			rarity: U
@@ -17,7 +21,6 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -44,6 +47,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07016.jpg
 			javaClass: true
+			//parentId: 7_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R16
 			rarity: R
@@ -63,7 +70,6 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -90,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07017.jpg
 			javaClass: true
+			//parentId: 7_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R17
 			rarity: R
@@ -106,8 +116,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Elf)
 		/*requires: {
 			
 		}
@@ -134,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07018.jpg
 			javaClass: true
+			//parentId: 7_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R18
 			rarity: R
@@ -150,8 +163,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Legolas)
 		/*requires: {
 			
 		}
@@ -178,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07019.jpg
 			javaClass: true
+			//parentId: 7_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U19
 			rarity: U
@@ -191,7 +207,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -221,6 +237,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07020.jpg
 			javaClass: true
+			//parentId: 7_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C20
 			rarity: C
@@ -234,7 +254,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -264,6 +284,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07021.jpg
 			javaClass: true
+			//parentId: 7_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R21
 			rarity: R
@@ -282,7 +306,6 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -309,6 +332,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07022.jpg
 			javaClass: true
+			//parentId: 7_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R22
 			rarity: R
@@ -322,7 +349,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -349,6 +376,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07023.jpg
 			javaClass: true
+			//parentId: 7_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C23
 			rarity: C
@@ -362,7 +393,7 @@
 		culture: Elven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -389,6 +420,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07024.jpg
 			javaClass: true
+			//parentId: 7_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R24
 			rarity: R
@@ -402,7 +437,7 @@
 		culture: Elven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -429,6 +464,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07025.jpg
 			javaClass: true
+			//parentId: 7_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R25
 			rarity: R
@@ -448,7 +487,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -475,6 +514,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07026.jpg
 			javaClass: true
+			//parentId: 7_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C26
 			rarity: C
@@ -494,7 +537,7 @@
 		vitality: 3
 		signet: Theoden
 		resistance: 6
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -521,6 +564,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07027.jpg
 			javaClass: true
+			//parentId: 7_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R27
 			rarity: R
@@ -534,7 +581,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -564,6 +611,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07028.jpg
 			javaClass: true
+			//parentId: 7_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R28
 			rarity: R
@@ -577,7 +628,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -604,6 +655,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07029.jpg
 			javaClass: true
+			//parentId: 7_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C29
 			rarity: C
@@ -617,7 +672,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -647,6 +702,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07030.jpg
 			javaClass: true
+			//parentId: 7_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C30
 			rarity: C
@@ -660,7 +719,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}

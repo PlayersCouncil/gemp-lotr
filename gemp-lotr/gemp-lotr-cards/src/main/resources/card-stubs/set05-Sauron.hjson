@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05095.jpg
 			javaClass: true
+			//parentId: 5_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R95
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05096.jpg
 			javaClass: true
+			//parentId: 5_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R96
 			rarity: R
@@ -57,7 +65,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05097.jpg
 			javaClass: true
+			//parentId: 5_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C97
 			rarity: C
@@ -104,7 +116,6 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -131,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05098.jpg
 			javaClass: true
+			//parentId: 5_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C98
 			rarity: C
@@ -148,7 +163,6 @@
 		strength: 5
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -175,6 +189,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05099.jpg
 			javaClass: true
+			//parentId: 5_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C99
 			rarity: C
@@ -192,7 +210,6 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -219,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05100.jpg
 			javaClass: true
+			//parentId: 5_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R100
 			rarity: R
@@ -237,7 +258,7 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		#keyword: damage+1
+		keywords: Tracker
 		/*requires: {
 			
 		}
@@ -264,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05101.jpg
 			javaClass: true
+			//parentId: 5_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U101
 			rarity: U
@@ -277,7 +302,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -304,6 +329,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05102.jpg
 			javaClass: true
+			//parentId: 5_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R102
 			rarity: R
@@ -317,7 +346,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -344,6 +373,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05103.jpg
 			javaClass: true
+			//parentId: 5_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R103
 			rarity: R
@@ -361,7 +394,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -388,6 +420,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05104.jpg
 			javaClass: true
+			//parentId: 5_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U104
 			rarity: U
@@ -405,7 +441,7 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
+		keywords: Tracker
 		/*requires: {
 			
 		}
@@ -432,6 +468,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05105.jpg
 			javaClass: true
+			//parentId: 5_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U105
 			rarity: U
@@ -449,7 +489,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -476,6 +515,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05106.jpg
 			javaClass: true
+			//parentId: 5_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C106
 			rarity: C
@@ -493,7 +536,6 @@
 		strength: 5
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -520,6 +562,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05107.jpg
 			javaClass: true
+			//parentId: 5_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U107
 			rarity: U
@@ -537,7 +583,7 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		#keyword: damage+1
+		keywords: Tracker
 		/*requires: {
 			
 		}
@@ -564,6 +610,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05108.jpg
 			javaClass: true
+			//parentId: 5_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C108
 			rarity: C
@@ -581,7 +631,7 @@
 		strength: 6
 		vitality: 2
 		site: 6
-		#keyword: damage+1
+		keywords: Tracker
 		/*requires: {
 			
 		}
@@ -608,6 +658,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05109.jpg
 			javaClass: true
+			//parentId: 5_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C109
 			rarity: C
@@ -625,7 +679,7 @@
 		strength: 6
 		vitality: 2
 		site: 6
-		#keyword: damage+1
+		keywords: Tracker
 		/*requires: {
 			
 		}
@@ -652,6 +706,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05110.jpg
 			javaClass: true
+			//parentId: 5_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U110
 			rarity: U
@@ -665,7 +723,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

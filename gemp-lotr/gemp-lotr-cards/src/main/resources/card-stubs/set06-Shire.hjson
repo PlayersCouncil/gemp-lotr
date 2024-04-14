@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06109.jpg
 			javaClass: true
+			//parentId: 6_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R109
 			rarity: R
@@ -17,7 +21,6 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -44,6 +47,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06110.jpg
 			javaClass: true
+			//parentId: 6_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U110
 			rarity: U
@@ -57,7 +64,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -87,6 +94,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06111.jpg
 			javaClass: true
+			//parentId: 6_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C111
 			rarity: C
@@ -100,7 +111,7 @@
 		culture: Shire
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -127,6 +138,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06112.jpg
 			javaClass: true
+			//parentId: 6_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C112
 			rarity: C
@@ -140,7 +155,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -170,6 +185,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06113.jpg
 			javaClass: true
+			//parentId: 6_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R113
 			rarity: R
@@ -189,7 +208,6 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -216,6 +234,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06114.jpg
 			javaClass: true
+			//parentId: 6_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R114
 			rarity: R
@@ -235,7 +257,6 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11144.jpg
 			javaClass: true
+			//parentId: 11_144
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U144
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11145.jpg
 			javaClass: true
+			//parentId: 11_145
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U145
 			rarity: U
@@ -62,7 +70,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -89,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11146.jpg
 			javaClass: true
+			//parentId: 11_146
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S146
 			rarity: S
@@ -107,7 +118,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -134,6 +144,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11147.jpg
 			javaClass: true
+			//parentId: 11_147
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R147
 			rarity: R
@@ -152,7 +166,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -179,6 +192,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11148.jpg
 			javaClass: true
+			//parentId: 11_148
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C148
 			rarity: C
@@ -197,7 +214,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -224,6 +240,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11149.jpg
 			javaClass: true
+			//parentId: 11_149
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U149
 			rarity: U
@@ -237,7 +257,7 @@
 		culture: Rohan
 		twilight: 4
 		type: Condition
-		#keyword: support area
+		keywords: Toil 2
 		/*requires: {
 			
 		}
@@ -264,6 +284,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11150.jpg
 			javaClass: true
+			//parentId: 11_150
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S150
 			rarity: S
@@ -277,7 +301,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -307,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11151.jpg
 			javaClass: true
+			//parentId: 11_151
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U151
 			rarity: U
@@ -322,8 +350,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -350,6 +377,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11152.jpg
 			javaClass: true
+			//parentId: 11_152
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S152
 			rarity: S
@@ -367,7 +398,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -394,6 +424,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11153.jpg
 			javaClass: true
+			//parentId: 11_153
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S153
 			rarity: S
@@ -409,8 +443,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -437,6 +470,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11154.jpg
 			javaClass: true
+			//parentId: 11_154
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R154
 			rarity: R
@@ -454,7 +491,6 @@
 		strength: 8
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -481,6 +517,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11155.jpg
 			javaClass: true
+			//parentId: 11_155
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C155
 			rarity: C
@@ -494,7 +534,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -521,6 +561,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11156.jpg
 			javaClass: true
+			//parentId: 11_156
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U156
 			rarity: U
@@ -535,8 +579,7 @@
 		twilight: 2
 		type: Possession
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -563,6 +606,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11157.jpg
 			javaClass: true
+			//parentId: 11_157
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C157
 			rarity: C
@@ -576,7 +623,7 @@
 		culture: Rohan
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -603,6 +650,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11158.jpg
 			javaClass: true
+			//parentId: 11_158
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R158
 			rarity: R
@@ -616,7 +667,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -643,6 +694,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11159.jpg
 			javaClass: true
+			//parentId: 11_159
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U159
 			rarity: U
@@ -661,7 +716,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -688,6 +742,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11160.jpg
 			javaClass: true
+			//parentId: 11_160
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S160
 			rarity: S
@@ -701,7 +759,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}

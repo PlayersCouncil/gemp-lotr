@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05001.jpg
 			javaClass: true
+			//parentId: 5_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U1
 			rarity: U
@@ -21,7 +25,6 @@
 		strength: 9
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -48,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05002.jpg
 			javaClass: true
+			//parentId: 5_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U2
 			rarity: U
@@ -65,7 +72,6 @@
 		strength: 10
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -92,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05003.jpg
 			javaClass: true
+			//parentId: 5_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R3
 			rarity: R
@@ -105,7 +115,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -135,6 +145,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05004.jpg
 			javaClass: true
+			//parentId: 5_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R4
 			rarity: R
@@ -152,7 +166,6 @@
 		strength: 18
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}

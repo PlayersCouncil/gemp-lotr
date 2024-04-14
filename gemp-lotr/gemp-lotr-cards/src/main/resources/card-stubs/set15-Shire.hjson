@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15143.jpg
 			javaClass: true
+			//parentId: 15_143
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C143
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15144.jpg
 			javaClass: true
+			//parentId: 15_144
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C144
 			rarity: C
@@ -65,7 +73,11 @@
 		strength: 3
 		vitality: 4
 		resistance: 10
-		#keyword: damage+1
+		keywords: [
+			Ring-bearer
+			Ring-bound
+			Can-bear-ring
+		]
 		/*requires: {
 			
 		}
@@ -92,6 +104,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15145.jpg
 			javaClass: true
+			//parentId: 15_145
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C145
 			rarity: C
@@ -107,8 +123,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Hobbit
 		/*requires: {
 			
 		}
@@ -135,6 +150,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15146.jpg
 			javaClass: true
+			//parentId: 15_146
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R146
 			rarity: R
@@ -150,7 +169,6 @@
 		twilight: 2
 		type: Follower
 		strength: 2
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -177,6 +195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15147.jpg
 			javaClass: true
+			//parentId: 15_147
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C147
 			rarity: C
@@ -193,7 +215,6 @@
 		type: Follower
 		strength: 1
 		resistance: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -220,6 +241,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15148.jpg
 			javaClass: true
+			//parentId: 15_148
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R148
 			rarity: R
@@ -233,7 +258,7 @@
 		culture: Shire
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -260,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15149.jpg
 			javaClass: true
+			//parentId: 15_149
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C149
 			rarity: C
@@ -278,7 +307,6 @@
 		strength: 3
 		vitality: 4
 		resistance: 9
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -305,6 +333,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15150.jpg
 			javaClass: true
+			//parentId: 15_150
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C150
 			rarity: C
@@ -318,7 +350,7 @@
 		culture: Shire
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -348,6 +380,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15151.jpg
 			javaClass: true
+			//parentId: 15_151
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C151
 			rarity: C
@@ -366,7 +402,6 @@
 		strength: 3
 		vitality: 4
 		resistance: 9
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -393,6 +428,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15152.jpg
 			javaClass: true
+			//parentId: 15_152
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R152
 			rarity: R
@@ -406,7 +445,7 @@
 		culture: Shire
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -433,6 +472,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15153.jpg
 			javaClass: true
+			//parentId: 15_153
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U153
 			rarity: U
@@ -451,7 +494,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 9
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -478,6 +521,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15154.jpg
 			javaClass: true
+			//parentId: 15_154
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R154
 			rarity: R
@@ -491,7 +538,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02096.jpg
 			javaClass: true
+			//parentId: 2_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U96
 			rarity: U
@@ -22,7 +26,6 @@
 		race: Hobbit
 		strength: 2
 		vitality: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02097.jpg
 			javaClass: true
+			//parentId: 2_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R97
 			rarity: R
@@ -62,7 +69,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -89,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02098.jpg
 			javaClass: true
+			//parentId: 2_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U98
 			rarity: U
@@ -102,7 +113,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -132,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02099.jpg
 			javaClass: true
+			//parentId: 2_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C99
 			rarity: C
@@ -145,7 +160,8 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -175,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02100.jpg
 			javaClass: true
+			//parentId: 2_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R100
 			rarity: R
@@ -188,7 +208,10 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Stealth
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -215,6 +238,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02101.jpg
 			javaClass: true
+			//parentId: 2_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C101
 			rarity: C
@@ -233,7 +260,6 @@
 		race: Hobbit
 		strength: 1
 		vitality: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -260,6 +286,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02102.jpg
 			javaClass: true
+			//parentId: 2_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C102
 			rarity: C
@@ -279,7 +309,6 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -306,6 +335,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02103.jpg
 			javaClass: true
+			//parentId: 2_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U103
 			rarity: U
@@ -319,7 +352,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -349,6 +382,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02104.jpg
 			javaClass: true
+			//parentId: 2_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C104
 			rarity: C
@@ -368,7 +405,6 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -395,6 +431,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02105.jpg
 			javaClass: true
+			//parentId: 2_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R105
 			rarity: R
@@ -409,8 +449,7 @@
 		twilight: 2
 		type: Artifact
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Frodo)
 		/*requires: {
 			
 		}
@@ -437,6 +476,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02106.jpg
 			javaClass: true
+			//parentId: 2_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U106
 			rarity: U
@@ -450,7 +493,10 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Stealth
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -477,6 +523,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02107.jpg
 			javaClass: true
+			//parentId: 2_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U107
 			rarity: U
@@ -490,7 +540,7 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -517,6 +567,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02108.jpg
 			javaClass: true
+			//parentId: 2_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R108
 			rarity: R
@@ -531,7 +585,7 @@
 		twilight: 1
 		type: Condition
 		strength: 1
-		#keyword: support area
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -558,6 +612,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02109.jpg
 			javaClass: true
+			//parentId: 2_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R109
 			rarity: R
@@ -571,7 +629,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -601,6 +659,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02110.jpg
 			javaClass: true
+			//parentId: 2_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C110
 			rarity: C
@@ -620,7 +682,6 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -647,6 +708,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02111.jpg
 			javaClass: true
+			//parentId: 2_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U111
 			rarity: U
@@ -654,13 +719,13 @@
 			cardNum: 111
 			style: Standard
 		}
-		title: Practically Everyone<br>Was Invited
+		title: Practically Everyone Was Invited
 		unique: false
 		side: Free Peoples
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -690,6 +755,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02112.jpg
 			javaClass: true
+			//parentId: 2_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R112
 			rarity: R
@@ -703,7 +772,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -730,6 +799,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02113.jpg
 			javaClass: true
+			//parentId: 2_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R113
 			rarity: R
@@ -743,8 +816,10 @@
 		culture: Shire
 		twilight: 2
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -771,6 +846,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02114.jpg
 			javaClass: true
+			//parentId: 2_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C114
 			rarity: C
@@ -790,7 +869,6 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

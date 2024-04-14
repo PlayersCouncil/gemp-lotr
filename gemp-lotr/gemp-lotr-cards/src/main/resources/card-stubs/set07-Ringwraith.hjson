@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07174.jpg
 			javaClass: true
+			//parentId: 7_174
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U174
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07175.jpg
 			javaClass: true
+			//parentId: 7_175
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U175
 			rarity: U
@@ -57,7 +65,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07176.jpg
 			javaClass: true
+			//parentId: 7_176
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U176
 			rarity: U
@@ -100,7 +112,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -130,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07177.jpg
 			javaClass: true
+			//parentId: 7_177
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R177
 			rarity: R
@@ -143,7 +159,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -170,6 +186,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07178.jpg
 			javaClass: true
+			//parentId: 7_178
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U178
 			rarity: U
@@ -183,7 +203,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -213,6 +233,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07179.jpg
 			javaClass: true
+			//parentId: 7_179
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R179
 			rarity: R
@@ -226,7 +250,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -253,6 +277,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07180.jpg
 			javaClass: true
+			//parentId: 7_180
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R180
 			rarity: R
@@ -271,7 +299,6 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -298,6 +325,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07181.jpg
 			javaClass: true
+			//parentId: 7_181
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R181
 			rarity: R
@@ -311,7 +342,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -338,6 +369,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07182.jpg
 			javaClass: true
+			//parentId: 7_182
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R182
 			rarity: R
@@ -351,7 +386,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -384,6 +419,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07183.jpg
 			javaClass: true
+			//parentId: 7_183
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R183
 			rarity: R
@@ -397,7 +436,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -430,6 +469,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07184.jpg
 			javaClass: true
+			//parentId: 7_184
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C184
 			rarity: C
@@ -443,7 +486,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -470,6 +513,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07185.jpg
 			javaClass: true
+			//parentId: 7_185
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U185
 			rarity: U
@@ -483,7 +530,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -510,6 +557,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07186.jpg
 			javaClass: true
+			//parentId: 7_186
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C186
 			rarity: C
@@ -525,8 +576,6 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -553,6 +602,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07187.jpg
 			javaClass: true
+			//parentId: 7_187
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U187
 			rarity: U
@@ -570,7 +623,6 @@
 		strength: 10
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -597,6 +649,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07188.jpg
 			javaClass: true
+			//parentId: 7_188
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R188
 			rarity: R
@@ -614,7 +670,6 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -641,6 +696,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07189.jpg
 			javaClass: true
+			//parentId: 7_189
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C189
 			rarity: C
@@ -658,7 +717,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -685,6 +743,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07190.jpg
 			javaClass: true
+			//parentId: 7_190
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U190
 			rarity: U
@@ -702,7 +764,6 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -729,6 +790,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07191.jpg
 			javaClass: true
+			//parentId: 7_191
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R191
 			rarity: R
@@ -746,7 +811,6 @@
 		strength: 15
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -773,6 +837,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07192.jpg
 			javaClass: true
+			//parentId: 7_192
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C192
 			rarity: C
@@ -790,7 +858,6 @@
 		strength: 5
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -817,6 +884,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07193.jpg
 			javaClass: true
+			//parentId: 7_193
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C193
 			rarity: C
@@ -834,7 +905,6 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -861,6 +931,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07194.jpg
 			javaClass: true
+			//parentId: 7_194
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C194
 			rarity: C
@@ -878,7 +952,6 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -905,6 +978,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07195.jpg
 			javaClass: true
+			//parentId: 7_195
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U195
 			rarity: U
@@ -918,7 +995,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -945,6 +1022,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07196.jpg
 			javaClass: true
+			//parentId: 7_196
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C196
 			rarity: C
@@ -962,7 +1043,6 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -989,6 +1069,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07197.jpg
 			javaClass: true
+			//parentId: 7_197
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R197
 			rarity: R
@@ -1006,7 +1090,6 @@
 		strength: 15
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1033,6 +1116,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07198.jpg
 			javaClass: true
+			//parentId: 7_198
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C198
 			rarity: C
@@ -1050,7 +1137,6 @@
 		strength: 7
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1077,6 +1163,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07199.jpg
 			javaClass: true
+			//parentId: 7_199
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C199
 			rarity: C
@@ -1094,7 +1184,6 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1121,6 +1210,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07200.jpg
 			javaClass: true
+			//parentId: 7_200
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C200
 			rarity: C
@@ -1138,7 +1231,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1165,6 +1257,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07201.jpg
 			javaClass: true
+			//parentId: 7_201
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C201
 			rarity: C
@@ -1182,7 +1278,6 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1209,6 +1304,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07202.jpg
 			javaClass: true
+			//parentId: 7_202
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U202
 			rarity: U
@@ -1226,7 +1325,6 @@
 		strength: 3
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1253,6 +1351,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07203.jpg
 			javaClass: true
+			//parentId: 7_203
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U203
 			rarity: U
@@ -1268,8 +1370,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [wraith] minion
 		/*requires: {
 			
 		}
@@ -1296,6 +1397,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07204.jpg
 			javaClass: true
+			//parentId: 7_204
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R204
 			rarity: R
@@ -1309,7 +1414,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1336,6 +1441,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07205.jpg
 			javaClass: true
+			//parentId: 7_205
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R205
 			rarity: R
@@ -1349,7 +1458,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1376,6 +1485,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07206.jpg
 			javaClass: true
+			//parentId: 7_206
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R206
 			rarity: R
@@ -1383,13 +1496,13 @@
 			cardNum: 206
 			style: Standard
 		}
-		title: Stronghold of<br>Minas Morgul
+		title: Stronghold of Minas Morgul
 		unique: true
 		side: Shadow
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1416,6 +1529,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07207.jpg
 			javaClass: true
+			//parentId: 7_207
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U207
 			rarity: U
@@ -1429,7 +1546,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1459,6 +1576,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07208.jpg
 			javaClass: true
+			//parentId: 7_208
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C208
 			rarity: C
@@ -1472,7 +1593,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1502,6 +1623,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07209.jpg
 			javaClass: true
+			//parentId: 7_209
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C209
 			rarity: C
@@ -1515,7 +1640,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1542,6 +1667,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07210.jpg
 			javaClass: true
+			//parentId: 7_210
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R210
 			rarity: R
@@ -1560,7 +1689,7 @@
 		strength: 12
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -1587,6 +1716,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07211.jpg
 			javaClass: true
+			//parentId: 7_211
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R211
 			rarity: R
@@ -1605,7 +1738,7 @@
 		strength: 10
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -1632,6 +1765,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07212.jpg
 			javaClass: true
+			//parentId: 7_212
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U212
 			rarity: U
@@ -1650,7 +1787,7 @@
 		strength: 11
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -1677,6 +1814,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07213.jpg
 			javaClass: true
+			//parentId: 7_213
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R213
 			rarity: R
@@ -1695,7 +1836,6 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1722,6 +1862,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07214.jpg
 			javaClass: true
+			//parentId: 7_214
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U214
 			rarity: U
@@ -1740,7 +1884,6 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1767,6 +1910,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07215.jpg
 			javaClass: true
+			//parentId: 7_215
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R215
 			rarity: R
@@ -1785,7 +1932,7 @@
 		strength: 10
 		vitality: 3
 		site: 2
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -1812,6 +1959,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07216.jpg
 			javaClass: true
+			//parentId: 7_216
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U216
 			rarity: U
@@ -1830,7 +1981,7 @@
 		strength: 10
 		vitality: 3
 		site: 2
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -1857,6 +2008,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07217.jpg
 			javaClass: true
+			//parentId: 7_217
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U217
 			rarity: U
@@ -1875,7 +2030,6 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1902,6 +2056,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07218.jpg
 			javaClass: true
+			//parentId: 7_218
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U218
 			rarity: U
@@ -1920,7 +2078,6 @@
 		strength: 9
 		vitality: 3
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1947,6 +2104,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07219.jpg
 			javaClass: true
+			//parentId: 7_219
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R219
 			rarity: R
@@ -1965,7 +2126,7 @@
 		strength: 12
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -1992,6 +2153,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07220.jpg
 			javaClass: true
+			//parentId: 7_220
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C220
 			rarity: C
@@ -2005,7 +2170,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -2035,6 +2200,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07221.jpg
 			javaClass: true
+			//parentId: 7_221
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R221
 			rarity: R
@@ -2053,7 +2222,7 @@
 		strength: 14
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}

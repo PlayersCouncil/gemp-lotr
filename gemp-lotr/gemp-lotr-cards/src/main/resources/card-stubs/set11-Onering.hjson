@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11001.jpg
 			javaClass: true
+			//parentId: 11_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R1
 			rarity: R
@@ -16,6 +20,7 @@
 		unique: true
 		twilight: 0
 		type: The One Ring
+		resistance: 2
 		/*requires: {
 			
 		}
@@ -42,6 +47,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11002.jpg
 			javaClass: true
+			//parentId: 11_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S2
 			rarity: S
@@ -54,6 +63,7 @@
 		unique: true
 		twilight: 0
 		type: The One Ring
+		strength: 1
 		/*requires: {
 			
 		}

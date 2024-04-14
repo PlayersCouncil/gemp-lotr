@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13009.jpg
 			javaClass: true
+			//parentId: 13_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13S9
 			rarity: S
@@ -22,7 +26,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13010.jpg
 			javaClass: true
+			//parentId: 13_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R10
 			rarity: R
@@ -65,8 +72,7 @@
 		type: Possession
 		resistance: 1
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Elf)
 		/*requires: {
 			
 		}
@@ -93,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13011.jpg
 			javaClass: true
+			//parentId: 13_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R11
 			rarity: R
@@ -111,7 +121,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -138,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13012.jpg
 			javaClass: true
+			//parentId: 13_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C12
 			rarity: C
@@ -151,7 +164,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -178,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13013.jpg
 			javaClass: true
+			//parentId: 13_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C13
 			rarity: C
@@ -191,7 +208,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -218,6 +235,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13014.jpg
 			javaClass: true
+			//parentId: 13_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C14
 			rarity: C
@@ -231,7 +252,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -261,6 +282,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13015.jpg
 			javaClass: true
+			//parentId: 13_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R15
 			rarity: R
@@ -279,7 +304,6 @@
 		strength: 3
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -306,6 +330,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13016.jpg
 			javaClass: true
+			//parentId: 13_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C16
 			rarity: C
@@ -319,7 +347,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -349,6 +377,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13017.jpg
 			javaClass: true
+			//parentId: 13_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U17
 			rarity: U
@@ -362,7 +394,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -392,6 +424,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13018.jpg
 			javaClass: true
+			//parentId: 13_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R18
 			rarity: R
@@ -410,7 +446,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -437,6 +473,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13019.jpg
 			javaClass: true
+			//parentId: 13_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U19
 			rarity: U
@@ -450,7 +490,7 @@
 		culture: Elven
 		twilight: 4
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -480,6 +520,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13020.jpg
 			javaClass: true
+			//parentId: 13_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13S20
 			rarity: S
@@ -497,7 +541,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -524,6 +567,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13021.jpg
 			javaClass: true
+			//parentId: 13_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C21
 			rarity: C
@@ -537,7 +584,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -567,6 +614,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13022.jpg
 			javaClass: true
+			//parentId: 13_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R22
 			rarity: R
@@ -580,7 +631,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -607,6 +658,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13023.jpg
 			javaClass: true
+			//parentId: 13_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C23
 			rarity: C
@@ -624,7 +679,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -651,6 +705,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13024.jpg
 			javaClass: true
+			//parentId: 13_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C24
 			rarity: C
@@ -664,7 +722,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -694,6 +752,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13025.jpg
 			javaClass: true
+			//parentId: 13_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C25
 			rarity: C
@@ -707,7 +769,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -734,6 +796,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13026.jpg
 			javaClass: true
+			//parentId: 13_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R26
 			rarity: R
@@ -747,7 +813,10 @@
 		culture: Elven
 		twilight: 6
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Toil 2
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -774,6 +843,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13027.jpg
 			javaClass: true
+			//parentId: 13_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U27
 			rarity: U
@@ -787,7 +860,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

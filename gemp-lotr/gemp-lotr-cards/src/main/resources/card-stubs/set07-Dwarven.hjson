@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07003.jpg
 			javaClass: true
+			//parentId: 7_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U3
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07004.jpg
 			javaClass: true
+			//parentId: 7_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C4
 			rarity: C
@@ -60,7 +68,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07005.jpg
 			javaClass: true
+			//parentId: 7_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R5
 			rarity: R
@@ -103,7 +115,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -130,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07006.jpg
 			javaClass: true
+			//parentId: 7_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C6
 			rarity: C
@@ -149,7 +165,7 @@
 		vitality: 3
 		signet: Theoden
 		resistance: 6
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -176,6 +192,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07007.jpg
 			javaClass: true
+			//parentId: 7_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R7
 			rarity: R
@@ -195,7 +215,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -222,6 +242,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07008.jpg
 			javaClass: true
+			//parentId: 7_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U8
 			rarity: U
@@ -236,8 +260,7 @@
 		twilight: 2
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gimli)
 		/*requires: {
 			
 		}
@@ -264,6 +287,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07009.jpg
 			javaClass: true
+			//parentId: 7_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R9
 			rarity: R
@@ -280,8 +307,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -308,6 +334,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07010.jpg
 			javaClass: true
+			//parentId: 7_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R10
 			rarity: R
@@ -321,7 +351,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -348,6 +378,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07011.jpg
 			javaClass: true
+			//parentId: 7_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C11
 			rarity: C
@@ -361,7 +395,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -391,6 +425,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07012.jpg
 			javaClass: true
+			//parentId: 7_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R12
 			rarity: R
@@ -404,7 +442,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -431,6 +469,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07013.jpg
 			javaClass: true
+			//parentId: 7_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U13
 			rarity: U
@@ -444,7 +486,6 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -471,6 +512,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07014.jpg
 			javaClass: true
+			//parentId: 7_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U14
 			rarity: U
@@ -484,7 +529,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}

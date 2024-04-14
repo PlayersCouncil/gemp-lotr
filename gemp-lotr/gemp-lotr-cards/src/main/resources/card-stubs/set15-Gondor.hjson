@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15054.jpg
 			javaClass: true
+			//parentId: 15_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S54
 			rarity: S
@@ -22,7 +26,10 @@
 		strength: 8
 		vitality: 4
 		resistance: 8
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -49,6 +56,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15055.jpg
 			javaClass: true
+			//parentId: 15_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R55
 			rarity: R
@@ -67,7 +78,10 @@
 		strength: 8
 		vitality: 4
 		resistance: 8
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 2
+		]
 		/*requires: {
 			
 		}
@@ -94,6 +108,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15056.jpg
 			javaClass: true
+			//parentId: 15_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R56
 			rarity: R
@@ -109,8 +127,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Aragorn)
 		/*requires: {
 			
 		}
@@ -137,6 +154,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15057.jpg
 			javaClass: true
+			//parentId: 15_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U57
 			rarity: U
@@ -155,7 +176,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -182,6 +206,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15058.jpg
 			javaClass: true
+			//parentId: 15_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R58
 			rarity: R
@@ -197,7 +225,10 @@
 		type: Condition
 		strength: -1
 		vitality: -2
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -224,6 +255,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15059.jpg
 			javaClass: true
+			//parentId: 15_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C59
 			rarity: C
@@ -241,7 +276,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -268,6 +306,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15060.jpg
 			javaClass: true
+			//parentId: 15_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C60
 			rarity: C
@@ -281,7 +323,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -308,6 +350,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15061.jpg
 			javaClass: true
+			//parentId: 15_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U61
 			rarity: U
@@ -325,7 +371,10 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -352,6 +401,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15062.jpg
 			javaClass: true
+			//parentId: 15_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C62
 			rarity: C
@@ -367,8 +420,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -395,6 +447,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15063.jpg
 			javaClass: true
+			//parentId: 15_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U63
 			rarity: U
@@ -413,7 +469,10 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -440,6 +499,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15064.jpg
 			javaClass: true
+			//parentId: 15_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R64
 			rarity: R
@@ -458,7 +521,10 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -485,6 +551,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15065.jpg
 			javaClass: true
+			//parentId: 15_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C65
 			rarity: C
@@ -498,7 +568,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -525,6 +595,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15066.jpg
 			javaClass: true
+			//parentId: 15_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U66
 			rarity: U
@@ -532,13 +606,13 @@
 			cardNum: 66
 			style: Standard
 		}
-		title: No Travellers In This<br>Land
+		title: No Travellers In This Land
 		unique: false
 		side: Free Peoples
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -568,6 +642,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15067.jpg
 			javaClass: true
+			//parentId: 15_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U67
 			rarity: U
@@ -583,7 +661,10 @@
 		type: Condition
 		strength: -2
 		site: 2
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -610,6 +691,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15068.jpg
 			javaClass: true
+			//parentId: 15_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C68
 			rarity: C
@@ -626,8 +711,7 @@
 		vitality: 1
 		resistance: 1
 		itemclass: Cloak
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -654,6 +738,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15069.jpg
 			javaClass: true
+			//parentId: 15_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C69
 			rarity: C
@@ -671,7 +759,10 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -698,6 +789,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15070.jpg
 			javaClass: true
+			//parentId: 15_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R70
 			rarity: R
@@ -711,7 +806,10 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -738,6 +836,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15071.jpg
 			javaClass: true
+			//parentId: 15_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C71
 			rarity: C
@@ -755,7 +857,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 1
+		]
 		/*requires: {
 			
 		}

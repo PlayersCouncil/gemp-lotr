@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR00059.jpg
 			javaClass: true
+			//parentId: 0_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 0P59
 			rarity: P
@@ -22,7 +26,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 5
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR00066.jpg
 			javaClass: true
+			//parentId: 0_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 0P66
 			rarity: P
@@ -67,7 +74,10 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Valiant
+			Damage+1
+		]
 		/*requires: {
 			
 		}

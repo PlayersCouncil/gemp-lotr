@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06012.jpg
 			javaClass: true
+			//parentId: 6_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C12
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06013.jpg
 			javaClass: true
+			//parentId: 6_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U13
 			rarity: U
@@ -63,7 +71,6 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -90,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06014.jpg
 			javaClass: true
+			//parentId: 6_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U14
 			rarity: U
@@ -104,8 +115,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Elf companion)
 		/*requires: {
 			
 		}
@@ -132,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06015.jpg
 			javaClass: true
+			//parentId: 6_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R15
 			rarity: R
@@ -150,7 +164,6 @@
 		race: Elf
 		strength: 8
 		vitality: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -177,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06016.jpg
 			javaClass: true
+			//parentId: 6_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U16
 			rarity: U
@@ -190,7 +207,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -220,6 +237,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06017.jpg
 			javaClass: true
+			//parentId: 6_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C17
 			rarity: C
@@ -233,7 +254,7 @@
 		culture: Elven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -260,6 +281,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06018.jpg
 			javaClass: true
+			//parentId: 6_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R18
 			rarity: R
@@ -278,7 +303,6 @@
 		race: Elf
 		strength: 3
 		vitality: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -305,6 +329,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06019.jpg
 			javaClass: true
+			//parentId: 6_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U19
 			rarity: U
@@ -318,7 +346,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -348,6 +376,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06020.jpg
 			javaClass: true
+			//parentId: 6_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U20
 			rarity: U
@@ -361,7 +393,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -391,6 +423,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06021.jpg
 			javaClass: true
+			//parentId: 6_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C21
 			rarity: C
@@ -406,8 +442,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Elf companion)
 		/*requires: {
 			
 		}
@@ -434,6 +469,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06022.jpg
 			javaClass: true
+			//parentId: 6_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U22
 			rarity: U
@@ -451,7 +490,6 @@
 		strength: 8
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -478,6 +516,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06023.jpg
 			javaClass: true
+			//parentId: 6_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R23
 			rarity: R
@@ -495,7 +537,6 @@
 		strength: 9
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17007.jpg
 			javaClass: true
+			//parentId: 17_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17S7
 			rarity: S
@@ -21,7 +25,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Hunter 1
 		/*requires: {
 			
 		}
@@ -48,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17008.jpg
 			javaClass: true
+			//parentId: 17_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U8
 			rarity: U
@@ -61,7 +69,7 @@
 		culture: Elven
 		twilight: 3
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -91,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17009.jpg
 			javaClass: true
+			//parentId: 17_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U9
 			rarity: U
@@ -104,7 +116,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -134,6 +146,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17010.jpg
 			javaClass: true
+			//parentId: 17_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U10
 			rarity: U
@@ -147,7 +163,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -174,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17011.jpg
 			javaClass: true
+			//parentId: 17_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17S11
 			rarity: S
@@ -192,7 +212,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Hunter 1
 		/*requires: {
 			
 		}
@@ -219,6 +239,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17012.jpg
 			javaClass: true
+			//parentId: 17_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17S12
 			rarity: S
@@ -237,7 +261,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Hunter 1
 		/*requires: {
 			
 		}
@@ -264,6 +288,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17013.jpg
 			javaClass: true
+			//parentId: 17_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R13
 			rarity: R
@@ -277,7 +305,7 @@
 		culture: Elven
 		twilight: 5
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -304,6 +332,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17014.jpg
 			javaClass: true
+			//parentId: 17_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U14
 			rarity: U
@@ -317,7 +349,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}

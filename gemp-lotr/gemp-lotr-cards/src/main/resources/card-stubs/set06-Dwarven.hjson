@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06009.jpg
 			javaClass: true
+			//parentId: 6_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U9
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06010.jpg
 			javaClass: true
+			//parentId: 6_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C10
 			rarity: C
@@ -60,7 +68,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06011.jpg
 			javaClass: true
+			//parentId: 6_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R11
 			rarity: R
@@ -100,7 +112,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}

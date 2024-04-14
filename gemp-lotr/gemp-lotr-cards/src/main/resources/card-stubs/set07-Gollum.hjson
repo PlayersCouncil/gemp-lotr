@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07053.jpg
 			javaClass: true
+			//parentId: 7_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C53
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07054.jpg
 			javaClass: true
+			//parentId: 7_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U54
 			rarity: U
@@ -60,7 +68,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07055.jpg
 			javaClass: true
+			//parentId: 7_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U55
 			rarity: U
@@ -103,7 +115,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -130,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07056.jpg
 			javaClass: true
+			//parentId: 7_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R56
 			rarity: R
@@ -143,7 +159,7 @@
 		culture: Gollum
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -170,6 +186,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07057.jpg
 			javaClass: true
+			//parentId: 7_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R57
 			rarity: R
@@ -183,7 +203,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -210,6 +230,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07058.jpg
 			javaClass: true
+			//parentId: 7_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R58
 			rarity: R
@@ -228,7 +252,6 @@
 		strength: 5
 		vitality: 4
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -255,6 +278,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07059.jpg
 			javaClass: true
+			//parentId: 7_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C59
 			rarity: C
@@ -273,7 +300,6 @@
 		strength: 5
 		vitality: 4
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -300,6 +326,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07060.jpg
 			javaClass: true
+			//parentId: 7_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U60
 			rarity: U
@@ -313,7 +343,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -340,6 +370,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07061.jpg
 			javaClass: true
+			//parentId: 7_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R61
 			rarity: R
@@ -353,7 +387,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -383,6 +417,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07062.jpg
 			javaClass: true
+			//parentId: 7_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C62
 			rarity: C
@@ -396,7 +434,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -423,6 +461,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07063.jpg
 			javaClass: true
+			//parentId: 7_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R63
 			rarity: R
@@ -436,7 +478,6 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -463,6 +504,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07064.jpg
 			javaClass: true
+			//parentId: 7_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U64
 			rarity: U
@@ -476,7 +521,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -506,6 +551,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07065.jpg
 			javaClass: true
+			//parentId: 7_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C65
 			rarity: C
@@ -519,7 +568,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -546,6 +595,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07066.jpg
 			javaClass: true
+			//parentId: 7_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R66
 			rarity: R
@@ -559,7 +612,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -589,6 +642,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07067.jpg
 			javaClass: true
+			//parentId: 7_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R67
 			rarity: R
@@ -602,7 +659,7 @@
 		culture: Gollum
 		twilight: 5
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -629,6 +686,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07068.jpg
 			javaClass: true
+			//parentId: 7_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R68
 			rarity: R
@@ -642,7 +703,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -669,6 +730,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07069.jpg
 			javaClass: true
+			//parentId: 7_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R69
 			rarity: R
@@ -682,7 +747,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -709,6 +774,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07070.jpg
 			javaClass: true
+			//parentId: 7_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R70
 			rarity: R
@@ -722,7 +791,7 @@
 		culture: Gollum
 		twilight: 3
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -752,6 +821,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07071.jpg
 			javaClass: true
+			//parentId: 7_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R71
 			rarity: R
@@ -771,7 +844,7 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -798,6 +871,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07072.jpg
 			javaClass: true
+			//parentId: 7_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C72
 			rarity: C
@@ -817,7 +894,7 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -844,6 +921,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07073.jpg
 			javaClass: true
+			//parentId: 7_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R73
 			rarity: R
@@ -857,7 +938,8 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -887,6 +969,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07074.jpg
 			javaClass: true
+			//parentId: 7_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R74
 			rarity: R
@@ -900,7 +986,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -930,6 +1016,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07075.jpg
 			javaClass: true
+			//parentId: 7_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C75
 			rarity: C
@@ -943,7 +1033,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -976,6 +1066,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07076.jpg
 			javaClass: true
+			//parentId: 7_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C76
 			rarity: C
@@ -989,7 +1083,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1019,6 +1113,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07077.jpg
 			javaClass: true
+			//parentId: 7_77
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U77
 			rarity: U
@@ -1032,7 +1130,6 @@
 		culture: Gollum
 		twilight: 2
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -1059,6 +1156,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07078.jpg
 			javaClass: true
+			//parentId: 7_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U78
 			rarity: U
@@ -1072,7 +1173,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01088.jpg
 			javaClass: true
+			//parentId: 1_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R88
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01089.jpg
 			javaClass: true
+			//parentId: 1_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R89
 			rarity: R
@@ -66,7 +74,7 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -93,6 +101,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01090.jpg
 			javaClass: true
+			//parentId: 1_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R90
 			rarity: R
@@ -107,8 +119,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Aragorn)
 		/*requires: {
 			
 		}
@@ -135,6 +146,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01091.jpg
 			javaClass: true
+			//parentId: 1_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U91
 			rarity: U
@@ -149,8 +164,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Pipe
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] companion
 		/*requires: {
 			
 		}
@@ -177,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01092.jpg
 			javaClass: true
+			//parentId: 1_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C92
 			rarity: C
@@ -191,8 +209,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Man
 		/*requires: {
 			
 		}
@@ -219,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01093.jpg
 			javaClass: true
+			//parentId: 1_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R93
 			rarity: R
@@ -232,7 +253,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -262,6 +283,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01094.jpg
 			javaClass: true
+			//parentId: 1_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U94
 			rarity: U
@@ -275,8 +300,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -303,6 +327,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01095.jpg
 			javaClass: true
+			//parentId: 1_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R95
 			rarity: R
@@ -318,8 +346,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Boromir)
 		/*requires: {
 			
 		}
@@ -346,6 +373,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01096.jpg
 			javaClass: true
+			//parentId: 1_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R96
 			rarity: R
@@ -365,7 +396,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -392,6 +423,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01097.jpg
 			javaClass: true
+			//parentId: 1_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U97
 			rarity: U
@@ -411,7 +446,6 @@
 		vitality: 3
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -438,6 +472,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01098.jpg
 			javaClass: true
+			//parentId: 1_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U98
 			rarity: U
@@ -452,8 +490,7 @@
 		twilight: 0
 		type: Possession
 		itemclass: Cloak
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Boromir)
 		/*requires: {
 			
 		}
@@ -480,6 +517,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01099.jpg
 			javaClass: true
+			//parentId: 1_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R99
 			rarity: R
@@ -493,7 +534,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -523,6 +564,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01100.jpg
 			javaClass: true
+			//parentId: 1_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R100
 			rarity: R
@@ -536,7 +581,10 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -563,6 +611,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01101.jpg
 			javaClass: true
+			//parentId: 1_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C101
 			rarity: C
@@ -577,8 +629,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Man
 		/*requires: {
 			
 		}
@@ -605,6 +656,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01102.jpg
 			javaClass: true
+			//parentId: 1_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C102
 			rarity: C
@@ -618,7 +673,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -648,6 +703,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01103.jpg
 			javaClass: true
+			//parentId: 1_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C103
 			rarity: C
@@ -661,7 +720,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -691,6 +750,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01104.jpg
 			javaClass: true
+			//parentId: 1_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C104
 			rarity: C
@@ -704,7 +767,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -734,6 +797,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01105.jpg
 			javaClass: true
+			//parentId: 1_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U105
 			rarity: U
@@ -747,7 +814,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -774,6 +841,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01106.jpg
 			javaClass: true
+			//parentId: 1_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C106
 			rarity: C
@@ -787,7 +858,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -817,6 +888,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01107.jpg
 			javaClass: true
+			//parentId: 1_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C107
 			rarity: C
@@ -831,8 +906,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Shield
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Man
 		/*requires: {
 			
 		}
@@ -859,6 +933,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01108.jpg
 			javaClass: true
+			//parentId: 1_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U108
 			rarity: U
@@ -866,13 +944,12 @@
 			cardNum: 108
 			style: Standard
 		}
-		title: No Stranger to<br>the Shadows
+		title: No Stranger to the Shadows
 		unique: false
 		side: Free Peoples
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -899,6 +976,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01109.jpg
 			javaClass: true
+			//parentId: 1_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U109
 			rarity: U
@@ -906,13 +987,13 @@
 			cardNum: 109
 			style: Standard
 		}
-		title: One Whom Men<br>Would Follow
+		title: One Whom Men Would Follow
 		unique: false
 		side: Free Peoples
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -942,6 +1023,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01110.jpg
 			javaClass: true
+			//parentId: 1_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C110
 			rarity: C
@@ -955,7 +1040,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -985,6 +1070,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01111.jpg
 			javaClass: true
+			//parentId: 1_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R111
 			rarity: R
@@ -998,7 +1087,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1028,6 +1117,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01112.jpg
 			javaClass: true
+			//parentId: 1_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U112
 			rarity: U
@@ -1043,8 +1136,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Aragorn)
 		/*requires: {
 			
 		}
@@ -1071,6 +1163,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01113.jpg
 			javaClass: true
+			//parentId: 1_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U113
 			rarity: U
@@ -1084,7 +1180,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1114,6 +1210,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01114.jpg
 			javaClass: true
+			//parentId: 1_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R114
 			rarity: R
@@ -1128,7 +1228,7 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
-		#keyword: support area
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -1155,6 +1255,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01115.jpg
 			javaClass: true
+			//parentId: 1_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R115
 			rarity: R
@@ -1168,7 +1272,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1198,6 +1302,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01116.jpg
 			javaClass: true
+			//parentId: 1_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C116
 			rarity: C
@@ -1205,13 +1313,13 @@
 			cardNum: 116
 			style: Standard
 		}
-		title: Swordarm of the<br>White Tower
+		title: Swordarm of the White Tower
 		unique: false
 		side: Free Peoples
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1241,6 +1349,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01117.jpg
 			javaClass: true
+			//parentId: 1_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C117
 			rarity: C
@@ -1248,13 +1360,13 @@
 			cardNum: 117
 			style: Standard
 		}
-		title: Swordsman of the<br>Northern Kingdom
+		title: Swordsman of the Northern Kingdom
 		unique: false
 		side: Free Peoples
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1284,6 +1396,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01118.jpg
 			javaClass: true
+			//parentId: 1_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R118
 			rarity: R
@@ -1297,7 +1413,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1327,6 +1443,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01119.jpg
 			javaClass: true
+			//parentId: 1_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C119
 			rarity: C
@@ -1340,7 +1460,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1370,6 +1490,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01365.jpg
 			javaClass: true
+			//parentId: 1_365
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1P365
 			rarity: P
@@ -1389,7 +1513,7 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}

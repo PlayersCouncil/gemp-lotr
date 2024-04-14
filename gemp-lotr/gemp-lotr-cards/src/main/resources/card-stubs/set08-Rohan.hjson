@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08085.jpg
 			javaClass: true
+			//parentId: 8_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U85
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08086.jpg
 			javaClass: true
+			//parentId: 8_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U86
 			rarity: U
@@ -60,7 +68,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08087.jpg
 			javaClass: true
+			//parentId: 8_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C87
 			rarity: C
@@ -106,7 +118,7 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -133,6 +145,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08088.jpg
 			javaClass: true
+			//parentId: 8_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R88
 			rarity: R
@@ -147,8 +163,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Shield
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -175,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08089.jpg
 			javaClass: true
+			//parentId: 8_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C89
 			rarity: C
@@ -188,7 +207,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -218,6 +237,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08090.jpg
 			javaClass: true
+			//parentId: 8_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C90
 			rarity: C
@@ -231,7 +254,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -261,6 +284,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08091.jpg
 			javaClass: true
+			//parentId: 8_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R91
 			rarity: R
@@ -278,7 +305,6 @@
 		strength: 9
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -305,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08092.jpg
 			javaClass: true
+			//parentId: 8_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R92
 			rarity: R
@@ -324,7 +354,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}

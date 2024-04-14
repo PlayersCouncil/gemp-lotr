@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13044.jpg
 			javaClass: true
+			//parentId: 13_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R44
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13045.jpg
 			javaClass: true
+			//parentId: 13_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U45
 			rarity: U
@@ -57,7 +65,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13046.jpg
 			javaClass: true
+			//parentId: 13_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R46
 			rarity: R
@@ -102,7 +114,6 @@
 		twilight: 0
 		type: Follower
 		resistance: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -129,6 +140,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13047.jpg
 			javaClass: true
+			//parentId: 13_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C47
 			rarity: C
@@ -142,7 +157,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -172,6 +187,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13048.jpg
 			javaClass: true
+			//parentId: 13_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R48
 			rarity: R
@@ -186,8 +205,7 @@
 		twilight: 2
 		type: Possession
 		vitality: 1
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Sméagol)
 		/*requires: {
 			
 		}
@@ -214,6 +232,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13049.jpg
 			javaClass: true
+			//parentId: 13_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R49
 			rarity: R
@@ -227,7 +249,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -254,6 +276,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13050.jpg
 			javaClass: true
+			//parentId: 13_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U50
 			rarity: U
@@ -272,7 +298,6 @@
 		strength: 5
 		vitality: 4
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -299,6 +324,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13051.jpg
 			javaClass: true
+			//parentId: 13_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C51
 			rarity: C
@@ -312,7 +341,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -342,6 +371,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13052.jpg
 			javaClass: true
+			//parentId: 13_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U52
 			rarity: U
@@ -355,7 +388,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -385,6 +418,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13053.jpg
 			javaClass: true
+			//parentId: 13_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U53
 			rarity: U
@@ -398,7 +435,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -428,6 +465,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13054.jpg
 			javaClass: true
+			//parentId: 13_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13C54
 			rarity: C
@@ -441,7 +482,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -471,6 +512,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13055.jpg
 			javaClass: true
+			//parentId: 13_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U55
 			rarity: U
@@ -489,7 +534,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 5
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -516,6 +561,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13056.jpg
 			javaClass: true
+			//parentId: 13_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U56
 			rarity: U
@@ -529,7 +578,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -559,6 +608,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13057.jpg
 			javaClass: true
+			//parentId: 13_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R57
 			rarity: R
@@ -572,7 +625,7 @@
 		culture: Gollum
 		twilight: 3
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -602,6 +655,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13058.jpg
 			javaClass: true
+			//parentId: 13_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R58
 			rarity: R
@@ -615,7 +672,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}

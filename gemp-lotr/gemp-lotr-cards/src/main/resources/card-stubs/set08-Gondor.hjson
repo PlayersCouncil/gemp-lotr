@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08031.jpg
 			javaClass: true
+			//parentId: 8_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C31
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08032.jpg
 			javaClass: true
+			//parentId: 8_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R32
 			rarity: R
@@ -60,8 +68,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -88,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08033.jpg
 			javaClass: true
+			//parentId: 8_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R33
 			rarity: R
@@ -101,7 +112,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -134,6 +145,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08034.jpg
 			javaClass: true
+			//parentId: 8_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C34
 			rarity: C
@@ -153,7 +168,7 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -180,6 +195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08035.jpg
 			javaClass: true
+			//parentId: 8_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C35
 			rarity: C
@@ -194,7 +213,10 @@
 		twilight: 2
 		type: Condition
 		strength: -1
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -221,6 +243,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08036.jpg
 			javaClass: true
+			//parentId: 8_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R36
 			rarity: R
@@ -238,7 +264,10 @@
 		strength: 8
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Knight
+			Archer
+		]
 		/*requires: {
 			
 		}
@@ -265,6 +294,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08037.jpg
 			javaClass: true
+			//parentId: 8_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R37
 			rarity: R
@@ -283,7 +316,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -310,6 +343,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08038.jpg
 			javaClass: true
+			//parentId: 8_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R38
 			rarity: R
@@ -329,7 +366,7 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -356,6 +393,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08039.jpg
 			javaClass: true
+			//parentId: 8_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C39
 			rarity: C
@@ -373,7 +414,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -400,6 +441,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08040.jpg
 			javaClass: true
+			//parentId: 8_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C40
 			rarity: C
@@ -415,8 +460,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a knight
 		/*requires: {
 			
 		}
@@ -443,6 +487,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08041.jpg
 			javaClass: true
+			//parentId: 8_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C41
 			rarity: C
@@ -461,7 +509,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -488,6 +536,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08042.jpg
 			javaClass: true
+			//parentId: 8_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U42
 			rarity: U
@@ -501,7 +553,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -528,6 +580,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08043.jpg
 			javaClass: true
+			//parentId: 8_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R43
 			rarity: R
@@ -546,7 +602,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -573,6 +629,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08044.jpg
 			javaClass: true
+			//parentId: 8_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U44
 			rarity: U
@@ -586,7 +646,10 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -613,6 +676,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08045.jpg
 			javaClass: true
+			//parentId: 8_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U45
 			rarity: U
@@ -631,7 +698,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -658,6 +725,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08046.jpg
 			javaClass: true
+			//parentId: 8_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U46
 			rarity: U
@@ -673,8 +744,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Wraith
 		/*requires: {
 			
 		}
@@ -701,6 +771,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08047.jpg
 			javaClass: true
+			//parentId: 8_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C47
 			rarity: C
@@ -708,13 +782,13 @@
 			cardNum: 47
 			style: Standard
 		}
-		title: Stronger and More<br>Terrible
+		title: Stronger and More Terrible
 		unique: false
 		side: Free Peoples
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -741,6 +815,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08048.jpg
 			javaClass: true
+			//parentId: 8_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C48
 			rarity: C
@@ -754,7 +832,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

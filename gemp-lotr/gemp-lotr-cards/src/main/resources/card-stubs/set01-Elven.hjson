@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01029.jpg
 			javaClass: true
+			//parentId: 1_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U29
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01030.jpg
 			javaClass: true
+			//parentId: 1_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R30
 			rarity: R
@@ -66,7 +74,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -93,6 +101,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01031.jpg
 			javaClass: true
+			//parentId: 1_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U31
 			rarity: U
@@ -108,8 +120,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Elf)
 		/*requires: {
 			
 		}
@@ -136,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01032.jpg
 			javaClass: true
+			//parentId: 1_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C32
 			rarity: C
@@ -149,7 +164,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -179,6 +194,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01033.jpg
 			javaClass: true
+			//parentId: 1_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R33
 			rarity: R
@@ -194,8 +213,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Legolas)
 		/*requires: {
 			
 		}
@@ -222,6 +240,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01034.jpg
 			javaClass: true
+			//parentId: 1_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R34
 			rarity: R
@@ -240,7 +262,6 @@
 		race: Elf
 		strength: 6
 		vitality: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -267,6 +288,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01035.jpg
 			javaClass: true
+			//parentId: 1_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R35
 			rarity: R
@@ -280,7 +305,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -310,6 +335,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01036.jpg
 			javaClass: true
+			//parentId: 1_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R36
 			rarity: R
@@ -323,7 +352,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -353,6 +382,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01037.jpg
 			javaClass: true
+			//parentId: 1_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C37
 			rarity: C
@@ -366,7 +399,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -396,6 +429,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01038.jpg
 			javaClass: true
+			//parentId: 1_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R38
 			rarity: R
@@ -409,7 +446,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -439,6 +476,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01039.jpg
 			javaClass: true
+			//parentId: 1_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C39
 			rarity: C
@@ -452,7 +493,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -482,6 +523,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01040.jpg
 			javaClass: true
+			//parentId: 1_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R40
 			rarity: R
@@ -500,7 +545,6 @@
 		race: Elf
 		strength: 8
 		vitality: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -527,6 +571,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01041.jpg
 			javaClass: true
+			//parentId: 1_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C41
 			rarity: C
@@ -541,8 +589,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Elf)
 		/*requires: {
 			
 		}
@@ -569,6 +616,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01042.jpg
 			javaClass: true
+			//parentId: 1_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C42
 			rarity: C
@@ -583,8 +634,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Cloak
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a companion
 		/*requires: {
 			
 		}
@@ -611,6 +661,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01043.jpg
 			javaClass: true
+			//parentId: 1_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C43
 			rarity: C
@@ -624,7 +678,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -651,6 +705,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01044.jpg
 			javaClass: true
+			//parentId: 1_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U44
 			rarity: U
@@ -664,7 +722,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -694,6 +752,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01045.jpg
 			javaClass: true
+			//parentId: 1_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R45
 			rarity: R
@@ -712,7 +774,6 @@
 		race: Elf
 		strength: 3
 		vitality: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -739,6 +800,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01046.jpg
 			javaClass: true
+			//parentId: 1_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U46
 			rarity: U
@@ -752,7 +817,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -779,6 +844,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01047.jpg
 			javaClass: true
+			//parentId: 1_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R47
 			rarity: R
@@ -794,8 +863,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Arwen)
 		/*requires: {
 			
 		}
@@ -822,6 +890,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01048.jpg
 			javaClass: true
+			//parentId: 1_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U48
 			rarity: U
@@ -840,7 +912,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -867,6 +938,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01049.jpg
 			javaClass: true
+			//parentId: 1_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R49
 			rarity: R
@@ -874,13 +949,13 @@
 			cardNum: 49
 			style: Standard
 		}
-		title: The Last Alliance of<br>Elves and Men
+		title: The Last Alliance of Elves and Men
 		unique: false
 		side: Free Peoples
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -907,6 +982,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01050.jpg
 			javaClass: true
+			//parentId: 1_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R50
 			rarity: R
@@ -926,7 +1005,7 @@
 		vitality: 3
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -953,6 +1032,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01051.jpg
 			javaClass: true
+			//parentId: 1_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U51
 			rarity: U
@@ -972,7 +1055,7 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -999,6 +1082,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01052.jpg
 			javaClass: true
+			//parentId: 1_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C52
 			rarity: C
@@ -1012,7 +1099,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -1042,6 +1129,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01053.jpg
 			javaClass: true
+			//parentId: 1_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C53
 			rarity: C
@@ -1059,7 +1150,6 @@
 		strength: 4
 		vitality: 2
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1086,6 +1176,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01054.jpg
 			javaClass: true
+			//parentId: 1_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U54
 			rarity: U
@@ -1099,7 +1193,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1126,6 +1220,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01055.jpg
 			javaClass: true
+			//parentId: 1_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R55
 			rarity: R
@@ -1139,8 +1237,7 @@
 		culture: Elven
 		twilight: 2
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1167,6 +1264,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01056.jpg
 			javaClass: true
+			//parentId: 1_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U56
 			rarity: U
@@ -1185,7 +1286,7 @@
 		race: Elf
 		strength: 3
 		vitality: 3
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -1212,6 +1313,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01057.jpg
 			javaClass: true
+			//parentId: 1_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U57
 			rarity: U
@@ -1230,7 +1335,7 @@
 		race: Elf
 		strength: 3
 		vitality: 3
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -1257,6 +1362,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01058.jpg
 			javaClass: true
+			//parentId: 1_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C58
 			rarity: C
@@ -1270,7 +1379,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -1300,6 +1409,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01059.jpg
 			javaClass: true
+			//parentId: 1_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C59
 			rarity: C
@@ -1313,7 +1426,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1340,6 +1453,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01060.jpg
 			javaClass: true
+			//parentId: 1_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U60
 			rarity: U
@@ -1358,7 +1475,6 @@
 		race: Elf
 		strength: 5
 		vitality: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1385,6 +1501,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01061.jpg
 			javaClass: true
+			//parentId: 1_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C61
 			rarity: C
@@ -1392,13 +1512,13 @@
 			cardNum: 61
 			style: Standard
 		}
-		title: Songs of the<br>Blessed Realm
+		title: Songs of the Blessed Realm
 		unique: false
 		side: Free Peoples
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1425,6 +1545,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01062.jpg
 			javaClass: true
+			//parentId: 1_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R62
 			rarity: R
@@ -1432,13 +1556,13 @@
 			cardNum: 62
 			style: Standard
 		}
-		title: The Splendor of<br>Their Banners
+		title: The Splendor of Their Banners
 		unique: true
 		side: Free Peoples
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -1465,6 +1589,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01063.jpg
 			javaClass: true
+			//parentId: 1_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U63
 			rarity: U
@@ -1478,7 +1606,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1508,6 +1636,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01064.jpg
 			javaClass: true
+			//parentId: 1_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U64
 			rarity: U
@@ -1515,13 +1647,13 @@
 			cardNum: 64
 			style: Standard
 		}
-		title: Support of the Last<br>Homely House
+		title: Support of the Last Homely House
 		unique: false
 		side: Free Peoples
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1551,6 +1683,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01065.jpg
 			javaClass: true
+			//parentId: 1_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U65
 			rarity: U
@@ -1558,13 +1694,13 @@
 			cardNum: 65
 			style: Standard
 		}
-		title: Swan-ship of the<br>Galadhrim
+		title: Swan-ship of the Galadhrim
 		unique: false
 		side: Free Peoples
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1594,6 +1730,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01066.jpg
 			javaClass: true
+			//parentId: 1_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R66
 			rarity: R
@@ -1608,7 +1748,7 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
-		#keyword: support area
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -1635,6 +1775,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01067.jpg
 			javaClass: true
+			//parentId: 1_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C67
 			rarity: C
@@ -1653,7 +1797,6 @@
 		race: Elf
 		strength: 5
 		vitality: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1680,6 +1823,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01068.jpg
 			javaClass: true
+			//parentId: 1_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C68
 			rarity: C
@@ -1687,13 +1834,13 @@
 			cardNum: 68
 			style: Standard
 		}
-		title: The White Arrows<br>of Lórien
+		title: The White Arrows of Lórien
 		unique: false
 		side: Free Peoples
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Tale
 		/*requires: {
 			
 		}

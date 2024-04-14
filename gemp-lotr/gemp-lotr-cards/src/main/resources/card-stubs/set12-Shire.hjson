@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12119.jpg
 			javaClass: true
+			//parentId: 12_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R119
 			rarity: R
@@ -22,7 +26,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 8
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -49,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12120.jpg
 			javaClass: true
+			//parentId: 12_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R120
 			rarity: R
@@ -62,7 +70,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -92,6 +100,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12121.jpg
 			javaClass: true
+			//parentId: 12_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C121
 			rarity: C
@@ -105,7 +117,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -138,6 +150,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12122.jpg
 			javaClass: true
+			//parentId: 12_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C122
 			rarity: C
@@ -151,7 +167,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -178,6 +194,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12123.jpg
 			javaClass: true
+			//parentId: 12_123
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C123
 			rarity: C
@@ -191,7 +211,7 @@
 		culture: Shire
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -221,6 +241,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12124.jpg
 			javaClass: true
+			//parentId: 12_124
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R124
 			rarity: R
@@ -234,7 +258,7 @@
 		culture: Shire
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -261,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12125.jpg
 			javaClass: true
+			//parentId: 12_125
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12S125
 			rarity: S
@@ -274,7 +302,7 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -301,6 +329,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12126.jpg
 			javaClass: true
+			//parentId: 12_126
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12S126
 			rarity: S
@@ -314,7 +346,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -344,6 +376,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12127.jpg
 			javaClass: true
+			//parentId: 12_127
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R127
 			rarity: R
@@ -362,7 +398,6 @@
 		strength: 3
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -389,6 +424,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12128.jpg
 			javaClass: true
+			//parentId: 12_128
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R128
 			rarity: R
@@ -402,7 +441,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -429,6 +468,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12129.jpg
 			javaClass: true
+			//parentId: 12_129
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R129
 			rarity: R
@@ -447,7 +490,6 @@
 		strength: 2
 		vitality: 3
 		resistance: 8
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -474,6 +516,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12130.jpg
 			javaClass: true
+			//parentId: 12_130
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U130
 			rarity: U
@@ -487,7 +533,7 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -514,6 +560,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12131.jpg
 			javaClass: true
+			//parentId: 12_131
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U131
 			rarity: U
@@ -527,7 +577,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -554,6 +604,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12132.jpg
 			javaClass: true
+			//parentId: 12_132
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U132
 			rarity: U
@@ -567,7 +621,7 @@
 		culture: Shire
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -594,6 +648,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12133.jpg
 			javaClass: true
+			//parentId: 12_133
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12S133
 			rarity: S
@@ -612,7 +670,6 @@
 		strength: 4
 		vitality: 4
 		resistance: 8
-		#keyword: damage+1
 		/*requires: {
 			
 		}

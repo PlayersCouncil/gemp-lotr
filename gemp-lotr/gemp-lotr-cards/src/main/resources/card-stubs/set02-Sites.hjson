@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02115.jpg
 			javaClass: true
+			//parentId: 2_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U115
 			rarity: U
@@ -18,7 +22,6 @@
 		site: 1
 		block: Fellowship
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02116.jpg
 			javaClass: true
+			//parentId: 2_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U116
 			rarity: U
@@ -59,7 +66,7 @@
 		site: 1
 		block: Fellowship
 		direction: Left
-		#keyword: mountain;
+		keywords: Forest
 		/*requires: {
 			
 		}
@@ -86,6 +93,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02117.jpg
 			javaClass: true
+			//parentId: 2_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C117
 			rarity: C
@@ -100,7 +111,6 @@
 		site: 1
 		block: Fellowship
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -127,6 +137,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02118.jpg
 			javaClass: true
+			//parentId: 2_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U118
 			rarity: U
@@ -141,7 +155,7 @@
 		site: 4
 		block: Fellowship
 		direction: Right
-		#keyword: mountain;
+		keywords: Underground
 		/*requires: {
 			
 		}
@@ -168,6 +182,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02119.jpg
 			javaClass: true
+			//parentId: 2_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C119
 			rarity: C
@@ -182,7 +200,7 @@
 		site: 4
 		block: Fellowship
 		direction: Right
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}
@@ -209,6 +227,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02120.jpg
 			javaClass: true
+			//parentId: 2_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U120
 			rarity: U
@@ -223,7 +245,10 @@
 		site: 6
 		block: Fellowship
 		direction: Left
-		#keyword: mountain;
+		keywords: [
+			River
+			Sanctuary
+		]
 		/*requires: {
 			
 		}

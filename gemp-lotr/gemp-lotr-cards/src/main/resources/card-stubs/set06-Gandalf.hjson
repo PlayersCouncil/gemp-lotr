@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06024.jpg
 			javaClass: true
+			//parentId: 6_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U24
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Gandalf
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06025.jpg
 			javaClass: true
+			//parentId: 6_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U25
 			rarity: U
@@ -60,7 +68,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06026.jpg
 			javaClass: true
+			//parentId: 6_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R26
 			rarity: R
@@ -104,7 +116,6 @@
 		twilight: 2
 		type: Condition
 		strength: 4
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -131,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06027.jpg
 			javaClass: true
+			//parentId: 6_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C27
 			rarity: C
@@ -148,7 +163,6 @@
 		strength: 6
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -175,6 +189,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06028.jpg
 			javaClass: true
+			//parentId: 6_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R28
 			rarity: R
@@ -192,7 +210,6 @@
 		strength: 10
 		vitality: 5
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -219,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06029.jpg
 			javaClass: true
+			//parentId: 6_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C29
 			rarity: C
@@ -233,7 +254,6 @@
 		twilight: 1
 		type: Condition
 		strength: 2
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -260,6 +280,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06030.jpg
 			javaClass: true
+			//parentId: 6_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R30
 			rarity: R
@@ -279,7 +303,7 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -306,6 +330,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06031.jpg
 			javaClass: true
+			//parentId: 6_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R31
 			rarity: R
@@ -322,8 +350,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -350,6 +377,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06032.jpg
 			javaClass: true
+			//parentId: 6_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U32
 			rarity: U
@@ -367,7 +398,6 @@
 		strength: 10
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -394,6 +424,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06033.jpg
 			javaClass: true
+			//parentId: 6_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C33
 			rarity: C
@@ -412,7 +446,6 @@
 		strength: 8
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -439,6 +472,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06034.jpg
 			javaClass: true
+			//parentId: 6_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C34
 			rarity: C
@@ -452,7 +489,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -482,6 +519,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06035.jpg
 			javaClass: true
+			//parentId: 6_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R35
 			rarity: R
@@ -500,7 +541,6 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -527,6 +567,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06036.jpg
 			javaClass: true
+			//parentId: 6_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U36
 			rarity: U
@@ -540,7 +584,8 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -570,6 +615,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06037.jpg
 			javaClass: true
+			//parentId: 6_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C37
 			rarity: C
@@ -588,7 +637,7 @@
 		strength: 12
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
+		keywords: Unhasty
 		/*requires: {
 			
 		}
@@ -615,6 +664,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06123.jpg
 			javaClass: true
+			//parentId: 6_123
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R123
 			rarity: R
@@ -629,7 +682,6 @@
 		twilight: 2
 		type: Condition
 		strength: 4
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -656,6 +708,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06124.jpg
 			javaClass: true
+			//parentId: 6_124
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R124
 			rarity: R
@@ -674,7 +730,6 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

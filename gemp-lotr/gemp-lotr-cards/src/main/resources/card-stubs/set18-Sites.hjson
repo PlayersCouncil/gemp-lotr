@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18134.jpg
 			javaClass: true
+			//parentId: 18_134
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U134
 			rarity: U
@@ -17,7 +21,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Mountain
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18135.jpg
 			javaClass: true
+			//parentId: 18_135
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U135
 			rarity: U
@@ -57,7 +65,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Mountain
 		/*requires: {
 			
 		}
@@ -84,6 +92,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18136.jpg
 			javaClass: true
+			//parentId: 18_136
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U136
 			rarity: U
@@ -97,7 +109,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -124,6 +136,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18137.jpg
 			javaClass: true
+			//parentId: 18_137
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U137
 			rarity: U
@@ -137,7 +153,10 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: [
+			Battleground
+			Plains
+		]
 		/*requires: {
 			
 		}
@@ -164,6 +183,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18138.jpg
 			javaClass: true
+			//parentId: 18_138
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U138
 			rarity: U
@@ -177,7 +200,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -204,6 +227,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18139.jpg
 			javaClass: true
+			//parentId: 18_139
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U139
 			rarity: U
@@ -217,7 +244,6 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -244,6 +270,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18140.jpg
 			javaClass: true
+			//parentId: 18_140
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U140
 			rarity: U
@@ -257,7 +287,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Dwelling
 		/*requires: {
 			
 		}

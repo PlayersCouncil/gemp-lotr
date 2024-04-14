@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03087.jpg
 			javaClass: true
+			//parentId: 3_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C87
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Sauron
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03088.jpg
 			javaClass: true
+			//parentId: 3_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U88
 			rarity: U
@@ -60,7 +68,8 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Shadow
+		keywords: Search
 		/*requires: {
 			
 		}
@@ -90,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03089.jpg
 			javaClass: true
+			//parentId: 3_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U89
 			rarity: U
@@ -103,7 +116,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -133,6 +146,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03090.jpg
 			javaClass: true
+			//parentId: 3_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C90
 			rarity: C
@@ -146,7 +163,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -176,6 +193,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03091.jpg
 			javaClass: true
+			//parentId: 3_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R91
 			rarity: R
@@ -189,7 +210,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -216,6 +237,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03092.jpg
 			javaClass: true
+			//parentId: 3_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U92
 			rarity: U
@@ -229,7 +254,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -259,6 +284,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03093.jpg
 			javaClass: true
+			//parentId: 3_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R93
 			rarity: R
@@ -276,7 +305,6 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -303,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03094.jpg
 			javaClass: true
+			//parentId: 3_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C94
 			rarity: C
@@ -320,7 +352,6 @@
 		strength: 6
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -347,6 +378,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03095.jpg
 			javaClass: true
+			//parentId: 3_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C95
 			rarity: C
@@ -364,7 +399,6 @@
 		strength: 5
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -391,6 +425,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03096.jpg
 			javaClass: true
+			//parentId: 3_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U96
 			rarity: U
@@ -408,7 +446,6 @@
 		strength: 10
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -435,6 +472,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03097.jpg
 			javaClass: true
+			//parentId: 3_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U97
 			rarity: U
@@ -452,7 +493,6 @@
 		strength: 5
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -479,6 +519,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03098.jpg
 			javaClass: true
+			//parentId: 3_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C98
 			rarity: C
@@ -496,7 +540,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -523,6 +566,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03099.jpg
 			javaClass: true
+			//parentId: 3_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R99
 			rarity: R
@@ -540,7 +587,6 @@
 		strength: 7
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -567,6 +613,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03100.jpg
 			javaClass: true
+			//parentId: 3_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U100
 			rarity: U
@@ -584,7 +634,6 @@
 		strength: 10
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -611,6 +660,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03101.jpg
 			javaClass: true
+			//parentId: 3_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C101
 			rarity: C
@@ -628,7 +681,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -655,6 +707,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03102.jpg
 			javaClass: true
+			//parentId: 3_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R102
 			rarity: R
@@ -662,13 +718,13 @@
 			cardNum: 102
 			style: Standard
 		}
-		title: Our List of Allies<br>Grows Thin
+		title: Our List of Allies Grows Thin
 		unique: true
 		side: Shadow
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -695,6 +751,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03103.jpg
 			javaClass: true
+			//parentId: 3_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R103
 			rarity: R
@@ -708,7 +768,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -738,6 +798,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03104.jpg
 			javaClass: true
+			//parentId: 3_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R104
 			rarity: R
@@ -751,7 +815,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -778,6 +842,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03105.jpg
 			javaClass: true
+			//parentId: 3_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R105
 			rarity: R
@@ -791,7 +859,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}

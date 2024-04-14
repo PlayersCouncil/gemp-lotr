@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02039.jpg
 			javaClass: true
+			//parentId: 2_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R39
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02040.jpg
 			javaClass: true
+			//parentId: 2_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C40
 			rarity: C
@@ -54,13 +62,13 @@
 			cardNum: 40
 			style: Standard
 		}
-		title: Demands of the<br>Sackville-Bagginses
+		title: Demands of the Sackville-Bagginses
 		unique: false
 		side: Shadow
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02041.jpg
 			javaClass: true
+			//parentId: 2_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U41
 			rarity: U
@@ -100,7 +112,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -130,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02042.jpg
 			javaClass: true
+			//parentId: 2_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C42
 			rarity: C
@@ -147,7 +163,6 @@
 		strength: 6
 		vitality: 2
 		site: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -174,6 +189,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02043.jpg
 			javaClass: true
+			//parentId: 2_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R43
 			rarity: R
@@ -189,8 +208,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Lurtz)
 		/*requires: {
 			
 		}
@@ -217,6 +235,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02044.jpg
 			javaClass: true
+			//parentId: 2_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C44
 			rarity: C
@@ -230,7 +252,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -257,6 +279,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02045.jpg
 			javaClass: true
+			//parentId: 2_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R45
 			rarity: R
@@ -270,7 +296,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -300,6 +326,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02046.jpg
 			javaClass: true
+			//parentId: 2_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R46
 			rarity: R
@@ -317,7 +347,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -344,6 +374,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02047.jpg
 			javaClass: true
+			//parentId: 2_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C47
 			rarity: C
@@ -361,7 +395,10 @@
 		strength: 7
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Damage+1
+		]
 		/*requires: {
 			
 		}
@@ -388,6 +425,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02048.jpg
 			javaClass: true
+			//parentId: 2_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U48
 			rarity: U
@@ -401,7 +442,10 @@
 		culture: Isengard
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Spell
+			Weather
+		]
 		/*requires: {
 			
 		}

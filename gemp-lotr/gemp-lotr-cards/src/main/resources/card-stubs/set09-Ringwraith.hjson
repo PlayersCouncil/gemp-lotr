@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09042.jpg
 			javaClass: true
+			//parentId: 9_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R42
 			rarity: R
@@ -19,8 +23,7 @@
 		type: Artifact
 		strength: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}
@@ -47,6 +50,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09043.jpg
 			javaClass: true
+			//parentId: 9_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+43
 			rarity: R+
@@ -62,8 +69,7 @@
 		type: Artifact
 		strength: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: The Witch-king
 		/*requires: {
 			
 		}
@@ -90,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09044.jpg
 			javaClass: true
+			//parentId: 9_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R44
 			rarity: R
@@ -105,8 +115,7 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}

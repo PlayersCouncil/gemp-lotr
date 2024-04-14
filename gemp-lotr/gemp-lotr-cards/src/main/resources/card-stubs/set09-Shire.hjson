@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09049.jpg
 			javaClass: true
+			//parentId: 9_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+49
 			rarity: R+
@@ -22,7 +26,10 @@
 		strength: 3
 		vitality: 4
 		resistance: 8
-		#keyword: damage+1
+		keywords: [
+			Ring-bound
+			Can-bear-ring
+		]
 		/*requires: {
 			
 		}
@@ -49,6 +56,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09050.jpg
 			javaClass: true
+			//parentId: 9_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R50
 			rarity: R
@@ -62,7 +73,10 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -89,6 +103,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09051.jpg
 			javaClass: true
+			//parentId: 9_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+51
 			rarity: R+
@@ -107,7 +125,6 @@
 		race: 
 		strength: 4
 		vitality: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -134,6 +151,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09052.jpg
 			javaClass: true
+			//parentId: 9_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+52
 			rarity: R+
@@ -152,7 +173,6 @@
 		race: 
 		strength: 14
 		vitality: 9
-		#keyword: damage+1
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09028.jpg
 			javaClass: true
+			//parentId: 9_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+28
 			rarity: R+
@@ -22,7 +26,6 @@
 		strength: 5
 		vitality: 4
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09029.jpg
 			javaClass: true
+			//parentId: 9_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+29
 			rarity: R+
@@ -62,7 +69,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -89,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09030.jpg
 			javaClass: true
+			//parentId: 9_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+30
 			rarity: R+
@@ -107,7 +118,10 @@
 		strength: 3
 		vitality: 4
 		resistance: 7
-		#keyword: damage+1
+		keywords: [
+			Ring-bound
+			Can-bear-ring
+		]
 		/*requires: {
 			
 		}

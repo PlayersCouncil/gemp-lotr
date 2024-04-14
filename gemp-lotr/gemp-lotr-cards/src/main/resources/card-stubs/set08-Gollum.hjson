@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08022.jpg
 			javaClass: true
+			//parentId: 8_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C22
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08023.jpg
 			javaClass: true
+			//parentId: 8_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U23
 			rarity: U
@@ -57,8 +65,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -85,6 +92,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08024.jpg
 			javaClass: true
+			//parentId: 8_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R24
 			rarity: R
@@ -98,7 +109,7 @@
 		culture: Gollum
 		twilight: 4
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -125,6 +136,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08025.jpg
 			javaClass: true
+			//parentId: 8_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R25
 			rarity: R
@@ -143,7 +158,7 @@
 		strength: 8
 		vitality: 8
 		site: 8
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -170,6 +185,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08026.jpg
 			javaClass: true
+			//parentId: 8_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C26
 			rarity: C
@@ -188,7 +207,10 @@
 		strength: 8
 		vitality: 8
 		site: 8
-		#keyword: damage+1
+		keywords: [
+			Enduring
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -215,6 +237,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08027.jpg
 			javaClass: true
+			//parentId: 8_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R27
 			rarity: R
@@ -234,7 +260,7 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -261,6 +287,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08028.jpg
 			javaClass: true
+			//parentId: 8_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C28
 			rarity: C
@@ -274,8 +304,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -302,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08029.jpg
 			javaClass: true
+			//parentId: 8_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U29
 			rarity: U
@@ -315,7 +348,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Fellowship or regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -345,6 +378,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08030.jpg
 			javaClass: true
+			//parentId: 8_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C30
 			rarity: C
@@ -358,8 +395,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

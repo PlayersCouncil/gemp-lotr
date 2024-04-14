@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04298.jpg
 			javaClass: true
+			//parentId: 4_298
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C298
 			rarity: C
@@ -17,8 +21,7 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Ring-bound Hobbit
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04299.jpg
 			javaClass: true
+			//parentId: 4_299
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R299
 			rarity: R
@@ -58,7 +65,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -85,6 +92,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04300.jpg
 			javaClass: true
+			//parentId: 4_300
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R300
 			rarity: R
@@ -99,7 +110,7 @@
 		twilight: 0
 		type: Condition
 		vitality: 1
-		#keyword: support area
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -126,6 +137,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04301.jpg
 			javaClass: true
+			//parentId: 4_301
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R301
 			rarity: R
@@ -145,7 +160,6 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -172,6 +186,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04302.jpg
 			javaClass: true
+			//parentId: 4_302
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C302
 			rarity: C
@@ -191,7 +209,7 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -218,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04303.jpg
 			javaClass: true
+			//parentId: 4_303
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R303
 			rarity: R
@@ -232,8 +254,7 @@
 		twilight: 2
 		type: Possession
 		itemclass: Cloak
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Frodo)
 		/*requires: {
 			
 		}
@@ -260,6 +281,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04304.jpg
 			javaClass: true
+			//parentId: 4_304
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R304
 			rarity: R
@@ -273,7 +298,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -303,6 +328,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04305.jpg
 			javaClass: true
+			//parentId: 4_305
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U305
 			rarity: U
@@ -316,7 +345,7 @@
 		culture: Shire
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -343,6 +372,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04306.jpg
 			javaClass: true
+			//parentId: 4_306
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C306
 			rarity: C
@@ -358,8 +391,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Hobbit
 		/*requires: {
 			
 		}
@@ -386,6 +418,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04307.jpg
 			javaClass: true
+			//parentId: 4_307
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R307
 			rarity: R
@@ -399,7 +435,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -429,6 +465,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04308.jpg
 			javaClass: true
+			//parentId: 4_308
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C308
 			rarity: C
@@ -442,7 +482,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -472,6 +512,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04309.jpg
 			javaClass: true
+			//parentId: 4_309
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U309
 			rarity: U
@@ -485,7 +529,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -515,6 +559,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04310.jpg
 			javaClass: true
+			//parentId: 4_310
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C310
 			rarity: C
@@ -534,7 +582,6 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -561,6 +608,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04311.jpg
 			javaClass: true
+			//parentId: 4_311
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R311
 			rarity: R
@@ -580,7 +631,6 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -607,6 +657,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04312.jpg
 			javaClass: true
+			//parentId: 4_312
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U312
 			rarity: U
@@ -620,7 +674,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -650,6 +704,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04313.jpg
 			javaClass: true
+			//parentId: 4_313
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R313
 			rarity: R
@@ -669,7 +727,6 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -696,6 +753,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04314.jpg
 			javaClass: true
+			//parentId: 4_314
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C314
 			rarity: C
@@ -715,7 +776,6 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -742,6 +802,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04315.jpg
 			javaClass: true
+			//parentId: 4_315
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R315
 			rarity: R
@@ -761,7 +825,7 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -788,6 +852,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04316.jpg
 			javaClass: true
+			//parentId: 4_316
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C316
 			rarity: C
@@ -807,7 +875,7 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -834,6 +902,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04317.jpg
 			javaClass: true
+			//parentId: 4_317
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R317
 			rarity: R
@@ -847,8 +919,7 @@
 		culture: Shire
 		twilight: 0
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Ring-bound Hobbit
 		/*requires: {
 			
 		}
@@ -875,6 +946,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04318.jpg
 			javaClass: true
+			//parentId: 4_318
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U318
 			rarity: U
@@ -888,7 +963,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -918,6 +993,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04319.jpg
 			javaClass: true
+			//parentId: 4_319
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C319
 			rarity: C
@@ -931,7 +1010,8 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -961,6 +1041,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04320.jpg
 			javaClass: true
+			//parentId: 4_320
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U320
 			rarity: U
@@ -974,7 +1058,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1004,6 +1088,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04321.jpg
 			javaClass: true
+			//parentId: 4_321
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C321
 			rarity: C
@@ -1017,7 +1105,8 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -1047,6 +1136,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04322.jpg
 			javaClass: true
+			//parentId: 4_322
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C322
 			rarity: C
@@ -1060,7 +1153,8 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
+		keywords: Stealth
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10104.jpg
 			javaClass: true
+			//parentId: 10_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R104
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10105.jpg
 			javaClass: true
+			//parentId: 10_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U105
 			rarity: U
@@ -57,7 +65,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10106.jpg
 			javaClass: true
+			//parentId: 10_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C106
 			rarity: C
@@ -100,7 +112,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -130,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10107.jpg
 			javaClass: true
+			//parentId: 10_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C107
 			rarity: C
@@ -144,7 +160,6 @@
 		twilight: 1
 		type: Condition
 		vitality: -1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -171,6 +186,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10108.jpg
 			javaClass: true
+			//parentId: 10_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U108
 			rarity: U
@@ -184,7 +203,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -211,6 +230,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10109.jpg
 			javaClass: true
+			//parentId: 10_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C109
 			rarity: C
@@ -224,7 +247,8 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -254,6 +278,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10110.jpg
 			javaClass: true
+			//parentId: 10_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C110
 			rarity: C
@@ -267,7 +295,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -297,6 +325,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10111.jpg
 			javaClass: true
+			//parentId: 10_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U111
 			rarity: U
@@ -310,7 +342,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -340,6 +372,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10112.jpg
 			javaClass: true
+			//parentId: 10_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C112
 			rarity: C
@@ -347,13 +383,14 @@
 			cardNum: 112
 			style: Standard
 		}
-		title: Nine-fingered Frodo<br>and the Ring of Doom
+		title: Nine-fingered Frodo and the Ring of Doom
 		unique: false
 		side: Free Peoples
 		culture: Shire
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -383,6 +420,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10113.jpg
 			javaClass: true
+			//parentId: 10_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C113
 			rarity: C
@@ -397,8 +438,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Hobbit
 		/*requires: {
 			
 		}
@@ -425,6 +465,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10114.jpg
 			javaClass: true
+			//parentId: 10_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U114
 			rarity: U
@@ -438,7 +482,7 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -465,6 +509,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10115.jpg
 			javaClass: true
+			//parentId: 10_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U115
 			rarity: U
@@ -478,7 +526,8 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -508,6 +557,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10116.jpg
 			javaClass: true
+			//parentId: 10_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U116
 			rarity: U
@@ -521,7 +574,10 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -548,6 +604,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10121.jpg
 			javaClass: true
+			//parentId: 10_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10P121
 			rarity: P
@@ -567,7 +627,6 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -594,6 +653,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10122.jpg
 			javaClass: true
+			//parentId: 10_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10P122
 			rarity: P
@@ -613,7 +676,7 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03115.jpg
 			javaClass: true
+			//parentId: 3_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U115
 			rarity: U
@@ -18,7 +22,10 @@
 		site: 6
 		block: Fellowship
 		direction: Left
-		#keyword: mountain;
+		keywords: [
+			Forest
+			Sanctuary
+		]
 		/*requires: {
 			
 		}
@@ -45,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03116.jpg
 			javaClass: true
+			//parentId: 3_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U116
 			rarity: U
@@ -59,7 +70,6 @@
 		site: 4
 		block: Fellowship
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -86,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03117.jpg
 			javaClass: true
+			//parentId: 3_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C117
 			rarity: C
@@ -100,7 +114,7 @@
 		site: 8
 		block: Fellowship
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -127,6 +141,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03118.jpg
 			javaClass: true
+			//parentId: 3_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C118
 			rarity: C
@@ -141,7 +159,7 @@
 		site: 7
 		block: Fellowship
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -168,6 +186,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03119.jpg
 			javaClass: true
+			//parentId: 3_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U119
 			rarity: U
@@ -182,7 +204,7 @@
 		site: 3
 		block: Fellowship
 		direction: Right
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -209,6 +231,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03120.jpg
 			javaClass: true
+			//parentId: 3_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U120
 			rarity: U
@@ -223,7 +249,6 @@
 		site: 9
 		block: Fellowship
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}

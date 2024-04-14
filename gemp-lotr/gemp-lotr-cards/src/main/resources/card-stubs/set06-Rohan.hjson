@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06090.jpg
 			javaClass: true
+			//parentId: 6_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U90
 			rarity: U
@@ -18,8 +22,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] companion
 		/*requires: {
 			
 		}
@@ -46,6 +49,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06091.jpg
 			javaClass: true
+			//parentId: 6_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U91
 			rarity: U
@@ -59,7 +66,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -86,6 +93,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06092.jpg
 			javaClass: true
+			//parentId: 6_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R92
 			rarity: R
@@ -105,7 +116,7 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -132,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06093.jpg
 			javaClass: true
+			//parentId: 6_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U93
 			rarity: U
@@ -145,7 +160,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -175,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06094.jpg
 			javaClass: true
+			//parentId: 6_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R94
 			rarity: R
@@ -193,7 +212,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -220,6 +238,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06095.jpg
 			javaClass: true
+			//parentId: 6_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C95
 			rarity: C
@@ -238,7 +260,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -265,6 +286,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06096.jpg
 			javaClass: true
+			//parentId: 6_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R96
 			rarity: R
@@ -278,7 +303,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -308,6 +333,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06097.jpg
 			javaClass: true
+			//parentId: 6_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C97
 			rarity: C
@@ -321,7 +350,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

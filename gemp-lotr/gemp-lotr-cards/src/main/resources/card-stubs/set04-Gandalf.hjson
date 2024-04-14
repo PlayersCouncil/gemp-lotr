@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04088.jpg
 			javaClass: true
+			//parentId: 4_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U88
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04089.jpg
 			javaClass: true
+			//parentId: 4_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R89
 			rarity: R
@@ -63,7 +71,6 @@
 		vitality: 4
 		signet: Theoden
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -90,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04090.jpg
 			javaClass: true
+			//parentId: 4_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C90
 			rarity: C
@@ -109,7 +120,6 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -136,6 +146,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04091.jpg
 			javaClass: true
+			//parentId: 4_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R91
 			rarity: R
@@ -152,8 +166,7 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Staff
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -180,6 +193,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04092.jpg
 			javaClass: true
+			//parentId: 4_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R92
 			rarity: R
@@ -193,7 +210,8 @@
 		culture: Gandalf
 		twilight: 5
 		type: Event
-		keyword: 
+		keywords: Fellowship
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -223,6 +241,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04093.jpg
 			javaClass: true
+			//parentId: 4_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C93
 			rarity: C
@@ -236,7 +258,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -266,6 +288,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04094.jpg
 			javaClass: true
+			//parentId: 4_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R94
 			rarity: R
@@ -281,7 +307,7 @@
 		type: Condition
 		strength: 2
 		vitality: 1
-		#keyword: support area
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -308,6 +334,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04095.jpg
 			javaClass: true
+			//parentId: 4_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R95
 			rarity: R
@@ -321,7 +351,8 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: 
+		#keywords: Regroup
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -351,6 +382,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04096.jpg
 			javaClass: true
+			//parentId: 4_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U96
 			rarity: U
@@ -364,7 +399,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -394,6 +429,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04097.jpg
 			javaClass: true
+			//parentId: 4_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C97
 			rarity: C
@@ -407,7 +446,8 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Skirmish
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -437,6 +477,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04098.jpg
 			javaClass: true
+			//parentId: 4_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C98
 			rarity: C
@@ -450,7 +494,8 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Maneuver
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -480,6 +525,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04099.jpg
 			javaClass: true
+			//parentId: 4_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U99
 			rarity: U
@@ -493,7 +542,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -523,6 +572,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04100.jpg
 			javaClass: true
+			//parentId: 4_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R100
 			rarity: R
@@ -538,8 +591,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -566,6 +618,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04101.jpg
 			javaClass: true
+			//parentId: 4_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U101
 			rarity: U
@@ -579,7 +635,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -609,6 +665,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04102.jpg
 			javaClass: true
+			//parentId: 4_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C102
 			rarity: C
@@ -622,7 +682,8 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Regroup
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -652,6 +713,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04103.jpg
 			javaClass: true
+			//parentId: 4_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R103
 			rarity: R
@@ -666,11 +731,11 @@
 		culture: Gandalf
 		twilight: 4
 		type: Ally
-		allyHome: fellowship,2T & 8T
+		allyHome: towers,2,towers,8
 		race: Ent
 		strength: 12
 		vitality: 4
-		#keyword: damage+1
+		keywords: Unhasty
 		/*requires: {
 			
 		}
@@ -697,6 +762,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04104.jpg
 			javaClass: true
+			//parentId: 4_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C104
 			rarity: C
@@ -711,11 +780,11 @@
 		culture: Gandalf
 		twilight: 4
 		type: Ally
-		allyHome: fellowship,2T & 8T
+		allyHome: towers,2,towers,8
 		race: Ent
 		strength: 12
 		vitality: 4
-		#keyword: damage+1
+		keywords: Unhasty
 		/*requires: {
 			
 		}
@@ -742,6 +811,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04105.jpg
 			javaClass: true
+			//parentId: 4_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C105
 			rarity: C
@@ -755,7 +828,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -785,6 +858,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04106.jpg
 			javaClass: true
+			//parentId: 4_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R106
 			rarity: R
@@ -798,7 +875,7 @@
 		culture: Gandalf
 		twilight: 5
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -828,6 +905,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04107.jpg
 			javaClass: true
+			//parentId: 4_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R107
 			rarity: R
@@ -841,7 +922,6 @@
 		culture: Gandalf
 		twilight: 1
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -868,6 +948,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04108.jpg
 			javaClass: true
+			//parentId: 4_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U108
 			rarity: U
@@ -881,7 +965,7 @@
 		culture: Gandalf
 		twilight: 4
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}

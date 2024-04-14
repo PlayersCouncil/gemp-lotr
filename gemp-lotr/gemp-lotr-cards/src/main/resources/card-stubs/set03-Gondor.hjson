@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03037.jpg
 			javaClass: true
+			//parentId: 3_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C37
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03038.jpg
 			javaClass: true
+			//parentId: 3_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R38
 			rarity: R
@@ -63,7 +71,7 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03039.jpg
 			javaClass: true
+			//parentId: 3_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R39
 			rarity: R
@@ -103,7 +115,8 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -133,6 +146,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03040.jpg
 			javaClass: true
+			//parentId: 3_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R40
 			rarity: R
@@ -146,7 +163,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -173,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03041.jpg
 			javaClass: true
+			//parentId: 3_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R41
 			rarity: R
@@ -186,7 +207,10 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -213,6 +237,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03042.jpg
 			javaClass: true
+			//parentId: 3_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R42
 			rarity: R
@@ -226,8 +254,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Boromir)
 		/*requires: {
 			
 		}
@@ -254,6 +281,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03043.jpg
 			javaClass: true
+			//parentId: 3_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C43
 			rarity: C
@@ -267,7 +298,8 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -297,6 +329,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03044.jpg
 			javaClass: true
+			//parentId: 3_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R44
 			rarity: R
@@ -310,8 +346,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -338,6 +373,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03045.jpg
 			javaClass: true
+			//parentId: 3_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U45
 			rarity: U
@@ -351,7 +390,8 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
+		keywords: Tale
 		/*requires: {
 			
 		}
@@ -381,6 +421,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03046.jpg
 			javaClass: true
+			//parentId: 3_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U46
 			rarity: U
@@ -394,7 +438,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -424,6 +468,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03047.jpg
 			javaClass: true
+			//parentId: 3_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U47
 			rarity: U
@@ -437,7 +485,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -467,6 +515,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03048.jpg
 			javaClass: true
+			//parentId: 3_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C48
 			rarity: C
@@ -480,7 +532,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -510,6 +562,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03122.jpg
 			javaClass: true
+			//parentId: 3_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3P122
 			rarity: P
@@ -529,7 +585,7 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}

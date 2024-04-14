@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09024.jpg
 			javaClass: true
+			//parentId: 9_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R24
 			rarity: R
@@ -18,7 +22,6 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09025.jpg
 			javaClass: true
+			//parentId: 9_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R25
 			rarity: R
@@ -62,7 +69,7 @@
 		strength: 6
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -89,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09026.jpg
 			javaClass: true
+			//parentId: 9_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+26
 			rarity: R+
@@ -108,7 +119,6 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -135,6 +145,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09027.jpg
 			javaClass: true
+			//parentId: 9_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R27
 			rarity: R
@@ -148,7 +162,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

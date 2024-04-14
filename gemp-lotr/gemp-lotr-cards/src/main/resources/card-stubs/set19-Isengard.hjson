@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19016.jpg
 			javaClass: true
+			//parentId: 19_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P16
 			rarity: P
@@ -22,7 +26,6 @@
 		strength: 4
 		vitality: 3
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19017.jpg
 			javaClass: true
+			//parentId: 19_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P17
 			rarity: P
@@ -62,7 +69,10 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Weather
+			Support Area
+		]
 		/*requires: {
 			
 		}

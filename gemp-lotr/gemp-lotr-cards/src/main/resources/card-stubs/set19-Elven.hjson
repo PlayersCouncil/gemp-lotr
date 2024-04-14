@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19005.jpg
 			javaClass: true
+			//parentId: 19_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P5
 			rarity: P
@@ -18,7 +22,6 @@
 		twilight: 0
 		type: Condition
 		strength: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19006.jpg
 			javaClass: true
+			//parentId: 19_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P6
 			rarity: P
@@ -63,7 +70,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -90,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19007.jpg
 			javaClass: true
+			//parentId: 19_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P7
 			rarity: P
@@ -108,7 +119,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
+		keywords: [
+			Fellowship
+			Archer
+		]
 		/*requires: {
 			
 		}

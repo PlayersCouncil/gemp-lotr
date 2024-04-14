@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02049.jpg
 			javaClass: true
+			//parentId: 2_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R49
 			rarity: R
@@ -21,7 +25,7 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -48,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02050.jpg
 			javaClass: true
+			//parentId: 2_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R50
 			rarity: R
@@ -63,8 +71,7 @@
 		type: Artifact
 		strength: 3
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: The Balrog
 		/*requires: {
 			
 		}
@@ -91,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02051.jpg
 			javaClass: true
+			//parentId: 2_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C51
 			rarity: C
@@ -109,7 +120,10 @@
 		strength: 17
 		vitality: 5
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Damage+1
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -136,6 +150,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02052.jpg
 			javaClass: true
+			//parentId: 2_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R52
 			rarity: R
@@ -154,7 +172,10 @@
 		strength: 17
 		vitality: 5
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Damage+1
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -181,6 +202,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02053.jpg
 			javaClass: true
+			//parentId: 2_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R53
 			rarity: R
@@ -195,8 +220,7 @@
 		twilight: 1
 		type: Possession
 		strength: 2
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Cave Troll of Moria)
 		/*requires: {
 			
 		}
@@ -223,6 +247,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02054.jpg
 			javaClass: true
+			//parentId: 2_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U54
 			rarity: U
@@ -237,7 +265,6 @@
 		twilight: 1
 		type: Condition
 		strength: -2
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -264,6 +291,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02055.jpg
 			javaClass: true
+			//parentId: 2_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C55
 			rarity: C
@@ -277,7 +308,7 @@
 		culture: Moria
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -304,6 +335,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02056.jpg
 			javaClass: true
+			//parentId: 2_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U56
 			rarity: U
@@ -317,7 +352,7 @@
 		culture: Moria
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -344,6 +379,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02057.jpg
 			javaClass: true
+			//parentId: 2_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R57
 			rarity: R
@@ -357,7 +396,7 @@
 		culture: Moria
 		twilight: 1
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -387,6 +426,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02058.jpg
 			javaClass: true
+			//parentId: 2_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C58
 			rarity: C
@@ -404,7 +447,7 @@
 		strength: 4
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: Tentacle
 		/*requires: {
 			
 		}
@@ -431,6 +474,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02059.jpg
 			javaClass: true
+			//parentId: 2_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U59
 			rarity: U
@@ -444,7 +491,7 @@
 		culture: Moria
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -474,6 +521,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02060.jpg
 			javaClass: true
+			//parentId: 2_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C60
 			rarity: C
@@ -491,7 +542,7 @@
 		strength: 4
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -518,6 +569,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02061.jpg
 			javaClass: true
+			//parentId: 2_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C61
 			rarity: C
@@ -535,7 +590,6 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -562,6 +616,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02062.jpg
 			javaClass: true
+			//parentId: 2_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C62
 			rarity: C
@@ -579,7 +637,6 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -606,6 +663,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02063.jpg
 			javaClass: true
+			//parentId: 2_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C63
 			rarity: C
@@ -623,7 +684,6 @@
 		strength: 8
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -650,6 +710,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02064.jpg
 			javaClass: true
+			//parentId: 2_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C64
 			rarity: C
@@ -667,7 +731,6 @@
 		strength: 4
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -694,6 +757,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02065.jpg
 			javaClass: true
+			//parentId: 2_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C65
 			rarity: C
@@ -711,7 +778,6 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -738,6 +804,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02066.jpg
 			javaClass: true
+			//parentId: 2_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R66
 			rarity: R
@@ -755,7 +825,10 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Tentacle
+			Damage+1
+		]
 		/*requires: {
 			
 		}
@@ -782,6 +855,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02067.jpg
 			javaClass: true
+			//parentId: 2_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U67
 			rarity: U
@@ -799,7 +876,7 @@
 		strength: 8
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -826,6 +903,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02068.jpg
 			javaClass: true
+			//parentId: 2_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U68
 			rarity: U
@@ -839,7 +920,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -869,6 +950,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02069.jpg
 			javaClass: true
+			//parentId: 2_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C69
 			rarity: C
@@ -882,7 +967,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -912,6 +997,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02070.jpg
 			javaClass: true
+			//parentId: 2_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U70
 			rarity: U
@@ -925,7 +1014,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -955,6 +1044,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02071.jpg
 			javaClass: true
+			//parentId: 2_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U71
 			rarity: U
@@ -962,13 +1055,12 @@
 			cardNum: 71
 			style: Standard
 		}
-		title: Throw Yourself in<br>Next Time
+		title: Throw Yourself in Next Time
 		unique: false
 		side: Shadow
 		culture: Moria
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -995,6 +1087,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02072.jpg
 			javaClass: true
+			//parentId: 2_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U72
 			rarity: U
@@ -1008,7 +1104,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -1038,6 +1134,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02073.jpg
 			javaClass: true
+			//parentId: 2_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R73
 			rarity: R
@@ -1056,7 +1156,7 @@
 		strength: 11
 		vitality: 4
 		site: 4
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -1083,6 +1183,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02074.jpg
 			javaClass: true
+			//parentId: 2_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R74
 			rarity: R
@@ -1098,8 +1202,7 @@
 		type: Artifact
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: The Balrog
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15039.jpg
 			javaClass: true
+			//parentId: 15_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U39
 			rarity: U
@@ -17,7 +21,6 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -44,6 +47,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15040.jpg
 			javaClass: true
+			//parentId: 15_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R40
 			rarity: R
@@ -57,7 +64,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -84,6 +91,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15041.jpg
 			javaClass: true
+			//parentId: 15_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U41
 			rarity: U
@@ -97,7 +108,6 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -124,6 +134,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15042.jpg
 			javaClass: true
+			//parentId: 15_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R42
 			rarity: R
@@ -137,7 +151,7 @@
 		culture: Gollum
 		twilight: 3
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -167,6 +181,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15043.jpg
 			javaClass: true
+			//parentId: 15_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R43
 			rarity: R
@@ -184,7 +202,6 @@
 		race: 
 		vitality: 4
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -211,6 +228,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15044.jpg
 			javaClass: true
+			//parentId: 15_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U44
 			rarity: U
@@ -224,7 +245,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -251,6 +272,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15045.jpg
 			javaClass: true
+			//parentId: 15_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C45
 			rarity: C
@@ -264,7 +289,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -294,6 +319,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15046.jpg
 			javaClass: true
+			//parentId: 15_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C46
 			rarity: C
@@ -307,7 +336,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -334,6 +363,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15047.jpg
 			javaClass: true
+			//parentId: 15_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R47
 			rarity: R
@@ -347,7 +380,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -374,6 +407,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15048.jpg
 			javaClass: true
+			//parentId: 15_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C48
 			rarity: C
@@ -387,7 +424,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -417,6 +454,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15049.jpg
 			javaClass: true
+			//parentId: 15_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R49
 			rarity: R
@@ -435,7 +476,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 5
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}
@@ -462,6 +503,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15050.jpg
 			javaClass: true
+			//parentId: 15_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U50
 			rarity: U
@@ -475,7 +520,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -505,6 +550,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15051.jpg
 			javaClass: true
+			//parentId: 15_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U51
 			rarity: U
@@ -518,7 +567,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -548,6 +597,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15052.jpg
 			javaClass: true
+			//parentId: 15_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U52
 			rarity: U
@@ -561,7 +614,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -591,6 +644,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15053.jpg
 			javaClass: true
+			//parentId: 15_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R53
 			rarity: R
@@ -604,7 +661,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}

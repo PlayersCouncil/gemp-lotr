@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10035.jpg
 			javaClass: true
+			//parentId: 10_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U35
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

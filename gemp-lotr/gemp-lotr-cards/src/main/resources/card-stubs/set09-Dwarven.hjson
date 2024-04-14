@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09003.jpg
 			javaClass: true
+			//parentId: 9_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+3
 			rarity: R+
@@ -22,7 +26,7 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09004.jpg
 			javaClass: true
+			//parentId: 9_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+4
 			rarity: R+
@@ -67,7 +75,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 4
-		#keyword: damage+1
+		keywords: [
+			Damage+1
+			Can-bear-ring
+		]
 		/*requires: {
 			
 		}
@@ -94,6 +105,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09005.jpg
 			javaClass: true
+			//parentId: 9_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R5
 			rarity: R
@@ -112,7 +127,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -139,6 +153,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09006.jpg
 			javaClass: true
+			//parentId: 9_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R6
 			rarity: R
@@ -154,8 +172,7 @@
 		type: Artifact
 		strength: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -182,6 +199,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09007.jpg
 			javaClass: true
+			//parentId: 9_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R+7
 			rarity: R+
@@ -197,8 +218,7 @@
 		type: Artifact
 		strength: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -225,6 +245,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09008.jpg
 			javaClass: true
+			//parentId: 9_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R8
 			rarity: R
@@ -240,8 +264,7 @@
 		type: Artifact
 		strength: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -268,6 +291,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09009.jpg
 			javaClass: true
+			//parentId: 9_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R9
 			rarity: R
@@ -284,8 +311,7 @@
 		strength: 1
 		vitality: 1
 		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -312,6 +338,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09010.jpg
 			javaClass: true
+			//parentId: 9_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R10
 			rarity: R
@@ -330,7 +360,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -357,6 +386,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR09011.jpg
 			javaClass: true
+			//parentId: 9_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 9R11
 			rarity: R
@@ -375,7 +408,6 @@
 		strength: 5
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08049.jpg
 			javaClass: true
+			//parentId: 8_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R49
 			rarity: R
@@ -21,7 +25,10 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Corsair
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -48,6 +55,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08050.jpg
 			javaClass: true
+			//parentId: 8_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C50
 			rarity: C
@@ -61,8 +72,7 @@
 		culture: Raider
 		twilight: 2
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -89,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08051.jpg
 			javaClass: true
+			//parentId: 8_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R51
 			rarity: R
@@ -106,7 +120,11 @@
 		strength: 14
 		vitality: 4
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Corsair
+			Enduring
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -133,6 +151,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08052.jpg
 			javaClass: true
+			//parentId: 8_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C52
 			rarity: C
@@ -148,8 +170,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a corsair
 		/*requires: {
 			
 		}
@@ -176,6 +197,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08053.jpg
 			javaClass: true
+			//parentId: 8_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C53
 			rarity: C
@@ -193,7 +218,7 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Corsair
 		/*requires: {
 			
 		}
@@ -220,6 +245,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08054.jpg
 			javaClass: true
+			//parentId: 8_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C54
 			rarity: C
@@ -237,7 +266,7 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Corsair
 		/*requires: {
 			
 		}
@@ -264,6 +293,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08055.jpg
 			javaClass: true
+			//parentId: 8_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C55
 			rarity: C
@@ -281,7 +314,7 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Corsair
 		/*requires: {
 			
 		}
@@ -308,6 +341,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08056.jpg
 			javaClass: true
+			//parentId: 8_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U56
 			rarity: U
@@ -325,7 +362,7 @@
 		strength: 5
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: Corsair
 		/*requires: {
 			
 		}
@@ -352,6 +389,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08057.jpg
 			javaClass: true
+			//parentId: 8_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R57
 			rarity: R
@@ -369,7 +410,7 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Corsair
 		/*requires: {
 			
 		}
@@ -396,6 +437,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08058.jpg
 			javaClass: true
+			//parentId: 8_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C58
 			rarity: C
@@ -413,7 +458,7 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Corsair
 		/*requires: {
 			
 		}
@@ -440,6 +485,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08059.jpg
 			javaClass: true
+			//parentId: 8_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U59
 			rarity: U
@@ -453,8 +502,7 @@
 		culture: Raider
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -481,6 +529,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08060.jpg
 			javaClass: true
+			//parentId: 8_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U60
 			rarity: U
@@ -498,7 +550,10 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Archer
+		]
 		/*requires: {
 			
 		}
@@ -525,6 +580,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08061.jpg
 			javaClass: true
+			//parentId: 8_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C61
 			rarity: C
@@ -538,7 +597,7 @@
 		culture: Raider
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -565,6 +624,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08062.jpg
 			javaClass: true
+			//parentId: 8_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R62
 			rarity: R
@@ -582,7 +645,7 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Easterling
 		/*requires: {
 			
 		}
@@ -609,6 +672,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08063.jpg
 			javaClass: true
+			//parentId: 8_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C63
 			rarity: C
@@ -622,7 +689,7 @@
 		culture: Raider
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -649,6 +716,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08064.jpg
 			javaClass: true
+			//parentId: 8_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U64
 			rarity: U
@@ -664,8 +735,7 @@
 		type: Possession
 		strength: 3
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Southron
 		/*requires: {
 			
 		}
@@ -692,6 +762,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08065.jpg
 			javaClass: true
+			//parentId: 8_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R65
 			rarity: R
@@ -705,8 +779,7 @@
 		culture: Raider
 		twilight: 2
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -733,6 +806,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08066.jpg
 			javaClass: true
+			//parentId: 8_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C66
 			rarity: C
@@ -746,7 +823,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06083.jpg
 			javaClass: true
+			//parentId: 6_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U83
 			rarity: U
@@ -19,8 +23,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}
@@ -47,6 +50,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06084.jpg
 			javaClass: true
+			//parentId: 6_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U84
 			rarity: U
@@ -60,7 +67,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -87,6 +94,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06085.jpg
 			javaClass: true
+			//parentId: 6_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R85
 			rarity: R
@@ -102,8 +113,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}
@@ -130,6 +140,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06086.jpg
 			javaClass: true
+			//parentId: 6_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U86
 			rarity: U
@@ -148,7 +162,6 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -175,6 +188,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06087.jpg
 			javaClass: true
+			//parentId: 6_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U87
 			rarity: U
@@ -193,7 +210,6 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -220,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06088.jpg
 			javaClass: true
+			//parentId: 6_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R88
 			rarity: R
@@ -238,7 +258,7 @@
 		strength: 12
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -265,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06089.jpg
 			javaClass: true
+			//parentId: 6_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R89
 			rarity: R
@@ -278,7 +302,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -305,6 +329,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06122.jpg
 			javaClass: true
+			//parentId: 6_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6P122
 			rarity: P
@@ -323,7 +351,7 @@
 		strength: 14
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12079.jpg
 			javaClass: true
+			//parentId: 12_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R79
 			rarity: R
@@ -22,7 +26,7 @@
 		strength: 17
 		vitality: 5
 		site: 4
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12080.jpg
 			javaClass: true
+			//parentId: 12_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R80
 			rarity: R
@@ -65,8 +73,7 @@
 		type: Artifact
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: The Balrog
 		/*requires: {
 			
 		}

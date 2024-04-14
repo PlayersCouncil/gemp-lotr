@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11028.jpg
 			javaClass: true
+			//parentId: 11_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U28
 			rarity: U
@@ -17,8 +21,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11029.jpg
 			javaClass: true
+			//parentId: 11_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U29
 			rarity: U
@@ -58,7 +65,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -88,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11030.jpg
 			javaClass: true
+			//parentId: 11_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R30
 			rarity: R
@@ -106,7 +117,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -133,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11031.jpg
 			javaClass: true
+			//parentId: 11_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C31
 			rarity: C
@@ -146,7 +160,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -176,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11032.jpg
 			javaClass: true
+			//parentId: 11_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S32
 			rarity: S
@@ -189,7 +207,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -216,6 +234,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11033.jpg
 			javaClass: true
+			//parentId: 11_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11S33
 			rarity: S
@@ -234,7 +256,6 @@
 		strength: 7
 		vitality: 4
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -261,6 +282,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11034.jpg
 			javaClass: true
+			//parentId: 11_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R34
 			rarity: R
@@ -277,8 +302,7 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Staff
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Wizard
 		/*requires: {
 			
 		}
@@ -305,6 +329,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11035.jpg
 			javaClass: true
+			//parentId: 11_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11R35
 			rarity: R
@@ -321,8 +349,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -349,6 +376,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11036.jpg
 			javaClass: true
+			//parentId: 11_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C36
 			rarity: C
@@ -362,7 +393,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -392,6 +423,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11037.jpg
 			javaClass: true
+			//parentId: 11_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U37
 			rarity: U
@@ -405,7 +440,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -432,6 +467,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11038.jpg
 			javaClass: true
+			//parentId: 11_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U38
 			rarity: U
@@ -445,7 +484,11 @@
 		culture: Gandalf
 		twilight: 6
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
+		keywords: [
+			Spell
+			Toil 2
+		]
 		/*requires: {
 			
 		}
@@ -475,6 +518,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11039.jpg
 			javaClass: true
+			//parentId: 11_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11C39
 			rarity: C
@@ -488,7 +535,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -518,6 +565,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR11040.jpg
 			javaClass: true
+			//parentId: 11_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 11U40
 			rarity: U
@@ -534,8 +585,7 @@
 		type: Possession
 		resistance: 2
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06001.jpg
 			javaClass: true
+			//parentId: 6_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C1
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Dunland
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06002.jpg
 			javaClass: true
+			//parentId: 6_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C2
 			rarity: C
@@ -61,7 +69,6 @@
 		strength: 7
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -88,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06003.jpg
 			javaClass: true
+			//parentId: 6_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C3
 			rarity: C
@@ -105,7 +116,6 @@
 		strength: 11
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -132,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06004.jpg
 			javaClass: true
+			//parentId: 6_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C4
 			rarity: C
@@ -149,7 +163,6 @@
 		strength: 10
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -176,6 +189,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06005.jpg
 			javaClass: true
+			//parentId: 6_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C5
 			rarity: C
@@ -193,7 +210,6 @@
 		strength: 10
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -220,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06006.jpg
 			javaClass: true
+			//parentId: 6_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R6
 			rarity: R
@@ -237,7 +257,6 @@
 		strength: 17
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -264,6 +283,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06007.jpg
 			javaClass: true
+			//parentId: 6_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R7
 			rarity: R
@@ -277,7 +300,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -304,6 +327,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06008.jpg
 			javaClass: true
+			//parentId: 6_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U8
 			rarity: U
@@ -311,13 +338,13 @@
 			cardNum: 8
 			style: Standard
 		}
-		title: Too Long Have These<br>Peasants Stood
+		title: Too Long Have These Peasants Stood
 		unique: false
 		side: Shadow
 		culture: Dunland
 		twilight: 2
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}

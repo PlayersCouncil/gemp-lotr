@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07079.jpg
 			javaClass: true
+			//parentId: 7_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R79
 			rarity: R
@@ -21,8 +25,7 @@
 		strength: 2
 		vitality: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Aragorn)
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07080.jpg
 			javaClass: true
+			//parentId: 7_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R80
 			rarity: R
@@ -65,8 +72,7 @@
 		type: Artifact
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Aragorn)
 		/*requires: {
 			
 		}
@@ -93,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07081.jpg
 			javaClass: true
+			//parentId: 7_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C81
 			rarity: C
@@ -112,7 +122,7 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -139,6 +149,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07082.jpg
 			javaClass: true
+			//parentId: 7_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C82
 			rarity: C
@@ -156,7 +170,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -183,6 +196,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07083.jpg
 			javaClass: true
+			//parentId: 7_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C83
 			rarity: C
@@ -196,7 +213,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -226,6 +243,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07084.jpg
 			javaClass: true
+			//parentId: 7_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C84
 			rarity: C
@@ -239,7 +260,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -269,6 +290,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07085.jpg
 			javaClass: true
+			//parentId: 7_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R85
 			rarity: R
@@ -288,7 +313,6 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -315,6 +339,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07086.jpg
 			javaClass: true
+			//parentId: 7_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C86
 			rarity: C
@@ -334,7 +362,6 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -361,6 +388,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07087.jpg
 			javaClass: true
+			//parentId: 7_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R87
 			rarity: R
@@ -378,7 +409,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -405,6 +435,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07088.jpg
 			javaClass: true
+			//parentId: 7_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U88
 			rarity: U
@@ -422,7 +456,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -449,6 +482,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07089.jpg
 			javaClass: true
+			//parentId: 7_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C89
 			rarity: C
@@ -462,7 +499,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -492,6 +529,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07090.jpg
 			javaClass: true
+			//parentId: 7_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C90
 			rarity: C
@@ -511,7 +552,7 @@
 		vitality: 3
 		signet: Theoden
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -538,6 +579,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07091.jpg
 			javaClass: true
+			//parentId: 7_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R91
 			rarity: R
@@ -557,7 +602,7 @@
 		vitality: 3
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -584,6 +629,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07092.jpg
 			javaClass: true
+			//parentId: 7_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C92
 			rarity: C
@@ -598,7 +647,10 @@
 		twilight: 1
 		type: Condition
 		strength: -1
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -625,6 +677,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07093.jpg
 			javaClass: true
+			//parentId: 7_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U93
 			rarity: U
@@ -639,8 +695,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -667,6 +722,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07094.jpg
 			javaClass: true
+			//parentId: 7_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U94
 			rarity: U
@@ -681,8 +740,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -709,6 +767,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07095.jpg
 			javaClass: true
+			//parentId: 7_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R95
 			rarity: R
@@ -722,7 +784,7 @@
 		culture: Gondor
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -749,6 +811,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07096.jpg
 			javaClass: true
+			//parentId: 7_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C96
 			rarity: C
@@ -766,7 +832,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -793,6 +859,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07097.jpg
 			javaClass: true
+			//parentId: 7_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R97
 			rarity: R
@@ -806,11 +876,10 @@
 		culture: Gondor
 		twilight: 1
 		type: Ally
-		allyHome: fellowship,3T
+		allyHome: towers,3
 		race: Man
 		strength: 6
 		vitality: 1
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -837,6 +906,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07098.jpg
 			javaClass: true
+			//parentId: 7_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U98
 			rarity: U
@@ -852,8 +925,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -880,6 +952,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07099.jpg
 			javaClass: true
+			//parentId: 7_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C99
 			rarity: C
@@ -893,7 +969,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -923,6 +999,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07100.jpg
 			javaClass: true
+			//parentId: 7_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R100
 			rarity: R
@@ -936,7 +1016,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -966,6 +1046,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07101.jpg
 			javaClass: true
+			//parentId: 7_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R101
 			rarity: R
@@ -979,7 +1063,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1006,6 +1090,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07102.jpg
 			javaClass: true
+			//parentId: 7_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U102
 			rarity: U
@@ -1019,7 +1107,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1046,6 +1134,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07103.jpg
 			javaClass: true
+			//parentId: 7_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R103
 			rarity: R
@@ -1059,7 +1151,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1086,6 +1178,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07104.jpg
 			javaClass: true
+			//parentId: 7_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R104
 			rarity: R
@@ -1099,7 +1195,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1129,6 +1225,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07105.jpg
 			javaClass: true
+			//parentId: 7_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C105
 			rarity: C
@@ -1142,7 +1242,6 @@
 		culture: Gondor
 		twilight: 3
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -1169,6 +1268,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07106.jpg
 			javaClass: true
+			//parentId: 7_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C106
 			rarity: C
@@ -1186,7 +1289,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Knight
 		/*requires: {
 			
 		}
@@ -1213,6 +1316,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07107.jpg
 			javaClass: true
+			//parentId: 7_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U107
 			rarity: U
@@ -1230,7 +1337,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1257,6 +1363,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07108.jpg
 			javaClass: true
+			//parentId: 7_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C108
 			rarity: C
@@ -1272,8 +1382,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -1300,6 +1409,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07109.jpg
 			javaClass: true
+			//parentId: 7_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U109
 			rarity: U
@@ -1313,7 +1426,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1340,6 +1453,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07110.jpg
 			javaClass: true
+			//parentId: 7_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U110
 			rarity: U
@@ -1358,7 +1475,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -1385,6 +1502,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07111.jpg
 			javaClass: true
+			//parentId: 7_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C111
 			rarity: C
@@ -1398,7 +1519,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1425,6 +1546,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07112.jpg
 			javaClass: true
+			//parentId: 7_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R112
 			rarity: R
@@ -1438,7 +1563,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1465,6 +1590,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07113.jpg
 			javaClass: true
+			//parentId: 7_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R113
 			rarity: R
@@ -1481,8 +1610,7 @@
 		strength: 2
 		vitality: -1
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Pippin)
 		/*requires: {
 			
 		}
@@ -1509,6 +1637,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07114.jpg
 			javaClass: true
+			//parentId: 7_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R114
 			rarity: R
@@ -1524,8 +1656,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Pippin)
 		/*requires: {
 			
 		}
@@ -1552,6 +1683,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07115.jpg
 			javaClass: true
+			//parentId: 7_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C115
 			rarity: C
@@ -1569,7 +1704,7 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -1596,6 +1731,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07116.jpg
 			javaClass: true
+			//parentId: 7_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C116
 			rarity: C
@@ -1613,7 +1752,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -1640,6 +1779,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07117.jpg
 			javaClass: true
+			//parentId: 7_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C117
 			rarity: C
@@ -1653,7 +1796,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1683,6 +1826,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07118.jpg
 			javaClass: true
+			//parentId: 7_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C118
 			rarity: C
@@ -1697,7 +1844,10 @@
 		twilight: 1
 		type: Condition
 		site: 2
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -1724,6 +1874,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07119.jpg
 			javaClass: true
+			//parentId: 7_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R119
 			rarity: R
@@ -1739,7 +1893,10 @@
 		type: Condition
 		strength: -2
 		vitality: -2
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -1766,6 +1923,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07120.jpg
 			javaClass: true
+			//parentId: 7_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U120
 			rarity: U
@@ -1779,7 +1940,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1809,6 +1970,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07121.jpg
 			javaClass: true
+			//parentId: 7_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C121
 			rarity: C
@@ -1822,7 +1987,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1852,6 +2017,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07122.jpg
 			javaClass: true
+			//parentId: 7_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R122
 			rarity: R
@@ -1865,7 +2034,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1892,6 +2061,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07123.jpg
 			javaClass: true
+			//parentId: 7_123
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U123
 			rarity: U
@@ -1905,7 +2078,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1932,6 +2105,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07124.jpg
 			javaClass: true
+			//parentId: 7_124
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C124
 			rarity: C
@@ -1949,7 +2126,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -1976,6 +2153,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07125.jpg
 			javaClass: true
+			//parentId: 7_125
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U125
 			rarity: U
@@ -1990,7 +2171,10 @@
 		twilight: 1
 		type: Condition
 		site: 4
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -2017,6 +2201,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07126.jpg
 			javaClass: true
+			//parentId: 7_126
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U126
 			rarity: U
@@ -2030,7 +2218,6 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -2057,6 +2244,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07127.jpg
 			javaClass: true
+			//parentId: 7_127
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R127
 			rarity: R
@@ -2074,7 +2265,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -2101,6 +2291,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07128.jpg
 			javaClass: true
+			//parentId: 7_128
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U128
 			rarity: U
@@ -2114,7 +2308,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -2144,6 +2338,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07364.jpg
 			javaClass: true
+			//parentId: 7_364
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7P364
 			rarity: P
@@ -2163,7 +2361,6 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

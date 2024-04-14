@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19008.jpg
 			javaClass: true
+			//parentId: 19_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P8
 			rarity: P
@@ -22,7 +26,7 @@
 		strength: 8
 		vitality: 4
 		resistance: 7
-		#keyword: damage+1
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -49,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19009.jpg
 			javaClass: true
+			//parentId: 19_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P9
 			rarity: P
@@ -63,7 +71,6 @@
 		twilight: 2
 		type: Condition
 		strength: 2
-		#keyword: support area
 		/*requires: {
 			
 		}

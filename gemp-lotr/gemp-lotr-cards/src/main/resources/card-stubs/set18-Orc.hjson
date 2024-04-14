@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18078.jpg
 			javaClass: true
+			//parentId: 18_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U78
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Orc
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18079.jpg
 			javaClass: true
+			//parentId: 18_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U79
 			rarity: U
@@ -57,7 +65,7 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18080.jpg
 			javaClass: true
+			//parentId: 18_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R80
 			rarity: R
@@ -105,7 +117,6 @@
 		strength: 15
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -132,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18081.jpg
 			javaClass: true
+			//parentId: 18_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R81
 			rarity: R
@@ -149,8 +164,7 @@
 		strength: 1
 		vitality: 1
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [orc] Orc with strength 9 or less (or bearer must be Gothmog))
 		/*requires: {
 			
 		}
@@ -177,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18082.jpg
 			javaClass: true
+			//parentId: 18_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R82
 			rarity: R
@@ -191,8 +209,7 @@
 		culture: Orc
 		twilight: 3
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -219,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18083.jpg
 			javaClass: true
+			//parentId: 18_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R83
 			rarity: R
@@ -232,7 +253,7 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -262,6 +283,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18084.jpg
 			javaClass: true
+			//parentId: 18_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C84
 			rarity: C
@@ -277,8 +302,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [orc] Orc)
 		/*requires: {
 			
 		}
@@ -305,6 +329,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18085.jpg
 			javaClass: true
+			//parentId: 18_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C85
 			rarity: C
@@ -322,7 +350,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -349,6 +376,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18086.jpg
 			javaClass: true
+			//parentId: 18_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U86
 			rarity: U
@@ -366,7 +397,6 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -393,6 +423,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18087.jpg
 			javaClass: true
+			//parentId: 18_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C87
 			rarity: C
@@ -410,7 +444,7 @@
 		strength: 9
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Hunter 1
 		/*requires: {
 			
 		}
@@ -437,6 +471,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18088.jpg
 			javaClass: true
+			//parentId: 18_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C88
 			rarity: C
@@ -454,7 +492,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -481,6 +518,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18089.jpg
 			javaClass: true
+			//parentId: 18_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C89
 			rarity: C
@@ -498,7 +539,7 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Hunter 1
 		/*requires: {
 			
 		}
@@ -525,6 +566,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18090.jpg
 			javaClass: true
+			//parentId: 18_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C90
 			rarity: C
@@ -542,7 +587,6 @@
 		strength: 9
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -569,6 +613,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18091.jpg
 			javaClass: true
+			//parentId: 18_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C91
 			rarity: C
@@ -586,7 +634,6 @@
 		strength: 7
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -613,6 +660,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18092.jpg
 			javaClass: true
+			//parentId: 18_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U92
 			rarity: U
@@ -626,7 +677,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -656,6 +707,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18093.jpg
 			javaClass: true
+			//parentId: 18_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U93
 			rarity: U
@@ -673,7 +728,6 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}

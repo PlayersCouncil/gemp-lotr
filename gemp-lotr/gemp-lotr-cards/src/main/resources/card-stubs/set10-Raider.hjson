@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10036.jpg
 			javaClass: true
+			//parentId: 10_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C36
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Raider
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10037.jpg
 			javaClass: true
+			//parentId: 10_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C37
 			rarity: C
@@ -61,7 +69,7 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Corsair
 		/*requires: {
 			
 		}
@@ -88,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10038.jpg
 			javaClass: true
+			//parentId: 10_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R38
 			rarity: R
@@ -105,7 +117,7 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Corsair
 		/*requires: {
 			
 		}
@@ -132,6 +144,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10039.jpg
 			javaClass: true
+			//parentId: 10_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U39
 			rarity: U
@@ -149,7 +165,7 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Corsair
 		/*requires: {
 			
 		}
@@ -176,6 +192,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10040.jpg
 			javaClass: true
+			//parentId: 10_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R40
 			rarity: R
@@ -193,7 +213,7 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Easterling
 		/*requires: {
 			
 		}
@@ -220,6 +240,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10041.jpg
 			javaClass: true
+			//parentId: 10_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C41
 			rarity: C
@@ -237,7 +261,10 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Easterling
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -264,6 +291,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10042.jpg
 			javaClass: true
+			//parentId: 10_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C42
 			rarity: C
@@ -281,7 +312,7 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -308,6 +339,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10043.jpg
 			javaClass: true
+			//parentId: 10_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U43
 			rarity: U
@@ -321,7 +356,7 @@
 		culture: Raider
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -348,6 +383,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10044.jpg
 			javaClass: true
+			//parentId: 10_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U44
 			rarity: U
@@ -361,7 +400,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -391,6 +430,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10045.jpg
 			javaClass: true
+			//parentId: 10_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R45
 			rarity: R
@@ -408,7 +451,7 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -435,6 +478,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10046.jpg
 			javaClass: true
+			//parentId: 10_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R46
 			rarity: R
@@ -448,7 +495,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -478,6 +525,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10047.jpg
 			javaClass: true
+			//parentId: 10_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U47
 			rarity: U
@@ -491,7 +542,7 @@
 		culture: Raider
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -518,6 +569,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10048.jpg
 			javaClass: true
+			//parentId: 10_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R48
 			rarity: R
@@ -532,7 +587,6 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -559,6 +613,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10049.jpg
 			javaClass: true
+			//parentId: 10_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C49
 			rarity: C
@@ -576,7 +634,7 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -603,6 +661,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10050.jpg
 			javaClass: true
+			//parentId: 10_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C50
 			rarity: C
@@ -620,7 +682,7 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -647,6 +709,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10051.jpg
 			javaClass: true
+			//parentId: 10_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R51
 			rarity: R
@@ -660,7 +726,7 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -693,6 +759,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10052.jpg
 			javaClass: true
+			//parentId: 10_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C52
 			rarity: C
@@ -706,7 +776,7 @@
 		culture: Raider
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

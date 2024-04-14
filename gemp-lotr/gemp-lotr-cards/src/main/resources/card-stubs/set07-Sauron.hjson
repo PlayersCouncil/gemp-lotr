@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07262.jpg
 			javaClass: true
+			//parentId: 7_262
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C262
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07263.jpg
 			javaClass: true
+			//parentId: 7_263
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C263
 			rarity: C
@@ -60,7 +68,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07264.jpg
 			javaClass: true
+			//parentId: 7_264
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U264
 			rarity: U
@@ -107,7 +119,6 @@
 		strength: 19
 		vitality: 5
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -134,6 +145,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07265.jpg
 			javaClass: true
+			//parentId: 7_265
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C265
 			rarity: C
@@ -149,8 +164,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [sauron] Orc
 		/*requires: {
 			
 		}
@@ -177,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07266.jpg
 			javaClass: true
+			//parentId: 7_266
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R266
 			rarity: R
@@ -190,7 +208,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -220,6 +238,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07267.jpg
 			javaClass: true
+			//parentId: 7_267
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R267
 			rarity: R
@@ -233,7 +255,7 @@
 		culture: Sauron
 		twilight: 2
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -263,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07268.jpg
 			javaClass: true
+			//parentId: 7_268
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R268
 			rarity: R
@@ -276,7 +302,7 @@
 		culture: Sauron
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -303,6 +329,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07269.jpg
 			javaClass: true
+			//parentId: 7_269
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R269
 			rarity: R
@@ -316,7 +346,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -343,6 +373,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07270.jpg
 			javaClass: true
+			//parentId: 7_270
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U270
 			rarity: U
@@ -360,7 +394,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -387,6 +421,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07271.jpg
 			javaClass: true
+			//parentId: 7_271
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U271
 			rarity: U
@@ -404,7 +442,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -431,6 +469,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07272.jpg
 			javaClass: true
+			//parentId: 7_272
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U272
 			rarity: U
@@ -448,7 +490,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -475,6 +517,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07273.jpg
 			javaClass: true
+			//parentId: 7_273
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C273
 			rarity: C
@@ -492,7 +538,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -519,6 +565,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07274.jpg
 			javaClass: true
+			//parentId: 7_274
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R274
 			rarity: R
@@ -536,7 +586,7 @@
 		strength: 12
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -563,6 +613,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07275.jpg
 			javaClass: true
+			//parentId: 7_275
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C275
 			rarity: C
@@ -580,7 +634,7 @@
 		strength: 10
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -607,6 +661,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07276.jpg
 			javaClass: true
+			//parentId: 7_276
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C276
 			rarity: C
@@ -624,7 +682,7 @@
 		strength: 10
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -651,6 +709,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07277.jpg
 			javaClass: true
+			//parentId: 7_277
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C277
 			rarity: C
@@ -668,7 +730,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -695,6 +757,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07278.jpg
 			javaClass: true
+			//parentId: 7_278
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U278
 			rarity: U
@@ -712,7 +778,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -739,6 +805,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07279.jpg
 			javaClass: true
+			//parentId: 7_279
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R279
 			rarity: R
@@ -756,7 +826,7 @@
 		strength: 14
 		vitality: 4
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -783,6 +853,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07280.jpg
 			javaClass: true
+			//parentId: 7_280
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U280
 			rarity: U
@@ -796,7 +870,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -823,6 +897,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07281.jpg
 			javaClass: true
+			//parentId: 7_281
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U281
 			rarity: U
@@ -836,7 +914,10 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Engine
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -863,6 +944,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07282.jpg
 			javaClass: true
+			//parentId: 7_282
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U282
 			rarity: U
@@ -880,7 +965,6 @@
 		strength: 21
 		vitality: 5
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -907,6 +991,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07283.jpg
 			javaClass: true
+			//parentId: 7_283
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R283
 			rarity: R
@@ -920,7 +1008,7 @@
 		culture: Sauron
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -947,6 +1035,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07284.jpg
 			javaClass: true
+			//parentId: 7_284
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R284
 			rarity: R
@@ -964,7 +1056,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -991,6 +1082,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07285.jpg
 			javaClass: true
+			//parentId: 7_285
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C285
 			rarity: C
@@ -1008,7 +1103,6 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1035,6 +1129,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07286.jpg
 			javaClass: true
+			//parentId: 7_286
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R286
 			rarity: R
@@ -1052,7 +1150,6 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1079,6 +1176,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07287.jpg
 			javaClass: true
+			//parentId: 7_287
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C287
 			rarity: C
@@ -1096,7 +1197,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1123,6 +1223,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07288.jpg
 			javaClass: true
+			//parentId: 7_288
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C288
 			rarity: C
@@ -1140,7 +1244,6 @@
 		strength: 8
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1167,6 +1270,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07289.jpg
 			javaClass: true
+			//parentId: 7_289
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U289
 			rarity: U
@@ -1184,7 +1291,6 @@
 		strength: 10
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1211,6 +1317,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07290.jpg
 			javaClass: true
+			//parentId: 7_290
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C290
 			rarity: C
@@ -1228,7 +1338,6 @@
 		strength: 3
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1255,6 +1364,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07291.jpg
 			javaClass: true
+			//parentId: 7_291
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C291
 			rarity: C
@@ -1272,7 +1385,6 @@
 		strength: 6
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1299,6 +1411,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07292.jpg
 			javaClass: true
+			//parentId: 7_292
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U292
 			rarity: U
@@ -1316,7 +1432,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1343,6 +1458,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07293.jpg
 			javaClass: true
+			//parentId: 7_293
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U293
 			rarity: U
@@ -1360,7 +1479,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1387,6 +1505,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07294.jpg
 			javaClass: true
+			//parentId: 7_294
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U294
 			rarity: U
@@ -1404,7 +1526,7 @@
 		strength: 15
 		vitality: 4
 		site: 6
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -1431,6 +1553,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07295.jpg
 			javaClass: true
+			//parentId: 7_295
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U295
 			rarity: U
@@ -1448,7 +1574,6 @@
 		strength: 10
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1475,6 +1600,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07296.jpg
 			javaClass: true
+			//parentId: 7_296
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C296
 			rarity: C
@@ -1492,7 +1621,6 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1519,6 +1647,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07297.jpg
 			javaClass: true
+			//parentId: 7_297
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C297
 			rarity: C
@@ -1536,7 +1668,6 @@
 		strength: 6
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1563,6 +1694,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07298.jpg
 			javaClass: true
+			//parentId: 7_298
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C298
 			rarity: C
@@ -1580,7 +1715,7 @@
 		strength: 6
 		vitality: 2
 		site: 6
-		#keyword: damage+1
+		keywords: Tracker
 		/*requires: {
 			
 		}
@@ -1607,6 +1742,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07299.jpg
 			javaClass: true
+			//parentId: 7_299
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C299
 			rarity: C
@@ -1624,7 +1763,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1651,6 +1789,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07300.jpg
 			javaClass: true
+			//parentId: 7_300
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C300
 			rarity: C
@@ -1668,7 +1810,6 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1695,6 +1836,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07301.jpg
 			javaClass: true
+			//parentId: 7_301
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U301
 			rarity: U
@@ -1712,7 +1857,6 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1739,6 +1883,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07302.jpg
 			javaClass: true
+			//parentId: 7_302
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U302
 			rarity: U
@@ -1756,7 +1904,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1783,6 +1930,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07303.jpg
 			javaClass: true
+			//parentId: 7_303
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C303
 			rarity: C
@@ -1800,7 +1951,7 @@
 		strength: 5
 		vitality: 2
 		site: 6
-		#keyword: damage+1
+		keywords: Tracker
 		/*requires: {
 			
 		}
@@ -1827,6 +1978,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07304.jpg
 			javaClass: true
+			//parentId: 7_304
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C304
 			rarity: C
@@ -1844,7 +1999,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1871,6 +2025,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07305.jpg
 			javaClass: true
+			//parentId: 7_305
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U305
 			rarity: U
@@ -1888,7 +2046,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1915,6 +2072,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07306.jpg
 			javaClass: true
+			//parentId: 7_306
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R306
 			rarity: R
@@ -1932,7 +2093,7 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		#keyword: damage+1
+		keywords: Tracker
 		/*requires: {
 			
 		}
@@ -1959,6 +2120,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07307.jpg
 			javaClass: true
+			//parentId: 7_307
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U307
 			rarity: U
@@ -1976,7 +2141,7 @@
 		strength: 8
 		vitality: 2
 		site: 6
-		#keyword: damage+1
+		keywords: Tracker
 		/*requires: {
 			
 		}
@@ -2003,6 +2168,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07308.jpg
 			javaClass: true
+			//parentId: 7_308
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R308
 			rarity: R
@@ -2016,7 +2185,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -2043,6 +2212,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07309.jpg
 			javaClass: true
+			//parentId: 7_309
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U309
 			rarity: U
@@ -2056,7 +2229,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -2086,6 +2259,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07310.jpg
 			javaClass: true
+			//parentId: 7_310
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7U310
 			rarity: U
@@ -2099,7 +2276,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -2126,6 +2303,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07311.jpg
 			javaClass: true
+			//parentId: 7_311
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R311
 			rarity: R
@@ -2143,7 +2324,7 @@
 		strength: 12
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Besieger
 		/*requires: {
 			
 		}
@@ -2170,6 +2351,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07312.jpg
 			javaClass: true
+			//parentId: 7_312
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C312
 			rarity: C
@@ -2183,7 +2368,7 @@
 		culture: Sauron
 		twilight: 4
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -2216,6 +2401,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07313.jpg
 			javaClass: true
+			//parentId: 7_313
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C313
 			rarity: C
@@ -2229,7 +2418,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -2256,6 +2445,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07314.jpg
 			javaClass: true
+			//parentId: 7_314
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R314
 			rarity: R
@@ -2269,7 +2462,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -2296,6 +2489,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07315.jpg
 			javaClass: true
+			//parentId: 7_315
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7C315
 			rarity: C
@@ -2309,7 +2506,10 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Engine
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -2336,6 +2536,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR07316.jpg
 			javaClass: true
+			//parentId: 7_316
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 7R316
 			rarity: R
@@ -2349,7 +2553,10 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Engine
+			Support Area
+		]
 		/*requires: {
 			
 		}

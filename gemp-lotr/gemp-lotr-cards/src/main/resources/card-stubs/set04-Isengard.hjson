@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04136.jpg
 			javaClass: true
+			//parentId: 4_136
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U136
 			rarity: U
@@ -21,7 +25,7 @@
 		strength: 10
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -48,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04137.jpg
 			javaClass: true
+			//parentId: 4_137
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C137
 			rarity: C
@@ -61,7 +69,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -88,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04138.jpg
 			javaClass: true
+			//parentId: 4_138
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U138
 			rarity: U
@@ -105,7 +117,10 @@
 		strength: 7
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Archer
+			Damage+1
+		]
 		/*requires: {
 			
 		}
@@ -132,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04139.jpg
 			javaClass: true
+			//parentId: 4_139
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R139
 			rarity: R
@@ -145,7 +164,6 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -172,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04140.jpg
 			javaClass: true
+			//parentId: 4_140
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R140
 			rarity: R
@@ -185,7 +207,7 @@
 		culture: Isengard
 		twilight: 5
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -215,6 +237,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04141.jpg
 			javaClass: true
+			//parentId: 4_141
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C141
 			rarity: C
@@ -228,7 +254,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -258,6 +284,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04142.jpg
 			javaClass: true
+			//parentId: 4_142
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C142
 			rarity: C
@@ -273,8 +303,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Uruk-hai)
 		/*requires: {
 			
 		}
@@ -301,6 +330,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04143.jpg
 			javaClass: true
+			//parentId: 4_143
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U143
 			rarity: U
@@ -314,7 +347,8 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Assignment
+		keywords: Search
 		/*requires: {
 			
 		}
@@ -344,6 +378,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04144.jpg
 			javaClass: true
+			//parentId: 4_144
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R144
 			rarity: R
@@ -357,7 +395,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -384,6 +422,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04145.jpg
 			javaClass: true
+			//parentId: 4_145
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C145
 			rarity: C
@@ -397,7 +439,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -427,6 +469,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04146.jpg
 			javaClass: true
+			//parentId: 4_146
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R146
 			rarity: R
@@ -440,7 +486,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -467,6 +513,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04147.jpg
 			javaClass: true
+			//parentId: 4_147
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U147
 			rarity: U
@@ -480,7 +530,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -507,6 +557,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04148.jpg
 			javaClass: true
+			//parentId: 4_148
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U148
 			rarity: U
@@ -520,7 +574,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -547,6 +601,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04149.jpg
 			javaClass: true
+			//parentId: 4_149
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R149
 			rarity: R
@@ -560,7 +618,7 @@
 		culture: Isengard
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -590,6 +648,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04150.jpg
 			javaClass: true
+			//parentId: 4_150
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R150
 			rarity: R
@@ -607,7 +669,10 @@
 		strength: 9
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Archer
+			Damage+1
+		]
 		/*requires: {
 			
 		}
@@ -634,6 +699,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04151.jpg
 			javaClass: true
+			//parentId: 4_151
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C151
 			rarity: C
@@ -647,7 +716,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -677,6 +746,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04152.jpg
 			javaClass: true
+			//parentId: 4_152
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U152
 			rarity: U
@@ -690,7 +763,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Assignment
 		/*requires: {
 			
 		}
@@ -720,6 +793,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04153.jpg
 			javaClass: true
+			//parentId: 4_153
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C153
 			rarity: C
@@ -738,7 +815,6 @@
 		strength: 4
 		vitality: 3
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -765,6 +841,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04154.jpg
 			javaClass: true
+			//parentId: 4_154
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R154
 			rarity: R
@@ -783,7 +863,6 @@
 		strength: 4
 		vitality: 3
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -810,6 +889,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04155.jpg
 			javaClass: true
+			//parentId: 4_155
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U155
 			rarity: U
@@ -823,7 +906,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -853,6 +936,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04156.jpg
 			javaClass: true
+			//parentId: 4_156
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C156
 			rarity: C
@@ -866,7 +953,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -896,6 +983,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04157.jpg
 			javaClass: true
+			//parentId: 4_157
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R157
 			rarity: R
@@ -910,7 +1001,7 @@
 		twilight: 0
 		type: Condition
 		strength: -1
-		#keyword: support area
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -937,6 +1028,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04158.jpg
 			javaClass: true
+			//parentId: 4_158
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R158
 			rarity: R
@@ -954,7 +1049,7 @@
 		strength: 12
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -981,6 +1076,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04159.jpg
 			javaClass: true
+			//parentId: 4_159
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U159
 			rarity: U
@@ -995,7 +1094,7 @@
 		twilight: 1
 		type: Condition
 		strength: -1
-		#keyword: support area
+		keywords: Search
 		/*requires: {
 			
 		}
@@ -1022,6 +1121,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04160.jpg
 			javaClass: true
+			//parentId: 4_160
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R160
 			rarity: R
@@ -1040,7 +1143,10 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -1067,6 +1173,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04161.jpg
 			javaClass: true
+			//parentId: 4_161
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U161
 			rarity: U
@@ -1080,7 +1190,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1110,6 +1220,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04162.jpg
 			javaClass: true
+			//parentId: 4_162
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R162
 			rarity: R
@@ -1123,7 +1237,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1153,6 +1267,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04163.jpg
 			javaClass: true
+			//parentId: 4_163
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R163
 			rarity: R
@@ -1166,7 +1284,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1196,6 +1314,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04164.jpg
 			javaClass: true
+			//parentId: 4_164
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R164
 			rarity: R
@@ -1213,7 +1335,7 @@
 		strength: 12
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -1240,6 +1362,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04165.jpg
 			javaClass: true
+			//parentId: 4_165
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C165
 			rarity: C
@@ -1257,7 +1383,7 @@
 		strength: 7
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -1284,6 +1410,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04166.jpg
 			javaClass: true
+			//parentId: 4_166
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R166
 			rarity: R
@@ -1298,8 +1428,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1326,6 +1455,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04167.jpg
 			javaClass: true
+			//parentId: 4_167
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R167
 			rarity: R
@@ -1339,7 +1472,6 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -1366,6 +1498,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04168.jpg
 			javaClass: true
+			//parentId: 4_168
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R168
 			rarity: R
@@ -1379,7 +1515,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1406,6 +1542,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04169.jpg
 			javaClass: true
+			//parentId: 4_169
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R169
 			rarity: R
@@ -1423,7 +1563,7 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -1450,6 +1590,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04170.jpg
 			javaClass: true
+			//parentId: 4_170
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U170
 			rarity: U
@@ -1463,7 +1607,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1490,6 +1634,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04171.jpg
 			javaClass: true
+			//parentId: 4_171
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R171
 			rarity: R
@@ -1503,7 +1651,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Search
 		/*requires: {
 			
 		}
@@ -1530,6 +1678,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04172.jpg
 			javaClass: true
+			//parentId: 4_172
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R172
 			rarity: R
@@ -1543,7 +1695,6 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -1570,6 +1721,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04173.jpg
 			javaClass: true
+			//parentId: 4_173
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R173
 			rarity: R
@@ -1588,7 +1743,6 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1615,6 +1769,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04174.jpg
 			javaClass: true
+			//parentId: 4_174
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R174
 			rarity: R
@@ -1631,8 +1789,7 @@
 		type: Artifact
 		strength: 2
 		itemclass: Staff
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Saruman)
 		/*requires: {
 			
 		}
@@ -1659,6 +1816,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04175.jpg
 			javaClass: true
+			//parentId: 4_175
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C175
 			rarity: C
@@ -1672,7 +1833,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1702,6 +1863,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04176.jpg
 			javaClass: true
+			//parentId: 4_176
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R176
 			rarity: R
@@ -1720,7 +1885,10 @@
 		strength: 9
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -1747,6 +1915,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04177.jpg
 			javaClass: true
+			//parentId: 4_177
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R177
 			rarity: R
@@ -1762,8 +1934,7 @@
 		type: Possession
 		strength: 3
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Uruk-hai)
 		/*requires: {
 			
 		}
@@ -1790,6 +1961,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04178.jpg
 			javaClass: true
+			//parentId: 4_178
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C178
 			rarity: C
@@ -1808,7 +1983,6 @@
 		strength: 6
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1835,6 +2009,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04179.jpg
 			javaClass: true
+			//parentId: 4_179
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R179
 			rarity: R
@@ -1852,7 +2030,7 @@
 		strength: 14
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -1879,6 +2057,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04180.jpg
 			javaClass: true
+			//parentId: 4_180
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C180
 			rarity: C
@@ -1896,7 +2078,7 @@
 		strength: 6
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -1923,6 +2105,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04181.jpg
 			javaClass: true
+			//parentId: 4_181
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C181
 			rarity: C
@@ -1940,7 +2126,10 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -1967,6 +2156,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04182.jpg
 			javaClass: true
+			//parentId: 4_182
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U182
 			rarity: U
@@ -1984,7 +2177,7 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -2011,6 +2204,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04183.jpg
 			javaClass: true
+			//parentId: 4_183
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C183
 			rarity: C
@@ -2028,7 +2225,7 @@
 		strength: 6
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -2055,6 +2252,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04184.jpg
 			javaClass: true
+			//parentId: 4_184
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C184
 			rarity: C
@@ -2072,7 +2273,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2099,6 +2300,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04185.jpg
 			javaClass: true
+			//parentId: 4_185
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C185
 			rarity: C
@@ -2116,7 +2321,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2143,6 +2348,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04186.jpg
 			javaClass: true
+			//parentId: 4_186
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R186
 			rarity: R
@@ -2160,7 +2369,10 @@
 		strength: 10
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -2187,6 +2399,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04187.jpg
 			javaClass: true
+			//parentId: 4_187
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C187
 			rarity: C
@@ -2204,7 +2420,10 @@
 		strength: 5
 		vitality: 1
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -2231,6 +2450,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04188.jpg
 			javaClass: true
+			//parentId: 4_188
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U188
 			rarity: U
@@ -2248,7 +2471,10 @@
 		strength: 12
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -2275,6 +2501,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04189.jpg
 			javaClass: true
+			//parentId: 4_189
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C189
 			rarity: C
@@ -2292,7 +2522,10 @@
 		strength: 7
 		vitality: 1
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -2319,6 +2552,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04190.jpg
 			javaClass: true
+			//parentId: 4_190
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C190
 			rarity: C
@@ -2336,7 +2573,10 @@
 		strength: 5
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -2363,6 +2603,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04191.jpg
 			javaClass: true
+			//parentId: 4_191
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C191
 			rarity: C
@@ -2380,7 +2624,7 @@
 		strength: 12
 		vitality: 4
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2407,6 +2651,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04192.jpg
 			javaClass: true
+			//parentId: 4_192
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C192
 			rarity: C
@@ -2424,7 +2672,7 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2451,6 +2699,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04193.jpg
 			javaClass: true
+			//parentId: 4_193
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C193
 			rarity: C
@@ -2468,7 +2720,10 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -2495,6 +2750,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04194.jpg
 			javaClass: true
+			//parentId: 4_194
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U194
 			rarity: U
@@ -2512,7 +2771,10 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -2539,6 +2801,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04195.jpg
 			javaClass: true
+			//parentId: 4_195
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C195
 			rarity: C
@@ -2556,7 +2822,10 @@
 		strength: 6
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: [
+			Tracker
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -2583,6 +2852,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04196.jpg
 			javaClass: true
+			//parentId: 4_196
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C196
 			rarity: C
@@ -2598,8 +2871,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Uruk-hai)
 		/*requires: {
 			
 		}
@@ -2626,6 +2898,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04197.jpg
 			javaClass: true
+			//parentId: 4_197
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C197
 			rarity: C
@@ -2643,7 +2919,7 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2670,6 +2946,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04198.jpg
 			javaClass: true
+			//parentId: 4_198
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C198
 			rarity: C
@@ -2687,7 +2967,7 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2714,6 +2994,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04199.jpg
 			javaClass: true
+			//parentId: 4_199
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R199
 			rarity: R
@@ -2731,7 +3015,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2758,6 +3042,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04200.jpg
 			javaClass: true
+			//parentId: 4_200
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R200
 			rarity: R
@@ -2775,7 +3063,7 @@
 		strength: 17
 		vitality: 4
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2802,6 +3090,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04201.jpg
 			javaClass: true
+			//parentId: 4_201
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U201
 			rarity: U
@@ -2819,7 +3111,7 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2846,6 +3138,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04202.jpg
 			javaClass: true
+			//parentId: 4_202
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U202
 			rarity: U
@@ -2863,7 +3159,7 @@
 		strength: 10
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2890,6 +3186,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04203.jpg
 			javaClass: true
+			//parentId: 4_203
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R203
 			rarity: R
@@ -2907,7 +3207,7 @@
 		strength: 12
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2934,6 +3234,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04204.jpg
 			javaClass: true
+			//parentId: 4_204
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C204
 			rarity: C
@@ -2951,7 +3255,7 @@
 		strength: 8
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -2978,6 +3282,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04205.jpg
 			javaClass: true
+			//parentId: 4_205
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U205
 			rarity: U
@@ -2995,7 +3303,7 @@
 		strength: 10
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -3022,6 +3330,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04206.jpg
 			javaClass: true
+			//parentId: 4_206
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C206
 			rarity: C
@@ -3039,7 +3351,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -3066,6 +3378,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04207.jpg
 			javaClass: true
+			//parentId: 4_207
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C207
 			rarity: C
@@ -3083,7 +3399,7 @@
 		strength: 9
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -3110,6 +3426,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04208.jpg
 			javaClass: true
+			//parentId: 4_208
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U208
 			rarity: U
@@ -3123,7 +3443,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -3153,6 +3473,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04209.jpg
 			javaClass: true
+			//parentId: 4_209
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R209
 			rarity: R
@@ -3166,7 +3490,7 @@
 		culture: Isengard
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -3196,6 +3520,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04210.jpg
 			javaClass: true
+			//parentId: 4_210
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C210
 			rarity: C
@@ -3203,13 +3531,13 @@
 			cardNum: 210
 			style: Standard
 		}
-		title: We Are the<br>Fighting Uruk-hai
+		title: We Are the Fighting Uruk-hai
 		unique: false
 		side: Shadow
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -3239,6 +3567,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04211.jpg
 			javaClass: true
+			//parentId: 4_211
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R211
 			rarity: R
@@ -3252,7 +3584,10 @@
 		culture: Isengard
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Machine
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -3279,6 +3614,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04212.jpg
 			javaClass: true
+			//parentId: 4_212
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C212
 			rarity: C
@@ -3292,7 +3631,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Search
 		/*requires: {
 			
 		}
@@ -3319,6 +3658,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04213.jpg
 			javaClass: true
+			//parentId: 4_213
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R213
 			rarity: R
@@ -3332,7 +3675,10 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Search
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -3359,6 +3705,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04214.jpg
 			javaClass: true
+			//parentId: 4_214
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R214
 			rarity: R
@@ -3366,13 +3716,13 @@
 			cardNum: 214
 			style: Standard
 		}
-		title: Where Has Gríma<br>Stowed It?
+		title: Where Has Gríma Stowed It?
 		unique: false
 		side: Shadow
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -3402,6 +3752,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04215.jpg
 			javaClass: true
+			//parentId: 4_215
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R215
 			rarity: R
@@ -3415,7 +3769,6 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}

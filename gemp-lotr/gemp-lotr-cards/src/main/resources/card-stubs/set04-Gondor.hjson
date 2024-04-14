@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04109.jpg
 			javaClass: true
+			//parentId: 4_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C109
 			rarity: C
@@ -23,7 +27,7 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Defender+1
 		/*requires: {
 			
 		}
@@ -50,6 +54,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04110.jpg
 			javaClass: true
+			//parentId: 4_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U110
 			rarity: U
@@ -63,7 +71,7 @@
 		culture: Gondor
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -93,6 +101,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04111.jpg
 			javaClass: true
+			//parentId: 4_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R111
 			rarity: R
@@ -107,7 +119,6 @@
 		twilight: 0
 		type: Condition
 		vitality: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -134,6 +145,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04112.jpg
 			javaClass: true
+			//parentId: 4_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C112
 			rarity: C
@@ -148,8 +163,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Gauntlets
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -176,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04113.jpg
 			javaClass: true
+			//parentId: 4_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C113
 			rarity: C
@@ -189,7 +207,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -219,6 +237,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04114.jpg
 			javaClass: true
+			//parentId: 4_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U114
 			rarity: U
@@ -237,7 +259,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ring-bound
+			Ranger
+		]
 		/*requires: {
 			
 		}
@@ -264,6 +289,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04115.jpg
 			javaClass: true
+			//parentId: 4_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C115
 			rarity: C
@@ -277,7 +306,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -307,6 +336,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04116.jpg
 			javaClass: true
+			//parentId: 4_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R116
 			rarity: R
@@ -326,7 +359,10 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ring-bound
+			Ranger
+		]
 		/*requires: {
 			
 		}
@@ -353,6 +389,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04117.jpg
 			javaClass: true
+			//parentId: 4_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C117
 			rarity: C
@@ -372,7 +412,10 @@
 		vitality: 3
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ring-bound
+			Ranger
+		]
 		/*requires: {
 			
 		}
@@ -399,6 +442,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04118.jpg
 			javaClass: true
+			//parentId: 4_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R118
 			rarity: R
@@ -413,8 +460,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Faramir)
 		/*requires: {
 			
 		}
@@ -441,6 +487,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04119.jpg
 			javaClass: true
+			//parentId: 4_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R119
 			rarity: R
@@ -455,8 +505,7 @@
 		twilight: 0
 		type: Possession
 		itemclass: Cloak
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Faramir)
 		/*requires: {
 			
 		}
@@ -483,6 +532,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04120.jpg
 			javaClass: true
+			//parentId: 4_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R120
 			rarity: R
@@ -496,7 +549,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -523,6 +576,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04121.jpg
 			javaClass: true
+			//parentId: 4_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R121
 			rarity: R
@@ -536,7 +593,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -563,6 +620,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04122.jpg
 			javaClass: true
+			//parentId: 4_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C122
 			rarity: C
@@ -580,7 +641,10 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ring-bound
+			Ranger
+		]
 		/*requires: {
 			
 		}
@@ -607,6 +671,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04123.jpg
 			javaClass: true
+			//parentId: 4_123
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U123
 			rarity: U
@@ -620,7 +688,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -650,6 +718,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04124.jpg
 			javaClass: true
+			//parentId: 4_124
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R124
 			rarity: R
@@ -663,7 +735,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -690,6 +762,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04125.jpg
 			javaClass: true
+			//parentId: 4_125
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R125
 			rarity: R
@@ -703,7 +779,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -730,6 +806,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04126.jpg
 			javaClass: true
+			//parentId: 4_126
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U126
 			rarity: U
@@ -743,7 +823,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -770,6 +850,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04127.jpg
 			javaClass: true
+			//parentId: 4_127
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U127
 			rarity: U
@@ -788,7 +872,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ring-bound
+			Ranger
+		]
 		/*requires: {
 			
 		}
@@ -815,6 +902,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04128.jpg
 			javaClass: true
+			//parentId: 4_128
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C128
 			rarity: C
@@ -828,7 +919,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -858,6 +949,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04129.jpg
 			javaClass: true
+			//parentId: 4_129
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C129
 			rarity: C
@@ -871,7 +966,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -901,6 +996,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04130.jpg
 			javaClass: true
+			//parentId: 4_130
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C130
 			rarity: C
@@ -918,7 +1017,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ring-bound
+			Ranger
+		]
 		/*requires: {
 			
 		}
@@ -945,6 +1047,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04131.jpg
 			javaClass: true
+			//parentId: 4_131
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C131
 			rarity: C
@@ -959,8 +1065,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Ring-bound Man)
 		/*requires: {
 			
 		}
@@ -987,6 +1092,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04132.jpg
 			javaClass: true
+			//parentId: 4_132
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U132
 			rarity: U
@@ -1003,8 +1112,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Aragorn)
 		/*requires: {
 			
 		}
@@ -1031,6 +1139,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04133.jpg
 			javaClass: true
+			//parentId: 4_133
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R133
 			rarity: R
@@ -1044,7 +1156,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1071,6 +1183,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04134.jpg
 			javaClass: true
+			//parentId: 4_134
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C134
 			rarity: C
@@ -1086,8 +1202,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -1114,6 +1229,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04135.jpg
 			javaClass: true
+			//parentId: 4_135
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C135
 			rarity: C
@@ -1127,7 +1246,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1157,6 +1276,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04364.jpg
 			javaClass: true
+			//parentId: 4_364
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4P364
 			rarity: P
@@ -1176,7 +1299,7 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06115.jpg
 			javaClass: true
+			//parentId: 6_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U115
 			rarity: U
@@ -18,7 +22,6 @@
 		site: 1T
 		block: Towers
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06116.jpg
 			javaClass: true
+			//parentId: 6_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U116
 			rarity: U
@@ -59,7 +66,6 @@
 		site: 1T
 		block: Towers
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -86,6 +92,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06117.jpg
 			javaClass: true
+			//parentId: 6_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U117
 			rarity: U
@@ -100,7 +110,7 @@
 		site: 3T
 		block: Towers
 		direction: Left
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -127,6 +137,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06118.jpg
 			javaClass: true
+			//parentId: 6_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U118
 			rarity: U
@@ -141,7 +155,7 @@
 		site: 6T
 		block: Towers
 		direction: Right
-		#keyword: mountain;
+		keywords: Sanctuary
 		/*requires: {
 			
 		}
@@ -168,6 +182,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06119.jpg
 			javaClass: true
+			//parentId: 6_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U119
 			rarity: U
@@ -182,7 +200,6 @@
 		site: 8T
 		block: Towers
 		direction: Right
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -209,6 +226,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06120.jpg
 			javaClass: true
+			//parentId: 6_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U120
 			rarity: U
@@ -223,7 +244,6 @@
 		site: 9T
 		block: Towers
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12037.jpg
 			javaClass: true
+			//parentId: 12_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R37
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12038.jpg
 			javaClass: true
+			//parentId: 12_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R38
 			rarity: R
@@ -57,7 +65,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keyword: Shadow
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12039.jpg
 			javaClass: true
+			//parentId: 12_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U39
 			rarity: U
@@ -100,7 +112,7 @@
 		culture: Gollum
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -127,6 +139,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12040.jpg
 			javaClass: true
+			//parentId: 12_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C40
 			rarity: C
@@ -140,7 +156,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -167,6 +183,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12041.jpg
 			javaClass: true
+			//parentId: 12_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U41
 			rarity: U
@@ -180,7 +200,6 @@
 		culture: Gollum
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}

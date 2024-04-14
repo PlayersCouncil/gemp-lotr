@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10025.jpg
 			javaClass: true
+			//parentId: 10_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R25
 			rarity: R
@@ -23,7 +27,6 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -50,6 +53,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10026.jpg
 			javaClass: true
+			//parentId: 10_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U26
 			rarity: U
@@ -67,7 +74,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -94,6 +101,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10027.jpg
 			javaClass: true
+			//parentId: 10_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C27
 			rarity: C
@@ -111,7 +122,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -138,6 +149,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10028.jpg
 			javaClass: true
+			//parentId: 10_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R28
 			rarity: R
@@ -157,7 +172,6 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -184,6 +198,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10029.jpg
 			javaClass: true
+			//parentId: 10_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10R29
 			rarity: R
@@ -197,7 +215,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -227,6 +245,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10030.jpg
 			javaClass: true
+			//parentId: 10_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C30
 			rarity: C
@@ -240,7 +262,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -270,6 +292,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10031.jpg
 			javaClass: true
+			//parentId: 10_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C31
 			rarity: C
@@ -283,7 +309,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -313,6 +339,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10032.jpg
 			javaClass: true
+			//parentId: 10_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U32
 			rarity: U
@@ -326,7 +356,10 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -353,6 +386,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10033.jpg
 			javaClass: true
+			//parentId: 10_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10U33
 			rarity: U
@@ -366,7 +403,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -393,6 +430,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR10034.jpg
 			javaClass: true
+			//parentId: 10_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 10C34
 			rarity: C
@@ -406,7 +447,7 @@
 		culture: Gondor
 		twilight: 5
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}

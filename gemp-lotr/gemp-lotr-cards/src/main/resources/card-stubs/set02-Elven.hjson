@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02016.jpg
 			javaClass: true
+			//parentId: 2_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U16
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02017.jpg
 			javaClass: true
+			//parentId: 2_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U17
 			rarity: U
@@ -57,7 +65,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -87,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02018.jpg
 			javaClass: true
+			//parentId: 2_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U18
 			rarity: U
@@ -100,7 +112,10 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -127,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02019.jpg
 			javaClass: true
+			//parentId: 2_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R19
 			rarity: R
@@ -140,7 +159,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -170,6 +189,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02020.jpg
 			javaClass: true
+			//parentId: 2_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R20
 			rarity: R
@@ -183,7 +206,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}

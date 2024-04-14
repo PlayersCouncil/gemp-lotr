@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17015.jpg
 			javaClass: true
+			//parentId: 17_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U15
 			rarity: U
@@ -17,7 +21,8 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -47,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17016.jpg
 			javaClass: true
+			//parentId: 17_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U16
 			rarity: U
@@ -65,7 +74,6 @@
 		strength: 4
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -92,6 +100,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17017.jpg
 			javaClass: true
+			//parentId: 17_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R17
 			rarity: R
@@ -110,7 +122,6 @@
 		strength: 7
 		vitality: 4
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -137,6 +148,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17018.jpg
 			javaClass: true
+			//parentId: 17_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R18
 			rarity: R
@@ -153,8 +168,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -181,6 +195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17019.jpg
 			javaClass: true
+			//parentId: 17_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U19
 			rarity: U
@@ -194,7 +212,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -224,6 +242,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17020.jpg
 			javaClass: true
+			//parentId: 17_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R20
 			rarity: R
@@ -240,7 +262,6 @@
 		type: Follower
 		strength: 1
 		resistance: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -267,6 +288,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17021.jpg
 			javaClass: true
+			//parentId: 17_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U21
 			rarity: U
@@ -280,7 +305,10 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Pipeweed
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -307,6 +335,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17022.jpg
 			javaClass: true
+			//parentId: 17_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U22
 			rarity: U
@@ -321,7 +353,6 @@
 		culture: Gandalf
 		twilight: 3
 		type: Follower
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -348,6 +379,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17023.jpg
 			javaClass: true
+			//parentId: 17_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R23
 			rarity: R
@@ -361,7 +396,10 @@
 		culture: Gandalf
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Spell
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -388,6 +426,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17024.jpg
 			javaClass: true
+			//parentId: 17_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R24
 			rarity: R
@@ -406,8 +448,7 @@
 		vitality: 1
 		resistance: 1
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gandalf] Wizard
 		/*requires: {
 			
 		}
@@ -434,6 +475,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17025.jpg
 			javaClass: true
+			//parentId: 17_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U25
 			rarity: U
@@ -447,7 +492,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -477,6 +522,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17026.jpg
 			javaClass: true
+			//parentId: 17_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U26
 			rarity: U
@@ -494,7 +543,6 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

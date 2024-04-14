@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18004.jpg
 			javaClass: true
+			//parentId: 18_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R4
 			rarity: R
@@ -19,8 +23,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [elven] companion)
 		/*requires: {
 			
 		}
@@ -47,6 +50,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18005.jpg
 			javaClass: true
+			//parentId: 18_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R5
 			rarity: R
@@ -62,8 +69,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [elven] companion)
 		/*requires: {
 			
 		}
@@ -90,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18006.jpg
 			javaClass: true
+			//parentId: 18_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R6
 			rarity: R
@@ -103,7 +113,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -133,6 +143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18007.jpg
 			javaClass: true
+			//parentId: 18_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R7
 			rarity: R
@@ -148,7 +162,6 @@
 		twilight: 3
 		type: Follower
 		strength: 2
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -175,6 +188,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18008.jpg
 			javaClass: true
+			//parentId: 18_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U8
 			rarity: U
@@ -191,8 +208,7 @@
 		strength: 2
 		vitality: 1
 		itemclass: Hand weapon/shield
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [elven] companion)
 		/*requires: {
 			
 		}
@@ -219,6 +235,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18009.jpg
 			javaClass: true
+			//parentId: 18_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C9
 			rarity: C
@@ -236,7 +256,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -263,6 +282,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18010.jpg
 			javaClass: true
+			//parentId: 18_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U10
 			rarity: U
@@ -276,7 +299,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -303,6 +326,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18011.jpg
 			javaClass: true
+			//parentId: 18_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R11
 			rarity: R
@@ -316,8 +343,7 @@
 		culture: Elven
 		twilight: 2
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -344,6 +370,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18012.jpg
 			javaClass: true
+			//parentId: 18_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R12
 			rarity: R
@@ -362,7 +392,6 @@
 		strength: 9
 		vitality: 4
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -389,6 +418,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18013.jpg
 			javaClass: true
+			//parentId: 18_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R13
 			rarity: R
@@ -407,7 +440,7 @@
 		strength: 9
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -434,6 +467,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18014.jpg
 			javaClass: true
+			//parentId: 18_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R14
 			rarity: R
@@ -452,7 +489,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -479,6 +515,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18015.jpg
 			javaClass: true
+			//parentId: 18_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R15
 			rarity: R
@@ -492,8 +532,7 @@
 		culture: Elven
 		twilight: 2
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a companion
 		/*requires: {
 			
 		}
@@ -520,6 +559,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18016.jpg
 			javaClass: true
+			//parentId: 18_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C16
 			rarity: C
@@ -533,7 +576,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -563,6 +606,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18017.jpg
 			javaClass: true
+			//parentId: 18_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C17
 			rarity: C
@@ -578,7 +625,6 @@
 		twilight: 1
 		type: Follower
 		resistance: 1
-		#keyword: support area
 		/*requires: {
 			
 		}

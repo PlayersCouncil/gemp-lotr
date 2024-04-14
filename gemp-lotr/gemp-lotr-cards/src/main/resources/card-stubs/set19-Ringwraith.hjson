@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19034.jpg
 			javaClass: true
+			//parentId: 19_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P34
 			rarity: P
@@ -18,7 +22,6 @@
 		twilight: 2
 		type: Condition
 		strength: 2
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19035.jpg
 			javaClass: true
+			//parentId: 19_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P35
 			rarity: P
@@ -63,7 +70,7 @@
 		strength: 12
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -90,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19036.jpg
 			javaClass: true
+			//parentId: 19_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P36
 			rarity: P
@@ -108,7 +119,7 @@
 		strength: 11
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -135,6 +146,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19037.jpg
 			javaClass: true
+			//parentId: 19_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P37
 			rarity: P
@@ -153,7 +168,7 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -180,6 +195,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19038.jpg
 			javaClass: true
+			//parentId: 19_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P38
 			rarity: P
@@ -198,7 +217,7 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -225,6 +244,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19039.jpg
 			javaClass: true
+			//parentId: 19_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P39
 			rarity: P
@@ -243,7 +266,7 @@
 		strength: 12
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -270,6 +293,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19040.jpg
 			javaClass: true
+			//parentId: 19_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P40
 			rarity: P
@@ -288,7 +315,7 @@
 		strength: 14
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}

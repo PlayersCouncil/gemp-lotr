@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02021.jpg
 			javaClass: true
+			//parentId: 2_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C21
 			rarity: C
@@ -22,7 +26,6 @@
 		race: Man
 		strength: 5
 		vitality: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02022.jpg
 			javaClass: true
+			//parentId: 2_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R22
 			rarity: R
@@ -64,8 +71,7 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Staff
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -92,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02023.jpg
 			javaClass: true
+			//parentId: 2_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C23
 			rarity: C
@@ -105,7 +115,7 @@
 		culture: Gandalf
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -132,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02024.jpg
 			javaClass: true
+			//parentId: 2_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C24
 			rarity: C
@@ -150,7 +164,6 @@
 		race: Man
 		strength: 4
 		vitality: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -177,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02025.jpg
 			javaClass: true
+			//parentId: 2_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R25
 			rarity: R
@@ -195,7 +212,6 @@
 		race: Man
 		strength: 4
 		vitality: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -222,6 +238,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02026.jpg
 			javaClass: true
+			//parentId: 2_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C26
 			rarity: C
@@ -235,7 +255,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -265,6 +285,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02027.jpg
 			javaClass: true
+			//parentId: 2_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R27
 			rarity: R
@@ -278,7 +302,8 @@
 		culture: Gandalf
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -308,6 +333,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02028.jpg
 			javaClass: true
+			//parentId: 2_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U28
 			rarity: U
@@ -321,7 +350,8 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -351,6 +381,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02029.jpg
 			javaClass: true
+			//parentId: 2_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C29
 			rarity: C
@@ -366,8 +400,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Staff
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Wizard
 		/*requires: {
 			
 		}
@@ -394,6 +427,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02030.jpg
 			javaClass: true
+			//parentId: 2_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U30
 			rarity: U
@@ -407,7 +444,8 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
+		keywords: Spell
 		/*requires: {
 			
 		}
@@ -437,6 +475,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02122.jpg
 			javaClass: true
+			//parentId: 2_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2P122
 			rarity: P
@@ -456,7 +498,6 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

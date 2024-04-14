@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04003.jpg
 			javaClass: true
+			//parentId: 4_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C3
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04004.jpg
 			javaClass: true
+			//parentId: 4_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C4
 			rarity: C
@@ -64,7 +72,6 @@
 		strength: 11
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -91,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04005.jpg
 			javaClass: true
+			//parentId: 4_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C5
 			rarity: C
@@ -104,7 +115,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -134,6 +145,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04006.jpg
 			javaClass: true
+			//parentId: 4_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R6
 			rarity: R
@@ -147,7 +162,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -174,6 +189,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04007.jpg
 			javaClass: true
+			//parentId: 4_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C7
 			rarity: C
@@ -187,7 +206,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -217,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04008.jpg
 			javaClass: true
+			//parentId: 4_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U8
 			rarity: U
@@ -230,7 +253,7 @@
 		culture: Dunland
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -260,6 +283,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04009.jpg
 			javaClass: true
+			//parentId: 4_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U9
 			rarity: U
@@ -277,7 +304,6 @@
 		strength: 10
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -304,6 +330,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04010.jpg
 			javaClass: true
+			//parentId: 4_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C10
 			rarity: C
@@ -321,7 +351,6 @@
 		strength: 8
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -348,6 +377,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04011.jpg
 			javaClass: true
+			//parentId: 4_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U11
 			rarity: U
@@ -365,7 +398,6 @@
 		strength: 9
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -392,6 +424,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04012.jpg
 			javaClass: true
+			//parentId: 4_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C12
 			rarity: C
@@ -409,7 +445,6 @@
 		strength: 7
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -436,6 +471,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04013.jpg
 			javaClass: true
+			//parentId: 4_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U13
 			rarity: U
@@ -453,7 +492,6 @@
 		strength: 9
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -480,6 +518,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04014.jpg
 			javaClass: true
+			//parentId: 4_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C14
 			rarity: C
@@ -497,7 +539,6 @@
 		strength: 7
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -524,6 +565,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04015.jpg
 			javaClass: true
+			//parentId: 4_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C15
 			rarity: C
@@ -541,7 +586,6 @@
 		strength: 5
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -568,6 +612,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04016.jpg
 			javaClass: true
+			//parentId: 4_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C16
 			rarity: C
@@ -585,7 +633,6 @@
 		strength: 9
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -612,6 +659,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04017.jpg
 			javaClass: true
+			//parentId: 4_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C17
 			rarity: C
@@ -629,7 +680,6 @@
 		strength: 11
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -656,6 +706,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04018.jpg
 			javaClass: true
+			//parentId: 4_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C18
 			rarity: C
@@ -673,7 +727,6 @@
 		strength: 9
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -700,6 +753,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04019.jpg
 			javaClass: true
+			//parentId: 4_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R19
 			rarity: R
@@ -713,8 +770,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -741,6 +797,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04020.jpg
 			javaClass: true
+			//parentId: 4_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R20
 			rarity: R
@@ -758,7 +818,6 @@
 		strength: 10
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -785,6 +844,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04021.jpg
 			javaClass: true
+			//parentId: 4_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C21
 			rarity: C
@@ -802,7 +865,6 @@
 		strength: 9
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -829,6 +891,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04022.jpg
 			javaClass: true
+			//parentId: 4_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R22
 			rarity: R
@@ -846,7 +912,6 @@
 		strength: 14
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -873,6 +938,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04023.jpg
 			javaClass: true
+			//parentId: 4_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R23
 			rarity: R
@@ -890,7 +959,6 @@
 		strength: 12
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -917,6 +985,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04024.jpg
 			javaClass: true
+			//parentId: 4_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U24
 			rarity: U
@@ -934,7 +1006,6 @@
 		strength: 10
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -961,6 +1032,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04025.jpg
 			javaClass: true
+			//parentId: 4_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C25
 			rarity: C
@@ -978,7 +1053,6 @@
 		strength: 9
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1005,6 +1079,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04026.jpg
 			javaClass: true
+			//parentId: 4_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C26
 			rarity: C
@@ -1020,8 +1098,7 @@
 		type: Possession
 		strength: 3
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [dunland] Man
 		/*requires: {
 			
 		}
@@ -1048,6 +1125,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04027.jpg
 			javaClass: true
+			//parentId: 4_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U27
 			rarity: U
@@ -1061,7 +1142,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1088,6 +1169,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04028.jpg
 			javaClass: true
+			//parentId: 4_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U28
 			rarity: U
@@ -1101,7 +1186,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1128,6 +1213,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04029.jpg
 			javaClass: true
+			//parentId: 4_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R29
 			rarity: R
@@ -1141,7 +1230,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1168,6 +1257,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04030.jpg
 			javaClass: true
+			//parentId: 4_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R30
 			rarity: R
@@ -1181,7 +1274,6 @@
 		culture: Dunland
 		twilight: 0
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -1208,6 +1300,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04031.jpg
 			javaClass: true
+			//parentId: 4_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U31
 			rarity: U
@@ -1221,7 +1317,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1248,6 +1344,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04032.jpg
 			javaClass: true
+			//parentId: 4_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R32
 			rarity: R
@@ -1261,7 +1361,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1291,6 +1391,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04033.jpg
 			javaClass: true
+			//parentId: 4_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R33
 			rarity: R
@@ -1309,7 +1413,6 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1336,6 +1439,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04034.jpg
 			javaClass: true
+			//parentId: 4_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U34
 			rarity: U
@@ -1349,7 +1456,7 @@
 		culture: Dunland
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1376,6 +1483,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04035.jpg
 			javaClass: true
+			//parentId: 4_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R35
 			rarity: R
@@ -1389,7 +1500,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1419,6 +1530,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04036.jpg
 			javaClass: true
+			//parentId: 4_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U36
 			rarity: U
@@ -1434,8 +1549,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [dunland] Man
 		/*requires: {
 			
 		}
@@ -1462,6 +1576,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04037.jpg
 			javaClass: true
+			//parentId: 4_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C37
 			rarity: C
@@ -1475,7 +1593,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1505,6 +1623,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04038.jpg
 			javaClass: true
+			//parentId: 4_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U38
 			rarity: U
@@ -1522,7 +1644,6 @@
 		strength: 9
 		vitality: 1
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1549,6 +1670,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04039.jpg
 			javaClass: true
+			//parentId: 4_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R39
 			rarity: R
@@ -1562,7 +1687,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1592,6 +1717,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04040.jpg
 			javaClass: true
+			//parentId: 4_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R40
 			rarity: R
@@ -1610,7 +1739,7 @@
 		strength: 10
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18094.jpg
 			javaClass: true
+			//parentId: 18_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C94
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18095.jpg
 			javaClass: true
+			//parentId: 18_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R95
 			rarity: R
@@ -58,8 +66,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -86,6 +93,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18096.jpg
 			javaClass: true
+			//parentId: 18_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R96
 			rarity: R
@@ -99,8 +110,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -127,6 +137,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18097.jpg
 			javaClass: true
+			//parentId: 18_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R97
 			rarity: R
@@ -141,8 +155,7 @@
 		twilight: 0
 		type: Possession
 		itemclass: Shield
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -169,6 +182,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18098.jpg
 			javaClass: true
+			//parentId: 18_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R98
 			rarity: R
@@ -182,7 +199,7 @@
 		culture: Rohan
 		twilight: 3
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -212,6 +229,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18099.jpg
 			javaClass: true
+			//parentId: 18_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R99
 			rarity: R
@@ -230,7 +251,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -257,6 +278,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18100.jpg
 			javaClass: true
+			//parentId: 18_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R100
 			rarity: R
@@ -270,8 +295,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man or Merry
 		/*requires: {
 			
 		}
@@ -298,6 +322,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18101.jpg
 			javaClass: true
+			//parentId: 18_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C101
 			rarity: C
@@ -311,7 +339,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		keyword: Archery
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -341,6 +369,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18102.jpg
 			javaClass: true
+			//parentId: 18_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R102
 			rarity: R
@@ -354,7 +386,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -381,6 +413,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18103.jpg
 			javaClass: true
+			//parentId: 18_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18C103
 			rarity: C
@@ -398,7 +434,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -425,6 +461,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18104.jpg
 			javaClass: true
+			//parentId: 18_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18U104
 			rarity: U
@@ -438,7 +478,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -465,6 +505,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR18105.jpg
 			javaClass: true
+			//parentId: 18_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 18R105
 			rarity: R
@@ -483,7 +527,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

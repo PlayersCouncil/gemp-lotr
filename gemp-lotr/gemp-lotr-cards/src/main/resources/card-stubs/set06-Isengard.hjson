@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06057.jpg
 			javaClass: true
+			//parentId: 6_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R57
 			rarity: R
@@ -21,7 +25,6 @@
 		strength: 9
 		vitality: 3
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -48,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06058.jpg
 			javaClass: true
+			//parentId: 6_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U58
 			rarity: U
@@ -61,7 +68,10 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Machine
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -88,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06059.jpg
 			javaClass: true
+			//parentId: 6_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C59
 			rarity: C
@@ -103,8 +117,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [isengard] minion)
 		/*requires: {
 			
 		}
@@ -131,6 +144,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06060.jpg
 			javaClass: true
+			//parentId: 6_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R60
 			rarity: R
@@ -148,7 +165,7 @@
 		strength: 12
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -175,6 +192,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06061.jpg
 			javaClass: true
+			//parentId: 6_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U61
 			rarity: U
@@ -189,7 +210,6 @@
 		twilight: 1
 		type: Condition
 		strength: -1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -216,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06062.jpg
 			javaClass: true
+			//parentId: 6_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R62
 			rarity: R
@@ -229,7 +253,7 @@
 		culture: Isengard
 		twilight: 4
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -259,6 +283,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06063.jpg
 			javaClass: true
+			//parentId: 6_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U63
 			rarity: U
@@ -266,13 +294,13 @@
 			cardNum: 63
 			style: Standard
 		}
-		title: Gnawing, Biting,<br>Hacking, Burning
+		title: Gnawing, Biting, Hacking, Burning
 		unique: false
 		side: Shadow
 		culture: Isengard
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -299,6 +327,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06064.jpg
 			javaClass: true
+			//parentId: 6_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U64
 			rarity: U
@@ -312,7 +344,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -339,6 +371,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06065.jpg
 			javaClass: true
+			//parentId: 6_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C65
 			rarity: C
@@ -356,7 +392,6 @@
 		strength: 8
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -383,6 +418,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06066.jpg
 			javaClass: true
+			//parentId: 6_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U66
 			rarity: U
@@ -400,7 +439,6 @@
 		strength: 7
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -427,6 +465,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06067.jpg
 			javaClass: true
+			//parentId: 6_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C67
 			rarity: C
@@ -444,7 +486,6 @@
 		strength: 5
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -471,6 +512,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06068.jpg
 			javaClass: true
+			//parentId: 6_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R68
 			rarity: R
@@ -488,7 +533,6 @@
 		strength: 11
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -515,6 +559,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06069.jpg
 			javaClass: true
+			//parentId: 6_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C69
 			rarity: C
@@ -532,7 +580,6 @@
 		strength: 7
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -559,6 +606,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06070.jpg
 			javaClass: true
+			//parentId: 6_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U70
 			rarity: U
@@ -576,7 +627,6 @@
 		strength: 5
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -603,6 +653,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06071.jpg
 			javaClass: true
+			//parentId: 6_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C71
 			rarity: C
@@ -620,7 +674,6 @@
 		strength: 5
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -647,6 +700,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06072.jpg
 			javaClass: true
+			//parentId: 6_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C72
 			rarity: C
@@ -664,7 +721,6 @@
 		strength: 6
 		vitality: 2
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -691,6 +747,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06073.jpg
 			javaClass: true
+			//parentId: 6_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U73
 			rarity: U
@@ -704,8 +764,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -732,6 +791,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06074.jpg
 			javaClass: true
+			//parentId: 6_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R74
 			rarity: R
@@ -750,7 +813,7 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Warg-rider
 		/*requires: {
 			
 		}
@@ -777,6 +840,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06075.jpg
 			javaClass: true
+			//parentId: 6_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U75
 			rarity: U
@@ -790,7 +857,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -817,6 +884,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06127.jpg
 			javaClass: true
+			//parentId: 6_127
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R127
 			rarity: R
@@ -834,7 +905,6 @@
 		strength: 11
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}

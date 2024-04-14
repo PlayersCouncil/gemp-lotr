@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19022.jpg
 			javaClass: true
+			//parentId: 19_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P22
 			rarity: P
@@ -21,7 +25,7 @@
 		strength: 13
 		vitality: 4
 		site: 4
-		#keyword: damage+1
+		keywords: Hunter 2
 		/*requires: {
 			
 		}
@@ -48,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19023.jpg
 			javaClass: true
+			//parentId: 19_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P23
 			rarity: P
@@ -66,7 +74,6 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12185.jpg
 			javaClass: true
+			//parentId: 12_185
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U185
 			rarity: U
@@ -17,7 +21,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Forest
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12186.jpg
 			javaClass: true
+			//parentId: 12_186
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U186
 			rarity: U
@@ -57,7 +65,10 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: [
+			Battleground
+			Underground
+		]
 		/*requires: {
 			
 		}
@@ -84,6 +95,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12187.jpg
 			javaClass: true
+			//parentId: 12_187
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12S187
 			rarity: S
@@ -97,7 +112,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Mountain
 		/*requires: {
 			
 		}
@@ -124,6 +139,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12188.jpg
 			javaClass: true
+			//parentId: 12_188
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12S188
 			rarity: S
@@ -137,7 +156,10 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: [
+			Battleground
+			Forest
+		]
 		/*requires: {
 			
 		}
@@ -164,6 +186,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12189.jpg
 			javaClass: true
+			//parentId: 12_189
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12S189
 			rarity: S
@@ -177,7 +203,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Dwelling
 		/*requires: {
 			
 		}
@@ -204,6 +230,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12190.jpg
 			javaClass: true
+			//parentId: 12_190
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12S190
 			rarity: S
@@ -217,7 +247,10 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: [
+			Battleground
+			Plains
+		]
 		/*requires: {
 			
 		}
@@ -244,6 +277,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12191.jpg
 			javaClass: true
+			//parentId: 12_191
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U191
 			rarity: U
@@ -257,7 +294,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}
@@ -284,6 +321,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12192.jpg
 			javaClass: true
+			//parentId: 12_192
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U192
 			rarity: U
@@ -297,7 +338,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Mountain
 		/*requires: {
 			
 		}
@@ -324,6 +365,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12193.jpg
 			javaClass: true
+			//parentId: 12_193
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U193
 			rarity: U
@@ -337,7 +382,7 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		#keyword: mountain;
+		keywords: Mountain
 		/*requires: {
 			
 		}
@@ -364,6 +409,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12194.jpg
 			javaClass: true
+			//parentId: 12_194
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U194
 			rarity: U
@@ -377,7 +426,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		#keyword: mountain;
+		keywords: Plains
 		/*requires: {
 			
 		}

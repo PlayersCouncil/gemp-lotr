@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03049.jpg
 			javaClass: true
+			//parentId: 3_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C49
 			rarity: C
@@ -11,13 +15,13 @@
 			cardNum: 49
 			style: Standard
 		}
-		title: Abandoning Reason<br>for Madness
+		title: Abandoning Reason for Madness
 		unique: false
 		side: Shadow
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03050.jpg
 			javaClass: true
+			//parentId: 3_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R50
 			rarity: R
@@ -54,13 +62,13 @@
 			cardNum: 50
 			style: Standard
 		}
-		title: Can You Protect Me<br>From Yourself?
+		title: Can You Protect Me From Yourself?
 		unique: false
 		side: Shadow
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03051.jpg
 			javaClass: true
+			//parentId: 3_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C51
 			rarity: C
@@ -103,7 +115,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -133,6 +145,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03052.jpg
 			javaClass: true
+			//parentId: 3_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R52
 			rarity: R
@@ -146,7 +162,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -173,6 +189,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03053.jpg
 			javaClass: true
+			//parentId: 3_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U53
 			rarity: U
@@ -186,7 +206,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -216,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03054.jpg
 			javaClass: true
+			//parentId: 3_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R54
 			rarity: R
@@ -229,7 +253,7 @@
 		culture: Isengard
 		twilight: 4
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -256,6 +280,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03055.jpg
 			javaClass: true
+			//parentId: 3_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C55
 			rarity: C
@@ -271,8 +299,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an [isengard] Orc)
 		/*requires: {
 			
 		}
@@ -299,6 +326,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03056.jpg
 			javaClass: true
+			//parentId: 3_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C56
 			rarity: C
@@ -316,7 +347,6 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -343,6 +373,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03057.jpg
 			javaClass: true
+			//parentId: 3_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U57
 			rarity: U
@@ -360,7 +394,6 @@
 		strength: 8
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -387,6 +420,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03058.jpg
 			javaClass: true
+			//parentId: 3_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U58
 			rarity: U
@@ -404,7 +441,6 @@
 		strength: 7
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -431,6 +467,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03059.jpg
 			javaClass: true
+			//parentId: 3_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C59
 			rarity: C
@@ -448,7 +488,6 @@
 		strength: 5
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -475,6 +514,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03060.jpg
 			javaClass: true
+			//parentId: 3_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U60
 			rarity: U
@@ -492,7 +535,6 @@
 		strength: 8
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -519,6 +561,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03061.jpg
 			javaClass: true
+			//parentId: 3_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U61
 			rarity: U
@@ -536,7 +582,6 @@
 		strength: 7
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -563,6 +608,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03062.jpg
 			javaClass: true
+			//parentId: 3_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C62
 			rarity: C
@@ -580,7 +629,6 @@
 		strength: 5
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -607,6 +655,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03063.jpg
 			javaClass: true
+			//parentId: 3_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C63
 			rarity: C
@@ -620,7 +672,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -650,6 +702,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03064.jpg
 			javaClass: true
+			//parentId: 3_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R64
 			rarity: R
@@ -667,7 +723,6 @@
 		strength: 11
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -694,6 +749,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03065.jpg
 			javaClass: true
+			//parentId: 3_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R65
 			rarity: R
@@ -711,7 +770,6 @@
 		strength: 10
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -738,6 +796,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03066.jpg
 			javaClass: true
+			//parentId: 3_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R66
 			rarity: R
@@ -755,7 +817,7 @@
 		strength: 11
 		vitality: 3
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -782,6 +844,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03067.jpg
 			javaClass: true
+			//parentId: 3_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R67
 			rarity: R
@@ -795,8 +861,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -823,6 +888,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03068.jpg
 			javaClass: true
+			//parentId: 3_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R68
 			rarity: R
@@ -841,7 +910,6 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -868,6 +936,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03069.jpg
 			javaClass: true
+			//parentId: 3_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C69
 			rarity: C
@@ -886,7 +958,6 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -913,6 +984,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03070.jpg
 			javaClass: true
+			//parentId: 3_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C70
 			rarity: C
@@ -926,7 +1001,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -956,6 +1031,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03071.jpg
 			javaClass: true
+			//parentId: 3_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R71
 			rarity: R
@@ -969,7 +1048,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -996,6 +1075,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03072.jpg
 			javaClass: true
+			//parentId: 3_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U72
 			rarity: U
@@ -1009,7 +1092,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1036,6 +1119,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03073.jpg
 			javaClass: true
+			//parentId: 3_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U73
 			rarity: U
@@ -1049,7 +1136,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1079,6 +1166,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03074.jpg
 			javaClass: true
+			//parentId: 3_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C74
 			rarity: C
@@ -1096,7 +1187,7 @@
 		strength: 6
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -1123,6 +1214,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03075.jpg
 			javaClass: true
+			//parentId: 3_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U75
 			rarity: U
@@ -1140,7 +1235,7 @@
 		strength: 9
 		vitality: 2
 		site: 5
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}

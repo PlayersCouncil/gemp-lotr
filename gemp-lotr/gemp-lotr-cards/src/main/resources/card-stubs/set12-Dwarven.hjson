@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12001.jpg
 			javaClass: true
+			//parentId: 12_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U1
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12002.jpg
 			javaClass: true
+			//parentId: 12_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U2
 			rarity: U
@@ -61,8 +69,7 @@
 		twilight: 0
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -89,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12003.jpg
 			javaClass: true
+			//parentId: 12_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U3
 			rarity: U
@@ -96,13 +107,13 @@
 			cardNum: 3
 			style: Standard
 		}
-		title: A Clamour of<br>Many Voices
+		title: A Clamour of Many Voices
 		unique: false
 		side: Free Peoples
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -129,6 +140,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12004.jpg
 			javaClass: true
+			//parentId: 12_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C4
 			rarity: C
@@ -142,7 +157,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -172,6 +187,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12005.jpg
 			javaClass: true
+			//parentId: 12_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U5
 			rarity: U
@@ -187,8 +206,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Bracers
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -215,6 +233,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12006.jpg
 			javaClass: true
+			//parentId: 12_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C6
 			rarity: C
@@ -228,7 +250,10 @@
 		culture: Dwarven
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Toil 2
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -255,6 +280,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12007.jpg
 			javaClass: true
+			//parentId: 12_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C7
 			rarity: C
@@ -272,7 +301,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -299,6 +327,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12008.jpg
 			javaClass: true
+			//parentId: 12_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C8
 			rarity: C
@@ -312,7 +344,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -339,6 +371,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12009.jpg
 			javaClass: true
+			//parentId: 12_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R9
 			rarity: R
@@ -352,7 +388,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -379,6 +415,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12010.jpg
 			javaClass: true
+			//parentId: 12_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R10
 			rarity: R
@@ -392,7 +432,8 @@
 		culture: Dwarven
 		twilight: 4
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
+		keywords: Toil 2
 		/*requires: {
 			
 		}
@@ -422,6 +463,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12011.jpg
 			javaClass: true
+			//parentId: 12_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U11
 			rarity: U
@@ -435,7 +480,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: Response
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -468,6 +513,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12012.jpg
 			javaClass: true
+			//parentId: 12_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U12
 			rarity: U
@@ -481,7 +530,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -508,6 +557,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12013.jpg
 			javaClass: true
+			//parentId: 12_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U13
 			rarity: U
@@ -521,7 +574,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -551,6 +604,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12014.jpg
 			javaClass: true
+			//parentId: 12_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U14
 			rarity: U
@@ -564,7 +621,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -591,6 +648,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12015.jpg
 			javaClass: true
+			//parentId: 12_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U15
 			rarity: U
@@ -609,7 +670,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

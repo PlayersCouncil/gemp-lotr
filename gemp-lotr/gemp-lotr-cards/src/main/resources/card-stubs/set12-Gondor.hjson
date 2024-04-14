@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12042.jpg
 			javaClass: true
+			//parentId: 12_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R42
 			rarity: R
@@ -20,8 +24,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Boromir)
 		/*requires: {
 			
 		}
@@ -48,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12043.jpg
 			javaClass: true
+			//parentId: 12_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U43
 			rarity: U
@@ -66,7 +73,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -93,6 +100,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12044.jpg
 			javaClass: true
+			//parentId: 12_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C44
 			rarity: C
@@ -106,7 +117,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -136,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12045.jpg
 			javaClass: true
+			//parentId: 12_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C45
 			rarity: C
@@ -149,7 +164,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -176,6 +191,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12046.jpg
 			javaClass: true
+			//parentId: 12_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C46
 			rarity: C
@@ -189,7 +208,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -219,6 +238,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12047.jpg
 			javaClass: true
+			//parentId: 12_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R47
 			rarity: R
@@ -237,7 +260,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
+		keywords: Ranger
 		/*requires: {
 			
 		}
@@ -264,6 +287,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12048.jpg
 			javaClass: true
+			//parentId: 12_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R48
 			rarity: R
@@ -279,8 +306,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Faramir)
 		/*requires: {
 			
 		}
@@ -307,6 +333,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12049.jpg
 			javaClass: true
+			//parentId: 12_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U49
 			rarity: U
@@ -323,8 +353,7 @@
 		strength: 1
 		resistance: 1
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a knight
 		/*requires: {
 			
 		}
@@ -351,6 +380,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12050.jpg
 			javaClass: true
+			//parentId: 12_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U50
 			rarity: U
@@ -364,7 +397,10 @@
 		culture: Gondor
 		twilight: 4
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Toil 2
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -391,6 +427,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12051.jpg
 			javaClass: true
+			//parentId: 12_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U51
 			rarity: U
@@ -404,7 +444,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -431,6 +471,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12052.jpg
 			javaClass: true
+			//parentId: 12_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C52
 			rarity: C
@@ -444,7 +488,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -471,6 +515,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12053.jpg
 			javaClass: true
+			//parentId: 12_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C53
 			rarity: C
@@ -484,7 +532,6 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}

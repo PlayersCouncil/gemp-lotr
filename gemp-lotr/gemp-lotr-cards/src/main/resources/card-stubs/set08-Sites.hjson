@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08117.jpg
 			javaClass: true
+			//parentId: 8_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U117
 			rarity: U
@@ -18,7 +22,10 @@
 		site: 3K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: [
+			Underground
+			Sanctuary
+		]
 		/*requires: {
 			
 		}
@@ -45,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08118.jpg
 			javaClass: true
+			//parentId: 8_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U118
 			rarity: U
@@ -59,7 +70,7 @@
 		site: 4K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: Underground
 		/*requires: {
 			
 		}
@@ -86,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08119.jpg
 			javaClass: true
+			//parentId: 8_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U119
 			rarity: U
@@ -100,7 +115,6 @@
 		site: 5K
 		block: King
 		direction: Left
-		#keyword: mountain;
 		/*requires: {
 			
 		}
@@ -127,6 +141,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08120.jpg
 			javaClass: true
+			//parentId: 8_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U120
 			rarity: U
@@ -141,7 +159,7 @@
 		site: 7K
 		block: King
 		direction: Right
-		#keyword: mountain;
+		keywords: River
 		/*requires: {
 			
 		}

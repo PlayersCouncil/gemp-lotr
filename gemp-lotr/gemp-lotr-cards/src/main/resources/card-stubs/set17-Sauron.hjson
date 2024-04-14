@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17105.jpg
 			javaClass: true
+			//parentId: 17_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R105
 			rarity: R
@@ -17,8 +21,7 @@
 		culture: Sauron
 		twilight: 2
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

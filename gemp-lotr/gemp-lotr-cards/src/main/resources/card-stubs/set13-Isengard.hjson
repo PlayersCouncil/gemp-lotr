@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13078.jpg
 			javaClass: true
+			//parentId: 13_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R78
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Isengard
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13079.jpg
 			javaClass: true
+			//parentId: 13_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13U79
 			rarity: U
@@ -57,7 +65,7 @@
 		culture: Isengard
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -84,6 +92,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13080.jpg
 			javaClass: true
+			//parentId: 13_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R80
 			rarity: R
@@ -97,7 +109,7 @@
 		culture: Isengard
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -124,6 +136,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR13081.jpg
 			javaClass: true
+			//parentId: 13_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 13R81
 			rarity: R
@@ -141,8 +157,7 @@
 		strength: 2
 		vitality: 1
 		itemclass: Staff
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Wizard
 		/*requires: {
 			
 		}

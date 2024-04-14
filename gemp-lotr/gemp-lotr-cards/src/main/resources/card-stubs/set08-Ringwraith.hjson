@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08067.jpg
 			javaClass: true
+			//parentId: 8_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R67
 			rarity: R
@@ -17,7 +21,7 @@
 		culture: Wraith
 		twilight: 4
 		type: Event
-		keyword: Assignment
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08068.jpg
 			javaClass: true
+			//parentId: 8_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R68
 			rarity: R
@@ -60,7 +68,7 @@
 		culture: Wraith
 		twilight: 3
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08069.jpg
 			javaClass: true
+			//parentId: 8_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U69
 			rarity: U
@@ -103,7 +115,7 @@
 		culture: Wraith
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -130,6 +142,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08070.jpg
 			javaClass: true
+			//parentId: 8_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R70
 			rarity: R
@@ -145,8 +161,7 @@
 		type: Possession
 		strength: 3
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}
@@ -173,6 +188,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08071.jpg
 			javaClass: true
+			//parentId: 8_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U71
 			rarity: U
@@ -186,7 +205,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -213,6 +232,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08072.jpg
 			javaClass: true
+			//parentId: 8_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R72
 			rarity: R
@@ -231,7 +254,6 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -258,6 +280,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08073.jpg
 			javaClass: true
+			//parentId: 8_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U73
 			rarity: U
@@ -271,7 +297,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -301,6 +327,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08074.jpg
 			javaClass: true
+			//parentId: 8_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C74
 			rarity: C
@@ -318,7 +348,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -345,6 +374,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08075.jpg
 			javaClass: true
+			//parentId: 8_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C75
 			rarity: C
@@ -362,7 +395,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -389,6 +421,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08076.jpg
 			javaClass: true
+			//parentId: 8_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8C76
 			rarity: C
@@ -406,7 +442,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -433,6 +468,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08077.jpg
 			javaClass: true
+			//parentId: 8_77
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R77
 			rarity: R
@@ -450,7 +489,6 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -477,6 +515,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08078.jpg
 			javaClass: true
+			//parentId: 8_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U78
 			rarity: U
@@ -490,7 +532,7 @@
 		culture: Wraith
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -517,6 +559,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08079.jpg
 			javaClass: true
+			//parentId: 8_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U79
 			rarity: U
@@ -535,7 +581,7 @@
 		strength: 12
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}
@@ -562,6 +608,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08080.jpg
 			javaClass: true
+			//parentId: 8_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U80
 			rarity: U
@@ -580,7 +630,10 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		#keyword: damage+1
+		keywords: [
+			Enduring
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -607,6 +660,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08081.jpg
 			javaClass: true
+			//parentId: 8_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R81
 			rarity: R
@@ -625,7 +682,10 @@
 		strength: 9
 		vitality: 3
 		site: 3
-		#keyword: damage+1
+		keywords: [
+			Enduring
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -652,6 +712,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08082.jpg
 			javaClass: true
+			//parentId: 8_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U82
 			rarity: U
@@ -665,7 +729,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -695,6 +759,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08083.jpg
 			javaClass: true
+			//parentId: 8_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8U83
 			rarity: U
@@ -710,8 +778,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Nazgûl
 		/*requires: {
 			
 		}
@@ -738,6 +805,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR08084.jpg
 			javaClass: true
+			//parentId: 8_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 8R84
 			rarity: R
@@ -756,7 +827,7 @@
 		strength: 14
 		vitality: 4
 		site: 3
-		#keyword: damage+1
+		keywords: Enduring
 		/*requires: {
 			
 		}

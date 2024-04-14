@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15121.jpg
 			javaClass: true
+			//parentId: 15_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C121
 			rarity: C
@@ -17,7 +21,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -47,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15122.jpg
 			javaClass: true
+			//parentId: 15_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R122
 			rarity: R
@@ -60,7 +68,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Assignment
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -90,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15123.jpg
 			javaClass: true
+			//parentId: 15_123
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R123
 			rarity: R
@@ -108,7 +120,10 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
+		keywords: [
+			Valiant
+			Hunter 2
+		]
 		/*requires: {
 			
 		}
@@ -135,6 +150,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15124.jpg
 			javaClass: true
+			//parentId: 15_124
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R124
 			rarity: R
@@ -151,8 +170,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -179,6 +197,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15125.jpg
 			javaClass: true
+			//parentId: 15_125
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C125
 			rarity: C
@@ -197,7 +219,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -224,6 +246,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15126.jpg
 			javaClass: true
+			//parentId: 15_126
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S126
 			rarity: S
@@ -242,7 +268,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Valiant
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -269,6 +298,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15127.jpg
 			javaClass: true
+			//parentId: 15_127
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C127
 			rarity: C
@@ -282,7 +315,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -312,6 +345,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15128.jpg
 			javaClass: true
+			//parentId: 15_128
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U128
 			rarity: U
@@ -330,7 +367,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -357,6 +393,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15129.jpg
 			javaClass: true
+			//parentId: 15_129
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U129
 			rarity: U
@@ -371,8 +411,7 @@
 		twilight: 2
 		type: Possession
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -399,6 +438,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15130.jpg
 			javaClass: true
+			//parentId: 15_130
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C130
 			rarity: C
@@ -416,7 +459,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -443,6 +485,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15131.jpg
 			javaClass: true
+			//parentId: 15_131
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C131
 			rarity: C
@@ -456,7 +502,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		keyword: Maneuver
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -486,6 +532,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15132.jpg
 			javaClass: true
+			//parentId: 15_132
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U132
 			rarity: U
@@ -499,7 +549,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -529,6 +579,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15133.jpg
 			javaClass: true
+			//parentId: 15_133
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C133
 			rarity: C
@@ -543,8 +597,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -571,6 +624,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15134.jpg
 			javaClass: true
+			//parentId: 15_134
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U134
 			rarity: U
@@ -585,7 +642,6 @@
 		twilight: 2
 		type: Follower
 		strength: 1
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -612,6 +668,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15135.jpg
 			javaClass: true
+			//parentId: 15_135
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R135
 			rarity: R
@@ -625,7 +685,6 @@
 		culture: Rohan
 		twilight: 1
 		type: Follower
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -652,6 +711,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15136.jpg
 			javaClass: true
+			//parentId: 15_136
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15C136
 			rarity: C
@@ -667,8 +730,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -695,6 +757,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15137.jpg
 			javaClass: true
+			//parentId: 15_137
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U137
 			rarity: U
@@ -708,7 +774,6 @@
 		culture: Rohan
 		twilight: 2
 		type: Follower
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -735,6 +800,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15138.jpg
 			javaClass: true
+			//parentId: 15_138
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15S138
 			rarity: S
@@ -752,7 +821,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -779,6 +848,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15139.jpg
 			javaClass: true
+			//parentId: 15_139
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U139
 			rarity: U
@@ -796,7 +869,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Valiant
 		/*requires: {
 			
 		}
@@ -823,6 +896,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15140.jpg
 			javaClass: true
+			//parentId: 15_140
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U140
 			rarity: U
@@ -839,8 +916,7 @@
 		strength: 1
 		resistance: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -867,6 +943,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15141.jpg
 			javaClass: true
+			//parentId: 15_141
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15R141
 			rarity: R
@@ -881,8 +961,7 @@
 		twilight: 2
 		type: Possession
 		itemclass: Shield
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -909,6 +988,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR15142.jpg
 			javaClass: true
+			//parentId: 15_142
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 15U142
 			rarity: U
@@ -922,7 +1005,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}

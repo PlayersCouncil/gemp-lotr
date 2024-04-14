@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19010.jpg
 			javaClass: true
+			//parentId: 19_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P10
 			rarity: P
@@ -22,7 +26,6 @@
 		strength: 5
 		vitality: 4
 		site: 3
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19011.jpg
 			javaClass: true
+			//parentId: 19_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P11
 			rarity: P
@@ -67,7 +74,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 5
-		#keyword: damage+1
+		keywords: Ring-bound
 		/*requires: {
 			
 		}

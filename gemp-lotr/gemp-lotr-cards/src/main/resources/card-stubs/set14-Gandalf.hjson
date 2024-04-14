@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR14005.jpg
 			javaClass: true
+			//parentId: 14_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 14R5
 			rarity: R
@@ -22,7 +26,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR14006.jpg
 			javaClass: true
+			//parentId: 14_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 14R6
 			rarity: R
@@ -67,7 +74,6 @@
 		strength: 4
 		vitality: 5
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17027.jpg
 			javaClass: true
+			//parentId: 17_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R27
 			rarity: R
@@ -21,8 +25,7 @@
 		strength: 2
 		vitality: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Aragorn)
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17028.jpg
 			javaClass: true
+			//parentId: 17_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R28
 			rarity: R
@@ -67,7 +74,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: Can-bear-ring
 		/*requires: {
 			
 		}
@@ -94,6 +101,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17029.jpg
 			javaClass: true
+			//parentId: 17_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R29
 			rarity: R
@@ -109,8 +120,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] ranger
 		/*requires: {
 			
 		}
@@ -137,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17030.jpg
 			javaClass: true
+			//parentId: 17_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17S30
 			rarity: S
@@ -155,7 +169,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -182,6 +199,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17031.jpg
 			javaClass: true
+			//parentId: 17_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R31
 			rarity: R
@@ -198,8 +219,7 @@
 		type: Artifact
 		strength: 3
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Elendil or Isildur)
 		/*requires: {
 			
 		}
@@ -226,6 +246,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17032.jpg
 			javaClass: true
+			//parentId: 17_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U32
 			rarity: U
@@ -239,7 +263,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: Fellowship or skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -269,6 +293,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17033.jpg
 			javaClass: true
+			//parentId: 17_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17S33
 			rarity: S
@@ -286,7 +314,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 5
-		#keyword: damage+1
+		keywords: [
+			Ranger
+			Hunter 1
+		]
 		/*requires: {
 			
 		}
@@ -313,6 +344,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17034.jpg
 			javaClass: true
+			//parentId: 17_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17U34
 			rarity: U
@@ -326,7 +361,6 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
 		/*requires: {
 			
 		}
@@ -353,6 +387,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17035.jpg
 			javaClass: true
+			//parentId: 17_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17S35
 			rarity: S
@@ -367,7 +405,10 @@
 		twilight: 2
 		type: Condition
 		site: 3
-		#keyword: support area
+		keywords: [
+			Fortification
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -394,6 +435,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR17036.jpg
 			javaClass: true
+			//parentId: 17_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 17R36
 			rarity: R
@@ -407,8 +452,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

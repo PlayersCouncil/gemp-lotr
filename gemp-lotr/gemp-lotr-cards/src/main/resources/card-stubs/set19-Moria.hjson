@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19018.jpg
 			javaClass: true
+			//parentId: 19_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P18
 			rarity: P
@@ -22,7 +26,10 @@
 		strength: 17
 		vitality: 5
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Damage+2
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -49,6 +56,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19019.jpg
 			javaClass: true
+			//parentId: 19_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P19
 			rarity: P
@@ -66,7 +77,7 @@
 		strength: 4
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Tentacle
 		/*requires: {
 			
 		}
@@ -93,6 +104,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19020.jpg
 			javaClass: true
+			//parentId: 19_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P20
 			rarity: P
@@ -110,7 +125,7 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Tentacle
 		/*requires: {
 			
 		}
@@ -137,6 +152,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19021.jpg
 			javaClass: true
+			//parentId: 19_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P21
 			rarity: P
@@ -155,7 +174,6 @@
 		strength: 11
 		vitality: 4
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}

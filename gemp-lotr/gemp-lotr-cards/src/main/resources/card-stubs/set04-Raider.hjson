@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04216.jpg
 			javaClass: true
+			//parentId: 4_216
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U216
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Raider
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04217.jpg
 			javaClass: true
+			//parentId: 4_217
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U217
 			rarity: U
@@ -61,7 +69,7 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -88,6 +96,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04218.jpg
 			javaClass: true
+			//parentId: 4_218
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R218
 			rarity: R
@@ -105,7 +117,10 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 1
+		]
 		/*requires: {
 			
 		}
@@ -132,6 +147,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04219.jpg
 			javaClass: true
+			//parentId: 4_219
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R219
 			rarity: R
@@ -149,7 +168,10 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Archer
+		]
 		/*requires: {
 			
 		}
@@ -176,6 +198,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04220.jpg
 			javaClass: true
+			//parentId: 4_220
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U220
 			rarity: U
@@ -193,7 +219,7 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -220,6 +246,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04221.jpg
 			javaClass: true
+			//parentId: 4_221
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C221
 			rarity: C
@@ -237,7 +267,7 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -264,6 +294,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04222.jpg
 			javaClass: true
+			//parentId: 4_222
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C222
 			rarity: C
@@ -281,7 +315,7 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -308,6 +342,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04223.jpg
 			javaClass: true
+			//parentId: 4_223
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R223
 			rarity: R
@@ -321,7 +359,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -351,6 +389,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04224.jpg
 			javaClass: true
+			//parentId: 4_224
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C224
 			rarity: C
@@ -368,7 +410,7 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Easterling
 		/*requires: {
 			
 		}
@@ -395,6 +437,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04225.jpg
 			javaClass: true
+			//parentId: 4_225
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R225
 			rarity: R
@@ -412,7 +458,10 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Easterling
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -439,6 +488,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04226.jpg
 			javaClass: true
+			//parentId: 4_226
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C226
 			rarity: C
@@ -456,7 +509,7 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Easterling
 		/*requires: {
 			
 		}
@@ -483,6 +536,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04227.jpg
 			javaClass: true
+			//parentId: 4_227
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C227
 			rarity: C
@@ -500,7 +557,7 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Easterling
 		/*requires: {
 			
 		}
@@ -527,6 +584,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04228.jpg
 			javaClass: true
+			//parentId: 4_228
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C228
 			rarity: C
@@ -544,7 +605,7 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Easterling
 		/*requires: {
 			
 		}
@@ -571,6 +632,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04229.jpg
 			javaClass: true
+			//parentId: 4_229
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R229
 			rarity: R
@@ -588,7 +653,7 @@
 		strength: 5
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: Easterling
 		/*requires: {
 			
 		}
@@ -615,6 +680,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04230.jpg
 			javaClass: true
+			//parentId: 4_230
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U230
 			rarity: U
@@ -632,7 +701,7 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Easterling
 		/*requires: {
 			
 		}
@@ -659,6 +728,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04231.jpg
 			javaClass: true
+			//parentId: 4_231
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R231
 			rarity: R
@@ -672,7 +745,7 @@
 		culture: Raider
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -699,6 +772,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04232.jpg
 			javaClass: true
+			//parentId: 4_232
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U232
 			rarity: U
@@ -716,7 +793,10 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Archer
+		]
 		/*requires: {
 			
 		}
@@ -743,6 +823,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04233.jpg
 			javaClass: true
+			//parentId: 4_233
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U233
 			rarity: U
@@ -756,7 +840,7 @@
 		culture: Raider
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -786,6 +870,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04234.jpg
 			javaClass: true
+			//parentId: 4_234
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U234
 			rarity: U
@@ -799,7 +887,7 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -829,6 +917,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04235.jpg
 			javaClass: true
+			//parentId: 4_235
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C235
 			rarity: C
@@ -842,7 +934,7 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -872,6 +964,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04236.jpg
 			javaClass: true
+			//parentId: 4_236
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U236
 			rarity: U
@@ -885,7 +981,7 @@
 		culture: Raider
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -912,6 +1008,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04237.jpg
 			javaClass: true
+			//parentId: 4_237
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R237
 			rarity: R
@@ -925,7 +1025,7 @@
 		culture: Raider
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -952,6 +1052,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04238.jpg
 			javaClass: true
+			//parentId: 4_238
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R238
 			rarity: R
@@ -965,7 +1069,7 @@
 		culture: Raider
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -992,6 +1096,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04239.jpg
 			javaClass: true
+			//parentId: 4_239
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C239
 			rarity: C
@@ -1005,7 +1113,7 @@
 		culture: Raider
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1035,6 +1143,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04240.jpg
 			javaClass: true
+			//parentId: 4_240
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R240
 			rarity: R
@@ -1048,7 +1160,7 @@
 		culture: Raider
 		twilight: 4
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1078,6 +1190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04241.jpg
 			javaClass: true
+			//parentId: 4_241
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C241
 			rarity: C
@@ -1091,7 +1207,7 @@
 		culture: Raider
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1121,6 +1237,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04242.jpg
 			javaClass: true
+			//parentId: 4_242
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U242
 			rarity: U
@@ -1134,7 +1254,7 @@
 		culture: Raider
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1161,6 +1281,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04243.jpg
 			javaClass: true
+			//parentId: 4_243
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R243
 			rarity: R
@@ -1174,7 +1298,7 @@
 		culture: Raider
 		twilight: 6
 		type: Event
-		keyword: 
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -1204,6 +1328,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04244.jpg
 			javaClass: true
+			//parentId: 4_244
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R244
 			rarity: R
@@ -1221,7 +1349,7 @@
 		strength: 16
 		vitality: 4
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -1248,6 +1376,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04245.jpg
 			javaClass: true
+			//parentId: 4_245
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R245
 			rarity: R
@@ -1265,7 +1397,10 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Archer
+		]
 		/*requires: {
 			
 		}
@@ -1292,6 +1427,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04246.jpg
 			javaClass: true
+			//parentId: 4_246
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R246
 			rarity: R
@@ -1309,7 +1448,7 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -1336,6 +1475,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04247.jpg
 			javaClass: true
+			//parentId: 4_247
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R247
 			rarity: R
@@ -1350,8 +1493,7 @@
 		twilight: 3
 		type: Possession
 		itemclass: Ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [raider] Man
 		/*requires: {
 			
 		}
@@ -1378,6 +1520,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04248.jpg
 			javaClass: true
+			//parentId: 4_248
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C248
 			rarity: C
@@ -1395,7 +1541,10 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Archer
+		]
 		/*requires: {
 			
 		}
@@ -1422,6 +1571,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04249.jpg
 			javaClass: true
+			//parentId: 4_249
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U249
 			rarity: U
@@ -1439,7 +1592,10 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 1
+		]
 		/*requires: {
 			
 		}
@@ -1466,6 +1622,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04250.jpg
 			javaClass: true
+			//parentId: 4_250
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U250
 			rarity: U
@@ -1483,7 +1643,7 @@
 		strength: 5
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -1510,6 +1670,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04251.jpg
 			javaClass: true
+			//parentId: 4_251
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R251
 			rarity: R
@@ -1527,7 +1691,10 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 1
+		]
 		/*requires: {
 			
 		}
@@ -1554,6 +1721,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04252.jpg
 			javaClass: true
+			//parentId: 4_252
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C252
 			rarity: C
@@ -1571,7 +1742,10 @@
 		strength: 3
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 2
+		]
 		/*requires: {
 			
 		}
@@ -1598,6 +1772,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04253.jpg
 			javaClass: true
+			//parentId: 4_253
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U253
 			rarity: U
@@ -1615,7 +1793,7 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -1642,6 +1820,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04254.jpg
 			javaClass: true
+			//parentId: 4_254
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C254
 			rarity: C
@@ -1659,7 +1841,10 @@
 		strength: 4
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 2
+		]
 		/*requires: {
 			
 		}
@@ -1686,6 +1871,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04255.jpg
 			javaClass: true
+			//parentId: 4_255
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C255
 			rarity: C
@@ -1701,8 +1890,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Southron
 		/*requires: {
 			
 		}
@@ -1729,6 +1917,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04256.jpg
 			javaClass: true
+			//parentId: 4_256
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R256
 			rarity: R
@@ -1746,7 +1938,11 @@
 		strength: 14
 		vitality: 4
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Archer
+			Ambush 1
+		]
 		/*requires: {
 			
 		}
@@ -1773,6 +1969,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04257.jpg
 			javaClass: true
+			//parentId: 4_257
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R257
 			rarity: R
@@ -1790,7 +1990,10 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 1
+		]
 		/*requires: {
 			
 		}
@@ -1817,6 +2020,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04258.jpg
 			javaClass: true
+			//parentId: 4_258
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C258
 			rarity: C
@@ -1834,7 +2041,10 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 1
+		]
 		/*requires: {
 			
 		}
@@ -1861,6 +2071,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04259.jpg
 			javaClass: true
+			//parentId: 4_259
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R259
 			rarity: R
@@ -1874,7 +2088,7 @@
 		culture: Raider
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Assignment
 		/*requires: {
 			
 		}
@@ -1904,6 +2118,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04260.jpg
 			javaClass: true
+			//parentId: 4_260
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C260
 			rarity: C
@@ -1917,7 +2135,7 @@
 		culture: Raider
 		twilight: 3
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1947,6 +2165,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04261.jpg
 			javaClass: true
+			//parentId: 4_261
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R261
 			rarity: R
@@ -1960,7 +2182,7 @@
 		culture: Raider
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}

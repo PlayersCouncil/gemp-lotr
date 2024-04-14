@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02031.jpg
 			javaClass: true
+			//parentId: 2_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U31
 			rarity: U
@@ -17,7 +21,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -44,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02032.jpg
 			javaClass: true
+			//parentId: 2_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R32
 			rarity: R
@@ -59,8 +67,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Man
 		/*requires: {
 			
 		}
@@ -87,6 +94,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02033.jpg
 			javaClass: true
+			//parentId: 2_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U33
 			rarity: U
@@ -100,7 +111,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -130,6 +141,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02034.jpg
 			javaClass: true
+			//parentId: 2_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2U34
 			rarity: U
@@ -143,7 +158,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -173,6 +188,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02035.jpg
 			javaClass: true
+			//parentId: 2_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C35
 			rarity: C
@@ -186,7 +205,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -213,6 +232,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02036.jpg
 			javaClass: true
+			//parentId: 2_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R36
 			rarity: R
@@ -226,7 +249,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -256,6 +279,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02037.jpg
 			javaClass: true
+			//parentId: 2_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2C37
 			rarity: C
@@ -269,7 +296,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -299,6 +326,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR02038.jpg
 			javaClass: true
+			//parentId: 2_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 2R38
 			rarity: R
@@ -313,8 +344,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Shield
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [gondor] companion
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03106.jpg
 			javaClass: true
+			//parentId: 3_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U106
 			rarity: U
@@ -17,8 +21,7 @@
 		culture: Shire
 		twilight: 0
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Hobbit companion
 		/*requires: {
 			
 		}
@@ -45,6 +48,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03107.jpg
 			javaClass: true
+			//parentId: 3_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3U107
 			rarity: U
@@ -59,8 +66,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Pipe
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Frodo)
 		/*requires: {
 			
 		}
@@ -87,6 +93,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03108.jpg
 			javaClass: true
+			//parentId: 3_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C108
 			rarity: C
@@ -102,8 +112,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Hobbit
 		/*requires: {
 			
 		}
@@ -130,6 +139,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03109.jpg
 			javaClass: true
+			//parentId: 3_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C109
 			rarity: C
@@ -143,7 +156,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -173,6 +186,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03110.jpg
 			javaClass: true
+			//parentId: 3_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R110
 			rarity: R
@@ -191,7 +208,6 @@
 		race: Hobbit
 		strength: 2
 		vitality: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -218,6 +234,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03111.jpg
 			javaClass: true
+			//parentId: 3_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C111
 			rarity: C
@@ -236,7 +256,6 @@
 		race: Hobbit
 		strength: 1
 		vitality: 2
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -263,6 +282,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03112.jpg
 			javaClass: true
+			//parentId: 3_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C112
 			rarity: C
@@ -276,7 +299,8 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
+		keywords: Stealth
 		/*requires: {
 			
 		}
@@ -306,6 +330,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03113.jpg
 			javaClass: true
+			//parentId: 3_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3R113
 			rarity: R
@@ -319,7 +347,7 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -346,6 +374,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR03114.jpg
 			javaClass: true
+			//parentId: 3_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 3C114
 			rarity: C
@@ -359,7 +391,10 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}

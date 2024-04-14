@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR19001.jpg
 			javaClass: true
+			//parentId: 19_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 19P1
 			rarity: P

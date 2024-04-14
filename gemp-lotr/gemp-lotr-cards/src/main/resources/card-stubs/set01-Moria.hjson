@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01163.jpg
 			javaClass: true
+			//parentId: 1_163
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R163
 			rarity: R
@@ -21,7 +25,6 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -48,6 +51,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01164.jpg
 			javaClass: true
+			//parentId: 1_164
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U164
 			rarity: U
@@ -61,7 +68,7 @@
 		culture: Moria
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -91,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01165.jpg
 			javaClass: true
+			//parentId: 1_165
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R165
 			rarity: R
@@ -109,7 +120,10 @@
 		strength: 15
 		vitality: 4
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Damage+1
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -136,6 +150,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01166.jpg
 			javaClass: true
+			//parentId: 1_166
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R166
 			rarity: R
@@ -144,15 +162,14 @@
 			style: Standard
 		}
 		title: Cave Troll's Hammer
-		unique: false
+		unique: true
 		side: Shadow
 		culture: Moria
 		twilight: 1
 		type: Possession
 		strength: 3
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Cave Troll of Moria)
 		/*requires: {
 			
 		}
@@ -179,6 +196,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01167.jpg
 			javaClass: true
+			//parentId: 1_167
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R167
 			rarity: R
@@ -192,7 +213,7 @@
 		culture: Moria
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -222,6 +243,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01168.jpg
 			javaClass: true
+			//parentId: 1_168
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C168
 			rarity: C
@@ -235,7 +260,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -265,6 +290,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01169.jpg
 			javaClass: true
+			//parentId: 1_169
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R169
 			rarity: R
@@ -278,7 +307,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Assignment
 		/*requires: {
 			
 		}
@@ -308,6 +337,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01170.jpg
 			javaClass: true
+			//parentId: 1_170
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R170
 			rarity: R
@@ -321,7 +354,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -351,6 +384,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01171.jpg
 			javaClass: true
+			//parentId: 1_171
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C171
 			rarity: C
@@ -364,7 +401,7 @@
 		culture: Moria
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Assignment
 		/*requires: {
 			
 		}
@@ -394,6 +431,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01172.jpg
 			javaClass: true
+			//parentId: 1_172
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R172
 			rarity: R
@@ -411,7 +452,7 @@
 		strength: 4
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -438,6 +479,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01173.jpg
 			javaClass: true
+			//parentId: 1_173
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R173
 			rarity: R
@@ -451,7 +496,7 @@
 		culture: Moria
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -478,6 +523,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01174.jpg
 			javaClass: true
+			//parentId: 1_174
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C174
 			rarity: C
@@ -495,7 +544,6 @@
 		strength: 5
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -522,6 +570,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01175.jpg
 			javaClass: true
+			//parentId: 1_175
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R175
 			rarity: R
@@ -535,7 +587,10 @@
 		culture: Moria
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Search
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -562,6 +617,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01176.jpg
 			javaClass: true
+			//parentId: 1_176
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C176
 			rarity: C
@@ -579,7 +638,7 @@
 		strength: 7
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: Archer
 		/*requires: {
 			
 		}
@@ -606,6 +665,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01177.jpg
 			javaClass: true
+			//parentId: 1_177
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C177
 			rarity: C
@@ -623,7 +686,6 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -650,6 +712,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01178.jpg
 			javaClass: true
+			//parentId: 1_178
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U178
 			rarity: U
@@ -667,7 +733,6 @@
 		strength: 5
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -694,6 +759,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01179.jpg
 			javaClass: true
+			//parentId: 1_179
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C179
 			rarity: C
@@ -711,7 +780,6 @@
 		strength: 8
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -738,6 +806,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01180.jpg
 			javaClass: true
+			//parentId: 1_180
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C180
 			rarity: C
@@ -753,8 +825,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [moria] Orc
 		/*requires: {
 			
 		}
@@ -781,6 +852,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01181.jpg
 			javaClass: true
+			//parentId: 1_181
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U181
 			rarity: U
@@ -798,7 +873,6 @@
 		strength: 5
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -825,6 +899,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01182.jpg
 			javaClass: true
+			//parentId: 1_182
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C182
 			rarity: C
@@ -840,8 +918,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [moria] minion
 		/*requires: {
 			
 		}
@@ -868,6 +945,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01183.jpg
 			javaClass: true
+			//parentId: 1_183
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R183
 			rarity: R
@@ -881,7 +962,7 @@
 		culture: Moria
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -908,6 +989,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01184.jpg
 			javaClass: true
+			//parentId: 1_184
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C184
 			rarity: C
@@ -925,7 +1010,6 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -952,6 +1036,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01185.jpg
 			javaClass: true
+			//parentId: 1_185
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C185
 			rarity: C
@@ -969,7 +1057,6 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -996,6 +1083,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01186.jpg
 			javaClass: true
+			//parentId: 1_186
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R186
 			rarity: R
@@ -1013,7 +1104,6 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1040,6 +1130,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01187.jpg
 			javaClass: true
+			//parentId: 1_187
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C187
 			rarity: C
@@ -1053,7 +1147,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -1083,6 +1177,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01188.jpg
 			javaClass: true
+			//parentId: 1_188
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U188
 			rarity: U
@@ -1096,7 +1194,7 @@
 		culture: Moria
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1123,6 +1221,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01189.jpg
 			javaClass: true
+			//parentId: 1_189
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R189
 			rarity: R
@@ -1136,7 +1238,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1166,6 +1268,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01190.jpg
 			javaClass: true
+			//parentId: 1_190
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R190
 			rarity: R
@@ -1181,8 +1287,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [moria] Orc
 		/*requires: {
 			
 		}
@@ -1209,6 +1314,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01191.jpg
 			javaClass: true
+			//parentId: 1_191
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C191
 			rarity: C
@@ -1226,7 +1335,6 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1253,6 +1361,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01192.jpg
 			javaClass: true
+			//parentId: 1_192
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C192
 			rarity: C
@@ -1266,7 +1378,7 @@
 		culture: Moria
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1293,6 +1405,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01193.jpg
 			javaClass: true
+			//parentId: 1_193
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C193
 			rarity: C
@@ -1306,7 +1422,7 @@
 		culture: Moria
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1333,6 +1449,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01194.jpg
 			javaClass: true
+			//parentId: 1_194
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U194
 			rarity: U
@@ -1346,7 +1466,8 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		#keywords: Regroup
+		keywords: Search
 		/*requires: {
 			
 		}
@@ -1376,6 +1497,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01195.jpg
 			javaClass: true
+			//parentId: 1_195
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R195
 			rarity: R
@@ -1389,7 +1514,7 @@
 		culture: Moria
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1416,6 +1541,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01196.jpg
 			javaClass: true
+			//parentId: 1_196
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C196
 			rarity: C
@@ -1429,7 +1558,7 @@
 		culture: Moria
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1456,6 +1585,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01197.jpg
 			javaClass: true
+			//parentId: 1_197
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C197
 			rarity: C
@@ -1469,7 +1602,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -1499,6 +1632,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01198.jpg
 			javaClass: true
+			//parentId: 1_198
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U198
 			rarity: U
@@ -1506,13 +1643,16 @@
 			cardNum: 198
 			style: Standard
 		}
-		title: Through the<br>Misty Mountains
+		title: Through the Misty Mountains
 		unique: false
 		side: Shadow
 		culture: Moria
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Search
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -1539,6 +1679,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01199.jpg
 			javaClass: true
+			//parentId: 1_199
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R199
 			rarity: R
@@ -1556,7 +1700,6 @@
 		strength: 8
 		vitality: 3
 		site: 4
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -1583,6 +1726,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01200.jpg
 			javaClass: true
+			//parentId: 1_200
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1R200
 			rarity: R
@@ -1596,7 +1743,7 @@
 		culture: Moria
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -1623,6 +1770,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01201.jpg
 			javaClass: true
+			//parentId: 1_201
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1C201
 			rarity: C
@@ -1636,7 +1787,7 @@
 		culture: Moria
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1666,6 +1817,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR01202.jpg
 			javaClass: true
+			//parentId: 1_202
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 1U202
 			rarity: U
@@ -1679,7 +1834,10 @@
 		culture: Moria
 		twilight: 2
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Search
+			Support Area
+		]
 		/*requires: {
 			
 		}

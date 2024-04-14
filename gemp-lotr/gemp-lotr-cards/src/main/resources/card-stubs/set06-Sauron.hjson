@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06098.jpg
 			javaClass: true
+			//parentId: 6_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C98
 			rarity: C
@@ -19,8 +23,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [sauron] Orc
 		/*requires: {
 			
 		}
@@ -47,6 +50,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06099.jpg
 			javaClass: true
+			//parentId: 6_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C99
 			rarity: C
@@ -64,7 +71,7 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Twilight
 		/*requires: {
 			
 		}
@@ -91,6 +98,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06100.jpg
 			javaClass: true
+			//parentId: 6_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C100
 			rarity: C
@@ -108,7 +119,10 @@
 		strength: 5
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Twilight
+			Damage+1
+		]
 		/*requires: {
 			
 		}
@@ -135,6 +149,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06101.jpg
 			javaClass: true
+			//parentId: 6_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R101
 			rarity: R
@@ -152,7 +170,6 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -179,6 +196,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06102.jpg
 			javaClass: true
+			//parentId: 6_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C102
 			rarity: C
@@ -196,7 +217,6 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -223,6 +243,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06103.jpg
 			javaClass: true
+			//parentId: 6_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R103
 			rarity: R
@@ -240,7 +264,7 @@
 		strength: 13
 		vitality: 4
 		site: 6
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -267,6 +291,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06104.jpg
 			javaClass: true
+			//parentId: 6_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U104
 			rarity: U
@@ -284,7 +312,6 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -311,6 +338,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06105.jpg
 			javaClass: true
+			//parentId: 6_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U105
 			rarity: U
@@ -324,7 +355,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -351,6 +382,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06106.jpg
 			javaClass: true
+			//parentId: 6_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R106
 			rarity: R
@@ -368,7 +403,7 @@
 		strength: 14
 		vitality: 5
 		site: 6
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}
@@ -395,6 +430,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06107.jpg
 			javaClass: true
+			//parentId: 6_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U107
 			rarity: U
@@ -410,8 +449,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [sauron] Troll
 		/*requires: {
 			
 		}
@@ -438,6 +476,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06108.jpg
 			javaClass: true
+			//parentId: 6_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C108
 			rarity: C
@@ -455,7 +497,7 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: Twilight
 		/*requires: {
 			
 		}
@@ -482,6 +524,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06128.jpg
 			javaClass: true
+			//parentId: 6_128
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R128
 			rarity: R
@@ -499,7 +545,7 @@
 		strength: 13
 		vitality: 4
 		site: 6
-		#keyword: damage+1
+		keywords: Fierce
 		/*requires: {
 			
 		}

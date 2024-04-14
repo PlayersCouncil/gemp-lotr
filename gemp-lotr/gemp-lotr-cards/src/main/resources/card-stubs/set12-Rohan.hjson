@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12107.jpg
 			javaClass: true
+			//parentId: 12_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C107
 			rarity: C
@@ -22,7 +26,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 5
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -49,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12108.jpg
 			javaClass: true
+			//parentId: 12_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R108
 			rarity: R
@@ -62,7 +69,10 @@
 		culture: Rohan
 		twilight: 4
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Toil 2
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -89,6 +99,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12109.jpg
 			javaClass: true
+			//parentId: 12_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C109
 			rarity: C
@@ -102,7 +116,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -132,6 +146,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12110.jpg
 			javaClass: true
+			//parentId: 12_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C110
 			rarity: C
@@ -145,7 +163,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -172,6 +190,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12111.jpg
 			javaClass: true
+			//parentId: 12_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R111
 			rarity: R
@@ -187,8 +209,7 @@
 		type: Possession
 		vitality: 1
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}
@@ -215,6 +236,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12112.jpg
 			javaClass: true
+			//parentId: 12_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U112
 			rarity: U
@@ -233,7 +258,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -260,6 +284,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12113.jpg
 			javaClass: true
+			//parentId: 12_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12S113
 			rarity: S
@@ -277,7 +305,6 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -304,6 +331,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12114.jpg
 			javaClass: true
+			//parentId: 12_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C114
 			rarity: C
@@ -317,7 +348,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		keyword: Regroup
+		#keywords: Regroup
 		/*requires: {
 			
 		}
@@ -347,6 +378,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12115.jpg
 			javaClass: true
+			//parentId: 12_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12C115
 			rarity: C
@@ -360,7 +395,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -387,6 +422,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12116.jpg
 			javaClass: true
+			//parentId: 12_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12R116
 			rarity: R
@@ -405,7 +444,6 @@
 		strength: 7
 		vitality: 3
 		resistance: 5
-		#keyword: damage+1
 		/*requires: {
 			
 		}
@@ -432,6 +470,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR12117.jpg
 			javaClass: true
+			//parentId: 12_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 12U117
 			rarity: U
@@ -450,7 +492,6 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		#keyword: damage+1
 		/*requires: {
 			
 		}

@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05070.jpg
 			javaClass: true
+			//parentId: 5_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R70
 			rarity: R
@@ -21,7 +25,7 @@
 		strength: 14
 		vitality: 4
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -48,6 +52,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05071.jpg
 			javaClass: true
+			//parentId: 5_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R71
 			rarity: R
@@ -65,7 +73,7 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}
@@ -92,6 +100,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05072.jpg
 			javaClass: true
+			//parentId: 5_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R72
 			rarity: R
@@ -109,7 +121,10 @@
 		strength: 11
 		vitality: 2
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 2
+		]
 		/*requires: {
 			
 		}
@@ -136,6 +151,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05073.jpg
 			javaClass: true
+			//parentId: 5_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C73
 			rarity: C
@@ -151,8 +170,7 @@
 		type: Possession
 		strength: 3
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Southron
 		/*requires: {
 			
 		}
@@ -179,6 +197,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05074.jpg
 			javaClass: true
+			//parentId: 5_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C74
 			rarity: C
@@ -196,7 +218,10 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 2
+		]
 		/*requires: {
 			
 		}
@@ -223,6 +248,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05075.jpg
 			javaClass: true
+			//parentId: 5_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C75
 			rarity: C
@@ -240,7 +269,10 @@
 		strength: 4
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 2
+		]
 		/*requires: {
 			
 		}
@@ -267,6 +299,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05076.jpg
 			javaClass: true
+			//parentId: 5_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5C76
 			rarity: C
@@ -284,7 +320,10 @@
 		strength: 8
 		vitality: 1
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 2
+		]
 		/*requires: {
 			
 		}
@@ -311,6 +350,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05077.jpg
 			javaClass: true
+			//parentId: 5_77
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5U77
 			rarity: U
@@ -324,7 +367,7 @@
 		culture: Raider
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -351,6 +394,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05078.jpg
 			javaClass: true
+			//parentId: 5_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R78
 			rarity: R
@@ -366,8 +413,7 @@
 		type: Possession
 		strength: 4
 		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
+		#target: a Southron
 		/*requires: {
 			
 		}
@@ -394,6 +440,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR05126.jpg
 			javaClass: true
+			//parentId: 5_126
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 5R126
 			rarity: R
@@ -411,7 +461,7 @@
 		strength: 14
 		vitality: 4
 		site: 4
-		#keyword: damage+1
+		keywords: Southron
 		/*requires: {
 			
 		}

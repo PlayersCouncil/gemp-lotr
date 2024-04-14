@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06078.jpg
 			javaClass: true
+			//parentId: 6_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R78
 			rarity: R
@@ -21,7 +25,10 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Easterling
+			Fierce
+		]
 		/*requires: {
 			
 		}
@@ -48,6 +55,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06079.jpg
 			javaClass: true
+			//parentId: 6_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6U79
 			rarity: U
@@ -63,8 +74,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(an Easterling)
 		/*requires: {
 			
 		}
@@ -91,6 +101,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06080.jpg
 			javaClass: true
+			//parentId: 6_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R80
 			rarity: R
@@ -108,7 +122,10 @@
 		strength: 13
 		vitality: 4
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Archer
+		]
 		/*requires: {
 			
 		}
@@ -135,6 +152,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06081.jpg
 			javaClass: true
+			//parentId: 6_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6C81
 			rarity: C
@@ -152,7 +173,10 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		#keyword: damage+1
+		keywords: [
+			Southron
+			Ambush 1
+		]
 		/*requires: {
 			
 		}
@@ -179,6 +203,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR06082.jpg
 			javaClass: true
+			//parentId: 6_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 6R82
 			rarity: R
@@ -192,7 +220,7 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}

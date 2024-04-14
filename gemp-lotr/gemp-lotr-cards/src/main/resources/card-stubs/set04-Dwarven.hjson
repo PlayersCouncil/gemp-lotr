@@ -4,6 +4,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04041.jpg
 			javaClass: true
+			//parentId: 4_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R41
 			rarity: R
@@ -19,8 +23,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: name(Gimli)
-		#keyword: support area
+		#target: title(Gimli)
 		/*requires: {
 			
 		}
@@ -47,6 +50,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04042.jpg
 			javaClass: true
+			//parentId: 4_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C42
 			rarity: C
@@ -60,7 +67,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -90,6 +97,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04043.jpg
 			javaClass: true
+			//parentId: 4_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U43
 			rarity: U
@@ -103,7 +114,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -133,6 +144,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04044.jpg
 			javaClass: true
+			//parentId: 4_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C44
 			rarity: C
@@ -146,7 +161,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -173,6 +188,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04045.jpg
 			javaClass: true
+			//parentId: 4_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R45
 			rarity: R
@@ -186,7 +205,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -216,6 +235,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04046.jpg
 			javaClass: true
+			//parentId: 4_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R46
 			rarity: R
@@ -229,7 +252,10 @@
 		culture: Dwarven
 		twilight: 3
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -256,6 +282,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04047.jpg
 			javaClass: true
+			//parentId: 4_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U47
 			rarity: U
@@ -269,7 +299,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -296,6 +326,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04048.jpg
 			javaClass: true
+			//parentId: 4_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R48
 			rarity: R
@@ -315,7 +349,7 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -342,6 +376,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04049.jpg
 			javaClass: true
+			//parentId: 4_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C49
 			rarity: C
@@ -361,7 +399,7 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		#keyword: damage+1
+		keywords: Damage+1
 		/*requires: {
 			
 		}
@@ -388,6 +426,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04050.jpg
 			javaClass: true
+			//parentId: 4_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C50
 			rarity: C
@@ -401,7 +443,10 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: [
+			Tale
+			Support Area
+		]
 		/*requires: {
 			
 		}
@@ -428,6 +473,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04051.jpg
 			javaClass: true
+			//parentId: 4_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C51
 			rarity: C
@@ -441,7 +490,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -471,6 +520,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04052.jpg
 			javaClass: true
+			//parentId: 4_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R52
 			rarity: R
@@ -484,7 +537,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
@@ -511,6 +564,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04053.jpg
 			javaClass: true
+			//parentId: 4_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U53
 			rarity: U
@@ -524,7 +581,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: 
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -554,6 +611,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04054.jpg
 			javaClass: true
+			//parentId: 4_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R54
 			rarity: R
@@ -567,7 +628,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -597,6 +658,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04055.jpg
 			javaClass: true
+			//parentId: 4_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R55
 			rarity: R
@@ -610,7 +675,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		keyword: 
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -640,6 +705,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04056.jpg
 			javaClass: true
+			//parentId: 4_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C56
 			rarity: C
@@ -653,7 +722,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: 
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -683,6 +752,10 @@
 		cardInfo: {
 			imagePath: decipher/LOTR04057.jpg
 			javaClass: true
+			//parentId: 4_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U57
 			rarity: U
@@ -696,7 +769,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Condition
-		#keyword: support area
+		keywords: Support Area
 		/*requires: {
 			
 		}
