@@ -14,6 +14,7 @@ import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.StackActionEffect;
 import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.FailedEffect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
@@ -58,7 +59,7 @@ public class PlayCardFromStacked implements EffectAppenderProducer {
                             final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(actionContext.getGame(), cardsToPlay.iterator().next(), costModifier, Filters.any, false);
                             return new StackActionEffect(playCardAction);
                         } else {
-                            return null;
+                            return new FailedEffect();
                         }
                     }
                 });

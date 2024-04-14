@@ -12,9 +12,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_033_Tests
 {
@@ -123,13 +121,13 @@ public class Card_V1_033_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(ftentacle1);
-		//scn.ShadowDeclineOptionalTrigger();
+        scn.ShadowDeclineOptionalTrigger();
 		scn.ShadowPlayCard(ftentacle2);
-		//scn.ShadowDeclineOptionalTrigger();
+        scn.ShadowDeclineOptionalTrigger();
 
 		assertFalse(scn.ShadowActionAvailable("Thrashing Tentacle"));
 		scn.ShadowPlayCard(ftentacle3);
-		//scn.ShadowDeclineOptionalTrigger();
+        scn.ShadowDeclineOptionalTrigger();
 
 		assertTrue(scn.ShadowActionAvailable("Thrashing Tentacle"));
 		scn.ShadowUseCardAction(ttent);

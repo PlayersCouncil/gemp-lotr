@@ -300,7 +300,6 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(or(wizard,and(culture(gandalf),ally)))
-				nocheck: true
 			}
 		}
 		gametext: Play a Wizard or [gandalf] ally from your draw deck.

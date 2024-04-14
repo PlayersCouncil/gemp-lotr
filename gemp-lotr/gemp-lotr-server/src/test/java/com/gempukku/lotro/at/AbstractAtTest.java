@@ -21,7 +21,6 @@ public abstract class AbstractAtTest {
     public static LotroCardBlueprintLibrary _cardLibrary;
     public static LotroFormatLibrary _formatLibrary;
     public static ProductLibrary _productLibrary;
-    private final int cardId = 100;
 
     static {
         _cardLibrary = new LotroCardBlueprintLibrary();
@@ -156,6 +155,10 @@ public abstract class AbstractAtTest {
             throw exp;
         }
         _game.carryOutPendingActionsUntilDecisionNeeded();
+    }
+
+    public AwaitingDecision getAwaitingDecision(String player) {
+        return _userFeedback.getAwaitingDecision(player);
     }
 
     public void carryOutEffectInPhaseActionByPlayer(String playerId, Effect effect) throws DecisionResultInvalidException {

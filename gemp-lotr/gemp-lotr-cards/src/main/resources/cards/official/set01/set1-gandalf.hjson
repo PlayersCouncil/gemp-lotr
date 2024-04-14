@@ -627,7 +627,6 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(culture(gandalf),character)
-				nocheck: true
 			}
 		}
 	}

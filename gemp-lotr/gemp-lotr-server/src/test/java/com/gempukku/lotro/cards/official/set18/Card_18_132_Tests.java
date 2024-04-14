@@ -9,9 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class Card_18_132_Tests
@@ -157,6 +155,7 @@ public class Card_18_132_Tests
         assertEquals(10, scn.GetTwilight());
         scn.ShadowChoose("0");
         assertEquals(10, scn.GetTwilight());
+        scn.ShadowChoose("0");
 
         assertEquals(Zone.DISCARD, follower0.getZone());
 

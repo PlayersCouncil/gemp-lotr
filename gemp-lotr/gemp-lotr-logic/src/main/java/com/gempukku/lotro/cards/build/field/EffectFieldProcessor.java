@@ -26,6 +26,7 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("discardedfromplaytrigger", new DiscardedFromPlayTriggerEffectProcessor());
         effectProcessors.put("discount", new PotentialDiscount());
         effectProcessors.put("event", new EventEffectProcessor());
+        effectProcessors.put("exerttargetextracost", new ExertTargetExtraCost());
         effectProcessors.put("extracost", new ExtraCost());
         effectProcessors.put("extrapossessionclass", new ExtraPossessionClassEffectProcessor());
         effectProcessors.put("inhandtrigger", new InHandTriggerEffectProcessor());

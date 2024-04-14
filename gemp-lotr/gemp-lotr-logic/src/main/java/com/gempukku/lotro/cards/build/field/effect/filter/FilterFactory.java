@@ -9,8 +9,10 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
+import com.gempukku.lotro.logic.effects.DiscardCardsFromPlayEffect;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.SingleMemoryEvaluator;
+import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.CharacterLostSkirmishResult;
 
 import java.util.*;
@@ -47,6 +49,15 @@ public class FilterFactory {
         simpleFilters.put("currentsitenumber",
                 (actionContext -> Filters.siteNumber(actionContext.getGame().getGameState().getCurrentSiteNumber())));
         simpleFilters.put("exhausted", (actionContext) -> Filters.exhausted);
+        simpleFilters.put("gettingdiscarded",
+                (actionContext -> {
+                    Effect effect = actionContext.getEffect();
+                    if (effect instanceof DiscardCardsFromPlayEffect aboutToDiscardFromPlay) {
+                        Collection<PhysicalCard> discardedCards = aboutToDiscardFromPlay.getAffectedCardsMinusPrevented(actionContext.getGame());
+                        return Filters.in(discardedCards);
+                    }
+                    return Filters.none;
+                }));
         simpleFilters.put("idinstored",
                 (actionContext ->
                         (Filter) (game, physicalCard) -> {

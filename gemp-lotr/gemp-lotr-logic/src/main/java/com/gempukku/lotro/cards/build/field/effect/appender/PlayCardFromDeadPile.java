@@ -21,15 +21,15 @@ import org.json.simple.JSONObject;
 
 import java.util.Collection;
 
-public class PlayCardFromHand implements EffectAppenderProducer {
+public class PlayCardFromDeadPile implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "ignoreInDeadPile", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "removedTwilight", "memorize");
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
+        final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("cost"), 0, environment);
-        final boolean ignoreInDeadPile = FieldUtils.getBoolean(effectObject.get("ignoreInDeadPile"), "ignoreInDeadPile", false);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
@@ -38,17 +38,28 @@ public class PlayCardFromHand implements EffectAppenderProducer {
         result.setPlayabilityCheckedForEffect(true);
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInHand(filter,
+                CardResolver.resolveCardsInDeadPile(filter,
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, costModifier, false, ignoreInDeadPile), ExtraFilters.attachableTo(game, onFilterable));
+                                return Filters.and(Filters.playable(game, costModifier), ExtraFilters.attachableTo(game, onFilterable));
                             }
-                            return Filters.playable(game, costModifier, false, ignoreInDeadPile);
+
+                            return Filters.playable(game, costModifier, false, true, true);
                         },
-                        new ConstantEvaluator(1), memorize, "you", "you", "Choose card to play from hand", false, environment));
+                        (actionContext) -> {
+                            final LotroGame game = actionContext.getGame();
+                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+                            if (onFilterableSource != null) {
+                                final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
+                                return Filters.and(Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, true, true), ExtraFilters.attachableTo(actionContext.getGame(), onFilterable));
+                            }
+
+                            return Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, true, true);
+                        },
+                        new ConstantEvaluator(1), memorize, "you", "Choose card to play", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -57,7 +68,6 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                         if (cardsToPlay.size() == 1) {
                             final LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
-
                             Filterable onFilterable = (onFilterableSource != null) ? onFilterableSource.getFilterable(actionContext) : Filters.any;
 
                             final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, cardsToPlay.iterator().next(), costModifier, onFilterable, false);

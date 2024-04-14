@@ -10,9 +10,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_037_Tests
 {
@@ -99,6 +97,7 @@ public class Card_V1_037_Tests
 		assertTrue(scn.ShadowPlayAvailable(fell2));
 		scn.ShadowPlayCard(fell2);
 
+        scn.ShadowChooseCardBPFromSelection(blade);
 		assertEquals(Zone.ATTACHED, blade.getZone());
 		assertEquals(nazgul, blade.getAttachedTo());
 

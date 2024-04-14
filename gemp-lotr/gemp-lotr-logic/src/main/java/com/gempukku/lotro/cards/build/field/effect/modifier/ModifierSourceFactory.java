@@ -38,6 +38,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantlookorrevealhand", new CantLookOrRevealHand());
         modifierProducers.put("cantplaycards", new CantPlayCards());
         modifierProducers.put("cantplaycardsfromdeckordiscardpile", new CantPlayCardsFromDeckOrDiscardPile());
+        modifierProducers.put("cantplaycardson", new CantPlayCardsOn());
         modifierProducers.put("cantplayphaseevents", new CantPlayPhaseEvents());
         modifierProducers.put("cantplayphaseeventsorphasespecialabilities", new CantPlayPhaseEventsOrPhaseSpecialAbilities());
         modifierProducers.put("cantplayphasespecialabilities", new CantPlayPhaseSpecialAbilities());

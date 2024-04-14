@@ -32,39 +32,9 @@ public class ValueResolver {
                 final int max = Integer.parseInt(split[1]);
                 if (min > max || min < 0 || max < 1)
                     throw new InvalidCardDefinitionException("Unable to resolve count: " + value);
-                return new ValueSource() {
-                    @Override
-                    public Evaluator getEvaluator(ActionContext actionContext) {
-                        throw new RuntimeException("Evaluator has resolved to range");
-                    }
-
-                    @Override
-                    public int getMinimum(ActionContext actionContext) {
-                        return min;
-                    }
-
-                    @Override
-                    public int getMaximum(ActionContext actionContext) {
-                        return max;
-                    }
-                };
+                return new RangeEvaluator(min, max);
             } else if (stringValue.equalsIgnoreCase("any")) {
-                return new ValueSource() {
-                    @Override
-                    public Evaluator getEvaluator(ActionContext actionContext) {
-                        throw new RuntimeException("Evaluator has resolved to range");
-                    }
-
-                    @Override
-                    public int getMinimum(ActionContext actionContext) {
-                        return 0;
-                    }
-
-                    @Override
-                    public int getMaximum(ActionContext actionContext) {
-                        return Integer.MAX_VALUE;
-                    }
-                };
+                return new RangeEvaluator(0, Integer.MAX_VALUE);
             } else {
                 int v = Integer.parseInt(stringValue);
                 return new ConstantEvaluator(v);

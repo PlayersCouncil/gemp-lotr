@@ -59,8 +59,6 @@
 								filter: Crow
 								multiplier: -1
 							}
-							#Have to have this true for "deck or discard" choices
-							nocheck: true
 						}
 						{
 							type: PlayCardFromDiscard
