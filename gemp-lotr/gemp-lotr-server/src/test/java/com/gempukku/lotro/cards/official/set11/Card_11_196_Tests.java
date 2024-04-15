@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,45 +27,41 @@ public class Card_11_196_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void OurFoesAreWeakStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 11
-		* Title: Our Foes Are Weak
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Uruk-hai
-		* Twilight Cost: 2
-		* Type: condition
-		* Subtype: 
-		* Strength: -1
-		* Resistance: -3
-		* Game Text: To play, spot an [uruk-hai] minion. Bearer must be an unbound companion. Limit 1 per bearer.
+		 * Set: 11
+		 * Name: Our Foes Are Weak
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Uruk-hai
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: 
+		 * Strength: -1
+
+		 * Resistance: -3
+
+		 * Game Text: To play, spot an [uruk-hai] minion. Bearer must be an unbound companion. Limit 1 per bearer.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Our Foes Are Weak", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(-1, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
 		assertEquals(-3, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void OurFoesAreWeakTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,40 @@ public class Card_11_191_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void IsengardSiegeBowStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 11
-		* Title: Isengard Siege Bow
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Uruk-hai
-		* Twilight Cost: 1
-		* Type: possession
-		* Subtype: Ranged Weapon
-		* Vitality: 1
-		* Game Text: Bearer must be an [uruk-hai] minion.<br>While bearer is at a battleground site, it is an <b>archer</b>.
+		 * Set: 11
+		 * Name: Isengard Siege Bow
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Uruk-hai
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Ranged weapon
+
+		 * Vitality: 1
+
+		 * Game Text: Bearer must be an [uruk-hai] minion.<br>While bearer is at a battleground site, it is an <b>archer</b>.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Isengard Siege Bow", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		//assertEquals(Race.RANGED WEAPON, card.getBlueprint().getRace());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.RANGED_WEAPON));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
 		assertEquals(1, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void IsengardSiegeBowTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

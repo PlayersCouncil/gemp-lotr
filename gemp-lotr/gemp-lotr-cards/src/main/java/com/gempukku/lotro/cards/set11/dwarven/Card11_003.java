@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class Card11_003 extends AbstractAttachableFPPossession {
     public Card11_003() {
-        super(1, 2, 0, Culture.DWARVEN, PossessionClass.HAND_WEAPON, "Axe of Khazad-dum");
+        super(1, 2, 0, Culture.DWARVEN, PossessionClass.HAND_WEAPON, "Axe of Khazad-dûm");
     }
 
     @Override

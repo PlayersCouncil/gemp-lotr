@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class Card11_051 extends AbstractCompanion {
     public Card11_051() {
-        super(0, 3, 4, 5, Culture.GOLLUM, null, null, "Smeagol", "Scout and Guide", true);
+        super(0, 3, 4, 5, Culture.GOLLUM, null, null, "Sméagol", "Scout and Guide", true);
         addKeyword(Keyword.RING_BOUND);
     }
 

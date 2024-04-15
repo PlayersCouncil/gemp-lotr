@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,40 @@ public class Card_11_094_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void PaviseStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 11
-		* Title: Pavise
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Men
-		* Twilight Cost: 3
-		* Type: possession
-		* Subtype: Shield
-		* Vitality: 2
-		* Game Text: Bearer must be a [men] minion.<br>The twilight cost of this possession is -1 for each Free Peoples possession you spot.<br>Bearer cannot take wounds except during a skirmish.
+		 * Set: 11
+		 * Name: Pavise
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Men
+		 * Twilight Cost: 3
+		 * Type: Possession
+		 * Subtype: Shield
+
+		 * Vitality: 2
+
+		 * Game Text: Bearer must be a [men] minion.<br>The twilight cost of this possession is -1 for each Free Peoples possession you spot.<br>Bearer cannot take wounds except during a skirmish.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Pavise", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		//assertEquals(Race.SHIELD, card.getBlueprint().getRace());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.SHIELD));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void PaviseTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

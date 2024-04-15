@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,43 @@ public class Card_11_010_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void GrimirStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 11
-		* Title: Grimir, Dwarven Emissary
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 3
-		* Type: companion
-		* Subtype: Dwarf
-		* Strength: 7
-		* Vitality: 3
-		* Resistance: 7
-		* Game Text: <b>Response:</b> If a [dwarven] companion is about to take a wound in a skirmish, discard 2 [dwarven] cards from play (except characters) to prevent that.
+		 * Set: 11
+		 * Name: Grimir, Dwarven Emissary
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 3
+		 * Type: Companion
+		 * Subtype: Dwarf
+		 * Strength: 7
+		 * Vitality: 3
+		 * Resistance: 7
+
+		 * Game Text: <b>Response:</b> If a [dwarven] companion is about to take a wound in a skirmish, discard 2 [dwarven] cards from play (except characters) to prevent that.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Grimir", card.getBlueprint().getTitle());
+		assertEquals("Dwarven Emissary", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.DWARF, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.DWARF));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(7, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void GrimirTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

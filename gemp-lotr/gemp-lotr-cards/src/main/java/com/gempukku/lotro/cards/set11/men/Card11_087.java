@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class Card11_087 extends AbstractAttachable {
     public Card11_087() {
-        super(Side.SHADOW, CardType.CONDITION, 3, Culture.MEN, null, "Lathspell");
+        super(Side.SHADOW, CardType.CONDITION, 3, Culture.MEN, null, "Láthspell");
     }
 
     @Override

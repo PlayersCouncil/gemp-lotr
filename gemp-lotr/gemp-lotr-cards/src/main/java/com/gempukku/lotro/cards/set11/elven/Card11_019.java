@@ -19,7 +19,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card11_019 extends AbstractEvent {
     public Card11_019() {
-        super(Side.FREE_PEOPLE, 3, Culture.ELVEN, "Farewell to Lorien", Phase.FELLOWSHIP);
+        super(Side.FREE_PEOPLE, 3, Culture.ELVEN, "Farewell to Lórien", Phase.FELLOWSHIP);
     }
 
     @Override

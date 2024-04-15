@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,43 @@ public class Card_11_097_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void RagingDunlendingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 11
-		* Title: Raging Dunlending
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Men
-		* Twilight Cost: 4
-		* Type: minion
-		* Subtype: Man
-		* Strength: 10
-		* Vitality: 3
-		* Site Number: 4
-		* Game Text: When you play this minion, you may exert it to make it <b>fierce</b> until the regroup phase.<br>While you can spot 6 companions, each [men] minion is <b>fierce</b>.
+		 * Set: 11
+		 * Name: Raging Dunlending
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Men
+		 * Twilight Cost: 4
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 10
+		 * Vitality: 3
+
+		 * Site Number: 4
+		 * Game Text: When you play this minion, you may exert it to make it <b>fierce</b> until the regroup phase.<br>While you can spot 6 companions, each [men] minion is <b>fierce</b>.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Raging Dunlending", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(10, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void RagingDunlendingTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

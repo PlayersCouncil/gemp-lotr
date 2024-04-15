@@ -12,9 +12,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_11_235_Tests
 {
@@ -62,35 +60,29 @@ public class Card_11_235_Tests
 		//Pre-game setup
 		GenericCardTestHelper scn = GetScenario();
 
-		PhysicalCardImpl site1 = scn.GetFreepsSite("Dammed Gate-stream");
+		var card = scn.GetFreepsSite("Dammed Gate-stream");
 
-		assertFalse(site1.getBlueprint().isUnique());
-		//assertEquals(Side.FREE_PEOPLE, site1.getBlueprint().getSide());
-		//assertEquals(Culture., site1.getBlueprint().getCulture());
-		assertEquals(CardType.SITE, site1.getBlueprint().getCardType());
-		//assertEquals(Race.CREATURE, site1.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(site1, Keyword.MARSH)); // test for keywords as needed
-		assertEquals(3, site1.getBlueprint().getTwilightCost());
-		//assertEquals(, site1.getBlueprint().getStrength());
-		//assertEquals(, site1.getBlueprint().getVitality());
-		//assertEquals(, site1.getBlueprint().getResistance());
-		//assertEquals(Signet., site1.getBlueprint().getSignet());
-		assertEquals(0, site1.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
+		assertEquals("Dammed Gate-stream", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MARSH));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 
 	}
 
 	@Test
 	public void StartOfFellowshipPhaseActionAllowsPlayFromDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl frodo = scn.GetRingBearer();
-		PhysicalCardImpl dontlook = scn.GetFreepsCard("dontlook");
-		PhysicalCardImpl smeagol = scn.GetFreepsCard("smeagol");
-		PhysicalCardImpl slippery = scn.GetFreepsCard("slippery");
-		PhysicalCardImpl boat = scn.GetFreepsCard("boat");
-		PhysicalCardImpl clever = scn.GetFreepsCard("clever");
-		PhysicalCardImpl site1 = scn.GetFreepsSite("Dammed Gate-stream");
+		var frodo = scn.GetRingBearer();
+		var dontlook = scn.GetFreepsCard("dontlook");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var slippery = scn.GetFreepsCard("slippery");
+		var boat = scn.GetFreepsCard("boat");
+		var clever = scn.GetFreepsCard("clever");
+		var site1 = scn.GetFreepsSite("Dammed Gate-stream");
 
 		scn.FreepsChooseCardBPFromSelection(site1);
 		scn.SkipStartingFellowships();
@@ -112,7 +104,5 @@ public class Card_11_235_Tests
 
 		assertEquals(Zone.SUPPORT, dontlook.getZone());
 		assertEquals(Zone.DECK, smeagol.getZone());
-
 	}
-
 }
