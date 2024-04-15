@@ -49,7 +49,8 @@ public class Card_07_303_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Orc Pursuer", card.getBlueprint().getTitle());
+		//Decipher messed up and assigned this name after already naming 5C108
+		assertEquals("Orc Pursuer(2)", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());

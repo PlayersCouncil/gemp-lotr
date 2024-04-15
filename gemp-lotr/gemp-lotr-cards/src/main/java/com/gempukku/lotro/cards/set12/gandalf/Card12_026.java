@@ -24,6 +24,7 @@ public class Card12_026 extends AbstractEvent {
     public Card12_026() {
         super(Side.FREE_PEOPLE, 7, Culture.GANDALF, "Discoveries", Phase.FELLOWSHIP);
         addKeyword(Keyword.TOIL, 3);
+        addKeyword(Keyword.SPELL);
     }
 
     @Override

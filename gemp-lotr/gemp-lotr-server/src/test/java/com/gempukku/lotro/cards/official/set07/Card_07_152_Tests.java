@@ -33,7 +33,7 @@ public class Card_07_152_Tests
 		/**
 		 * Set: 7
 		 * Name: Mûmak Commander
-		 * Unique: True
+		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 8
@@ -51,7 +51,7 @@ public class Card_07_152_Tests
 
 		assertEquals("Mûmak Commander", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());

@@ -46,7 +46,7 @@ public class Card_02_026_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Speak "Friend" and Enter", card.getBlueprint().getTitle());
+		assertEquals("Speak \"Friend\" and Enter", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());

@@ -50,7 +50,7 @@ public class Card_03_018_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Galdor", card.getBlueprint().getTitle());
-		assertEquals("Councilor From The West", card.getBlueprint().getSubtitle());
+		assertEquals("Councilor From the West", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());

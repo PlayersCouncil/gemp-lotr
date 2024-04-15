@@ -116,7 +116,6 @@
 		twilight: 5
 		type: Event
 		keywords: [
-			instead
 			Maneuver
 		]
 		/*requires: {

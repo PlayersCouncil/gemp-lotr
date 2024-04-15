@@ -1114,7 +1114,7 @@
 			style: Standard
 		}
 		title: Mûmak Commander
-		unique: true
+		unique: false
 		side: Shadow
 		culture: Raider
 		twilight: 8
