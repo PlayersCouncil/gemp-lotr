@@ -65,7 +65,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}

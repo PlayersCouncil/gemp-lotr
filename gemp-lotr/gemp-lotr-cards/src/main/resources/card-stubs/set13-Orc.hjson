@@ -112,7 +112,7 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -203,7 +203,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -389,7 +389,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -861,7 +861,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

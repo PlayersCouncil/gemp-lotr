@@ -120,7 +120,7 @@
 		resistance: 7
 		keywords: [
 			Ring-bound
-			Can-bear-ring
+			CAN_START_WITH_RING
 		]
 		/*requires: {
 			

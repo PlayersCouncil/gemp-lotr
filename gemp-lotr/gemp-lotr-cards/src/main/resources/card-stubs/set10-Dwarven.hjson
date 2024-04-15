@@ -21,7 +21,7 @@
 		culture: Dwarven
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}
@@ -115,7 +115,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}

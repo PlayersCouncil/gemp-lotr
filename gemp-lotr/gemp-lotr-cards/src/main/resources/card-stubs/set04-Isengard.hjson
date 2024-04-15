@@ -347,8 +347,10 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keywords: Assignment
-		keywords: Search
+		keywords: [
+			Search
+			Assignment
+		]
 		/*requires: {
 			
 		}

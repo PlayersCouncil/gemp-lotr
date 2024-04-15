@@ -210,8 +210,10 @@
 		culture: Gandalf
 		twilight: 5
 		type: Event
-		keywords: Fellowship
-		keywords: Spell
+		keywords: [
+			Spell
+			Fellowship
+		]
 		/*requires: {
 			
 		}
@@ -351,7 +353,6 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		#keywords: Regroup
 		keywords: Spell
 		/*requires: {
 			
@@ -446,8 +447,10 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keywords: Skirmish
-		keywords: Spell
+		keywords: [
+			Spell
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -494,8 +497,10 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keywords: Maneuver
-		keywords: Spell
+		keywords: [
+			Spell
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -682,8 +687,10 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keywords: Regroup
-		keywords: Spell
+		keywords: [
+			Spell
+			Regroup
+		]
 		/*requires: {
 			
 		}

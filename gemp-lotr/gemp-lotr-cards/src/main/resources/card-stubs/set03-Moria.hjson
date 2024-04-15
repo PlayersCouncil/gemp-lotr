@@ -112,8 +112,10 @@
 		culture: Moria
 		twilight: 1
 		type: Event
-		keywords: Skirmish
-		keywords: Search
+		keywords: [
+			Search
+			Skirmish
+		]
 		/*requires: {
 			
 		}

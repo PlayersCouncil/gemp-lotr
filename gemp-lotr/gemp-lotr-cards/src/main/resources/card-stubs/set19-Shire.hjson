@@ -30,7 +30,7 @@
 			Ring-bearer
 			Ring-bound
 			Fellowship
-			Can-bear-ring
+			CAN_START_WITH_RING
 		]
 		/*requires: {
 			

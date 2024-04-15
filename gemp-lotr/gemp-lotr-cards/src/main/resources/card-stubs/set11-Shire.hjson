@@ -21,7 +21,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -68,8 +68,10 @@
 		culture: Shire
 		twilight: 2
 		type: Event
-		#keywords: Regroup
-		keywords: Stealth
+		keywords: [
+			Stealth
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -172,7 +174,7 @@
 		keywords: [
 			Ring-bearer
 			Ring-bound
-			Can-bear-ring
+			CAN_START_WITH_RING
 		]
 		/*requires: {
 			
@@ -307,8 +309,10 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		#keywords: Regroup
-		keywords: Stealth
+		keywords: [
+			Stealth
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -403,8 +407,10 @@
 		culture: Shire
 		twilight: 6
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 2
+		keywords: [
+			Toil 2
+			Fellowship
+		]
 		/*requires: {
 			
 		}
@@ -641,7 +647,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -688,7 +694,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -735,7 +741,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}

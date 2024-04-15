@@ -21,7 +21,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -68,7 +68,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -208,7 +208,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -255,7 +255,7 @@
 		culture: Sauron
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -2229,7 +2229,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -2368,7 +2368,7 @@
 		culture: Sauron
 		twilight: 4
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}

@@ -199,7 +199,7 @@
 		culture: Rohan
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -339,7 +339,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Archery
 		/*requires: {
 			
 		}

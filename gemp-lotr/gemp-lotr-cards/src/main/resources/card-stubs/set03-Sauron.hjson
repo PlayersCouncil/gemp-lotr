@@ -68,8 +68,10 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keywords: Shadow
-		keywords: Search
+		keywords: [
+			Search
+			Shadow
+		]
 		/*requires: {
 			
 		}

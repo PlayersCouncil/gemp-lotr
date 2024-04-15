@@ -65,7 +65,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -157,7 +157,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -341,7 +341,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -388,7 +388,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -435,7 +435,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -482,7 +482,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -578,7 +578,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -625,7 +625,7 @@
 		culture: Gollum
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -672,7 +672,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}

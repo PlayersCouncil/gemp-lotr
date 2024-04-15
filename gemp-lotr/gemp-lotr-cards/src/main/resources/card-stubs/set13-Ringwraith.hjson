@@ -21,7 +21,7 @@
 		culture: Wraith
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -68,7 +68,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -115,8 +115,10 @@
 		culture: Wraith
 		twilight: 4
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 1
+		keywords: [
+			Toil 1
+			Shadow
+		]
 		/*requires: {
 			
 		}

@@ -21,7 +21,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -68,8 +68,10 @@
 		culture: Orc
 		twilight: 5
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 2
+		keywords: [
+			Toil 2
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -160,7 +162,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -1055,8 +1057,10 @@
 		culture: Orc
 		twilight: 3
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 2
+		keywords: [
+			Toil 2
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -1103,7 +1107,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

@@ -65,7 +65,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -112,7 +112,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -159,7 +159,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -256,7 +256,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -303,7 +303,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}

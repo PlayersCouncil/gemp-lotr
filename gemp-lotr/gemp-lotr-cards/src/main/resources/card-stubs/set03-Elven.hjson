@@ -1010,8 +1010,10 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keywords: Skirmish
-		keywords: Tale
+		keywords: [
+			Tale
+			Skirmish
+		]
 		/*requires: {
 			
 		}

@@ -823,7 +823,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

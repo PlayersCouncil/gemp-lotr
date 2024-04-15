@@ -65,7 +65,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -112,7 +112,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -247,8 +247,10 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
-		keywords: Stealth
+		keywords: [
+			Stealth
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -295,7 +297,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -342,7 +344,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -389,8 +391,10 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
-		keywords: Tale
+		keywords: [
+			Tale
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -526,8 +530,10 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		#keywords: Regroup
-		keywords: Stealth
+		keywords: [
+			Stealth
+			Skirmish
+		]
 		/*requires: {
 			
 		}

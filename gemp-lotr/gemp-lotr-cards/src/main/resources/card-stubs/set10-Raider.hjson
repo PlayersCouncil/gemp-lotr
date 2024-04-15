@@ -400,7 +400,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -495,7 +495,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -726,7 +726,7 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}

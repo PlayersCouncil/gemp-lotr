@@ -74,7 +74,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		keywords: Can-bear-ring
+		keywords: CAN_START_WITH_RING
 		/*requires: {
 			
 		}
@@ -263,7 +263,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Fellowship or Skirmish
 		/*requires: {
 			
 		}

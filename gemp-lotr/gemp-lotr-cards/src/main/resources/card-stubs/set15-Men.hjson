@@ -581,7 +581,7 @@
 		culture: Men
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -628,7 +628,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}

@@ -21,7 +21,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -118,7 +118,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -165,7 +165,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Archery
 		/*requires: {
 			
 		}

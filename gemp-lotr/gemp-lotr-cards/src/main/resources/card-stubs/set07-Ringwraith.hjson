@@ -65,7 +65,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -112,7 +112,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -203,7 +203,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -386,7 +386,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}
@@ -436,7 +436,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}
@@ -1546,7 +1546,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1593,7 +1593,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -2170,7 +2170,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

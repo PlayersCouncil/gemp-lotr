@@ -21,7 +21,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -439,7 +439,7 @@
 		culture: Men
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

@@ -164,7 +164,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -352,7 +352,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -492,7 +492,7 @@
 		culture: Gondor
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Fellowship
 		/*requires: {
 			
 		}
@@ -539,7 +539,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -634,8 +634,10 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		#keywords: Regroup
-		keywords: ranger
+		keywords: [
+			ranger
+			Fellowship or Regroup
+		]
 		/*requires: {
 			
 		}

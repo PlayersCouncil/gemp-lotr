@@ -937,7 +937,7 @@
 		culture: Raider
 		twilight: 7
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -1072,7 +1072,7 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1167,7 +1167,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -1214,7 +1214,7 @@
 		culture: Raider
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1352,7 +1352,7 @@
 		culture: Raider
 		twilight: 5
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -2024,7 +2024,7 @@
 		culture: Raider
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -2119,7 +2119,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}

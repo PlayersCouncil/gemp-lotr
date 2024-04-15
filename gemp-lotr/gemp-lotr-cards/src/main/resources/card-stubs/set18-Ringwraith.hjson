@@ -21,7 +21,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -68,7 +68,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Assignment
 		/*requires: {
 			
 		}

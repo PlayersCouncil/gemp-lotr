@@ -21,7 +21,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}

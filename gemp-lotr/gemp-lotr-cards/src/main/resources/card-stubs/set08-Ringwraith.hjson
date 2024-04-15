@@ -21,7 +21,7 @@
 		culture: Wraith
 		twilight: 4
 		type: Event
-		#keywords: Regroup
+		keywords: Assignment
 		/*requires: {
 			
 		}
@@ -68,7 +68,7 @@
 		culture: Wraith
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -297,7 +297,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -729,7 +729,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

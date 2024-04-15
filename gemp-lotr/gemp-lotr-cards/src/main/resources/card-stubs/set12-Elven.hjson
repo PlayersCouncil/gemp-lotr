@@ -21,7 +21,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -348,8 +348,10 @@
 		culture: Elven
 		twilight: 3
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 2
+		keywords: [
+			Toil 2
+			Maneuver
+		]
 		/*requires: {
 			
 		}

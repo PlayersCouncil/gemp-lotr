@@ -70,8 +70,10 @@
 		culture: Gandalf
 		twilight: 5
 		type: Event
-		keywords: Maneuver
-		keywords: Spell
+		keywords: [
+			Spell
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -166,8 +168,10 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keywords: Maneuver
-		keywords: Spell
+		keywords: [
+			Spell
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -263,8 +267,10 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keywords: Maneuver
-		keywords: Spell
+		keywords: [
+			Spell
+			Maneuver
+		]
 		/*requires: {
 			
 		}

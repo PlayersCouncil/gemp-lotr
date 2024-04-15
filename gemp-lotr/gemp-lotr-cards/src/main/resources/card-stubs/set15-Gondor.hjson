@@ -613,7 +613,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}

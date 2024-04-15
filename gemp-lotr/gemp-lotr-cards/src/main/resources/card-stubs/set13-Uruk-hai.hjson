@@ -396,7 +396,7 @@
 		culture: Uruk-hai
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -872,7 +872,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

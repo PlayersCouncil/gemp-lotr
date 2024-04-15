@@ -302,8 +302,10 @@
 		culture: Gandalf
 		twilight: 0
 		type: Event
-		keywords: Skirmish
-		keywords: Spell
+		keywords: [
+			Spell
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -350,8 +352,10 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Maneuver
-		keywords: Spell
+		keywords: [
+			Spell
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -444,8 +448,10 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Maneuver
-		keywords: Spell
+		keywords: [
+			Spell
+			Maneuver
+		]
 		/*requires: {
 			
 		}

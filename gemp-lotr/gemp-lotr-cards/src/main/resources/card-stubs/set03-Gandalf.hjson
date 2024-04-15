@@ -65,8 +65,10 @@
 		culture: Gandalf
 		twilight: 4
 		type: Event
-		keywords: Maneuver
-		keywords: Spell
+		keywords: [
+			Spell
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -113,8 +115,10 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Maneuver
-		keywords: Stealth
+		keywords: [
+			Stealth
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -161,8 +165,10 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Fellowship
-		keywords: Spell
+		keywords: [
+			Spell
+			Fellowship
+		]
 		/*requires: {
 			
 		}

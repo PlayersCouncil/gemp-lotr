@@ -68,8 +68,10 @@
 		culture: Gandalf
 		twilight: 0
 		type: Event
-		#keywords: Regroup
-		keywords: Spell
+		keywords: [
+			Spell
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -116,7 +118,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -255,8 +257,10 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		#keywords: Regroup
-		keywords: Spell
+		keywords: [
+			Spell
+			Maneuver
+		]
 		/*requires: {
 			
 		}

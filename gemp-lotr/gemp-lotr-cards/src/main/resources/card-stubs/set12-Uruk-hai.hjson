@@ -217,8 +217,10 @@
 		culture: Uruk-hai
 		twilight: 3
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 2
+		keywords: [
+			Toil 2
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -265,7 +267,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -452,7 +454,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -592,7 +594,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}

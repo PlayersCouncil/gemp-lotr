@@ -1010,8 +1010,10 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keywords: Skirmish
-		keywords: Stealth
+		keywords: [
+			Stealth
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -1105,8 +1107,10 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keywords: Skirmish
-		keywords: Stealth
+		keywords: [
+			Stealth
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -1153,8 +1157,10 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keywords: Skirmish
-		keywords: Stealth
+		keywords: [
+			Stealth
+			Skirmish
+		]
 		/*requires: {
 			
 		}

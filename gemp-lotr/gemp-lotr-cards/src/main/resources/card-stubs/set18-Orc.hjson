@@ -65,7 +65,7 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -253,7 +253,7 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -677,7 +677,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}

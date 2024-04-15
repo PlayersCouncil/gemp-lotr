@@ -163,7 +163,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -210,8 +210,10 @@
 		culture: Men
 		twilight: 5
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 2
+		keywords: [
+			Toil 2
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -543,8 +545,10 @@
 		culture: Men
 		twilight: 7
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 2
+		keywords: [
+			Toil 2
+			Archery
+		]
 		/*requires: {
 			
 		}
@@ -1197,7 +1201,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -1383,7 +1387,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -1761,7 +1765,7 @@
 		culture: Men
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

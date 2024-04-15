@@ -250,7 +250,7 @@
 		culture: Men
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}
@@ -485,7 +485,7 @@
 		culture: Men
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}
@@ -769,7 +769,7 @@
 		culture: Men
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}

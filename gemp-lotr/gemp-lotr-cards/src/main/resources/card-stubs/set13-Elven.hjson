@@ -252,7 +252,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -347,7 +347,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -394,7 +394,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -490,7 +490,7 @@
 		culture: Elven
 		twilight: 4
 		type: Event
-		#keywords: Regroup
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -584,7 +584,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Archery
 		/*requires: {
 			
 		}
@@ -722,7 +722,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

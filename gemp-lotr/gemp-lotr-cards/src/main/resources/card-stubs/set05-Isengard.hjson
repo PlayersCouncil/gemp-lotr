@@ -359,7 +359,6 @@
 		strength: 4
 		vitality: 3
 		site: 3
-		keywords: hands
 		/*requires: {
 			
 		}

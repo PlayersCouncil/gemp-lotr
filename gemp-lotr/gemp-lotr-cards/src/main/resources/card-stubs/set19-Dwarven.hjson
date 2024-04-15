@@ -116,7 +116,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}

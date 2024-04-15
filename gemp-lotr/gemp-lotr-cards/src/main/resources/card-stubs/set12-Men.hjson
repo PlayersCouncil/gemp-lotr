@@ -542,8 +542,10 @@
 		culture: Men
 		twilight: 6
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 2
+		keywords: [
+			Toil 2
+			Skirmish
+		]
 		/*requires: {
 			
 		}
@@ -961,8 +963,10 @@
 		culture: Men
 		twilight: 4
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 2
+		keywords: [
+			Toil 2
+			Maneuver or Regroup
+		]
 		/*requires: {
 			
 		}

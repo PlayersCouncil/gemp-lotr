@@ -205,7 +205,7 @@
 		culture: Shire
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -667,7 +667,7 @@
 		resistance: 5
 		keywords: [
 			Ring-bound
-			Can-bear-ring
+			CAN_START_WITH_RING
 		]
 		/*requires: {
 			

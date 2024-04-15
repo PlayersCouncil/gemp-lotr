@@ -115,8 +115,10 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Maneuver
-		keywords: Tale
+		keywords: [
+			Tale
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -298,8 +300,10 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keywords: Maneuver
-		keywords: Tale
+		keywords: [
+			Tale
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -390,8 +394,10 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Maneuver
-		keywords: Tale
+		keywords: [
+			Tale
+			Maneuver
+		]
 		/*requires: {
 			
 		}

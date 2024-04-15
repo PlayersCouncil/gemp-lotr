@@ -21,8 +21,10 @@
 		culture: Sauron
 		twilight: 2
 		type: Event
-		keywords: Maneuver
-		keywords: Search
+		keywords: [
+			Search
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -579,8 +581,10 @@
 		culture: Sauron
 		twilight: 3
 		type: Event
-		keywords: Maneuver
-		keywords: Search
+		keywords: [
+			Search
+			Maneuver
+		]
 		/*requires: {
 			
 		}

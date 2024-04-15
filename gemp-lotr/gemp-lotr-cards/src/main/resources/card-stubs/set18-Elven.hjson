@@ -113,7 +113,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -579,7 +579,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Fellowship
 		/*requires: {
 			
 		}

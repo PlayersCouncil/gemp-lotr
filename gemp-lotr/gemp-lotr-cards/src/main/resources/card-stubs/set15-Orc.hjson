@@ -1134,7 +1134,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Shadow
 		/*requires: {
 			
 		}

@@ -116,7 +116,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -348,7 +348,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}

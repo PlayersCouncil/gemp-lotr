@@ -115,8 +115,10 @@
 		culture: Wraith
 		twilight: 5
 		type: Event
-		keywords: Maneuver
-		keywords: instead
+		keywords: [
+			instead
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -435,8 +437,10 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keywords: Maneuver
-		keywords: Search
+		keywords: [
+			Search
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -577,8 +581,10 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keywords: Shadow
-		keywords: Search
+		keywords: [
+			Search
+			Shadow
+		]
 		/*requires: {
 			
 		}

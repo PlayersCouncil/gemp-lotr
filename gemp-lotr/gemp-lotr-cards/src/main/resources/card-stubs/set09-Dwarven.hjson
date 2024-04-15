@@ -77,7 +77,7 @@
 		resistance: 4
 		keywords: [
 			Damage+1
-			Can-bear-ring
+			CAN_START_WITH_RING
 		]
 		/*requires: {
 			

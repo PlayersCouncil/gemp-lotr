@@ -109,7 +109,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -247,7 +247,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Regroup
 		/*requires: {
 			
 		}
@@ -294,7 +294,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}
@@ -344,7 +344,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}

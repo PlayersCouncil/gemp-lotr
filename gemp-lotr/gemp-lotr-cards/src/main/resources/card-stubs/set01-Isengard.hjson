@@ -159,10 +159,10 @@
 		culture: Isengard
 		twilight: 3
 		type: Event
-		keywords: Maneuver
 		keywords: [
 			Spell
 			Weather
+			Maneuver
 		]
 		/*requires: {
 			
@@ -210,10 +210,10 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keywords: Maneuver
 		keywords: [
 			Spell
 			Weather
+			Maneuver
 		]
 		/*requires: {
 			
@@ -775,8 +775,10 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keywords: Shadow
-		keywords: Spell
+		keywords: [
+			Spell
+			Shadow
+		]
 		/*requires: {
 			
 		}
@@ -823,8 +825,10 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keywords: Maneuver
-		keywords: Search
+		keywords: [
+			Search
+			Maneuver
+		]
 		/*requires: {
 			
 		}
@@ -1948,7 +1952,6 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		#keywords: Regroup
 		keywords: Search
 		/*requires: {
 			

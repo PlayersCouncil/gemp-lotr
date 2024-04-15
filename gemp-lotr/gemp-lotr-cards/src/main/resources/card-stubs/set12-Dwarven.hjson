@@ -21,7 +21,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Maneuver
 		/*requires: {
 			
 		}
@@ -157,7 +157,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}
@@ -432,8 +432,10 @@
 		culture: Dwarven
 		twilight: 4
 		type: Event
-		#keywords: Regroup
-		keywords: Toil 2
+		keywords: [
+			Toil 2
+			Fellowship
+		]
 		/*requires: {
 			
 		}
@@ -480,7 +482,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}
@@ -574,7 +576,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

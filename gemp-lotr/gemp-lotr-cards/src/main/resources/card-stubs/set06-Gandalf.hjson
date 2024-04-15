@@ -584,8 +584,10 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Skirmish
-		keywords: Spell
+		keywords: [
+			Spell
+			Skirmish
+		]
 		/*requires: {
 			
 		}

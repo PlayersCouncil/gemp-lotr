@@ -160,7 +160,7 @@
 		culture: Shire
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Skirmish
 		/*requires: {
 			
 		}

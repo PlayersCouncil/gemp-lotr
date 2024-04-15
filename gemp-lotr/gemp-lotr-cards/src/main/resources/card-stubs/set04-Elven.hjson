@@ -21,8 +21,10 @@
 		culture: Elven
 		twilight: 3
 		type: Event
-		keywords: Fellowship
-		keywords: Tale
+		keywords: [
+			Tale
+			Fellowship
+		]
 		/*requires: {
 			
 		}
