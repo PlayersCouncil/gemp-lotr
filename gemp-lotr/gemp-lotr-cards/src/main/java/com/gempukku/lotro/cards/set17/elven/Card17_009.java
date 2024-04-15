@@ -19,7 +19,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card17_009 extends AbstractEvent {
     public Card17_009() {
-        super(Side.FREE_PEOPLE, 2, Culture.ELVEN, "Lothlorien Guides", Phase.MANEUVER);
+        super(Side.FREE_PEOPLE, 2, Culture.ELVEN, "Lothlórien Guides", Phase.MANEUVER);
     }
 
     @Override

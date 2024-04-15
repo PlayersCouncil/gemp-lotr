@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,43 @@ public class Card_17_134_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void WhiteHandVanquisherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 17
-		* Title: White Hand Vanquisher
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Uruk-hai
-		* Twilight Cost: 4
-		* Type: minion
-		* Subtype: Uruk-hai
-		* Strength: 8
-		* Vitality: 3
-		* Site Number: 5
-		* Game Text: <b>Fierce</b>.<br>This minion is <b>damage +1</b> for each [uruk-hai] hunter assigned to a skirmish.
+		 * Set: 17
+		 * Name: White Hand Vanquisher
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Uruk-hai
+		 * Twilight Cost: 4
+		 * Type: Minion
+		 * Subtype: Uruk-hai
+		 * Strength: 8
+		 * Vitality: 3
+		 * Site Number: 5
+		 * Game Text: <b>Fierce</b>.<br>This minion is <b>damage +1</b> for each [uruk-hai] hunter assigned to a skirmish.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("White Hand Vanquisher", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.URUK-HAI));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void WhiteHandVanquisherTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

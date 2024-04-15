@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class Card17_014 extends AbstractEvent {
     public Card17_014() {
-        super(Side.FREE_PEOPLE, 1, Culture.ELVEN, "Weapons of Lothlorien", Phase.ARCHERY);
+        super(Side.FREE_PEOPLE, 1, Culture.ELVEN, "Weapons of Lothlórien", Phase.ARCHERY);
     }
 
     @Override
