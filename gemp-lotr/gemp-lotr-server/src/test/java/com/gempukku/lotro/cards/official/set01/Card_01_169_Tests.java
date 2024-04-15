@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,27 +31,26 @@ public class Card_01_169_Tests
 	public void TheEndComesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: The End Comes
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 0
-		* Type: event
-		* Subtype: 
-		* Game Text: <b>Assignment:</b> Spot 5 [moria] minions to make the Free Peoples player assign the Ring-bearer to a skirmish.
+		 * Set: 1
+		 * Name: The End Comes
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Assignment
+
+		 * Game Text: <b>Assignment:</b> Spot 5 [moria] minions to make the Free Peoples player assign the Ring-bearer to a skirmish.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("The End Comes", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.ASSIGNMENT));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}

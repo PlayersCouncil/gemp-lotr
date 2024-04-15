@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_00_058_Tests
 	public void AnarionStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 0
-		* Title: Anárion, Lord of Anórien
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gondor
-		* Twilight Cost: 3
-		* Type: companion
-		* Subtype: Man
-		* Strength: 7
-		* Vitality: 3
-		* Resistance: 6
-		* Game Text: <b>Skirmish:</b> Play a [gondor] skirmish event to make each minion skirmishing Anárion strength -X, where X is Anárion's vitality.
+		 * Set: 0
+		 * Name: Anárion, Lord of Anórien
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 3
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 7
+		 * Vitality: 3
+		 * Resistance: 6
+
+		 * Game Text: <b>Skirmish:</b> Play a [gondor] skirmish event to make each minion skirmishing Anárion strength -X, where X is Anárion's vitality.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Anárion", card.getBlueprint().getTitle());
 		assertEquals("Lord of Anórien", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());

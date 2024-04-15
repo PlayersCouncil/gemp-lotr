@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_229_Tests
 	public void UlaireAtteaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Úlairë Attëa, Keeper of Dol Guldur
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Wraith
-		* Twilight Cost: 6
-		* Type: minion
-		* Subtype: Nazgûl
-		* Strength: 12
-		* Vitality: 3
-		* Site Number: 3
-		* Game Text: <b>Fierce</b>.<br><b>Skirmish:</b> Remove (1) to make Úlairë Attëa strength +1 (limit +5).
+		 * Set: 1
+		 * Name: Úlairë Attëa, Keeper of Dol Guldur
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 6
+		 * Type: Minion
+		 * Subtype: Nazgûl
+		 * Strength: 12
+		 * Vitality: 3
+
+		 * Site Number: 3
+		 * Game Text: <b>Fierce</b>.<br><b>Skirmish:</b> Remove (1) to make Úlairë Attëa strength +1 (limit +5).
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Úlairë Attëa", card.getBlueprint().getTitle());
 		assertEquals("Keeper of Dol Guldur", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(6, card.getBlueprint().getTwilightCost());

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_261_Tests
 	public void OrcAmbusherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Orc Ambusher
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Sauron
-		* Twilight Cost: 1
-		* Type: minion
-		* Subtype: Orc
-		* Strength: 5
-		* Vitality: 2
-		* Site Number: 6
-		* Game Text: <b>Tracker</b>.<br>The roaming penalty for each [sauron] minion you play is -1.<br><b>Response:</b> If a Free Peoples regroup event is played, exert this minion to cancel that event.
+		 * Set: 1
+		 * Name: Orc Ambusher
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 1
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 5
+		 * Vitality: 2
+
+		 * Site Number: 6
+		 * Game Text: <b>Tracker</b>.<br>The roaming penalty for each [sauron] minion you play is -1.<br><b>Response:</b> If a Free Peoples regroup event is played, exert this minion to cancel that event.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Orc Ambusher", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());

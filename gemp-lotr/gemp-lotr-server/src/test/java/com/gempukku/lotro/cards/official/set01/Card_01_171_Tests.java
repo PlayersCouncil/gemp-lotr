@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,27 +31,26 @@ public class Card_01_171_Tests
 	public void FrenzyStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Frenzy
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 2
-		* Type: event
-		* Subtype: 
-		* Game Text: <b>Assignment:</b> Assign an exhausted companion (except the Ring-bearer) to skirmish a [moria] Orc.
+		 * Set: 1
+		 * Name: Frenzy
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Assignment
+
+		 * Game Text: <b>Assignment:</b> Assign an exhausted companion (except the Ring-bearer) to skirmish a [moria] Orc.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Frenzy", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.ASSIGNMENT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}

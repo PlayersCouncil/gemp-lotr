@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_335_Tests
 	public void WeatherhillsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Weatherhills
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 3
-		* Type: site
-		* Subtype: 
-		* Site Number: 2
-		* Game Text: Each Nazgûl's twilight cost is -1.
+		 * Set: 1
+		 * Name: Weatherhills
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 3
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 2
+		 * Game Text: Each Nazgûl's twilight cost is -1.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(2);
 		assertEquals("Weatherhills", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

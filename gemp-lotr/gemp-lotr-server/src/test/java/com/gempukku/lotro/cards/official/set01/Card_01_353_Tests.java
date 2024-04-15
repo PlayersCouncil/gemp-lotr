@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_353_Tests
 	public void AnduinConfluenceStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Anduin Confluence
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 6
-		* Type: site
-		* Subtype: 
-		* Site Number: 7
-		* Game Text: <b>River</b>. When the fellowship moves to Anduin Confluence, discard every ally.
+		 * Set: 1
+		 * Name: Anduin Confluence
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 6
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 7
+		 * Game Text: <b>River</b>. When the fellowship moves to Anduin Confluence, discard every ally.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(7);
 		assertEquals("Anduin Confluence", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

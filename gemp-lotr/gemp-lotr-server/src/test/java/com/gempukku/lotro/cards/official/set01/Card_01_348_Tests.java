@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_348_Tests
 	public void PassofCaradhrasStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Pass of Caradhras
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 2
-		* Type: site
-		* Subtype: 
-		* Site Number: 4
-		* Game Text: <b>Mountain</b>. <b>Shadow:</b> Spot an [isengard] minion to play a weather card from your draw deck (limit 1 per turn).
+		 * Set: 1
+		 * Name: Pass of Caradhras
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 2
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 4
+		 * Game Text: <b>Mountain</b>. <b>Shadow:</b> Spot an [isengard] minion to play a weather card from your draw deck (limit 1 per turn).
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(4);
 		assertEquals("Pass of Caradhras", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

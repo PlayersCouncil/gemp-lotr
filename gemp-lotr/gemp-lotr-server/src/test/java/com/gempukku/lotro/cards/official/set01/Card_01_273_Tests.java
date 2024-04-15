@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,27 +31,26 @@ public class Card_01_273_Tests
 	public void TheRingsOppressionStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: The Ring's Oppression
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Sauron
-		* Twilight Cost: 3
-		* Type: event
-		* Subtype: 
-		* Game Text: <b>Response:</b> If a [sauron] Orc kills a companion, add 1 burden (or 3 if the Ring-bearer wears The One Ring).
+		 * Set: 1
+		 * Name: The Ring's Oppression
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 3
+		 * Type: Event
+		 * Subtype: 
+
+		 * Game Text: <b>Response:</b> If a [sauron] Orc kills a companion, add 1 burden (or 3 if the Ring-bearer wears The One Ring).
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("The Ring's Oppression", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

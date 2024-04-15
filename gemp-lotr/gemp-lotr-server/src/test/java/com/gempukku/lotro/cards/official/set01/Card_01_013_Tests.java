@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,30 @@ public class Card_01_013_Tests
 	public void GimliStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Gimli, Son of Glóin
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Dwarf
-		* Strength: 6
-		* Vitality: 3
-		* Signet: gandalf
-		* Game Text: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert Gimli to make him strength +2.
+		 * Set: 1
+		 * Name: Gimli, Son of Glóin
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Dwarf
+		 * Strength: 6
+		 * Vitality: 3
+
+		 * Signet: Gandalf
+
+		 * Game Text: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert Gimli to make him strength +2.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Gimli", card.getBlueprint().getTitle());
 		assertEquals("Son of Glóin", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.DWARF, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));

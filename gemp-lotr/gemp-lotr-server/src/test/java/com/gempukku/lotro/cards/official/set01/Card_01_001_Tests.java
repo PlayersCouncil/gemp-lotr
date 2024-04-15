@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,23 +31,22 @@ public class Card_01_001_Tests
 	public void TheOneRingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: The One Ring, Isildur's Bane
-		* Unique: True
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 
-		* Type: onering
-		* Subtype: 
-		* Strength: 1
-		* Vitality: 1
-		* Game Text: <b>Response:</b> If bearer is about to take a wound, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound, add 2 burdens instead.
+		 * Set: 1
+		 * Name: The One Ring, Isildur's Bane
+		 * Unique: True
+		 * Side: 
+		 * Culture: 
+		 * Twilight Cost: 
+		 * Type: Onering
+		 * Subtype: 
+		 * Strength: 1
+		 * Vitality: 1
+
+		 * Game Text: <b>Response:</b> If bearer is about to take a wound, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound, add 2 burdens instead.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("The One Ring", card.getBlueprint().getTitle());
 		assertEquals("Isildur's Bane", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

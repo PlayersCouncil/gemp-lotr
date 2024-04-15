@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,28 +31,27 @@ public class Card_01_313_Tests
 	public void StingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Sting
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Shire
-		* Twilight Cost: 1
-		* Type: possession
-		* Subtype: Hand Weapon
-		* Strength: 2
-		* Game Text: Bearer must be Frodo.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Exert Frodo to reveal an opponent's hand. Remove (1) for each Orc revealed (limit (4)).
+		 * Set: 1
+		 * Name: Sting
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Hand weapon
+		 * Strength: 2
+
+		 * Game Text: Bearer must be Frodo.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Exert Frodo to reveal an opponent's hand. Remove (1) for each Orc revealed (limit (4)).
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Sting", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getStrength());

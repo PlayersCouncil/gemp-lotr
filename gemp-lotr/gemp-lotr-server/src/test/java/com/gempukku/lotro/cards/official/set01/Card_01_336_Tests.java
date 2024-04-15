@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_336_Tests
 	public void WeathertopStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Weathertop
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 3
-		* Type: site
-		* Subtype: 
-		* Site Number: 2
-		* Game Text: Each Nazgûl at Weathertop is <b>fierce</b>.
+		 * Set: 1
+		 * Name: Weathertop
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 3
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 2
+		 * Game Text: Each Nazgûl at Weathertop is <b>fierce</b>.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(2);
 		assertEquals("Weathertop", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

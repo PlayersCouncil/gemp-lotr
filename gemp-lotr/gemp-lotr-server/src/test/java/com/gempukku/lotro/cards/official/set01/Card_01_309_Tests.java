@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_309_Tests
 	public void RosieCottonStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Rosie Cotton, Hobbiton Lass
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Shire
-		* Twilight Cost: 1
-		* Type: ally
-		* Subtype: Hobbit
-		* Strength: 1
-		* Vitality: 2
-		* Site Number: 1
-		* Game Text: Sam is strength +1.<br><b>Fellowship:</b> Exert Rosie Cotton to heal Sam.
+		 * Set: 1
+		 * Name: Rosie Cotton, Hobbiton Lass
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Hobbit
+		 * Strength: 1
+		 * Vitality: 2
+
+		 * Site Number: 1
+		 * Game Text: Sam is strength +1.<br><b>Fellowship:</b> Exert Rosie Cotton to heal Sam.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Rosie Cotton", card.getBlueprint().getTitle());
 		assertEquals("Hobbiton Lass", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(1, card.getBlueprint().getStrength());

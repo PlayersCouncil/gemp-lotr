@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_186_Tests
 	public void GuardCommanderStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Guard Commander
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 3
-		* Type: minion
-		* Subtype: Orc
-		* Strength: 7
-		* Vitality: 2
-		* Site Number: 4
-		* Game Text: <b>Skirmish:</b> Remove (3) to make a [moria] Orc strength +2.
+		 * Set: 1
+		 * Name: Guard Commander
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 7
+		 * Vitality: 2
+
+		 * Site Number: 4
+		 * Game Text: <b>Skirmish:</b> Remove (3) to make a [moria] Orc strength +2.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Guard Commander", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());

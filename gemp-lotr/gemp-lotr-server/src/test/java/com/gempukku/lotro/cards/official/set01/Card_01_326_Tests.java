@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_326_Tests
 	public void WestfarthingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Westfarthing
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 
-		* Type: site
-		* Subtype: 
-		* Site Number: 1
-		* Game Text: <b>Fellowship:</b> Exert a Hobbit to play a companion or ally; that character's twilight cost is -1.
+		 * Set: 1
+		 * Name: Westfarthing
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 1
+		 * Game Text: <b>Fellowship:</b> Exert a Hobbit to play a companion or ally; that character's twilight cost is -1.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(1);
 		assertEquals("Westfarthing", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

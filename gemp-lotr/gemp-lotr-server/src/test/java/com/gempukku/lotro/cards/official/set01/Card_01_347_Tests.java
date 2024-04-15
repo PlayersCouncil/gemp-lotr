@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_347_Tests
 	public void MoriaStairwayStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Moria Stairway
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 2
-		* Type: site
-		* Subtype: 
-		* Site Number: 4
-		* Game Text: <b>Underground</b>. Each companion and minion bearing a hand weapon is <b>damage +1</b>.
+		 * Set: 1
+		 * Name: Moria Stairway
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 2
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 4
+		 * Game Text: <b>Underground</b>. Each companion and minion bearing a hand weapon is <b>damage +1</b>.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(4);
 		assertEquals("Moria Stairway", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

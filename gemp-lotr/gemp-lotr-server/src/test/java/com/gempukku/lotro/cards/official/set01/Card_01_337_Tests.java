@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_337_Tests
 	public void CouncilCourtyardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Council Courtyard
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 0
-		* Type: sanctuary
-		* Subtype: 
-		* Site Number: 3
-		* Game Text: <b>Sanctuary</b>. When the fellowship moves from Council Courtyard, remove (2).
+		 * Set: 1
+		 * Name: Council Courtyard
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 0
+		 * Type: Sanctuary
+		 * Subtype: 
+
+		 * Site Number: 3
+		 * Game Text: <b>Sanctuary</b>. When the fellowship moves from Council Courtyard, remove (2).
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(3);
 		assertEquals("Council Courtyard", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

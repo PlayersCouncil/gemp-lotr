@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,27 +31,26 @@ public class Card_01_314_Tests
 	public void StoneTrollsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Stone Trolls
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Shire
-		* Twilight Cost: 2
-		* Type: condition
-		* Subtype: 
-		* Game Text: <b>Tale</b>. To play, spot Bilbo. Plays on any character. Limit 1 per character.<br>Each time bearer skirmishes a Troll or Uruk-hai, bearer is strength +3.
+		 * Set: 1
+		 * Name: Stone Trolls
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: 
+
+		 * Game Text: <b>Tale</b>. To play, spot Bilbo. Plays on any character. Limit 1 per character.<br>Each time bearer skirmishes a Troll or Uruk-hai, bearer is strength +3.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Stone Trolls", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.TALE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}

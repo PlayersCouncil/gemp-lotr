@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_235_Tests
 	public void UlaireOtseaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Úlairë Otsëa, Lieutenant of Morgul
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Wraith
-		* Twilight Cost: 4
-		* Type: minion
-		* Subtype: Nazgûl
-		* Strength: 9
-		* Vitality: 3
-		* Site Number: 3
-		* Game Text: <b>Shadow:</b> Exert Úlairë Otsëa to make a [wraith] minion <b>fierce</b> until the regroup phase.
+		 * Set: 1
+		 * Name: Úlairë Otsëa, Lieutenant of Morgul
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 4
+		 * Type: Minion
+		 * Subtype: Nazgûl
+		 * Strength: 9
+		 * Vitality: 3
+
+		 * Site Number: 3
+		 * Game Text: <b>Shadow:</b> Exert Úlairë Otsëa to make a [wraith] minion <b>fierce</b> until the regroup phase.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Úlairë Otsëa", card.getBlueprint().getTitle());
 		assertEquals("Lieutenant of Morgul", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());

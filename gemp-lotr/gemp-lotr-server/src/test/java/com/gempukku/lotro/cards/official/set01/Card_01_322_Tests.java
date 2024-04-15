@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_322_Tests
 	public void GreenDragonInnStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Green Dragon Inn
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 
-		* Type: site
-		* Subtype: 
-		* Site Number: 1
-		* Game Text: <b>Fellowship:</b> Exert a Hobbit to play Sam from your draw deck.
+		 * Set: 1
+		 * Name: Green Dragon Inn
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 1
+		 * Game Text: <b>Fellowship:</b> Exert a Hobbit to play Sam from your draw deck.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(1);
 		assertEquals("Green Dragon Inn", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

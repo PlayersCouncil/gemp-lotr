@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,30 @@ public class Card_01_365_Tests
 	public void AragornStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Aragorn, King in Exile
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gondor
-		* Twilight Cost: 4
-		* Type: companion
-		* Subtype: Man
-		* Strength: 8
-		* Vitality: 4
-		* Signet: aragorn
-		* Game Text: <b>Ranger</b>.<br>At the start of each of your turns, you may heal another companion who has the Aragorn signet.
+		 * Set: 1
+		 * Name: Aragorn, King in Exile
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 4
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 8
+		 * Vitality: 4
+
+		 * Signet: Aragorn
+
+		 * Game Text: <b>Ranger</b>.<br>At the start of each of your turns, you may heal another companion who has the Aragorn signet.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
 		assertEquals("King in Exile", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.RANGER));
 		assertEquals(4, card.getBlueprint().getTwilightCost());

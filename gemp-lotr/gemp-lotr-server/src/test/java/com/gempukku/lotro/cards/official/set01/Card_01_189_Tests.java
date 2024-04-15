@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,27 +31,26 @@ public class Card_01_189_Tests
 	public void LosttotheGoblinsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Lost to the Goblins
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 0
-		* Type: event
-		* Subtype: 
-		* Game Text: <b>Response:</b> If the Ring-bearer exerts or takes a wound, discard a card from the top of your draw deck for each [moria] minion you spot. For each Shadow card discarded in this way, add a burden (limit 3 burdens).
+		 * Set: 1
+		 * Name: Lost to the Goblins
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: 
+
+		 * Game Text: <b>Response:</b> If the Ring-bearer exerts or takes a wound, discard a card from the top of your draw deck for each [moria] minion you spot. For each Shadow card discarded in this way, add a burden (limit 3 burdens).
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Lost to the Goblins", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

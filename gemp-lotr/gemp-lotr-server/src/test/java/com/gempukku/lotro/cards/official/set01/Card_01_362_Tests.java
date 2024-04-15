@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_362_Tests
 	public void SummitofAmonHenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Summit of Amon Hen
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 8
-		* Type: site
-		* Subtype: 
-		* Site Number: 9
-		* Game Text: When the fellowship moves to Summit of Amon Hen, each Shadow player may draw a card for each burden.
+		 * Set: 1
+		 * Name: Summit of Amon Hen
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 8
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 9
+		 * Game Text: When the fellowship moves to Summit of Amon Hen, each Shadow player may draw a card for each burden.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(9);
 		assertEquals("Summit of Amon Hen", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_355_Tests
 	public void SilverlodeBanksStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Silverlode Banks
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 6
-		* Type: site
-		* Subtype: 
-		* Site Number: 7
-		* Game Text: <b>River</b>. When the fellowship moves to Silverlode Banks without a ranger, every companion must exert.
+		 * Set: 1
+		 * Name: Silverlode Banks
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 6
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 7
+		 * Game Text: <b>River</b>. When the fellowship moves to Silverlode Banks without a ranger, every companion must exert.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(7);
 		assertEquals("Silverlode Banks", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

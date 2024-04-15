@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_349_Tests
 	public void TheBridgeofKhazaddumStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: The Bridge of Khazad-dûm
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 6
-		* Type: site
-		* Subtype: 
-		* Site Number: 5
-		* Game Text: <b>Underground</b>. <b>Shadow:</b> Play The Balrog from your draw deck or hand; The Balrog's twilight cost is -6.
+		 * Set: 1
+		 * Name: The Bridge of Khazad-dûm
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 6
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 5
+		 * Game Text: <b>Underground</b>. <b>Shadow:</b> Play The Balrog from your draw deck or hand; The Balrog's twilight cost is -6.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(5);
 		assertEquals("The Bridge of Khazad-dûm", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

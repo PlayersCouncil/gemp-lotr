@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_174_Tests
 	public void GoblinBackstabberStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Goblin Backstabber
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 1
-		* Type: minion
-		* Subtype: Orc
-		* Strength: 5
-		* Vitality: 1
-		* Site Number: 4
-		* Game Text: This minion is <b>damage +2</b> while in the same skirmish as another [moria] Orc.
+		 * Set: 1
+		 * Name: Goblin Backstabber
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 1
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 5
+		 * Vitality: 1
+
+		 * Site Number: 4
+		 * Game Text: This minion is <b>damage +2</b> while in the same skirmish as another [moria] Orc.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Goblin Backstabber", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());

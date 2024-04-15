@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_301_Tests
 	public void MasterProudfootStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Master Proudfoot, Distant Relative of Bilbo
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Shire
-		* Twilight Cost: 1
-		* Type: ally
-		* Subtype: Hobbit
-		* Strength: 2
-		* Vitality: 2
-		* Site Number: 1
-		* Game Text: <b>Fellowship:</b> If the twilight pool has fewer than 3 twilight tokens, add (2) to reveal the top 3 cards of your draw deck. Take all [shire] cards revealed into hand and discard the rest.
+		 * Set: 1
+		 * Name: Master Proudfoot, Distant Relative of Bilbo
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Hobbit
+		 * Strength: 2
+		 * Vitality: 2
+
+		 * Site Number: 1
+		 * Game Text: <b>Fellowship:</b> If the twilight pool has fewer than 3 twilight tokens, add (2) to reveal the top 3 cards of your draw deck. Take all [shire] cards revealed into hand and discard the rest.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Master Proudfoot", card.getBlueprint().getTitle());
 		assertEquals("Distant Relative of Bilbo", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getStrength());

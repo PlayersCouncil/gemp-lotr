@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_356_Tests
 	public void AnduinBanksStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Anduin Banks
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 6
-		* Type: site
-		* Subtype: 
-		* Site Number: 8
-		* Game Text: <b>River</b>. For each companion in the fellowship over 4, add 2 to the minion archery total.
+		 * Set: 1
+		 * Name: Anduin Banks
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 6
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 8
+		 * Game Text: <b>River</b>. For each companion in the fellowship over 4, add 2 to the minion archery total.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(8);
 		assertEquals("Anduin Banks", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

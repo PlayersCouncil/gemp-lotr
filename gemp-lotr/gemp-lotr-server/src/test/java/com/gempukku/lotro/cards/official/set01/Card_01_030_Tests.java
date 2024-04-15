@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,30 @@ public class Card_01_030_Tests
 	public void ArwenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Arwen, Daughter of Elrond
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Elven
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Elf
-		* Strength: 6
-		* Vitality: 3
-		* Signet: aragorn
-		* Game Text: <b>Ranger</b>.<br>While skirmishing a Nazgûl, Arwen is strength +3.
+		 * Set: 1
+		 * Name: Arwen, Daughter of Elrond
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Elf
+		 * Strength: 6
+		 * Vitality: 3
+
+		 * Signet: Aragorn
+
+		 * Game Text: <b>Ranger</b>.<br>While skirmishing a Nazgûl, Arwen is strength +3.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Arwen", card.getBlueprint().getTitle());
 		assertEquals("Daughter of Elrond", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.RANGER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());

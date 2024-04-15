@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_329_Tests
 	public void BreelandForestStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Breeland Forest
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 1
-		* Type: site
-		* Subtype: 
-		* Site Number: 2
-		* Game Text: <b>Forest</b>. Stealth events may not be played.
+		 * Set: 1
+		 * Name: Breeland Forest
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 1
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 2
+		 * Game Text: <b>Forest</b>. Stealth events may not be played.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(2);
 		assertEquals("Breeland Forest", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

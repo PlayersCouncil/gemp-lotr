@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_288_Tests
 	public void FarmerMaggotStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Farmer Maggot, Chaser of Rascals
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Shire
-		* Twilight Cost: 1
-		* Type: ally
-		* Subtype: Hobbit
-		* Strength: 2
-		* Vitality: 3
-		* Site Number: 1
-		* Game Text: <b>Fellowship:</b> Exert Farmer Maggot to heal Merry or Pippin.
+		 * Set: 1
+		 * Name: Farmer Maggot, Chaser of Rascals
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Hobbit
+		 * Strength: 2
+		 * Vitality: 3
+
+		 * Site Number: 1
+		 * Game Text: <b>Fellowship:</b> Exert Farmer Maggot to heal Merry or Pippin.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Farmer Maggot", card.getBlueprint().getTitle());
 		assertEquals("Chaser of Rascals", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getStrength());

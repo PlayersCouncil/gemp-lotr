@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_237_Tests
 	public void TheWitchkingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: The Witch-king, Lord of Angmar
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Wraith
-		* Twilight Cost: 8
-		* Type: minion
-		* Subtype: Nazgûl
-		* Strength: 14
-		* Vitality: 4
-		* Site Number: 3
-		* Game Text: <b>Fierce</b>.<br>For each other Nazgûl you can spot, The Witch-king is strength +2.
+		 * Set: 1
+		 * Name: The Witch-king, Lord of Angmar
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 8
+		 * Type: Minion
+		 * Subtype: Nazgûl
+		 * Strength: 14
+		 * Vitality: 4
+
+		 * Site Number: 3
+		 * Game Text: <b>Fierce</b>.<br>For each other Nazgûl you can spot, The Witch-king is strength +2.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("The Witch-king", card.getBlueprint().getTitle());
 		assertEquals("Lord of Angmar", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(8, card.getBlueprint().getTwilightCost());

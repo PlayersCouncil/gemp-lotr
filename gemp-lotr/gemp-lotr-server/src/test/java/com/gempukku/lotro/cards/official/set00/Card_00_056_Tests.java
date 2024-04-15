@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_00_056_Tests
 	public void GhanburiGhanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 0
-		* Title: Ghân-buri-Ghân, Chieftain of the Woses
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Man
-		* Strength: 6
-		* Vitality: 3
-		* Resistance: 5
-		* Game Text: While you can spot 2 other Men, Ghân-buri-Ghân cannot be overwhelmed unless his strength is tripled.<br>While at a forest site, Ghân-buri-Ghân is <b>defender +1</b>.
+		 * Set: 0
+		 * Name: Ghân-buri-Ghân, Chieftain of the Woses
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 6
+		 * Vitality: 3
+		 * Resistance: 5
+
+		 * Game Text: While you can spot 2 other Men, Ghân-buri-Ghân cannot be overwhelmed unless his strength is tripled.<br>While at a forest site, Ghân-buri-Ghân is <b>defender +1</b>.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Ghân-buri-Ghân", card.getBlueprint().getTitle());
 		assertEquals("Chieftain of the Woses", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());

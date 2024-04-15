@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,27 +31,26 @@ public class Card_01_279_Tests
 	public void ThinandStretchedStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Thin and Stretched
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Sauron
-		* Twilight Cost: 0
-		* Type: condition
-		* Subtype: 
-		* Game Text: To play, exert a [sauron] Orc. Plays on the Ring-bearer.<br>Add a burden at the end of each turn during which bearer was not assigned to a skirmish (and another companion was).
+		 * Set: 1
+		 * Name: Thin and Stretched
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 0
+		 * Type: Condition
+		 * Subtype: 
+
+		 * Game Text: To play, exert a [sauron] Orc. Plays on the Ring-bearer.<br>Add a burden at the end of each turn during which bearer was not assigned to a skirmish (and another companion was).
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Thin and Stretched", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

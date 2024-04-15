@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_002_Tests
 	public void TheOneRingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: The One Ring, The Ruling Ring
-		* Unique: True
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 
-		* Type: onering
-		* Subtype: 
-		* Strength: 1
-		* Game Text: <b>Response:</b> If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound during a skirmish, add a burden instead.
+		 * Set: 1
+		 * Name: The One Ring, The Ruling Ring
+		 * Unique: True
+		 * Side: 
+		 * Culture: 
+		 * Twilight Cost: 
+		 * Type: Onering
+		 * Subtype: 
+		 * Strength: 1
+
+		 * Game Text: <b>Response:</b> If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound during a skirmish, add a burden instead.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("The One Ring", card.getBlueprint().getTitle());
 		assertEquals("The Ruling Ring", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

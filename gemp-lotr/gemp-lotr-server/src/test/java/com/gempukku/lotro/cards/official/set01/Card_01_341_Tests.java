@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_341_Tests
 	public void RivendellValleyStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Rivendell Valley
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 0
-		* Type: sanctuary
-		* Subtype: 
-		* Site Number: 3
-		* Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Play an Elf to draw a card.
+		 * Set: 1
+		 * Name: Rivendell Valley
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 0
+		 * Type: Sanctuary
+		 * Subtype: 
+
+		 * Site Number: 3
+		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Play an Elf to draw a card.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(3);
 		assertEquals("Rivendell Valley", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

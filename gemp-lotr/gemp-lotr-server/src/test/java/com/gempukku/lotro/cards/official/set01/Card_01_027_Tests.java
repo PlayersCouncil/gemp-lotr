@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_027_Tests
 	public void ThrarinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Thrarin, Dwarven Smith
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 1
-		* Type: ally
-		* Subtype: Dwarf
-		* Strength: 4
-		* Vitality: 2
-		* Site Number: 3
-		* Game Text: <b>Maneuver:</b> Exert Thrarin to allow him to participate in archery fire and skirmishes until the regroup phase.
+		 * Set: 1
+		 * Name: Thrarin, Dwarven Smith
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Dwarf
+		 * Strength: 4
+		 * Vitality: 2
+
+		 * Site Number: 3
+		 * Game Text: <b>Maneuver:</b> Exert Thrarin to allow him to participate in archery fire and skirmishes until the regroup phase.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Thrarin", card.getBlueprint().getTitle());
 		assertEquals("Dwarven Smith", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Race.DWARF, card.getBlueprint().getRace());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getStrength());

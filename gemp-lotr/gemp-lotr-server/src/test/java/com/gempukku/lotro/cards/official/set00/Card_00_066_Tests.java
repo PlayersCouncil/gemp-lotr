@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,29 +31,28 @@ public class Card_00_066_Tests
 	public void EomerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 0
-		* Title: Éomer, Forthwith Banished
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Rohan
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Man
-		* Strength: 7
-		* Vitality: 3
-		* Game Text: <b>Valiant</b>. <b>Damage +1</b>.<br>While you can spot a [rohan] Man, Éomer's twilight cost is -1.
+		 * Set: 0
+		 * Name: Éomer, Forthwith Banished
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Rohan
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 7
+		 * Vitality: 3
+
+		 * Game Text: <b>Valiant</b>. <b>Damage +1</b>.<br>While you can spot a [rohan] Man, Éomer's twilight cost is -1.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Éomer", card.getBlueprint().getTitle());
 		assertEquals("Forthwith Banished", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.VALIANT));
 		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));

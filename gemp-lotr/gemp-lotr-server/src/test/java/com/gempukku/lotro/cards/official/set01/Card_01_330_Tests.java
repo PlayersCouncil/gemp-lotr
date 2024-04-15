@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_330_Tests
 	public void BuckleberryFerryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Buckleberry Ferry
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 1
-		* Type: site
-		* Subtype: 
-		* Site Number: 2
-		* Game Text: <b>River</b>. While only Hobbits are in the fellowship, there are no assignment and skirmish phases at Buckleberry Ferry.
+		 * Set: 1
+		 * Name: Buckleberry Ferry
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 1
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 2
+		 * Game Text: <b>River</b>. While only Hobbits are in the fellowship, there are no assignment and skirmish phases at Buckleberry Ferry.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(2);
 		assertEquals("Buckleberry Ferry", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

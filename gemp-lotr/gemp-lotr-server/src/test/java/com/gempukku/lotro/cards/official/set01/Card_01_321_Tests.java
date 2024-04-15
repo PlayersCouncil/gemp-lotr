@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_321_Tests
 	public void FarmerMaggotsFieldsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Farmer Maggot's Fields
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 
-		* Type: site
-		* Subtype: 
-		* Site Number: 1
-		* Game Text: <b>Fellowship:</b> Exert a Hobbit to play Merry or Pippin from your draw deck.
+		 * Set: 1
+		 * Name: Farmer Maggot's Fields
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 1
+		 * Game Text: <b>Fellowship:</b> Exert a Hobbit to play Merry or Pippin from your draw deck.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(1);
 		assertEquals("Farmer Maggot's Fields", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

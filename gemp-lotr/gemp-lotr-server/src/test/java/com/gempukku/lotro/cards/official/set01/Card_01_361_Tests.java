@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_361_Tests
 	public void SlopesofAmonHenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Slopes of Amon Hen
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 9
-		* Type: site
-		* Subtype: 
-		* Site Number: 9
-		* Game Text: The twilight cost of each [isengard] minion is -1.
+		 * Set: 1
+		 * Name: Slopes of Amon Hen
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 9
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 9
+		 * Game Text: The twilight cost of each [isengard] minion is -1.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(9);
 		assertEquals("Slopes of Amon Hen", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

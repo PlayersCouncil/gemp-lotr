@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_340_Tests
 	public void RivendellTerraceStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Rivendell Terrace
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 0
-		* Type: sanctuary
-		* Subtype: 
-		* Site Number: 3
-		* Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Play a Man to draw a card.
+		 * Set: 1
+		 * Name: Rivendell Terrace
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 0
+		 * Type: Sanctuary
+		 * Subtype: 
+
+		 * Site Number: 3
+		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Play a Man to draw a card.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(3);
 		assertEquals("Rivendell Terrace", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

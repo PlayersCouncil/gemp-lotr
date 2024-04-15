@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_069_Tests
 	public void AlbertDrearyStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Albert Dreary, Entertainer from Bree
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 1
-		* Type: ally
-		* Subtype: Man
-		* Strength: 3
-		* Vitality: 3
-		* Site Number: 1
-		* Game Text: To play, spot Gandalf.<br><b>Maneuver:</b> Exert Albert Dreary to discard an [isengard] or [moria] condition.
+		 * Set: 1
+		 * Name: Albert Dreary, Entertainer from Bree
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Man
+		 * Strength: 3
+		 * Vitality: 3
+
+		 * Site Number: 1
+		 * Game Text: To play, spot Gandalf.<br><b>Maneuver:</b> Exert Albert Dreary to discard an [isengard] or [moria] condition.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Albert Dreary", card.getBlueprint().getTitle());
 		assertEquals("Entertainer from Bree", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());

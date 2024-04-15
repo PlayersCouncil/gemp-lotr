@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_176_Tests
 	public void GoblinMarksmanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Goblin Marksman
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 3
-		* Type: minion
-		* Subtype: Orc
-		* Strength: 7
-		* Vitality: 1
-		* Site Number: 4
-		* Game Text: <b>Archer</b>. <helper>(Add 1 to the minion archery total.)</helper>
+		 * Set: 1
+		 * Name: Goblin Marksman
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 7
+		 * Vitality: 1
+
+		 * Site Number: 4
+		 * Game Text: <b>Archer</b>. <helper>(Add 1 to the minion archery total.)</helper>
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Goblin Marksman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
 		assertEquals(3, card.getBlueprint().getTwilightCost());

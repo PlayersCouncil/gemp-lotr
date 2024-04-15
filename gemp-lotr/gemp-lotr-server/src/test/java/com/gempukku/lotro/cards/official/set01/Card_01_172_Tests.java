@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,30 +31,29 @@ public class Card_01_172_Tests
 	public void GoblinArcherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Goblin Archer
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 5
-		* Type: minion
-		* Subtype: Orc
-		* Strength: 4
-		* Vitality: 3
-		* Site Number: 4
-		* Game Text: <b>Archer</b>.<br>While you can spot another [moria] Orc, the fellowship archery total is -6.
+		 * Set: 1
+		 * Name: Goblin Archer
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 5
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 4
+		 * Vitality: 3
+
+		 * Site Number: 4
+		 * Game Text: <b>Archer</b>.<br>While you can spot another [moria] Orc, the fellowship archery total is -6.
 		*/
 
 		var scn = GetScenario();
-
 		var card = scn.GetFreepsCard("card");
-
 		assertEquals("Goblin Archer", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
 		assertEquals(5, card.getBlueprint().getTwilightCost());

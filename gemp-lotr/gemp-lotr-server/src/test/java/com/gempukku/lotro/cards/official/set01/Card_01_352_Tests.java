@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,22 +31,21 @@ public class Card_01_352_Tests
 	public void LothlorienWoodsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Lothlórien Woods
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 3
-		* Type: sanctuary
-		* Subtype: 
-		* Site Number: 6
-		* Game Text: <b>Forest</b>. <b>Sanctuary</b>. Each ally whose home is site 6 is strength +3.
+		 * Set: 1
+		 * Name: Lothlórien Woods
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 3
+		 * Type: Sanctuary
+		 * Subtype: 
+
+		 * Site Number: 6
+		 * Game Text: <b>Forest</b>. <b>Sanctuary</b>. Each ally whose home is site 6 is strength +3.
 		*/
 
 		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-
+		var card = scn.GetFreepsSite(6);
 		assertEquals("Lothlórien Woods", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
