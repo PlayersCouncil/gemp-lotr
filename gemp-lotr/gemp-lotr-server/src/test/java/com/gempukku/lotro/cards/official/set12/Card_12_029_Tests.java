@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,35 @@ public class Card_12_029_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void IntrospectionStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: Introspection
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 2
-		* Type: event
-		* Subtype: Fellowship
-		* Game Text: <b>Spell</b>. Choose one: Spot a [gandalf] Wizard to choose an opponent who must discard one of his or her conditions from play; or spot a [gandalf] Wizard at a battleground site to discard a condition from play.
+		 * Set: 12
+		 * Name: Introspection
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Fellowship
+		 * Game Text: <b>Spell</b>. Choose one: Spot a [gandalf] Wizard to choose an opponent who must discard one of his or her conditions from play; or spot a [gandalf] Wizard at a battleground site to discard a condition from play.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Introspection", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.FELLOWSHIP, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.FELLOWSHIP));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void IntrospectionTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

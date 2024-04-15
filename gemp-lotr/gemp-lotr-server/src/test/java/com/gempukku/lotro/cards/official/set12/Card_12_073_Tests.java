@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,42 @@ public class Card_12_073_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void TheMouthofSauronStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: The Mouth of Sauron, Messenger of Mordor
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Men
-		* Twilight Cost: 3
-		* Type: minion
-		* Subtype: Man
-		* Strength: 9
-		* Vitality: 3
-		* Site Number: 5
-		* Game Text: <b>Maneuver:</b> Exert The Mouth of Sauron to play a [men] condition or [men] possession from your draw deck.
+		 * Set: 12
+		 * Name: The Mouth of Sauron, Messenger of Mordor
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Men
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 9
+		 * Vitality: 3
+		 * Site Number: 5
+		 * Game Text: <b>Maneuver:</b> Exert The Mouth of Sauron to play a [men] condition or [men] possession from your draw deck.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("The Mouth of Sauron", card.getBlueprint().getTitle());
+		assertEquals("Messenger of Mordor", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void TheMouthofSauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

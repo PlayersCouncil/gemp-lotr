@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class Card12_074 extends AbstractMinion {
     public Card12_074() {
-        super(4, 8, 2, 4, Race.MAN, Culture.MEN, "Mumak Rider");
+        super(4, 8, 2, 4, Race.MAN, Culture.MEN, "Mûmak Rider");
         addKeyword(Keyword.ARCHER);
     }
 

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,42 @@ public class Card_12_062_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void DunlendingZealotStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: Dunlending Zealot
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Men
-		* Twilight Cost: 3
-		* Type: minion
-		* Subtype: Man
-		* Strength: 8
-		* Vitality: 2
-		* Site Number: 4
-		* Game Text: While this minion is exhausted, each unbound companion is resistance -1 (or -2 if the fellowship is at a battleground site).
+		 * Set: 12
+		 * Name: Dunlending Zealot
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Men
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 8
+		 * Vitality: 2
+		 * Site Number: 4
+		 * Game Text: While this minion is exhausted, each unbound companion is resistance -1 (or -2 if the fellowship is at a battleground site).
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Dunlending Zealot", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void DunlendingZealotTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

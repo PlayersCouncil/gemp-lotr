@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,44 @@ public class Card_12_079_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void TheBalrogStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: The Balrog, The Terror of Khazad-dûm
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 12
-		* Type: minion
-		* Subtype: Balrog
-		* Strength: 17
-		* Vitality: 5
-		* Site Number: 4
-		* Game Text: <b>Damage +1</b>.<br>While The Balrog is at an underground site, it is <b>fierce</b> and cannot take wounds or be exerted.
+		 * Set: 12
+		 * Name: The Balrog, The Terror of Khazad-dûm
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 12
+		 * Type: Minion
+		 * Subtype: Balrog
+		 * Strength: 17
+		 * Vitality: 5
+		 * Site Number: 4
+		 * Game Text: <b>Damage +1</b>.<br>While The Balrog is at an underground site, it is <b>fierce</b> and cannot take wounds or be exerted.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("The Balrog", card.getBlueprint().getTitle());
+		assertEquals("The Terror of Khazad-dûm", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.BALROG, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.BALROG));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(12, card.getBlueprint().getTwilightCost());
 		assertEquals(17, card.getBlueprint().getStrength());
 		assertEquals(5, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void TheBalrogTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

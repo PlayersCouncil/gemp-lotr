@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,38 @@ public class Card_12_019_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void LongknivesofLegolasStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: Long-knives of Legolas
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Elven
-		* Twilight Cost: 1
-		* Type: possession
-		* Subtype: Hand Weapon
-		* Strength: 1
-		* Game Text: Bearer must be Legolas.<br>Each Orc or Uruk-hai skirmishing Legolas is strength -2.
+		 * Set: 12
+		 * Name: Long-knives of Legolas
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Hand weapon
+		 * Strength: 1
+		 * Game Text: Bearer must be Legolas.<br>Each Orc or Uruk-hai skirmishing Legolas is strength -2.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Long-knives of Legolas", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		//assertEquals(Race.HAND WEAPON, card.getBlueprint().getRace());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(1, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void LongknivesofLegolasTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

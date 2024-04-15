@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,36 @@ public class Card_12_110_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void CleavingaPathStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: Cleaving a Path
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Rohan
-		* Twilight Cost: 1
-		* Type: condition
-		* Subtype: Support Area
-		* Game Text: <b>Skirmish:</b> Discard this condition to make a [rohan] companion strength +1 for each of the following that is true: he or she is at a plains site; he or she has resistance 4 or more; he or she is bearing armor; he or she is skirmishing a wounded minion.
+		 * Set: 12
+		 * Name: Cleaving a Path
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Rohan
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: <b>Skirmish:</b> Discard this condition to make a [rohan] companion strength +1 for each of the following that is true: he or she is at a plains site; he or she has resistance 4 or more; he or she is bearing armor; he or she is skirmishing a wounded minion.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Cleaving a Path", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		//assertEquals(Race.SUPPORT AREA, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.SUPPORT_AREA));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void CleavingaPathTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

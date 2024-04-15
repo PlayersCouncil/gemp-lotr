@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,35 @@ public class Card_12_028_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void GandalfsHatStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: Gandalf's Hat
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 0
-		* Type: possession
-		* Subtype: 
-		* Game Text: Bearer must be Gandalf.<br>Each time the fellowship moves from a battleground site, add a burden.<br><b>Regroup:</b> Add 2 burdens to remove all twilight tokens from the twilight pool.
+		 * Set: 12
+		 * Name: Gandalf's Hat
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 0
+		 * Type: Possession
+		 * Subtype: 
+		 * Game Text: Bearer must be Gandalf.<br>Each time the fellowship moves from a battleground site, add a burden.<br><b>Regroup:</b> Add 2 burdens to remove all twilight tokens from the twilight pool.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Gandalf's Hat", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void GandalfsHatTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

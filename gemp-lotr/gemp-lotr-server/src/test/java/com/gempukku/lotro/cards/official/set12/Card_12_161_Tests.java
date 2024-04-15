@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,43 @@ public class Card_12_161_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void BlackRiderStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: Black Rider
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Wraith
-		* Twilight Cost: 5
-		* Type: minion
-		* Subtype: Nazgûl
-		* Strength: 8
-		* Vitality: 3
-		* Site Number: 3
-		* Game Text: <b>Fierce</b>.<br>This minion is strength +1 for each companion you can spot.
+		 * Set: 12
+		 * Name: Black Rider
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 5
+		 * Type: Minion
+		 * Subtype: Nazgûl
+		 * Strength: 8
+		 * Vitality: 3
+		 * Site Number: 3
+		 * Game Text: <b>Fierce</b>.<br>This minion is strength +1 for each companion you can spot.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Black Rider", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.NAZGUL));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void BlackRiderTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

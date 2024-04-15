@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class Card12_186 extends AbstractShadowsSite {
     public Card12_186() {
-        super("The Bridge of Khazad-dum", 0, Direction.LEFT);
+        super("The Bridge of Khazad-dûm", 0, Direction.LEFT);
         addKeyword(Keyword.BATTLEGROUND);
         addKeyword(Keyword.UNDERGROUND);
     }

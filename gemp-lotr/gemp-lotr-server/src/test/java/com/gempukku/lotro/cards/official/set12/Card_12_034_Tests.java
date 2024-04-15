@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,35 @@ public class Card_12_034_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void TraveledLeaderStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: Traveled Leader
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 1
-		* Type: event
-		* Subtype: Maneuver or Regroup
-		* Game Text: Spot a [gandalf] Wizard to replace a site in the fellowship's current region with a site from your adventure deck.
+		 * Set: 12
+		 * Name: Traveled Leader
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Maneuver or regroup
+		 * Game Text: Spot a [gandalf] Wizard to replace a site in the fellowship's current region with a site from your adventure deck.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Traveled Leader", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.MANEUVER OR REGROUP, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MANEUVER_OR_REGROUP));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void TraveledLeaderTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

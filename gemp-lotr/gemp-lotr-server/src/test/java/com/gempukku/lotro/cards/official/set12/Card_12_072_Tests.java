@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,38 @@ public class Card_12_072_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void MessengersMountStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: Messenger's Mount
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Men
-		* Twilight Cost: 2
-		* Type: possession
-		* Subtype: Mount
-		* Strength: 3
-		* Game Text: Bearer must be The Mouth of Sauron.<br>He is <b>fierce</b>.<br><b>Response:</b> If a [men] minion is about to take a wound, remove (3) to prevent that.
+		 * Set: 12
+		 * Name: Messenger's Mount
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Men
+		 * Twilight Cost: 2
+		 * Type: Possession
+		 * Subtype: Mount
+		 * Strength: 3
+		 * Game Text: Bearer must be The Mouth of Sauron.<br>He is <b>fierce</b>.<br><b>Response:</b> If a [men] minion is about to take a wound, remove (3) to prevent that.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Messenger's Mount", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		//assertEquals(Race.MOUNT, card.getBlueprint().getRace());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void MessengersMountTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,35 @@ public class Card_12_139_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void BrokeninDefeatStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 12
-		* Title: Broken in Defeat
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Uruk-hai
-		* Twilight Cost: 1
-		* Type: event
-		* Subtype: Skirmish
-		* Game Text: Make an [uruk-hai] minion strength +2. Then you may spot 6 companions to return this event to your hand.
+		 * Set: 12
+		 * Name: Broken in Defeat
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Uruk-hai
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: Make an [uruk-hai] minion strength +2. Then you may spot 6 companions to return this event to your hand.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Broken in Defeat", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.SKIRMISH, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.SKIRMISH));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void BrokeninDefeatTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

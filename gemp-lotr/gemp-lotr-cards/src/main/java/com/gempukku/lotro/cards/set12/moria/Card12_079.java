@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class Card12_079 extends AbstractMinion {
     public Card12_079() {
-        super(12, 17, 5, 4, Race.BALROG, Culture.MORIA, "The Balrog", "The Terror of Khazad-dum", true);
+        super(12, 17, 5, 4, Race.BALROG, Culture.MORIA, "The Balrog", "The Terror of Khazad-dûm", true);
         addKeyword(Keyword.DAMAGE, 1);
     }
 

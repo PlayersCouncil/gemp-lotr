@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class Card12_112 extends AbstractCompanion {
     public Card12_112() {
-        super(3, 7, 3, 7, Culture.ROHAN, Race.MAN, null, Names.eomer, "Eored Leader", true);
+        super(3, 7, 3, 7, Culture.ROHAN, Race.MAN, null, Names.eomer, "Éored Leader", true);
     }
 
     @Override
