@@ -65,7 +65,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}

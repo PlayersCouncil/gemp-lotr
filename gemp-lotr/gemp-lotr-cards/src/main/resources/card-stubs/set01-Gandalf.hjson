@@ -348,7 +348,10 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keywords: Spell
+		keywords: [
+			Spell
+			Response
+		]
 		/*requires: {
 			
 		}
@@ -784,7 +787,10 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Spell
+		keywords: [
+			Spell
+			Response
+		]
 		/*requires: {
 			
 		}

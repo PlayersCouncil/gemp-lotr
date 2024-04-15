@@ -1001,7 +1001,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}

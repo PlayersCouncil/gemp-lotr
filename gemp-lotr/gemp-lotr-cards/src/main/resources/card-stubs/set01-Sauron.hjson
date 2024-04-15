@@ -396,7 +396,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}
@@ -1231,7 +1231,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}
@@ -1607,7 +1607,7 @@
 		culture: Sauron
 		twilight: 3
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}

@@ -91,51 +91,6 @@
 		}
 	}
 
-	15_204: {
-		cardInfo: {
-			imagePath: decipher/LOTR15060.jpg
-			javaClass: true
-			//parentId: 15_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 15C60
-			rarity: C
-			setNum: "15"
-			cardNum: 60
-			style: Standard
-		}
-		title: Forth the Three Hunters!
-		subtitle: Dwarven Version
-		unique: false
-		side: Free Peoples
-		culture: Dwarven
-		twilight: 2
-		type: Condition
-		keywords: Support Area
-		/*requires: {
-			
-		}
-		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
-		gametext: <b>Archery:</b> Exert Legolas and exert Aragorn to wound a minion.<br><b>Skirmish:</b> Exert Aragorn and spot Gimli to make a minion strength -1 (or -3 if Aragorn and Gimli are hunters).<br><b>Regroup:</b> Exert Gimli and spot Legolas to draw a card (or 2 cards if Gimli and Legolas are hunters).
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
 	15_5: {
 		cardInfo: {
 			imagePath: decipher/LOTR15005.jpg

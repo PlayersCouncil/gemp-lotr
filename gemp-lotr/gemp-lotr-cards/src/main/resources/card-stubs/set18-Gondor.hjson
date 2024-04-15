@@ -581,8 +581,8 @@
 		twilight: 3
 		type: Condition
 		keywords: [
+			Tale
 			Support Area
-			Tale	
 		]
 		/*requires: {
 			
@@ -595,7 +595,7 @@
 				
 			}
 		]*/
-		gametext: <span style="word-spacing:-0.02em;font-size:98%"><b>Tale</b>. Each time a non-[wraith] minion is played, you may spot a Man to add a [gondor] token here.</span><br><span style="word-spacing:-0.02em;font-size:98%"><b>Maneuver:</b> Remove 3 [gondor] tokens from here to spot a minion. That minion cannot be assigned to a skirmish until the regroup phase. Any Shadow player may remove (2) to prevent this.</span>
+		gametext: <b>Tale</b>. Each time a non-[wraith] minion is played, you may spot a Man to add a [gondor] token here.<br><b>Maneuver:</b> Remove 3 [gondor] tokens from here to spot a minion. That minion cannot be assigned to a skirmish until the regroup phase. Any Shadow player may remove (2) to prevent this.
 		lore: Each turn was guarded by Púkel-men stones with their huge, clumsy arms folded across their round bellies.
 		promotext: ""
 		alts: {

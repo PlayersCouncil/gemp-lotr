@@ -344,7 +344,7 @@
 		culture: Dunland
 		twilight: 2
 		type: Event
-		#keywords: Regroup
+		keywords: Response
 		/*requires: {
 			
 		}

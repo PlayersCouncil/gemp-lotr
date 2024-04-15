@@ -348,10 +348,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: [
-			Fellowship
-			Regroup
-		]
+		keywords: Fellowship or Regroup
 		/*requires: {
 			
 		}

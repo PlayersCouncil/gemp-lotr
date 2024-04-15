@@ -65,7 +65,10 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		keywords: [
+			Skirmish
+			Response
+		]
 		/*requires: {
 			
 		}

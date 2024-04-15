@@ -353,7 +353,10 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keywords: Spell
+		keywords: [
+			Spell
+			Response
+		]
 		/*requires: {
 			
 		}
