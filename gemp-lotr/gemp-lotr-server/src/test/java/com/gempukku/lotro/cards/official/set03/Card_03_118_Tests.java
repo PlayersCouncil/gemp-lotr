@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,39 @@ public class Card_03_118_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void TheGreatRiverStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 3
-		* Title: The Great River
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 6
-		* Type: site
-		* Subtype: 
-		* Site Number: 7
-		* Game Text: <b>River</b>. While the fellowship is at The Great River, cards may not be played from draw decks or discard piles.
+		 * Set: 3
+		 * Name: The Great River
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 6
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 7
+		 * Game Text: <b>River</b>. While the fellowship is at The Great River, cards may not be played from draw decks or discard piles.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(7);
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("The Great River", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		//assertEquals(Side., card.getBlueprint().getSide());
-		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.RIVER));
 		assertEquals(6, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(7, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void TheGreatRiverTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

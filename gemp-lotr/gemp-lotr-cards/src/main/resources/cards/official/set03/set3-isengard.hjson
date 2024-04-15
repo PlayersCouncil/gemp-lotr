@@ -492,13 +492,14 @@
         }
     }
     3_67: {
-        title: The Palantir of Orthanc
+        title: The Palantír of Orthanc
         unique: true
         side: shadow
         culture: Isengard
         twilight: 0
         type: artifact
         keyword: Support Area
+        itemclass: Palantir
         effects: [
             {
                 type: toPlay

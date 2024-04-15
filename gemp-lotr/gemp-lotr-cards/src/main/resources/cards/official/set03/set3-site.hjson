@@ -6,7 +6,10 @@
         block: Fellowship
         site: 6
         direction: left
-        keyword: Forest
+        keyword: [
+            Forest
+            Sanctuary
+        ]
         effects: {
             type: modifier
             modifier: {
@@ -79,6 +82,7 @@
         block: Fellowship
         site: 3
         direction: right
+        keyword: Sanctuary
         effects: {
             type: trigger
             trigger: {

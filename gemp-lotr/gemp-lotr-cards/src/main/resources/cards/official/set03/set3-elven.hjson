@@ -32,7 +32,7 @@
     }
     3_8: {
         title: Arwen
-        subtitle: Lady Undomiel
+        subtitle: Lady Undómiel
         unique: true
         side: free_people
         culture: Elven
@@ -58,7 +58,7 @@
         }
     }
     3_9: {
-        title: Beren and Luthien
+        title: Beren and Lúthien
         side: free_people
         culture: Elven
         twilight: 1
@@ -99,7 +99,7 @@
     }
     3_10: {
         title: Calaglin
-        subtitle: Elf of Lorien
+        subtitle: Elf of Lórien
         unique: true
         side: free_people
         culture: Elven
@@ -159,7 +159,7 @@
         }
     }
     3_12: {
-        title: Dinendal
+        title: Dínendal
         subtitle: Silent Scout
         unique: true
         side: free_people
@@ -267,7 +267,7 @@
         ]
 	}
     3_15: {
-        title: Forests of Lothlorien
+        title: Forests of Lothlórien
         side: free_people
         culture: Elven
         twilight: 1
