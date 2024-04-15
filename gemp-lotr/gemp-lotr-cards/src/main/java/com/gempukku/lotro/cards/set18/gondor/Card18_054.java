@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class Card18_054 extends AbstractCompanion {
     public Card18_054() {
-        super(2, 7, 3, 1, Culture.GONDOR, Race.MAN, null, "Isildur", "Sword-Bearer", true);
+        super(2, 7, 3, 1, Culture.GONDOR, Race.MAN, null, "Isildur", "Sword-bearer", true);
         addKeyword(Keyword.KNIGHT);
     }
 

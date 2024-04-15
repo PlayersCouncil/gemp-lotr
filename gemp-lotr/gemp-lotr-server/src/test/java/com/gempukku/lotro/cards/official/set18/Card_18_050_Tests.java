@@ -33,34 +33,36 @@ public class Card_18_050_Tests
 	public void TheFaithfulStoneStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 18
-		* Title: *The Faithful Stone
-		* Side: Free Peoples
-		* Culture: Gondor
-		* Twilight Cost: 3
-		* Type: condition
-		* Subtype: Support Area
-		* Game Text: <b>Tale.</b> Each time a non-[wraith] minion is played, you may spot a Man to put a [gondor] token here.<br><b>Maneuver:</b> Remove 3 [gondor] tokens from here to spot a minion. That minion cannot be assigned to a skirmish until the regroup phase.  Any Shadow player may remove (2) to prevent this.
-		*/
+		 * Set: 18
+		 * Name: The Faithful Stone
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 3
+		 * Type: Condition
+		 * Subtype: Support Area
+		 * Game Text: <b>Tale.</b> Each time a non-[wraith] minion is played, you may spot a Man to put a [gondor] token here.<br><b>Maneuver:</b> Remove 3 [gondor] tokens from here to spot a minion. That minion cannot be assigned to a skirmish until the regroup phase.  Any Shadow player may remove (2) to prevent this.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		var stone = scn.GetFreepsCard("stone");
+		var card = scn.GetFreepsCard("stone");
 
-		assertFalse(stone.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, stone.getBlueprint().getSide());
-		assertEquals(Culture.GONDOR, stone.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, stone.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(stone, Keyword.SUPPORT_AREA));
-		assertTrue(scn.HasKeyword(stone, Keyword.TALE));
-		assertEquals(3, stone.getBlueprint().getTwilightCost());
+		assertEquals("The Faithful Stone", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
 	public void TheFaithfulStoneAddsTokenWhenNonRingwraithMinionPlayedIfManCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
 		var boromir = scn.GetFreepsCard("boromir");
@@ -82,7 +84,7 @@ public class Card_18_050_Tests
 	@Test
 	public void TheFaithfulStoneAddsTokenWhenNonRingwraithMinionPlayedIfShadowManCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
 		scn.FreepsMoveCardToSupportArea(stone);
@@ -104,7 +106,7 @@ public class Card_18_050_Tests
 	@Test
 	public void TheFaithfulStoneAddsNoTokenIfManCannotBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
 		scn.FreepsMoveCardToSupportArea(stone);
@@ -123,7 +125,7 @@ public class Card_18_050_Tests
 	@Test
 	public void TheFaithfulStoneAddsNoTokenWhenRingwraithMinionIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
 		scn.FreepsMoveCardToSupportArea(stone);
@@ -143,7 +145,7 @@ public class Card_18_050_Tests
 	@Test
 	public void TheFaithfulStoneManueverActionCannotBeUsedIfLessThan3Tokens() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
 		var boromir = scn.GetFreepsCard("boromir");
@@ -163,7 +165,7 @@ public class Card_18_050_Tests
 	@Test
 	public void TheFaithfulStoneManueverActionRemoves3TokensToPreventAssigningTargetMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
 		scn.FreepsMoveCardToSupportArea(stone);
@@ -198,7 +200,7 @@ public class Card_18_050_Tests
 	@Test
 	public void TheFaithfulStoneManueverActionCanBePreventedByShadowRemoving2Twilight() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
 		scn.FreepsMoveCardToSupportArea(stone);

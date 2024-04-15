@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class Card18_094 extends AbstractPermanent {
     public Card18_094() {
-        super(Side.FREE_PEOPLE, 0, CardType.CONDITION, Culture.ROHAN, "Cast From the Hall");
+        super(Side.FREE_PEOPLE, 0, CardType.CONDITION, Culture.ROHAN, "Cast from the Hall");
     }
 
     @Override

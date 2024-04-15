@@ -580,7 +580,10 @@
 		culture: Gondor
 		twilight: 3
 		type: Condition
-		keywords: Support Area
+		keywords: [
+			Support Area
+			Tale	
+		]
 		/*requires: {
 			
 		}

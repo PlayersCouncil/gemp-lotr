@@ -207,7 +207,10 @@
 		type: Possession
 		strength: 2
 		vitality: 1
-		itemclass: Hand weapon/shield
+		itemclass: [
+			Hand Weapon
+			Shield
+		]
 		#target: title(an [elven] companion)
 		/*requires: {
 			

@@ -24,7 +24,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card18_070 extends AbstractEvent {
     public Card18_070() {
-        super(Side.SHADOW, 2, Culture.MEN, "Ill News Is An Ill Guest", Phase.SHADOW);
+        super(Side.SHADOW, 2, Culture.MEN, "Ill News is an Ill Guest", Phase.SHADOW);
     }
 
     @Override

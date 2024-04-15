@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,45 @@ public class Card_18_048_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void FaramirStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 18
-		* Title: Faramir, Captain of Ithilien
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gondor
-		* Twilight Cost: 3
-		* Type: companion
-		* Subtype: Man
-		* Strength: 7
-		* Vitality: 3
-		* Resistance: 7
-		* Game Text: <b>Ranger</b>. <b>Hunter 2</b>.<br>If Faramir is in your starting fellowship, his twilight cost is -1.<br><b>Maneuver:</b> Exert Faramir to heal another companion with resistance 5 or more.
+		 * Set: 18
+		 * Name: Faramir, Captain of Ithilien
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 3
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 7
+		 * Vitality: 3
+		 * Resistance: 7
+		 * Game Text: <b>Ranger</b>. <b>Hunter 2</b>.<br>If Faramir is in your starting fellowship, his twilight cost is -1.<br><b>Maneuver:</b> Exert Faramir to heal another companion with resistance 5 or more.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Faramir", card.getBlueprint().getTitle());
+		assertEquals("Captain of Ithilien", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(card, Keyword.HUNTER));
+		assertEquals(2, scn.GetKeywordCount(card, Keyword.HUNTER));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(7, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void FaramirTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

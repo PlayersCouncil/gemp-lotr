@@ -22,7 +22,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card18_016 extends AbstractEvent {
     public Card18_016() {
-        super(Side.FREE_PEOPLE, 0, Culture.ELVEN, "Miruvore", Phase.FELLOWSHIP);
+        super(Side.FREE_PEOPLE, 0, Culture.ELVEN, "Miruvóre", Phase.FELLOWSHIP);
     }
 
     @Override

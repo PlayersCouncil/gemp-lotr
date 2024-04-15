@@ -9,9 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class Card_18_132_Tests
@@ -40,44 +38,40 @@ public class Card_18_132_Tests
 
         /**
          * Set: 18
-         * Title: All Life Flees
+         * Name: All Life Flees
+         * Unique: False
          * Side: Shadow
          * Culture: Wraith
          * Twilight Cost: 2
          * Type: Event
          * Subtype: Shadow
          * Game Text: To play, spot a Nazgul.
-         * Remove (X) to choose one: discard a follower from play that has a twilight cost of X, or play from deck a
-         * [RINGWRAITH] minion that has a twilight cost of X.
+         *   Remove (X) to choose one: discard a follower from play that has a twilight cost of X, or play from deck a
+         *   [RINGWRAITH] minion that has a twilight cost of X.
          */
 
-        //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl flees = scn.GetFreepsCard("flees");
+        var card = scn.GetFreepsCard("flees");
 
-        assertFalse(flees.getBlueprint().isUnique());
-        assertEquals(Side.SHADOW, flees.getBlueprint().getSide());
-        assertEquals(Culture.WRAITH, flees.getBlueprint().getCulture());
-        assertEquals(CardType.EVENT, flees.getBlueprint().getCardType());
-        //assertEquals(Race.CREATURE, flees.getBlueprint().getRace());
-        assertTrue(scn.HasKeyword(flees, Keyword.SHADOW)); // test for keywords as needed
-        assertEquals(2, flees.getBlueprint().getTwilightCost());
-        //assertEquals(, flees.getBlueprint().getStrength());
-        //assertEquals(, flees.getBlueprint().getVitality());
-        //assertEquals(, flees.getBlueprint().getResistance());
-        //assertEquals(Signet., flees.getBlueprint().getSignet());
-        //assertEquals(, flees.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
+        assertEquals("All Life Flees", card.getBlueprint().getTitle());
+        assertNull(card.getBlueprint().getSubtitle());
+        assertFalse(card.getBlueprint().isUnique());
+        assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+        assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+        assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
+        assertEquals(2, card.getBlueprint().getTwilightCost());
 
     }
 
     @Test
     public void RequiresNazgulToPlay() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl flees = scn.GetShadowCard("flees");
-        PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
+        var flees = scn.GetShadowCard("flees");
+        var nazgul = scn.GetShadowCard("nazgul");
         scn.ShadowMoveCardToHand(flees, nazgul);
 
         scn.StartGame();
@@ -93,19 +87,19 @@ public class Card_18_132_Tests
     @Test
     public void CanDiscardFollowerCostingX() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl flees = scn.GetShadowCard("flees");
-        PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-        PhysicalCardImpl orc = scn.GetShadowCard("orc");
-        PhysicalCardImpl cantea = scn.GetShadowCard("cantea");
+        var flees = scn.GetShadowCard("flees");
+        var nazgul = scn.GetShadowCard("nazgul");
+        var orc = scn.GetShadowCard("orc");
+        var cantea = scn.GetShadowCard("cantea");
         scn.ShadowMoveCardToHand(flees);
         scn.ShadowMoveCharToTable(nazgul);
 
-        PhysicalCardImpl follower0 = scn.GetFreepsCard("follower0");
-        PhysicalCardImpl follower1 = scn.GetFreepsCard("follower1");
-        PhysicalCardImpl follower2 = scn.GetFreepsCard("follower2");
-        PhysicalCardImpl follower3 = scn.GetFreepsCard("follower3");
+        var follower0 = scn.GetFreepsCard("follower0");
+        var follower1 = scn.GetFreepsCard("follower1");
+        var follower2 = scn.GetFreepsCard("follower2");
+        var follower3 = scn.GetFreepsCard("follower3");
         scn.FreepsMoveCardToSupportArea(follower0, follower1, follower2, follower3);
 
         scn.StartGame();
@@ -125,24 +119,22 @@ public class Card_18_132_Tests
         scn.ShadowChooseMultipleChoiceOption("Discard a follower");
 
         assertEquals(Zone.DISCARD, follower2.getZone());
-
-
     }
 
     @Test
     public void CanDiscardFollowerCosting0() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl flees = scn.GetShadowCard("flees");
-        PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
+        var flees = scn.GetShadowCard("flees");
+        var nazgul = scn.GetShadowCard("nazgul");
         scn.ShadowMoveCardToHand(flees);
         scn.ShadowMoveCharToTable(nazgul);
 
-        PhysicalCardImpl follower0 = scn.GetFreepsCard("follower0");
-        PhysicalCardImpl follower1 = scn.GetFreepsCard("follower1");
-        PhysicalCardImpl follower2 = scn.GetFreepsCard("follower2");
-        PhysicalCardImpl follower3 = scn.GetFreepsCard("follower3");
+        var follower0 = scn.GetFreepsCard("follower0");
+        var follower1 = scn.GetFreepsCard("follower1");
+        var follower2 = scn.GetFreepsCard("follower2");
+        var follower3 = scn.GetFreepsCard("follower3");
         scn.FreepsMoveCardToSupportArea(follower0, follower1, follower2, follower3);
 
         scn.StartGame();
@@ -159,19 +151,18 @@ public class Card_18_132_Tests
         assertEquals(10, scn.GetTwilight());
 
         assertEquals(Zone.DISCARD, follower0.getZone());
-
     }
 
     @Test
     public void CanPlayWraithMinionFromDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl flees = scn.GetShadowCard("flees");
-        PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-        PhysicalCardImpl orc = scn.GetShadowCard("orc");
-        PhysicalCardImpl cantea = scn.GetShadowCard("cantea");
-        PhysicalCardImpl twk = scn.GetShadowCard("twk");
+        var flees = scn.GetShadowCard("flees");
+        var nazgul = scn.GetShadowCard("nazgul");
+        var orc = scn.GetShadowCard("orc");
+        var cantea = scn.GetShadowCard("cantea");
+        var twk = scn.GetShadowCard("twk");
         scn.ShadowMoveCardToHand(flees);
         scn.ShadowMoveCharToTable(nazgul);
 
@@ -195,9 +186,5 @@ public class Card_18_132_Tests
         scn.ShadowChooseCardBPFromSelection(orc);
 
         assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
-
     }
-
-
-
 }

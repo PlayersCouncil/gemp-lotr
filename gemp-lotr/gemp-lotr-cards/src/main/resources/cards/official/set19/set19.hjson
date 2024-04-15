@@ -380,7 +380,7 @@
 		]
 	}
 	19_11: {
-		title: Smeagol
+		title: Sméagol
 		subtitle: Pitiable Guide
 		unique: true
 		side: free people
@@ -524,7 +524,7 @@
 		]
 	}
 	19_14: {
-		title: Not Bound To His Fate
+		title: Not Bound to His Fate
 		culture: gondor
 		twilight: 2
 		type: condition
@@ -561,7 +561,7 @@
 		]
 	}
 	19_15: {
-		title: Strength In My Blood
+		title: Strength in My Blood
 		culture: gondor
 		twilight: 1
 		type: condition
@@ -581,7 +581,7 @@
 		}
 	}
 	19_16: {
-		title: Grima
+		title: Gríma
 		subtitle: Servant of Another Master
 		unique: true
 		culture: isengard
@@ -836,7 +836,7 @@
 	}
 	19_21: {
 		title: Watcher in the Water
-		subtitle: Many-Tentacled Creature
+		subtitle: Many-tentacled Creature
 		unique: true
 		culture: moria
 		twilight: 4
@@ -960,7 +960,7 @@
         ]
 	}
 	19_24: {
-		title: Brought Down From Inside
+		title: Brought Down from Inside
 		culture: rohan
 		twilight: 2
 		type: condition
@@ -1001,7 +1001,7 @@
 	}
 	19_25: {
 		title: Éomer
-		subtitle: Eored Captain
+		subtitle: Éored Captain
 		unique: true
 		culture: rohan
 		twilight: 3
