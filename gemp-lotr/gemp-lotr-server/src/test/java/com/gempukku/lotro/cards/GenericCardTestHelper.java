@@ -168,6 +168,14 @@ public class GenericCardTestHelper extends AbstractAtTest {
                 .findFirst().orElse(null);
     }
 
+    public PhysicalCardImpl GetFreepsRing() {
+        return (PhysicalCardImpl)_game.getGameState().getRing(P1);
+    }
+    public PhysicalCardImpl GetShadowRing() {
+        return (PhysicalCardImpl)_game.getGameState().getRing(P2);
+    }
+    public PhysicalCardImpl GetRingBearer() { return (PhysicalCardImpl)_game.getGameState().getRingBearer(P1); }
+    public PhysicalCardImpl GetShadowRingBearer() { return (PhysicalCardImpl)_game.getGameState().getRingBearer(P2); }
     public PhysicalCardImpl GetFreepsSite(int siteNum) { return GetSite(P1, siteNum); }
     public PhysicalCardImpl GetShadowSite(int siteNum) { return GetSite(P2, siteNum); }
     public PhysicalCardImpl GetSite(String playerID, int siteNum)
@@ -628,8 +636,6 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public int GetMoveCount() { return _game.getGameState().getMoveCount(); }
 
-    public PhysicalCardImpl GetRingBearer() { return (PhysicalCardImpl)_game.getGameState().getRingBearer(P1); }
-
     public boolean RBWearingOneRing() { return _game.getGameState().isWearingRing(); }
     public PhysicalCardImpl GetCurrentSite() { return (PhysicalCardImpl)_game.getGameState().getCurrentSite(); }
 
@@ -1052,7 +1058,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         }
         while(ShadowDecisionAvailable("discard down"))
         {
-            ShadowChooseCard((PhysicalCardImpl) GetShadowHand().get(0));
+            ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
         }
         if(FreepsDecisionAvailable("another move"))
         {
@@ -1064,7 +1070,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         }
         if(FreepsDecisionAvailable("discard down"))
         {
-            FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().get(0));
+            FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
         }
 
         //Shadow player
@@ -1077,7 +1083,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         }
         if(FreepsDecisionAvailable("discard down"))
         {
-            FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().get(0));
+            FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
         }
         if(ShadowDecisionAvailable("another move"))
         {
@@ -1089,7 +1095,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         }
         if(ShadowDecisionAvailable("discard down"))
         {
-            ShadowChooseCard((PhysicalCardImpl) GetShadowHand().get(0));
+            ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
         }
 
         Assert.assertTrue(GetCurrentPhase() == Phase.BETWEEN_TURNS
