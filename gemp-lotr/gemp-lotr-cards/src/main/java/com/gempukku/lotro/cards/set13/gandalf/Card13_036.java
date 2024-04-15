@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class Card13_036 extends AbstractAttachableFPPossession {
     public Card13_036() {
-        super(0, 0, 0, Culture.GANDALF, CardType.ARTIFACT, PossessionClass.PALANTIR, "The Palantir of Orthanc", "Recovered Seeing Stone", true);
+        super(0, 0, 0, Culture.GANDALF, CardType.ARTIFACT, PossessionClass.PALANTIR, "The Palantír of Orthanc", "Recovered Seeing Stone", true);
     }
 
     @Override

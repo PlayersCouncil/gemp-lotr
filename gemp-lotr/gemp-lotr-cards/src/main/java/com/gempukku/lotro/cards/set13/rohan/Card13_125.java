@@ -20,7 +20,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card13_125 extends AbstractEvent {
     public Card13_125() {
-        super(Side.FREE_PEOPLE, 1, Culture.ROHAN, "Ferthu Theoden Hal", Phase.MANEUVER);
+        super(Side.FREE_PEOPLE, 1, Culture.ROHAN, "Ferthu Théoden Hal", Phase.MANEUVER);
     }
 
     @Override

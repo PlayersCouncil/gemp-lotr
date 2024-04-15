@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class Card13_092 extends AbstractMinion {
     public Card13_092() {
-        super(2, 4, 3, 3, Race.MAN, Culture.MEN, "Grima", "Footman of Saruman", true);
+        super(2, 4, 3, 3, Race.MAN, Culture.MEN, "Gríma", "Footman of Saruman", true);
         addKeyword(Keyword.LURKER);
     }
 

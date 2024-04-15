@@ -37,7 +37,7 @@ import java.util.List;
  */
 public class Card13_065 extends AbstractCompanion {
     public Card13_065() {
-        super(5, 8, 5, 6, Culture.GONDOR, Race.MAN, null, "Elendil", "High-King of Gondor", true);
+        super(5, 8, 5, 6, Culture.GONDOR, Race.MAN, null, "Elendil", "High-king of Gondor", true);
         addKeyword(Keyword.KNIGHT);
     }
 

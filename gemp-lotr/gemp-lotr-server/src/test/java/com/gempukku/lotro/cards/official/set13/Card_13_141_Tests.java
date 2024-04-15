@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,45 +27,40 @@ public class Card_13_141_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void SceptreoftheDarkLordStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 13
-		* Title: Sceptre of the Dark Lord
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Sauron
-		* Twilight Cost: 0
-		* Type: artifact
-		* Subtype: Hand Weapon
-		* Strength: 2
-		* Vitality: 1
-		* Game Text: Bearer must be Sauron.<br>He is <b>damage +1</b>.<br>Each time Sauron wins a skirmish and the companion he is skirmishing is not killed, you may assign X wounds to other companions, where X is the current region number.
+		 * Set: 13
+		 * Name: Sceptre of the Dark Lord
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 0
+		 * Type: Artifact
+		 * Subtype: Hand weapon
+		 * Strength: 2
+		 * Vitality: 1
+		 * Game Text: Bearer must be Sauron.<br>He is <b>damage +1</b>.<br>Each time Sauron wins a skirmish and the companion he is skirmishing is not killed, you may assign X wounds to other companions, where X is the current region number.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Sceptre of the Dark Lord", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		//assertEquals(Race.HAND WEAPON, card.getBlueprint().getRace());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getStrength());
 		assertEquals(1, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void SceptreoftheDarkLordTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

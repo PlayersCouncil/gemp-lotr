@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,37 @@ public class Card_13_038_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void RadagastStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 13
-		* Title: Radagast, Tender of Beasts
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 2
-		* Type: follower
-		* Subtype: 
-		* Resistance: 2
-		* Game Text: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, <span style="word-spacing:-0.08em">you may add (2) to transfer this to a companion.)</span></helper><br>While you can spot 2 [gandalf] companions, minions skirmishing bearer do not gain strength bonuses from possessions.
+		 * Set: 13
+		 * Name: Radagast, Tender of Beasts
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 2
+		 * Type: Follower
+		 * Subtype: 
+		 * Resistance: 2
+		 * Game Text: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, <span style="word-spacing:-0.08em">you may add (2) to transfer this to a companion.)</span></helper><br>While you can spot 2 [gandalf] companions, minions skirmishing bearer do not gain strength bonuses from possessions.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Radagast", card.getBlueprint().getTitle());
+		assertEquals("Tender of Beasts", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.FOLLOWER, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
 		assertEquals(2, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void RadagastTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

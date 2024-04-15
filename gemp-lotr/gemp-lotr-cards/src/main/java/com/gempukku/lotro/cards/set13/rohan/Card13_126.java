@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class Card13_126 extends AbstractAttachableFPPossession {
     public Card13_126() {
-        super(2, 1, 0, Culture.ROHAN, PossessionClass.MOUNT, "Firefoot", "Mearas of the Mark", true);
+        super(2, 1, 0, Culture.ROHAN, PossessionClass.MOUNT, "Firefoot", "Mearas of The Mark", true);
     }
 
     @Override

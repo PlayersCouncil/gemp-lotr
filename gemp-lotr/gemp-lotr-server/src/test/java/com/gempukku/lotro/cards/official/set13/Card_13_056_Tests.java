@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,35 @@ public class Card_13_056_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void SoftlyUpBehindStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 13
-		* Title: Softly Up Behind
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Gollum
-		* Twilight Cost: 1
-		* Type: event
-		* Subtype: Maneuver
-		* Game Text: Spot Sméagol and discard 2 [gollum] cards from hand to return a minion with strength 6 or less to its owner's hand.<br>While this is in your discard pile, Sméagol gains <b>muster</b>.
+		 * Set: 13
+		 * Name: Softly Up Behind
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Gollum
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: Spot Sméagol and discard 2 [gollum] cards from hand to return a minion with strength 6 or less to its owner's hand.<br>While this is in your discard pile, Sméagol gains <b>muster</b>.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Softly Up Behind", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.MANEUVER, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MANEUVER));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void SoftlyUpBehindTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

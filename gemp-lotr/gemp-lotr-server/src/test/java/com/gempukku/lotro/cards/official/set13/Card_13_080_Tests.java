@@ -9,9 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_13_080_Tests
 {
@@ -23,7 +21,6 @@ public class Card_13_080_Tests
                     put("saruman", "12_144");
                     put("gandalf", "6_30");
                     put("fool", "8_14");
-
                 }}
         );
     }
@@ -34,45 +31,43 @@ public class Card_13_080_Tests
 
         /**
          * Set: 13
-         * Title: *Radagast Deceived
+         * Name: Radagast Deceived
+         * Unique: True
          * Side: Shadow
          * Culture: Isengard
          * Twilight Cost: 3
          * Type: Condition
-         * Subtype: Support Area
-         * Game Text: Each time a Wizard heals, this condition becomes a fierce Wizard minion until the start of the
-         * regroup phase that has 12 strength and 1 vitality, and cannot take wounds or bear other cards. This radagast is still a condition.
+         * Subtype: Support area
+         * Game Text: Each time a Wizard heals, this condition becomes a <b>fierce</b> Wizard minion until the start
+         *   of the regroup phase that has 12 strength and 1 vitality, and cannot take wounds or bear other cards.
+         *   This card is still a condition.
          */
 
-        //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl radagast = scn.GetFreepsCard("radagast");
+        var card = scn.GetFreepsCard("radagast");
 
-        assertTrue(radagast.getBlueprint().isUnique());
-        assertEquals(Side.SHADOW, radagast.getBlueprint().getSide());
-        assertEquals(Culture.ISENGARD, radagast.getBlueprint().getCulture());
-        assertEquals(CardType.CONDITION, radagast.getBlueprint().getCardType());
-        assertTrue(scn.HasKeyword(radagast, Keyword.SUPPORT_AREA)); // test for keywords as needed
-        assertEquals(3, radagast.getBlueprint().getTwilightCost());
-        //assertEquals(, radagast.getBlueprint().getStrength());
-        //assertEquals(, radagast.getBlueprint().getVitality());
-        //assertEquals(, radagast.getBlueprint().getResistance());
-        //assertEquals(Signet., radagast.getBlueprint().getSignet());
-        //assertEquals(, radagast.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
+        assertEquals("Radagast Deceived", card.getBlueprint().getTitle());
+        assertNull(card.getBlueprint().getSubtitle());
+        assertTrue(card.getBlueprint().isUnique());
+        assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+        assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+        assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+        assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+        assertEquals(3, card.getBlueprint().getTwilightCost());
     }
 
     @Test
     public void RadagastDeceivedTurnsIntoAMinionIfSarumanHeals() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl radagast = scn.GetShadowCard("radagast");
-        PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
+        var radagast = scn.GetShadowCard("radagast");
+        var saruman = scn.GetShadowCard("saruman");
         scn.ShadowMoveCharToTable(saruman);
         scn.ShadowMoveCardToSupportArea(radagast);
 
-        PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
+        var gandalf = scn.GetFreepsCard("gandalf");
         scn.FreepsMoveCharToTable(gandalf);
 
         scn.StartGame();
@@ -93,10 +88,4 @@ public class Card_13_080_Tests
         assertTrue(scn.IsType(radagast, CardType.CONDITION));
 
     }
-
-
-
-
-
-
 }
