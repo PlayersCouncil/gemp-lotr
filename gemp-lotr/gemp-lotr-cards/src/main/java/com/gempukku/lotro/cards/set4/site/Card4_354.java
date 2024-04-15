@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.set4.site;
 
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -24,7 +25,7 @@ import java.util.List;
 public class Card4_354 extends AbstractSite {
     public Card4_354() {
         super("Hornburg Armory", SitesBlock.TWO_TOWERS, 6, 3, Direction.LEFT);
-
+        addKeyword(Keyword.SANCTUARY);
     }
 
     @Override

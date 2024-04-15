@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class Card4_363 extends AbstractSite {
     public Card4_363() {
-        super("Palantir Chamber", SitesBlock.TWO_TOWERS, 9, 9, Direction.LEFT);
+        super("Palantír Chamber", SitesBlock.TWO_TOWERS, 9, 9, Direction.LEFT);
     }
 
     @Override

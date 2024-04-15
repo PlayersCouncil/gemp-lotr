@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class Card4_266 extends AbstractCompanion {
     public Card4_266() {
-        super(3, 7, 3, 6, Culture.ROHAN, Race.MAN, Signet.ARAGORN, Names.eomer, "Sister-son of Theoden", true);
+        super(3, 7, 3, 6, Culture.ROHAN, Race.MAN, Signet.ARAGORN, Names.eomer, "Sister-son of Théoden", true);
     }
 
     @Override

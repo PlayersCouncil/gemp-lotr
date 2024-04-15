@@ -30,7 +30,7 @@ public class Card4_352 extends AbstractSite {
     public Card4_352() {
         super("Caves of Aglarond", SitesBlock.TWO_TOWERS, 6, 3, Direction.LEFT);
         addKeyword(Keyword.UNDERGROUND);
-
+        addKeyword(Keyword.SANCTUARY);
     }
 
     @Override

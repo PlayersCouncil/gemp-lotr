@@ -22,7 +22,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card4_214 extends AbstractEvent {
     public Card4_214() {
-        super(Side.SHADOW, 2, Culture.ISENGARD, "Where Has Grima Stowed It?", Phase.MANEUVER);
+        super(Side.SHADOW, 2, Culture.ISENGARD, "Where Has Gríma Stowed It?", Phase.MANEUVER);
     }
 
     @Override

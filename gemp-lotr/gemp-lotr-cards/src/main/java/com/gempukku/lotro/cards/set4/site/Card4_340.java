@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.set4.site;
 
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -24,7 +25,7 @@ import java.util.List;
 public class Card4_340 extends AbstractSite {
     public Card4_340() {
         super("Streets of Edoras", SitesBlock.TWO_TOWERS, 3, 0, Direction.RIGHT);
-
+        addKeyword(Keyword.SANCTUARY);
     }
 
     @Override

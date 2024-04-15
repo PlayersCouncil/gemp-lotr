@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class Card4_166 extends AbstractPermanent {
     public Card4_166() {
-        super(Side.SHADOW, 0, CardType.ARTIFACT, Culture.ISENGARD, "The Palantir of Orthanc", "Seventh Seeing-stone", true);
+        super(Side.SHADOW, 0, CardType.ARTIFACT, Culture.ISENGARD, "The Palantír of Orthanc", "Seventh Seeing-stone", true);
     }
 
     @Override

@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class Card4_160 extends AbstractMinion {
     public Card4_160() {
-        super(3, 9, 2, 5, Race.URUK_HAI, Culture.ISENGARD, "Mauhur", "Patrol Leader", true);
+        super(3, 9, 2, 5, Race.URUK_HAI, Culture.ISENGARD, "Mauhúr", "Patrol Leader", true);
         addKeyword(Keyword.TRACKER);
         addKeyword(Keyword.FIERCE);
     }

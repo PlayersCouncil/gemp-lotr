@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.set4.site;
 
+import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Names;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.SitesBlock;
@@ -24,7 +25,7 @@ import java.util.List;
 public class Card4_341 extends AbstractSite {
     public Card4_341() {
         super("Throne Room", SitesBlock.TWO_TOWERS, 3, 1, Direction.RIGHT);
-
+        addKeyword(Keyword.SANCTUARY);
     }
 
     @Override

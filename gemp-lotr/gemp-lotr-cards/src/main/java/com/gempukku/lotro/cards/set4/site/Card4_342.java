@@ -23,7 +23,7 @@ public class Card4_342 extends AbstractSite {
     public Card4_342() {
         super("Westemnet Plains", SitesBlock.TWO_TOWERS, 3, 1, Direction.RIGHT);
         addKeyword(Keyword.PLAINS);
-
+        addKeyword(Keyword.SANCTUARY);
     }
 
     @Override

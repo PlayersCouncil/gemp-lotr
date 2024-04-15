@@ -22,7 +22,7 @@ import com.gempukku.lotro.logic.modifiers.StrengthModifier;
  */
 public class Card4_239 extends AbstractEvent {
     public Card4_239() {
-        super(Side.SHADOW, 2, Culture.RAIDER, "Men of Rhun", Phase.SKIRMISH);
+        super(Side.SHADOW, 2, Culture.RAIDER, "Men of Rhûn", Phase.SKIRMISH);
     }
 
     @Override

@@ -20,7 +20,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card4_289 extends AbstractEvent {
     public Card4_289() {
-        super(Side.FREE_PEOPLE, 1, Culture.ROHAN, "Simbelmyne", Phase.FELLOWSHIP);
+        super(Side.FREE_PEOPLE, 1, Culture.ROHAN, "Simbelmynë", Phase.FELLOWSHIP);
     }
 
     @Override

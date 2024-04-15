@@ -21,7 +21,7 @@ import com.gempukku.lotro.logic.modifiers.StrengthModifier;
  */
 public class Card4_051 extends AbstractEvent {
     public Card4_051() {
-        super(Side.FREE_PEOPLE, 1, Culture.DWARVEN, "Khazad Ai-menu", Phase.SKIRMISH);
+        super(Side.FREE_PEOPLE, 1, Culture.DWARVEN, "Khazâd Ai-mênu", Phase.SKIRMISH);
     }
 
     @Override
