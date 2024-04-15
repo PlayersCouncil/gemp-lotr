@@ -34,6 +34,7 @@ public class Card_01_087_Tests
 		/**
 		 * Set: 1
 		 * Name: A Wizard Is Never Late
+		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 1

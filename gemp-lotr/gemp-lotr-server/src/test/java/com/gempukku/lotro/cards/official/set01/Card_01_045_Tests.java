@@ -38,21 +38,20 @@ public class Card_01_045_Tests
     @Test
     public void GaladrielStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
-        /**
-         * Set: 1
-         * Name: Galadriel, Lady of Light
-         * Unique: True
-         * Side: Free Peoples
-         * Culture: Elven
-         * Twilight Cost: 3
-         * Type: Ally
-         * Subtype: Elf
-         * Home: 6
-         * Strength: 3
-         * Vitality: 3
-         * Errata Game Text: At the start of each of your turns, heal every ally whose home is site 6.
-         * Fellowship: Exert Galadriel to play an Elf for free.
-         */
+		/**
+		 * Set: 1
+		 * Name: Galadriel, Lady of Light
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 3
+		 * Type: Ally
+		 * Subtype: Elf
+		 * Strength: 3
+		 * Vitality: 3
+		 * Site Number: 6
+		 * Game Text: At the start of each of your turns, heal every ally whose home is site 6.<br><b>Fellowship:</b> Exert Galadriel to play an Elf for free.
+		*/
 
         var scn = GetSimplePlayScenario();
 

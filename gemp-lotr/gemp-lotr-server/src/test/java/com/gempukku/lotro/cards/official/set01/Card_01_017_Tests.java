@@ -39,7 +39,7 @@ public class Card_01_017_Tests
 		 * Set: 1
 		 * Name: Grimir, Dwarven Elder
 		 * Unique: True
-		 * Side: FREE_PEOPLE
+		 * Side: Free Peoples
 		 * Culture: Dwarven
 		 * Twilight Cost: 1
 		 * Type: Ally

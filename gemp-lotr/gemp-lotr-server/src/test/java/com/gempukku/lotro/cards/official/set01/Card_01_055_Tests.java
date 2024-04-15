@@ -43,6 +43,7 @@ public class Card_01_055_Tests
 		/**
 		 * Set: 1
 		 * Name: The Mirror of Galadriel
+		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Elven
 		 * Twilight Cost: 2

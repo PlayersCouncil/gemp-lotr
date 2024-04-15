@@ -51,6 +51,8 @@ public class Card_01_016_Tests
 
 		var card = scn.GetFreepsCard("kingdom");
 
+		assertEquals("Greatest Kingdom of My People", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());

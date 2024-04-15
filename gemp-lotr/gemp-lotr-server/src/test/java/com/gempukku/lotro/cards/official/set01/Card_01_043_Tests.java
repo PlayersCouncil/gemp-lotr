@@ -37,7 +37,7 @@ public class Card_01_043_Tests
 
 		/**
 		 * Set: 1
-		 * Title: Far-seeing Eyes
+		 * Name: Far-seeing Eyes
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Elven

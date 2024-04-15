@@ -45,16 +45,16 @@ public class Card_01_031_Tests
 
 		/**
 		 * Set: 1
-		 * Title: Asfaloth
+		 * Name: Asfaloth
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Elven
 		 * Twilight Cost: 2
 		 * Type: Possession
-		 * Item Class: Mount
-		 * Game Text: Bearer must be an Elf.  When played on Arwen, Asfaloth's twilight cost is -2.  While at a plains
-		 * site, bearer is strength +2.  Discard Asfaloth when at an underground site.
-		 */
+		 * Subtype: Mount
+		 * Strength: 2
+		 * Game Text: Bearer must be an Elf. When played on Arwen, Asfaloth's twilight cost is -2.<br>While at a plains site, bearer is strength +2. Discard Asfaloth when at an underground site.
+		*/
 
 		var scn = GetScenario();
 

@@ -53,6 +53,7 @@ public class Card_04_095_Tests
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
