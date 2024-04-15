@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,42 @@ public class Card_14_005_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void BrandStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 14
-		* Title: Brand, King of Dale
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Man
-		* Strength: 6
-		* Vitality: 3
-		* Resistance: 6
-		* Game Text: Each of your Dwarves and other [gandalf] Men is strength +1.<br>While you can spot more minions than companions, the fellowship archery total is +X, where X is the number of minions minus the number of companions.
+		 * Set: 14
+		 * Name: Brand, King of Dale
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 6
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Game Text: Each of your Dwarves and other [gandalf] Men is strength +1.<br>While you can spot more minions than companions, the fellowship archery total is +X, where X is the number of minions minus the number of companions.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Brand", card.getBlueprint().getTitle());
+		assertEquals("King of Dale", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void BrandTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

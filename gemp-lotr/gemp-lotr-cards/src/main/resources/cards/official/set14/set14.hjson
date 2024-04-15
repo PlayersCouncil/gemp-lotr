@@ -1,6 +1,6 @@
 {
 	14_1: {
-		title: Dain Ironfoot
+		title: Dáin Ironfoot
 		subtitle: King Under the Mountain
 		unique: true
 		culture: dwarven
@@ -251,7 +251,7 @@
 	}
 	14_7: {
 		title: Duilin
-		subtitle: Ranger from Blackroot Vale
+		subtitle: Ranger From Blackroot Vale
 		unique: true
 		culture: gondor
 		twilight: 2
