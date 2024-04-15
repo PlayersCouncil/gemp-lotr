@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class Card7_222 extends AbstractAlly {
     public Card7_222() {
-        super(1, SitesBlock.TWO_TOWERS, 3, 4, 2, Race.MAN, Culture.ROHAN, "Deor", null, true);
+        super(1, SitesBlock.TWO_TOWERS, 3, 4, 2, Race.MAN, Culture.ROHAN, "Déor", null, true);
         addKeyword(Keyword.VILLAGER);
     }
 

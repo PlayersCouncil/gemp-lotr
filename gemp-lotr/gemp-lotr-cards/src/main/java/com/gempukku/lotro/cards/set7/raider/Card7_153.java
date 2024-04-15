@@ -21,7 +21,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card7_153 extends AbstractEvent {
     public Card7_153() {
-        super(Side.SHADOW, 1, Culture.RAIDER, "Mumakil of the Harad", Phase.MANEUVER);
+        super(Side.SHADOW, 1, Culture.RAIDER, "Mûmakil of the Harad", Phase.MANEUVER);
     }
 
     @Override

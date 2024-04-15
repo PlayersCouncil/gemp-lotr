@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class Card7_080 extends AbstractAttachableFPPossession {
     public Card7_080() {
-        super(3, 2, 0, Culture.GONDOR, CardType.ARTIFACT, PossessionClass.HAND_WEAPON, "Anduril", "King's Blade", true);
+        super(3, 2, 0, Culture.GONDOR, CardType.ARTIFACT, PossessionClass.HAND_WEAPON, "Andúril", "King's Blade", true);
     }
 
     @Override

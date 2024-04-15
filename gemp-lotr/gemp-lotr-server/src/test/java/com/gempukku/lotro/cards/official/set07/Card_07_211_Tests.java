@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,48 +27,46 @@ public class Card_07_211_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
-	public void lairCantaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void UlaireCanteaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 7
-		* Title: Úlairë Cantëa, Faster Than Winds
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Wraith
-		* Twilight Cost: 5
-		* Type: minion
-		* Subtype: Nazgûl
-		* Strength: 10
-		* Vitality: 3
-		* Site Number: 3
-		* Game Text: <b>Fierce</b>.<br>When you play Úlairë Cantëa, add a threat for each companion over 4.<br><b>Maneuver:</b> Remove 2 threats and spot another [wraith] minion to discard a possession.
+		 * Set: 7
+		 * Name: Úlairë Cantëa, Faster Than Winds
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 5
+		 * Type: Minion
+		 * Subtype: Nazgûl
+		 * Strength: 10
+		 * Vitality: 3
+
+		 * Site Number: 3
+		 * Game Text: <b>Fierce</b>.<br>When you play Úlairë Cantëa, add a threat for each companion over 4.<br><b>Maneuver:</b> Remove 2 threats and spot another [wraith] minion to discard a possession.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Úlairë Cantëa", card.getBlueprint().getTitle());
+		assertEquals("Faster Than Winds", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.NAZGUL));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(10, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void lairCantaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireCanteaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

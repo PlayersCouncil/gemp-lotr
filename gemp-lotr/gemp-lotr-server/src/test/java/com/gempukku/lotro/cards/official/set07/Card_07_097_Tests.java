@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,44 @@ public class Card_07_097_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void GondorianMerchantStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 7
-		* Title: Gondorian Merchant
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gondor
-		* Twilight Cost: 1
-		* Type: ally
-		* Subtype: Man
-		* Strength: 6
-		* Vitality: 1
-		* Site Number: 3T
-		* Game Text: <b>Maneuver:</b> If you have initiative, discard 2 cards from hand to make the site number of a minion +2 until the regroup phase.
+		 * Set: 7
+		 * Name: Gondorian Merchant
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Man
+		 * Strength: 6
+		 * Vitality: 1
+
+		 * Site Number: 3T
+		 * Game Text: <b>Maneuver:</b> If you have initiative, discard 2 cards from hand to make the site number of a minion +2 until the regroup phase.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Gondorian Merchant", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(1, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(3, card.getBlueprint().getAllyHomeSiteNumbers()[0]);
+		assertEquals(SitesBlock.TWO_TOWERS, card.getBlueprint().getAllyHomeSiteBlock());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void GondorianMerchantTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,48 +27,46 @@ public class Card_07_072_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
-	public void SmagolStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SmeagolStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 7
-		* Title: Sméagol, Hurried Guide
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gollum
-		* Twilight Cost: 0
-		* Type: companion
-		* Subtype: 
-		* Strength: 3
-		* Vitality: 4
-		* Signet: frodo
-		* Game Text: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> If you have initiative, discard 2 cards from your hand. Sméagol cannot be overwhelmed unless his strength is tripled.
+		 * Set: 7
+		 * Name: Sméagol, Hurried Guide
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gollum
+		 * Twilight Cost: 0
+		 * Type: Companion
+		 * Subtype: 
+		 * Strength: 3
+		 * Vitality: 4
+
+		 * Signet: Frodo
+
+		 * Game Text: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> If you have initiative, discard 2 cards from your hand. Sméagol cannot be overwhelmed unless his strength is tripled.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Sméagol", card.getBlueprint().getTitle());
+		assertEquals("Hurried Guide", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void SmagolTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SmeagolTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

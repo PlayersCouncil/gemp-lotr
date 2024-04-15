@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,38 @@ public class Card_07_357_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void MorgulValeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 7
-		* Title: Morgul Vale
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 8
-		* Type: site
-		* Subtype: 
-		* Site Number: 8K
-		* Game Text: <b>Skirmish:</b> Spot your [sauron] minion and remove 2 threats to make your [sauron] minion strength +3.
+		 * Set: 7
+		 * Name: Morgul Vale
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 8
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 8K
+		 * Game Text: <b>Skirmish:</b> Spot your [sauron] minion and remove 2 threats to make your [sauron] minion strength +3.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Morgul Vale", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		//assertEquals(Side., card.getBlueprint().getSide());
-		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(8, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(8, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void MorgulValeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

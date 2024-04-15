@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,45 @@ public class Card_07_081_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void AragornStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 7
-		* Title: Aragorn, Captain of Gondor
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gondor
-		* Twilight Cost: 4
-		* Type: companion
-		* Subtype: Man
-		* Strength: 8
-		* Vitality: 4
-		* Signet: aragorn
-		* Game Text: <b>Knight</b>.<br>At the start of each fellowship phase, you may add (2) to heal another [gondor] companion.
+		 * Set: 7
+		 * Name: Aragorn, Captain of Gondor
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 4
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 8
+		 * Vitality: 4
+
+		 * Signet: Aragorn
+
+		 * Game Text: <b>Knight</b>.<br>At the start of each fellowship phase, you may add (2) to heal another [gondor] companion.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Aragorn", card.getBlueprint().getTitle());
+		assertEquals("Captain of Gondor", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.KNIGHT));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void AragornTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

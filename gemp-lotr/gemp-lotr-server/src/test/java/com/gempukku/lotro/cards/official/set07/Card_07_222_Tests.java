@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,48 +27,47 @@ public class Card_07_222_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
-	public void DorStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void DeorStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 7
-		* Title: Déor
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Rohan
-		* Twilight Cost: 1
-		* Type: ally
-		* Subtype: Man
-		* Strength: 4
-		* Vitality: 2
-		* Site Number: 3T
-		* Game Text: <b>Villager</b>.<br><b>Skirmish:</b> If you have initiative, discard a card from hand to make a [rohan] Man strength +1.
+		 * Set: 7
+		 * Name: Déor
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Rohan
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Man
+		 * Strength: 4
+		 * Vitality: 2
+
+		 * Site Number: 3T
+		 * Game Text: <b>Villager</b>.<br><b>Skirmish:</b> If you have initiative, discard a card from hand to make a [rohan] Man strength +1.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Déor", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.VILLAGER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(3, card.getBlueprint().getAllyHomeSiteNumbers()[0]);
+		assertEquals(SitesBlock.TWO_TOWERS, card.getBlueprint().getAllyHomeSiteBlock());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DorTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DeorTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

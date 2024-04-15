@@ -21,7 +21,7 @@ import com.gempukku.lotro.logic.effects.discount.RemoveThreatsToDiscountEffect;
  */
 public class Card7_282 extends AbstractMinion {
     public Card7_282() {
-        super(10, 21, 5, 6, Race.ORC, Culture.SAURON, "Host of Udun", null, true);
+        super(10, 21, 5, 6, Race.ORC, Culture.SAURON, "Host of Udûn", null, true);
     }
 
     @Override

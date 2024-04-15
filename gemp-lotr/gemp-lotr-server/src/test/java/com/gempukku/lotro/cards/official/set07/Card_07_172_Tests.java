@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,44 @@ public class Card_07_172_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void TroopofHaradrimStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 7
-		* Title: Troop of Haradrim
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Raider
-		* Twilight Cost: 5
-		* Type: minion
-		* Subtype: Man
-		* Strength: 10
-		* Vitality: 3
-		* Site Number: 4
-		* Game Text: <b>Southron</b>.<br>While you can spot 2 threats, this minion is an <b>archer</b>.<br>While you can spot 3 threats, this minion is <b>fierce</b>.<br>While you can spot 4 threats, this minion is <b>damage +1</b>.
+		 * Set: 7
+		 * Name: Troop of Haradrim
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Raider
+		 * Twilight Cost: 5
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 10
+		 * Vitality: 3
+
+		 * Site Number: 4
+		 * Game Text: <b>Southron</b>.<br>While you can spot 2 threats, this minion is an <b>archer</b>.<br>While you can spot 3 threats, this minion is <b>fierce</b>.<br>While you can spot 4 threats, this minion is <b>damage +1</b>.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Troop of Haradrim", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(10, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void TroopofHaradrimTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

@@ -48,9 +48,9 @@ public class Card_07_076_Tests
 
         /**
          * Set: 7
-         * Title: Very Nice Friends
+         * Name: Very Nice Friends
          * Unique: False
-         * Side: FREE_PEOPLE
+         * Side: Free Peoples
          * Culture: Gollum
          * Twilight Cost: 0
          * Type: Event
@@ -62,14 +62,16 @@ public class Card_07_076_Tests
         //Pre-game setup
         var scn = GetScenario();
 
-        var friends = scn.GetFreepsCard("friends");
+        var card = scn.GetFreepsCard("friends");
 
-        assertFalse(friends.getBlueprint().isUnique());
-        assertEquals(Side.FREE_PEOPLE, friends.getBlueprint().getSide());
-        assertEquals(Culture.GOLLUM, friends.getBlueprint().getCulture());
-        assertEquals(CardType.EVENT, friends.getBlueprint().getCardType());
-        assertTrue(scn.HasKeyword(friends, Keyword.REGROUP));
-        assertEquals(0, friends.getBlueprint().getTwilightCost());
+        assertEquals("Very Nice Friends", card.getBlueprint().getTitle());
+        assertNull(card.getBlueprint().getSubtitle());
+        assertFalse(card.getBlueprint().isUnique());
+        assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+        assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
+        assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
+        assertEquals(0, card.getBlueprint().getTwilightCost());
     }
 
     @Test

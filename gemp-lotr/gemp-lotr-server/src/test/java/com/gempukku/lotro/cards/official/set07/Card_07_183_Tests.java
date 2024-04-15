@@ -42,7 +42,7 @@ public class Card_07_183_Tests
 
         /**
          * Set: 7
-         * Title: Mind and Body
+         * Name: Mind and Body
          * Unique: False
          * Side: Shadow
          * Culture: Ringwraith
@@ -55,14 +55,16 @@ public class Card_07_183_Tests
         //Pre-game setup
         var scn = GetScenario();
 
-        var mind = scn.GetFreepsCard("mind");
+        var card = scn.GetFreepsCard("mind");
 
-        assertFalse(mind.getBlueprint().isUnique());
-        assertEquals(Side.SHADOW, mind.getBlueprint().getSide());
-        assertEquals(Culture.WRAITH, mind.getBlueprint().getCulture());
-        assertEquals(CardType.EVENT, mind.getBlueprint().getCardType());
-        assertTrue(scn.HasKeyword(mind, Keyword.RESPONSE));
-        assertEquals(1, mind.getBlueprint().getTwilightCost());
+        assertEquals("Mind and Body", card.getBlueprint().getTitle());
+        assertNull(card.getBlueprint().getSubtitle());
+        assertFalse(card.getBlueprint().isUnique());
+        assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+        assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+        assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
+        assertEquals(1, card.getBlueprint().getTwilightCost());
     }
 
     @Test

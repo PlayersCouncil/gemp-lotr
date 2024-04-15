@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,36 @@ public class Card_07_061_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void HobbitsesAreDeadStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 7
-		* Title: Hobbitses Are Dead
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Gollum
-		* Twilight Cost: 1
-		* Type: event
-		* Subtype: Skirmish
-		* Game Text: Spot Gollum or Sméagol to make a Nazgûl, [sauron] minion, or [gollum] minion strength +2.<br>If you have initiative, you may play this event from your discard pile; place it under your draw deck instead of discarding it.
+		 * Set: 7
+		 * Name: Hobbitses Are Dead
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Gollum
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Skirmish
+
+		 * Game Text: Spot Gollum or Sméagol to make a Nazgûl, [sauron] minion, or [gollum] minion strength +2.<br>If you have initiative, you may play this event from your discard pile; place it under your draw deck instead of discarding it.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Hobbitses Are Dead", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.SKIRMISH, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.SKIRMISH));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void HobbitsesAreDeadTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

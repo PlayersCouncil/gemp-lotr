@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.set7.site;
 
+import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.logic.cardtype.AbstractSite;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 import com.gempukku.lotro.logic.timing.TriggerConditions;
@@ -25,7 +26,7 @@ import java.util.List;
 public class Card7_347 extends AbstractSite {
     public Card7_347() {
         super("Minas Tirith First Circle", SitesBlock.KING, 6, 3, Direction.LEFT);
-
+        addKeyword(Keyword.SANCTUARY);
     }
 
     @Override
