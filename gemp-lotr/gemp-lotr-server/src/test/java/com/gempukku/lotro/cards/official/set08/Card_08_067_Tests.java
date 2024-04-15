@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,45 +27,38 @@ public class Card_08_067_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
-	public void BetweenNazglandPreyStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void BetweenNazgulandPreyStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 8
-		* Title: Between Nazgûl and Prey
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Wraith
-		* Twilight Cost: 4
-		* Type: event
-		* Subtype: Assignment
-		* Game Text: Exert an enduring [wraith] minion twice to assign that minion to an unbound companion.
+		 * Set: 8
+		 * Name: Between Nazgûl and Prey
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 4
+		 * Type: Event
+		 * Subtype: Assignment
+
+		 * Game Text: Exert an enduring [wraith] minion twice to assign that minion to an unbound companion.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Between Nazgûl and Prey", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.ASSIGNMENT, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.ASSIGNMENT));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void BetweenNazglandPreyTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BetweenNazgulandPreyTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

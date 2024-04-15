@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,36 @@ public class Card_08_116_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void WeShallMeetAgainSoonStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 8
-		* Title: We Shall Meet Again Soon
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Shire
-		* Twilight Cost: 0
-		* Type: event
-		* Subtype: Response
-		* Game Text: If the fellowship moves during the regroup phase, exert an unbound Hobbit to place a Shadow card from your discard pile on top of your draw deck.
+		 * Set: 8
+		 * Name: We Shall Meet Again Soon
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Response
+
+		 * Game Text: If the fellowship moves during the regroup phase, exert an unbound Hobbit to place a Shadow card from your discard pile on top of your draw deck.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("We Shall Meet Again Soon", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.RESPONSE, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.RESPONSE));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void WeShallMeetAgainSoonTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

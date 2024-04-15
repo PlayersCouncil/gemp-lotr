@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class Card8_079 extends AbstractMinion {
     public Card8_079() {
-        super(6, 12, 3, 3, Race.NAZGUL, Culture.WRAITH, Names.attea, "Thrall of the One", true);
+        super(6, 12, 3, 3, Race.NAZGUL, Culture.WRAITH, Names.attea, "Thrall of The One", true);
         addKeyword(Keyword.ENDURING);
     }
 

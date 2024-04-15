@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class Card8_049 extends AbstractMinion {
     public Card8_049() {
-        super(6, 12, 3, 4, Race.MAN, Culture.RAIDER, "Black Numenorean");
+        super(6, 12, 3, 4, Race.MAN, Culture.RAIDER, "Black Númenorean");
         addKeyword(Keyword.CORSAIR);
         addKeyword(Keyword.FIERCE);
     }

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,44 @@ public class Card_08_099_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void GorgorothPatrolStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 8
-		* Title: Gorgoroth Patrol
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Sauron
-		* Twilight Cost: 4
-		* Type: minion
-		* Subtype: Orc
-		* Strength: 10
-		* Vitality: 2
-		* Site Number: 5
-		* Game Text: <b>Besieger</b>.<br><b>Regroup:</b> If this minion is stacked on a site you control, discard this minion to make the move limit for this turn -1.
+		 * Set: 8
+		 * Name: Gorgoroth Patrol
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 4
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 10
+		 * Vitality: 2
+
+		 * Site Number: 5
+		 * Game Text: <b>Besieger</b>.<br><b>Regroup:</b> If this minion is stacked on a site you control, discard this minion to make the move limit for this turn -1.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Gorgoroth Patrol", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.ORC));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.BESIEGER));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(10, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void GorgorothPatrolTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

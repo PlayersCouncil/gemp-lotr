@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,36 @@ public class Card_08_014_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void AFoolStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 8
-		* Title: A Fool
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 3
-		* Type: event
-		* Subtype: Skirmish
-		* Game Text: At sites 1[K] to 5[K], heal Gandalf. At any other site, prevent a Hobbit from being overwhelmed unless his or her strength is tripled.
+		 * Set: 8
+		 * Name: A Fool
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 3
+		 * Type: Event
+		 * Subtype: Skirmish
+
+		 * Game Text: At sites 1[K] to 5[K], heal Gandalf. At any other site, prevent a Hobbit from being overwhelmed unless his or her strength is tripled.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("A Fool", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.SKIRMISH, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.SKIRMISH));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void AFoolTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

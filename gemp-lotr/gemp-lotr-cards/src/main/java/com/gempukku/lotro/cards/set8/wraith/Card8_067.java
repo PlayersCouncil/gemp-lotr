@@ -20,7 +20,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card8_067 extends AbstractEvent {
     public Card8_067() {
-        super(Side.SHADOW, 4, Culture.WRAITH, "Between Nazgul and Prey", Phase.ASSIGNMENT);
+        super(Side.SHADOW, 4, Culture.WRAITH, "Between Nazgûl and Prey", Phase.ASSIGNMENT);
     }
 
     @Override

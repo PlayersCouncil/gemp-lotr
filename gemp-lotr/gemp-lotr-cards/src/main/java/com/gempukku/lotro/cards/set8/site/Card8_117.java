@@ -26,6 +26,7 @@ public class Card8_117 extends AbstractSite {
     public Card8_117() {
         super("The Dimholt", SitesBlock.KING, 3, 1, Direction.RIGHT);
         addKeyword(Keyword.UNDERGROUND);
+        addKeyword(Keyword.SANCTUARY);
     }
 
     @Override
