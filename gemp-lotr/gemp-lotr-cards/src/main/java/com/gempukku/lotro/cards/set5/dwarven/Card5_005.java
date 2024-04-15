@@ -20,7 +20,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card5_005 extends AbstractEvent {
     public Card5_005() {
-        super(Side.FREE_PEOPLE, 0, Culture.DWARVEN, "Baruk Khazad", Phase.MANEUVER);
+        super(Side.FREE_PEOPLE, 0, Culture.DWARVEN, "Baruk Khazâd", Phase.MANEUVER);
     }
 
     @Override

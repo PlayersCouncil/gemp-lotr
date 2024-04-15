@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,45 +27,42 @@ public class Card_05_042_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void TurgonStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 5
-		* Title: Turgon, Man of Belfalas
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gondor
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Man
-		* Strength: 6
-		* Vitality: 3
-		* Game Text: <b>Knight</b>. To play, spot a knight.<br><b>Maneuver:</b> Exert Turgon to wound a minion bearing a [gondor] fortification.
+		 * Set: 5
+		 * Name: Turgon, Man of Belfalas
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 6
+		 * Vitality: 3
+
+		 * Game Text: <b>Knight</b>. To play, spot a knight.<br><b>Maneuver:</b> Exert Turgon to wound a minion bearing a [gondor] fortification.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Turgon", card.getBlueprint().getTitle());
+		assertEquals("Man of Belfalas", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.KNIGHT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void TurgonTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

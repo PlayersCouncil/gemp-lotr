@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,39 @@ public class Card_05_120_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void CavernsofIsengardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 5
-		* Title: Caverns of Isengard
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 9
-		* Type: site
-		* Subtype: 
-		* Site Number: 9T
-		* Game Text: <b>Underground</b>. The Free Peoples player wins the game only if the Ring-bearer survives until Shadow players reconcile.
+		 * Set: 5
+		 * Name: Caverns of Isengard
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 9
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 9T
+		 * Game Text: <b>Underground</b>. The Free Peoples player wins the game only if the Ring-bearer survives until Shadow players reconcile.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Caverns of Isengard", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		//assertEquals(Side., card.getBlueprint().getSide());
-		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.UNDERGROUND));
 		assertEquals(9, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(9, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void CavernsofIsengardTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

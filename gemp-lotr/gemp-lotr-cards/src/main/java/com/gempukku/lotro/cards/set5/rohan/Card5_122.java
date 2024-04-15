@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class Card5_122 extends AbstractCompanion {
     public Card5_122() {
-        super(2, 6, 3, 6, Culture.ROHAN, Race.MAN, Signet.GANDALF, Names.eowyn, "Daughter of Eomund", true);
+        super(2, 6, 3, 6, Culture.ROHAN, Race.MAN, Signet.GANDALF, Names.eowyn, "Daughter of Éomund", true);
         addKeyword(Keyword.VALIANT);
     }
 

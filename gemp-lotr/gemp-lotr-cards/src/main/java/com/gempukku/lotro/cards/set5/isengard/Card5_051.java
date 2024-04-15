@@ -34,7 +34,7 @@ import java.util.Set;
  */
 public class Card5_051 extends AbstractMinion {
     public Card5_051() {
-        super(2, 4, 3, 3, Race.MAN, Culture.ISENGARD, "Grima", "Chief Counselor", true);
+        super(2, 4, 3, 3, Race.MAN, Culture.ISENGARD, "Gríma", "Chief Counselor", true);
     }
 
     @Override

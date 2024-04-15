@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,44 @@ public class Card_05_126_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void ArmyofHaradrimStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 5
-		* Title: Army of Haradrim
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Raider
-		* Twilight Cost: 7
-		* Type: minion
-		* Subtype: Man
-		* Strength: 14
-		* Vitality: 4
-		* Site Number: 4
-		* Game Text: <b>Southron</b>.<br><b>Skirmish:</b> Remove (3) to play a [raider] mount from your discard pile.
+		 * Set: 5
+		 * Name: Army of Haradrim
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Raider
+		 * Twilight Cost: 7
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 14
+		 * Vitality: 4
+
+		 * Site Number: 4
+		 * Game Text: <b>Southron</b>.<br><b>Skirmish:</b> Remove (3) to play a [raider] mount from your discard pile.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Army of Haradrim", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
 		assertEquals(7, card.getBlueprint().getTwilightCost());
 		assertEquals(14, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void ArmyofHaradrimTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

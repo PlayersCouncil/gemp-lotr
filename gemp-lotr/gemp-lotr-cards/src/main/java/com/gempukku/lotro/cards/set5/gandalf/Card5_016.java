@@ -25,7 +25,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card5_016 extends AbstractEvent {
     public Card5_016() {
-        super(Side.FREE_PEOPLE, 5, Culture.GANDALF, "Down From The Hills", Phase.MANEUVER);
+        super(Side.FREE_PEOPLE, 5, Culture.GANDALF, "Down From the Hills", Phase.MANEUVER);
         addKeyword(Keyword.SPELL);
     }
 

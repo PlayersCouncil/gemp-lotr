@@ -18,7 +18,7 @@ import com.gempukku.lotro.logic.effects.ChooseAndWoundCharactersEffect;
  */
 public class Card5_037 extends AbstractEvent {
     public Card5_037() {
-        super(Side.FREE_PEOPLE, 0, Culture.GONDOR, "Men of Numenor", Phase.SKIRMISH);
+        super(Side.FREE_PEOPLE, 0, Culture.GONDOR, "Men of Númenor", Phase.SKIRMISH);
     }
 
     @Override

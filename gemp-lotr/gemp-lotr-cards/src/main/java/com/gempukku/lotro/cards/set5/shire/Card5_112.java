@@ -22,7 +22,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card5_112 extends AbstractEvent {
     public Card5_112() {
-        super(Side.FREE_PEOPLE, 0, Culture.SHIRE, "No Help For It", Phase.REGROUP);
+        super(Side.FREE_PEOPLE, 0, Culture.SHIRE, "No Help for It", Phase.REGROUP);
     }
 
     @Override

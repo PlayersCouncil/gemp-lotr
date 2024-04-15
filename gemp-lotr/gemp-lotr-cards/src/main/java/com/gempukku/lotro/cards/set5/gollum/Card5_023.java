@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class Card5_023 extends AbstractAttachable {
     public Card5_023() {
-        super(Side.FREE_PEOPLE, CardType.CONDITION, 1, Culture.GOLLUM, null, "Follow Smeagol");
+        super(Side.FREE_PEOPLE, CardType.CONDITION, 1, Culture.GOLLUM, null, "Follow Sméagol");
     }
 
     @Override

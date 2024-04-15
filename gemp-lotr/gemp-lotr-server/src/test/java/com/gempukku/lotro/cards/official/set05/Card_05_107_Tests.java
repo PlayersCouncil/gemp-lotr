@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,44 @@ public class Card_05_107_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void OrcPatrolStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 5
-		* Title: Orc Patrol
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Sauron
-		* Twilight Cost: 4
-		* Type: minion
-		* Subtype: Orc
-		* Strength: 11
-		* Vitality: 3
-		* Site Number: 6
-		* Game Text: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -3.<br><b>Maneuver:</b> Exert Orc Patrol twice and spot another [sauron] Orc to discard a condition.
+		 * Set: 5
+		 * Name: Orc Patrol
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 4
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 11
+		 * Vitality: 3
+
+		 * Site Number: 6
+		 * Game Text: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -3.<br><b>Maneuver:</b> Exert Orc Patrol twice and spot another [sauron] Orc to discard a condition.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Orc Patrol", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.ORC));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(11, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void OrcPatrolTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
