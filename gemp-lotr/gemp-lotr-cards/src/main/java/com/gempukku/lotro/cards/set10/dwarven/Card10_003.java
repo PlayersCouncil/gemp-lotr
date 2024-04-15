@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class Card10_003 extends AbstractResponseEvent {
     public Card10_003() {
-        super(Side.FREE_PEOPLE, 0, Culture.DWARVEN, "More Yet To Come");
+        super(Side.FREE_PEOPLE, 0, Culture.DWARVEN, "More Yet to Come");
     }
 
     @Override

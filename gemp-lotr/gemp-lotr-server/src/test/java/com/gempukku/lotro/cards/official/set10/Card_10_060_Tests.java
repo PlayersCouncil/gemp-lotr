@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,39 @@ public class Card_10_060_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void GorbagsSwordStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 10
-		* Title: Gorbag's Sword
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Wraith
-		* Twilight Cost: 2
-		* Type: possession
-		* Subtype: Hand Weapon
-		* Strength: 2
-		* Game Text: Bearer must be a [wraith] Orc.<br>When you play this possession, you may discard a possession. Its owner may place it on top of his or her draw deck instead.<br>If bearer is Gorbag, he is <b>fierce</b>.
+		 * Set: 10
+		 * Name: Gorbag's Sword
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 2
+		 * Type: Possession
+		 * Subtype: Hand weapon
+		 * Strength: 2
+
+		 * Game Text: Bearer must be a [wraith] Orc.<br>When you play this possession, you may discard a possession. Its owner may place it on top of his or her draw deck instead.<br>If bearer is Gorbag, he is <b>fierce</b>.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Gorbag's Sword", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		//assertEquals(Race.HAND WEAPON, card.getBlueprint().getRace());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void GorbagsSwordTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

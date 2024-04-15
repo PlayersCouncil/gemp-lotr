@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class Card10_098 extends AbstractResponseEvent {
     public Card10_098() {
-        super(Side.SHADOW, 0, Culture.SAURON, "Ruinous Hail");
+        super(Side.SHADOW, 0, Culture.SAURON, "Ruinous Hall");
     }
 
     @Override

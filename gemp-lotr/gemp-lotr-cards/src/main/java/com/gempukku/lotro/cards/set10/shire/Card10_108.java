@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class Card10_108 extends AbstractPermanent {
     public Card10_108() {
-        super(Side.FREE_PEOPLE, 0, CardType.CONDITION, Culture.SHIRE, "A Light in His Mind", null, true);
+        super(Side.FREE_PEOPLE, 0, CardType.CONDITION, Culture.SHIRE, "A Light in his Mind", null, true);
     }
 
     @Override

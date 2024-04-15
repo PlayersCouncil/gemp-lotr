@@ -9,8 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 // Wielder of the Flame
 public class Card_10_030_Tests
@@ -31,38 +30,42 @@ public class Card_10_030_Tests
 
         /**
          * Set: 10
+         * Name: End of the Game
+         * Unique: False
          * Side: Free Peoples
          * Culture: Gondor
          * Twilight Cost: 0
-         * Type: Event • Skirmish
+         * Type: Event
+         * Subtype: Skirmish
          * Game Text: Make an exhausted [GONDOR] companion strength +2. If that companion wins this skirmish, heal that
-         * companion or make him or her damage +1.
+         *   companion or make him or her damage +1.
          */
 
-        //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl endgame = scn.GetFreepsCard("endgame");
+        var card = scn.GetFreepsCard("endgame");
 
-        assertEquals(0, endgame.getBlueprint().getTwilightCost());
-
-        assertEquals(CardType.EVENT, endgame.getBlueprint().getCardType());
-        assertEquals(Culture.GONDOR, endgame.getBlueprint().getCulture());
-        assertTrue(scn.HasKeyword(endgame, Keyword.SKIRMISH)); // test for keywords as needed;
+        assertEquals("End of the Game", card.getBlueprint().getTitle());
+        assertNull(card.getBlueprint().getSubtitle());
+        assertFalse(card.getBlueprint().isUnique());
+        assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+        assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+        assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertEquals(0, card.getBlueprint().getTwilightCost());
     }
 
     @Test
     public void DoesNotWorkIfNoExhaustedGondorCompanions() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl frodo = scn.GetRingBearer();
-        PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        PhysicalCardImpl endgame = scn.GetFreepsCard("endgame");
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var endgame = scn.GetFreepsCard("endgame");
         scn.FreepsMoveCharToTable(aragorn);
         scn.FreepsMoveCardToHand(endgame);
 
-        PhysicalCardImpl troop = scn.GetShadowCard("troop");
+        var troop = scn.GetShadowCard("troop");
         scn.ShadowMoveCharToTable(troop);
 
         scn.StartGame();
@@ -89,14 +92,14 @@ public class Card_10_030_Tests
     @Test
     public void AddsStrengthToExhaustedGondorCompanion() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        PhysicalCardImpl endgame = scn.GetFreepsCard("endgame");
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var endgame = scn.GetFreepsCard("endgame");
         scn.FreepsMoveCharToTable(aragorn);
         scn.FreepsMoveCardToHand(endgame);
 
-        PhysicalCardImpl troop = scn.GetShadowCard("troop");
+        var troop = scn.GetShadowCard("troop");
         scn.ShadowMoveCharToTable(troop);
 
         scn.StartGame();
@@ -118,14 +121,14 @@ public class Card_10_030_Tests
     @Test
     public void WinningSkirmishCanHealCompanion() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        PhysicalCardImpl endgame = scn.GetFreepsCard("endgame");
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var endgame = scn.GetFreepsCard("endgame");
         scn.FreepsMoveCharToTable(aragorn);
         scn.FreepsMoveCardToHand(endgame);
 
-        PhysicalCardImpl troop = scn.GetShadowCard("troop");
+        var troop = scn.GetShadowCard("troop");
         scn.ShadowMoveCharToTable(troop);
 
         scn.StartGame();
@@ -155,14 +158,14 @@ public class Card_10_030_Tests
     @Test
     public void WinningSkirmishCanAddDamageBonus() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        PhysicalCardImpl endgame = scn.GetFreepsCard("endgame");
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var endgame = scn.GetFreepsCard("endgame");
         scn.FreepsMoveCharToTable(aragorn);
         scn.FreepsMoveCardToHand(endgame);
 
-        PhysicalCardImpl troop = scn.GetShadowCard("troop");
+        var troop = scn.GetShadowCard("troop");
         scn.ShadowMoveCharToTable(troop);
 
         scn.StartGame();
@@ -188,9 +191,4 @@ public class Card_10_030_Tests
         assertEquals(3, scn.GetWoundsOn(aragorn));
         assertEquals(2, scn.GetWoundsOn(troop));
     }
-
-
-
-
-
 }

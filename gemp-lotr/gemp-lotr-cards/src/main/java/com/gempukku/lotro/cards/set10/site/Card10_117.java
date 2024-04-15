@@ -25,6 +25,7 @@ import java.util.List;
 public class Card10_117 extends AbstractSite {
     public Card10_117() {
         super("Base of Mindolluin", SitesBlock.KING, 3, 0, Direction.RIGHT);
+        addKeyword(Keyword.SANCTUARY);
     }
 
     @Override

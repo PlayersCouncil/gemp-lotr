@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class Card10_045 extends AbstractMinion {
     public Card10_045() {
-        super(5, 11, 3, 4, Race.MAN, Culture.RAIDER, "Mumak Chieftain");
+        super(5, 11, 3, 4, Race.MAN, Culture.RAIDER, "Mûmak Chieftain");
         addKeyword(Keyword.SOUTHRON);
     }
 
