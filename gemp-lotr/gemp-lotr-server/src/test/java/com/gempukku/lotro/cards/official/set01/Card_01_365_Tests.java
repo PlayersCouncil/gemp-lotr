@@ -48,7 +48,9 @@ public class Card_01_365_Tests
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
 		assertEquals("King in Exile", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

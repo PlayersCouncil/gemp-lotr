@@ -48,7 +48,9 @@ public class Card_01_364_Tests
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gandalf", card.getBlueprint().getTitle());
 		assertEquals("The Grey Wizard", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

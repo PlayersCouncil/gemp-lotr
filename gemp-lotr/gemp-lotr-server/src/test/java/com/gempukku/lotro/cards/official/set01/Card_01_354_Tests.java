@@ -45,7 +45,11 @@ public class Card_01_354_Tests
 		*/
 
 		var scn = GetScenario();
-		var card = scn.GetFreepsSite(7);
+
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(7);
+		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Anduin Wilderland", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

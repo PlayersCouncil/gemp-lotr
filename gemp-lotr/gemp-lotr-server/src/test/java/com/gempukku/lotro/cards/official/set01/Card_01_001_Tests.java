@@ -46,7 +46,11 @@ public class Card_01_001_Tests
 		*/
 
 		var scn = GetScenario();
+
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsRing();
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The One Ring", card.getBlueprint().getTitle());
 		assertEquals("Isildur's Bane", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

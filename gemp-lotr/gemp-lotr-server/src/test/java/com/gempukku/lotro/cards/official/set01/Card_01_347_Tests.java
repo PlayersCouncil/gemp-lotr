@@ -45,7 +45,11 @@ public class Card_01_347_Tests
 		*/
 
 		var scn = GetScenario();
-		var card = scn.GetFreepsSite(4);
+
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(4);
+		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Moria Stairway", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

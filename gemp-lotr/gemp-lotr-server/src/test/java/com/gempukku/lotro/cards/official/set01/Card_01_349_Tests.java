@@ -45,7 +45,11 @@ public class Card_01_349_Tests
 		*/
 
 		var scn = GetScenario();
-		var card = scn.GetFreepsSite(5);
+
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(5);
+		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Bridge of Khazad-dûm", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

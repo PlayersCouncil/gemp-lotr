@@ -45,7 +45,11 @@ public class Card_01_339_Tests
 		*/
 
 		var scn = GetScenario();
-		var card = scn.GetFreepsSite(3);
+
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(3);
+		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Frodo's Bedroom", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

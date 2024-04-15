@@ -45,7 +45,11 @@ public class Card_01_357_Tests
 		*/
 
 		var scn = GetScenario();
-		var card = scn.GetFreepsSite(8);
+
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(8);
+		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Brown Lands", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
