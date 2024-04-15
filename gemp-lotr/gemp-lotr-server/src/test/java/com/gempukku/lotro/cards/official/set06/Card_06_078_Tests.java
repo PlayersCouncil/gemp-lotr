@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,45 @@ public class Card_06_078_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void EasterlingArmyStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 6
-		* Title: Easterling Army
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Raider
-		* Twilight Cost: 6
-		* Type: minion
-		* Subtype: Man
-		* Strength: 13
-		* Vitality: 3
-		* Site Number: 4
-		* Game Text: <b>Easterling</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Spot 2 burdens and exert this minion to make an Easterling strength +1.<br><b>Skirmish:</b> Spot 4 burdens and exert this minion to make an Easterling strength +2.<br><b>Skirmish:</b> Spot 6 burdens and exert this minion to make an Easterling strength +3.
+		 * Set: 6
+		 * Name: Easterling Army
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Raider
+		 * Twilight Cost: 6
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 13
+		 * Vitality: 3
+
+		 * Site Number: 4
+		 * Game Text: <b>Easterling</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Spot 2 burdens and exert this minion to make an Easterling strength +1.<br><b>Skirmish:</b> Spot 4 burdens and exert this minion to make an Easterling strength +2.<br><b>Skirmish:</b> Spot 6 burdens and exert this minion to make an Easterling strength +3.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Easterling Army", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.EASTERLING));
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(6, card.getBlueprint().getTwilightCost());
 		assertEquals(13, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void EasterlingArmyTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

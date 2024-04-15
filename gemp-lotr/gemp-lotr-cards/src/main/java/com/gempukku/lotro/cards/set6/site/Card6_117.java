@@ -1,9 +1,6 @@
 package com.gempukku.lotro.cards.set6.site;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Signet;
-import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -27,7 +24,7 @@ import java.util.List;
 public class Card6_117 extends AbstractSite {
     public Card6_117() {
         super("Meduseld", SitesBlock.TWO_TOWERS, 3, 0, Direction.RIGHT);
-
+        addKeyword(Keyword.SANCTUARY);
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,38 @@ public class Card_06_119_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void ValleyofSarumanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 6
-		* Title: Valley of Saruman
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 8
-		* Type: site
-		* Subtype: 
-		* Site Number: 8T
-		* Game Text: When the fellowship moves to this site, discard all allies.
+		 * Set: 6
+		 * Name: Valley of Saruman
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 8
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 8T
+		 * Game Text: When the fellowship moves to this site, discard all allies.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Valley of Saruman", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		//assertEquals(Side., card.getBlueprint().getSide());
-		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(8, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(8, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void ValleyofSarumanTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

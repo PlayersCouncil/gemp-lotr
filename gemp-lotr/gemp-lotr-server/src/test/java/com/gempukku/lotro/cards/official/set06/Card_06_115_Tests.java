@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,37 @@ public class Card_06_115_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void RocksofEmynMuilStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 6
-		* Title: Rocks of Emyn Muil
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 
-		* Type: site
-		* Subtype: 
-		* Site Number: 1T
-		* Game Text: <b>Fellowship:</b> Play a companion with the Frodo signet to remove a burden.
+		 * Set: 6
+		 * Name: Rocks of Emyn Muil
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 
+		 * Type: Site
+		 * Subtype: 
+
+		 * Site Number: 1T
+		 * Game Text: <b>Fellowship:</b> Play a companion with the Frodo signet to remove a burden.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(1);
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Rocks of Emyn Muil", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		//assertEquals(Side., card.getBlueprint().getSide());
-		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		//assertEquals(, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(1, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void RocksofEmynMuilTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

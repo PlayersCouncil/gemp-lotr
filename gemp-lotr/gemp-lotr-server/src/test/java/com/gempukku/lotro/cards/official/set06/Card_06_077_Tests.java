@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,37 @@ public class Card_06_077_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void DurinsTowerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 6
-		* Title: Durin's Tower
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 0
-		* Type: condition
-		* Subtype: 
-		* Game Text: Plays to your support area. At sites 2[T] and 3[T], The Balrog's twilight cost is -3.<br><b>Skirmish:</b> Discard this condition to make a unique [moria] minion strength +3.
+		 * Set: 6
+		 * Name: Durin's Tower
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 0
+		 * Type: Condition
+		 * Subtype: 
+
+		 * Game Text: Plays to your support area. At sites 2[T] and 3[T], The Balrog's twilight cost is -3.<br><b>Skirmish:</b> Discard this condition to make a unique [moria] minion strength +3.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Durin's Tower", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void DurinsTowerTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
