@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -19,8 +18,11 @@ public class Card_01_011_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "1_11");
-					// put other cards in here as needed for the test case
+					put("farin", "1_11");
+					put("gimli", "1_13");
+
+					put("runner", "1_178");
+					put("nazgul", "1_230");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -32,47 +34,79 @@ public class Card_01_011_Tests
 	public void FarinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Farin, Dwarven Emissary
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Dwarf
-		* Strength: 5
-		* Vitality: 3
-		* Game Text: To play, spot a Dwarf.<br>While skirmishing an Orc, Farin is strength +2.
-		*/
+		 * Set: 1
+		 * Title: Farin, Dwarven Emissary
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Dwarf
+		 * Strength: 5
+		 * Vitality: 3
+		 * Game Text: To play, spot a Dwarf.
+		 * 	While skirmishing an Orc, Farin is strength +2.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("farin");
 
 		assertEquals("Farin", card.getBlueprint().getTitle());
 		assertEquals("Dwarven Emissary", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.DWARF, card.getBlueprint().getRace());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FarinTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void FarinRequiresDwarf() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var farin = scn.GetFreepsCard("farin");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.FreepsMoveCardToHand(farin, gimli);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(farin));
+		scn.FreepsPlayCard(gimli);
+		assertTrue(scn.FreepsPlayAvailable(farin));
+	}
+
+	@Test
+	public void FarinStrengthBonusAgainstOrcs() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var farin = scn.GetFreepsCard("farin");
+		scn.FreepsMoveCharToTable(farin);
+
+		var orc = scn.GetShadowCard("runner");
+		var nazgul = scn.GetShadowCard("nazgul");
+		scn.ShadowMoveCharToTable(orc, nazgul);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(farin, orc);
+		scn.ShadowDeclineAssignments();
+
+		assertEquals(5, scn.GetStrength(farin));
+		scn.FreepsResolveSkirmish(farin);
+		assertEquals(7, scn.GetStrength(farin));
+		scn.PassCurrentPhaseActions();
+
+		//fierce
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(farin, nazgul);
+		scn.FreepsResolveSkirmish(farin);
+		assertEquals(5, scn.GetStrength(farin));
 	}
 }

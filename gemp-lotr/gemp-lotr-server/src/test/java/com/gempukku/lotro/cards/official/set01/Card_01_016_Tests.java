@@ -3,9 +3,7 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -19,8 +17,13 @@ public class Card_01_016_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "1_16");
-					// put other cards in here as needed for the test case
+					put("kingdom", "1_16");
+					put("gimli", "1_13");
+					put("guard", "1_7");
+
+					put("runner1", "1_178");
+					put("runner2", "1_178");
+					put("runner3", "1_178");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -29,47 +32,96 @@ public class Card_01_016_Tests
 	}
 
 	@Test
-	public void GreatestKingdombrofMyPeopleStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GreatestKingdomofMyPeopleStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Greatest Kingdom of My People
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 0
-		* Type: condition
-		* Subtype: 
-		* Game Text: <b>Tale</b>. Exert a Dwarf to play this condition. Plays to your support area.<br>Each time your opponent plays an Orc, that player discards the top card of his or her draw deck.
-		*/
+		 * Set: 1
+		 * Name: Greatest Kingdom of My People
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 0
+		 * Type: Condition
+		 * Subtype: Support Area
+		 * Game Text: <b>Tale.</b>  To play, exert a Dwarf.
+		 * 	Each time your opponent plays an Orc, that player discards the top card of his or her draw deck.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("kingdom");
 
-		assertEquals("Greatest Kingdom of My People", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
-		assertTrue(scn.HasKeyword(card, Keyword.TALE));
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GreatestKingdombrofMyPeopleTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GreatestKingdomExertsADwarfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var kingdom = scn.GetFreepsCard("kingdom");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		scn.FreepsMoveCharToTable(gimli);
+		scn.FreepsMoveCardToHand(kingdom, guard);
+
+		scn.AddWoundsToChar(gimli, 2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(kingdom));
+		scn.FreepsPlayCard(guard);
+		assertEquals(0, scn.GetWoundsOn(guard));
+		scn.FreepsPlayCard(kingdom);
+		assertEquals(1, scn.GetWoundsOn(guard));
+	}
+
+	@Test
+	public void GreatestKingdomTriggerDiscardsFromShadowTopDeckEachTime() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var kingdom = scn.GetFreepsCard("kingdom");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		scn.FreepsMoveCardToSupportArea(kingdom);
+		scn.FreepsMoveCardToDiscard(gimli, guard);
+		scn.FreepsMoveCardToDiscard("runner1", "runner2");
+
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
+		scn.ShadowMoveCardToHand(runner1, runner2);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		var top1 = scn.GetFromTopOfShadowDeck(1);
+		var top2 = scn.GetFromTopOfShadowDeck(2);
+		var top3 = scn.GetFromTopOfShadowDeck(3);
+
+		assertEquals(Zone.DECK, top1.getZone());
+		assertEquals(Zone.DECK, top2.getZone());
+		assertEquals(Zone.DECK, top3.getZone());
+		scn.ShadowPlayCard(runner1);
+		scn.FreepsResolveActionOrder("0");
+
+		assertEquals(Zone.DISCARD, top1.getZone());
+		assertEquals(Zone.DECK, top2.getZone());
+		assertEquals(Zone.DECK, top3.getZone());
+
+		scn.ShadowPlayCard(runner2);
+		scn.FreepsResolveActionOrder("0");
+
+		assertEquals(Zone.DISCARD, top1.getZone());
+		assertEquals(Zone.DISCARD, top2.getZone());
+		assertEquals(Zone.DECK, top3.getZone());
+
 	}
 }

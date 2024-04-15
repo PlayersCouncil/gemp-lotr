@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -19,8 +18,8 @@ public class Card_01_053_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "1_53");
-					// put other cards in here as needed for the test case
+					put("elf", "1_53");
+					put("arwen", "1_30");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -32,47 +31,46 @@ public class Card_01_053_Tests
 	public void LorienElfStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Lórien Elf
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Elven
-		* Twilight Cost: 1
-		* Type: companion
-		* Subtype: Elf
-		* Strength: 4
-		* Vitality: 2
-		* Game Text: To play, spot an Elf.
-		*/
+		 * Set: 1
+		 * Name: Lórien Elf
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 1
+		 * Type: Companion
+		 * Subtype: Elf
+		 * Strength: 4
+		 * Vitality: 2
+		 * Game Text: To play, spot an Elf.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("elf");
 
 		assertEquals("Lórien Elf", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LorienElfTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void LorienElfRequiresAnElfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var elf = scn.GetFreepsCard("elf");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCardToHand(elf, arwen);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(1, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(elf));
+		scn.FreepsPlayCard(arwen);
+		assertTrue(scn.FreepsPlayAvailable(elf));
 	}
 }
