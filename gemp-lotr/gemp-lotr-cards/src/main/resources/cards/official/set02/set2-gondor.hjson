@@ -3,7 +3,7 @@
 		side: free_people
 		twilight: 2
 		culture: Gondor
-		title: Blood of Numenor
+		title: Blood of Númenor
 		type: condition
 		keyword: Support Area
 		effects: [
@@ -199,7 +199,7 @@
 		side: free_people
 		twilight: 0
 		culture: Gondor
-		title: Sentinels of Numenor
+		title: Sentinels of Númenor
 		type: event
 		keyword: Skirmish
 		effects: {

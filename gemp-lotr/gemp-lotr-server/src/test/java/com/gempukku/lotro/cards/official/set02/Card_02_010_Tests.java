@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,39 @@ public class Card_02_010_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void HandAxeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: Hand Axe
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 0
-		* Type: possession
-		* Subtype: Hand Weapon
-		* Strength: 1
-		* Game Text: Bearer must be a Dwarf.<br>This weapon may be borne in addition to 1 other hand weapon.<br><b>Archery:</b> Discard this weapon to make the fellowship archery total +1.
+		 * Set: 2
+		 * Name: Hand Axe
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 0
+		 * Type: Possession
+		 * Subtype: Hand weapon
+		 * Strength: 1
+
+		 * Game Text: Bearer must be a Dwarf.<br>This weapon may be borne in addition to 1 other hand weapon.<br><b>Archery:</b> Discard this weapon to make the fellowship archery total +1.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Hand Axe", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		//assertEquals(Race.HAND WEAPON, card.getBlueprint().getRace());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(1, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void HandAxeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

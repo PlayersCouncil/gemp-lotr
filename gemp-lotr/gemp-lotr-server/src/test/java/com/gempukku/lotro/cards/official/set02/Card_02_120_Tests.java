@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,40 @@ public class Card_02_120_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void ValleyoftheSilverlodeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: Valley of the Silverlode
-		* Unique: False
-		* Side: 
-		* Culture: 
-		* Twilight Cost: 3
-		* Type: sanctuary
-		* Subtype: 
-		* Site Number: 6
-		* Game Text: <b>River</b>. <b>Sanctuary</b>. When the fellowship moves to Valley of the Silverlode, each Hobbit companion may heal.
+		 * Set: 2
+		 * Name: Valley of the Silverlode
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 3
+		 * Type: Sanctuary
+		 * Subtype: 
+
+		 * Site Number: 6
+		 * Game Text: <b>River</b>. <b>Sanctuary</b>. When the fellowship moves to Valley of the Silverlode, each Hobbit companion may heal.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(6);
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Valley of the Silverlode", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		//assertEquals(Side., card.getBlueprint().getSide());
-		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.RIVER));
+		assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void ValleyoftheSilverlodeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,48 +27,46 @@ public class Card_02_025_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
-	public void JrnsmidStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void JarnsmidStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: Járnsmid, Merchant from Dale
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 1
-		* Type: ally
-		* Subtype: Man
-		* Strength: 4
-		* Vitality: 2
-		* Site Number: 3
-		* Game Text: To play, spot Gandalf.<br>Each time you play a shield, armor, helm, or hand weapon, its twilight cost is -1.
+		 * Set: 2
+		 * Name: Járnsmid, Merchant from Dale
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Man
+		 * Strength: 4
+		 * Vitality: 2
+
+		 * Site Number: 3
+		 * Game Text: To play, spot Gandalf.<br>Each time you play a shield, armor, helm, or hand weapon, its twilight cost is -1.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Járnsmid", card.getBlueprint().getTitle());
+		assertEquals("Merchant from Dale", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(3, card.getBlueprint().getAllyHomeSiteNumbers()[0]);
+		assertEquals(SitesBlock.FELLOWSHIP, card.getBlueprint().getAllyHomeSiteBlock());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void JrnsmidTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void JarnsmidTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

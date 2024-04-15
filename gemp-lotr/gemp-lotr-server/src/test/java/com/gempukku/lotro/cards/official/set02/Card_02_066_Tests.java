@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,46 @@ public class Card_02_066_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void HugeTentacleStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: Huge Tentacle
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 2
-		* Type: minion
-		* Subtype: Creature
-		* Strength: 7
-		* Vitality: 2
-		* Site Number: 4
-		* Game Text: <b>Tentacle</b>. <b>Damage +1</b>.<br>When you play this minion, you may play Watcher in the Water from your draw deck.<br>This minion may not bear possessions and is discarded if not at a marsh.
+		 * Set: 2
+		 * Name: Huge Tentacle
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 2
+		 * Type: Minion
+		 * Subtype: Creature
+		 * Strength: 7
+		 * Vitality: 2
+
+		 * Site Number: 4
+		 * Game Text: <b>Tentacle</b>. <b>Damage +1</b>.<br>When you play this minion, you may play Watcher in the Water from your draw deck.<br>This minion may not bear possessions and is discarded if not at a marsh.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Huge Tentacle", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.CREATURE));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.TENTACLE));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void HugeTentacleTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

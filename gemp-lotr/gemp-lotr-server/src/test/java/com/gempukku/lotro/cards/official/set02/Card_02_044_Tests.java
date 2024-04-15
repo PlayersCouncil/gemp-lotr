@@ -43,26 +43,27 @@ public class Card_02_044_Tests
 		* Set: 2
 		* Title: No Business of Ours
 		* Unique: False
-		* Side: FREE_PEOPLE
+		* Side: Shadow
 		* Culture: Isengard
 		* Twilight Cost: 0
-		* Type: condition
+		* Type: Condition
 		* Subtype: Support Area
 		* Game Text: To play, spot an [isengard] minion. Plays to your support area.
 		* 	The Free Peoples player may not look at or reveal cards in any Shadow player’s hand.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var business = scn.GetFreepsCard("business");
+		var card = scn.GetFreepsCard("business");
 
-		assertFalse(business.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, business.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, business.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, business.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(business, Keyword.SUPPORT_AREA));
-		assertEquals(0, business.getBlueprint().getTwilightCost());
+		assertEquals("No Business of Ours", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test

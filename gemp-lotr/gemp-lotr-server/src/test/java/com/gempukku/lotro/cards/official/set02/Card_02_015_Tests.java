@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,37 @@ public class Card_02_015_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void WhatAreWeWaitingForStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: What Are We Waiting For?
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 1
-		* Type: event
-		* Subtype: 
-		* Game Text: <b>Fellowship:</b> Exert a Dwarf to make an opponent draw 2 cards. That player then chooses to either discard 2 Shadow cards from hand or skip his or her next Shadow phase.
+		 * Set: 2
+		 * Name: What Are We Waiting For?
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Fellowship
+
+		 * Game Text: <b>Fellowship:</b> Exert a Dwarf to make an opponent draw 2 cards. That player then chooses to either discard 2 Shadow cards from hand or skip his or her next Shadow phase.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("What Are We Waiting For?", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void WhatAreWeWaitingForTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

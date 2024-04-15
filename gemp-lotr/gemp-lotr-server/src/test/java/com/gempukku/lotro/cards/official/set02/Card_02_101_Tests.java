@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,44 @@ public class Card_02_101_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void FilibertBolgerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: Filibert Bolger, Wily Rascal
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Shire
-		* Twilight Cost: 1
-		* Type: ally
-		* Subtype: Hobbit
-		* Strength: 1
-		* Vitality: 2
-		* Site Number: 1
-		* Game Text: <b>Skirmish:</b> Exert a Hobbit companion twice to cancel a fierce skirmish involving that Hobbit.
+		 * Set: 2
+		 * Name: Filibert Bolger, Wily Rascal
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Hobbit
+		 * Strength: 1
+		 * Vitality: 2
+
+		 * Site Number: 1
+		 * Game Text: <b>Skirmish:</b> Exert a Hobbit companion twice to cancel a fierce skirmish involving that Hobbit.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Filibert Bolger", card.getBlueprint().getTitle());
+		assertEquals("Wily Rascal", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
 		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HOBBIT));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(1, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(1, card.getBlueprint().getAllyHomeSiteNumbers()[0]);
+		assertEquals(SitesBlock.FELLOWSHIP, card.getBlueprint().getAllyHomeSiteBlock());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void FilibertBolgerTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

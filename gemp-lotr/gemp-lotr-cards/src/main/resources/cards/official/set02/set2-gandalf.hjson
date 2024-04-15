@@ -123,7 +123,7 @@
         ]
 	}
 	2_25: {
-		title: Jarnsmid
+		title: Járnsmid
 		subtitle: Merchant from Dale
 		unique: true
 		culture: gandalf
@@ -152,7 +152,7 @@
         ]
 	}
 	2_26: {
-		title: Speak \Friend\ and Enter
+		title: "Speak \"Friend\" and Enter"
 		culture: gandalf
 		twilight: 1
 		type: event

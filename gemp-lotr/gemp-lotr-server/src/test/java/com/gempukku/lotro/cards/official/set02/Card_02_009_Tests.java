@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,38 @@ public class Card_02_009_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void GreatWorksBegunThereStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: Great Works Begun There
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 1
-		* Type: condition
-		* Subtype: 
-		* Game Text: <b>Tale</b>. Plays to your support area.<br>Each time you play a Dwarf, you may discard the top 2 cards from your draw deck to take a [dwarven] event into hand from your discard pile.
+		 * Set: 2
+		 * Name: Great Works Begun There
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: 
+
+		 * Game Text: <b>Tale</b>. Plays to your support area.<br>Each time you play a Dwarf, you may discard the top 2 cards from your draw deck to take a [dwarven] event into hand from your discard pile.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Great Works Begun There", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void GreatWorksBegunThereTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

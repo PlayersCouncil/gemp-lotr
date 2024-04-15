@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,36 @@ public class Card_02_045_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void TooMuchAttentionStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: Too Much Attention
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Isengard
-		* Twilight Cost: 1
-		* Type: event
-		* Subtype: 
-		* Game Text: <b>Response:</b> If the Ring-bearer puts on The One Ring, spot an [isengard] minion to make the Free Peoples player discard the top 5 cards of his or her draw deck.
+		 * Set: 2
+		 * Name: Too Much Attention
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: 
+
+		 * Game Text: <b>Response:</b> If the Ring-bearer puts on The One Ring, spot an [isengard] minion to make the Free Peoples player discard the top 5 cards of his or her draw deck.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Too Much Attention", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void TooMuchAttentionTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

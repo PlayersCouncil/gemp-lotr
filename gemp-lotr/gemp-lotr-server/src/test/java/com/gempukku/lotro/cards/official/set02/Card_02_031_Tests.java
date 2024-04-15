@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,45 +27,39 @@ public class Card_02_031_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
-	public void BloodofNmenorStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void BloodofNumenorStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: Blood of Númenor
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Gondor
-		* Twilight Cost: 2
-		* Type: condition
-		* Subtype: 
-		* Game Text: To play, exert a [gondor] companion. Plays to your support area.<br>Each [sauron] Orc comes into play exhausted.<br>Skip the archery phase. Discard this condition during the regroup phase.
+		 * Set: 2
+		 * Name: Blood of Númenor
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: 
+
+		 * Game Text: To play, exert a [gondor] companion. Plays to your support area.<br>Each [sauron] Orc comes into play exhausted.<br>Skip the archery phase. Discard this condition during the regroup phase.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Blood of Númenor", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void BloodofNmenorTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BloodofNumenorTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

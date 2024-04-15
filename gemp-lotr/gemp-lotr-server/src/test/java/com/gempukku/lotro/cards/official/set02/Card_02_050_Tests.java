@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,39 @@ public class Card_02_050_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void TheBalrogsSwordStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: The Balrog's Sword
-		* Unique: True
-		* Side: SHADOW
-		* Culture: Moria
-		* Twilight Cost: 1
-		* Type: artifact
-		* Subtype: Hand Weapon
-		* Strength: 3
-		* Game Text: Bearer must be The Balrog.<br>It is <b>damage +1</b>.<br>This weapon may be borne in addition to 1 other hand weapon.
+		 * Set: 2
+		 * Name: The Balrog's Sword
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 1
+		 * Type: Artifact
+		 * Subtype: Hand weapon
+		 * Strength: 3
+
+		 * Game Text: Bearer must be The Balrog.<br>It is <b>damage +1</b>.<br>This weapon may be borne in addition to 1 other hand weapon.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("The Balrog's Sword", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		//assertEquals(Race.HAND WEAPON, card.getBlueprint().getRace());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void TheBalrogsSwordTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

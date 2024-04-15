@@ -155,7 +155,7 @@
 		}
 	}
 	2_6: {
-		title: Fror
+		title: Frór
 		subtitle: Gimli's Kinsman
 		unique: true
 		culture: dwarven
@@ -184,7 +184,7 @@
         ]
 	}
 	2_7: {
-		title: Gloin
+		title: Glóin
 		subtitle: Friend to Thorin
 		unique: true
 		culture: dwarven

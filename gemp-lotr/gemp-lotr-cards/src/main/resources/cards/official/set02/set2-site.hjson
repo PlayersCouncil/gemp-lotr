@@ -105,7 +105,10 @@
         block: Fellowship
         title: Valley of the Silverlode
         type: site
-        keyword: River
+        keywords: [
+            River
+            Sanctuary
+        ]
         twilight: 3
         direction: left
         effects: {
