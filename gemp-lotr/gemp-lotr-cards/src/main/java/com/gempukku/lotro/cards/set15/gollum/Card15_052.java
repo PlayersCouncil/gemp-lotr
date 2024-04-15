@@ -29,7 +29,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card15_052 extends AbstractEvent {
     public Card15_052() {
-        super(Side.FREE_PEOPLE, 2, Culture.GOLLUM, "Swear By the Precious", Phase.MANEUVER);
+        super(Side.FREE_PEOPLE, 2, Culture.GOLLUM, "Swear by the Precious", Phase.MANEUVER);
     }
 
     @Override

@@ -22,7 +22,7 @@ import com.gempukku.lotro.logic.timing.PlayConditions;
  */
 public class Card15_020 extends AbstractEvent {
     public Card15_020() {
-        super(Side.FREE_PEOPLE, 0, Culture.ELVEN, "Lorien's Blessing", Phase.ARCHERY);
+        super(Side.FREE_PEOPLE, 0, Culture.ELVEN, "Lórien's Blessing", Phase.ARCHERY);
     }
 
     @Override

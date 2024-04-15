@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class Card15_012 extends AbstractFollower {
     public Card15_012() {
-        super(Side.FREE_PEOPLE, 2, 0, 0, 0, Culture.ELVEN, "Dinendal", "Mirkwood Archer", true);
+        super(Side.FREE_PEOPLE, 2, 0, 0, 0, Culture.ELVEN, "Dínendal", "Mirkwood Archer", true);
     }
 
     @Override

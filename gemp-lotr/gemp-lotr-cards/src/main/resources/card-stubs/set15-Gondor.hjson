@@ -302,7 +302,7 @@
 		}
 	}
 
-	15_60: {
+	15_206: {
 		cardInfo: {
 			imagePath: decipher/LOTR15060.jpg
 			javaClass: true
@@ -318,6 +318,7 @@
 			style: Standard
 		}
 		title: Forth the Three Hunters!
+		subtitle: Gondor Version
 		unique: false
 		side: Free Peoples
 		culture: Gondor

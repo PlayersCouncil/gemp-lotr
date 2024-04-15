@@ -49,7 +49,7 @@ public class Card_13_036_Tests
 
 		assertEquals("The Palantír of Orthanc", card.getBlueprint().getTitle());
 		assertEquals("Recovered Seeing Stone", card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());

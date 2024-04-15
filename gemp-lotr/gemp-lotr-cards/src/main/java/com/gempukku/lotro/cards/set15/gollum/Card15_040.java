@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class Card15_040 extends AbstractPermanent {
     public Card15_040() {
-        super(Side.FREE_PEOPLE, 2, CardType.CONDITION, Culture.GOLLUM, "Connected by Fate", null, true);
+        super(Side.FREE_PEOPLE, 2, CardType.CONDITION, Culture.GOLLUM, "Connected By Fate", null, true);
     }
 
     @Override

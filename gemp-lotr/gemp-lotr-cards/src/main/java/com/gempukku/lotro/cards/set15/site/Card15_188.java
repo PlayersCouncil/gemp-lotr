@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class Card15_188 extends AbstractShadowsSite {
     public Card15_188() {
-        super("Breeding Pit of Isengard", 0, Direction.LEFT);
+        super("Breeding pit of Isengard", 0, Direction.LEFT);
         addKeyword(Keyword.UNDERGROUND);
     }
 

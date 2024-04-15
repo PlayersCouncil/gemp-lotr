@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,46 +27,42 @@ public class Card_15_029_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void GandalfStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 15
-		* Title: Gandalf, Powerful Guide
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 4
-		* Type: companion
-		* Subtype: Wizard
-		* Strength: 8
-		* Vitality: 4
-		* Resistance: 7
-		* Game Text: To play, spot 2 Hobbits.<br>Each time you play a spell, you may add a burden to wound a minion.<br>At the start of each skirmish involving Gandalf, you may draw a card and then discard a card from your hand.
+		 * Set: 15
+		 * Name: Gandalf, Powerful Guide
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 4
+		 * Type: Companion
+		 * Subtype: Wizard
+		 * Strength: 8
+		 * Vitality: 4
+		 * Resistance: 7
+		 * Game Text: To play, spot 2 Hobbits.<br>Each time you play a spell, you may add a burden to wound a minion.<br>At the start of each skirmish involving Gandalf, you may draw a card and then discard a card from your hand.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Gandalf", card.getBlueprint().getTitle());
+		assertEquals("Powerful Guide", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.WIZARD, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.WIZARD));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(7, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void GandalfTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

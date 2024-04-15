@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class Card15_086 extends AbstractMinion {
     public Card15_086() {
-        super(6, 14, 3, 4, Race.MAN, Culture.MEN, "Mumak Commander", "Giant Among the Swertings", true);
+        super(6, 14, 3, 4, Race.MAN, Culture.MEN, "Mûmak Commander", "Giant Among the Swertings", true);
     }
 
     @Override

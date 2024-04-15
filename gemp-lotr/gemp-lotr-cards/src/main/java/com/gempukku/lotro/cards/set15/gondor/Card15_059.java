@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class Card15_059 extends AbstractCompanion {
     public Card15_059() {
-        super(3, 6, 3, 6, Culture.GONDOR, Race.MAN, null, "Dunedain of the South");
+        super(3, 6, 3, 6, Culture.GONDOR, Race.MAN, null, "Dúnedain of the South");
         addKeyword(Keyword.RANGER);
         addKeyword(Keyword.HUNTER, 1);
     }

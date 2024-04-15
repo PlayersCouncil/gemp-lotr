@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,35 @@ public class Card_15_051_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void SuddenStrikeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 15
-		* Title: Sudden Strike
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Gollum
-		* Twilight Cost: 2
-		* Type: event
-		* Subtype: Shadow
-		* Game Text: Spot Gollum or Sméagol to play a minion from your draw deck. If that minion is a [gollum] minion, you may also play a Shadow possession or Shadow condition from your draw deck. Shuffle your draw deck.
+		 * Set: 15
+		 * Name: Sudden Strike
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Gollum
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Shadow
+		 * Game Text: Spot Gollum or Sméagol to play a minion from your draw deck. If that minion is a [gollum] minion, you may also play a Shadow possession or Shadow condition from your draw deck. Shuffle your draw deck.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Sudden Strike", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.SHADOW, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.SHADOW));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void SuddenStrikeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

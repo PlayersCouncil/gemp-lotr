@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class Card15_041 extends AbstractAttachable {
     public Card15_041() {
-        super(Side.SHADOW, CardType.CONDITION, 1, Culture.GOLLUM, null, "Controlled by the Ring");
+        super(Side.SHADOW, CardType.CONDITION, 1, Culture.GOLLUM, null, "Controlled By The Ring");
     }
 
     @Override

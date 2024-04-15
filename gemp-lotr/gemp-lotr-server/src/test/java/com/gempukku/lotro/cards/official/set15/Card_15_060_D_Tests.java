@@ -1,9 +1,11 @@
 package com.gempukku.lotro.cards.official.set15;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -11,14 +13,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_15_014_Tests
+public class Card_15_060_D_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "15_14");
+					put("card", "15_204");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,43 +30,38 @@ public class Card_15_014_Tests
 	}
 
 	@Test
-	public void ElvenWarriorStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ForththeThreeHuntersStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 15
-		 * Name: Elven Warrior
+		 * Name: Forth the Three Hunters!
 		 * Unique: False
 		 * Side: Free Peoples
-		 * Culture: Elven
+		 * Culture: Gondor
 		 * Twilight Cost: 2
-		 * Type: Companion
-		 * Subtype: Elf
-		 * Strength: 5
-		 * Vitality: 3
-		 * Resistance: 6
-		 * Game Text: While this companion is bearing a possession, he is strength +2.<br><b>Maneuver:</b> Exert this companion to place an [elven] card from your discard pile on the bottom of your draw deck.
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: <b>Archery:</b> Exert Legolas and exert Aragorn to wound a minion.<br><b>Skirmish:</b> Exert Aragorn and spot Gimli to make a minion strength -1 (or -3 if Aragorn and Gimli are hunters).<br><b>Regroup:</b> Exert Gimli and spot Legolas to draw a card (or 2 cards if Gimli and Legolas are hunters).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Elven Warrior", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals("Forth the Three Hunters!", card.getBlueprint().getTitle());
+		//Not actually what's on the card, but concessions must be made for the system
+		assertEquals("Dwarven Version", card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void ElvenWarriorTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ForththeThreeHuntersTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
