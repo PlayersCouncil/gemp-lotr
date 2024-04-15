@@ -46,7 +46,7 @@ public class Card7_127 extends AbstractCompanion {
                         new Condition() {
                             @Override
                             public boolean isFullfilled(LotroGame game) {
-                                return Filters.countActive(game, Filters.siteControlledByShadowPlayer(self.getOwner())) == 0;
+                                return Filters.countActive(game, Filters.siteControlledByOtherPlayer(self.getOwner())) == 0;
                             }
                         }, 2));
     }

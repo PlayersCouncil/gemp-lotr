@@ -39,7 +39,7 @@ public class Card15_141 extends AbstractAttachableFPPossession {
     @Override
     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
         return Collections.singletonList(
-                new StrengthModifier(self, Filters.hasAttached(self), new NotCondition(new SpotCondition(Filters.siteControlledByShadowPlayer(self.getOwner()))), 1));
+                new StrengthModifier(self, Filters.hasAttached(self), new NotCondition(new SpotCondition(Filters.siteControlledByOtherPlayer(self.getOwner()))), 1));
     }
 
     @Override

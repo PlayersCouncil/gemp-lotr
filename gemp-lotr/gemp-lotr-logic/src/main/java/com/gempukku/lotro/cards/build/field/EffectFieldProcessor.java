@@ -18,6 +18,7 @@ public class EffectFieldProcessor implements FieldProcessor {
 
     public EffectFieldProcessor() {
         effectProcessors.put("activated", new ActivatedEffectProcessor());
+        effectProcessors.put("activatedfromstacked", new ActivatedFromStackedEffectProcessor());
         effectProcessors.put("activatedindiscard", new ActivatedInDiscardEffectProcessor());
         effectProcessors.put("activatedtrigger", new ActivatedTriggerEffectProcessor());
         effectProcessors.put("aidcost", new AidCost());
@@ -25,6 +26,7 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("discardedfromplaytrigger", new DiscardedFromPlayTriggerEffectProcessor());
         effectProcessors.put("discount", new PotentialDiscount());
         effectProcessors.put("event", new EventEffectProcessor());
+        effectProcessors.put("exerttargetextracost", new ExertTargetExtraCost());
         effectProcessors.put("extracost", new ExtraCost());
         effectProcessors.put("extrapossessionclass", new ExtraPossessionClassEffectProcessor());
         effectProcessors.put("inhandtrigger", new InHandTriggerEffectProcessor());

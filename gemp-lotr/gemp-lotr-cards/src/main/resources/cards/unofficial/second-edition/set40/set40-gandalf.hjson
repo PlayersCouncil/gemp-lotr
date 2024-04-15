@@ -211,7 +211,7 @@
 				}
 				{
 					type: addTwilight
-					amount: 0-100
+					amount: any
 					memorize: addedTwilight
 				}
 			]

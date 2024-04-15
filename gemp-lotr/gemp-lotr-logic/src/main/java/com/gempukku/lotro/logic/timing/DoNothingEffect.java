@@ -2,9 +2,14 @@ package com.gempukku.lotro.logic.timing;
 
 import com.gempukku.lotro.game.state.LotroGame;
 
-public class DoNothingEffect extends UnrespondableEffect {
+public class DoNothingEffect extends AbstractEffect {
     @Override
-    protected void doPlayEffect(LotroGame game) {
-        // Do nothing
+    protected FullEffectResult playEffectReturningResult(LotroGame game) {
+        return new FullEffectResult(true);
+    }
+
+    @Override
+    public boolean isPlayableInFull(LotroGame game) {
+        return true;
     }
 }

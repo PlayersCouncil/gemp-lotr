@@ -78,8 +78,9 @@ public class CardResolver {
 
         if (type.startsWith("memory(") && type.endsWith(")")) {
             return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
-        }
-        else if (type.startsWith("choose(") && type.endsWith(")")) {
+        } else if (type.equals("self")) {
+            return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
+        } else if (type.startsWith("choose(") && type.endsWith(")")) {
             final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
                 String choicePlayerId = playerSource.getPlayer(actionContext);
@@ -194,7 +195,6 @@ public class CardResolver {
         return resolveCardsInDiscard(type, additionalFilter, additionalFilter, countSource, memory, choicePlayer,  targetPlayerDiscard, choiceText, environment);
     }
 
-
     public static EffectAppender resolveCardsInDiscard(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         return resolveCardsInDiscard(type, choiceFilter, playabilityFilter, countSource, memory, choicePlayer, choicePlayer, choiceText, environment);
     }
@@ -219,6 +219,42 @@ public class CardResolver {
                 String choicePlayerId = playerSource.getPlayer(actionContext);
                 String targetPlayerDiscardId = targetPlayerDiscardSource.getPlayer(actionContext);
                 return new ChooseCardsFromDiscardEffect(choicePlayerId, targetPlayerDiscardId, min, max, Filters.in(possibleCards)) {
+                    @Override
+                    protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
+                        actionContext.setCardMemory(memory, cards);
+                        game.getGameState().sendMessage(GameUtils.SubstituteText("{you} chooses {" + memory + "}.", actionContext));
+                    }
+
+                    @Override
+                    public String getText(LotroGame game) {
+                        return GameUtils.SubstituteText(choiceText, actionContext);
+                    }
+                };
+            };
+
+            return resolveChoiceCards(type, choiceFilter, playabilityFilter, countSource, environment, cardSource, effectSource);
+        }
+        throw new RuntimeException("Unable to resolve card resolver of type: " + type);
+    }
+
+    public static EffectAppender resolveCardsInDeadPile(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
+
+        Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
+            String targetPlayerId = playerSource.getPlayer(actionContext);
+            return actionContext.getGame().getGameState().getDeadPile(targetPlayerId);
+        };
+
+        if (type.equals("self")) {
+            return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
+        } else if (type.startsWith("memory(") && type.endsWith(")")) {
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+        } else if (type.startsWith("all(") && type.endsWith(")")) {
+            return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
+        } else if (type.startsWith("choose(") && type.endsWith(")")) {
+            ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
+                String choicePlayerId = playerSource.getPlayer(actionContext);
+                return new ChooseCardsFromDeadPileEffect(choicePlayerId, min, max, Filters.in(possibleCards)) {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
                         actionContext.setCardMemory(memory, cards);

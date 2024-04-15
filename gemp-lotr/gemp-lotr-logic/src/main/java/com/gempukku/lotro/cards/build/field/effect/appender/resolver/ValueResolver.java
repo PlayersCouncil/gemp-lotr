@@ -32,22 +32,9 @@ public class ValueResolver {
                 final int max = Integer.parseInt(split[1]);
                 if (min > max || min < 0 || max < 1)
                     throw new InvalidCardDefinitionException("Unable to resolve count: " + value);
-                return new ValueSource() {
-                    @Override
-                    public Evaluator getEvaluator(ActionContext actionContext) {
-                        throw new RuntimeException("Evaluator has resolved to range");
-                    }
-
-                    @Override
-                    public int getMinimum(ActionContext actionContext) {
-                        return min;
-                    }
-
-                    @Override
-                    public int getMaximum(ActionContext actionContext) {
-                        return max;
-                    }
-                };
+                return new RangeEvaluator(min, max);
+            } else if (stringValue.equalsIgnoreCase("any")) {
+                return new RangeEvaluator(0, Integer.MAX_VALUE);
             } else {
                 int v = Integer.parseInt(stringValue);
                 return new ConstantEvaluator(v);
@@ -114,12 +101,13 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("regionNumber")) {
                 return (actionContext) -> (game, cardAffected) -> GameUtils.getRegion(actionContext.getGame());
             } else if (type.equalsIgnoreCase("forEachInMemory")) {
-                FieldUtils.validateAllowedFields(object, "memory", "limit");
+                FieldUtils.validateAllowedFields(object, "memory", "limit", "multiplier");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
                 final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
+                final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
                 return (actionContext) -> {
                     final int count = actionContext.getCardsFromMemory(memory).size();
-                    return new ConstantEvaluator(Math.min(limit, count));
+                    return new ConstantEvaluator(Math.min(limit, multiplier * count));
                 };
             } else if (type.equalsIgnoreCase("forEachMatchingInMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "filter", "limit");
@@ -470,11 +458,12 @@ public class ValueResolver {
                                 second.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)
                         );
             } else if (type.equalsIgnoreCase("forEachToken")) {
-                FieldUtils.validateAllowedFields(object, "filter", "culture");
+                FieldUtils.validateAllowedFields(object, "filter", "culture", "limit");
 
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
                 final Culture culture = FieldUtils.getEnum(Culture.class, object.get("culture"), "culture");
                 final Token tokenForCulture = Token.findTokenForCulture(culture);
+                final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
 
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
@@ -485,7 +474,7 @@ public class ValueResolver {
                         result += game.getGameState().getTokenCount(physicalCard, tokenForCulture);
                     }
 
-                    return result;
+                    return Math.min(limit, result);
                 };
             }
             throw new InvalidCardDefinitionException("Unrecognized type of an evaluator " + type);

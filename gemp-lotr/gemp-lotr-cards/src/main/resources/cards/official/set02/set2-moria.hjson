@@ -681,7 +681,7 @@
             type: event
             cost: {
                 type: revealCardsFromHand
-                count: 0-100
+                count: any
                 filter: choose(culture(moria),orc)
                 memorize: revealedCards
             }

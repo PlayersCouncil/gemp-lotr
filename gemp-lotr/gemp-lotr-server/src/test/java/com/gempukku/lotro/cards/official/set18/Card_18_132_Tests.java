@@ -149,6 +149,7 @@ public class Card_18_132_Tests
         assertEquals(10, scn.GetTwilight());
         scn.ShadowChoose("0");
         assertEquals(10, scn.GetTwilight());
+        scn.ShadowChoose("0");
 
         assertEquals(Zone.DISCARD, follower0.getZone());
     }

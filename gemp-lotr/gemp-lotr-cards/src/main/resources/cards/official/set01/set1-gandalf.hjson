@@ -339,7 +339,7 @@
 			cost: {
 				type: exert
 				filter: choose(companion)
-				count: 0-100
+				count: any
 				memorize: exertedCompanions
 			}
 			effect: {
@@ -627,7 +627,6 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(culture(gandalf),character)
-				nocheck: true
 			}
 		}
 	}

@@ -777,7 +777,7 @@
             cost: {
                 type: discard
                 filter: choose(culture(isengard),orc)
-                count: 0-1000
+                count: any
                 memorize: discardedOrcs
             }
             effect: {

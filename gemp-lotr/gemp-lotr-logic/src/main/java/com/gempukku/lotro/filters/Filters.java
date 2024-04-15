@@ -936,11 +936,11 @@ public class Filters {
         };
     }
 
-    public static Filter siteControlledByShadowPlayer(final String fellowshipPlayer) {
+    public static Filter siteControlledByOtherPlayer(final String thisPlayer) {
         return new Filter() {
             @Override
             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return physicalCard.getBlueprint().getCardType() == CardType.SITE && physicalCard.getCardController() != null && !physicalCard.getCardController().equals(fellowshipPlayer);
+                return physicalCard.getBlueprint().getCardType() == CardType.SITE && physicalCard.getCardController() != null && !physicalCard.getCardController().equals(thisPlayer);
             }
         };
     }

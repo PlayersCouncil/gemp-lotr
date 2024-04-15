@@ -28,13 +28,11 @@
 						type: playCardFromDrawDeck
 						filter: choose(item)
 						on: culture(shire),companion
-						nocheck: true
 					}
 					{
 						type: playCardFromDrawDeck
 						filter: choose(item)
 						on: culture(shire),companion
-						nocheck: true
 					}
 				]
 			}

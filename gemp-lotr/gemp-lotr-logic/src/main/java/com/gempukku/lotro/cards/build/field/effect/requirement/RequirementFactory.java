@@ -50,6 +50,7 @@ public class RequirementFactory {
         requirementProducers.put("memorylike", new MemoryLike());
         requirementProducers.put("memorymatches", new MemoryMatches());
         requirementProducers.put("movecountminimum", new MoveCountMinimum());
+        requirementProducers.put("opponentdoesnotcontrolsite", new OpponentDoesNotControlSite());
         requirementProducers.put("perphaselimit", new PerPhaseLimit());
         requirementProducers.put("perturnlimit", new PerTurnLimit());
         requirementProducers.put("playablefromdiscard", new PlayableFromDiscard());

@@ -28,7 +28,7 @@ public class Card10_034 extends AbstractEvent {
 
     @Override
     public boolean checkPlayRequirements(LotroGame game, PhysicalCard self) {
-        return !PlayConditions.canSpot(game, Filters.siteControlledByShadowPlayer(self.getOwner()))
+        return !PlayConditions.canSpot(game, Filters.siteControlledByOtherPlayer(self.getOwner()))
                 && PlayConditions.canSpot(game, 2, Culture.GONDOR, Race.MAN);
     }
 

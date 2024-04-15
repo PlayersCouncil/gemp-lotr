@@ -505,7 +505,7 @@
 			type: event
 			cost: {
 				type: exert
-				count: 0-100
+				count: any
 				filter: choose(nazgul)
 				memorize: exertedNazgul
 			}

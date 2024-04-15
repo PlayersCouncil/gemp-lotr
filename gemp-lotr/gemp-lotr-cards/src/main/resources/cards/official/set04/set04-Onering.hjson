@@ -1,0 +1,166 @@
+{
+	4_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR04001.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4R1
+			rarity: R
+			setNum: "4"
+			cardNum: 1
+			style: Standard
+		}
+		title: The One Ring
+		subtitle: Answer To All Riddles
+		unique: true
+		twilight: 0
+		vitality: 2
+		type: The One Ring
+        effects: [
+            {
+                type: modifier
+                modifier: {
+                    type: modifyStrength
+                    requires: [
+                        {
+                            type: ringIsOn
+                        }
+                        {
+                            type: ringIsActive
+                        }
+                    ]
+                    filter: bearer
+                    amount: 2
+                }
+            }
+            {
+                type: trigger
+                requires: [
+                    {
+                        type: ringIsOn
+                    }
+                    {
+                        type: ringIsActive
+                    }
+                ]
+                trigger: {
+                    type: aboutToTakeWound
+                    filter: bearer
+                }
+                effect: [
+                    {
+                        type: negateWound
+                        filter: bearer
+                    }
+                    {
+                        type: addBurdens
+                    }
+                ]
+            }
+            {
+                type: activated
+                phase: skirmish
+                cost: {
+                    type: addBurdens
+                }
+                effect: {
+                    type: putOnRing
+                }
+            }
+        ]
+		gametext: While wearing The One Ring, the Ring-bearer is strength +2, and each time he is about to take a wound in a skirmish, add a burden instead.<br><b>Skirmish:</b> Add a burden to wear The One Ring until the regroup phase.
+		lore: ...thought to have perished from the world.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_2: {
+		cardInfo: {
+			imagePath: decipher/LOTR04002.jpg
+			javaClass: true
+			version: 0
+			collInfo: 4C2
+			rarity: C
+			setNum: "4"
+			cardNum: 2
+			style: Standard
+		}
+		title: The One Ring
+		subtitle: The Ruling Ring
+		unique: true
+		twilight: 0
+		type: The One Ring
+		effects: [
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						filter: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: activatedTrigger
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				effect: [
+					{
+						type: putOnRing
+					}
+					{
+						type: negateWound
+						filter: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+		]
+		gametext: <b>Response:</b> If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound during a skirmish, add a burden instead.
+		lore: One Ring to rule them all....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

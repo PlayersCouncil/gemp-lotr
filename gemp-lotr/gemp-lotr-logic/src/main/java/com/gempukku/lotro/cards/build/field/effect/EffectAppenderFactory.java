@@ -36,11 +36,13 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("chooseandremovetwilight", new ChooseAndRemoveTwilight());
         effectAppenderProducers.put("chooseanumber", new ChooseANumber());
         effectAppenderProducers.put("choosearace", new ChooseARace());
+        effectAppenderProducers.put("choosearbitrarycards", new ChooseArbitraryCards());
         effectAppenderProducers.put("choosecardsfromdiscard", new ChooseCardsFromDiscard());
         effectAppenderProducers.put("choosecardsfromdrawdeck", new ChooseCardsFromDrawDeck());
         effectAppenderProducers.put("choosecardsfromsinglestack", new ChooseCardsFromSingleStack());
         effectAppenderProducers.put("choosehowmanyburdenstospot", new ChooseHowManyBurdensToSpot());
         effectAppenderProducers.put("choosehowmanytospot", new ChooseHowManyToSpot());
+        effectAppenderProducers.put("choosehowmanytwilighttokenstospot", new ChooseHowManyTwilightTokensToSpot());
         effectAppenderProducers.put("chooseopponent", new ChooseOpponent());
         effectAppenderProducers.put("chooseyesorno", new ChooseYesOrNo());
         effectAppenderProducers.put("conditional", new ConditionalEffect());
@@ -90,12 +92,14 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("optional", new Optional());
         effectAppenderProducers.put("placenowoundforexert", new PlaceNoWoundForExert());
         effectAppenderProducers.put("play", new PlayCardFromHand());
+        effectAppenderProducers.put("playcardfromdeadpile", new PlayCardFromDeadPile());
         effectAppenderProducers.put("playcardfromdiscard", new PlayCardFromDiscard());
         effectAppenderProducers.put("playcardfromdrawdeck", new PlayCardFromDrawDeck());
         effectAppenderProducers.put("playcardfromstacked", new PlayCardFromStacked());
         effectAppenderProducers.put("playnextsite", new PlayNextSite());
         effectAppenderProducers.put("playsite", new PlaySite());
         effectAppenderProducers.put("preventable", new PreventableAppenderProducer());
+        effectAppenderProducers.put("preventallwounds", new PreventAllWounds());
         effectAppenderProducers.put("preventburden", new PreventBurden());
         effectAppenderProducers.put("preventdiscard", new PreventCardEffectAppender());
         effectAppenderProducers.put("preventexert", new PreventExert());
@@ -144,6 +148,8 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("shufflecardsfromdiscardintodrawdeck", new ShuffleCardsFromDiscardIntoDrawDeck());
         effectAppenderProducers.put("shufflecardsfromhandintodrawdeck", new ShuffleCardsFromHandIntoDrawDeck());
         effectAppenderProducers.put("shufflecardsfromplayintodrawdeck", new ShuffleCardsFromPlayIntoDrawDeck());
+        effectAppenderProducers.put("shufflecardsfromplayandstackedonthemintodrawdeck", new ShuffleCardsFromPlayAndStackedOnThemIntoDrawDeck());
+        effectAppenderProducers.put("shuffledeck", new ShuffleDeck());
         effectAppenderProducers.put("shufflehandintodrawdeck", new ShuffleHandIntoDrawDeck());
         effectAppenderProducers.put("sideplayercantplayphaseeventsorusephasespecialabilities", new SidePlayerCantPlayPhaseEventsOrUsePhaseSpecialAbilities());
         effectAppenderProducers.put("spot", new Spot());

@@ -38,6 +38,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantlookorrevealhand", new CantLookOrRevealHand());
         modifierProducers.put("cantplaycards", new CantPlayCards());
         modifierProducers.put("cantplaycardsfromdeckordiscardpile", new CantPlayCardsFromDeckOrDiscardPile());
+        modifierProducers.put("cantplaycardson", new CantPlayCardsOn());
         modifierProducers.put("cantplayphaseevents", new CantPlayPhaseEvents());
         modifierProducers.put("cantplayphaseeventsorphasespecialabilities", new CantPlayPhaseEventsOrPhaseSpecialAbilities());
         modifierProducers.put("cantplayphasespecialabilities", new CantPlayPhaseSpecialAbilities());
@@ -49,6 +50,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("canttakewounds", new CantTakeWounds());
         modifierProducers.put("cantusespecialabilities", new CantUseSpecialAbilities());
         modifierProducers.put("disablegametext", new DisableGameText());
+        modifierProducers.put("doesnotaddtoarcherytotal", new DoesNotAddToArcheryTotal());
         modifierProducers.put("extracosttoplay", new ExtraCostToPlay());
         modifierProducers.put("fpculturespot", new FPCultureSpot());
         modifierProducers.put("fpusesresinsteadofstr", new FPUsesResInsteadOfStr());
@@ -66,6 +68,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("modifysitenumber", new ModifySiteNumber());
         modifierProducers.put("modifystrength", new ModifyStrength());
         modifierProducers.put("nomorethanoneminionmaybeassignedtoeachskirmish", new NoMorethanOneMinionMayBeAssignedToEachSkirmish());
+        modifierProducers.put("opponentscantplayphaseeventsorphasespecialabilities", new OpponentsCantPlayPhaseEventsOrPhaseSpecialAbilities());
         modifierProducers.put("opponentmaynotdiscard", new OpponentMayNotDiscard());
         modifierProducers.put("removekeyword", new RemoveKeyword());
         modifierProducers.put("ringtextisinactive", new RingTextIsInactive());
