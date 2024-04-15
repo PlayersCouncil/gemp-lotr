@@ -41,7 +41,6 @@ public class Card_11_120_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Assignment:</b> Assign this minion to an unbound companion who has resistance 4 or less.
 		*/

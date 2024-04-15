@@ -39,7 +39,6 @@ public class Card_11_167_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Stealth</b>.<br>If the fellowship is at a dwelling site, exert 2 Hobbits to cancel a skirmish involving a Hobbit.<br>At any other site, exert 2 Hobbits to make a Hobbit strength +3.
 		*/
 

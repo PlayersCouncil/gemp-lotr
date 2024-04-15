@@ -39,7 +39,6 @@ public class Card_11_192_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Hand weapon
-
 		 * Game Text: Bearer must be an [uruk-hai] minion.<br>Each character skirmishing bearer is strength -2.
 		*/
 

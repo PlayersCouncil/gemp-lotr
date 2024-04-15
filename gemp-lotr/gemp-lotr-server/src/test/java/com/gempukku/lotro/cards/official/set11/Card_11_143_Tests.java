@@ -41,7 +41,6 @@ public class Card_11_143_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may spot another [orc] minion to replace the fellowship's current site with an underground site from your adventure deck.
 		*/

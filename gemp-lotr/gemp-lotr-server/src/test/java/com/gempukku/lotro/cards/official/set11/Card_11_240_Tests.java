@@ -39,7 +39,7 @@ public class Card_11_240_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Plains</b>. Each unbound companion skirmishing more than 1 minion is strength +3.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_11_081_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: While this minion is at a plains site, it is an <b>archer</b>.<br>While you can spot 6 companions, each [men] minion is an <b>archer</b>.
 		*/

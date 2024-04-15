@@ -39,7 +39,7 @@ public class Card_11_243_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Plains</b>. Until the regroup phase, each minion skirmishing a [rohan] companion loses <b>fierce</b> and cannot gain fierce.
 		*/
 

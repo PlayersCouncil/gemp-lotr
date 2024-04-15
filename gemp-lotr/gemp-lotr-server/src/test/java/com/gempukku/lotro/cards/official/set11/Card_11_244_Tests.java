@@ -39,7 +39,7 @@ public class Card_11_244_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Battleground</b>. Each time a [gandalf] companion wins a skirmish, the Free Peoples player may discard a condition from play.
 		*/
 

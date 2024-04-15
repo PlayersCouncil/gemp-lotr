@@ -39,7 +39,6 @@ public class Card_11_109_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be an [orc] minion.<br>Bearer is a <b>lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Exert bearer to make an [orc] minion strength +2.
 		*/
 

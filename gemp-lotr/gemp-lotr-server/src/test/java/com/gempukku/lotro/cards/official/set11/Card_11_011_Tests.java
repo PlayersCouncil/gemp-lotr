@@ -39,7 +39,6 @@ public class Card_11_011_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: When you play this condition, stack the top 8 cards of your draw deck here.<br>At the start of your maneuver phase, you may spot a Dwarf to exchange the cards stacked here with your hand.
 		*/
 

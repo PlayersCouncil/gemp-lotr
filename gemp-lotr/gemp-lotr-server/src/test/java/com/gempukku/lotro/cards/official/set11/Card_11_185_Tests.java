@@ -39,7 +39,6 @@ public class Card_11_185_Tests
 		 * Twilight Cost: 4
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: When you play this condition, spot an [uruk-hai] minion to add 3 [uruk-hai] tokens here.<br><b>Response:</b> If an [uruk-hai] minion is about to take a wound, discard this condition or remove an [uruk-hai] token from here to prevent that.
 		*/
 

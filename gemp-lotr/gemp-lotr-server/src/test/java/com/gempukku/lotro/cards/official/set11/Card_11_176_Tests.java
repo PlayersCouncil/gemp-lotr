@@ -39,7 +39,6 @@ public class Card_11_176_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Heal a Hobbit for each minion you spot.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_11_155_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, exert a [rohan] Man.<br>While you can spot 2 [rohan] mounts, the move limit is +1.<br>Each of your companions that is not mounted is strength -1.
 		*/
 

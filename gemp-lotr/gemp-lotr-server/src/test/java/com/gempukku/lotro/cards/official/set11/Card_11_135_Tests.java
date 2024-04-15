@@ -41,7 +41,6 @@ public class Card_11_135_Tests
 		 * Subtype: Troll
 		 * Strength: 15
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>. <b>Fierce</b>. To play, spot an [orc] minion.<br>When you play this minion, add a burden unless the Free Peoples player reveals a Free Peoples event from his or her hand.
 		*/

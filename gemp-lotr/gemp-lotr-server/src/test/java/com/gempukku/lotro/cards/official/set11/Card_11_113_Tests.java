@@ -41,7 +41,6 @@ public class Card_11_113_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: This minion is strength +1 for each companion who has resistance 5 or less.
 		*/

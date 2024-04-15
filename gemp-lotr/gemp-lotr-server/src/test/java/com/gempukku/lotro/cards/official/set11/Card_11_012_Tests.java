@@ -39,7 +39,6 @@ public class Card_11_012_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 Dwarf companions.<br>While the fellowship is at a mountain site, each Dwarf is strength +2.
 		*/
 

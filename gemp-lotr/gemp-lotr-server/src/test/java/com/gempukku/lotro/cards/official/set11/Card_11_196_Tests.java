@@ -40,9 +40,7 @@ public class Card_11_196_Tests
 		 * Type: Condition
 		 * Subtype: 
 		 * Strength: -1
-
 		 * Resistance: -3
-
 		 * Game Text: To play, spot an [uruk-hai] minion. Bearer must be an unbound companion. Limit 1 per bearer.
 		*/
 

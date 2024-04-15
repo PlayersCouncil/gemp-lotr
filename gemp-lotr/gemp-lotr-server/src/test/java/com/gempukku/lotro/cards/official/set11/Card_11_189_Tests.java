@@ -41,7 +41,6 @@ public class Card_11_189_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>When you play this minion at a battleground site, spot an unbound companion to make that companion resistance -2 until the end of the turn.
 		*/

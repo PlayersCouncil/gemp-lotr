@@ -39,7 +39,6 @@ public class Card_11_026_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: When you play this condition, spot an Elf to add 3 [elven] tokens here.<br><b>Maneuver:</b> Discard this condition or remove an [elven] token from here to reveal the top card of your draw deck. You may place that card beneath your draw deck.
 		*/
 

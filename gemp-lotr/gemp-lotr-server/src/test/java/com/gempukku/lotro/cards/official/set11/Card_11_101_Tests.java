@@ -41,7 +41,6 @@ public class Card_11_101_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: At the start of the maneuver phase, you may remove (2) to transfer a condition borne by a character to another eligible bearer.
 		*/

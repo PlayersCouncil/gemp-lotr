@@ -39,7 +39,6 @@ public class Card_11_096_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: Spot a [men] minion to make the minion archery total +1 and to make the Free Peoples player choose 3 companions. Other companions cannot take archery wounds.
 		*/
 

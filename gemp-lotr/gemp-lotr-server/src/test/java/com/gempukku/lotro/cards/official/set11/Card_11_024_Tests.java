@@ -39,7 +39,6 @@ public class Card_11_024_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Exert an Elf to reveal the top card of your draw deck. If that card's twilight cost is 3 or less, make a minion strength -3.
 		*/
 

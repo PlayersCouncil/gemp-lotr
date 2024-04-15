@@ -41,7 +41,6 @@ public class Card_11_076_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Response:</b> If a [men] minion is about to take a wound in a skirmish, exert this minion and remove (1) to prevent that.
 		*/

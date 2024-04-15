@@ -39,7 +39,7 @@ public class Card_11_255_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Mountain</b>. At the start of your fellowship phase, you may exert 3 companions to play a Wizard from your dead pile.
 		*/
 

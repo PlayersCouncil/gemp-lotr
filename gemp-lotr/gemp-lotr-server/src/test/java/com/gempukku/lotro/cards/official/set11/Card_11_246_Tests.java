@@ -39,7 +39,7 @@ public class Card_11_246_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Marsh</b>. <b>Regroup:</b> Exert your Gollum or your Sméagol to play the fellowship's next site.
 		*/
 

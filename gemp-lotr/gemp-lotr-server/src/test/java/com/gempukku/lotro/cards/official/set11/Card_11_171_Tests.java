@@ -39,9 +39,7 @@ public class Card_11_171_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Box
-
 		 * Resistance: 2
-
 		 * Game Text: Bearer must be a Hobbit.<br><b>Fellowship:</b> Discard this possession to remove a burden.<br><b>Skirmish:</b> If bearer is an unbound Hobbit, discard this possession to prevent him or her from being overwhelmed unless his or her strength is tripled.
 		*/
 

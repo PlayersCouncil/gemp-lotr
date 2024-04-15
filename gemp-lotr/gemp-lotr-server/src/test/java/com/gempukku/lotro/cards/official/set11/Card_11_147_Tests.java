@@ -42,7 +42,6 @@ public class Card_11_147_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: At the start of the fellowship phase, you may add (1) to play a possession on Gamling from your draw deck.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_11_107_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Skirmish:</b> Exert another [orc] minion to make this minion strength +2 (or +4 if this minion is skirmishing a companion who has resistance 4 or less).
 		*/

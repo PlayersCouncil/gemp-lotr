@@ -39,7 +39,6 @@ public class Card_11_041_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: If a minion is skirmishing a Free Peoples character who has resistance 2 or less, spot Gollum to wound that character twice.
 		*/
 

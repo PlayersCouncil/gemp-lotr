@@ -39,7 +39,6 @@ public class Card_11_104_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Wound a character skirmishing a [men] minion. If the fellowship is at a battleground site, you may remove (3) to wound that character again.
 		*/
 

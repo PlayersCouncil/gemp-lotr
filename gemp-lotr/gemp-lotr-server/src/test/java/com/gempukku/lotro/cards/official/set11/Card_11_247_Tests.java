@@ -39,7 +39,7 @@ public class Card_11_247_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Underground</b>. When your fellowship moves from this site, you may spot a Dwarf to draw 2 cards.
 		*/
 

@@ -39,7 +39,7 @@ public class Card_11_236_Tests
 		 * Shadow Number: 0
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Forest</b>. Each companion is twilight cost +2.
 		*/
 

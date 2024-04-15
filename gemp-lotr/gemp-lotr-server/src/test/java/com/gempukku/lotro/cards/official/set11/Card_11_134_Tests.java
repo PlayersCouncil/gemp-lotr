@@ -41,7 +41,6 @@ public class Card_11_134_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: Each time this minion is about to be killed or discarded from play, you may spot another [orc] card to place this minion on top of your draw deck instead.
 		*/

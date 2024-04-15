@@ -41,7 +41,6 @@ public class Card_11_184_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>Each time this minion is about to take a wound at a battleground site, you may spot another [uruk-hai] card to make the Free Peoples player draw a card instead.
 		*/

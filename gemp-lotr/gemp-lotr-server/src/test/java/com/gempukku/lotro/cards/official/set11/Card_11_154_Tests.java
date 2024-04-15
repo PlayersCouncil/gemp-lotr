@@ -42,7 +42,6 @@ public class Card_11_154_Tests
 		 * Strength: 8
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: To play, spot 2 [rohan] companions.<br>You may play Riders of the Mark any time you could play a skirmish event.<br>When you play Riders of the Mark, you may exhaust a minion.
 		*/
 

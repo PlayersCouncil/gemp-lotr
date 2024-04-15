@@ -42,7 +42,6 @@ public class Card_11_163_Tests
 		 * Strength: 3
 		 * Vitality: 3
 		 * Resistance: 8
-
 		 * Game Text: While Farmer Maggot is at a dwelling or forest site, he is strength +4.
 		*/
 

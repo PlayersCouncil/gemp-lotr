@@ -39,7 +39,6 @@ public class Card_11_160_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Exert a [rohan] companion to make him or her strength +3 (and <b>damage +1</b> if he or she has resistance 5 or more).
 		*/
 

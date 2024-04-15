@@ -40,7 +40,6 @@ public class Card_11_089_Tests
 		 * Type: Possession
 		 * Subtype: Ranged weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a [men] minion.<br>Bearer is an <b>archer</b>.<br>When you play this possession, you may make the Free Peoples player exert his or her Man.
 		*/
 

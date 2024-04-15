@@ -41,7 +41,6 @@ public class Card_11_088_Tests
 		 * Subtype: Man
 		 * Strength: 14
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Toil 2</b>. <helper>(For each [men] character you exert when playing this, its twilight cost is -2.)</helper>
 		*/

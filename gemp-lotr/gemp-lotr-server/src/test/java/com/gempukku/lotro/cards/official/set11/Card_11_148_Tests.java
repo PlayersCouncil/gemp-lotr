@@ -42,7 +42,6 @@ public class Card_11_148_Tests
 		 * Strength: 5
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: <b>Response:</b> If a [rohan] companion who has resistance 4 or more is about to take a wound, exert Hrothlac to prevent that.
 		*/
 

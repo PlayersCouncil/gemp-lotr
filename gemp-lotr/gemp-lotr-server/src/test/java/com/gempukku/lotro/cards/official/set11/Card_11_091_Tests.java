@@ -39,7 +39,6 @@ public class Card_11_091_Tests
 		 * Twilight Cost: 4
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: At the start of the maneuver phase, if you have 2 or more cards in hand, you may spot 2 [men] minions and discard your hand to add (8).
 		*/
 

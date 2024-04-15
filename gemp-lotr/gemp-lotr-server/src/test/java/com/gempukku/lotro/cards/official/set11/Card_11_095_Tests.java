@@ -40,7 +40,6 @@ public class Card_11_095_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [men] minion.<br><b>Skirmish:</b> Remove (2) to make a [men] minion <b>fierce</b> until the regroup phase.
 		*/
 

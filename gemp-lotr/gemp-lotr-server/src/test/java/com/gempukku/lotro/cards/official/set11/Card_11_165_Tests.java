@@ -39,7 +39,6 @@ public class Card_11_165_Tests
 		 * Twilight Cost: 4
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Toil 2</b>. <helper>(For each [shire] character you exert when playing this, its twilight cost is -2.)</helper><br>Bearer must be a Hobbit. Limit 1 per bearer.<br>Each time the fellowship moves from a dwelling or forest site, remove (1).
 		*/
 

@@ -42,7 +42,6 @@ public class Card_11_170_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 9
-
 		 * Game Text: <b>Skirmish:</b> If Pippin is not assigned to a skirmish, spot an unbound companion who has less resistance than Pippin to have Pippin replace him or her in a skirmish.
 		*/
 

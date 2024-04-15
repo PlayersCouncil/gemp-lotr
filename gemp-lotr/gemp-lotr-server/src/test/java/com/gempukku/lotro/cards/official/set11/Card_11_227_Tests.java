@@ -39,7 +39,7 @@ public class Card_11_227_Tests
 		 * Shadow Number: 0
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>River</b>. The minion archery total is +2 for each companion in the fellowship over 4.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_11_079_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Ambush (1)</b>.<br>When you play this minion at a plains site, you may spot an unbound companion to make that companion resistance -1 until the end of the turn.
 		*/

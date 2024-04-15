@@ -41,7 +41,6 @@ public class Card_11_190_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 11
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>While this minion is at a battleground site, it cannot take wounds.<br>While you can spot 6 companions, each [uruk-hai] minion cannot take wounds.
 		*/

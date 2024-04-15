@@ -39,7 +39,6 @@ public class Card_11_037_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [gandalf] Wizard.<br>Each time a Shadow card adds a burden, you may remove (3).<br><b>Response:</b> If a minion uses its special ability, discard this condition to cancel the effect of that special ability.
 		*/
 

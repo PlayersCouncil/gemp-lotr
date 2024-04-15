@@ -40,7 +40,6 @@ public class Card_11_058_Tests
 		 * Type: Possession
 		 * Subtype: Ranged weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a [gondor] Man.<br>At the start of the archery phase, if bearer is at a battleground site, you may exert him or her to make the fellowship archery total +1.
 		*/
 

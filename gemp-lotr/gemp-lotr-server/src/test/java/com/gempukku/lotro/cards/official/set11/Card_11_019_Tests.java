@@ -39,7 +39,6 @@ public class Card_11_019_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Spot an Elf to heal each companion who has resistance 5 or more.
 		*/
 

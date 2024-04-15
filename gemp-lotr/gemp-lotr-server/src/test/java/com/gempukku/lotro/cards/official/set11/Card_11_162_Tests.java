@@ -39,7 +39,6 @@ public class Card_11_162_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Stealth</b>.<br>Cancel a skirmish involving a Hobbit and a minion whose strength is lower than that Hobbit's resistance.
 		*/
 

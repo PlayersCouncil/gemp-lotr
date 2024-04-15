@@ -41,7 +41,6 @@ public class Card_11_183_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: While this minion is at a battleground site, it is strength +1 and <b>damage +1</b>.
 		*/

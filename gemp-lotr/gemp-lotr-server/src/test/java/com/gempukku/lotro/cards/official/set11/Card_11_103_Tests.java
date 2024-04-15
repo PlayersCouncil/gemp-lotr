@@ -41,7 +41,6 @@ public class Card_11_103_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Ambush (1)</b>.<br>While this minion is at a plains site, it gains an additional ambush (1).
 		*/

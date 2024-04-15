@@ -39,7 +39,7 @@ public class Card_11_248_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Underground</b>. Each character bearing a hand weapon is <b>damage +1</b>.
 		*/
 

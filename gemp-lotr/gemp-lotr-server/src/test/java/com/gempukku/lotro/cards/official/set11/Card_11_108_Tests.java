@@ -41,7 +41,6 @@ public class Card_11_108_Tests
 		 * Subtype: Troll
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>. <b>Fierce</b>. To play, spot an [orc] minion.<br><b>Assignment:</b> Exert this minion to assign it to a companion bearing an artifact. The Free Peoples player may discard an artifact from play to prevent this.
 		*/

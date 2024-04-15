@@ -39,7 +39,6 @@ public class Card_11_209_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time a companion is killed in a skirmish involving a Nazgûl, add a burden.
 		*/
 

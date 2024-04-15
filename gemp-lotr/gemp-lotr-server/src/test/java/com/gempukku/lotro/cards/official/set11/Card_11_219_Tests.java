@@ -41,7 +41,6 @@ public class Card_11_219_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br>Each time Úlairë Attëa is assigned to a fierce skirmish involving a character who has resistance 4 or less, you may exert Úlairë Attëa to add a burden.
 		*/

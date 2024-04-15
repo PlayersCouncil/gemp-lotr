@@ -39,7 +39,6 @@ public class Card_11_106_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Spot your [orc] minion to play an [orc] possession from your discard pile (or, if that minion is at a battleground site, from your draw deck or discard pile).
 		*/
 

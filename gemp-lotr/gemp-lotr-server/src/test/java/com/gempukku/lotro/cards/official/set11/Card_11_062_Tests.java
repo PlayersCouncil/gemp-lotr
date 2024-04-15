@@ -42,7 +42,6 @@ public class Card_11_062_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 7
-
 		 * Game Text: <b>Ranger</b>.<br><b>Fellowship:</b> If Madril is at a forest site, exert him to play the fellowship's next site.
 		*/
 

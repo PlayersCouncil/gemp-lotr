@@ -39,7 +39,7 @@ public class Card_11_258_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Battleground</b>. Each time a companion is killed, add a burden.
 		*/
 

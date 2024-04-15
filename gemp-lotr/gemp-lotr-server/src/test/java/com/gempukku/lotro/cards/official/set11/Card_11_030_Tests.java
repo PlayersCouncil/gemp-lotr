@@ -42,7 +42,6 @@ public class Card_11_030_Tests
 		 * Strength: 5
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: To play, spot a [gandalf] companion.<br><b>Skirmish:</b> Exert Erland to take a [gandalf] skirmish event from your discard pile into hand.
 		*/
 

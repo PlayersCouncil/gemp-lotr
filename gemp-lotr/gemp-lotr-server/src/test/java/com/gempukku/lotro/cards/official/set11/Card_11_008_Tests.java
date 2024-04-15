@@ -42,7 +42,6 @@ public class Card_11_008_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 7
-
 		 * Game Text: <b>Damage +1</b>.<br>Each time Gimli wins a skirmish, you may draw a card.
 		*/
 

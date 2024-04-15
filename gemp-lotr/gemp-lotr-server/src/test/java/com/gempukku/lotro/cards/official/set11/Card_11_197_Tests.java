@@ -41,7 +41,6 @@ public class Card_11_197_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>. <b>Muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>While this minion is skirmishing a character who has resistance 3 or less, this minion is strength +3.
 		*/

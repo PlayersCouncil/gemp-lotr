@@ -41,7 +41,6 @@ public class Card_11_099_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Regroup:</b> Spot another [men] minion and 2 Free Peoples characters who each have resistance 5 or less to make the move limit -1 for this turn.
 		*/

@@ -39,7 +39,7 @@ public class Card_11_252_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Battleground</b>. When the fellowship moves from this site, the Free Peoples player may spot 3 burdens to remove a burden.
 		*/
 

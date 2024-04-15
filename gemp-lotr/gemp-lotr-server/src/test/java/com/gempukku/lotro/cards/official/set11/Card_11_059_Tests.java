@@ -40,7 +40,6 @@ public class Card_11_059_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [gondor] Man.<br>While bearer is a ranger or at a river site, he or she is <b>damage +1</b>.
 		*/
 

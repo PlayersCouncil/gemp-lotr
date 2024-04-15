@@ -40,7 +40,6 @@ public class Card_11_016_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be an Elf.<br>While bearer is at a forest or river site, each minion he or she is skirmishing is strength -1.
 		*/
 

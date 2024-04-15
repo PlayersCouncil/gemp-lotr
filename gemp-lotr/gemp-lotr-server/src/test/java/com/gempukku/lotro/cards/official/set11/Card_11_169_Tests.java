@@ -39,7 +39,6 @@ public class Card_11_169_Tests
 		 * Twilight Cost: 6
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Toil 2</b>. <helper>(For each [shire] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot 2 [shire] companions to remove 2 burdens.
 		*/
 

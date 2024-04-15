@@ -41,7 +41,6 @@ public class Card_11_142_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Skirmish:</b> If this minion is at an underground site, exert it to exert a companion it is skirmishing.
 		*/

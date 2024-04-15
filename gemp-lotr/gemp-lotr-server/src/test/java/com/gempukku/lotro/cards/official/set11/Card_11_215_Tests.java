@@ -39,7 +39,6 @@ public class Card_11_215_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Reveal your hand to make a [wraith] minion strength +1 for each [wraith] minion in your hand.
 		*/
 

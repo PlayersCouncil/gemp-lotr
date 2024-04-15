@@ -39,7 +39,7 @@ public class Card_11_234_Tests
 		 * Shadow Number: 0
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Mountain</b>. If this site is in region 2 when the fellowship moves from it during the regroup phase, wound each companion.
 		*/
 

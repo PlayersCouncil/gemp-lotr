@@ -39,7 +39,6 @@ public class Card_11_150_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a [rohan] Man who has resistance 4 or more strength +2 for each wound on each minion he or she is skirmishing.
 		*/
 

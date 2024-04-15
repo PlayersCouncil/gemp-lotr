@@ -39,7 +39,6 @@ public class Card_11_207_Tests
 		 * Twilight Cost: 6
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a Nazgûl to draw 3 cards.
 		*/
 

@@ -39,7 +39,7 @@ public class Card_11_266_Tests
 		 * Shadow Number: 0
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Forest</b>. <b>Shadow:</b> Remove a burden to play a Nazgûl from your discard pile.
 		*/
 

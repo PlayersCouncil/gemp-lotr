@@ -41,7 +41,6 @@ public class Card_11_080_Tests
 		 * Subtype: Man
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Archer</b>.<br>Each time a Free Peoples character is killed, each of your [men] minions is strength +3 until the regroup phase.
 		*/

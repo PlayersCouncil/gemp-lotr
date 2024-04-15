@@ -42,7 +42,6 @@ public class Card_11_159_Tests
 		 * Strength: 7
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: While you can spot a [gandalf] companion, Théoden gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>While Théoden is at a battleground or plains site each [rohan] Man is strength +1.
 		*/
 

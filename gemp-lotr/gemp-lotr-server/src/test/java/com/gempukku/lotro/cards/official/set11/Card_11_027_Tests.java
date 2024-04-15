@@ -42,7 +42,6 @@ public class Card_11_027_Tests
 		 * Strength: 5
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: While this companion is at a forest site, he is strength +2.
 		*/
 

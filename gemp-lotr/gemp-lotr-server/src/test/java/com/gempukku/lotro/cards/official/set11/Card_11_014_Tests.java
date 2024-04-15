@@ -39,7 +39,6 @@ public class Card_11_014_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Discard a [dwarven] card from hand to play a [dwarven] possession from your draw deck on a [dwarven] companion who has resistance 5 or more.
 		*/
 

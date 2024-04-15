@@ -41,7 +41,6 @@ public class Card_11_122_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: While this minion is at an underground site, each character skirmishing it is strength -2.<br>While you can spot 6 companions, each character skirmishing an [orc] minion is strength -2.
 		*/

@@ -39,9 +39,7 @@ public class Card_11_191_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Ranged weapon
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be an [uruk-hai] minion.<br>While bearer is at a battleground site, it is an <b>archer</b>.
 		*/
 

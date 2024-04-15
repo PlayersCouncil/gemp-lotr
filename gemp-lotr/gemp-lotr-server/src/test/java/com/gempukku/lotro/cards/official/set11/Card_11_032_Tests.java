@@ -39,7 +39,6 @@ public class Card_11_032_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: While you can spot a [gandalf] Wizard, each companion who has resistance 6 or more is strength +1.
 		*/
 

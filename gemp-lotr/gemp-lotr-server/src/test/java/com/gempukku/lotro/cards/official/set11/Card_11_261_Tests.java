@@ -39,7 +39,7 @@ public class Card_11_261_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Dwelling</b>. <b>River</b>. When your fellowship moves to this site, you may heal each Hobbit companion.
 		*/
 

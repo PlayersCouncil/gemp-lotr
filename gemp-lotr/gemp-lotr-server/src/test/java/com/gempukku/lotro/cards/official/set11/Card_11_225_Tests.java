@@ -41,7 +41,6 @@ public class Card_11_225_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br>Each time Úlairë Toldëa wins a skirmish, you may play the fellowship's next site.
 		*/

@@ -41,7 +41,6 @@ public class Card_11_138_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: The fellowship's current site gains <b>underground</b>.
 		*/

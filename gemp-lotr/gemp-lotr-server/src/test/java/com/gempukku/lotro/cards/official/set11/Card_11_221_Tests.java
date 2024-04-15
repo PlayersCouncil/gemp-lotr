@@ -41,7 +41,6 @@ public class Card_11_221_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: Each character skirmishing Úlairë Lemenya who has resistance 5 or less is strength -3.
 		*/

@@ -39,7 +39,6 @@ public class Card_11_187_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make an [uruk-hai] minion strength +2 (or +3 if you can spot an exhausted companion).
 		*/
 

@@ -42,7 +42,6 @@ public class Card_11_146_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 7
-
 		 * Game Text: Each time Éowyn wins a skirmish, each other [rohan] Man is strength +1 until the regroup phase.
 		*/
 

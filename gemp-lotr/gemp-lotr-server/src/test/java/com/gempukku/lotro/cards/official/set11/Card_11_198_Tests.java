@@ -41,7 +41,6 @@ public class Card_11_198_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 11
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>While this minion is skirmishing a Free Peoples character who has resistance 5 or less, this minion cannot take wounds.
 		*/

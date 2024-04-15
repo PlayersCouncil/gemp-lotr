@@ -41,7 +41,6 @@ public class Card_11_077_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: While this minion is at a plains site, it is <b>damage +1</b>.
 		*/

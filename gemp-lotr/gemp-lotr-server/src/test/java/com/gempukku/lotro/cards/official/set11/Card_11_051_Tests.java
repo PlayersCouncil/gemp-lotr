@@ -42,7 +42,6 @@ public class Card_11_051_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 5
-
 		 * Game Text: <b>Ring-bound</b>. To play, add a burden.<br>Each time Sméagol wins a skirmish, you may play the fellowship's next site.<br><b>Skirmish:</b> If Sméagol is at a marsh, exert him to cancel a skirmish involving him.
 		*/
 

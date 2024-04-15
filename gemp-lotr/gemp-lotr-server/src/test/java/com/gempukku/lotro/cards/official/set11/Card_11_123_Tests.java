@@ -39,7 +39,6 @@ public class Card_11_123_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot an [orc] minion.<br>Each time the fellowship moves from an underground site, you may take an [orc] minion from your discard pile into hand.
 		*/
 

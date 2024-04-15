@@ -39,7 +39,7 @@ public class Card_11_256_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Dwelling</b>. At the start of your fellowship phase, you may add a burden to play a ranger from your draw deck.
 		*/
 

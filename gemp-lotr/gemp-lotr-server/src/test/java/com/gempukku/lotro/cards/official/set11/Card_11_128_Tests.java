@@ -40,7 +40,6 @@ public class Card_11_128_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 3
-
 		 * Game Text: Bearer must be an [orc] minion.<br>Each time bearer is assigned to skirmish a companion, you may exert that companion.
 		*/
 

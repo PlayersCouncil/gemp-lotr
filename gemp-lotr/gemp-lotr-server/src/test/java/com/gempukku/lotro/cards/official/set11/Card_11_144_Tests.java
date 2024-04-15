@@ -39,7 +39,6 @@ public class Card_11_144_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: When you play this condition, spot a mounted [rohan] Man to add 3 [rohan] tokens here.<br><b>Response:</b> If a minion is played at a plains site, discard this condition or remove a [rohan] token from here to exert that minion.
 		*/
 

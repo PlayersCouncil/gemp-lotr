@@ -39,9 +39,7 @@ public class Card_11_001_Tests
 		 * Twilight Cost: 
 		 * Type: Onering
 		 * Subtype: 
-
 		 * Resistance: 2
-
 		 * Game Text: <b>Response:</b> If the Ring-bearer is about to take a wound, he or she wears The One Ring until the regroup phase.<br>While the Ring-bearer is wearing The One Ring, each time he or she is about to take a wound, add a burden instead.
 		*/
 

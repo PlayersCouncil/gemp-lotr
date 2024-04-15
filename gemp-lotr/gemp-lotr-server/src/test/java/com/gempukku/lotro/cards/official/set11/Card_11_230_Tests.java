@@ -39,7 +39,7 @@ public class Card_11_230_Tests
 		 * Shadow Number: 0
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Dwelling</b>. <b>Shadow:</b> Play a Nazgûl to discard a condition from play.
 		*/
 

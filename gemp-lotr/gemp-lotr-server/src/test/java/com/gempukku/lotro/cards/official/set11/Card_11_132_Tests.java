@@ -41,7 +41,6 @@ public class Card_11_132_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may take an [orc] condition from your discard pile into hand.
 		*/

@@ -41,7 +41,6 @@ public class Card_11_090_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: This minion is strength +1 for each card in the Free Peoples player's hand.
 		*/

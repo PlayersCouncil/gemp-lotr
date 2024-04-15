@@ -39,7 +39,6 @@ public class Card_11_110_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Spot an [orc] minion to reveal the Free Peoples player's hand. The Free Peoples player chooses to either discard a revealed Free Peoples event or add a burden.
 		*/
 

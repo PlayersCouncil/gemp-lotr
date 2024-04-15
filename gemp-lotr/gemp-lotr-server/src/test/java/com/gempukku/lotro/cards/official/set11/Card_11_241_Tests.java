@@ -39,7 +39,7 @@ public class Card_11_241_Tests
 		 * Shadow Number: 0
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Battleground</b>. When the fellowship moves to this site, add (2) for each companion over 5.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_11_114_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot an [orc] minion.<br>Each time a companion exerts, you may add (1) (or (2) if you can spot 6 companions).
 		*/
 

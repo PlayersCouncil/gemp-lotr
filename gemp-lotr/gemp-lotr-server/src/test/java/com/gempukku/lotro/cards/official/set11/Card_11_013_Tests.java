@@ -39,7 +39,6 @@ public class Card_11_013_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If a Dwarf who has resistance 3 or more is about to take a wound, prevent that.
 		*/
 

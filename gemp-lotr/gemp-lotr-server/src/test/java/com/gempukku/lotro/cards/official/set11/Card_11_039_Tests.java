@@ -39,7 +39,6 @@ public class Card_11_039_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Exert a [gandalf] Wizard and spot 2 companions who each have resistance 7 or more to wound a minion that Wizard is skirmishing twice.
 		*/
 

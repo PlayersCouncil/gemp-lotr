@@ -42,7 +42,6 @@ public class Card_11_065_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: <b>Ranger</b>.<br>When you play this companion, you may play the fellowship's next site.
 		*/
 

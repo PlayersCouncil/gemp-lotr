@@ -41,7 +41,6 @@ public class Card_11_126_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: When you cannot spot another [orc] minion, discard this minion from play.
 		*/

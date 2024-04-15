@@ -42,7 +42,6 @@ public class Card_11_022_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 7
-
 		 * Game Text: At the start of the archery phase, you may spot another Elf to exert a minion.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_11_124_Tests
 		 * Subtype: Orc
 		 * Strength: 12
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: Each time this minion wins a skirmish, you may exert each companion who has resistance 4 or less.
 		*/

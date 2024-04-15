@@ -41,7 +41,6 @@ public class Card_11_133_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may spot another [orc] minion to reveal the top card of the Free Peoples player's deck. If it is a Shadow card, add (X), where X is its twilight cost.
 		*/

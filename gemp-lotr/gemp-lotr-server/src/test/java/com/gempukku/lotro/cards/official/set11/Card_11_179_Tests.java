@@ -41,7 +41,6 @@ public class Card_11_179_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br><b>Response:</b> If a special ability of a companion who has resistance 5 or less is used, exert this minion to cancel its effect.
 		*/

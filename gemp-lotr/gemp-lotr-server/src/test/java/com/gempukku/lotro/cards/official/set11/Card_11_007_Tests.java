@@ -42,7 +42,6 @@ public class Card_11_007_Tests
 		 * Strength: 5
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: While Farin is at a battleground or underground site, he gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
 		*/
 

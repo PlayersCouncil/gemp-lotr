@@ -39,7 +39,6 @@ public class Card_11_182_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If your [uruk-hai] minion wins a skirmish, discard a condition from play.
 		*/
 

@@ -42,7 +42,6 @@ public class Card_11_168_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 9
-
 		 * Game Text: For each other unbound companion assigned to a skirmish, Merry is strength +2.
 		*/
 

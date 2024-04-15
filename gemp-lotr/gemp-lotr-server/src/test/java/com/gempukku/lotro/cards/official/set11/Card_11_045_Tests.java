@@ -39,7 +39,6 @@ public class Card_11_045_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Spot Gollum to add (3) and exchange one of your sites on the adventure path with another site from your adventure deck.
 		*/
 

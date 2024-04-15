@@ -39,7 +39,7 @@ public class Card_11_239_Tests
 		 * Shadow Number: 0
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Forest</b>. When the fellowship moves to this site, add (1) for each Free Peoples weapon.
 		*/
 

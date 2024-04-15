@@ -41,7 +41,6 @@ public class Card_11_111_Tests
 		 * Subtype: Orc
 		 * Strength: 13
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Toil 2</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -2.)</helper>
 		*/

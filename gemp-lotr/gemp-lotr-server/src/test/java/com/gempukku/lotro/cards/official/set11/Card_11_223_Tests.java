@@ -41,7 +41,6 @@ public class Card_11_223_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>While Úlairë Nertëa is at a forest site, he is strength +2.<br>While you can spot 6 companions, each Nazgûl is strength +2.
 		*/

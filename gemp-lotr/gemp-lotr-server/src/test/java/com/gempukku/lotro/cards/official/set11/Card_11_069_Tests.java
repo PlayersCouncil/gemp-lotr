@@ -41,7 +41,6 @@ public class Card_11_069_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: While you can spot a companion who has resistance 3 or less, this minion's twilight cost is -2.
 		*/

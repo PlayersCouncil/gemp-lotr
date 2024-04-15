@@ -41,7 +41,6 @@ public class Card_11_200_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: Each time this minion is assigned to skirmish a character who has resistance 3 or less, you may exert this minion to discard a possession borne by that character.
 		*/

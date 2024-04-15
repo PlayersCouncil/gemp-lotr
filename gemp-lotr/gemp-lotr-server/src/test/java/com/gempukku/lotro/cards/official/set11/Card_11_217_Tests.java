@@ -39,7 +39,6 @@ public class Card_11_217_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Regroup:</b> Discard your Nazgûl from play to add a [wraith] token here. The Free Peoples player may return a companion to hand to prevent the placement of that token.<br>When you can spot 4 [wraith] tokens on this condition, the Ring-bearer is corrupted.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_11_047_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Exert Gollum to make another minion strength +2 (or +3 if Gollum is at a mountain site).
 		*/
 

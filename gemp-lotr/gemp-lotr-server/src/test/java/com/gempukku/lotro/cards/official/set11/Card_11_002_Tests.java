@@ -40,7 +40,6 @@ public class Card_11_002_Tests
 		 * Type: Onering
 		 * Subtype: 
 		 * Strength: 1
-
 		 * Game Text: <b>Response:</b> If the Ring-bearer is about to take a wound in a skirmish, he or she wears The One Ring until the regroup phase.<br>While the Ring-bearer is wearing The One Ring, each time he or she is about to take a wound in a skirmish, add a burden instead.
 		*/
 

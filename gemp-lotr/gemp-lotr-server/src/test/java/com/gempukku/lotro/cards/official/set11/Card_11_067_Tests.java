@@ -41,7 +41,6 @@ public class Card_11_067_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Archer</b>.<br>While you can spot a companion who has resistance 4 or less, the minion archery total is +1.
 		*/

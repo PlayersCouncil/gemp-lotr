@@ -39,7 +39,6 @@ public class Card_11_112_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make an [orc] minion strength +1 for each underground site you can spot.
 		*/
 

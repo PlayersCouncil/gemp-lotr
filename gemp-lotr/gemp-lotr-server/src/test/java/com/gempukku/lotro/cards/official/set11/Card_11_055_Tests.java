@@ -39,7 +39,6 @@ public class Card_11_055_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be a [gondor] Man.<br>Each minion skirmishing bearer loses all <b>damage</b> bonuses.<br>While bearer is at a battleground site and unwounded, he or she is <b>defender +1</b>.
 		*/
 

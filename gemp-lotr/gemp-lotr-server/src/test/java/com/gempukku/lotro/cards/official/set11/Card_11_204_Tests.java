@@ -41,7 +41,6 @@ public class Card_11_204_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 14
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>. <b>Toil 1</b>. <helper>(For each [uruk-hai] character you exert when playing this, its twilight cost is -1.)</helper>
 		*/

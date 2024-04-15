@@ -39,7 +39,6 @@ public class Card_11_212_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Skirmish:</b> Transfer this condition from your support area to a companion your Nazgûl is skirmishing. Limit 1 per companion.<br>Each [wraith] minion skirmishing bearer is strength +1 for each forest site you can spot.
 		*/
 

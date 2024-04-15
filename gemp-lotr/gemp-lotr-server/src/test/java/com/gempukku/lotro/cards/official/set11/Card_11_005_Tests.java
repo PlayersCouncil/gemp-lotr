@@ -39,7 +39,6 @@ public class Card_11_005_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a Dwarf.<br>Each companion is <b>damage +1</b>.<br>Discard this condition at the end of your turn.
 		*/
 

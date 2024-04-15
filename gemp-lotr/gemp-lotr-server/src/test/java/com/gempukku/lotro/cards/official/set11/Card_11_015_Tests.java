@@ -42,7 +42,6 @@ public class Card_11_015_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 7
-
 		 * Game Text: Each minion skirmishing Arwen is strength -1 for each forest site on the adventure path.
 		*/
 

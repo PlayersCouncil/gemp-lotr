@@ -42,7 +42,6 @@ public class Card_11_054_Tests
 		 * Strength: 8
 		 * Vitality: 4
 		 * Resistance: 8
-
 		 * Game Text: <b>Ranger</b>.<br>Each time the fellowship moves, add (1).
 		*/
 

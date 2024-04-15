@@ -39,7 +39,6 @@ public class Card_11_180_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make an [uruk-hai] minion strength +1 for each battleground site you can spot.
 		*/
 

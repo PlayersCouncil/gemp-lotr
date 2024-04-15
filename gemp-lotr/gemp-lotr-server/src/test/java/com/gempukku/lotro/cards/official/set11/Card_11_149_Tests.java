@@ -39,7 +39,6 @@ public class Card_11_149_Tests
 		 * Twilight Cost: 4
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Toil 2</b>. <helper>(For each [rohan] character you exert when playing this, its twilight cost is -2.)</helper><br>Bearer must be a [rohan] Man.<br><b>Assignment:</b> Discard this condition from play to make bearer <b>defender +1</b>.
 		*/
 

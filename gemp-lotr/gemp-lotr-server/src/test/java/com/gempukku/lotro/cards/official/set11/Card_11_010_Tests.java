@@ -42,7 +42,6 @@ public class Card_11_010_Tests
 		 * Strength: 7
 		 * Vitality: 3
 		 * Resistance: 7
-
 		 * Game Text: <b>Response:</b> If a [dwarven] companion is about to take a wound in a skirmish, discard 2 [dwarven] cards from play (except characters) to prevent that.
 		*/
 

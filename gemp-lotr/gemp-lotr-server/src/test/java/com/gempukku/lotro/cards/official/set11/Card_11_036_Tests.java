@@ -39,7 +39,6 @@ public class Card_11_036_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Spot a [gandalf] Wizard to reveal your hand and make a minion strength -3 for each companion in your hand (or -4 for each if the fellowship is at a battleground site).
 		*/
 

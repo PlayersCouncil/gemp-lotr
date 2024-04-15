@@ -39,7 +39,6 @@ public class Card_11_087_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot a [men] minion.<br>Bearer must be a companion.<br>While bearer is skirmishing a [men] minion, bearer loses all strength and <b>damage</b> bonuses from possessions.
 		*/
 

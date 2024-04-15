@@ -39,7 +39,6 @@ public class Card_11_048_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time a companion loses a fierce skirmish, you may exert Gollum to add a burden.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_11_063_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Heal each [gondor] companion who has resistance 5 or more.
 		*/
 

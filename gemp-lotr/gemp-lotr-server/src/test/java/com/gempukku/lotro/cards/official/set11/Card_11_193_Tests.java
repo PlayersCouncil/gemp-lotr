@@ -41,7 +41,6 @@ public class Card_11_193_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>The fellowship's current site gains <b>battleground</b>.
 		*/

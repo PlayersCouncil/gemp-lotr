@@ -40,7 +40,6 @@ public class Card_11_153_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>If bearer is mounted, bearer is <b>damage +1</b>.
 		*/
 

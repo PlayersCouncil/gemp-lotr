@@ -39,7 +39,6 @@ public class Card_11_004_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Spot a Dwarf. For each wound on that Dwarf, make him strength +2 and <b>damage +1</b>.
 		*/
 

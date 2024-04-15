@@ -42,7 +42,6 @@ public class Card_11_053_Tests
 		 * Strength: 8
 		 * Vitality: 4
 		 * Resistance: 8
-
 		 * Game Text: <b>Ranger</b>.<br>Each time a Free Peoples skirmish event is played, you may exert Aragorn to wound a minion he is skirmishing.
 		*/
 

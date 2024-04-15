@@ -40,7 +40,6 @@ public class Card_11_035_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Gandalf.<br>Each time Gandalf wins a skirmish, you may remove a burden.
 		*/
 

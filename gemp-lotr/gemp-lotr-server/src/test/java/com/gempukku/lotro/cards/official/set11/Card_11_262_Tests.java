@@ -39,7 +39,7 @@ public class Card_11_262_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Mountain</b>. <b>Maneuver:</b> Exert your [orc] minion to discard a card at random from the Free Peoples player's hand.
 		*/
 

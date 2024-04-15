@@ -41,7 +41,6 @@ public class Card_11_188_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>While you can spot an exhausted companion, this minion is strength +3.
 		*/

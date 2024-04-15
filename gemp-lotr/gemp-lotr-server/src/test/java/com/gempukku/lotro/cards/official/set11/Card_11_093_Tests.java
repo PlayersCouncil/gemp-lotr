@@ -41,7 +41,6 @@ public class Card_11_093_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: Each time this minion is assigned to a character who has resistance 5 or less, you may discard a possession borne by that character.
 		*/

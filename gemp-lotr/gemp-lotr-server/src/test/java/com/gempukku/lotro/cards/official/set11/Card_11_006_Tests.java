@@ -39,7 +39,6 @@ public class Card_11_006_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Exert the Ring-bearer and a Dwarf to make that Dwarf strength +X, where X equals that Dwarf's resistance.
 		*/
 

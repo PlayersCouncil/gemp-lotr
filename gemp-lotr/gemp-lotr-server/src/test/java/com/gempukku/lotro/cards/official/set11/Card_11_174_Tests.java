@@ -39,7 +39,6 @@ public class Card_11_174_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a Hobbit strength +1 for each companion who has resistance 7 or more.
 		*/
 

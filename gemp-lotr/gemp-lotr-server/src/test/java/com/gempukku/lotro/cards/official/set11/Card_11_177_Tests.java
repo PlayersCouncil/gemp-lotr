@@ -41,7 +41,6 @@ public class Card_11_177_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>Each Free Peoples archer who has resistance 5 or less does not add to the Free Peoples archery total.
 		*/

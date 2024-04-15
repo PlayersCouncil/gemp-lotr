@@ -41,7 +41,6 @@ public class Card_11_097_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may exert it to make it <b>fierce</b> until the regroup phase.<br>While you can spot 6 companions, each [men] minion is <b>fierce</b>.
 		*/

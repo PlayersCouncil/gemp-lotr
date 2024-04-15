@@ -39,7 +39,7 @@ public class Card_11_264_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Dwelling</b>. When the fellowship moves to this site, the Free Peoples player wounds a companion for each ally.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_11_028_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [gandalf] Wizard.<br><b>Regroup:</b> Stack a spell from hand here.<br><b>Fellowship:</b> Discard a [gandalf] card from hand to take a card stacked here into hand.
 		*/
 

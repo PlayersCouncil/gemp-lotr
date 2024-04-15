@@ -39,7 +39,6 @@ public class Card_11_056_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a ranger strength +2 (or +3 if he or she is skirmishing a minion who has a damage bonus).
 		*/
 

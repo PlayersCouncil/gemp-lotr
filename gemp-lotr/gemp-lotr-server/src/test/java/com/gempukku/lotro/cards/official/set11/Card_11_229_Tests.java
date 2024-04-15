@@ -39,7 +39,7 @@ public class Card_11_229_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Mountain</b>. At the start of your fellowship phase, you may exert a Dwarf to play a [dwarven] possession from your draw deck.
 		*/
 

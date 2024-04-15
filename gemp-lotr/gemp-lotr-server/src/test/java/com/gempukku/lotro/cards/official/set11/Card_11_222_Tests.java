@@ -41,7 +41,6 @@ public class Card_11_222_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 2
 		 * Game Text: <b>Fierce</b>.<br><b>Shadow:</b> Exert Úlairë Nelya to replace the fellowship's current site with a site from your adventure deck.
 		*/

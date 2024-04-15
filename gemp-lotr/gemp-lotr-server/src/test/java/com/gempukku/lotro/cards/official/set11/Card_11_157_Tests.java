@@ -39,7 +39,6 @@ public class Card_11_157_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [rohan] Man.<br>Each time a Shadow condition is played, you may exert a minion.<br><b>Response:</b> If a minion exerts as a cost of its special ability, discard this condition to prevent that and return that minion to its owner's hand.
 		*/
 

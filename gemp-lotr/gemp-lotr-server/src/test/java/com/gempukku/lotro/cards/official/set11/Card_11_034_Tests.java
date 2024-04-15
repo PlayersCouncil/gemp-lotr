@@ -39,9 +39,7 @@ public class Card_11_034_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Staff
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be a Wizard.<br>If bearer is Gandalf, he gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>Each time bearer wins a skirmish, choose a Shadow player who must wound a minion.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_11_208_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time your [wraith] minion wins a skirmish, you may discard this condition to discard a Free Peoples condition from play.
 		*/
 

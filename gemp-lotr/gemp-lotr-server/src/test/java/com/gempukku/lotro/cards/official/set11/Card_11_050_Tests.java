@@ -39,7 +39,6 @@ public class Card_11_050_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: When you play this condition, name forest, mountain, plains, or river.<br>Each time the fellowship moves to a site that has the named keyword, you may exert Gollum or Sméagol to remove (4).
 		*/
 

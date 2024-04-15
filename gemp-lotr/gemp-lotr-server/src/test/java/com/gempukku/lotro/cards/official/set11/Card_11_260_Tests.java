@@ -39,7 +39,7 @@ public class Card_11_260_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Forest</b>. Each time you play an artifact or possession on your companion, you may draw a card.
 		*/
 

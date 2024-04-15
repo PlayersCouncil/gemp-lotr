@@ -39,7 +39,6 @@ public class Card_11_017_Tests
 		 * Twilight Cost: 6
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot an Elf.<br><b>Toil 2</b>. <helper>(For each [elven] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Archery:</b> Discard this condition to make the fellowship archery total +2.
 		*/
 

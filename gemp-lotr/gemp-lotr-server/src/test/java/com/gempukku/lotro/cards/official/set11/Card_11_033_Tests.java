@@ -42,7 +42,6 @@ public class Card_11_033_Tests
 		 * Strength: 7
 		 * Vitality: 4
 		 * Resistance: 7
-
 		 * Game Text: While Gandalf is in region 1, each other companion is strength +2.<br>While Gandalf is in region 2, each companion is strength +1.<br>While Gandalf is in region 3, he is strength +2.
 		*/
 

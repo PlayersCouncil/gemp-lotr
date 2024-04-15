@@ -39,7 +39,6 @@ public class Card_11_029_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Exert a [gandalf] Wizard to remove a burden (or 2 burdens if the fellowship is at a dwelling site).
 		*/
 

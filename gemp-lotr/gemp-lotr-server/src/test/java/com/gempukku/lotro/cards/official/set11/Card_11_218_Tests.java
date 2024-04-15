@@ -39,7 +39,6 @@ public class Card_11_218_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a Nazgûl.<br>Each time the Free Peoples player plays a companion, that companion is exhausted unless the Free Peoples player pays its twilight cost again.
 		*/
 

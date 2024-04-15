@@ -39,7 +39,6 @@ public class Card_11_070_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Spot 2 [men] minions to wound an unbound companion.
 		*/
 

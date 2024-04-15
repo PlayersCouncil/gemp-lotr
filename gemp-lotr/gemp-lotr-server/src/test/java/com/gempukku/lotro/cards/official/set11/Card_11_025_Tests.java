@@ -39,7 +39,6 @@ public class Card_11_025_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: Exert an Elf who has resistance 4 or more to wound a minion.
 		*/
 

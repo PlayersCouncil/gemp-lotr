@@ -41,7 +41,6 @@ public class Card_11_098_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time another [men] minion wins a skirmish, make this minion strength +3 until the regroup phase.
 		*/

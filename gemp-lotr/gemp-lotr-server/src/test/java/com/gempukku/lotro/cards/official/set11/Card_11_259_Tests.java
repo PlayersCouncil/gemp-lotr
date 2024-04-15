@@ -39,7 +39,7 @@ public class Card_11_259_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: At the start of your fellowship phase, you may exert a [rohan] Man to play a [rohan] mount from your draw deck.
 		*/
 

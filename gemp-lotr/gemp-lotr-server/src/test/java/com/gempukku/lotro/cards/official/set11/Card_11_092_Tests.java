@@ -39,7 +39,6 @@ public class Card_11_092_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a [men] minion strength +2 (or +4 if that minion is at a battleground or plains site).
 		*/
 

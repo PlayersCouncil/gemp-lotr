@@ -40,7 +40,6 @@ public class Card_11_130_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be an [orc] Orc.<br>When you play this possession, you may exert a companion.
 		*/
 

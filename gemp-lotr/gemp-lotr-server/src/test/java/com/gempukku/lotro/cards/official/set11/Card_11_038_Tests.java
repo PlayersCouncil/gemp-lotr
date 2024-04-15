@@ -39,7 +39,6 @@ public class Card_11_038_Tests
 		 * Twilight Cost: 6
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Spell</b>. <b>Toil 2</b>. <helper>(For each [gandalf] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a [gandalf] Wizard to discard 2 conditions from play.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_11_073_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: While this minion is at a battleground site, it is <b>fierce</b>.
 		*/

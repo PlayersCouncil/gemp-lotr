@@ -39,7 +39,6 @@ public class Card_11_078_Tests
 		 * Twilight Cost: 7
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: <b>Toil 2</b>. <helper>(For each [men] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a [men] minion to make the minion archery total +3.
 		*/
 

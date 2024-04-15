@@ -41,7 +41,6 @@ public class Card_11_075_Tests
 		 * Subtype: Man
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Exert Easterling Host and make it strength -2 until the regroup phase to make each other [men] minion strength +1 until the regroup phase.
 		*/

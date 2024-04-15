@@ -41,7 +41,6 @@ public class Card_11_220_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: While Úlairë Cantëa is at a forest or dwelling site, he is strength +2 and <b>fierce</b>.
 		*/

@@ -39,7 +39,6 @@ public class Card_11_061_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: When you play this condition, spot a [gondor] Man to add 3 [gondor] tokens here.<br><b>Fellowship:</b> Add (2) and either discard this condition or remove a [gondor] token from here to heal a [gondor] Man.
 		*/
 

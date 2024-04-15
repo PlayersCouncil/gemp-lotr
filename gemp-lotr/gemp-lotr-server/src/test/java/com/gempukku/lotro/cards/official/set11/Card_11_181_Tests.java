@@ -41,7 +41,6 @@ public class Card_11_181_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: To play, spot an [uruk-hai] minion.<br>Each time a companion exerts, you may draw a card.
 		*/

@@ -39,7 +39,6 @@ public class Card_11_060_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Exert any number of [gondor] companions who have total resistance 12 or more to make a minion skirmishing a [gondor] companion strength -3 for each companion exerted this way.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_11_100_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Maneuver:</b> Exert this minion to transfer a possession or condition borne by a character to another eligible bearer.
 		*/

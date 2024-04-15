@@ -41,7 +41,6 @@ public class Card_11_201_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>. <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Response:</b> If an [uruk-hai] minion is about to take a wound in a skirmish, exert or discard this minion to prevent that.
 		*/

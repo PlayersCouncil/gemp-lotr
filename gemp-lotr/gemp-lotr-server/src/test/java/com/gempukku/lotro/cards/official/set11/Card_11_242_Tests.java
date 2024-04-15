@@ -39,7 +39,7 @@ public class Card_11_242_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Dwelling</b>. At the start of your fellowship phase, you may exert 2 Hobbits to play a Hobbit from your draw deck.
 		*/
 

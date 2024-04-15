@@ -40,7 +40,6 @@ public class Card_11_003_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a Dwarf.<br>While bearer is at a mountain site, he is <b>damage +1</b>.
 		*/
 

@@ -39,7 +39,7 @@ public class Card_11_263_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Underground</b>. When the fellowship moves from this site, remove (2).
 		*/
 

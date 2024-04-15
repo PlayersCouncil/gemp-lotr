@@ -39,7 +39,6 @@ public class Card_11_052_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Spot a [gollum] minion at a mountain site to play a minion from your discard pile.
 		*/
 

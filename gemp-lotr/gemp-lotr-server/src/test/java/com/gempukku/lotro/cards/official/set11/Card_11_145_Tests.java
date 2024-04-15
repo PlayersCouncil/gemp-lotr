@@ -42,7 +42,6 @@ public class Card_11_145_Tests
 		 * Strength: 7
 		 * Vitality: 3
 		 * Resistance: 7
-
 		 * Game Text: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br>Each time the fellowship moves, you may exert Éomer to return a minion to its owner's hand.
 		*/
 

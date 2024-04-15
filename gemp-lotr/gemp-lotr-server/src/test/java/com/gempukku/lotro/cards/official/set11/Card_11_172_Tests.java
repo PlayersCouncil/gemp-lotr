@@ -42,7 +42,6 @@ public class Card_11_172_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 10
-
 		 * Game Text: <b>Ring-bound</b>.<br>Each other companion is resistance +1.
 		*/
 

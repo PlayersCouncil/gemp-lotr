@@ -41,7 +41,6 @@ public class Card_11_115_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: While this minion is at an underground site, it is strength +2.
 		*/

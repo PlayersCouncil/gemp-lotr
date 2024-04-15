@@ -41,7 +41,6 @@ public class Card_11_119_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>This minion is strength +1 for each companion who is not assigned to a skirmish.
 		*/

@@ -39,7 +39,6 @@ public class Card_11_141_Tests
 		 * Twilight Cost: 8
 		 * Type: Event
 		 * Subtype: Assignment
-
 		 * Game Text: <b>Toil 3</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -3.)</helper><br>Assign an [orc] minion to a companion (except the Ring-bearer).
 		*/
 

@@ -39,7 +39,6 @@ public class Card_11_044_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time a companion loses a skirmish, you may exert Gollum to take a [gollum] card into hand from your discard pile.
 		*/
 

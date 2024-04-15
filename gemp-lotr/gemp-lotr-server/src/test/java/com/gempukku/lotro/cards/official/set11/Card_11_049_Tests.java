@@ -39,7 +39,6 @@ public class Card_11_049_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship or regroup
-
 		 * Game Text: Spot Sméagol to play the fellowship's next site. Then you may add a burden to take this card back into hand.
 		*/
 

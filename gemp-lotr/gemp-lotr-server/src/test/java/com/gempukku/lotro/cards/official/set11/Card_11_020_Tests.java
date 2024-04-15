@@ -39,7 +39,6 @@ public class Card_11_020_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make an Elf strength +2 (or +3 at a river site).
 		*/
 

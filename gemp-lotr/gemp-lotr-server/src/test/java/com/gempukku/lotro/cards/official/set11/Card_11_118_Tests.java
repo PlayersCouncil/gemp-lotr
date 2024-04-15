@@ -39,7 +39,6 @@ public class Card_11_118_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Spot 2 [orc] minions to discard a condition from play. The Free Peoples player may discard the top 6 cards of his or her draw deck to prevent this.
 		*/
 

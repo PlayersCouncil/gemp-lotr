@@ -39,7 +39,7 @@ public class Card_11_249_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Marsh</b>. When the fellowship moves to here, heal each character who has resistance 5 or more and exert each other character.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_11_213_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Shadow:</b> Spot a Nazgûl and reveal a Nazgûl from hand to place the revealed card beneath your draw deck and draw a card.
 		*/
 

@@ -39,9 +39,7 @@ public class Card_11_040_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Mount
-
 		 * Resistance: 2
-
 		 * Game Text: Bearer must be Gandalf.<br>Each time Gandalf is about to take a wound, you may add a burden to prevent that.
 		*/
 

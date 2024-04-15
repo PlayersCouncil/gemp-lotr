@@ -41,7 +41,6 @@ public class Card_11_199_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 14
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>Each time a Free Peoples event is played during a skirmish involving this minion, this minion is strength -2 until the regroup phase.
 		*/

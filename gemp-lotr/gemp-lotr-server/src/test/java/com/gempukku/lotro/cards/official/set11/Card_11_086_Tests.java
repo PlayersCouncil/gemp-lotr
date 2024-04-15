@@ -41,7 +41,6 @@ public class Card_11_086_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: Each time the Free Peoples player assigns this minion to a skirmish, add (1) for each Free Peoples character who has resistance 5 or less.
 		*/

@@ -39,7 +39,6 @@ public class Card_11_071_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Toil 2</b>. <helper>(For each [men] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a [men] minion to discard a possession from play.
 		*/
 

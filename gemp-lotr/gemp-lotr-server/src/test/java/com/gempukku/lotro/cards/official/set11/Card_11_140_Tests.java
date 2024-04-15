@@ -39,7 +39,6 @@ public class Card_11_140_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make an [orc] minion strength +2 (or +4 if it is a lurker).
 		*/
 

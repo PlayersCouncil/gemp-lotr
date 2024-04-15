@@ -39,7 +39,7 @@ public class Card_11_253_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Plains</b>. Each [men] minion gains <b>ambush</b> (1).
 		*/
 

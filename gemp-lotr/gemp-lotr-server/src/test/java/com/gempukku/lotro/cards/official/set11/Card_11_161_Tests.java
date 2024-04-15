@@ -39,7 +39,6 @@ public class Card_11_161_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: For each dwelling and forest site on the adventure path, make a Hobbit strength +1.
 		*/
 

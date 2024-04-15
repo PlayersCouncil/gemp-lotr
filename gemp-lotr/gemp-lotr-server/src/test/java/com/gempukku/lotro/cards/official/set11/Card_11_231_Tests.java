@@ -39,7 +39,7 @@ public class Card_11_231_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Forest</b>. No more than 1 minion can be assigned to each skirmish.
 		*/
 

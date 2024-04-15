@@ -39,7 +39,7 @@ public class Card_11_251_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Forest</b>. At the start of your fellowship phase, you may heal 2 Elves.
 		*/
 

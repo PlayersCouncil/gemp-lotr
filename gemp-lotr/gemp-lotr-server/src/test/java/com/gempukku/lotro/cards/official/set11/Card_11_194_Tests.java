@@ -41,7 +41,6 @@ public class Card_11_194_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Archer</b>. <b>Damage +1</b>. <b>Muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>Lurtz is strength +3 for each exhausted companion you can spot.
 		*/

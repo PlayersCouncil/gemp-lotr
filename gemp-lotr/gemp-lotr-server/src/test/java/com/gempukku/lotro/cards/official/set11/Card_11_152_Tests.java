@@ -42,7 +42,6 @@ public class Card_11_152_Tests
 		 * Strength: 5
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: When you play this companion, each [rohan] companion is strength +2 until the regroup phase.
 		*/
 

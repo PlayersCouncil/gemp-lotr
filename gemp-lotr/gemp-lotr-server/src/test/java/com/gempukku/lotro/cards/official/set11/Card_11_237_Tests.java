@@ -39,7 +39,7 @@ public class Card_11_237_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Plains</b>. <b>Skirmish:</b> Exert your character (except an enduring character), to make it strength +2.
 		*/
 

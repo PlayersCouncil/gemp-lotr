@@ -40,7 +40,6 @@ public class Card_11_009_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a Dwarf.<br>Bearer gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br><b>Skirmish:</b> If bearer is Gimli and he is at a battleground site, exert him to wound a minion he is skirmishing.
 		*/
 

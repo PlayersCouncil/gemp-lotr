@@ -41,7 +41,6 @@ public class Card_11_137_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion at an underground site, you may spot another [orc] minion to add (2).
 		*/

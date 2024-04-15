@@ -39,7 +39,6 @@ public class Card_11_216_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Maneuver:</b> Remove (5) to make this condition a <b>fierce</b> [wraith] minion until the start of the regroup phase that has 10 strength and 3 vitality, and cannot bear other cards. This card is still a condition.<br>At the start of the regroup phase, remove all tokens from here.
 		*/
 

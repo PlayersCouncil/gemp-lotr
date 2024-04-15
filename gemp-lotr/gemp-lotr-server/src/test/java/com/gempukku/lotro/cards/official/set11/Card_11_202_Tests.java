@@ -41,7 +41,6 @@ public class Card_11_202_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>While this minion is skirmishing a character who has resistance 4 or less, this minion is <b>damage +1</b>.
 		*/

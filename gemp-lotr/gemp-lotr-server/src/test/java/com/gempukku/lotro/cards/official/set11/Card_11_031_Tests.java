@@ -39,7 +39,6 @@ public class Card_11_031_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: To play, exert a [gandalf] Wizard.<br>Discard 2 cards from hand to take a Free Peoples card and a Shadow card from your discard pile into hand.
 		*/
 

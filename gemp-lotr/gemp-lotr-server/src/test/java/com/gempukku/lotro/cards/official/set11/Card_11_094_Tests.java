@@ -39,9 +39,7 @@ public class Card_11_094_Tests
 		 * Twilight Cost: 3
 		 * Type: Possession
 		 * Subtype: Shield
-
 		 * Vitality: 2
-
 		 * Game Text: Bearer must be a [men] minion.<br>The twilight cost of this possession is -1 for each Free Peoples possession you spot.<br>Bearer cannot take wounds except during a skirmish.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_11_175_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Spot X Hobbits to make an unbound Hobbit resistance +X.
 		*/
 

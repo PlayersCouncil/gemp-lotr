@@ -39,7 +39,6 @@ public class Card_11_043_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Discard Gollum from play to wound an unbound companion who has resistance 6 or less.
 		*/
 

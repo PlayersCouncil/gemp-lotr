@@ -39,7 +39,7 @@ public class Card_11_254_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Plains</b>. At the start of the maneuver phase, the Free Peoples player must add a burden or discard 3 cards from hand.
 		*/
 

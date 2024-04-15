@@ -39,7 +39,7 @@ public class Card_11_228_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>River</b>. When the fellowship moves to this site, discard each ally from play.
 		*/
 

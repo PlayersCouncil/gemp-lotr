@@ -41,7 +41,6 @@ public class Card_11_203_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>While you can spot another [uruk-hai] minion assigned to a skirmish, this minion cannot take wounds.
 		*/

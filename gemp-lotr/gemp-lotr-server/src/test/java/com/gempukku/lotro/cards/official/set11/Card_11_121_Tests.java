@@ -41,7 +41,6 @@ public class Card_11_121_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may spot another [orc] minion and a companion who has resistance 3 or less to add (2).
 		*/

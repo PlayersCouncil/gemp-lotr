@@ -42,7 +42,6 @@ public class Card_11_057_Tests
 		 * Strength: 7
 		 * Vitality: 3
 		 * Resistance: 5
-
 		 * Game Text: <b>Knight</b>.<br>Each time Boromir wins a skirmish, you may heal a [gondor] companion.
 		*/
 

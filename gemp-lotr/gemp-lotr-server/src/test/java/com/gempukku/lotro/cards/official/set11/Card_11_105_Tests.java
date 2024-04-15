@@ -39,9 +39,7 @@ public class Card_11_105_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Resistance: -2
-
 		 * Game Text: To play, spot a [men] minion.<br>Bearer must be a companion (except the Ring-bearer).
 		*/
 

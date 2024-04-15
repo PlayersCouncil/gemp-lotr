@@ -41,7 +41,6 @@ public class Card_11_084_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Skirmish:</b> Remove (3) to make this minion <b>damage +1</b>.
 		*/

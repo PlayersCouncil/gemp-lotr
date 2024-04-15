@@ -39,7 +39,7 @@ public class Card_11_257_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Plains</b>. During the archery phase, [uruk-hai] minions cannot take wounds.
 		*/
 

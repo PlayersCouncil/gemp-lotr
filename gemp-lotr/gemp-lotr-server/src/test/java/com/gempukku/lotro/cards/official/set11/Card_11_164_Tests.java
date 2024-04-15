@@ -42,7 +42,6 @@ public class Card_11_164_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 10
-
 		 * Game Text: <b>Ring-bearer</b>. <b>Ring-bound</b>.<br>At the start of the regroup phase, you may exert Frodo to make him gain <b>muster</b> until the end of the regroup phase. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
 		*/
 

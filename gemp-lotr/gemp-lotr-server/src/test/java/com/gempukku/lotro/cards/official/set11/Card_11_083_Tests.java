@@ -41,7 +41,6 @@ public class Card_11_083_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: When you cannot spot another [men] minion, discard this minion.
 		*/

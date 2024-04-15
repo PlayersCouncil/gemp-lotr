@@ -39,7 +39,6 @@ public class Card_11_211_Tests
 		 * Twilight Cost: 7
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a Nazgûl to add a burden.
 		*/
 

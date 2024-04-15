@@ -41,7 +41,6 @@ public class Card_11_074_Tests
 		 * Subtype: Man
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Maneuver:</b> Exert this minion to add (1) for each companion who has resistance 5 or less.
 		*/

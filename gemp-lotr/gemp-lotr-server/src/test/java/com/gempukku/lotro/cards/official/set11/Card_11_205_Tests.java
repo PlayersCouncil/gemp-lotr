@@ -41,7 +41,6 @@ public class Card_11_205_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>. <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>This minion is strength +2 for each [uruk-hai] minion not assigned to a skirmish.
 		*/

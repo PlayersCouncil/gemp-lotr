@@ -39,7 +39,7 @@ public class Card_11_265_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>Underground</b>. Each unwounded [gondor] Man is <b>defender +1</b>.
 		*/
 

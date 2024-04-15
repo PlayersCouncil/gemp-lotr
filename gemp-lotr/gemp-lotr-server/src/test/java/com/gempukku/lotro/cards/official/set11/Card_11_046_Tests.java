@@ -39,7 +39,6 @@ public class Card_11_046_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make Sméagol strength +1 for each companion who has resistance 5 or more.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_11_068_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Skirmish:</b> Remove (2) to make a lurker strength +1.<br><b>Skirmish:</b> Remove (2) to make a lurker <b>fierce</b> until the regroup phase.<br><b>Skirmish:</b> Remove (2) to make a lurker <b>damage +1</b>.
 		*/

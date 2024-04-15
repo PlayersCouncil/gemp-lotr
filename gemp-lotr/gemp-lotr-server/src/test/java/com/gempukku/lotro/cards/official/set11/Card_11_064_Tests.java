@@ -39,7 +39,6 @@ public class Card_11_064_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a [gondor] companion strength +2 (or +3 if he or she has resistance 4 or more).
 		*/
 

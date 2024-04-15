@@ -42,7 +42,6 @@ public class Card_11_018_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 7
-
 		 * Game Text: While you can spot another Elf, this companion has <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
 		*/
 

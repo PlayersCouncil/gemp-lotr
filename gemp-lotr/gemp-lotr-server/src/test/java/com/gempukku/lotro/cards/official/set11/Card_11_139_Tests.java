@@ -39,7 +39,6 @@ public class Card_11_139_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, exert an [orc] minion.<br>At the start of the Shadow phase, add (1).
 		*/
 

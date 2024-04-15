@@ -41,7 +41,6 @@ public class Card_11_131_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: To play, spot an [orc] minion.<br><b>Regroup:</b> Exert this minion to add a burden.
 		*/

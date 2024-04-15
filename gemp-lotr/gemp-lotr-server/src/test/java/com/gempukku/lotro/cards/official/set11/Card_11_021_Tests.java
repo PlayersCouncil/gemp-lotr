@@ -42,7 +42,6 @@ public class Card_11_021_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 7
-
 		 * Game Text: While Legolas is at a battleground or forest site, he is strength +2 and resistance +2.
 		*/
 

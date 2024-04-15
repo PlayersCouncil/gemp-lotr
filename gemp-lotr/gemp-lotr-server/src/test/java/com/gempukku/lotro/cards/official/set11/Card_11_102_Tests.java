@@ -41,7 +41,6 @@ public class Card_11_102_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: Each time this minion is assigned to skirmish a character who has resistance 5 or less, it is <b>fierce</b> until the regroup phase.
 		*/

@@ -41,7 +41,6 @@ public class Card_11_082_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: The fellowship's current site gains <b>plains</b>.
 		*/

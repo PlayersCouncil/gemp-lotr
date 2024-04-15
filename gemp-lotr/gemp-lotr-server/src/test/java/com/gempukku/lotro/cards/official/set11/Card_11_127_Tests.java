@@ -41,7 +41,6 @@ public class Card_11_127_Tests
 		 * Subtype: Orc
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: Each time this minion wins a skirmish, add a burden unless the Free Peoples player discards a Free Peoples event from hand.
 		*/

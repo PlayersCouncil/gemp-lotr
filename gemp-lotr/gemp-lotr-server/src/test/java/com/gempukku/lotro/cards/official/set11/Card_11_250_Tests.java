@@ -39,7 +39,7 @@ public class Card_11_250_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
+		 * Site Number: *
 		 * Game Text: <b>River</b>. The minion archery total is -3.
 		*/
 

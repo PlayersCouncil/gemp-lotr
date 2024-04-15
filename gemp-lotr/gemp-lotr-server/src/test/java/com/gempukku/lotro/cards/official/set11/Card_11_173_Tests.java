@@ -40,7 +40,6 @@ public class Card_11_173_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Bilbo, Frodo, or Sam.<br><b>Maneuver:</b> If bearer is Bilbo or Frodo, exert him to make another companion resistance +2 until the regroup phase. If bearer is Sam, each time he wins a skirmish, you may remove a burden.
 		*/
 

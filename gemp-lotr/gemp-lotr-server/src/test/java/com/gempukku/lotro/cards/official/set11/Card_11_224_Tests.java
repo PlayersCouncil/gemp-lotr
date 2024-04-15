@@ -41,7 +41,6 @@ public class Card_11_224_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: When you play Úlairë Otsëa, you may spot a companion who has X wounds to reveal the top X cards of your draw deck. Take each [wraith] card revealed this way into hand.
 		*/
