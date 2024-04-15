@@ -421,7 +421,7 @@
 		}
 	}
 	9_11: {
-		title: Uri
+		title: Úri
 		subtitle: Dwarven Lord
 		unique: true
 		culture: dwarven

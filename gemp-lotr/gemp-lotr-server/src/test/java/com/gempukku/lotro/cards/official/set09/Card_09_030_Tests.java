@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,48 +27,46 @@ public class Card_09_030_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
-	public void SmagolStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SmeagolStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 9
-		* Title: Sméagol, Bearer of Great Secrets
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gollum
-		* Twilight Cost: 0
-		* Type: companion
-		* Subtype: 
-		* Strength: 3
-		* Vitality: 4
-		* Resistance: 7
-		* Game Text: <b>Ring-bound</b>. To play, add a burden.<br>Each time the fellowship moves, place an unbound companion in the dead pile.<br><b>Regroup:</b> If Sméagol is the Ring-bearer, add 2 burdens to discard each minion.
+		 * Set: 9
+		 * Name: Sméagol, Bearer of Great Secrets
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gollum
+		 * Twilight Cost: 0
+		 * Type: Companion
+		 * Subtype: 
+		 * Strength: 3
+		 * Vitality: 4
+		 * Resistance: 7
+
+		 * Game Text: <b>Ring-bound</b>. To play, add a burden.<br>Each time the fellowship moves, place an unbound companion in the dead pile.<br><b>Regroup:</b> If Sméagol is the Ring-bearer, add 2 burdens to discard each minion.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Sméagol", card.getBlueprint().getTitle());
+		assertEquals("Bearer of Great Secrets", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
+		assertTrue(scn.HasKeyword(card, Keyword.CAN_START_WITH_RING));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(7, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void SmagolTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SmeagolTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
