@@ -886,7 +886,7 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		keyword: archery
+		keyword: archer
 		effects: [
 		    {
 		        type: activated

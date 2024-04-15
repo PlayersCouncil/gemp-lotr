@@ -94,6 +94,7 @@
 		subtitle: The Ruling Ring
 		unique: true
 		twilight: 0
+		strength: 1
 		type: The One Ring
 		effects: [
 			{
