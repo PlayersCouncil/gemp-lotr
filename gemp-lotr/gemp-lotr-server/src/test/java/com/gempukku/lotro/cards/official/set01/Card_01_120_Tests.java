@@ -39,12 +39,13 @@ public class Card_01_120_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert an Uruk-hai. Plays to your support area.<br><b>Shadow:</b> Remove (3) and spot X burdens to make the Free Peoples player reveal X cards at random from hand. You may discard 1 revealed card.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Alive and Unspoiled", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

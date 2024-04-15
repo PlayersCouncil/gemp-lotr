@@ -41,9 +41,7 @@ public class Card_02_114_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Maneuver:</b> Exert Sam twice to make him <b>defender +1</b> until the regroup phase.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
 

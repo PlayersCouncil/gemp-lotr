@@ -41,7 +41,6 @@ public class Card_10_011_Tests
 		 * Subtype: Elf
 		 * Strength: 3
 		 * Vitality: 3
-
 		 * Game Text: When Galadriel is in your starting fellowship, her twilight cost is -3.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Discard an [elven] event from hand to discard a Shadow condition or Shadow possession.
 		*/
 

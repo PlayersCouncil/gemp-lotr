@@ -41,7 +41,6 @@ public class Card_04_198_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>Each time a companion or ally is killed during a skirmish involving an Uruk-hai, you may take control of a site.
 		*/

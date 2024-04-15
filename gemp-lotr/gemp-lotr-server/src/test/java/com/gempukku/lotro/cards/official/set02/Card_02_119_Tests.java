@@ -39,7 +39,6 @@ public class Card_02_119_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4
 		 * Game Text: <b>Plains</b>. Uruk-hai are not roaming.
 		*/

@@ -39,7 +39,6 @@ public class Card_07_328_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Bearer must be Merry or Pippin.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Slow-kindled Courage."<br><b>Regroup:</b> Discard this condition to discard a minion and remove 2 burdens.
 		*/
 

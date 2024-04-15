@@ -39,7 +39,6 @@ public class Card_04_331_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2T
 		 * Game Text: <b>Plains</b>. <b>Shadow:</b> Spot 3 [isengard] trackers to prevent the fellowship from moving again this turn.
 		*/

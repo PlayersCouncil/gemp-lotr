@@ -41,7 +41,6 @@ public class Card_03_013_Tests
 		 * Subtype: Elf
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: At the start of each of your turns, you may spot an ally whose home is site 3 and heal that ally up to 2 times.<br><b>Regroup:</b> Exert Elrond twice to heal a companion.
 		*/

@@ -39,7 +39,6 @@ public class Card_02_115_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> Exert a Hobbit to play Bilbo from your draw deck.
 		*/

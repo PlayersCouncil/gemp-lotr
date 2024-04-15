@@ -39,7 +39,6 @@ public class Card_08_019_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Spot Gandalf and exert a companion to place a card of that companion's culture from your discard pile on top of your draw deck.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_019_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

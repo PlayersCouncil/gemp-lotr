@@ -39,12 +39,13 @@ public class Card_01_169_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Assignment
-
 		 * Game Text: <b>Assignment:</b> Spot 5 [moria] minions to make the Free Peoples player assign the Ring-bearer to a skirmish.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The End Comes", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_04_284_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>Bearer takes no more than 1 wound during each skirmish phase. If bearer is Théoden, he may not take wounds except during a skirmish involving him.
 		*/
 

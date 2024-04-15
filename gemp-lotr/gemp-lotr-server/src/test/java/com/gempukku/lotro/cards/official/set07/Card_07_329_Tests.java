@@ -39,7 +39,6 @@ public class Card_07_329_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1K
 		 * Game Text: <b>Fellowship:</b> Spot a Dwarf to play a [dwarven] condition from your draw deck (limit once per turn).
 		*/

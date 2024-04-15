@@ -41,7 +41,6 @@ public class Card_06_028_Tests
 		 * Subtype: Ent
 		 * Strength: 10
 		 * Vitality: 5
-
 		 * Game Text: To play, spot 2 Ent companions.<br>Ent Horde's twilight cost is -2 for each Ent or unbound Hobbit you can spot.<br>While you can spot more minions than companions, Ent Horde is <b>defender +1</b>.
 		*/
 

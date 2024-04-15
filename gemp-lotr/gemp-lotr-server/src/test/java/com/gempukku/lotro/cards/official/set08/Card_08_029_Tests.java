@@ -39,7 +39,6 @@ public class Card_08_029_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship or regroup
-
 		 * Game Text: Spot Sméagol to play the fellowship's next site (replacing opponent's site if necessary). The Shadow number of the fellowship's next site is -1 until the end of the turn.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_029_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP_OR_REGROUP));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

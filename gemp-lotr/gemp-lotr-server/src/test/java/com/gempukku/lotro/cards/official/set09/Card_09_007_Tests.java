@@ -40,7 +40,6 @@ public class Card_09_007_Tests
 		 * Type: Artifact
 		 * Subtype: Ring
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a Dwarf.<br>Bearer is <b>damage +2</b>.<br><b>Regroup:</b> Spot a Dwarf that is damage +X to heal X Dwarves. Discard this artifact.
 		*/
 

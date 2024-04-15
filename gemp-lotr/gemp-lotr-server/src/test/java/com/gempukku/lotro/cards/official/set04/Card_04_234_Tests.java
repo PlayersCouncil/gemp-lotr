@@ -39,7 +39,6 @@ public class Card_04_234_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Maneuver</b> <i>or</i> <b>Skirmish:</b> Exert a Southron to add (3).
 		*/
 

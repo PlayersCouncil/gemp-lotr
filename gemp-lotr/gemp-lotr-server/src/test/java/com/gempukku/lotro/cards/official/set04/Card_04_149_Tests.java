@@ -39,7 +39,6 @@ public class Card_04_149_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: <b>Archery:</b> Spot 2 [isengard] archers to make the minion archery total +1 for each card in the dead pile.
 		*/
 

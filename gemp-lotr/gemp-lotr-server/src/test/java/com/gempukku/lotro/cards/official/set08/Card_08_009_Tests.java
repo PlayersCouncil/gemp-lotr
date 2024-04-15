@@ -39,7 +39,6 @@ public class Card_08_009_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: Spot an Elf companion and make the fellowship archery total -X (to a minimum of 0) to heal X unbound companions. You cannot use archery special abilities.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_009_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.ARCHERY));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

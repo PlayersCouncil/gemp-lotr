@@ -39,7 +39,6 @@ public class Card_06_097_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area. When you play this condition, you may spot a [rohan] Man to place 2 [rohan] tokens here.<br><b>Skirmish:</b> Discard this condition or remove a [rohan] token from here to make a [rohan] Man skirmishing an exhausted minion strength +2.
 		*/
 

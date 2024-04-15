@@ -41,7 +41,6 @@ public class Card_07_131_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (1) to add a threat.
 		*/

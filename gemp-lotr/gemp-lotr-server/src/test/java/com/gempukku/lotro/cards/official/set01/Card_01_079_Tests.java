@@ -39,12 +39,13 @@ public class Card_01_079_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot Gandalf. Plays to your support area.<br>Each time you play a companion whose race you cannot spot, that companion's twilight cost is -2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Nine Walkers", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

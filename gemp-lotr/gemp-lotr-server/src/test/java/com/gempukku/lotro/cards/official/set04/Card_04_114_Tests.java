@@ -41,7 +41,6 @@ public class Card_04_114_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Ring-bound</b>. <b>Ranger</b>. To play, spot a Ring-bound Man.<br><b>Skirmish:</b> Exert Damrod to exhaust a Man he is skirmishing.
 		*/
 

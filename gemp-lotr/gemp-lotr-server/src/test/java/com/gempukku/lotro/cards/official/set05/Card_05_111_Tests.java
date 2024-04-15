@@ -41,9 +41,7 @@ public class Card_05_111_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Ring-bearer (resistance 10).</b><br><b>Fellowship:</b> Add a burden to play Sméagol from your discard pile.
 		*/
 

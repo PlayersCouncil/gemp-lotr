@@ -41,7 +41,6 @@ public class Card_08_108_Tests
 		 * Subtype: Troll
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>. <b>Fierce</b>. To play, spot a [sauron] Orc.<br>The twilight cost of Troll of Gorgoroth is -2 for each [sauron] engine you spot.<br><b>Regroup:</b> Exert Troll of Gorgoroth to stack your besieger on a site you control.
 		*/

@@ -39,7 +39,6 @@ public class Card_07_040_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Spot Gandalf to heal an unbound companion twice.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_040_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

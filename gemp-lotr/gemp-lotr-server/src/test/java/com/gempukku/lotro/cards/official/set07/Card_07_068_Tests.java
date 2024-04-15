@@ -39,7 +39,6 @@ public class Card_07_068_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot Sméagol.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Maneuver:</b> Discard Sméagol to discard a minion. An opponent may exert a minion twice to prevent this.
 		*/
 

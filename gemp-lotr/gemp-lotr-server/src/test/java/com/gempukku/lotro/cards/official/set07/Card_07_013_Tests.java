@@ -39,7 +39,6 @@ public class Card_07_013_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Bearer must be a [dwarven] companion.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Reckless Pride."<br><b>Regroup:</b> Discard this condition to draw 4 cards.
 		*/
 

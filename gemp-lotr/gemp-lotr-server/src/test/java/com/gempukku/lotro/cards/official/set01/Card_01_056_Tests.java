@@ -41,13 +41,14 @@ public class Card_01_056_Tests
 		 * Subtype: Elf
 		 * Strength: 3
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Archer</b>.<br><b>Archery:</b> Exert Orophin to wound an Uruk-hai.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Orophin", card.getBlueprint().getTitle());
 		assertEquals("Lórien Bowman", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

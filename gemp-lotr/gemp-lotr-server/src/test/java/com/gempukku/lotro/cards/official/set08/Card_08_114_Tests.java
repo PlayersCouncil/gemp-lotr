@@ -39,7 +39,6 @@ public class Card_08_114_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Exert Frodo to remove (1) for each Frodo signet you spot.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_114_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

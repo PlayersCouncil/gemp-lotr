@@ -41,13 +41,14 @@ public class Card_01_235_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Shadow:</b> Exert Úlairë Otsëa to make a [wraith] minion <b>fierce</b> until the regroup phase.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Úlairë Otsëa", card.getBlueprint().getTitle());
 		assertEquals("Lieutenant of Morgul", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

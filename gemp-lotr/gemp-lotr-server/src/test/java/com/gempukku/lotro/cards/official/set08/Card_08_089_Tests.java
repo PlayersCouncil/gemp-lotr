@@ -39,7 +39,6 @@ public class Card_08_089_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Exert a minion skirmishing a mounted [rohan] Man.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_089_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

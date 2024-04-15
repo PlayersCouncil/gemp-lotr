@@ -39,7 +39,6 @@ public class Card_02_030_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Spell</b>.<br><b>Maneuver:</b> Spot Gandalf bearing a staff to prevent a minion from being <b>fierce</b> until the regroup phase.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_02_030_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}

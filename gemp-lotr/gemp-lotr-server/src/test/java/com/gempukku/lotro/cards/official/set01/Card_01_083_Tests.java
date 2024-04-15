@@ -39,18 +39,20 @@ public class Card_01_083_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Spell</b>.<br><b>Skirmish:</b> Spot Gandalf to make a minion strength -3.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Servant of the Secret Fire", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}

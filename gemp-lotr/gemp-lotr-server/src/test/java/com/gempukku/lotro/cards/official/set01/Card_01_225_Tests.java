@@ -40,12 +40,13 @@ public class Card_01_225_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Úlairë Lemenya.<br>He is <b>damage +1</b>.<br><b>Skirmish:</b> Exert Úlairë Lemenya to discard a possession borne by a character he is skirmishing.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Sword of Minas Morgul", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

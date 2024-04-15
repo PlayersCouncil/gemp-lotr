@@ -39,12 +39,13 @@ public class Card_01_206_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. Plays to your support area.<br>At the beginning of each of your Shadow phases, draw 1 card.<br>At the end of each of your Shadow phases, exert a Nazgûl or discard this condition.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Bent on Discovery", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

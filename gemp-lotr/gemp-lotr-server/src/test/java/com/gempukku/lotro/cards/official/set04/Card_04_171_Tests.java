@@ -39,7 +39,6 @@ public class Card_04_171_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. To play, spot an [isengard] tracker. Plays on a companion. Limit 1 per companion.<br>If bearer is killed, reveal the top 10 cards of opponent's draw deck and discard 1 Shadow card and 1 Free Peoples card. Your opponent reshuffles that deck.
 		*/
 

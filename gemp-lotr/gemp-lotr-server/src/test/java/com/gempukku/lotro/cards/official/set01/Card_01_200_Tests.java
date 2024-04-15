@@ -39,12 +39,13 @@ public class Card_01_200_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Shadow:</b> Remove (3) to reveal the bottom card of your draw deck. If it is a [moria] Orc, take it into hand. Otherwise, discard it.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Underdeeps of Moria", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

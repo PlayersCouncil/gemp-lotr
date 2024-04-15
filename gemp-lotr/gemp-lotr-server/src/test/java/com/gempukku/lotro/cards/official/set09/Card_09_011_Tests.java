@@ -41,7 +41,6 @@ public class Card_09_011_Tests
 		 * Subtype: Dwarf
 		 * Strength: 5
 		 * Vitality: 4
-
 		 * Game Text: <b>Skirmish:</b> If Úri is damage +X, exert him to make him strength +X.
 		*/
 

@@ -40,7 +40,6 @@ public class Card_04_291_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>While bearer is skirmishing an Uruk-hai, bearer is <b>damage +1</b>.
 		*/
 

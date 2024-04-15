@@ -39,7 +39,6 @@ public class Card_04_112_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Gauntlets
-
 		 * Game Text: Bearer must be a [gondor] Man.<br><b>Skirmish:</b> Exert bearer to cancel a skirmish involving bearer. Any Shadow player may remove (1) to prevent this.
 		*/
 

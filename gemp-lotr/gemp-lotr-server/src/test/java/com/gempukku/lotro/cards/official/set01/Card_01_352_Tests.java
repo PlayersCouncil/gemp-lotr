@@ -39,7 +39,6 @@ public class Card_01_352_Tests
 		 * Shadow Number: 3
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 6
 		 * Game Text: <b>Forest</b>. <b>Sanctuary</b>. Each ally whose home is site 6 is strength +3.
 		*/

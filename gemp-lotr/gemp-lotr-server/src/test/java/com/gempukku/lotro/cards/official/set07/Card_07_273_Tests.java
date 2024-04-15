@@ -41,7 +41,6 @@ public class Card_07_273_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Regroup:</b> Discard 2 cards from hand to stack a [sauron] Orc on a site you control (or discard 1 card from hand if that Orc is a besieger).
 		*/

@@ -40,7 +40,6 @@ public class Card_04_159_Tests
 		 * Type: Condition
 		 * Subtype: 
 		 * Strength: -1
-
 		 * Game Text: <b>Search</b>. To play, exert an [isengard] tracker. Plays on a companion (except the Ring- bearer).<br><b>Assignment:</b> Exert an [isengard] tracker and remove (2) to assign that tracker to bearer. Bearer may exert to prevent this.
 		*/
 

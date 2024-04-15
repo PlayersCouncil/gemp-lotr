@@ -41,9 +41,7 @@ public class Card_04_266_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br>At the start of each turn, you may heal a [rohan] ally.
 		*/
 

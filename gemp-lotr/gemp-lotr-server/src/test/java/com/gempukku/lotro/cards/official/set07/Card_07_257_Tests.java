@@ -41,7 +41,6 @@ public class Card_07_257_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Skirmish:</b> Exert this companion to make him strength +1 for each mounted companion you spot.
 		*/
 

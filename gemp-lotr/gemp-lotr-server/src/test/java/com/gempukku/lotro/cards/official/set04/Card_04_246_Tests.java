@@ -41,7 +41,6 @@ public class Card_04_246_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br>Each time a companion or ally loses a skirmish involving a Southron, you may remove (1) to make the Free Peoples player wound a Ring-bound companion.
 		*/

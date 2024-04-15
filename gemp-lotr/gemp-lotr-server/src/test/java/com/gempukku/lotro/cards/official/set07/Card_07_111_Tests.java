@@ -39,7 +39,6 @@ public class Card_07_111_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: The site number of each minion skirmishing a [gondor] Man is +1.
 		*/
 

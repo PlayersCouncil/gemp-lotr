@@ -39,12 +39,13 @@ public class Card_01_159_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot an Uruk-hai. Plays to your support area.<br><b>Response:</b> If your Uruk-hai wins a skirmish, remove (3) to make him <b>fierce</b> until the regroup phase.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Uruk-hai Rampage", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

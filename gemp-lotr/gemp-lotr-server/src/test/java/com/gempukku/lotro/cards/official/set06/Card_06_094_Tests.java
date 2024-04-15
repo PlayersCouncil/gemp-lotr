@@ -41,7 +41,6 @@ public class Card_06_094_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: To play, spot a [rohan] Man.<br><b>Skirmish:</b> Exert Háma to discard a possession borne by a minion he is skirmishing.
 		*/
 

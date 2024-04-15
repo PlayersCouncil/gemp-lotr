@@ -39,7 +39,6 @@ public class Card_07_178_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Discard 3 cards from hand to make a Nazgûl strength +3.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_178_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

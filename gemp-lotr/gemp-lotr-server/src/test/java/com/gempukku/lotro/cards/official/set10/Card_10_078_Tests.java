@@ -41,7 +41,6 @@ public class Card_10_078_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Shadow:</b> Exert or discard this minion to make each [sauron] minion you spot roaming until the regroup phase.
 		*/

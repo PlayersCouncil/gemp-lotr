@@ -39,7 +39,6 @@ public class Card_04_129_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Fellowship</b> <i>or</i> <b>Regroup:</b> Spot a ranger to play the fellowship's next site (replacing opponent's site if necessary).
 		*/
 

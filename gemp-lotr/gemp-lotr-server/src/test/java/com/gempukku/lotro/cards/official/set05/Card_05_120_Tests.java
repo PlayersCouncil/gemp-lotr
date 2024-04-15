@@ -39,7 +39,6 @@ public class Card_05_120_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9T
 		 * Game Text: <b>Underground</b>. The Free Peoples player wins the game only if the Ring-bearer survives until Shadow players reconcile.
 		*/

@@ -39,12 +39,13 @@ public class Card_01_044_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Exert an Elf to reveal an opponent's hand. You may discard an [isengard] minion revealed to draw 2 cards.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Foul Creation", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

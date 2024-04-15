@@ -39,7 +39,6 @@ public class Card_04_175_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Exert an Uruk-hai who is not assigned to a skirmish to make another Uruk-hai strength +3.
 		*/
 

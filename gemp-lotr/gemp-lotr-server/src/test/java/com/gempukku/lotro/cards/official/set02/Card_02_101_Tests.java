@@ -41,7 +41,6 @@ public class Card_02_101_Tests
 		 * Subtype: Hobbit
 		 * Strength: 1
 		 * Vitality: 2
-
 		 * Site Number: 1
 		 * Game Text: <b>Skirmish:</b> Exert a Hobbit companion twice to cancel a fierce skirmish involving that Hobbit.
 		*/

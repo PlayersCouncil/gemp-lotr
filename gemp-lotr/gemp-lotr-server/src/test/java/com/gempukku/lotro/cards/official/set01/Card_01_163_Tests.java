@@ -41,13 +41,14 @@ public class Card_01_163_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: For each other [moria] Orc you can spot, Ancient Chieftain is strength +1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Ancient Chieftain", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

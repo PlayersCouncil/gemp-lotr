@@ -42,7 +42,6 @@ public class Card_09_031_Tests
 		 * Strength: 7
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: While Boromir is the Ring-bearer, at the start of each skirmish involving him, add 3 burdens or wound him twice.<br>Each time Boromir wins a skirmish, discard each minion he is skirmishing.
 		*/
 

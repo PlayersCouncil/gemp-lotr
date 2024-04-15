@@ -41,7 +41,6 @@ public class Card_03_012_Tests
 		 * Subtype: Elf
 		 * Strength: 3
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Archer</b>.<br><b>Regroup:</b> Exert Dínendal to remove (2).
 		*/

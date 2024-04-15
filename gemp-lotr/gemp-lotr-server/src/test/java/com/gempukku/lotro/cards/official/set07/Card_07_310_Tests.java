@@ -39,7 +39,6 @@ public class Card_07_310_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [sauron] Orc.<br><b>Shadow:</b> Remove a threat to play a [sauron] Orc without paying any roaming penalty.<br><b>Regroup:</b> Spot a [sauron] Orc and remove (4) to add a threat.
 		*/
 

@@ -40,7 +40,6 @@ public class Card_02_054_Tests
 		 * Type: Condition
 		 * Subtype: 
 		 * Strength: -2
-
 		 * Game Text: To play, spot The Balrog. Plays on Gandalf.<br>Each time the fellowship moves, Gandalf must exert.
 		*/
 

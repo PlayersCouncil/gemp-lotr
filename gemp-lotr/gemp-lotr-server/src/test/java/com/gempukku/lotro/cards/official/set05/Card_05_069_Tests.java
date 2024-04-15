@@ -39,7 +39,6 @@ public class Card_05_069_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays on a plains site you control.<br><b>Regroup:</b> Exert an [isengard] Orc to make the Free Peoples player wound a companion.
 		*/
 

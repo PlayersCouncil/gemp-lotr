@@ -39,7 +39,6 @@ public class Card_02_059_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Play a [moria] minion from your discard pile.
 		*/
 

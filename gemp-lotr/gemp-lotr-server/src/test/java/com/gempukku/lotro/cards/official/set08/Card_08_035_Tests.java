@@ -40,7 +40,6 @@ public class Card_08_035_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Strength: -1
-
 		 * Game Text: <b>Fortification</b>.<br><b>Skirmish:</b> Exert 2 [gondor] Men or spot 3 knights to transfer this condition from your support area to a minion skirmishing a [gondor] Man. Exhaust that minion.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_10_038_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Corsair</b>.<br>At the start of each skirmish involving this minion, you may remove a [raider] token to wound a companion he is skirmishing.
 		*/

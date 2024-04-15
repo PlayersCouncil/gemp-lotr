@@ -41,7 +41,6 @@ public class Card_08_060_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Archer</b>.<br>While you can spot another [raider] Man, Ring-bound companions cannot take archery wounds.
 		*/

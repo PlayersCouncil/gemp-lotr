@@ -39,7 +39,6 @@ public class Card_02_005_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a Dwarf strength +2 (or +4 and <b>damage +1</b> if bearing 2 hand weapons).
 		*/
 

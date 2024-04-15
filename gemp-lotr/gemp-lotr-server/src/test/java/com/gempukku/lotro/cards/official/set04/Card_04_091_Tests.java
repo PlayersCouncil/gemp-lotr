@@ -39,9 +39,7 @@ public class Card_04_091_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Staff
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Gandalf.<br>While you can spot 2 twilight tokens, Gandalf is <b>damage +2</b>.
 		*/
 

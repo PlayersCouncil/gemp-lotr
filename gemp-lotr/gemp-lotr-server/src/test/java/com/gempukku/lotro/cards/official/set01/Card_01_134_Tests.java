@@ -39,12 +39,13 @@ public class Card_01_134_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Spell</b>. <b>Weather</b>. To play, exert an [isengard] minion. Plays on a site. Limit 1 per site.<br>Each Hobbit who moves from this site must exert. Discard this condition at the end of the turn.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Saruman's Chill", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -39,12 +39,13 @@ public class Card_01_219_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. Plays to your support area.<br>Each time you play a Nazgûl, you may exert a Hobbit (except the Ring-bearer).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Nine Servants of Sauron", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

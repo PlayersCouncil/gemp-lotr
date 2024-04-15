@@ -41,13 +41,14 @@ public class Card_01_176_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Archer</b>. <helper>(Add 1 to the minion archery total.)</helper>
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Marksman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

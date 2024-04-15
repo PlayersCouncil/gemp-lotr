@@ -40,7 +40,6 @@ public class Card_03_108_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a Hobbit.<br><b>Skirmish:</b> Exert bearer to wound an Orc he or she is skirmishing.
 		*/
 

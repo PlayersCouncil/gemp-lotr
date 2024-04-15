@@ -39,7 +39,6 @@ public class Card_07_268_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: For each 2 sites you control, the twilight cost of each of your [sauron] cards is -1.<br><b>Regroup:</b> Spot a [sauron] minion to draw a card (or draw 2 cards instead if that minion is a besieger). Discard this condition.
 		*/
 

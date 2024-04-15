@@ -39,7 +39,6 @@ public class Card_10_032_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fortification</b>. Bearer is strength -1 for each fortification you can spot.<br><b>Maneuver:</b> Exert 2 [gondor] Men or spot 3 knights to transfer this condition to a minion.
 		*/
 

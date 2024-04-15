@@ -39,7 +39,6 @@ public class Card_04_231_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each Ring-bound companion moving from site 2[T] must exert twice.<br><b>Maneuver:</b> Discard this condition and exert a [raider] Man to exert a Ring-bound companion.
 		*/
 

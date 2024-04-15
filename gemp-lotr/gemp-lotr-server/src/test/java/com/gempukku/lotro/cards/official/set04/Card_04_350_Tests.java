@@ -39,7 +39,6 @@ public class Card_04_350_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 5T
 		 * Game Text: <b>Battleground</b>. While you can spot Aragorn, the Shadow number of Hornburg Courtyard is -2.
 		*/

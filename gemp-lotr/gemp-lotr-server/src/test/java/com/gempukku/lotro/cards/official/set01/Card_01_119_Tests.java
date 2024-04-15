@@ -39,12 +39,13 @@ public class Card_01_119_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot a ranger to discard a roaming minion.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("What Are They?", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

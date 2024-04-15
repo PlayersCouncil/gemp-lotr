@@ -39,8 +39,6 @@ public class Card_07_118_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
-		 * Site Number: 2
 		 * Game Text: <b>Fortification</b>.<br><b>Maneuver:</b> Exert a [gondor] Man or spot a ranger to transfer this condition from your support area to a minion.
 		*/
 

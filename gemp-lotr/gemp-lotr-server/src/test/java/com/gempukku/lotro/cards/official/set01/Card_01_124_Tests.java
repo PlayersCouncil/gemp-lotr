@@ -39,18 +39,21 @@ public class Card_01_124_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Spell</b>. <b>Weather</b>.<br><b>Maneuver:</b> Exert an [isengard] minion to make the opponent choose to either exert the Ring-bearer or add a burden.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Cruel Caradhras", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
+		assertTrue(scn.HasKeyword(card, Keyword.WEATHER));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}

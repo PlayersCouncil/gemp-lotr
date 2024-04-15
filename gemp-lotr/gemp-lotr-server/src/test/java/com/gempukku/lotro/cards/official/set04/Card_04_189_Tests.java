@@ -41,7 +41,6 @@ public class Card_04_189_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 7
 		 * Vitality: 1
-
 		 * Site Number: 5
 		 * Game Text: <b>Tracker</b>. <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it is strength +3 and <b>damage +1</b>.
 		*/

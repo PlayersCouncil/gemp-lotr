@@ -39,7 +39,6 @@ public class Card_03_076_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Spot a [moria] minion to reveal a card at random from the Free Peoples player's hand. Add (X), where X is the twilight cost of the card revealed.
 		*/
 

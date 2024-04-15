@@ -41,9 +41,7 @@ public class Card_02_102_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Ring-bearer (resistance 10).</b><br>The cost of each artifact, possession, and [shire] tale played on Frodo is -1.
 		*/
 

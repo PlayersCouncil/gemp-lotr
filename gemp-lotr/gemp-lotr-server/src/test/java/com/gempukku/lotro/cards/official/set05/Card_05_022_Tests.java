@@ -39,7 +39,6 @@ public class Card_05_022_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each site on the adventure path is a <b>marsh</b>.<br><b>Shadow:</b> Exert Gollum twice and discard this condition to play a minion from your discard pile.
 		*/
 

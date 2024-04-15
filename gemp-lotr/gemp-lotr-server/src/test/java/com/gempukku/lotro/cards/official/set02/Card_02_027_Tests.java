@@ -39,7 +39,6 @@ public class Card_02_027_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Spell</b>.<br><b>Skirmish:</b> Discard a staff Gandalf is bearing and then exert him twice to discard a minion he is skirmishing.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_02_027_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}

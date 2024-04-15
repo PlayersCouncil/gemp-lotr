@@ -39,7 +39,6 @@ public class Card_07_023_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Regroup:</b> Exert an Elf to reveal the top card of your draw deck. If it is an [elven] card, remove 3 threats. Place the revealed card beneath your draw deck.
 		*/
 

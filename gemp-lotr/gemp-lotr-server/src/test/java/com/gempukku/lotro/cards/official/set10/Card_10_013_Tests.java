@@ -39,7 +39,6 @@ public class Card_10_013_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: 
-
 		 * Game Text: Bearer must be a Hobbit.<br><b>Skirmish:</b> Until the regroup phase, remove the game text (except card type and race) from a minion skirmishing bearer and make it unable to gain game text. Discard this artifact.
 		*/
 

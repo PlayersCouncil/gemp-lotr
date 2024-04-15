@@ -39,7 +39,6 @@ public class Card_01_346_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4
 		 * Game Text: <b>Marsh</b>. When the fellowship moves to Moria Lake, Frodo or 2 other companions must exert.
 		*/

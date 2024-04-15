@@ -39,7 +39,6 @@ public class Card_05_006_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot a Dwarf to draw a card or play a [dwarven] condition from your discard pile.
 		*/
 

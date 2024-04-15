@@ -39,7 +39,6 @@ public class Card_02_001_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Plays to your support area.<br><b>Fellowship:</b> Discard the top 3 cards from your draw deck to play a [dwarven] weapon from your discard pile.
 		*/
 

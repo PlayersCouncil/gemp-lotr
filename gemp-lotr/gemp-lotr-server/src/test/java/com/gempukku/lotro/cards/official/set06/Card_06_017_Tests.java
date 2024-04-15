@@ -39,7 +39,6 @@ public class Card_06_017_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot 2 Elves. Plays to your support area.<br><b>Fellowship:</b> Add (1) to look at the top card of your draw deck. You may discard this condition to discard that card.
 		*/
 

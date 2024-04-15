@@ -39,7 +39,6 @@ public class Card_04_003_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Spot 3 [dunland] minions or a site you control to make a [dunland] Man <b>fierce</b> until the regroup phase.
 		*/
 

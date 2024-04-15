@@ -39,7 +39,6 @@ public class Card_04_344_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4T
 		 * Game Text: <b>Plains</b>. When the fellowship moves to Westemnet Hills, heal each mounted companion and mounted ally.
 		*/

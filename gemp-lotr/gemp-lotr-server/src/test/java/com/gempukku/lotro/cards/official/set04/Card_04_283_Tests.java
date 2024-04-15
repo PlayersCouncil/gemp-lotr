@@ -39,7 +39,6 @@ public class Card_04_283_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Mount
-
 		 * Game Text: To play, spot a [rohan] Man. Bearer must be a Man, Elf, or Wizard.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
 		*/
 

@@ -40,7 +40,6 @@ public class Card_04_268_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>If bearer is Éomer and he is mounted, Éomer is <b>damage +2</b>.
 		*/
 

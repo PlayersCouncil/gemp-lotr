@@ -39,7 +39,6 @@ public class Card_04_032_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If your [dunland] Man wins a skirmish, discard all Free Peoples cards borne by the companion or ally he was skirmishing.
 		*/
 

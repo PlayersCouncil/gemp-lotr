@@ -41,7 +41,6 @@ public class Card_07_196_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Skirmish:</b> Exert this minion to make a Nazgûl or [wraith] Orc strength +1.
 		*/

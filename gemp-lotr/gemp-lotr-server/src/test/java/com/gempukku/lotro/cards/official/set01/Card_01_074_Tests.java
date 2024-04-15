@@ -39,12 +39,13 @@ public class Card_01_074_Tests
 		 * Twilight Cost: 0
 		 * Type: Possession
 		 * Subtype: Pipe
-
 		 * Game Text: Bearer must be Gandalf.<br><b>Fellowship:</b> Discard a pipeweed possession and spot X pipes to remove X burdens.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gandalf's Pipe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

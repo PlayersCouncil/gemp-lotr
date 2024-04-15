@@ -40,7 +40,6 @@ public class Card_07_098_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [gondor] Man.<br><b>Skirmish:</b> Discard 3 cards from hand to make bearer <b>damage +1</b>.
 		*/
 

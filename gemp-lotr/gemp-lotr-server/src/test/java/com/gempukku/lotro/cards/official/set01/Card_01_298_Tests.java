@@ -39,18 +39,20 @@ public class Card_01_298_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Stealth</b>.<br><b>Skirmish:</b> At sites 1 to 5, cancel a skirmish involving a Hobbit. At any other site, make a Hobbit strength +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Hobbit Stealth", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.STEALTH));
 		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}

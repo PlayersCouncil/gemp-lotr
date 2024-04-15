@@ -40,7 +40,6 @@ public class Card_06_021_Tests
 		 * Type: Possession
 		 * Subtype: Ranged weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be an Elf companion.<br><b>Archery:</b> Exert bearer to discard the top card of your draw deck. If it is an [elven] card, exert a minion.
 		*/
 

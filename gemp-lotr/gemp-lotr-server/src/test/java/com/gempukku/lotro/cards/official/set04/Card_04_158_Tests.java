@@ -41,7 +41,6 @@ public class Card_04_158_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br><b>Maneuver:</b> Exert Lieutenant of Orthanc to make another Uruk-hai <b>fierce</b> until the regroup phase.
 		*/

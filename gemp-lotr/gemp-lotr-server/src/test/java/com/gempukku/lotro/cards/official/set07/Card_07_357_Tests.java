@@ -39,7 +39,6 @@ public class Card_07_357_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8K
 		 * Game Text: <b>Skirmish:</b> Spot your [sauron] minion and remove 2 threats to make your [sauron] minion strength +3.
 		*/

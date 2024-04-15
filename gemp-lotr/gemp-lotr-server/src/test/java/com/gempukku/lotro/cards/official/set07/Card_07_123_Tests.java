@@ -39,7 +39,6 @@ public class Card_07_123_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fellowship:</b> Play a [gondor] Man to place a [gondor] token here.<br><b>Fellowship:</b> Play a [gondor] companion. That companion's twilight cost is -1 for each token here. Discard this condition.
 		*/
 

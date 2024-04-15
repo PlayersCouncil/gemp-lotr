@@ -39,7 +39,6 @@ public class Card_07_154_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a [raider] Man strength +3 (or +6 if you have initiative).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_154_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

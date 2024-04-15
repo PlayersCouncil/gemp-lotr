@@ -39,7 +39,6 @@ public class Card_08_110_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: When the fellowship moves from site 4[K], remove (1) for each Ring-bound companion you spot.<br><b>Regroup:</b> Discard a card from hand for each Ring-bound companion you spot. Discard this condition.
 		*/
 

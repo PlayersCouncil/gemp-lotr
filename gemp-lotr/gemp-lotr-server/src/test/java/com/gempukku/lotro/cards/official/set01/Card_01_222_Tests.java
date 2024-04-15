@@ -39,12 +39,13 @@ public class Card_01_222_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. To play, spot a Nazgûl. Plays to your support area.<br><b>Shadow:</b> Remove (3) to replace the fellowship's site with your version of the same site.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Paths Seldom Trodden", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -41,7 +41,6 @@ public class Card_05_053_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Warg-rider</b>.<br>While this minion is not exhausted, he is <b>fierce</b>.
 		*/

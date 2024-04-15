@@ -39,12 +39,13 @@ public class Card_01_164_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: <b>Archery:</b> Spot a [moria] archer to wound an Elf.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Bitter Hatred", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

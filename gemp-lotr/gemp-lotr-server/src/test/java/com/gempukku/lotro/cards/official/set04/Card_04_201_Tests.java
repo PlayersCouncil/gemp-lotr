@@ -41,7 +41,6 @@ public class Card_04_201_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
 		*/

@@ -39,7 +39,6 @@ public class Card_10_047_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [raider] Man.<br>Threats cannot be removed by Free Peoples cards.<br><b>Shadow:</b> Remove (1) and play a Southron to add a threat.
 		*/
 

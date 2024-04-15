@@ -39,7 +39,6 @@ public class Card_04_276_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a [rohan] Man wins a skirmish, you may place a [rohan] token on this card.<br><b>Regroup:</b> Discard a Shadow condition for each [rohan] token here. Discard this condition.
 		*/
 

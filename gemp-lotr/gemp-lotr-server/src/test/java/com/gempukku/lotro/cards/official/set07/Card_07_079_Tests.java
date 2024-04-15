@@ -41,7 +41,6 @@ public class Card_07_079_Tests
 		 * Subtype: Hand weapon
 		 * Strength: 2
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Aragorn. Discard other weapons he bears. He is <b>damage +1</b> and cannot bear other weapons.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> If the fellowship is at any site 2 or any site 5, play the fellowship's next site (replacing opponent's site if necessary).
 		*/
 

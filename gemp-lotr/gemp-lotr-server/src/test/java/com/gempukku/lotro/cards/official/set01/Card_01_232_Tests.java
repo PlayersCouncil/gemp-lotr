@@ -41,13 +41,14 @@ public class Card_01_232_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: Each companion or ally who bears a [wraith] condition is strength -2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Úlairë Lemenya", card.getBlueprint().getTitle());
 		assertEquals("Lieutenant of Morgul", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

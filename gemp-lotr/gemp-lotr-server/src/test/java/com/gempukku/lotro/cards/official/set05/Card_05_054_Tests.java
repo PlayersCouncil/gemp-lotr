@@ -40,7 +40,6 @@ public class Card_05_054_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be an [isengard] Orc.<br>When you play this weapon, you may add (1) for each site you control.
 		*/
 

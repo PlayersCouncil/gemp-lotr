@@ -41,7 +41,6 @@ public class Card_07_247_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 3T
 		 * Game Text: <b>Villager</b>. To play, spot 2 [rohan] Men.<br><b>Regroup:</b> Discard 3 cards from hand to remove a threat.
 		*/

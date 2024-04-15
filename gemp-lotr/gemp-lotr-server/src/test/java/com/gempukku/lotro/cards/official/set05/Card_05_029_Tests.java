@@ -41,9 +41,7 @@ public class Card_05_029_Tests
 		 * Subtype: 
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> Add a burden to make Sméagol strength +2 and take no wounds.
 		*/
 

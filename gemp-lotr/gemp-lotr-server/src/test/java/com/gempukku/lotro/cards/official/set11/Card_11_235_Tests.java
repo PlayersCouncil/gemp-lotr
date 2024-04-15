@@ -1,10 +1,7 @@
-
 package com.gempukku.lotro.cards.official.set11;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -44,21 +41,22 @@ public class Card_11_235_Tests
 	}
 
 	@Test
-	public void DammedGateStreamStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DammedGatestreamStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 11
-		* Title: Dammed Gate-stream
-		* Side: Site
-		* Culture: Site
-		* Twilight Cost: 3
-		* Type: Site
-		* Site Number: *
-		* Game Text: Marsh. At the start of your fellowship phase, you may play a [GOLLUM] Free Peoples card from your draw deck.
+		 * Set: 11
+		 * Name: Dammed Gate-stream
+		 * Unique: False
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 3
+		 * Type: Site
+		 * Subtype: 
+		 * Site Number: *
+		 * Game Text: <b>Marsh</b>. At the start of your fellowship phase, you may play a [gollum] Free Peoples card from your draw deck.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var card = scn.GetFreepsSite("Dammed Gate-stream");
 

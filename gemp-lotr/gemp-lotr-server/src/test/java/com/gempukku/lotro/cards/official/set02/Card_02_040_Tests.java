@@ -39,7 +39,6 @@ public class Card_02_040_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot an [isengard] minion. Plays to your support area.<br>Each time a [shire] ally exerts, add (1).
 		*/
 

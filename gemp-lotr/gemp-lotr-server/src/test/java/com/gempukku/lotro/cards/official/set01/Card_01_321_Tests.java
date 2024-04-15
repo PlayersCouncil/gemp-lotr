@@ -39,7 +39,6 @@ public class Card_01_321_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> Exert a Hobbit to play Merry or Pippin from your draw deck.
 		*/

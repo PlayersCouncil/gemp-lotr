@@ -41,7 +41,6 @@ public class Card_07_226_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: While you can spot another [rohan] Man and this companion is skirmishing a wounded minion, this companion is strength +2 and <b>damage +1</b>.
 		*/
 

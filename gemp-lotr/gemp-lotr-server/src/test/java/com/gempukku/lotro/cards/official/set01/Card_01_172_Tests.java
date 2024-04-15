@@ -41,13 +41,14 @@ public class Card_01_172_Tests
 		 * Subtype: Orc
 		 * Strength: 4
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Archer</b>.<br>While you can spot another [moria] Orc, the fellowship archery total is -6.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Archer", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

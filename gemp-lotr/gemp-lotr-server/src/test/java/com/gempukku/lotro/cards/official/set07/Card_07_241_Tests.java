@@ -41,7 +41,6 @@ public class Card_07_241_Tests
 		 * Subtype: Armor
 		 * Strength: 2
 		 * Vitality: -1
-
 		 * Game Text: Bearer must be Merry.<br>While you can spot 3 [rohan] Men, Merry cannot be overwhelmed unless his strength is tripled.
 		*/
 

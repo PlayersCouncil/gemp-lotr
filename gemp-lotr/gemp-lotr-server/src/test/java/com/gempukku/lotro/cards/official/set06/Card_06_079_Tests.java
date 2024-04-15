@@ -40,7 +40,6 @@ public class Card_06_079_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be an Easterling.<br>While you can spot 2 burdens, bearer cannot take wounds.<br>While you can spot 5 burdens, bearer is <b>damage +1</b>.
 		*/
 

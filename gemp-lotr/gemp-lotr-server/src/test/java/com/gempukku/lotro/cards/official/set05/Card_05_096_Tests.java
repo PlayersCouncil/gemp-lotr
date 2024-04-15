@@ -39,7 +39,6 @@ public class Card_05_096_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a companion or ally skirmishing a [sauron] Orc strength -1 for each Ring-bound companion.<br><b>Response:</b> If a Free Peoples player reveals this card from your hand, discard this card to add 2 burdens.
 		*/
 

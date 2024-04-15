@@ -39,7 +39,6 @@ public class Card_04_069_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time Legolas wins a skirmish, you may place an [elven] token on this card.<br>While you can spot X [elven] tokens on this card and the same number of [dwarven] tokens on My Axe Is Notched, Legolas is strength +X (limit +3).
 		*/
 

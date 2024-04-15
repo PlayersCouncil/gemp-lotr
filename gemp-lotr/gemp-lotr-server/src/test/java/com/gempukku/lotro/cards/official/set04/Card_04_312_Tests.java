@@ -39,7 +39,6 @@ public class Card_04_312_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Spot Frodo and add a burden to wound a minion skirmishing a companion who has the Frodo signet.
 		*/
 

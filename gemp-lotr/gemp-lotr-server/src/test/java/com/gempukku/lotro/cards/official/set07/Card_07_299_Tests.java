@@ -41,7 +41,6 @@ public class Card_07_299_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Shadow:</b> Remove (3) and spot 3 [sauron] Orcs to draw a card.
 		*/

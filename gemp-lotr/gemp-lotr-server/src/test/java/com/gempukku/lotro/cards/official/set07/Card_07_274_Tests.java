@@ -41,7 +41,6 @@ public class Card_07_274_Tests
 		 * Subtype: Orc
 		 * Strength: 12
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Skirmish:</b> Discard 2 cards from hand to play a [sauron] Orc stacked on a site you control. That Orc is <b>fierce</b> and strength +6 until the regroup phase.
 		*/

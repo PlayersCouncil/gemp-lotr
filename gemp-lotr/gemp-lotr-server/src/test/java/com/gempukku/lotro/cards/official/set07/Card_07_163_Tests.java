@@ -41,7 +41,6 @@ public class Card_07_163_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. To play, spot a [raider] Man.<br>Each time the Free Peoples player assigns this minion to a character, the Shadow has initiative until the end of the turn.
 		*/

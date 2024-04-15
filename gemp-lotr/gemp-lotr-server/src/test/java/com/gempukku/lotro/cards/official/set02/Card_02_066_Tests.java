@@ -41,7 +41,6 @@ public class Card_02_066_Tests
 		 * Subtype: Creature
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Tentacle</b>. <b>Damage +1</b>.<br>When you play this minion, you may play Watcher in the Water from your draw deck.<br>This minion may not bear possessions and is discarded if not at a marsh.
 		*/

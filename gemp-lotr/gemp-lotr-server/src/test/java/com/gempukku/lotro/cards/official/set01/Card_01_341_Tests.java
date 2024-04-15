@@ -39,7 +39,6 @@ public class Card_01_341_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Play an Elf to draw a card.
 		*/

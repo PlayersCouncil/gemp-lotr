@@ -39,7 +39,6 @@ public class Card_04_097_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Spell</b>.<br><b>Skirmish:</b> Spot Gandalf to prevent all wounds to him. Any Shadow player may make you wound a minion to prevent this.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_04_097_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}

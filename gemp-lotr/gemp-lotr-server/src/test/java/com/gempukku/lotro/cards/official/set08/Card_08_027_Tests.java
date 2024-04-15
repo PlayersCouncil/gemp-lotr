@@ -41,9 +41,7 @@ public class Card_08_027_Tests
 		 * Subtype: 
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> Add threats equal to the total vitality of the minions Sméagol is skirmishing to discard Sméagol.<br><b>Regroup:</b> Discard Sméagol to take a [gollum] minion from your discard pile into hand.
 		*/
 

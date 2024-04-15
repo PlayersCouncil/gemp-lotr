@@ -41,7 +41,6 @@ public class Card_06_022_Tests
 		 * Subtype: Elf
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Game Text: To play, spot 3 Elf companions.<br><b>Skirmish:</b> Exert Naith Troop to discard the top card of your draw deck. If it is an [elven] card, make a minion skirmishing Naith Troop strength -2.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_04_235_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Spot a [raider] Man skirmishing a Ring-bound companion to add a burden.
 		*/
 

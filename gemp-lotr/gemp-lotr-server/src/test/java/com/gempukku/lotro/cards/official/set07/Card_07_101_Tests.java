@@ -39,7 +39,6 @@ public class Card_07_101_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 3 [gondor] Men.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to discard a minion (or all roaming minions).
 		*/
 

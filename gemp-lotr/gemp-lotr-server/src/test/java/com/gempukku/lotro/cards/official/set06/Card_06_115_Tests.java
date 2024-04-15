@@ -39,7 +39,6 @@ public class Card_06_115_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1T
 		 * Game Text: <b>Fellowship:</b> Play a companion with the Frodo signet to remove a burden.
 		*/

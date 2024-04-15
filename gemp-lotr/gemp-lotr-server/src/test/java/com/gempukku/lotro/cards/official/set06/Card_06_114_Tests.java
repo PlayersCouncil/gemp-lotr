@@ -41,9 +41,7 @@ public class Card_06_114_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Regroup:</b> Discard Pippin to choose a Shadow player who must wound one of his or her minions.
 		*/
 

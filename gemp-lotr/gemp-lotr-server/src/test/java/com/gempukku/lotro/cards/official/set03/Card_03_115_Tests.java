@@ -39,7 +39,6 @@ public class Card_03_115_Tests
 		 * Shadow Number: 3
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 6
 		 * Game Text: <b>Forest</b>. <b>Sanctuary</b>. While the fellowship is at Caras Galadhon, no more than one minion may be assigned to each skirmish.
 		*/

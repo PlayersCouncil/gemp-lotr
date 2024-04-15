@@ -41,9 +41,7 @@ public class Card_04_310_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Skirmish:</b> Exert the Ring-bearer to discard Merry. Any Shadow player may remove (2) to prevent this.
 		*/
 

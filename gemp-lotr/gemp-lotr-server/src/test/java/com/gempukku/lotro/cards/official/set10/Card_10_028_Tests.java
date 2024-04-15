@@ -41,9 +41,7 @@ public class Card_10_028_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] card into hand from your draw deck, then reshuffle. Choose an opponent who may draw 2 cards.
 		*/
 

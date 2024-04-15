@@ -41,9 +41,7 @@ public class Card_02_104_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Fellowship:</b> Exert Merry to play Farmer Maggot from your draw deck.
 		*/
 

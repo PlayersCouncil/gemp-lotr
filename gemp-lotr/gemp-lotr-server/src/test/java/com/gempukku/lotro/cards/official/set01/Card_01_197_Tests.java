@@ -39,12 +39,13 @@ public class Card_01_197_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Exert your [moria] Orc to draw 2 cards.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Threat of the Unknown", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

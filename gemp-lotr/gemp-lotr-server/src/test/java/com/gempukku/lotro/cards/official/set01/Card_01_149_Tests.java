@@ -41,13 +41,14 @@ public class Card_01_149_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 6
 		 * Vitality: 1
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>While you can spot a weather condition, this minion is strength +3.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Uruk Messenger", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

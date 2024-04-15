@@ -39,7 +39,6 @@ public class Card_10_097_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If a burden is added, spot a [sauron] minion to add an additional burden.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_097_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

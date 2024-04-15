@@ -41,13 +41,14 @@ public class Card_01_146_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 5 companions to make this minion <b>fierce</b> until the regroup phase.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Uruk Fighter", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

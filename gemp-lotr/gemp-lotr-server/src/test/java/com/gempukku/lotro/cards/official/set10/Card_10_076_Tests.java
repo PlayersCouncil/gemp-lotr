@@ -41,7 +41,6 @@ public class Card_10_076_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Exert this minion to make a roaming [sauron] minion strength +3.
 		*/

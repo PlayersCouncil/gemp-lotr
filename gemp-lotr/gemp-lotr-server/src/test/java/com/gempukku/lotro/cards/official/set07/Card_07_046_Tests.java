@@ -39,7 +39,6 @@ public class Card_07_046_Tests
 		 * Twilight Cost: 4
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Spot Gandalf to heal an unbound Hobbit 3 times.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_046_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}
 

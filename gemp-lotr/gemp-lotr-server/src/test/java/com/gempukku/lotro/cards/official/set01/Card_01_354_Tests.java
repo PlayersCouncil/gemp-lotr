@@ -39,7 +39,6 @@ public class Card_01_354_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7
 		 * Game Text: <b>Forest</b>. <b>River</b>. While the fellowship is at Anduin Wilderland, skip the archery phase.
 		*/

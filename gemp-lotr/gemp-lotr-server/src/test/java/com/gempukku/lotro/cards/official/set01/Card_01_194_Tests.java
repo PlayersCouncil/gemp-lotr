@@ -39,18 +39,20 @@ public class Card_01_194_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>.<br><b>Response:</b> If a stealth event is played, spot 3 [moria] minions to cancel that event.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Relentless", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SEARCH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

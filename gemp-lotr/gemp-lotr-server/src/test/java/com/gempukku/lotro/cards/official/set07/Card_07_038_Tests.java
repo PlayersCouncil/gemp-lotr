@@ -39,9 +39,7 @@ public class Card_07_038_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Staff
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Gandalf.<br>While you can spot 4 twilight tokens, Gandalf is strength +1.
 		*/
 

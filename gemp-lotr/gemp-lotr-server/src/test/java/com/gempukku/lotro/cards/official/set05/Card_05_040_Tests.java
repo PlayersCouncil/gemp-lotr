@@ -39,7 +39,6 @@ public class Card_05_040_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Exert a knight to play a [gondor] fortification from your discard pile.
 		*/
 

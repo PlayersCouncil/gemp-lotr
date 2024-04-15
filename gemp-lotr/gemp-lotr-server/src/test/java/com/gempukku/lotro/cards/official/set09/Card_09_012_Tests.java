@@ -39,9 +39,7 @@ public class Card_09_012_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Hand weapon
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be an Elf.<br>If bearer is Gil-galad, he is strength +1 for each [elven] artifact you can spot (limit +6).<br><b>Regroup:</b> Discard Aiglos to wound a minion for each Elf you spot.
 		*/
 

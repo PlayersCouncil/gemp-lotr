@@ -39,7 +39,6 @@ public class Card_02_009_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Plays to your support area.<br>Each time you play a Dwarf, you may discard the top 2 cards from your draw deck to take a [dwarven] event into hand from your discard pile.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_07_291_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Remove 2 threats to make a [sauron] Orc strength +6.
 		*/

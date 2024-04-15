@@ -39,7 +39,6 @@ public class Card_02_031_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert a [gondor] companion. Plays to your support area.<br>Each [sauron] Orc comes into play exhausted.<br>Skip the archery phase. Discard this condition during the regroup phase.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_02_064_Tests
 		 * Subtype: Orc
 		 * Strength: 4
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may discard an [elven] condition.<br>The roaming penalty for each [moria] Orc you play is -1.
 		*/

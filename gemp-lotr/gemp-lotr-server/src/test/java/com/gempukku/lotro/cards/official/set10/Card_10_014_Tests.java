@@ -39,7 +39,6 @@ public class Card_10_014_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Spot your Wizard to exchange a companion in hand with a companion in your dead pile or discard pile.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_014_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

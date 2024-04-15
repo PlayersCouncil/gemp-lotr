@@ -39,7 +39,6 @@ public class Card_07_062_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Shadow:</b> Remove (1) and exert Gollum to discard the top card of your draw deck. If that card is a [gollum] or [wraith] card, take it into hand.
 		*/
 

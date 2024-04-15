@@ -39,7 +39,6 @@ public class Card_06_001_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area. When you play this condition, you may spot 2 [dunland] Men to place 2 [dunland] tokens here.<br><b>Response:</b> If a [dunland] Man is about to take a wound, discard this condition or remove a [dunland] token from here to prevent that wound.
 		*/
 

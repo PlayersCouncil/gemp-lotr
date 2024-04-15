@@ -39,7 +39,6 @@ public class Card_10_046_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: Exert a [raider] Man to discard a Free Peoples condition. If you spot a [rohan] Man, discard an additional Free Peoples condition.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_046_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.ARCHERY));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

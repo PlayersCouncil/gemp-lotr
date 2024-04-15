@@ -39,7 +39,6 @@ public class Card_08_109_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Regroup:</b> Exert an unbound Hobbit and add a burden to reveal your hand. Place each Free Peoples card revealed this way beneath your draw deck.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_07_008_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be Gimli.<br><b>Response:</b> If you have initiative and Gimli is about to take a wound, discard 2 cards from hand to prevent that wound.
 		*/
 

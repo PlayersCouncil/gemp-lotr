@@ -40,7 +40,6 @@ public class Card_06_026_Tests
 		 * Type: Condition
 		 * Subtype: 
 		 * Strength: 4
-
 		 * Game Text: Bearer must be an Ent. Limit 1 per bearer.<br>Discard this condition at the end of the turn.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_08_100_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Archery:</b> Return this minion to your hand to make the fellowship archery total -2 and prevent the Free Peoples player from using archery special abilities.
 		*/

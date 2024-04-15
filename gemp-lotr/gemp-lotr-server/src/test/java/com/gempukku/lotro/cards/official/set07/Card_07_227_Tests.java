@@ -41,9 +41,7 @@ public class Card_07_227_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Valiant</b>. While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br><b>Fellowship:</b> Play a [rohan] companion to take a [rohan] possession or [rohan] skirmish event into hand from your discard pile.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_02_011_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Maneuver:</b> Exert a Dwarf companion and discard the top 3 cards from your draw deck to discard either a Shadow condition from a Dwarf or a weather condition.
 		*/
 

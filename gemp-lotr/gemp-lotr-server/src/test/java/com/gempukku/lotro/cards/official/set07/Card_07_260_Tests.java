@@ -39,7 +39,6 @@ public class Card_07_260_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Mount
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br><b>Skirmish:</b> If bearer is Éowyn, exert her twice to wound a fierce minion she is skirmishing.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_10_009_Tests
 		 * Subtype: Elf
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Game Text: To play, spot an Elf.<br>At the start of each skirmish involving Elrond, you may reveal the top card of your draw deck. If it is an [elven] card, you may heal another Elf.
 		*/
 

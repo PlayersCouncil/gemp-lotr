@@ -39,7 +39,6 @@ public class Card_04_043_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Stack the top 2 cards from your draw deck on a [dwarven] condition that has a card already stacked on it.
 		*/
 

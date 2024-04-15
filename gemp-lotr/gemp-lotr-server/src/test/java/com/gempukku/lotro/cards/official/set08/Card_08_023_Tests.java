@@ -39,7 +39,6 @@ public class Card_08_023_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [gollum] minion.<br><b>Regroup:</b> Discard an Orc from hand to add a [gollum] token here.<br><b>Skirmish:</b> Remove a [gollum] token here to make Shelob strength +3 (limit +6).
 		*/
 

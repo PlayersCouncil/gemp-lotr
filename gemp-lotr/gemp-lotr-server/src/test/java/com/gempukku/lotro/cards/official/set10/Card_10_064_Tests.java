@@ -39,7 +39,6 @@ public class Card_10_064_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: While you have initiative, each of your [wraith] minions is <b>damage +1</b>.<br><b>Skirmish:</b> Discard this condition to make a [wraith] minion strength +2.
 		*/
 

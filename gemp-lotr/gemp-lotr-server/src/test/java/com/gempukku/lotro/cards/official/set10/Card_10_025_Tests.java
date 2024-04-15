@@ -41,9 +41,7 @@ public class Card_10_025_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: When you play Aragorn, you may heal another companion.<br>At the start of each fellowship phase, you may exert a companion of one culture to heal a companion of another culture.
 		*/
 

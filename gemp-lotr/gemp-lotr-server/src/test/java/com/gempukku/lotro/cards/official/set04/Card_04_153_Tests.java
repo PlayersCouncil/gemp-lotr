@@ -41,7 +41,6 @@ public class Card_04_153_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: Each unbound companion (or ally) bearing a Shadow condition is strength -1.
 		*/

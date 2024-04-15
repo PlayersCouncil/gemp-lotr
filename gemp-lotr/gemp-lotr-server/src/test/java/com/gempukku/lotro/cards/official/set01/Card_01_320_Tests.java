@@ -39,7 +39,6 @@ public class Card_01_320_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1
 		 * Game Text: Each companion's twilight cost is +2.
 		*/

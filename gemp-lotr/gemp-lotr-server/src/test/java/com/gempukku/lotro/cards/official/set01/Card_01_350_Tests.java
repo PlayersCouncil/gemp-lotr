@@ -39,7 +39,6 @@ public class Card_01_350_Tests
 		 * Shadow Number: 3
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 6
 		 * Game Text: <b>Sanctuary</b>. The twilight cost of the first [moria] Orc played each Shadow phase is -2.
 		*/

@@ -39,7 +39,6 @@ public class Card_05_003_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Spot 3 [dunland] minions to shuffle your hand into your draw deck and draw 8 cards. The Free Peoples player may discard 3 cards from hand to prevent this.
 		*/
 

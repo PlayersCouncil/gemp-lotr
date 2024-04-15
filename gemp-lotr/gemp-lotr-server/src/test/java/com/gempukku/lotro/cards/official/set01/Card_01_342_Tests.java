@@ -39,7 +39,6 @@ public class Card_01_342_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3
 		 * Game Text: <b>Forest</b>. <b>Sanctuary</b>. While you can spot a ranger at Rivendell Waterfall, the move limit is +1 for this turn.
 		*/

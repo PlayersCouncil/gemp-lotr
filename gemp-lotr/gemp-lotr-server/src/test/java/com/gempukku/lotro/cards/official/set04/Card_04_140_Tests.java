@@ -39,7 +39,6 @@ public class Card_04_140_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert 2 Uruk-hai to add a burden for each card in the dead pile.
 		*/
 

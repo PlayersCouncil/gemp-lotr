@@ -39,7 +39,6 @@ public class Card_04_326_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1T
 		 * Game Text: <b>Plains</b>. While you can spot a [rohan] mount at Horse-country, the move limit is +1 for this turn.
 		*/

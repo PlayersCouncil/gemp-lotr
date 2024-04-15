@@ -41,9 +41,7 @@ public class Card_10_121_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ring-bearer (resistance 12).</b>
 		*/
 

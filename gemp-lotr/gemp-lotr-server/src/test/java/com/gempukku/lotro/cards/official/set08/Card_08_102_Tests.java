@@ -41,7 +41,6 @@ public class Card_08_102_Tests
 		 * Subtype: Troll
 		 * Strength: 16
 		 * Vitality: 4
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>. <b>Fierce</b>.<br>The twilight cost of this minion is -1 for each [sauron] engine you spot.<br>When you play this minion at sites 5[K] to 9[K], you may discard a Free Peoples condition.
 		*/

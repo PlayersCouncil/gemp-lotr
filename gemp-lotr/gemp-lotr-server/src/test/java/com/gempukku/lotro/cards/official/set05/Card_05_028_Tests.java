@@ -41,9 +41,7 @@ public class Card_05_028_Tests
 		 * Subtype: 
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ring-bound</b>. To play, add a burden.<br><b>Regroup:</b> Exert Sméagol (or Gollum) twice to reveal the top 4 cards of your draw deck. Wound a minion for each Shadow card revealed. Place those 4 cards beneath your draw deck in any order.
 		*/
 

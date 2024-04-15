@@ -39,7 +39,6 @@ public class Card_09_013_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: To play, spot an Elf. Bearer must be an Elf or Hobbit.<br><b>Maneuver:</b> Discard this possession to make a Shadow player return a minion with strength 6 or less to its owner's hand.
 		*/
 

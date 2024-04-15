@@ -39,7 +39,6 @@ public class Card_04_323_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1T
 		 * Game Text: When the fellowship moves from East Wall of Rohan, add (2).
 		*/

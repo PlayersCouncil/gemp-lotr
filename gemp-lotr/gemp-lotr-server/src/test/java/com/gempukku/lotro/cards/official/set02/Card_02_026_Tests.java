@@ -39,7 +39,6 @@ public class Card_02_026_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Fellowship</b> <i>or</i> <b>Regroup:</b> Spot Gandalf to play the fellowship's next site (replacing opponent's site if necessary). Draw a card if you play an underground site.
 		*/
 
@@ -47,7 +46,7 @@ public class Card_02_026_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Speak \"Friend\" and Enter", card.getBlueprint().getTitle());
+		assertEquals("Speak "Friend" and Enter", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());

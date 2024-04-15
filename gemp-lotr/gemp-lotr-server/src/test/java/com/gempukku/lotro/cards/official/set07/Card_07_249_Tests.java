@@ -39,7 +39,6 @@ public class Card_07_249_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Skirmishes are resolved in an order decided by the first Shadow player.<br>Each time a [rohan] Man wins a skirmish, place a [rohan] token here. Each [rohan] Man is strength +1 for each token here.<br>Discard this condition during the regroup phase.
 		*/
 

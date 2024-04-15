@@ -40,12 +40,13 @@ public class Card_01_216_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a Nazgûl.<br>This weapon may be borne in addition to 1 other hand weapon.<br><b>Skirmish:</b> Discard this possession to transfer Blade Tip from your support area or discard pile to a companion bearer is skirmishing.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Morgul Blade", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

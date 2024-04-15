@@ -39,7 +39,6 @@ public class Card_04_062_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Ranged weapon
-
 		 * Game Text: Bearer must be an Elf.<br>Bearer is an <b>archer</b>.
 		*/
 

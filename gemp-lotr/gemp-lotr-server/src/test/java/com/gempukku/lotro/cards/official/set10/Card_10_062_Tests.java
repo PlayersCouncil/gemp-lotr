@@ -41,7 +41,6 @@ public class Card_10_062_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: While the total number of other minions and twilight tokens is 3 or fewer, this minion is strength +3 and an <b>archer</b>.
 		*/

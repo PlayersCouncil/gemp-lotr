@@ -41,7 +41,6 @@ public class Card_06_071_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Regroup:</b> Discard an [isengard] Orc to make the Free Peoples player wound a companion.
 		*/

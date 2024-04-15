@@ -39,7 +39,6 @@ public class Card_04_030_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays on a site you control.<br><b>Regroup:</b> Spot 2 [dunland] Men and discard this condition to make the Free Peoples player choose to move again this turn (if the move limit allows).
 		*/
 

@@ -40,12 +40,13 @@ public class Card_01_160_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be an Uruk-hai.<br>Each time bearer wins a skirmish, the Free Peoples player must discard the top card of his or her draw deck.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Uruk-hai Sword", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

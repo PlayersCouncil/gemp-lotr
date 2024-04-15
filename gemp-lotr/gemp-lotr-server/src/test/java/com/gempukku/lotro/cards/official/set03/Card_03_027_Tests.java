@@ -39,9 +39,7 @@ public class Card_03_027_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Ring
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Elrond.<br><b>Maneuver:</b> Exert Elrond twice and spot a Shadow condition to return that condition to its owner's hand.
 		*/
 

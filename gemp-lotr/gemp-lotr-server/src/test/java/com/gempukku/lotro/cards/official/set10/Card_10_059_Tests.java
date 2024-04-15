@@ -41,7 +41,6 @@ public class Card_10_059_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: For each wound on the Ring-bearer, each [wraith] Orc is strength +1.
 		*/

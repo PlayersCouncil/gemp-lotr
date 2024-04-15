@@ -39,7 +39,6 @@ public class Card_07_173_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: Spot a [raider] minion to add a threat. Add an additional threat for each companion over 4.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_173_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

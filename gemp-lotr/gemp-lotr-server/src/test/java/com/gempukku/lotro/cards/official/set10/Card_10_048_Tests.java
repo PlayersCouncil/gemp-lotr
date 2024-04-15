@@ -39,9 +39,7 @@ public class Card_10_048_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be a Southron.<br>Bearer is <b>enduring</b>.<br><b>Skirmish:</b> Remove a threat to play a [raider] condition from your discard pile.
 		*/
 

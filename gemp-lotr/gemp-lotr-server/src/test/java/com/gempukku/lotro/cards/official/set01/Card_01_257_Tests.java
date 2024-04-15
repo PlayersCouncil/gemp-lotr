@@ -41,13 +41,14 @@ public class Card_01_257_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Maneuver:</b> Remove (3) to exert a Hobbit (except the Ring-bearer).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Morgul Skirmisher", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

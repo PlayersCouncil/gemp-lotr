@@ -41,14 +41,14 @@ public class Card_01_310_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Fellowship:</b> Play Bill the Pony from your draw deck.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Sam", card.getBlueprint().getTitle());
 		assertEquals("Faithful Companion", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

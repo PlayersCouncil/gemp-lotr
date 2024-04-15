@@ -39,7 +39,6 @@ public class Card_07_070_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Discard Sméagol to play a companion from your discard pile.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_070_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

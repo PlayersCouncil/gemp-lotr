@@ -39,7 +39,6 @@ public class Card_04_343_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4T
 		 * Game Text: <b>Mountain</b>. The twilight cost of each companion and ally played at Ered Nimrais is +3.
 		*/

@@ -39,7 +39,6 @@ public class Card_06_109_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Bearer must be Frodo.<br>Each time Frodo is about to be killed by a wound, add a burden instead.<br>When the fellowship moves to site 9, Frodo is corrupted.<br><b>Regroup:</b> If you can spot no minions, discard this condition.
 		*/
 

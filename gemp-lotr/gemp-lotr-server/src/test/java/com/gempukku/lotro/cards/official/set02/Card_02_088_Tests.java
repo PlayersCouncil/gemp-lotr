@@ -39,7 +39,6 @@ public class Card_02_088_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert a [sauron] Orc to discard an ally (or 2 [elven] allies).
 		*/
 

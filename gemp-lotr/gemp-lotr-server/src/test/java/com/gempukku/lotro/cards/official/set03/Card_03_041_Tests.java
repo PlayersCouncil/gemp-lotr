@@ -39,7 +39,6 @@ public class Card_03_041_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Plays to your support area.<br><b>Archery:</b> Exert a [gondor] companion and discard this condition to make the fellowship archery total +2.
 		*/
 

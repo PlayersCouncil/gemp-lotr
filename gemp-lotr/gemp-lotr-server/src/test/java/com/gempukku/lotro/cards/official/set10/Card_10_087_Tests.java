@@ -41,7 +41,6 @@ public class Card_10_087_Tests
 		 * Subtype: Orc
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br>When you play this minion, you may spot 6 companions and another besieger to play a besieger from your discard pile and control a site.
 		*/

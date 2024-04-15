@@ -41,13 +41,14 @@ public class Card_01_186_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Skirmish:</b> Remove (3) to make a [moria] Orc strength +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Guard Commander", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -41,13 +41,14 @@ public class Card_01_258_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: When you play this minion, you may shuffle up to 2 [wraith] cards from your discard pile into your draw deck.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Morgul Skulker", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -41,7 +41,6 @@ public class Card_04_040_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br><b>Response:</b> If another [dunland] Man wins a skirmish, exert Wulf to take control of a site.
 		*/

@@ -39,7 +39,6 @@ public class Card_03_104_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert a [sauron] minion. Plays to your support area.<br>Each time the fellowship moves, the Free Peoples player must discard a card from hand.
 		*/
 

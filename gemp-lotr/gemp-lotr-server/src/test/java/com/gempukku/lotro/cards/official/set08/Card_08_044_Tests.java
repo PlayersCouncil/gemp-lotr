@@ -39,7 +39,6 @@ public class Card_08_044_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fortification</b>.<br><b>Regroup:</b> Exert a [gondor] Man to play a [gondor] fortification from your discard pile (limit 1).
 		*/
 

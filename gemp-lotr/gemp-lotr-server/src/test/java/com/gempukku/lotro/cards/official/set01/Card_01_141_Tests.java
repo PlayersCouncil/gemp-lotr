@@ -39,12 +39,13 @@ public class Card_01_141_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot Saruman or an Uruk-hai. Plays to your support area.<br>Each archer companion and archer ally is strength -1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Their Arrows Enrage", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

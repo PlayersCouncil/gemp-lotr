@@ -41,7 +41,6 @@ public class Card_07_180_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: While you can spot a Nazgûl, Gorbag is strength +2 and <b>damage +1</b>.
 		*/

@@ -39,7 +39,6 @@ public class Card_04_101_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot an [isengard] minion and an Ent ally. Until the regroup phase, that ally is <b>damage +2</b> and participates in archery fire and skirmishes.
 		*/
 

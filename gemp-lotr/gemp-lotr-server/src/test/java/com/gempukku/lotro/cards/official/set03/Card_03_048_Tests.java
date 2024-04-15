@@ -39,7 +39,6 @@ public class Card_03_048_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If the fellowship moves in the regroup phase, exert a [gondor] companion twice to make each minion's twilight cost +1 until the next regroup phase.
 		*/
 

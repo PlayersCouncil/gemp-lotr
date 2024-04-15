@@ -41,7 +41,6 @@ public class Card_04_086_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: To play, spot an Elf.<br>While Thónnas bears a ranged weapon, each minion skirmishing him is strength -2 and Thónnas does not add to the fellowship archery total.
 		*/
 

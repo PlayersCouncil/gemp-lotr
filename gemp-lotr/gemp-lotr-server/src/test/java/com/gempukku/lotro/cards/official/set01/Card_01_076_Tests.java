@@ -39,18 +39,20 @@ public class Card_01_076_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Spell</b>.<br><b>Response:</b> If a companion is about to take a wound, spot Gandalf to prevent that wound.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Intimidate", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

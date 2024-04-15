@@ -39,7 +39,6 @@ public class Card_08_042_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fellowship:</b> Exert a [gondor] Man and either a [dwarven] companion or a [rohan] companion to add a [gondor] token here.<br><b>Regroup:</b> Remove a [gondor] token here to discard a minion.
 		*/
 

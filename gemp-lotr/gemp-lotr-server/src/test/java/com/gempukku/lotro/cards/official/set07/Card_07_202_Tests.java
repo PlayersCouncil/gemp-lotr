@@ -41,7 +41,6 @@ public class Card_07_202_Tests
 		 * Subtype: Orc
 		 * Strength: 3
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: While you can spot a wound on the Ring-bearer, this minion is strength +6.
 		*/

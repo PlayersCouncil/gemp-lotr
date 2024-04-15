@@ -39,7 +39,6 @@ public class Card_02_023_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>The twilight cost of each possession or artifact played on Gandalf or a character who has the Gandalf signet is -1.
 		*/
 

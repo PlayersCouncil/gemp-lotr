@@ -39,12 +39,13 @@ public class Card_01_202_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. To play, exert a [moria] Orc. Plays to your support area.<br>While the fellowship is at site 5 or higher, each companion's twilight cost is +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("What Is This New Devilry?", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

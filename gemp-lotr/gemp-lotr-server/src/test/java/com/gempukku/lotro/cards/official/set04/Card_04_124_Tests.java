@@ -39,7 +39,6 @@ public class Card_04_124_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Exert an unbound [gondor] Man to make a [rohan] companion strength +2, or exert a [rohan] companion to make an unbound [gondor] Man strength +2.
 		*/
 

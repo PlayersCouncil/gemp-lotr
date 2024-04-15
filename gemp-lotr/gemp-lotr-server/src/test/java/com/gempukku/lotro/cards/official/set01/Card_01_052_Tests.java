@@ -39,12 +39,13 @@ public class Card_01_052_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: <b>Archery:</b> Spot an Elf companion to make the minion archery total -1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Lightfootedness", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

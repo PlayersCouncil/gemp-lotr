@@ -41,7 +41,6 @@ public class Card_04_160_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Tracker</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Remove (2) to prevent an [isengard] tracker from taking wounds.
 		*/

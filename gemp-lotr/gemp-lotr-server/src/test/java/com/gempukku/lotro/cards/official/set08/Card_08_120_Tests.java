@@ -39,7 +39,6 @@ public class Card_08_120_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7K
 		 * Game Text: <b>River</b>. <b>Regroup:</b> Spot your minion and 6 companions to make the Free Peoples player choose to move again this turn.
 		*/

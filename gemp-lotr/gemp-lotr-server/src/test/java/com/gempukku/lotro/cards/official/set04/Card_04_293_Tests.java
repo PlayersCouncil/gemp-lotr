@@ -39,7 +39,6 @@ public class Card_04_293_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time your opponent plays a roaming minion, you may spot a villager to exert that minion.
 		*/
 

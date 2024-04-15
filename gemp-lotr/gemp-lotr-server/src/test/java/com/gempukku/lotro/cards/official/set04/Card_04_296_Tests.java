@@ -39,7 +39,6 @@ public class Card_04_296_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>At the start of each fellowship phase, you may heal a villager.
 		*/
 

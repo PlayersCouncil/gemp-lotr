@@ -39,7 +39,6 @@ public class Card_04_044_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area. When you play this condition, stack a card from your discard pile here.<br><b>Fellowship:</b> Discard a Free Peoples card stacked here to heal a Dwarf.
 		*/
 

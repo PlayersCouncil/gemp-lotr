@@ -41,13 +41,14 @@ public class Card_01_034_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Fellowship:</b> Exert Celeborn to heal an [elven] ally.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Celeborn", card.getBlueprint().getTitle());
 		assertEquals("Lord of Lórien", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

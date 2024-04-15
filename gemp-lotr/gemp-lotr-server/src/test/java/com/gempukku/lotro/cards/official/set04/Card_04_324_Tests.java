@@ -39,7 +39,6 @@ public class Card_04_324_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1T
 		 * Game Text: Each time you play a companion here, you must discard 2 cards from hand.
 		*/

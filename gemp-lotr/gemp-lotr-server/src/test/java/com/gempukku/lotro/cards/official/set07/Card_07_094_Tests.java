@@ -39,7 +39,6 @@ public class Card_07_094_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Ranged weapon
-
 		 * Game Text: Bearer must be a [gondor] Man.<br>If bearer is a knight, he or she is strength +1.<br><b>Skirmish:</b> Exert bearer to wound a minion he or she is skirmishing if that minion bears a fortification.
 		*/
 

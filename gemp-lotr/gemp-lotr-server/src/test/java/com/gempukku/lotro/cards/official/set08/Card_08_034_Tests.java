@@ -41,9 +41,7 @@ public class Card_08_034_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Knight</b>.<br>When you play Faramir (except in your starting fellowship), you may reveal the top 10 cards of your draw deck. You may play a knight revealed. Shuffle your draw deck.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_08_096_Tests
 		 * Subtype: Orc
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>. <b>Enduring</b>. To play, spot a [sauron] Orc.<br><b>Maneuver:</b> If you have initiative, exert this minion twice to take control of a site.<br><b>Maneuver:</b> Remove a threat and exert this minion twice to take control of a site.
 		*/

@@ -41,7 +41,6 @@ public class Card_02_089_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Tracker</b>.<br>The roaming penalty for each [sauron] minion you play is -1.<br><b>Response:</b> If an event is played that spots or exerts a ranger, exert or discard this minion to cancel that event.
 		*/

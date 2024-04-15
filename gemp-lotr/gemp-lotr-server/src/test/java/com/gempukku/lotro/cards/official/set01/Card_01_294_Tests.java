@@ -39,12 +39,13 @@ public class Card_01_294_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Add (X) to heal a Hobbit companion X times.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Hobbit Appetite", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

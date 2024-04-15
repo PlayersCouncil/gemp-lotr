@@ -41,7 +41,6 @@ public class Card_08_077_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Shadow:</b> Discard this minion to play a [wraith] minion from your discard pile.<br><b>Shadow:</b> Spot 6 companions and discard this minion to play up to 2 [wraith] minions from your draw deck; their twilight costs are each -1.
 		*/

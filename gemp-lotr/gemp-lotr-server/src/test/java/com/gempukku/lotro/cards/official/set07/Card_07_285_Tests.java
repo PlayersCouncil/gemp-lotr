@@ -41,7 +41,6 @@ public class Card_07_285_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Exert this minion and spot another [sauron] minion to add a threat.
 		*/

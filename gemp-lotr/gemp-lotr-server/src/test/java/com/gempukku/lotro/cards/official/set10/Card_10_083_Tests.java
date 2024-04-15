@@ -41,7 +41,6 @@ public class Card_10_083_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Damage +1</b>.<br>If you can spot another [sauron] Uruk-hai, this minion is twilight cost -1 for each possession you can spot.
 		*/

@@ -39,7 +39,6 @@ public class Card_04_289_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot 2 [rohan] Men (or 1 valiant [rohan] Man) to play a [rohan] character or [rohan] possession from your draw deck.
 		*/
 

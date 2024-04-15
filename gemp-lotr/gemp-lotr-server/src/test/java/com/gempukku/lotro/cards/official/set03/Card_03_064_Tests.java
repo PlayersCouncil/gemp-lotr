@@ -41,7 +41,6 @@ public class Card_03_064_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: Each other [isengard] Orc is strength +1.<br><b>Regroup:</b> Exert Orc Commander to make the Free Peoples player wound a companion.
 		*/

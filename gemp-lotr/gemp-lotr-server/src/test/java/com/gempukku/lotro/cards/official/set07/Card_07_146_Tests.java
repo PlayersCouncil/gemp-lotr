@@ -41,7 +41,6 @@ public class Card_07_146_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>.<br><b>Maneuver:</b> If you cannot spot a burden, spot another Easterling and exert this minion to add a burden.
 		*/

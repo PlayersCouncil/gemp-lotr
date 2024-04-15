@@ -41,9 +41,7 @@ public class Card_06_030_Tests
 		 * Subtype: Wizard
 		 * Strength: 10
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Damage +1</b>.<br>Each time the fellowship moves, wound Gandalf.
 		*/
 

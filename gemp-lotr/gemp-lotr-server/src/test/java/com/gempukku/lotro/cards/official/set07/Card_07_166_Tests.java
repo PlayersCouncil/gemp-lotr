@@ -41,7 +41,6 @@ public class Card_07_166_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br><b>Archery:</b> Spot 4 Free Peoples cultures and either exert this minion or remove a threat to wound a companion (except the Ring-bearer).
 		*/

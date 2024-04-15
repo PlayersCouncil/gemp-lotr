@@ -41,7 +41,6 @@ public class Card_06_102_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Maneuver:</b> Exert this minion twice and spot another [sauron] minion to discard a condition.
 		*/

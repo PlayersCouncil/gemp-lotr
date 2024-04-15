@@ -41,9 +41,7 @@ public class Card_04_073_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Archer</b>.<br>The twilight cost of each Shadow event and Shadow condition is +1 for each unbound Hobbit you can spot.
 		*/
 

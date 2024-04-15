@@ -39,7 +39,6 @@ public class Card_03_035_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Exert Gandalf to make a companion strength +1 for each companion with the Gandalf signet you can spot (limit +3).
 		*/
 

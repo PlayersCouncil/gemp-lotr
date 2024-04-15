@@ -40,7 +40,6 @@ public class Card_09_043_Tests
 		 * Type: Artifact
 		 * Subtype: Ring
 		 * Strength: 1
-
 		 * Game Text: Bearer must be The Witch-king.<br><b>Skirmish:</b> Exert bearer twice to make a [wraith] minion <b>damage +1</b>.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
 		*/
 

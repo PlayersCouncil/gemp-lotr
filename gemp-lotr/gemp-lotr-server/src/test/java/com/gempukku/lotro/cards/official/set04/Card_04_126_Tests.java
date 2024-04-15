@@ -39,7 +39,6 @@ public class Card_04_126_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a [gondor] Man wins a skirmish, you may place a [gondor] token here.<br><b>Maneuver:</b> Exert a minion for each [gondor] token here (limit 3). Discard this condition.
 		*/
 

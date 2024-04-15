@@ -39,7 +39,6 @@ public class Card_08_004_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: If Gimli is not assigned to a skirmish, add a threat to have him replace an unbound companion in a skirmish.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_004_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

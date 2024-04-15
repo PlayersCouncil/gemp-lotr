@@ -39,7 +39,6 @@ public class Card_06_044_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert Sméagol 3 times and discard him to wound each minion. The move limit for this turn is +1. If the fellowship moves, each Shadow player may take up to 3 Shadow cards into hand from his or her discard pile.
 		*/
 

@@ -41,9 +41,7 @@ public class Card_04_089_Tests
 		 * Subtype: Wizard
 		 * Strength: 7
 		 * Vitality: 4
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Fellowship:</b> If the twilight pool has fewer than 2 twilight tokens, add (2) to play a character from your discard pile.
 		*/
 

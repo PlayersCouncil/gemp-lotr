@@ -39,7 +39,6 @@ public class Card_02_070_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Reveal any number of [moria] Orcs from your hand to play The Balrog. Its twilight cost is -2 for each Orc revealed.
 		*/
 

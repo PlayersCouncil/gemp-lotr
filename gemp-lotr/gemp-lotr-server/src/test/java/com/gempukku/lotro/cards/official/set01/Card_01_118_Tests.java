@@ -39,12 +39,13 @@ public class Card_01_118_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Make Aragorn <b>defender +1</b> and he takes no more than 1 wound during each skirmish phase until the regroup phase.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Valiant Man of the West", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

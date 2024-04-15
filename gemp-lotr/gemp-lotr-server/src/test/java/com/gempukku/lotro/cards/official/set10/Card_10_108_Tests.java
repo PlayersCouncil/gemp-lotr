@@ -39,7 +39,6 @@ public class Card_10_108_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time you lose initiative, you may spot 2 [shire] companions to remove a burden.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_05_113_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Add 3 burdens to wound a minion skirmishing a companion who has the Frodo signet twice.
 		*/
 

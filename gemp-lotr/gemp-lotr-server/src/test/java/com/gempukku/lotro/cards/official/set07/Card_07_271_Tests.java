@@ -41,7 +41,6 @@ public class Card_07_271_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Skirmish:</b> Discard this minion to make a [sauron] minion strength +1 for each site you control (or +2 if you have initiative).
 		*/

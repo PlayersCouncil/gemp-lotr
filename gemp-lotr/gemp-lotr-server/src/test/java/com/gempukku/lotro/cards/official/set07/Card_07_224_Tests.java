@@ -41,7 +41,6 @@ public class Card_07_224_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Valiant</b>.<br><b>Skirmish:</b> Exert Elfhelm to make him strength +1 for each uncontrolled plains site you can spot.
 		*/
 

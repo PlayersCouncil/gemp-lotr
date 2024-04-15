@@ -39,7 +39,6 @@ public class Card_01_322_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> Exert a Hobbit to play Sam from your draw deck.
 		*/

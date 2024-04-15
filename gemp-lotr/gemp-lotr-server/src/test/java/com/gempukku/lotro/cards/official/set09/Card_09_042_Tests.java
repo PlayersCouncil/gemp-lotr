@@ -40,7 +40,6 @@ public class Card_09_042_Tests
 		 * Type: Artifact
 		 * Subtype: Ring
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a Nazgûl.<br>When you play this artifact, you may wound an unwounded companion.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
 		*/
 

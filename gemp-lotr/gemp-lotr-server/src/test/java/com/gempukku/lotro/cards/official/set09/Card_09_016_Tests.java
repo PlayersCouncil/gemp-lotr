@@ -41,7 +41,6 @@ public class Card_09_016_Tests
 		 * Subtype: Elf
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Game Text: When Glorfindel is in your starting fellowship, his twilight cost is -2.<br><b>Skirmish:</b> Reveal the top card of your draw deck. You may exert Glorfindel to make a Nazgûl he is skirmishing strength -X, where X is the twilight cost of the card revealed.
 		*/
 

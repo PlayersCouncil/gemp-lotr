@@ -40,7 +40,6 @@ public class Card_03_021_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be Legolas.<br>Each Orc or Uruk-hai skirmishing Legolas is strength -2.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_08_069_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Archery:</b> Spot your enduring or mounted Nazgûl to transfer this condition from your support area to an unbound companion. Discard a mount borne by that companion.<br>Bearer cannot heal or bear mounts.
 		*/
 

@@ -40,7 +40,6 @@ public class Card_07_240_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>You may add a threat to play this possession any time you could play a skirmish event.
 		*/
 

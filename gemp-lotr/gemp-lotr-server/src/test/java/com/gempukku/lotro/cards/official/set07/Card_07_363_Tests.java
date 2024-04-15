@@ -39,7 +39,6 @@ public class Card_07_363_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9K
 		 * Game Text: Each time a companion is killed, add a burden.
 		*/

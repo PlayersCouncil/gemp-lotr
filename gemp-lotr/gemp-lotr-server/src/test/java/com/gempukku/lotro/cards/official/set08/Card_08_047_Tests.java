@@ -39,7 +39,6 @@ public class Card_08_047_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, add a threat.<br>Each time your [gondor] Wraith wins a skirmish, you may remove a threat.
 		*/
 

@@ -39,18 +39,20 @@ public class Card_01_081_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Spell</b>.<br><b>Fellowship:</b> If the twilight pool has fewer than 3 twilight tokens, spot Gandalf to look at the top 4 cards of your draw deck. Take 2 of those cards into hand and discard the rest.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Questions That Need Answering", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}

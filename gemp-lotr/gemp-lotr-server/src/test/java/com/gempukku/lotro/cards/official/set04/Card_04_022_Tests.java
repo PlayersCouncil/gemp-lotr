@@ -41,7 +41,6 @@ public class Card_04_022_Tests
 		 * Subtype: Man
 		 * Strength: 14
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: While you control 2 sites, skip the archery phase.<br>While you control 3 sites, each of your [dunland] Men is <b>fierce</b>.<br>While you control 4 sites, each of your [dunland] Men is <b>damage +1</b>.
 		*/

@@ -39,7 +39,6 @@ public class Card_07_204_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a Nazgûl.<br>Each time a companion is played, the Free Peoples player must exert a companion.<br><b>Shadow:</b> Spot a Nazgûl and discard this condition to play a Nazgûl from your discard pile.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_07_048_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot Gandalf.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to wound 2 minions.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_02_079_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert a twilight Nazgûl to exert the Ring-bearer. If the Ring-bearer is then exhausted, he puts on The One Ring until the regroup phase.
 		*/
 

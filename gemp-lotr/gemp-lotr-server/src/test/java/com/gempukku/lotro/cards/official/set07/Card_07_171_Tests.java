@@ -39,7 +39,6 @@ public class Card_07_171_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Spot a threat and X [raider] Men to make the Free Peoples player exert X companions (limit 3).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_171_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

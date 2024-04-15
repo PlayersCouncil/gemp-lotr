@@ -39,12 +39,13 @@ public class Card_01_106_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert a ranger companion to discard a minion.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gondor's Vengeance", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

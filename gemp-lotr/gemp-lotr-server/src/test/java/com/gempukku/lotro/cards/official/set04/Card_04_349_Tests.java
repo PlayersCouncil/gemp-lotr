@@ -39,7 +39,6 @@ public class Card_04_349_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 5T
 		 * Game Text: <b>Battleground</b>. Each companion and minion bearing a hand weapon is strength +2.
 		*/

@@ -39,7 +39,6 @@ public class Card_07_252_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot a [rohan] Man. Plays on a site.<br>This site is a <b>plains</b>.<br>Each [rohan] Man is strength +1 at this site.
 		*/
 

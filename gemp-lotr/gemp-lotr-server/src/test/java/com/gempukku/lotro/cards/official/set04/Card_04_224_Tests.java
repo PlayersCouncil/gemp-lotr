@@ -41,7 +41,6 @@ public class Card_04_224_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>.<br>While you can spot 2 burdens, this minion is strength +3 and <b>fierce</b>.
 		*/

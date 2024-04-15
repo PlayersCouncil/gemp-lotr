@@ -41,7 +41,6 @@ public class Card_07_272_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br>When you play this minion from a site you control, add 2 threats.
 		*/

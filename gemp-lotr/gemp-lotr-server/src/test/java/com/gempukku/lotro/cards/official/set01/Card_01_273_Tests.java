@@ -39,12 +39,13 @@ public class Card_01_273_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If a [sauron] Orc kills a companion, add 1 burden (or 3 if the Ring-bearer wears The One Ring).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Ring's Oppression", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

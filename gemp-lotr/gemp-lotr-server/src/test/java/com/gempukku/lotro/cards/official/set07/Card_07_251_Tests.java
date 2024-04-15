@@ -39,7 +39,6 @@ public class Card_07_251_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 [rohan] Men.<br><b>Regroup:</b> Discard cards from hand equal to the number of cards in an opponent's hand to make the move limit +1 for this turn. Each Shadow player may take up to 4 cards into hand from his or her discard pile. Discard this condition.
 		*/
 

@@ -41,9 +41,7 @@ public class Card_07_327_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ring-bound</b>.<br><b>Fellowship:</b> If you have initiative, discard a card from hand to heal Sam.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
 

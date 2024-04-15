@@ -39,7 +39,6 @@ public class Card_09_050_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Tale</b>. Each unbound Hobbit is strength +1 for each vitality over 3 he or she has.<br><b>Skirmish:</b> Prevent an unbound Hobbit from being overwhelmed unless his or her strength is tripled. Discard this condition.
 		*/
 

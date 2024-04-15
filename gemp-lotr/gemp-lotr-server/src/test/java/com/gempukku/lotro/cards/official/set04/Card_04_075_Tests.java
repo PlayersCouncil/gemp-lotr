@@ -39,7 +39,6 @@ public class Card_04_075_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: To play, spot 3 Elves. Bearer must be a companion.<br><b>Regroup:</b> Discard this possession to reconcile your hand.
 		*/
 

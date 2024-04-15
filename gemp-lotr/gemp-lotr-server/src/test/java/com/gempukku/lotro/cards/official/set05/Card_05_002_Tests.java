@@ -41,7 +41,6 @@ public class Card_05_002_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: When you play this minion, the Free Peoples player may discard 2 cards from hand to discard him.
 		*/

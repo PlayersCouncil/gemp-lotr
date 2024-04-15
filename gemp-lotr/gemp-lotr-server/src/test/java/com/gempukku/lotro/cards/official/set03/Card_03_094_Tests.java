@@ -41,7 +41,6 @@ public class Card_03_094_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: For each [sauron] condition you can spot, this minion is strength +1.
 		*/

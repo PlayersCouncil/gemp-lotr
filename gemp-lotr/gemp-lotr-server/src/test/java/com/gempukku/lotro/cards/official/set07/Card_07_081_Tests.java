@@ -41,9 +41,7 @@ public class Card_07_081_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Knight</b>.<br>At the start of each fellowship phase, you may add (2) to heal another [gondor] companion.
 		*/
 

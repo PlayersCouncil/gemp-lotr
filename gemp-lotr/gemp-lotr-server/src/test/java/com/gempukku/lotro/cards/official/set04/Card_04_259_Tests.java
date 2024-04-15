@@ -39,7 +39,6 @@ public class Card_04_259_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Assignment
-
 		 * Game Text: <b>Assignment:</b> Assign an Easterling to the Ring-bearer. The Free Peoples player may add a burden to prevent this.
 		*/
 

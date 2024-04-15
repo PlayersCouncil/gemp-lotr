@@ -40,7 +40,6 @@ public class Card_07_186_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must a [wraith] Orc.<br>While you can spot 2 wounds on the Ring-bearer, bearer is <b>damage +1</b>.
 		*/
 

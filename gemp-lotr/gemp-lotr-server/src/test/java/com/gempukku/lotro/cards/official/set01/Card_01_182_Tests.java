@@ -40,12 +40,13 @@ public class Card_01_182_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [moria] minion.<br>If bearer kills a companion in a skirmish, add 1 burden (or 2 burdens if that companion was a Hobbit).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Spear", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

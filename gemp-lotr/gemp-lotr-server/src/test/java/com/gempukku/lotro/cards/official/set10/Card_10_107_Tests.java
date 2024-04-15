@@ -39,9 +39,7 @@ public class Card_10_107_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Vitality: -1
-
 		 * Game Text: Play this condition only during a skirmish. Bearer must be a Hobbit.<br>When this condition is played, wound a minion skirmishing bearer.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_05_031_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Game Text: <b>Knight</b>. The twilight cost of each other knight in your starting fellowship is -1.<br><b>Assignment:</b> Assign Alcarin to a minion bearing a [gondor] fortification to heal Alcarin.
 		*/
 

@@ -39,12 +39,13 @@ public class Card_01_022_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert a Dwarf to discard cards from the top of your draw deck until you choose to stop (limit 5). Add (1) for each card discarded in this way. Take the last card discarded into hand.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Mithril Shaft", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

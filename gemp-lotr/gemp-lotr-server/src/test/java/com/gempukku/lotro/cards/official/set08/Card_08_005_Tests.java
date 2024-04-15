@@ -41,9 +41,7 @@ public class Card_08_005_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Damage +1</b>.<br>For each wound on Gimli, he is strength +1 and <b>damage +1</b>.
 		*/
 

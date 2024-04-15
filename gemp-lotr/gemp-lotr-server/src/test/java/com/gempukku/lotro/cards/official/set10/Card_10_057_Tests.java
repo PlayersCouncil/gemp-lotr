@@ -41,7 +41,6 @@ public class Card_10_057_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: Each companion skirmishing this minion loses all <b>damage</b> and strength bonuses from possessions.
 		*/

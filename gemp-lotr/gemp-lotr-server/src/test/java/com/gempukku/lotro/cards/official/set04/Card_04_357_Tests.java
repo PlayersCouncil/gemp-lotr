@@ -39,7 +39,6 @@ public class Card_04_357_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7T
 		 * Game Text: When the fellowship moves to King's Room without a [rohan] companion, each unbound companion must exert.
 		*/

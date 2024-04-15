@@ -41,7 +41,6 @@ public class Card_04_136_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>While at a battleground, this minion is <b>fierce</b>.<br>While you control a battleground, this minion is strength +4.
 		*/

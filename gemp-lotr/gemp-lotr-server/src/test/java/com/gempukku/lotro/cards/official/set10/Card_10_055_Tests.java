@@ -41,7 +41,6 @@ public class Card_10_055_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Shadow:</b> Spot a possession to make this minion <b>fierce</b> until the regroup phase.
 		*/

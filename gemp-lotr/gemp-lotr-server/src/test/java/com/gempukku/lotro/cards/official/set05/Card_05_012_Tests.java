@@ -40,7 +40,6 @@ public class Card_05_012_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be Legolas.<br>Each time the fellowship moves, you may spot a wounded minion to heal Legolas.
 		*/
 

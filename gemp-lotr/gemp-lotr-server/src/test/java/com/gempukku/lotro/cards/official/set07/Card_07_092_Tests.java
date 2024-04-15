@@ -40,7 +40,6 @@ public class Card_07_092_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Strength: -1
-
 		 * Game Text: <b>Fortification</b>.<br><b>Maneuver:</b> Exert a [gondor] Man or spot a knight to transfer this condition from your support area to a minion.
 		*/
 

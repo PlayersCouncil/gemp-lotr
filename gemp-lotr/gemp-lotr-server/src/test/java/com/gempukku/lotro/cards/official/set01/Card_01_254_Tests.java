@@ -39,12 +39,13 @@ public class Card_01_254_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays on a [sauron] minion.<br><b>Shadow:</b> Exert bearer to add (1) for each archer companion.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Mordor Enraged", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

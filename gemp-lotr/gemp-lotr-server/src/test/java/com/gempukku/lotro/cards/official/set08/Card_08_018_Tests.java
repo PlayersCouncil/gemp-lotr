@@ -39,7 +39,6 @@ public class Card_08_018_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fellowship:</b> Exert Gandalf and either an [elven] companion or a [shire] companion to add a [gandalf] token here.<br><b>Skirmish:</b> Remove a [gandalf] token here to make a minion skirmishing an unbound companion strength -2.
 		*/
 

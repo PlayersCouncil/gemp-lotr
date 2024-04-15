@@ -39,7 +39,6 @@ public class Card_08_071_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: When you play a minion stacked here, you may exert a companion.<br><b>Regroup:</b> If no minion is stacked here, spot your [wraith] minion to stack it here.<br><b>Shadow:</b> Spot 2 [wraith] minions to play a [wraith] minion stacked here as if played from hand.
 		*/
 

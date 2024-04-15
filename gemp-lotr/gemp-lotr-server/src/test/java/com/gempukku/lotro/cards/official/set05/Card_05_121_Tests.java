@@ -41,9 +41,7 @@ public class Card_05_121_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Archer</b>.<br>Each time Legolas wins a skirmish, you may heal a Dwarf companion or another Elf companion.
 		*/
 

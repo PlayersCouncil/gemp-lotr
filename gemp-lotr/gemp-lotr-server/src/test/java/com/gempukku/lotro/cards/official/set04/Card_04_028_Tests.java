@@ -39,7 +39,6 @@ public class Card_04_028_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Shadow:</b> Remove (3) to place a [dunland] token here.<br><b>Skirmish:</b> Spot a [dunland] Man and remove a [dunland] token from this card. A character skirmishing that [dunland] Man does not gain strength bonuses from possessions.
 		*/
 

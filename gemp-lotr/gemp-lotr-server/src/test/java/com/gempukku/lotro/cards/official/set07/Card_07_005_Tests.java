@@ -39,7 +39,6 @@ public class Card_07_005_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a Dwarf.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to heal a Dwarf twice and take a [dwarven] skirmish event into hand from your discard pile.
 		*/
 

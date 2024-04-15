@@ -40,7 +40,6 @@ public class Card_07_114_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Pippin.<br><b>Skirmish:</b> Exert Pippin twice make him strength +1 for each [gondor] companion you spot.
 		*/
 

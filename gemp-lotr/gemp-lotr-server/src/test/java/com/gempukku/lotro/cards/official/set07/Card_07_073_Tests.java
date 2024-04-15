@@ -39,7 +39,6 @@ public class Card_07_073_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Stealth</b>.<br>Heal Sméagol (or cancel Sméagol's skirmish if he has more vitality than the minion or minions he is skirmishing).
 		*/
 
@@ -53,6 +52,8 @@ public class Card_07_073_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.STEALTH));
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

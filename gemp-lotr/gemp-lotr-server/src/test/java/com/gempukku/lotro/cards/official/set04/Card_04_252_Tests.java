@@ -41,7 +41,6 @@ public class Card_04_252_Tests
 		 * Subtype: Man
 		 * Strength: 3
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Ambush (2)</b>.
 		*/

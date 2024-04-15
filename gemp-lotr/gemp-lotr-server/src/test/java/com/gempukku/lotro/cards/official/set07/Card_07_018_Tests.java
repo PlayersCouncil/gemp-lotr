@@ -40,7 +40,6 @@ public class Card_07_018_Tests
 		 * Type: Possession
 		 * Subtype: Ranged weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be Legolas.<br>Each time you play an [elven] skirmish event during a skirmish involving Legolas, you may heal him.
 		*/
 

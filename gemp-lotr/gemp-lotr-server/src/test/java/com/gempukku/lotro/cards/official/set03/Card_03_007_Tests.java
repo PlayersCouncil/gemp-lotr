@@ -41,9 +41,7 @@ public class Card_03_007_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ranger</b>.<br><b>Response:</b> If the Ring-bearer is about to take a wound, discard 3 cards from hand to prevent that wound.
 		*/
 

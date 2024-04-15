@@ -39,7 +39,6 @@ public class Card_07_340_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3K
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 3 threats, add 3 threats to make the move limit for this turn +1.
 		*/

@@ -41,13 +41,14 @@ public class Card_01_199_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: Cave Troll of Moria's twilight cost is -2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Troll's Keyward", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -39,12 +39,13 @@ public class Card_01_091_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Pipe
-
 		 * Game Text: Bearer must be a [gondor] companion.<br><b>Fellowship:</b> Discard a pipeweed possession and spot X pipes to heal X companions.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Aragorn's Pipe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

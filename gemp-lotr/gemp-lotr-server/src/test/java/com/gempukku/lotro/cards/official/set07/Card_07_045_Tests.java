@@ -39,7 +39,6 @@ public class Card_07_045_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot Gandalf and add 3 threats.<br>Gandalf is <b>defender +1</b> and cannot take wounds.<br>Discard this condition at the start of the regroup phase.
 		*/
 

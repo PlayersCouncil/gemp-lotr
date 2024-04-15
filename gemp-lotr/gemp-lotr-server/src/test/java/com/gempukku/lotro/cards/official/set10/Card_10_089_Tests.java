@@ -41,7 +41,6 @@ public class Card_10_089_Tests
 		 * Subtype: Mount
 		 * Strength: 1
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be a [sauron] Orc.<br>For each site you control, bearer is strength +1 (or +2 if bearer is Gothmog).
 		*/
 

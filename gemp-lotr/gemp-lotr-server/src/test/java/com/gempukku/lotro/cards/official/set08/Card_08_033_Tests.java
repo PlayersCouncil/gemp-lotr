@@ -39,7 +39,6 @@ public class Card_08_033_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If a [gondor] Wraith is about to be killed, discard him and either exhaust another [gondor] Wraith or spot another exhausted [gondor] Wraith to prevent that.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_033_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

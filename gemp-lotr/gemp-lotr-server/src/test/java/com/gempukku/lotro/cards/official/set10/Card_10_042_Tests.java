@@ -41,7 +41,6 @@ public class Card_10_042_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may spot 6 companions and another [raider] Man to discard an unbound companion this minion is skirmishing.
 		*/

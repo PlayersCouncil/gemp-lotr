@@ -39,7 +39,6 @@ public class Card_02_017_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If an Elf archer wins a skirmish, make an opponent choose a minion to discard. That opponent may remove (3) to prevent this.
 		*/
 

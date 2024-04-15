@@ -39,7 +39,6 @@ public class Card_04_263_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Mount
-
 		 * Game Text: To play, spot a [rohan] Man. Bearer must be a Man, Elf, or Wizard. When you play Brego, you may heal bearer.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
 		*/
 

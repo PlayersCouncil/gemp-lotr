@@ -39,7 +39,6 @@ public class Card_05_084_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Exert Théoden twice to heal every other companion with the Théoden signet twice.
 		*/
 

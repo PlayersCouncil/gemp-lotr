@@ -39,7 +39,6 @@ public class Card_10_115_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Stealth</b>. If there are 6 or more [shire] cards in your discard pile, cancel a skirmish involving your Hobbit and a minion who is not fierce. Each minion in that skirmish is <b>fierce</b> until the regroup phase.
 		*/
 
@@ -53,6 +52,8 @@ public class Card_10_115_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.STEALTH));
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

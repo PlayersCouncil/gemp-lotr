@@ -39,7 +39,6 @@ public class Card_07_253_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Mount
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>While at a plains site, bearer takes no more than 1 wound during each skirmish.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
 		*/
 

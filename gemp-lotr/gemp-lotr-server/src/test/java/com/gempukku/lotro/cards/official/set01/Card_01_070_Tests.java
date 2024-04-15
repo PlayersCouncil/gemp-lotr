@@ -41,13 +41,14 @@ public class Card_01_070_Tests
 		 * Subtype: Man
 		 * Strength: 1
 		 * Vitality: 2
-
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> Exert Barliman Butterbur to take a [gandalf] event into hand from your discard pile.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Barliman Butterbur", card.getBlueprint().getTitle());
 		assertEquals("Prancing Pony Proprietor", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -41,7 +41,6 @@ public class Card_10_040_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>. To play, spot an Easterling.<br>While this minion is unwounded, he is <b>damage +2</b>.<br><b>Skirmish:</b> Wound 2 other [raider] Men to heal this minion.
 		*/

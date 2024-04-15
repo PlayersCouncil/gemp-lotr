@@ -39,7 +39,6 @@ public class Card_04_056_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot a Dwarf and discard the top card of your draw deck to draw 2 cards.
 		*/
 

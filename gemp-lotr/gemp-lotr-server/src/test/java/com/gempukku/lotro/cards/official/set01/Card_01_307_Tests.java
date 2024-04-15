@@ -41,14 +41,14 @@ public class Card_01_307_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: When you play Pippin, remove a burden or wound from a companion.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Pippin", card.getBlueprint().getTitle());
 		assertEquals("Hobbit of Some Intelligence", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_04_209_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: <b>Archery:</b> Discard 2 [isengard] archers to exhaust an unbound companion.
 		*/
 

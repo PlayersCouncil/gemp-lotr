@@ -39,7 +39,6 @@ public class Card_04_303_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Cloak
-
 		 * Game Text: Bearer must be Frodo.<br><b>Skirmish:</b> At sites 1[T] to 4[T], add a burden and discard this possession to cancel a skirmish involving Frodo. At any other site, discard this possession to remove a burden and heal Frodo.
 		*/
 

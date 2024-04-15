@@ -41,7 +41,6 @@ public class Card_08_091_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Game Text: To play, spot 3 [rohan] companions.<br>You may play Rohirrim Army any time you could play a regroup event.<br>When you play Rohirrim Army, you may discard a minion.
 		*/
 

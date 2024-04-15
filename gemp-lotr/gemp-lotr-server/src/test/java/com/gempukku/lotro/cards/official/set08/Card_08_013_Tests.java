@@ -39,7 +39,6 @@ public class Card_08_013_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fellowship:</b> Exert an Elf companion and either a [gandalf] companion or a [dwarven] companion to add an [elven] token here.<br><b>Archery:</b> Remove an [elven] token here to make the fellowship archery total +1 (limit +2).
 		*/
 

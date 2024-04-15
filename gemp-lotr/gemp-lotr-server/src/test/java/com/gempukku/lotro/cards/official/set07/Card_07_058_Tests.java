@@ -41,7 +41,6 @@ public class Card_07_058_Tests
 		 * Subtype: 
 		 * Strength: 5
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: If you have initiative during the Shadow phase, you may play this minion from your discard pile.
 		*/

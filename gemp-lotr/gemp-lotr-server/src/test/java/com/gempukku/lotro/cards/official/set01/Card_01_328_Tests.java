@@ -39,7 +39,6 @@ public class Card_01_328_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2
 		 * Game Text: The roaming penalty for each Nazgûl you play to Bree Streets is -2.
 		*/

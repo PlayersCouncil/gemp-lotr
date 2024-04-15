@@ -39,12 +39,13 @@ public class Card_01_071_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot Gandalf, a Dwarf, and an Elf to make the move limit for this turn +1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Durin's Secret", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

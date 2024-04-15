@@ -39,7 +39,6 @@ public class Card_03_037_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Discard a [gondor] tale from hand to make a [gondor] companion strength +2.
 		*/
 

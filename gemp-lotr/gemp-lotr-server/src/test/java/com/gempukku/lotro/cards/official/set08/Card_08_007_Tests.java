@@ -39,7 +39,6 @@ public class Card_08_007_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If a Dwarf who is damage +X wins a skirmish, wound a minion not assigned to a skirmish X times.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_007_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

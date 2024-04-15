@@ -41,7 +41,6 @@ public class Card_08_106_Tests
 		 * Subtype: Orc
 		 * Strength: 20
 		 * Vitality: 4
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Regroup:</b> Exert this minion twice to take control of a site.
 		*/

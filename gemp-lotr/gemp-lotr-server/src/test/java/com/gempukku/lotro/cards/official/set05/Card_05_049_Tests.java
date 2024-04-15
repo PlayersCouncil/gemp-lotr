@@ -39,7 +39,6 @@ public class Card_05_049_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Exert an Uruk-hai to place an [isengard] token on this card.<br><b>Maneuver:</b> Spot 8 [isengard] tokens here to exert every character. Discard this condition.
 		*/
 

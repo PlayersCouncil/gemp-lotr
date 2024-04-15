@@ -39,7 +39,6 @@ public class Card_04_345_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4T
 		 * Game Text: <b>Mountain</b>. When the fellowship moves to White Mountains, Théoden or 2 other companions must exert.
 		*/

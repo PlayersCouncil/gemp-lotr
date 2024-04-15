@@ -41,9 +41,7 @@ public class Card_09_026_Tests
 		 * Subtype: Wizard
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: The move limit is +1.<br>Each time the fellowship moves during the regroup phase, each opponent may discard 2 cards from hand to draw 2 cards.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_04_336_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2T
 		 * Game Text: <b>Plains</b>. Each time the Free Peoples player assigns a companion or ally to a skirmish, add (1).
 		*/

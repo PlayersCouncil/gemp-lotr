@@ -39,12 +39,13 @@ public class Card_01_253_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. To play, exert a [sauron] Orc. Plays to your support area.<br>While you can spot 5 companions, each companion's twilight cost is +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Journey Into Danger", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

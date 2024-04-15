@@ -39,7 +39,6 @@ public class Card_07_333_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1K
 		 * Game Text: When the fellowship moves from this site, the Free Peoples player may spot 3 Hobbits to remove (2).
 		*/

@@ -41,7 +41,6 @@ public class Card_04_076_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: <b>Regroup:</b> Exert this companion to make a Shadow player wound a minion.
 		*/
 

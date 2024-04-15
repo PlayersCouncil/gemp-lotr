@@ -39,7 +39,6 @@ public class Card_07_267_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: Choose an opponent to discard the top card of his or her draw deck. If the twilight cost of that card is less than the number of besiegers you spot, take control of a site and all besiegers are strength +3 until the regroup phase.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_267_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

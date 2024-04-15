@@ -39,7 +39,6 @@ public class Card_02_111_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Exert Bilbo to play a Hobbit from your draw deck.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_07_043_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: Exert Gandalf three times (or twice if you have initiative) to make all unbound companions of one culture (except [gandalf]) strength +3 until the regroup phase.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_043_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

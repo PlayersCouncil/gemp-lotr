@@ -39,7 +39,6 @@ public class Card_06_010_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area. When you play this condition, you may spot a Dwarf to place 2 [dwarven] tokens here.<br><b>Fellowship:</b> Discard this condition or remove a [dwarven] token from here to stack the top card of your draw deck on a [dwarven] condition that has a card stacked on it.
 		*/
 

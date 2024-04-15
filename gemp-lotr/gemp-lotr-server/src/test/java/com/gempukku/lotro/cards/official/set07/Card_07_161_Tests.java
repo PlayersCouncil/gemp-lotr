@@ -41,7 +41,6 @@ public class Card_07_161_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br><b>Shadow:</b> Remove (3) and spot 3 [raider] Men to make one of those Men <b>damage +1</b> until the regroup phase.
 		*/

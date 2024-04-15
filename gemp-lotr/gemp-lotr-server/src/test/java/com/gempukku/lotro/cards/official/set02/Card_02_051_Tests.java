@@ -41,7 +41,6 @@ public class Card_02_051_Tests
 		 * Subtype: Balrog
 		 * Strength: 17
 		 * Vitality: 5
-
 		 * Site Number: 4
 		 * Game Text: <b>Damage +1</b>. <b>Fierce</b>.<br>While you can spot The Balrog, discard all other minions. Skip the archery phase.<br>Discard The Balrog if not underground.
 		*/

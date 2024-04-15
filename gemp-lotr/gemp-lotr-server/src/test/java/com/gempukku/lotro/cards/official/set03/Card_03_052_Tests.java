@@ -39,7 +39,6 @@ public class Card_03_052_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Shadow:</b> Exert Saruman to play an [isengard] weather condition from your discard pile. Its twilight cost is -2.
 		*/
 

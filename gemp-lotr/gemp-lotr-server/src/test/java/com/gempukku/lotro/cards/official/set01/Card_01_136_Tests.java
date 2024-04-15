@@ -39,18 +39,20 @@ public class Card_01_136_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Spell</b>.<br><b>Shadow:</b> Exert an [isengard] minion to discard all conditions.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Saruman's Power", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}

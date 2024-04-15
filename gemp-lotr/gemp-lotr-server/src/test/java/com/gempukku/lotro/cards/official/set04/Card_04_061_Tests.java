@@ -39,7 +39,6 @@ public class Card_04_061_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: <b>Archery:</b> Spot 2 Elf companions to discard a condition.
 		*/
 

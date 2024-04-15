@@ -39,7 +39,6 @@ public class Card_09_022_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a Dwarf.<br>When you play this possession, add 2 [elven] tokens here.<br><b>Fellowship:</b> Discard this possession or remove an [elven] token from here to reveal the top card of your draw deck. If it is a [dwarven] or [elven] card, you may take it into hand.
 		*/
 

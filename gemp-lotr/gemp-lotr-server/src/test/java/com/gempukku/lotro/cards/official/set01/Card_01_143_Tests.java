@@ -41,13 +41,14 @@ public class Card_01_143_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 4
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>A character skirmishing this minion does not gain strength bonuses from weapons.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Troop of Uruk-hai", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

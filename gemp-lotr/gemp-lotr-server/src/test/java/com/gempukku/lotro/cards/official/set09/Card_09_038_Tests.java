@@ -39,7 +39,6 @@ public class Card_09_038_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [gondor] Man with 3 or more vitality (or spot a [gondor] Man and add 2 threats).<br><b>Regroup:</b> Add a threat or discard this artifact to remove (2) or to draw a card.
 		*/
 

@@ -40,7 +40,6 @@ public class Card_08_046_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a [gondor] Wraith.<br><b>Skirmish:</b> Discard 3 cards from hand to heal bearer.
 		*/
 

@@ -40,12 +40,13 @@ public class Card_01_095_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Boromir.<br>He is <b>damage +1</b>.<br><b>Skirmish:</b> Exert Boromir to wound an Orc or Uruk-hai he is skirmishing.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Blade of Gondor", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

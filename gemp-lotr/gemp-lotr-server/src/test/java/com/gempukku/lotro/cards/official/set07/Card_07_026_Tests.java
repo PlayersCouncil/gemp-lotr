@@ -41,9 +41,7 @@ public class Card_07_026_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Archer</b>.<br><b>Archery:</b> If you cannot spot a threat, add a threat to make the fellowship archery total +1.
 		*/
 

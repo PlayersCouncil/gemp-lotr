@@ -40,12 +40,13 @@ public class Card_01_075_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Gandalf.<br>He is <b>damage +1</b>.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Exert Gandalf to reveal an opponent's hand. Remove (1) for each Orc revealed.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Glamdring", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -39,18 +39,20 @@ public class Card_01_137_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Search</b>.<br><b>Maneuver:</b> Exert an Uruk-hai to make the opponent choose to either exert 2 companions or make the Ring-bearer put on The One Ring until the regroup phase.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Saruman's Reach", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SEARCH));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}

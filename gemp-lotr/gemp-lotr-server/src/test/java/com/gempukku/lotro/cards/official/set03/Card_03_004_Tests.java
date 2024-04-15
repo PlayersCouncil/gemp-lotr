@@ -39,7 +39,6 @@ public class Card_03_004_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Regroup:</b> Exert a Dwarf ally to heal a Dwarf companion.
 		*/
 

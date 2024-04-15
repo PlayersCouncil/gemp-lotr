@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 
 public class Card_08_057_Tests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new GenericCardTestHelper(
                 new HashMap<>() {{
                     put("marauder", "8_57");
                     put("corsair", "8_56");
@@ -24,45 +24,44 @@ public class Card_08_057_Tests
                     put("blacksails1", "8_50");
                     put("blacksails2", "8_50");
                 }}
-        );
-    }
+		);
+	}
 
-    @Test
-    public void CorsairMarauderStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void CorsairMarauderStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
-        /**
-         * Set: 8
-         * Name: Corsair Marauder
-         * Unique: False
-         * Side: Shadow
-         * Culture: Raider
-         * Twilight Cost: 4
-         * Type: Minion
-         * Race: Man
-         * Strength: 9
-         * Vitality: 2
-         * Site Number: 4
-         * Game Text: <b>Corsair</b>.<br>When you play this minion, if you can spot another corsair, you may discard
-         *   a possession to add 2 [raider] tokens to a card that already has a [raider] token on it.
-         */
+		/**
+		 * Set: 8
+		 * Name: Corsair Marauder
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Raider
+		 * Twilight Cost: 4
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 9
+		 * Vitality: 2
+		 * Site Number: 4
+		 * Game Text: <b>Corsair</b>.<br>When you play this minion, if you can spot another corsair, you may discard a possession to add 2 [raider] tokens to a card that already has a [raider] token on it.
+		*/
 
-        var scn = GetScenario();
+		var scn = GetScenario();
 
         var card = scn.GetFreepsCard("marauder");
 
-        assertEquals("Corsair Marauder", card.getBlueprint().getTitle());
-        assertNull(card.getBlueprint().getSubtitle());
-        assertFalse(card.getBlueprint().isUnique());
-        assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-        assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-        assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-        assertEquals(Race.MAN, card.getBlueprint().getRace());
-        assertTrue(card.getBlueprint().hasKeyword(Keyword.CORSAIR));
-        assertEquals(4, card.getBlueprint().getTwilightCost());
-        assertEquals(9, card.getBlueprint().getStrength());
-        assertEquals(2, card.getBlueprint().getVitality());
-        assertEquals(4, card.getBlueprint().getSiteNumber());
-    }
+		assertEquals("Corsair Marauder", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.CORSAIR));
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
+	}
 
     @Test
     public void IfYouCannotSpotAnotherCorsairOnPlayNothingHappens() throws DecisionResultInvalidException, CardNotFoundException {
@@ -100,8 +99,8 @@ public class Card_08_057_Tests
 
     @Test
     public void IfAnotherCorsairOnPlayCanDiscardAPossessionToAdd2Tokens() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        var scn = GetScenario();
+		//Pre-game setup
+		var scn = GetScenario();
 
         var marauder = scn.GetShadowCard("marauder");
         var corsair = scn.GetShadowCard("corsair");
@@ -113,7 +112,7 @@ public class Card_08_057_Tests
         var cart = scn.GetFreepsCard("cart");
         scn.FreepsMoveCardToSupportArea(cart);
 
-        scn.StartGame();
+		scn.StartGame();
 
         scn.SetTwilight(10);
 
@@ -143,5 +142,5 @@ public class Card_08_057_Tests
         assertEquals(Zone.SUPPORT, blacksails1.getZone());
         assertEquals(Zone.SUPPORT, blacksails2.getZone());
         assertEquals(Zone.DISCARD, cart.getZone());
-    }
+	}
 }

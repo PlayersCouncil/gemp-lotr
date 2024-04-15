@@ -41,7 +41,6 @@ public class Card_07_276_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Skirmish:</b> If this minion is stacked on a site you control, discard him to make a [sauron] Orc strength +5 (or +10 if you have initiative).
 		*/

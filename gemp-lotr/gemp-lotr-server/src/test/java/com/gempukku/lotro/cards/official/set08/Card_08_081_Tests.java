@@ -41,7 +41,6 @@ public class Card_08_081_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Enduring</b>. <b>Fierce</b>.<br><b>Regroup:</b> Discard Úlairë Otsëa to add (X), where X is the current site number.
 		*/

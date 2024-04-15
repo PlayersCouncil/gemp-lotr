@@ -39,7 +39,6 @@ public class Card_07_120_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: If you have initiative, discard 2 cards from hand to wound a roaming minion skirmishing a [gondor] Man twice.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_120_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

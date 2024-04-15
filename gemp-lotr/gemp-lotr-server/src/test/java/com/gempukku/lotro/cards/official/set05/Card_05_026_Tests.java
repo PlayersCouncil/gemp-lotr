@@ -39,7 +39,6 @@ public class Card_05_026_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Spot Sméagol or Gollum to add (1) for each burden.
 		*/
 

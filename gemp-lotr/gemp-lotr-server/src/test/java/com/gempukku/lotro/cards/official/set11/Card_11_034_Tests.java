@@ -32,7 +32,7 @@ public class Card_11_034_Tests
 
 		/**
 		 * Set: 11
-		 * Name: Gandalf's Staff, Ash Staff
+		 * Name: Gandalf's Staff, Ash-staff
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Gandalf

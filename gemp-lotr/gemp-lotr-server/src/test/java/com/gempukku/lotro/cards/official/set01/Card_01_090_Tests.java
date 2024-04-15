@@ -39,12 +39,13 @@ public class Card_01_090_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Ranged weapon
-
 		 * Game Text: Bearer must be Aragorn.<br>He is an <b>archer</b>.<br><b>Archery:</b> Exert Aragorn to wound a minion; Aragorn does not add to the fellowship archery total.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Aragorn's Bow", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

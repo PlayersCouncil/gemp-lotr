@@ -39,7 +39,6 @@ public class Card_02_100_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Stealth</b>. To play, exert 2 Hobbits. Plays to your support area.<br>The twilight cost of each search card and each tracker is +2.
 		*/
 

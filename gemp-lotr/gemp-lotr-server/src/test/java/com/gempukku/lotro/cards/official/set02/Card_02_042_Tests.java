@@ -41,7 +41,6 @@ public class Card_02_042_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 2
 		 * Game Text: Discard this minion if underground.<br><b>Shadow:</b> Exert this minion to look at the Free Peoples player's hand.
 		*/

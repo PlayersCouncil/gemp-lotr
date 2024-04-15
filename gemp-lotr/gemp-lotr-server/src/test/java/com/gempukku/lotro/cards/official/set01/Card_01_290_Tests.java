@@ -41,14 +41,14 @@ public class Card_01_290_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ring-bearer (resistance 10).</b><br><b>Fellowship:</b> Exert another companion who has the Frodo signet to heal Frodo.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Frodo", card.getBlueprint().getTitle());
 		assertEquals("Son of Drogo", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

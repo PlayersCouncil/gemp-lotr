@@ -41,7 +41,6 @@ public class Card_03_075_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>When you play this minion, you may spot Saruman to add (2).
 		*/

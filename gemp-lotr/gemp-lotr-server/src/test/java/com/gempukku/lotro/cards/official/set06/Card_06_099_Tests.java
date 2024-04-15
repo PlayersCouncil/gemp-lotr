@@ -41,7 +41,6 @@ public class Card_06_099_Tests
 		 * Subtype: Wraith
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Twilight</b>.<br><b>Skirmish:</b> Exert this minion to make a [sauron] or twilight minion strength +1 for each twilight minion you can spot.
 		*/

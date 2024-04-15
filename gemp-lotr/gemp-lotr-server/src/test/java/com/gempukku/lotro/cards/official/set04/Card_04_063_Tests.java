@@ -39,7 +39,6 @@ public class Card_04_063_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Brooch
-
 		 * Game Text: To play, spot an Elf. Bearer must be a companion.<br><b>Response:</b> If another possession borne by bearer is about to be discarded by a Shadow card, discard this possession instead.
 		*/
 

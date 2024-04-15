@@ -39,12 +39,13 @@ public class Card_01_171_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Assignment
-
 		 * Game Text: <b>Assignment:</b> Assign an exhausted companion (except the Ring-bearer) to skirmish a [moria] Orc.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Frenzy", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

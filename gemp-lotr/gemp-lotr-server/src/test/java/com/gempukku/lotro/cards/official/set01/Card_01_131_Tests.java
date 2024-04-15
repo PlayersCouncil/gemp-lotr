@@ -41,13 +41,14 @@ public class Card_01_131_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Archer</b>. <b>Damage +1</b>.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Orthanc Assassin", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

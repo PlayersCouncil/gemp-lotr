@@ -41,13 +41,14 @@ public class Card_01_309_Tests
 		 * Subtype: Hobbit
 		 * Strength: 1
 		 * Vitality: 2
-
 		 * Site Number: 1
 		 * Game Text: Sam is strength +1.<br><b>Fellowship:</b> Exert Rosie Cotton to heal Sam.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Rosie Cotton", card.getBlueprint().getTitle());
 		assertEquals("Hobbiton Lass", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_06_041_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert Gollum 3 times to wound each companion. The move limit for this turn is -1.
 		*/
 

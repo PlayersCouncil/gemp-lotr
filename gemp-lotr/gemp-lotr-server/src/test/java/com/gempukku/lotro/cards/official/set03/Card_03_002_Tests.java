@@ -39,7 +39,6 @@ public class Card_03_002_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Pipe
-
 		 * Game Text: Bearer must be Gimli.<br><b>Fellowship:</b> Exert Gimli to add 1 to the number of pipes you can spot.
 		*/
 

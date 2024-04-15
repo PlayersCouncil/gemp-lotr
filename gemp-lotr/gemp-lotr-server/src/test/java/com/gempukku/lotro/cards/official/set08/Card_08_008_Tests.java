@@ -39,7 +39,6 @@ public class Card_08_008_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fellowship:</b> Exert a Dwarf companion and either an [elven] companion or a [gondor] Man to add a [dwarven] token here.<br><b>Skirmish:</b> Remove a [dwarven] token here to make a companion <b>damage +1</b>.
 		*/
 

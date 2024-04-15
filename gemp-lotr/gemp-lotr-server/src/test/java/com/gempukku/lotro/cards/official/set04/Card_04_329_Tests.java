@@ -39,7 +39,6 @@ public class Card_04_329_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1T
 		 * Game Text: When the Fellowship moves from Western Emyn Muil, each Ring-bound companion must exert.
 		*/

@@ -41,9 +41,7 @@ public class Card_08_038_Tests
 		 * Subtype: Wraith
 		 * Strength: 7
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Enduring</b>. To play, spot a [gondor] Wraith and add 2 threats.<br><b>Response:</b> If Aragorn is about to take a wound in a skirmish, exert King of the Dead to prevent that wound.
 		*/
 

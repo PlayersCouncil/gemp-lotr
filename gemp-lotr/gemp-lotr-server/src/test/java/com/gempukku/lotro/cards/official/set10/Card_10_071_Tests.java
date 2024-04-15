@@ -41,7 +41,6 @@ public class Card_10_071_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Enduring</b>.<br>Shadow cards cannot exert Úlairë Toldëa during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Toldëa to make him <b>damage +1</b>.
 		*/

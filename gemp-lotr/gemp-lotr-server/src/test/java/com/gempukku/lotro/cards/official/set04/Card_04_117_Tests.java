@@ -41,9 +41,7 @@ public class Card_04_117_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ring-bound</b>. <b>Ranger</b>.<br>An opponent may not play skirmish events or use skirmish special abilities during skirmishes involving Faramir.
 		*/
 

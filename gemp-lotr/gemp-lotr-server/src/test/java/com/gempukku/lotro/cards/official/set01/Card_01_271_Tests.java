@@ -41,13 +41,14 @@ public class Card_01_271_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Exert this minion to wound a character he is skirmishing.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Orc Soldier", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

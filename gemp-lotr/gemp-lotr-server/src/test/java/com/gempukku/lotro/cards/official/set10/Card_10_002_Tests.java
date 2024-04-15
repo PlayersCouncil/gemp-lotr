@@ -39,7 +39,6 @@ public class Card_10_002_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a Dwarf.<br>Each time you lose initiative (except during the fellowship phase), you may play a [dwarven] condition from hand or from your discard pile.
 		*/
 

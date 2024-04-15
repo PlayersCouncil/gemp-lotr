@@ -39,7 +39,6 @@ public class Card_10_053_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Shadow:</b> Exert a Nazgûl and play a [wraith] minion to add (1) (or (2) if you have initiative).
 		*/
 

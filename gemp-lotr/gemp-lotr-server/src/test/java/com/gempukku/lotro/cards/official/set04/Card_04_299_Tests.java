@@ -39,7 +39,6 @@ public class Card_04_299_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>When the fellowship moves from site 1[T], remove up to 2 burdens.<br><b>Skirmish:</b> Discard this condition to wound a minion a Hobbit companion is skirmishing.
 		*/
 

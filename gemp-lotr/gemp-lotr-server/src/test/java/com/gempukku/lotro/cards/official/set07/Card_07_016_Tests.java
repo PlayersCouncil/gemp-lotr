@@ -41,9 +41,7 @@ public class Card_07_016_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: While skirmishing a fierce minion, Arwen is strength +3.
 		*/
 

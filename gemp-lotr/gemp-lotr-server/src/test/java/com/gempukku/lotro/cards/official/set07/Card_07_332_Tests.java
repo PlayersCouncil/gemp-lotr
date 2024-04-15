@@ -39,7 +39,6 @@ public class Card_07_332_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1K
 		 * Game Text: <b>Fellowship:</b> Exert an Elf to make the twilight cost of each condition and possession +2 until the end of the turn.
 		*/

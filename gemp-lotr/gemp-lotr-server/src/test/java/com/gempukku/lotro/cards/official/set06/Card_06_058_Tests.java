@@ -39,7 +39,6 @@ public class Card_06_058_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Exert an Uruk-hai to place an [isengard] token on this card.<br><b>Skirmish:</b> Spot 3 [isengard] tokens here to make an Uruk-hai strength +3. Discard this condition.
 		*/
 

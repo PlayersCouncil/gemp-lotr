@@ -39,7 +39,6 @@ public class Card_07_042_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: Exert Gandalf twice to make an opponent exert a minion for each [rohan] companion you spot.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_042_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

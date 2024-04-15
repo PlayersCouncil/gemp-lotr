@@ -39,7 +39,6 @@ public class Card_06_056_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a [gondor] Man strength +2 (and heal a companion if you spot an [elven] token).
 		*/
 

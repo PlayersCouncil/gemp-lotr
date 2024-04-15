@@ -39,7 +39,6 @@ public class Card_04_320_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Heal an unbound Hobbit once (or twice if you spot Gandalf).
 		*/
 

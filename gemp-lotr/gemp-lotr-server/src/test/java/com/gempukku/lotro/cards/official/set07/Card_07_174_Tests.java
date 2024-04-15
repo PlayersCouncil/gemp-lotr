@@ -39,7 +39,6 @@ public class Card_07_174_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Assignment:</b> Remove 5 threats to assign a Nazgûl to a companion (except the Ring-bearer). The Free Peoples player may discard that companion.
 		*/
 

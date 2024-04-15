@@ -39,7 +39,6 @@ public class Card_07_083_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a [gondor] Man strength +2. If that Man is skirmishing a [sauron] minion, discard that minion at the end of the skirmish.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_083_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

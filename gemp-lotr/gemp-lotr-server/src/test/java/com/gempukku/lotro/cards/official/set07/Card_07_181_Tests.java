@@ -39,7 +39,6 @@ public class Card_07_181_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 Nazgûl and add up to 3 threats.<br>Each time a companion is about to be killed, you may remove a threat to discard up to 2 possessions.<br>Discard this condition and remove 3 threats during the regroup phase.
 		*/
 

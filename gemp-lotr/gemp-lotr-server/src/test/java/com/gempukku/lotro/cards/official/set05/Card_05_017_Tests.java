@@ -41,7 +41,6 @@ public class Card_05_017_Tests
 		 * Subtype: Ent
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Game Text: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow this companion to skirmish.
 		*/
 

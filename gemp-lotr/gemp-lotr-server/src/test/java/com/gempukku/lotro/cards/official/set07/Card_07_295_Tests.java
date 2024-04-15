@@ -41,7 +41,6 @@ public class Card_07_295_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Spot 6 companions and exert this minion to make another [sauron] Orc strength +6.
 		*/

@@ -39,12 +39,13 @@ public class Card_01_140_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert an [isengard] minion. Plays on a site.<br>While the fellowship is at this site, skip the archery phase. Discard this condition at the end of the turn.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Spies of Saruman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

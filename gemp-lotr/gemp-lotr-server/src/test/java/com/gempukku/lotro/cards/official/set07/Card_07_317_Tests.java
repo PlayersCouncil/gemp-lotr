@@ -41,9 +41,7 @@ public class Card_07_317_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br>Each time the fellowship moves, you may add (3) to remove a threat.
 		*/
 

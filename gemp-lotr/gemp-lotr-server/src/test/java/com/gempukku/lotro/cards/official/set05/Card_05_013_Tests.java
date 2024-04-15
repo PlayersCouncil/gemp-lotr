@@ -41,7 +41,6 @@ public class Card_05_013_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: To play, spot an Elf.<br>While Taurnil bears a ranged weapon, the twilight cost of each Shadow possession is +2, and he does not add to the fellowship archery total.
 		*/
 

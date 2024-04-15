@@ -39,7 +39,6 @@ public class Card_07_060_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Regroup:</b> Discard Gollum and remove a threat to add a burden.
 		*/
 

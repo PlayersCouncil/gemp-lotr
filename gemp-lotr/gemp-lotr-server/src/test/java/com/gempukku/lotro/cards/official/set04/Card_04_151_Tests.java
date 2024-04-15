@@ -39,7 +39,6 @@ public class Card_04_151_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make an Uruk-hai strength +2 (or +3 if at a battleground).
 		*/
 

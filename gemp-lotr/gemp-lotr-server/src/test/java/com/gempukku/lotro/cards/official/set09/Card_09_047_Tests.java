@@ -39,7 +39,6 @@ public class Card_09_047_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Support area
-
 		 * Game Text: To play, exert a [wraith] or [sauron] minion.<br>At the start of each of your Shadow phases, you may draw a card.<br><b>Shadow:</b> Discard this artifact to play a [sauron] minion. Its twilight cost is -3.
 		*/
 

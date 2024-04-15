@@ -39,7 +39,6 @@ public class Card_02_092_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. To play, spot a [sauron] Orc. Plays to your support area.<br>Each time the fellowship moves during the regroup phase, you may draw a card (or 2 cards if you can spot a [sauron] tracker).
 		*/
 

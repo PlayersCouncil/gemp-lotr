@@ -39,7 +39,6 @@ public class Card_04_133_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While the fellowship is at site 7[T], each Ring-bound Man is <b>defender +1</b>.<br><b>Skirmish:</b> Spot a Ring-bound Man and discard this condition to wound an opponent's Man.
 		*/
 

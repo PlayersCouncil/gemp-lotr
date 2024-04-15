@@ -39,7 +39,6 @@ public class Card_08_078_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: For each [wraith] Orc you can spot, the Free Peoples player must have an additional card in hand to have initiative.<br><b>Skirmish:</b> Discard this condition to make a [wraith] Orc strength +2.
 		*/
 

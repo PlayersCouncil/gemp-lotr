@@ -39,7 +39,6 @@ public class Card_03_109_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot a Hobbit companion (except the Ring-bearer) to reveal a card at random from an opponent's hand. Remove (X), where X is the twilight cost of the card revealed.
 		*/
 

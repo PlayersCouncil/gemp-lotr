@@ -39,7 +39,6 @@ public class Card_04_247_Tests
 		 * Twilight Cost: 3
 		 * Type: Possession
 		 * Subtype: Ranged weapon
-
 		 * Game Text: Bearer must be a [raider] Man.<br>Bearer is an <b>archer</b>.<br>While you can spot another [raider] Man, the minion archery total is +1.
 		*/
 

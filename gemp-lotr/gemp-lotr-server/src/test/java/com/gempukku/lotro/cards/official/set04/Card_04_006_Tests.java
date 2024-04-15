@@ -39,7 +39,6 @@ public class Card_04_006_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Shadow:</b> If the fellowship has moved more than once this turn, remove (2) to play a [dunland] Man from your discard pile.
 		*/
 

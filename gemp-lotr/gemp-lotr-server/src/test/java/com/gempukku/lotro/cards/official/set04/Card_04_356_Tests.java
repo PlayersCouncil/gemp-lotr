@@ -39,7 +39,6 @@ public class Card_04_356_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7T
 		 * Game Text: <b>Battleground</b>. The minion archery total is +2 for each unbound companion over 3.
 		*/

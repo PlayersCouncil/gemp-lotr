@@ -39,9 +39,7 @@ public class Card_04_001_Tests
 		 * Twilight Cost: 
 		 * Type: Onering
 		 * Subtype: 
-
 		 * Vitality: 2
-
 		 * Game Text: While wearing The One Ring, the Ring-bearer is strength +2, and each time he is about to take a wound in a skirmish, add a burden instead.<br><b>Skirmish:</b> Add a burden to wear The One Ring until the regroup phase.
 		*/
 

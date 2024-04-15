@@ -41,7 +41,6 @@ public class Card_03_093_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Regroup:</b> Exert this minion to wound a companion (except the Ring-bearer).
 		*/

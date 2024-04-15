@@ -41,7 +41,6 @@ public class Card_04_262_Tests
 		 * Subtype: Man
 		 * Strength: 3
 		 * Vitality: 2
-
 		 * Site Number: 3T & 6T
 		 * Game Text: <b>Archery:</b> Exert Aldor and spot a villager to make the fellowship archery total +1.
 		*/

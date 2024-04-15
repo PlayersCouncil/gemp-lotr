@@ -39,7 +39,6 @@ public class Card_02_018_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Plays to your support area.<br>While you can spot an Elf companion, the minion archery total is -1.<br><b>Response:</b> If an Elf is about to take a wound, discard this condition to prevent that wound.
 		*/
 

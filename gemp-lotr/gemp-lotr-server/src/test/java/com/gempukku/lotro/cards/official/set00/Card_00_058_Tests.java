@@ -42,12 +42,13 @@ public class Card_00_058_Tests
 		 * Strength: 7
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: <b>Skirmish:</b> Play a [gondor] skirmish event to make each minion skirmishing Anárion strength -X, where X is Anárion's vitality.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Anárion", card.getBlueprint().getTitle());
 		assertEquals("Lord of Anórien", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

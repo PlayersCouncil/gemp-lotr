@@ -39,7 +39,6 @@ public class Card_03_092_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert a [sauron] minion to discard a card from the top of the Free Peoples player's draw deck for each of these races you can spot in the fellowship: Dwarf, Elf, Man, and Wizard.
 		*/
 

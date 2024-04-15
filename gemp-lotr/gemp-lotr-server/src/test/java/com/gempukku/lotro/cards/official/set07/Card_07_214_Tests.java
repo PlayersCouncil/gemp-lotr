@@ -41,7 +41,6 @@ public class Card_07_214_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: <b>Regroup:</b> If you have initiative, discard Úlairë Lemenya to discard a possession.
 		*/

@@ -40,7 +40,6 @@ public class Card_10_060_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [wraith] Orc.<br>When you play this possession, you may discard a possession. Its owner may place it on top of his or her draw deck instead.<br>If bearer is Gorbag, he is <b>fierce</b>.
 		*/
 

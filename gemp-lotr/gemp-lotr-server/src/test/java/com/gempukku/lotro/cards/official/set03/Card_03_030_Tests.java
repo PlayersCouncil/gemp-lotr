@@ -39,7 +39,6 @@ public class Card_03_030_Tests
 		 * Twilight Cost: 4
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Spell</b>.<br><b>Maneuver:</b> Spot Gandalf and 4 twilight tokens to discard all Shadow conditions.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_03_030_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}

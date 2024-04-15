@@ -39,7 +39,6 @@ public class Card_04_308_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Play an unbound Hobbit from your discard pile.
 		*/
 

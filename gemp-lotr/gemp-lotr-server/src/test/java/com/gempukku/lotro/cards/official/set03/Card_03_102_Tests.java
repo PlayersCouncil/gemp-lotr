@@ -39,7 +39,6 @@ public class Card_03_102_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert a [sauron] minion. Plays to your support area.<br>Each time the fellowship moves, add (1) for each ally you can spot.
 		*/
 

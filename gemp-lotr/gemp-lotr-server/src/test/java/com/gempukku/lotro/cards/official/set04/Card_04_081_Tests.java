@@ -41,7 +41,6 @@ public class Card_04_081_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: To play, spot an Elf.<br>While Pengedhel bears a ranged weapon, he is strength +2 and he does not add to the fellowship archery total.
 		*/
 

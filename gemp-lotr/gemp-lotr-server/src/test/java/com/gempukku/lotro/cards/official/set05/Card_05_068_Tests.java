@@ -39,7 +39,6 @@ public class Card_05_068_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make an [isengard] Orc strength +2 (and heal it if mounted).
 		*/
 

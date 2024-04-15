@@ -41,7 +41,6 @@ public class Card_10_090_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: Each [sauron] Orc bearing a possession cannot take wounds (except during skirmish phases).
 		*/

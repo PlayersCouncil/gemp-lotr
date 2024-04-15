@@ -39,7 +39,6 @@ public class Card_04_027_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a [dunland] Man wins a skirmish involving a [rohan] Man, you may make that minion strength +2 and <b>fierce</b> until the regroup phase.
 		*/
 

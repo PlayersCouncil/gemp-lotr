@@ -40,13 +40,13 @@ public class Card_02_044_Tests
 	public void NoBusinessofOursStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 2
-		* Title: No Business of Ours
-		* Unique: False
-		* Side: Shadow
-		* Culture: Isengard
-		* Twilight Cost: 0
-		* Type: Condition
+		 * Set: 2
+		 * Name: No Business of Ours
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 0
+		 * Type: Condition
 		* Subtype: Support Area
 		* Game Text: To play, spot an [isengard] minion. Plays to your support area.
 		* 	The Free Peoples player may not look at or reveal cards in any Shadow player’s hand.

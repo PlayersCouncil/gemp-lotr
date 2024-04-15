@@ -41,7 +41,6 @@ public class Card_04_186_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Tracker</b>. <b>Fierce</b>.<br>Unbound Hobbits may not be discarded.<br><b>Response:</b> If an unbound Hobbit is killed, exert this minion to add a burden.
 		*/

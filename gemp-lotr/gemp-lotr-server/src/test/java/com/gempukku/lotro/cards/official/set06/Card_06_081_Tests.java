@@ -41,7 +41,6 @@ public class Card_06_081_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Ambush (1)</b>.<br>When you play this minion, you may spot another Southron to play a minion with ambush from your discard pile.
 		*/

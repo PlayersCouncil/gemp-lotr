@@ -41,7 +41,6 @@ public class Card_07_286_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: While you can spot a threat and another [sauron] Orc, the Shadow has initiative, regardless of the Free People player's hand.
 		*/

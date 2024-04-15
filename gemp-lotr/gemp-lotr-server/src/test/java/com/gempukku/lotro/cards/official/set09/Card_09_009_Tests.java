@@ -41,7 +41,6 @@ public class Card_09_009_Tests
 		 * Subtype: Ring
 		 * Strength: 1
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be a Dwarf.<br><b>Response:</b> If bearer wins a skirmish, discard this artifact to exert each Orc.
 		*/
 

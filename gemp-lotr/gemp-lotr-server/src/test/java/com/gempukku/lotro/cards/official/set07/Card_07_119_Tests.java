@@ -41,7 +41,6 @@ public class Card_07_119_Tests
 		 * Subtype: Support area
 		 * Strength: -2
 		 * Vitality: -2
-
 		 * Game Text: <b>Fortification</b>.<br><b>Skirmish:</b> Exert 3 [gondor] Men to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
 		*/
 

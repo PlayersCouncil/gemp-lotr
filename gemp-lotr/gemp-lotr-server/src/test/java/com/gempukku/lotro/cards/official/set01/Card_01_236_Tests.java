@@ -41,13 +41,14 @@ public class Card_01_236_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br><b>Assignment:</b> Spot 4 burdens to assign a companion (except the Ring-bearer) to skirmish Úlairë Toldëa.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Úlairë Toldëa", card.getBlueprint().getTitle());
 		assertEquals("Messenger of Morgul", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

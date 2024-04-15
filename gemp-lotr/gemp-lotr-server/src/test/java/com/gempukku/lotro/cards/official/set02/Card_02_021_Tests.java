@@ -41,7 +41,6 @@ public class Card_02_021_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: To play, spot Gandalf.<br>Shadow players may not look at or reveal cards in your hand.
 		*/

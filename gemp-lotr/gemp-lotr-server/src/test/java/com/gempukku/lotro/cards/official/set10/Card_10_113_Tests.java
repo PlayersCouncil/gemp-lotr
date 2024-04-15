@@ -39,7 +39,6 @@ public class Card_10_113_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be a Hobbit.<br>Each Orc and each Uruk-hai skirmishing bearer is strength -1.
 		*/
 

@@ -41,13 +41,14 @@ public class Card_01_150_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>Each time this minion wins a skirmish, the Free Peoples player must discard the top 2 cards of his or her draw deck.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Uruk Rager", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

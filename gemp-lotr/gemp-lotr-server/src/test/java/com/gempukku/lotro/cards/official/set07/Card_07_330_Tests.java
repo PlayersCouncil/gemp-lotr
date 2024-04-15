@@ -39,7 +39,6 @@ public class Card_07_330_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1K
 		 * Game Text: The twilight cost of each [rohan] possession is -1.
 		*/

@@ -41,9 +41,7 @@ public class Card_04_364_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Ranger</b>.<br>Each time the fellowship moves, you may wound a minion for each unbound Hobbit you spot.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_07_197_Tests
 		 * Subtype: Orc
 		 * Strength: 15
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: For each Nazgûl you can spot, the Free Peoples player must exert a companion to assign this minion to a skirmish.<br><b>Skirmish:</b> Exert this minion to make a Nazgûl or [wraith] Orc strength +1.
 		*/

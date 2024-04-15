@@ -41,7 +41,6 @@ public class Card_03_110_Tests
 		 * Subtype: Hobbit
 		 * Strength: 2
 		 * Vitality: 2
-
 		 * Site Number: 1
 		 * Game Text: <b>Response:</b> If a burden is about to be added by a Shadow card, exert Melilot Brandybuck to prevent that burden.
 		*/

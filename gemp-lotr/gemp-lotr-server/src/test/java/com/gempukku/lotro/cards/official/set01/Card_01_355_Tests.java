@@ -39,7 +39,6 @@ public class Card_01_355_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7
 		 * Game Text: <b>River</b>. When the fellowship moves to Silverlode Banks without a ranger, every companion must exert.
 		*/

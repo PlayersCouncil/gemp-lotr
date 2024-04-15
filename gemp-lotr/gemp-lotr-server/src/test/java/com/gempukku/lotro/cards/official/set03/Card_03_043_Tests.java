@@ -39,7 +39,6 @@ public class Card_03_043_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Tale</b>.<br><b>Maneuver:</b> Spot a [gondor] companion to reveal a card at random from an opponent's hand. Heal X companions, where X is the twilight cost of the card revealed.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_03_043_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}

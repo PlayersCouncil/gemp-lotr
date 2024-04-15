@@ -39,7 +39,6 @@ public class Card_04_278_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be a Man.<br>Bearer may not be overwhelmed unless his or her strength is tripled.
 		*/
 

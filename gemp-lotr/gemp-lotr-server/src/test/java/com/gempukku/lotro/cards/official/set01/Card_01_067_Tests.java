@@ -41,13 +41,14 @@ public class Card_01_067_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: While you can spot your site 6, Uruviel has the game text of that site.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Uruviel", card.getBlueprint().getTitle());
 		assertEquals("Maid of Lórien", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

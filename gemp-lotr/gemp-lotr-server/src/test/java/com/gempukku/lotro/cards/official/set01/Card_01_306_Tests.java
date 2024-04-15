@@ -41,14 +41,14 @@ public class Card_01_306_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: Your opponent may not discard your [shire] tales from play.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Pippin", card.getBlueprint().getTitle());
 		assertEquals("Friend to Frodo", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

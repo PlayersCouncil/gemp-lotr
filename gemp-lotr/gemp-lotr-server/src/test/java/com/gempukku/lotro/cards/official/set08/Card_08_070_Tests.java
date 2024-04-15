@@ -40,7 +40,6 @@ public class Card_08_070_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 3
-
 		 * Game Text: Bearer must be a Nazgûl.<br><b>Skirmish:</b> If bearer is The Witch-king, exert him and spot a possession borne by a character he is skirmishing to discard that possession.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_01_344_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4
 		 * Game Text: <b>Underground</b>. When the fellowship moves to Dwarrowdelf Chamber, Gimli or 2 other companions must exert.
 		*/

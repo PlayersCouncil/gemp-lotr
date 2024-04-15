@@ -39,7 +39,6 @@ public class Card_07_220_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a [wraith] Orc strength +2 (or +4 if you spot 2 wounds on the Ring-bearer).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_220_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

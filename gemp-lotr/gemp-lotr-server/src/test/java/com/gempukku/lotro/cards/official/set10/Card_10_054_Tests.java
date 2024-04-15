@@ -41,7 +41,6 @@ public class Card_10_054_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: Each time this minion wins a skirmish, you may exert it to discard a possession borne by a character this minion is skirmishing.
 		*/

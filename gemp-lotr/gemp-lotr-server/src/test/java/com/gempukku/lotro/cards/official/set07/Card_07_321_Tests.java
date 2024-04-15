@@ -41,9 +41,7 @@ public class Card_07_321_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Skirmish:</b> If Merry is not assigned to a skirmish, return him to your hand to play up to 2 [rohan] possessions from your discard pile.
 		*/
 

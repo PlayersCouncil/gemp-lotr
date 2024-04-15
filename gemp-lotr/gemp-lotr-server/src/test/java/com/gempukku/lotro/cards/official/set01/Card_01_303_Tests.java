@@ -41,14 +41,14 @@ public class Card_01_303_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: While Merry bears a weapon, he is strength +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Merry", card.getBlueprint().getTitle());
 		assertEquals("From O'er the Brandywine", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

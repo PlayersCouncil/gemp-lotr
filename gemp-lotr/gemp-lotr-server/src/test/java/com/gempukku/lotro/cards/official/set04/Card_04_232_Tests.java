@@ -41,7 +41,6 @@ public class Card_04_232_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Exert this minion to exert a companion (except the Ring-bearer); this minion does not add to the minion archery total.
 		*/

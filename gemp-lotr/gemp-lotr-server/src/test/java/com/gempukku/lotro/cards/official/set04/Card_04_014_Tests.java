@@ -41,7 +41,6 @@ public class Card_04_014_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: Each time this minion wins a skirmish, you may spot another [dunland] Man to take control of a site.
 		*/

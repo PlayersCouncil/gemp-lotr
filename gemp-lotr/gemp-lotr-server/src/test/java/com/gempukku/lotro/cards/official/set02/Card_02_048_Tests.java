@@ -39,7 +39,6 @@ public class Card_02_048_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Spell</b>. <b>Weather</b>. To play, exert an [isengard] minion. Plays on a site. Limit 1 per site.<br>When the fellowship moves from this site, every companion must exert. Discard this condition at the end of the turn.
 		*/
 

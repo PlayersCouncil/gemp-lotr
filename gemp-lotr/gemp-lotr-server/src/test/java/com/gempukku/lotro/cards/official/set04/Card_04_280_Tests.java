@@ -41,7 +41,6 @@ public class Card_04_280_Tests
 		 * Subtype: Hand weapon
 		 * Strength: 2
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Théoden.<br>He is <b>damage +1</b>.
 		*/
 

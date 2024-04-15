@@ -39,7 +39,6 @@ public class Card_04_051_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a Dwarf strength +2 (or strength +3 and <b>damage +1</b> if you spot Legolas).
 		*/
 

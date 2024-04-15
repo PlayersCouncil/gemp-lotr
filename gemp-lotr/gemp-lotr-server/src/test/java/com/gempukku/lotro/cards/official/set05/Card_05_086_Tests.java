@@ -39,7 +39,6 @@ public class Card_05_086_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot 3 valiant Men to make one of those Men <b>defender +1</b> until the regroup phase.
 		*/
 

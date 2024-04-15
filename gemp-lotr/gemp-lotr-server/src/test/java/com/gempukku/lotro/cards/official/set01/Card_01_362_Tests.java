@@ -39,7 +39,6 @@ public class Card_01_362_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9
 		 * Game Text: When the fellowship moves to Summit of Amon Hen, each Shadow player may draw a card for each burden.
 		*/

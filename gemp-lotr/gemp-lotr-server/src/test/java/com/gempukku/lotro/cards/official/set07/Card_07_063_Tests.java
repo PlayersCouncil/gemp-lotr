@@ -39,7 +39,6 @@ public class Card_07_063_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot Gollum or Sméagol. Bearer must be a minion. Limit 1 per bearer.<br>Bearer is <b>damage +1</b>.<br>If you have initiative during the Shadow phase, you may play this condition from your discard pile.
 		*/
 

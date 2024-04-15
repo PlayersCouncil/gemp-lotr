@@ -39,7 +39,6 @@ public class Card_06_117_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3T
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Exert 3 companions with the Gandalf signet to play an unbound companion from your dead pile.
 		*/

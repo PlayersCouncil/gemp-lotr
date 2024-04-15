@@ -41,7 +41,6 @@ public class Card_07_147_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>.<br><b>Skirmish:</b> Remove 2 burdens to heal another Easterling.
 		*/

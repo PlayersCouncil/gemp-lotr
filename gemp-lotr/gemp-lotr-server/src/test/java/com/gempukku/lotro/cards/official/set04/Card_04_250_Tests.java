@@ -41,7 +41,6 @@ public class Card_04_250_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br><b>Regroup:</b> Exert this minion and remove (5) to take control of a site.
 		*/

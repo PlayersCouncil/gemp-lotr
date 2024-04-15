@@ -39,7 +39,6 @@ public class Card_04_304_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Add 2 burdens to play the fellowship's next 2 sites (replacing opponent's sites if necessary).
 		*/
 

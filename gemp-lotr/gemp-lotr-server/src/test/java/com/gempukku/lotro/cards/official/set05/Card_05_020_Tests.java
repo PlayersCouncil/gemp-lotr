@@ -39,7 +39,6 @@ public class Card_05_020_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Spell</b>.<br><b>Maneuver:</b> Exert Gandalf to discard up to 2 Shadow possessions. Any Shadow player may discard a minion to prevent this.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_05_020_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}

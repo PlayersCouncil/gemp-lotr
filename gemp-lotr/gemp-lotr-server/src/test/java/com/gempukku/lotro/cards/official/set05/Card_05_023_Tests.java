@@ -39,7 +39,6 @@ public class Card_05_023_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays on Sméagol.<br><b>Regroup:</b> Exert Sméagol or Gollum to play the fellowship's next site (replacing opponent's site if necessary).
 		*/
 

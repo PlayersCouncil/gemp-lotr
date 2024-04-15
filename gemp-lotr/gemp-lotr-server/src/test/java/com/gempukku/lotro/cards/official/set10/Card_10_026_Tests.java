@@ -41,7 +41,6 @@ public class Card_10_026_Tests
 		 * Subtype: Wraith
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Game Text: <b>Enduring</b>. To play, add a threat.<br>When you play Cursed of Erech, exert him twice.<br>At the start of the maneuver phase, you may exert another [gondor] Wraith to make Cursed of Erech <b>defender +1</b> until the regroup phase.
 		*/
 

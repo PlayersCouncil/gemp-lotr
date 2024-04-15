@@ -39,12 +39,13 @@ public class Card_01_188_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>When the fellowship moves to site 4 or 5, add (2) for each Dwarf companion.<br><b>Skirmish:</b> Discard this condition to make your [moria] Orc strength +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Long Dark", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

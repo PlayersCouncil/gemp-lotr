@@ -39,7 +39,6 @@ public class Card_08_028_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: <b>Skirmish:</b> Remove a threat or a burden to transfer this possession to a companion skirmishing Shelob.<br>Each time bearer is assigned to a skirmish, bearer must exert.
 		*/
 

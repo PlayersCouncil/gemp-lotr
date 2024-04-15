@@ -39,7 +39,6 @@ public class Card_07_151_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: To play, spot 2 [raider] Men.<br>Discard any number of cards from hand. The Free Peoples player then discards any number of cards from hand. For each card you discarded more than the Free Peoples player, add (1).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_151_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

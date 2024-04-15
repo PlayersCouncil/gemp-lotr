@@ -39,7 +39,6 @@ public class Card_04_053_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot a Dwarf companion and an Elf companion to wound a minion.
 		*/
 

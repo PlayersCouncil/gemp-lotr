@@ -39,7 +39,6 @@ public class Card_07_244_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 3 [rohan] Men.<br><b>Maneuver:</b> Exert a [rohan] companion twice or discard this condition to play a [rohan] possession from your discard pile.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_06_127_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: <b>Regroup:</b> Discard an [isengard] Orc to make the Free Peoples player wound a companion (or 2 companions if you spot 6 companions).<br><b>Regroup:</b> If this minion is stacked on an [isengard] card, spot an [isengard] Orc and discard this minion to add (3).
 		*/

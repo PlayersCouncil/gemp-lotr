@@ -41,13 +41,14 @@ public class Card_01_284_Tests
 		 * Subtype: Hobbit
 		 * Strength: 2
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Fellowship:</b> Exert Bilbo to shuffle a [shire] card from your discard pile into your draw deck.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Bilbo", card.getBlueprint().getTitle());
 		assertEquals("Retired Adventurer", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

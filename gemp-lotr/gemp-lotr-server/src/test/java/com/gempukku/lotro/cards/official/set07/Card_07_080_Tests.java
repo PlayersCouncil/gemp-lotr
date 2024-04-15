@@ -40,7 +40,6 @@ public class Card_07_080_Tests
 		 * Type: Artifact
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Aragorn.<br>If you cannot spot a threat, Aragorn is <b>defender +1</b>.
 		*/
 

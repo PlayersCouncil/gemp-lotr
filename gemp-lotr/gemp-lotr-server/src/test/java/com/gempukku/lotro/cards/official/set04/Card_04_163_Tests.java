@@ -39,7 +39,6 @@ public class Card_04_163_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert an Uruk-hai to exert X unbound companions, where X is the number of sites you control.
 		*/
 

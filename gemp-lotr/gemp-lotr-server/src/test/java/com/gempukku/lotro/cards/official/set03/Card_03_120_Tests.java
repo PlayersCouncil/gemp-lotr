@@ -39,7 +39,6 @@ public class Card_03_120_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9
 		 * Game Text: <b>Maneuver:</b> Spot 4 companions and exert your [isengard] Orc to make the Free Peoples player wound a companion.
 		*/

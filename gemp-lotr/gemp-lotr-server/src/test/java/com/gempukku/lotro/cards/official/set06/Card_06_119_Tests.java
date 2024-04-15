@@ -39,7 +39,6 @@ public class Card_06_119_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8T
 		 * Game Text: When the fellowship moves to this site, discard all allies.
 		*/

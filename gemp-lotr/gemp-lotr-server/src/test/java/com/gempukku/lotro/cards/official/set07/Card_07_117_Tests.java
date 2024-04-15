@@ -39,7 +39,6 @@ public class Card_07_117_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Spot 2 knights or exert 2 [gondor] Men to liberate a site or discard any number of cards from hand.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_117_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

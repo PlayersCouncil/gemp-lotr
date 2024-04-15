@@ -39,7 +39,6 @@ public class Card_04_156_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make an [isengard] tracker strength +2 (or +4 if skirmishing a character bearing a search card).
 		*/
 

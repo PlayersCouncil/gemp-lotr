@@ -41,7 +41,6 @@ public class Card_07_219_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br>While you have initiative and can spot a Nazgûl, Úlairë Toldëa's twilight cost is -6.
 		*/

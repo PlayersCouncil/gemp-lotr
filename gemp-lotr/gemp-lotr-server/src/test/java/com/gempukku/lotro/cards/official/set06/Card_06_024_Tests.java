@@ -39,7 +39,6 @@ public class Card_06_024_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make an Ent strength +X and <b>damage +X</b>, where X is the number of unbound Hobbits you can spot.
 		*/
 

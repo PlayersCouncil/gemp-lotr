@@ -39,7 +39,6 @@ public class Card_03_089_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert a [sauron] Orc and spot a [gondor] companion to add a burden.
 		*/
 

@@ -41,9 +41,7 @@ public class Card_02_122_Tests
 		 * Subtype: Wizard
 		 * Strength: 7
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: At the start of each of your turns, you may draw a card.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_10_031_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: Spot a [gondor] Man to discard a stacked Shadow card or to wound a minion bearing a fortification.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_031_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

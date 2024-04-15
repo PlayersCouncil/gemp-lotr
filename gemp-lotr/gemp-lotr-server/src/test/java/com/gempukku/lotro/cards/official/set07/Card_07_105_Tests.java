@@ -39,7 +39,6 @@ public class Card_07_105_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Bearer must be a [gondor] Man.<br>If you have initiative, bearer is <b>defender +1</b>.
 		*/
 

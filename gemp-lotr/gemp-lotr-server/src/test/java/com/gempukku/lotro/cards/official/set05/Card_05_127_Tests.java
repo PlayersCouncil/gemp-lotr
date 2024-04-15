@@ -39,7 +39,6 @@ public class Card_05_127_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Helm
-
 		 * Game Text: Bearer must be a [rohan] Man.<br><b>Skirmish:</b> Discard this possession to cancel a skirmish involving bearer. A minion in this skirmish may exert to prevent this.
 		*/
 

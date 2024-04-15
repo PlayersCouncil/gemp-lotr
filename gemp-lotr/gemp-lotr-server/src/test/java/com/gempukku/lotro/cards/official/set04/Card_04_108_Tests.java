@@ -39,7 +39,6 @@ public class Card_04_108_Tests
 		 * Twilight Cost: 4
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> If you can spot more minions than companions, exert Gandalf to make an opponent discard a minion.
 		*/
 

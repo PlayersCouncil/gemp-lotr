@@ -41,9 +41,7 @@ public class Card_05_093_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Valiant</b>.<br><b>Maneuver:</b> Play a [rohan] possession on Théoden to heal a [rohan] ally.
 		*/
 

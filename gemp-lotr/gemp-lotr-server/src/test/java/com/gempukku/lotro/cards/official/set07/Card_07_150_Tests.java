@@ -39,7 +39,6 @@ public class Card_07_150_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [raider] Man.<br><b>Regroup:</b> Remove (3) and spot a [raider] Man to place a [raider] token here.<br>While there are 3 [raider] tokens here, the Shadow has initiative regardless of the Free Peoples player's hand.
 		*/
 

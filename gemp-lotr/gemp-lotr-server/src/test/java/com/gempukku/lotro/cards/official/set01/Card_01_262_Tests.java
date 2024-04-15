@@ -41,13 +41,14 @@ public class Card_01_262_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Tracker</b>.<br>The roaming penalty for each [sauron] minion you play is -1.<br><b>Assignment:</b> Spot 2 Hobbit companions to make the Free Peoples player assign a Hobbit to skirmish this minion.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Orc Assassin", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

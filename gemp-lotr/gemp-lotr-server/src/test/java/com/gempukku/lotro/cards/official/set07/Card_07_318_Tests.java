@@ -41,9 +41,7 @@ public class Card_07_318_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br><b>Skirmish:</b> At sites 6[K] to 8[K], add 4 burdens to wound a minion skirmishing Frodo.
 		*/
 

@@ -40,7 +40,6 @@ public class Card_04_041_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Gimli.<br>He is <b>damage +1</b>.<br><b>Skirmish:</b> Discard a [dwarven] condition or a card stacked on a [dwarven] condition to make Gimli strength +1.
 		*/
 

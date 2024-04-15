@@ -41,13 +41,14 @@ public class Card_01_291_Tests
 		 * Subtype: Hobbit
 		 * Strength: 2
 		 * Vitality: 2
-
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> Exert The Gaffer to heal Frodo or Sam.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Gaffer", card.getBlueprint().getTitle());
 		assertEquals("Sam's Father", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

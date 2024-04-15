@@ -39,12 +39,13 @@ public class Card_01_094_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: Bearer must be a [gondor] Man.<br><b>Fellowship:</b> Discard this possession to heal a companion or to remove a Shadow condition from a companion.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Athelas", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

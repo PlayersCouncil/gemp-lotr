@@ -40,7 +40,6 @@ public class Card_08_083_Tests
 		 * Type: Possession
 		 * Subtype: Mount
 		 * Strength: 2
-
 		 * Game Text: To play, discard 2 cards from hand. Bearer must be a Nazgûl.<br><b>Response:</b> If bearer is about to take a wound, remove a threat to prevent that wound.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_04_128_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Spot a Ring-bound Man to make a minion's site number +2. If that minion loses this skirmish, you may wound a minion.
 		*/
 

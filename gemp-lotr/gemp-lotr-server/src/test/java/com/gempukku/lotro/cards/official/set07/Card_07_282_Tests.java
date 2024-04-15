@@ -41,7 +41,6 @@ public class Card_07_282_Tests
 		 * Subtype: Orc
 		 * Strength: 21
 		 * Vitality: 5
-
 		 * Site Number: 6
 		 * Game Text: When you play Host of Udûn, you may remove X threats to make its twilight cost -X.
 		*/

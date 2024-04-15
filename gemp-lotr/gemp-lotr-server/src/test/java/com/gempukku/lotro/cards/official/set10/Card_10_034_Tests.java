@@ -39,7 +39,6 @@ public class Card_10_034_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: If no opponent controls a site, spot 2 [gondor] Men to make the move limit +1 for this turn.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_034_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 	}
 

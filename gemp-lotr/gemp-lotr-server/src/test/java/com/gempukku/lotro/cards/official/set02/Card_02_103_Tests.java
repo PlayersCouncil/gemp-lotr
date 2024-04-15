@@ -39,7 +39,6 @@ public class Card_02_103_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert a Hobbit bearing a weapon to wound a minion. That minion's owner may remove (3) to prevent this.
 		*/
 

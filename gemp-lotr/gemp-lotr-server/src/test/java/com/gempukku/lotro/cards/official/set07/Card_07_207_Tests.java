@@ -39,7 +39,6 @@ public class Card_07_207_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: Exert a Nazgûl to wound each ally.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_207_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

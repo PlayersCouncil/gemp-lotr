@@ -39,7 +39,6 @@ public class Card_02_002_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert a Dwarf to make that Dwarf <b>defender +1</b> (or <b>defender +2</b> if you spot an Orc) until the regroup phase.
 		*/
 

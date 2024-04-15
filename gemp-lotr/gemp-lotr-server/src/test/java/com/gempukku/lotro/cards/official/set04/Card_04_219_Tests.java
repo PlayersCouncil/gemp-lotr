@@ -41,7 +41,6 @@ public class Card_04_219_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Exert Desert Lord to exert a companion (except the Ring-bearer); Desert Lord does not add to the minion archery total.
 		*/

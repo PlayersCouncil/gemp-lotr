@@ -41,12 +41,13 @@ public class Card_00_057_Tests
 		 * Subtype: Staff
 		 * Strength: 1
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Radagast.<br>Each time the fellowship moves during the regroup phase, you may draw 2 cards.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Radagast's Staff", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

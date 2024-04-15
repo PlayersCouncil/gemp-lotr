@@ -39,7 +39,6 @@ public class Card_08_065_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: <b>Shadow:</b> Remove a threat or discard a [raider] card from hand to add a [raider] token here.<br><b>Regroup:</b> Remove 2 [raider] tokens here to place a [raider] card from your discard pile on top of your draw deck.
 		*/
 

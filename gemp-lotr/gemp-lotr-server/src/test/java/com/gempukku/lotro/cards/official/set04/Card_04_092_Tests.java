@@ -39,7 +39,6 @@ public class Card_04_092_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Spell</b>.<br><b>Fellowship:</b> Spot Gandalf to discard all conditions.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_04_092_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 	}

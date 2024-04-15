@@ -39,9 +39,7 @@ public class Card_04_300_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Vitality: 1
-
 		 * Game Text: <b>Stealth</b>. Bearer must be an unbound Hobbit. Limit 1 per character.<br><b>Skirmish:</b> Exert bearer twice to cancel a skirmish involving him. Any Shadow player may remove (1) to prevent this.
 		*/
 

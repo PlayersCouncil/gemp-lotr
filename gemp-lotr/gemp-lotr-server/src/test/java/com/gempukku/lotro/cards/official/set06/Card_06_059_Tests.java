@@ -40,7 +40,6 @@ public class Card_06_059_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be an [isengard] minion.<br>Each time bearer wins a skirmish, the Free Peoples player must exert a companion for each site you control.
 		*/
 

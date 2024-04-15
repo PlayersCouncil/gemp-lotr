@@ -39,7 +39,6 @@ public class Card_03_046_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Spot The Shards of Narsil to make a [gondor] companion strength +3 and <b>damage +1</b>.
 		*/
 

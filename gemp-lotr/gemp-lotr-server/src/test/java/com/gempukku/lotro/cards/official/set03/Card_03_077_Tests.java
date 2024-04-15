@@ -39,7 +39,6 @@ public class Card_03_077_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot a [moria] Orc. Plays to your support area.<br>Each time the fellowship moves during the regroup phase, add (2).
 		*/
 

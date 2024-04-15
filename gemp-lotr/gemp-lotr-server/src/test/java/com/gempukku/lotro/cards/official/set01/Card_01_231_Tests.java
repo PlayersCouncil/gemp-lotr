@@ -41,13 +41,14 @@ public class Card_01_231_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 11
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br><b>Maneuver:</b> Spot 6 companions (or 5 burdens) and exert Úlairë Enquëa to wound a companion (except the Ring-bearer).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Úlairë Enquëa", card.getBlueprint().getTitle());
 		assertEquals("Lieutenant of Morgul", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -40,7 +40,6 @@ public class Card_02_032_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a Man.<br>This weapon may be borne in addition to 1 other hand weapon.<br>Bearer is strength +2 and <b>damage +1</b> while skirmishing a Nazgûl.
 		*/
 

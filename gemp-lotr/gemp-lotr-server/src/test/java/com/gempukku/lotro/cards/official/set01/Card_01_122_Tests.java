@@ -39,12 +39,13 @@ public class Card_01_122_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If you play an Uruk-hai, take all copies of that card in your discard pile and place them beneath your draw deck.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Breeding Pit", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

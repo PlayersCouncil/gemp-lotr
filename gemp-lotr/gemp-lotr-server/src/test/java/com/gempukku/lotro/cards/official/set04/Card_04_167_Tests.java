@@ -39,7 +39,6 @@ public class Card_04_167_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays on a site you control.<br>While an Uruk-hai is stacked on this site, the Free Peoples player may not play skirmish events or use skirmish special abilities.
 		*/
 

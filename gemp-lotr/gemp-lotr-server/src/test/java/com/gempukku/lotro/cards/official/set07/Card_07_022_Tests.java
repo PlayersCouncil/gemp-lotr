@@ -39,7 +39,6 @@ public class Card_07_022_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 Elves.<br><b>Response:</b> If an [elven] skirmish event is played, discard this condition to draw 3 cards.
 		*/
 

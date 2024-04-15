@@ -39,7 +39,6 @@ public class Card_06_116_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1T
 		 * Game Text: <b>Fellowship:</b> Exert Aragorn twice to play a companion with the Aragorn signet from your draw deck.
 		*/

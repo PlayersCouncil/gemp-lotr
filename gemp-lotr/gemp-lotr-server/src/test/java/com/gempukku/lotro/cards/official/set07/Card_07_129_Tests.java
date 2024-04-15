@@ -39,7 +39,6 @@ public class Card_07_129_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 [raider] Men and add a threat.<br>Each time a companion is about to be killed, you may remove a threat to discard a companion (except the Ring-bearer).<br>Discard this condition at the start of the regroup phase.
 		*/
 

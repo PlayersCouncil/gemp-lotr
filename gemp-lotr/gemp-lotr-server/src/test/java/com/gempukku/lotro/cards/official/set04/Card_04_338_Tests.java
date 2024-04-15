@@ -39,7 +39,6 @@ public class Card_04_338_Tests
 		 * Shadow Number: 1
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3T
 		 * Game Text: <b>Sanctuary</b>. When the fellowship moves to Golden Hall, all Free Peoples weapons must be discarded.
 		*/

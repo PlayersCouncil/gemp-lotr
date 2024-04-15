@@ -41,7 +41,6 @@ public class Card_05_010_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: To play, spot an Elf.<br>While skirmishing a wounded minion, Balglin takes no more than 1 wound during each skirmish phase.
 		*/
 

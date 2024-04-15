@@ -41,7 +41,6 @@ public class Card_07_210_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br><b>Shadow:</b> If you have initiative, exert Úlairë Attëa and spot another [wraith] minion to add a burden.
 		*/

@@ -39,7 +39,6 @@ public class Card_07_065_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot Sméagol.<br><b>Regroup:</b> Discard Sméagol to remove 2 threats.
 		*/
 

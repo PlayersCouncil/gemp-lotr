@@ -40,7 +40,6 @@ public class Card_09_017_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a [gondor] Man. If bearer is Aragorn, he may bear this hand weapon in addition to 1 other hand weapon.<br><b>Skirmish:</b> Discard this weapon to wound a minion bearer is skirmishing.
 		*/
 

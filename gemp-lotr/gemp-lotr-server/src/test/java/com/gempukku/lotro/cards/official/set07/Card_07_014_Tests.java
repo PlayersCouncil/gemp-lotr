@@ -39,7 +39,6 @@ public class Card_07_014_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: Choose one: Spot a Dwarf to draw a card; or, if this card is stacked on a [dwarven] condition, spot a Dwarf companion and discard this event to exert a minion twice.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_014_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

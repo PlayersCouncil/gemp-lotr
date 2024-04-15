@@ -39,7 +39,6 @@ public class Card_03_079_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: <b>Archery:</b> Spot a [moria] Orc and a [sauron] Orc to wound an archer.
 		*/
 

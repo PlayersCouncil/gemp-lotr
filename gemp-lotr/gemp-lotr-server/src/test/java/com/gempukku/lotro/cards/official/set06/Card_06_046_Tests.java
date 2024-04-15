@@ -39,7 +39,6 @@ public class Card_06_046_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Spot Gollum and discard 3 cards from hand to wound a companion Gollum is skirmishing once (or twice if that companion is a [shire] companion).
 		*/
 

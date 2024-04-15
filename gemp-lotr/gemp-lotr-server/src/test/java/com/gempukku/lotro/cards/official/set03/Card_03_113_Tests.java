@@ -39,7 +39,6 @@ public class Card_03_113_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot 2 [shire] companions. Plays to your support area.<br>Each time you remove a burden (except by a Hobbit's game text), you may heal a companion.
 		*/
 

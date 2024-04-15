@@ -41,7 +41,6 @@ public class Card_05_092_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 4T
 		 * Game Text: <b>Villager</b>.<br><b>Regroup:</b> Exert Sigewulf and spot 5 valiant Men to discard a minion.
 		*/

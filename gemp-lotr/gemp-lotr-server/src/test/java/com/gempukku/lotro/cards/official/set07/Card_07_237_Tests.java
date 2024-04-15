@@ -39,7 +39,6 @@ public class Card_07_237_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Spot 3 [rohan] Men to make an opponent remove (1) or place a random card from hand beneath his or her draw deck. Do this once for each card in that player's hand when you play this event.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_237_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

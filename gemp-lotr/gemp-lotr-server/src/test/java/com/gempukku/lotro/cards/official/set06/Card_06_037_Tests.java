@@ -41,7 +41,6 @@ public class Card_06_037_Tests
 		 * Subtype: Ent
 		 * Strength: 12
 		 * Vitality: 4
-
 		 * Game Text: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit to allow Treebeard to skirmish.<br><b>Skirmish:</b> Exert Treebeard to make an Ent <b>damage +1</b>.
 		*/
 

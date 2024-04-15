@@ -41,7 +41,6 @@ public class Card_08_037_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Game Text: <b>Knight</b>. To play, spot a knight.<br>Each time Imrahil wins a skirmish, you may exert 2 minions.
 		*/
 

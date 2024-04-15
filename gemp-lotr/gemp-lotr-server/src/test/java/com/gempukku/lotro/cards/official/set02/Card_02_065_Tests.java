@@ -41,7 +41,6 @@ public class Card_02_065_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: While bearing a Goblin Spear, this minion is <b>damage +2</b>.
 		*/

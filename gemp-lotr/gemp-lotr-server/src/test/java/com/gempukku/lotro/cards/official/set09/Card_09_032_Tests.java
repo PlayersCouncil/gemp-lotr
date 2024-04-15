@@ -41,7 +41,6 @@ public class Card_09_032_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 5
-
 		 * Game Text: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> Play an artifact on Elendil to make the move limit +1 for this turn.<br><b>Regroup:</b> Discard a [gondor] artifact to liberate a site.
 		*/
 

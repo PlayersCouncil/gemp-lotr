@@ -39,7 +39,6 @@ public class Card_08_112_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fellowship:</b> Exert a [shire] companion and either a [rohan] companion or a [gandalf] companion to add a [shire] token here.<br><b>Skirmish:</b> Remove a [shire] token here to prevent an unbound companion from being overwhelmed unless his or her strength is tripled.
 		*/
 

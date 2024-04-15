@@ -39,7 +39,6 @@ public class Card_07_356_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8K
 		 * Game Text: <b>Shadow:</b> Spot 2 [raider] Men and remove a threat to add (2).
 		*/

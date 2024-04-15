@@ -40,7 +40,6 @@ public class Card_07_265_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [sauron] Orc.<br>If you have initiative, bearer is strength +3.
 		*/
 

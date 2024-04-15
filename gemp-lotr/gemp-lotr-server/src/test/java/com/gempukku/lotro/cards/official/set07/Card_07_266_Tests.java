@@ -39,7 +39,6 @@ public class Card_07_266_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Remove 4 threats and spot 2 [sauron] Orcs to make the Free Peoples player spot a companion and place that companion in the dead pile.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_266_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

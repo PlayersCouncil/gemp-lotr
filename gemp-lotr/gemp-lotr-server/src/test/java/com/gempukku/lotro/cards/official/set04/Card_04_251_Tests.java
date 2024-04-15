@@ -41,7 +41,6 @@ public class Card_04_251_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Maneuver:</b> Exert this minion and spot 5 companions to make the Free Peoples player exert a companion.
 		*/

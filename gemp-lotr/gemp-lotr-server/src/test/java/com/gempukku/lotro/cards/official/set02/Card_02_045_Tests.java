@@ -39,7 +39,6 @@ public class Card_02_045_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If the Ring-bearer puts on The One Ring, spot an [isengard] minion to make the Free Peoples player discard the top 5 cards of his or her draw deck.
 		*/
 

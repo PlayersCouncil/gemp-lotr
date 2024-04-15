@@ -39,7 +39,6 @@ public class Card_01_359_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8
 		 * Game Text: <b>River</b>. <b>Shadow:</b> Spot 5 Orc minions to prevent the fellowship from moving again this turn.
 		*/

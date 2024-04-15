@@ -39,7 +39,6 @@ public class Card_07_208_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Spot a Nazgûl to add a threat (or 3 threats if you have initiative).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_208_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

@@ -39,7 +39,6 @@ public class Card_07_256_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Exert X mounted companions to wound X minions.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_256_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

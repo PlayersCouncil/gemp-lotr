@@ -41,7 +41,6 @@ public class Card_04_249_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Assignment:</b> Spot 6 companions to assign this minion to the Ring-bearer. The Free Peoples player may discard an unbound companion to prevent this.
 		*/

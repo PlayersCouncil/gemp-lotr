@@ -41,7 +41,6 @@ public class Card_06_002_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: While you control 2 sites, this minion is strength +5, <b>fierce</b> and <b>damage +1</b>.
 		*/

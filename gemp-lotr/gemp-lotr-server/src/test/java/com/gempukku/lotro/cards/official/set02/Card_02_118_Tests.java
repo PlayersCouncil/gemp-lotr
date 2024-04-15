@@ -39,7 +39,6 @@ public class Card_02_118_Tests
 		 * Shadow Number: 4
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4
 		 * Game Text: <b>Underground</b>. The twilight cost of the first [moria] archer played each Shadow phase is -2.
 		*/

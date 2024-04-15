@@ -41,13 +41,14 @@ public class Card_01_286_Tests
 		 * Subtype: Hobbit
 		 * Strength: 2
 		 * Vitality: 2
-
 		 * Site Number: 2
 		 * Game Text: <b>Skirmish:</b> Exert this ally to prevent a Hobbit from being overwhelmed unless that Hobbit's strength is tripled.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Bounder", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

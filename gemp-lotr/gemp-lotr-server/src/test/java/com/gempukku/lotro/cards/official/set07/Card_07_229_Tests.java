@@ -41,9 +41,7 @@ public class Card_07_229_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Skirmish:</b> Discard a possession borne by Éowyn to make her strength +2.
 		*/
 

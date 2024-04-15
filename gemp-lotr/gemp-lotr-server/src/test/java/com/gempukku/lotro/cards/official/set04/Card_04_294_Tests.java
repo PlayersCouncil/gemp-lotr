@@ -39,7 +39,6 @@ public class Card_04_294_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Fellowship:</b> Exert a [rohan] Man to play a hand weapon from your discard pile.
 		*/
 

@@ -40,7 +40,6 @@ public class Card_06_107_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [sauron] Troll.<br>When you play this possession, you may draw a card.
 		*/
 

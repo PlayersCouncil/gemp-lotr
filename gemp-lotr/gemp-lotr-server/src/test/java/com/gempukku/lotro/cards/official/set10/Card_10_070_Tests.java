@@ -41,7 +41,6 @@ public class Card_10_070_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 2
 		 * Game Text: <b>Enduring</b>. <b>Fierce</b>.<br>Shadow cards cannot exert Úlairë Nelya during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Nelya to add (1) for each burden.
 		*/

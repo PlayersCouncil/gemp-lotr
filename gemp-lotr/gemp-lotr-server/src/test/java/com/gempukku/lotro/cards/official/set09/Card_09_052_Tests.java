@@ -41,7 +41,6 @@ public class Card_09_052_Tests
 		 * Subtype: 
 		 * Strength: 14
 		 * Vitality: 9
-
 		 * Site Number: 2
 		 * Game Text: To play, remove 2 burdens or 2 threats.<br><b>Skirmish:</b> Spot 2 [shire] companions and exert Tom Bombadil X times, where X is the fellowship's site number, to cancel a skirmish involving a [shire] companion.
 		*/

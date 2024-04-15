@@ -39,12 +39,13 @@ public class Card_01_252_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert a [sauron] Orc. Plays to your support area.<br>If you can spot 5 burdens and the Free Peoples player has no cards in his or her draw deck, the Ring-bearer is corrupted.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Irresistible Shadow", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_08_020_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to 3 cards from that companion's culture into hand from your draw deck. Shuffle your draw deck.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_020_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

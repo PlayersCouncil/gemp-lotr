@@ -39,7 +39,6 @@ public class Card_07_004_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Spot a Dwarf and add a threat to draw 3 cards.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_004_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

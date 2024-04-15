@@ -39,7 +39,6 @@ public class Card_06_077_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area. At sites 2[T] and 3[T], The Balrog's twilight cost is -3.<br><b>Skirmish:</b> Discard this condition to make a unique [moria] minion strength +3.
 		*/
 

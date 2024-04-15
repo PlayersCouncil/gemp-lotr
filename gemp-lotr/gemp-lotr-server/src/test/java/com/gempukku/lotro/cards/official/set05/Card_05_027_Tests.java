@@ -40,7 +40,6 @@ public class Card_05_027_Tests
 		 * Type: Condition
 		 * Subtype: 
 		 * Strength: 1
-
 		 * Game Text: Plays on Sméagol.<br><b>Skirmish:</b> Discard this condition to make Sméagol <b>damage +1</b>.
 		*/
 

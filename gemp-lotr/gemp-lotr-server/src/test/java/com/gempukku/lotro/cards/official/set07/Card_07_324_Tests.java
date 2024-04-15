@@ -41,9 +41,7 @@ public class Card_07_324_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Skirmish:</b> If Pippin is not assigned to a skirmish, return him to your hand to wound a roaming minion twice.
 		*/
 

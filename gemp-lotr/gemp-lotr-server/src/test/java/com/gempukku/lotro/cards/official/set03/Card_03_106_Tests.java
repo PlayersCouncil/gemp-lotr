@@ -39,7 +39,6 @@ public class Card_03_106_Tests
 		 * Twilight Cost: 0
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: Bearer must be a Hobbit companion.<br>The Shadow number of each site is -1.<br>Discard Bill the Pony when at an underground site.
 		*/
 

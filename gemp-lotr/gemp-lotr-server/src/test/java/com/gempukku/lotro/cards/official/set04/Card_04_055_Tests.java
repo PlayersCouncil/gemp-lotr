@@ -39,7 +39,6 @@ public class Card_04_055_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert a Dwarf to shuffle a [dwarven] condition (and all cards stacked on it) into your draw deck. Exert a minion for each card shuffled into your draw deck.
 		*/
 

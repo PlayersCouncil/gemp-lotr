@@ -39,7 +39,6 @@ public class Card_04_282_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make an unbound companion strength +1 for each [rohan] Man you spot (limit +3).
 		*/
 

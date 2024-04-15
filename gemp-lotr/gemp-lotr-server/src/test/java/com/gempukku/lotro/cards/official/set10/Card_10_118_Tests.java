@@ -39,7 +39,6 @@ public class Card_10_118_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4K
 		 * Game Text: <b>Plains</b>. <b>Shadow:</b> Exert a minion and remove a burden to make the Free Peoples player discard one of his or her conditions.
 		*/

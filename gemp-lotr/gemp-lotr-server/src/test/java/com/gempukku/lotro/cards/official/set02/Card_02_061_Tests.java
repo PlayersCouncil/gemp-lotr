@@ -41,7 +41,6 @@ public class Card_02_061_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may add (3) if the fellowship has moved more than once this turn.
 		*/

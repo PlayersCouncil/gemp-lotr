@@ -41,7 +41,6 @@ public class Card_10_021_Tests
 		 * Subtype: 
 		 * Strength: 5
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: To assign Gollum to a skirmish, the Free Peoples player must make Gollum strength +3 until the regroup phase or add a burden.
 		*/

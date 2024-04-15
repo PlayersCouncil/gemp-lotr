@@ -41,9 +41,7 @@ public class Card_05_115_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Ring-bound</b>.<br>While you can spot Frodo and Sméagol, Sam may not be overwhelmed unless his strength is tripled.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_07_354_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7K
 		 * Game Text: <b>Plains</b>. <b>Shadow:</b> Exert a minion and spot 6 companions to add (1).
 		*/

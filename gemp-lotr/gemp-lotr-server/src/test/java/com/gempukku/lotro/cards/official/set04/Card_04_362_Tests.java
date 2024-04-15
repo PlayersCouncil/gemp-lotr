@@ -39,7 +39,6 @@ public class Card_04_362_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9T
 		 * Game Text: When the fellowship moves to Orthanc Library, each Shadow player may draw a card for each companion over 4.
 		*/

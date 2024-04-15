@@ -41,12 +41,13 @@ public class Card_00_063_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Ranger</b>.<br><b>Skirmish:</b> Exert Arwen to make a minion skirmishing an Elf strength -2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Arwen", card.getBlueprint().getTitle());
 		assertEquals("Maiden of Rivendell", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

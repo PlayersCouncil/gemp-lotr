@@ -41,7 +41,6 @@ public class Card_06_057_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: This minion is strength +2 and <b>damage +1</b> for each Free Peoples culture that you can spot over 2.
 		*/

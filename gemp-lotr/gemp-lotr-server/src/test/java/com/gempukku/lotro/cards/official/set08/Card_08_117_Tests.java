@@ -39,7 +39,6 @@ public class Card_08_117_Tests
 		 * Shadow Number: 1
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3K
 		 * Game Text: <b>Underground</b>. <b>Sanctuary</b>. <b>Fellowship:</b> Add 3 threats to play an enduring companion from your draw deck.
 		*/

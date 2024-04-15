@@ -41,7 +41,6 @@ public class Card_08_058_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Corsair</b>.<br>When you play this minion, you may discard 2 cards from hand to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		*/

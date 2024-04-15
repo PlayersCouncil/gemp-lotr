@@ -41,7 +41,6 @@ public class Card_04_179_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 14
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>. To play, spot an Uruk-hai.<br>While at a battleground, this minion is <b>fierce</b>.<br>While you control a battleground, this minion is strength +6.<br>While you control 2 battlegrounds, this minion may not take wounds.
 		*/

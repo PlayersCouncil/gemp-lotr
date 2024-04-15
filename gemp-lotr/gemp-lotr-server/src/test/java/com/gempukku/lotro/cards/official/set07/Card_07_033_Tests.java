@@ -39,7 +39,6 @@ public class Card_07_033_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Exert Gandalf twice to remove all threats and to heal all companions of one culture (except [gandalf]).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_033_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 	}
 

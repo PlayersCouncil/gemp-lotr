@@ -39,7 +39,6 @@ public class Card_07_128_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a roaming minion skirmishing a [gondor] Man strength -3.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_128_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

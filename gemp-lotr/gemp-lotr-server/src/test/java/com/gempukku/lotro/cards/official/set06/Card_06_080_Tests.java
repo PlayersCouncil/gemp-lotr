@@ -41,7 +41,6 @@ public class Card_06_080_Tests
 		 * Subtype: Man
 		 * Strength: 13
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Remove (3) to add 1 to the minion archery total for each companion over 4 (limit +4).
 		*/

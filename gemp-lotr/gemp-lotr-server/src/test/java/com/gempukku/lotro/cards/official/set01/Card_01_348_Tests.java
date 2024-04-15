@@ -39,7 +39,6 @@ public class Card_01_348_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4
 		 * Game Text: <b>Mountain</b>. <b>Shadow:</b> Spot an [isengard] minion to play a weather card from your draw deck (limit 1 per turn).
 		*/

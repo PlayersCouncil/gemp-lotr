@@ -41,7 +41,6 @@ public class Card_09_048_Tests
 		 * Subtype: Maia
 		 * Strength: 24
 		 * Vitality: 5
-
 		 * Site Number: 6
 		 * Game Text: <b>Damage +2</b>. <b>Enduring</b>. <b>Fierce</b>.<br>For each burden you spot, threat you spot, and site you control, Sauron's twilight cost is -1.
 		*/

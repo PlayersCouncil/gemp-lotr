@@ -41,13 +41,14 @@ public class Card_01_184_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: While at an underground site, this minion is strength +2.<br>While you can spot another [moria] Orc, the fellowship archery total is -1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Wallcrawler", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

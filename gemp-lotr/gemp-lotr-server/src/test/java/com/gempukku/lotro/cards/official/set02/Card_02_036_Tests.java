@@ -39,7 +39,6 @@ public class Card_02_036_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Exert Aragorn to make another companion strength +2 (or +3 if that companion has the Aragorn signet).
 		*/
 

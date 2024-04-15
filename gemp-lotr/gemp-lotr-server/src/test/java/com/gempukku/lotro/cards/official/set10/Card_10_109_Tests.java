@@ -39,7 +39,6 @@ public class Card_10_109_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Stealth</b>. Spot a [shire] companion and return him or her to your hand to make a Shadow player choose to remove (2) or discard a minion.
 		*/
 
@@ -53,6 +52,8 @@ public class Card_10_109_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.STEALTH));
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

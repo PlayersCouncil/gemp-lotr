@@ -41,7 +41,6 @@ public class Card_04_218_Tests
 		 * Subtype: Man
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Ambush (1)</b>.<br>While you can spot 4 burdens, this minion is strength +5.<br>While you can spot 5 burdens, this minion is <b>fierce</b>.<br>While you can spot 6 burdens, this minion is <b>damage +1</b>.
 		*/

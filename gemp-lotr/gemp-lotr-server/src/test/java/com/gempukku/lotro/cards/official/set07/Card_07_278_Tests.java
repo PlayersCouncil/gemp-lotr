@@ -41,7 +41,6 @@ public class Card_07_278_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Response:</b> If a besieger is about to take a wound, discard 2 cards from hand to prevent it.
 		*/

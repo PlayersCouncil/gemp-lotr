@@ -41,7 +41,6 @@ public class Card_05_103_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: When you play this minion, you may spot a [sauron] condition to draw a card for each site you control (limit 3).
 		*/

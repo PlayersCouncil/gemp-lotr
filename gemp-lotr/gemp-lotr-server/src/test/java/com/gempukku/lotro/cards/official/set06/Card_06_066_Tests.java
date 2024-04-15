@@ -41,7 +41,6 @@ public class Card_06_066_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Regroup:</b> If stacked on an [isengard] card, discard this card to add (2).
 		*/

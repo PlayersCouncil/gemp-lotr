@@ -33,7 +33,7 @@ public class Card_13_036_Tests
 		/**
 		 * Set: 13
 		 * Name: The Palantír of Orthanc, Recovered Seeing Stone
-		 * Unique: False
+		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 0

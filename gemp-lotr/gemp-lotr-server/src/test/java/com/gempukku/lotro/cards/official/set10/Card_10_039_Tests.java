@@ -41,7 +41,6 @@ public class Card_10_039_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Corsair</b>.<br>When you play this minion, you may spot another corsair and discard the top card of the Free Peoples player's draw deck to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		*/

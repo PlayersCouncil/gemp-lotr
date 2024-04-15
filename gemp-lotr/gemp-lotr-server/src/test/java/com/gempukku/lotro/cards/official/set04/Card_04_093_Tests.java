@@ -39,7 +39,6 @@ public class Card_04_093_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot Gandalf to heal an unbound companion twice.
 		*/
 

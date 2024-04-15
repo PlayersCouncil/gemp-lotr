@@ -39,7 +39,6 @@ public class Card_10_065_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Maneuver:</b> Spot a [wraith] Orc and remove a threat to wound an unwounded companion.
 		*/
 

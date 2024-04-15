@@ -39,7 +39,6 @@ public class Card_09_027_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Skirmish:</b> Discard this condition to discard each minion skirmishing a Wizard. Place that Wizard in your dead pile.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Play a Wizard (even if another copy of that Wizard is in your dead pile).
 		*/
 

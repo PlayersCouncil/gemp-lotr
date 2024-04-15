@@ -42,7 +42,6 @@ public class Card_09_030_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 7
-
 		 * Game Text: <b>Ring-bound</b>. To play, add a burden.<br>Each time the fellowship moves, place an unbound companion in the dead pile.<br><b>Regroup:</b> If Sméagol is the Ring-bearer, add 2 burdens to discard each minion.
 		*/
 

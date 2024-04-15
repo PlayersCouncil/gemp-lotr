@@ -52,6 +52,7 @@ public class Card_11_182_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

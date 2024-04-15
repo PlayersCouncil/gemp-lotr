@@ -41,7 +41,6 @@ public class Card_02_058_Tests
 		 * Subtype: Creature
 		 * Strength: 4
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Tentacle</b>.<br>When you play this minion, you may play a tentacle from your draw deck. This minion may not bear possessions and is discarded if not at a marsh.
 		*/

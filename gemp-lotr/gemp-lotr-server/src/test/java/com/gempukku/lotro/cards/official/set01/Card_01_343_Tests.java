@@ -39,7 +39,6 @@ public class Card_01_343_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4
 		 * Game Text: <b>Underground</b>. <b>Maneuver:</b> Discard your tale from play or from hand to heal your companion.
 		*/

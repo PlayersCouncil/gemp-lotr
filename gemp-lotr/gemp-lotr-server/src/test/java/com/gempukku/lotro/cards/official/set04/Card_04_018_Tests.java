@@ -41,7 +41,6 @@ public class Card_04_018_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: <b>Assignment:</b> Spot an ally to make that ally participate in skirmishes and assign this minion to skirmish that ally.
 		*/

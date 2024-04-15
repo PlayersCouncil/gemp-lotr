@@ -39,7 +39,6 @@ public class Card_04_070_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Exert an Elf to make a minion skirmishing that Elf strength -3.
 		*/
 

@@ -39,12 +39,13 @@ public class Card_01_049_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Bearer must be a [gondor] Man. Limit 1 per bearer.<br>Bearer is strength +1 for each Elf you can spot (limit +3).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Last Alliance of Elves and Men", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

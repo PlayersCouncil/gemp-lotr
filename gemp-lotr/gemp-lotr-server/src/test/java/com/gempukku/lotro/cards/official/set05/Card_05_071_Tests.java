@@ -41,7 +41,6 @@ public class Card_05_071_Tests
 		 * Subtype: Man
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br><b>Regroup:</b> Remove (9) and spot another Southron to make the move limit -1 for this turn (to a minimum of 1).
 		*/

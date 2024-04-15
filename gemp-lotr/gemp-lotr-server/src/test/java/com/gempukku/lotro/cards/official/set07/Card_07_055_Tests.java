@@ -39,7 +39,6 @@ public class Card_07_055_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fellowship:</b> Discard 3 cards from hand to play Sméagol from your discard pile.
 		*/
 

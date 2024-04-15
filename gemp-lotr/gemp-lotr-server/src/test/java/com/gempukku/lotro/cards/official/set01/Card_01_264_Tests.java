@@ -39,12 +39,13 @@ public class Card_01_264_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While you can spot a [sauron] Orc, add 1 to the minion archery total.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Orc Bowmen", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

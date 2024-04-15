@@ -41,7 +41,6 @@ public class Card_10_099_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Damage +1</b>.<br>Each time Shagrat loses a skirmish, you may exert a character.
 		*/

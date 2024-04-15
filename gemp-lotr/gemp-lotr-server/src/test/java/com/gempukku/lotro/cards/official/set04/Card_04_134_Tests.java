@@ -40,7 +40,6 @@ public class Card_04_134_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [gondor] Man.<br>While skirmishing a Man or a roaming minion, bearer is <b>damage +1</b>.
 		*/
 

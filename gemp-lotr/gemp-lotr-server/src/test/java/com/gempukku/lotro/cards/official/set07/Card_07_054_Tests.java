@@ -39,7 +39,6 @@ public class Card_07_054_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Discard any number of [gollum] conditions. For each condition discarded, make Sméagol strength +3 and <b>damage +1</b>.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_054_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

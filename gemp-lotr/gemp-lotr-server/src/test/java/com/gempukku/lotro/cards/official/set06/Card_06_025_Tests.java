@@ -39,7 +39,6 @@ public class Card_06_025_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert 2 Ents to liberate a site and discard a Shadow condition.
 		*/
 

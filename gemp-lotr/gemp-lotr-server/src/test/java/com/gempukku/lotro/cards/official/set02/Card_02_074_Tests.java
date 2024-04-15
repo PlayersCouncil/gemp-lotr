@@ -40,7 +40,6 @@ public class Card_02_074_Tests
 		 * Type: Artifact
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be The Balrog.<br><b>Skirmish:</b> Exert The Balrog to discard a helm, shield, or armor borne by a character The Balrog is skirmishing.
 		*/
 

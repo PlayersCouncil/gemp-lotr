@@ -39,12 +39,13 @@ public class Card_01_209_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Response:</b> If your Nazgûl wins a skirmish, transfer this condition from your support area to the losing character. Limit 1 per character. Wound bearer at the start of each fellowship phase. (If bearer is the Ring-bearer, add a burden instead.)
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Blade Tip", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

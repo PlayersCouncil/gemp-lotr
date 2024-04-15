@@ -39,7 +39,6 @@ public class Card_08_111_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: If the Shadow has initiative, add a threat to make an unbound Hobbit strength +1 for each [shire] card you spot.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_111_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

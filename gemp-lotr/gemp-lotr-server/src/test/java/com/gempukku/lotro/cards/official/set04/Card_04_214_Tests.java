@@ -39,7 +39,6 @@ public class Card_04_214_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot Gríma to discard a possession borne by an ally or unbound companion.
 		*/
 

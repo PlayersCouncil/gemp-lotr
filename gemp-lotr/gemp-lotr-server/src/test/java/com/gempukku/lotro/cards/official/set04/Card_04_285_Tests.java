@@ -41,7 +41,6 @@ public class Card_04_285_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 4T
 		 * Game Text: <b>Villager</b>.<br>Discard Léod if an opponent controls his home site.<br><b>Skirmish:</b> Exert Léod to make a mounted companion strength +2.
 		*/

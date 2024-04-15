@@ -41,7 +41,6 @@ public class Card_07_168_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br><b>Archery:</b> Spot another [raider] Man, spot 6 companions, and remove a threat to exert a companion.
 		*/

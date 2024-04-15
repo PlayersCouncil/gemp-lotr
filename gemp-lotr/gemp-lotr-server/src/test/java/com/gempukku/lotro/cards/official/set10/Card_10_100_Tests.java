@@ -39,7 +39,6 @@ public class Card_10_100_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Exert a [sauron] minion to return a Free Peoples condition to its owner's hand (or 2 if both are [shire] conditions).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_100_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

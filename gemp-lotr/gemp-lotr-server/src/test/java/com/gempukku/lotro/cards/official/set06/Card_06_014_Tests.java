@@ -39,7 +39,6 @@ public class Card_06_014_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Hand weapon
-
 		 * Game Text: Bearer must be an Elf companion.<br>Each time bearer wins a skirmish, you may draw a card.<br><b>Response:</b> If bearer wins a skirmish, discard this possession to liberate a site.
 		*/
 

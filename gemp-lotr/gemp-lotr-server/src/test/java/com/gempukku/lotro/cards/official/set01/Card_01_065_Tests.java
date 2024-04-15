@@ -39,12 +39,13 @@ public class Card_01_065_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert an Elf ally whose home is site 6. Until the regroup phase, that ally is strength +3 and participates in archery fire and skirmishes.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Swan-ship of the Galadhrim", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -41,7 +41,6 @@ public class Card_06_100_Tests
 		 * Subtype: Wraith
 		 * Strength: 5
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Twilight</b>. <b>Damage +1</b>.<br>To play this minion, remove a burden or spot a twilight minion.
 		*/

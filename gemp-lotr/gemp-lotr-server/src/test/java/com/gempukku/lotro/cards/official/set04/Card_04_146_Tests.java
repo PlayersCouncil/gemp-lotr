@@ -39,7 +39,6 @@ public class Card_04_146_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Archery:</b> Spot 2 [isengard] archers to make allies take wounds from archery fire instead of companions.
 		*/
 

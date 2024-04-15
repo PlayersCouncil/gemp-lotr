@@ -39,7 +39,6 @@ public class Card_02_109_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot Sting or Glamdring and exert its bearer X times to wound X Orcs or X Uruk-hai.
 		*/
 

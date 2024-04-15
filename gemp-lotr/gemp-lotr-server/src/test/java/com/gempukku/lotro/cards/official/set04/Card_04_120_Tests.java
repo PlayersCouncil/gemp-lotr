@@ -39,7 +39,6 @@ public class Card_04_120_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While the fellowship is at site 6[T], each Ring-bound Man takes no more than 1 wound during each skirmish phase.<br><b>Fellowship:</b> Add (2) and discard this condition to heal a Ring-bound Man.
 		*/
 

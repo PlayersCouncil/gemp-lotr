@@ -41,7 +41,6 @@ public class Card_04_295_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 4T
 		 * Game Text: <b>Villager</b>.<br>Discard Weland if an opponent controls his home site.<br><b>Fellowship:</b> Exert Weland to heal a mounted companion.
 		*/

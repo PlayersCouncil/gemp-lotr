@@ -39,7 +39,6 @@ public class Card_03_019_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot Arwen. Bearer must be Aragorn.<br><b>Skirmish:</b> Exert Aragorn or discard 2 cards from hand to make a minion skirmishing Aragorn strength -1.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_07_218_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Regroup:</b> If you have initiative, discard Úlairë Otsëa to make the Free Peoples player exert a Ring-bound companion twice or return an unbound companion to his or her hand.
 		*/

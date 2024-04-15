@@ -41,7 +41,6 @@ public class Card_08_080_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: <b>Enduring</b>. <b>Fierce</b>.<br>The site number of each [wraith] minion is -1.
 		*/

@@ -40,7 +40,6 @@ public class Card_02_010_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a Dwarf.<br>This weapon may be borne in addition to 1 other hand weapon.<br><b>Archery:</b> Discard this weapon to make the fellowship archery total +1.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_03_080_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot a [moria] minion to wound Boromir 3 times. The Free Peoples player may discard 2 Free Peoples possessions to prevent this.
 		*/
 

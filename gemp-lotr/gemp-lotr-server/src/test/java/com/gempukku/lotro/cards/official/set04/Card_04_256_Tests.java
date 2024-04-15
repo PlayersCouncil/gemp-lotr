@@ -41,7 +41,6 @@ public class Card_04_256_Tests
 		 * Subtype: Man
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Archer</b>. <b>Ambush (1)</b>. To play, spot a Southron.<br><b>Assignment:</b> Spot 7 companions to assign this minion to the Ring-bearer. The Free Peoples player may make you discard a companion (except the Ring-bearer) to prevent this.
 		*/

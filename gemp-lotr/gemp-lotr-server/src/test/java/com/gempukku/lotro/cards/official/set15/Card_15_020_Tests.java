@@ -52,6 +52,7 @@ public class Card_15_020_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.ARCHERY));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

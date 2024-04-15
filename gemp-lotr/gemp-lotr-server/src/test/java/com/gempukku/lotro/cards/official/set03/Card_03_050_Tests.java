@@ -39,7 +39,6 @@ public class Card_03_050_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot an [isengard] minion to exhaust Aragorn. The Free Peoples player may add 2 burdens to prevent this.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_03_016_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Reveal a card at random from an opponent's hand. Heal X [elven] allies, where X is the twilight cost of the card revealed.
 		*/
 

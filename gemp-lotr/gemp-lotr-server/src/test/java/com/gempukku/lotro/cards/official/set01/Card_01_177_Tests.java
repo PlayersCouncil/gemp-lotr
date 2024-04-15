@@ -41,13 +41,14 @@ public class Card_01_177_Tests
 		 * Subtype: Orc
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: &nbsp;
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Patrol Troop", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

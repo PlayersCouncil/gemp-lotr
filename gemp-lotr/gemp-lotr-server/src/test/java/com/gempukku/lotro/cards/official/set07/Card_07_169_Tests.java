@@ -39,7 +39,6 @@ public class Card_07_169_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Regroup:</b> Exert an Easterling and discard this condition to make the move limit -1 for this turn. The Free Peoples player may add 2 burdens to prevent this.<br><b>Skirmish:</b> Discard this condition to heal an Easterling.
 		*/
 

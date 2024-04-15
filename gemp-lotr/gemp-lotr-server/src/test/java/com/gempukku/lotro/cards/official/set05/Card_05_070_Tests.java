@@ -41,7 +41,6 @@ public class Card_05_070_Tests
 		 * Subtype: Man
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br><b>Skirmish:</b> Remove (3) to play a [raider] mount from your discard pile.
 		*/

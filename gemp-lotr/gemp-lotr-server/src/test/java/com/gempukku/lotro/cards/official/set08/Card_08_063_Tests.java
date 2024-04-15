@@ -39,7 +39,6 @@ public class Card_08_063_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: While you can spot a mounted [raider] Man, [raider] Men cannot take wounds (except during skirmishes).
 		*/
 

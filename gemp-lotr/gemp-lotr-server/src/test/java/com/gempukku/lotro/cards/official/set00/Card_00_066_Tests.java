@@ -41,12 +41,13 @@ public class Card_00_066_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Game Text: <b>Valiant</b>. <b>Damage +1</b>.<br>While you can spot a [rohan] Man, Éomer's twilight cost is -1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Éomer", card.getBlueprint().getTitle());
 		assertEquals("Forthwith Banished", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

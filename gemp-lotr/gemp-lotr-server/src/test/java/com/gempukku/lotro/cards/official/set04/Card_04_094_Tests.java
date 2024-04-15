@@ -41,7 +41,6 @@ public class Card_04_094_Tests
 		 * Subtype: 
 		 * Strength: 2
 		 * Vitality: 1
-
 		 * Game Text: <b>Spell</b>. To play, spot Gandalf. Bearer must be Théoden.<br>Discard all Shadow conditions on Théoden. Shadow conditions may not be played on Théoden.
 		*/
 

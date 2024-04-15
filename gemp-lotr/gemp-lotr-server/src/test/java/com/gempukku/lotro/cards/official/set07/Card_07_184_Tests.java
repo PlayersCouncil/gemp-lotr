@@ -39,7 +39,6 @@ public class Card_07_184_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a Nazgûl.<br><b>Regroup:</b> Discard a Nazgûl to place a [wraith] token on this card.<br>While there are 3 [wraith] tokens on this card, the Shadow has initiative, regardless of the Free Peoples player's hand.
 		*/
 

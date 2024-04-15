@@ -41,12 +41,13 @@ public class Card_00_065_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Game Text: <b>Ring-bound</b>. <b>Knight</b>. <b>Ranger</b>.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Boromir", card.getBlueprint().getTitle());
 		assertEquals("Steward's Heir", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

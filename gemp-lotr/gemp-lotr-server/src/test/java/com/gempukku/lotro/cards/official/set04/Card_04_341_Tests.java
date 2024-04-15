@@ -39,7 +39,6 @@ public class Card_04_341_Tests
 		 * Shadow Number: 1
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3T
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Play Théoden from your draw deck.
 		*/

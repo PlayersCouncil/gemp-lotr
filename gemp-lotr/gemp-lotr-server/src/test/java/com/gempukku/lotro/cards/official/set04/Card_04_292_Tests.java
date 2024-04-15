@@ -41,9 +41,7 @@ public class Card_04_292_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Regroup:</b> Spot a [rohan] ally and exert Théoden to liberate a site.
 		*/
 

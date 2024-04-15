@@ -39,7 +39,6 @@ public class Card_08_021_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Mount
-
 		 * Game Text: Bearer must be Gandalf.<br>At the start of each skirmish involving Gandalf, each minion skirmishing Gandalf must exert.<br><b>Skirmish:</b> Add a threat to make Gandalf strength +1.
 		*/
 

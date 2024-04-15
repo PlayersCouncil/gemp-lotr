@@ -41,7 +41,6 @@ public class Card_03_086_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Twilight</b>.<br>Each time Úlairë Otsëa wins a skirmish, you may exert him to transfer Blade Tip from your support area to the Ring-bearer.
 		*/

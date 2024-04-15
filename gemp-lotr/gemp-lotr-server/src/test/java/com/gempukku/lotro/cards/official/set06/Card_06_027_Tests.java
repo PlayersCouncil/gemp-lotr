@@ -41,7 +41,6 @@ public class Card_06_027_Tests
 		 * Subtype: Ent
 		 * Strength: 6
 		 * Vitality: 4
-
 		 * Game Text: While you can spot 3 Ents, this companion is strength +2.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_02_077_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Response:</b> If a twilight Nazgûl is about to take a wound, remove (1) to prevent that wound.
 		*/
 

@@ -39,12 +39,13 @@ public class Card_01_129_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert an Uruk-hai. Plays to your support area.<br>The twilight cost of each companion played to a site which is not a sanctuary is +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Misadventure of Mr. Underhill", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

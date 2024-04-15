@@ -39,7 +39,6 @@ public class Card_03_024_Tests
 		 * Twilight Cost: 0
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: To play, exert an Elf. Bearer must be the Ring-bearer.<br>Bearer's resistance is +2.
 		*/
 

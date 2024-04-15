@@ -41,7 +41,6 @@ public class Card_03_068_Tests
 		 * Subtype: Wizard
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.<br>Uruk-hai are <b>fierce</b>.<br><b>Response:</b> If an Uruk-hai is about to take a wound, exert Saruman to prevent that wound.
 		*/

@@ -39,7 +39,6 @@ public class Card_05_009_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Maneuver:</b> Stack the top card from your draw deck here (limit once per phase).<br><b>Maneuver:</b> Spot a Dwarf and discard a card stacked on a [dwarven] condition to take a Free Peoples card stacked here into hand.
 		*/
 

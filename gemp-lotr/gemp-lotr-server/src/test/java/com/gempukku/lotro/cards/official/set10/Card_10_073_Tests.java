@@ -39,7 +39,6 @@ public class Card_10_073_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [rohan] Man.<br>Each time you lose initiative, you may liberate a site.
 		*/
 

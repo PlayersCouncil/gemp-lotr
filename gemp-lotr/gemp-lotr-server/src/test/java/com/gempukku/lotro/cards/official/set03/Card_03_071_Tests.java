@@ -39,7 +39,6 @@ public class Card_03_071_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot an [isengard] minion. Plays to your support area.<br>Each time the fellowship moves, you may spot an exhausted companion to add (3).
 		*/
 

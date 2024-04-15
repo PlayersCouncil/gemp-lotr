@@ -39,7 +39,6 @@ public class Card_02_016_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot an Elf. Plays to your support area.<br>Each Uruk-hai is strength -2 and loses all <b>damage</b> bonuses. Discard this condition during the regroup phase.
 		*/
 

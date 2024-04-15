@@ -39,14 +39,14 @@ public class Card_01_114_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Vitality: 1
-
 		 * Game Text: <b>Tale</b>. Bearer must be a [gondor] companion.<br><b>Skirmish:</b> Discard this condition to make bearer strength +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Saga of Elendil", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

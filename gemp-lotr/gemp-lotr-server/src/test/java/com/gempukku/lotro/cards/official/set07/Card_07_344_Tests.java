@@ -39,7 +39,6 @@ public class Card_07_344_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 5K
 		 * Game Text: When the fellowship moves to this site, add 3 threats. When the fellowship moves from this site, remove 3 threats.
 		*/

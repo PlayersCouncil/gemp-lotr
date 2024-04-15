@@ -41,7 +41,6 @@ public class Card_09_005_Tests
 		 * Subtype: Dwarf
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Game Text: Each time a Dwarf wins a fierce skirmish, you may heal that Dwarf.<br><b>Skirmish:</b> Discard a [dwarven] card from hand to make a Dwarf <b>damage +1</b>.
 		*/
 

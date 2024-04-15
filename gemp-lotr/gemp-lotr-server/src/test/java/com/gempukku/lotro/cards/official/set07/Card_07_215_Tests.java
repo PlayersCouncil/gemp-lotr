@@ -41,7 +41,6 @@ public class Card_07_215_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 2
 		 * Game Text: <b>Fierce</b>.<br><b>Skirmish:</b> Discard a [wraith] minion to make Úlairë Nelya strength +2.
 		*/

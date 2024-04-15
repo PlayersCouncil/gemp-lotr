@@ -41,7 +41,6 @@ public class Card_04_253_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br><b>Maneuver:</b> Exert this minion to add (2) for each site you control.
 		*/

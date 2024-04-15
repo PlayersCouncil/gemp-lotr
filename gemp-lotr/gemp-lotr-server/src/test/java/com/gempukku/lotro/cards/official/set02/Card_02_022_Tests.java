@@ -39,9 +39,7 @@ public class Card_02_022_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Staff
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Gandalf.<br>The twilight cost of each [gandalf] spell is -1.<br><b>Skirmish:</b> Exert Gandalf twice to cancel a skirmish involving him.
 		*/
 

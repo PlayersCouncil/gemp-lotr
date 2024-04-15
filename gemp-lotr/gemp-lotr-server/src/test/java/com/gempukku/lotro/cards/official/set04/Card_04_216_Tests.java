@@ -39,7 +39,6 @@ public class Card_04_216_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving a [raider] Man, you may place a [raider] token here.<br><b>Archery:</b> Heal a [raider] archer for each [raider] token here. Discard this condition.
 		*/
 

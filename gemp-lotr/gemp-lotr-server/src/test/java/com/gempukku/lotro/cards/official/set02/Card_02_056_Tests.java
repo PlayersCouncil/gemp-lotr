@@ -39,7 +39,6 @@ public class Card_02_056_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While you can spot The Balrog, skip the archery phase.<br><b>Maneuver:</b> Exert The Balrog to discard a ranged weapon.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_03_105_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot a [sauron] minion to discard Bilbo. The Free Peoples player may discard 2 Free Peoples conditions to prevent this.
 		*/
 

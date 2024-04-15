@@ -39,12 +39,13 @@ public class Card_01_285_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Pipe
-
 		 * Game Text: Bearer must be a Hobbit.<br><b>Fellowship:</b> Discard a pipeweed possession and spot X pipes to shuffle X tales from your discard pile into your draw deck.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Bilbo's Pipe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_06_064_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a regroup action discards an [isengard] Orc, you may stack that Orc on this card.<br><b>Regroup:</b> Discard 3 cards stacked here and remove (1) to discard a Free Peoples possession.
 		*/
 

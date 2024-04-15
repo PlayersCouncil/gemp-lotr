@@ -41,9 +41,7 @@ public class Card_07_085_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Fellowship:</b> Play a [gondor] knight. That knight's twilight cost is -2.<br>Each time a Shadow card adds a threat, add a burden. Each time a Shadow card adds a burden, add a threat.
 		*/
 

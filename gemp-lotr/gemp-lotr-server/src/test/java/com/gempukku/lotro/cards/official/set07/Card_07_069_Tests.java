@@ -39,7 +39,6 @@ public class Card_07_069_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot Sméagol and add 2 threats.<br>The move limit for this turn is +1.<br>Discard this condition at the end of the turn.
 		*/
 

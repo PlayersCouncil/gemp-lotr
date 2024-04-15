@@ -39,7 +39,6 @@ public class Card_07_149_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [raider] Man.<br><b>Regroup:</b> Remove (9) and spot 3 [raider] Men to make the move limit -1.
 		*/
 

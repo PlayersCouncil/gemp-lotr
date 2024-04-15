@@ -39,7 +39,6 @@ public class Card_04_348_Tests
 		 * Shadow Number: 7
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 5T
 		 * Game Text: <b>Battleground</b>. <b>Shadow:</b> Play Saruman from your draw deck.
 		*/

@@ -41,14 +41,14 @@ public class Card_01_097_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Skirmish:</b> Exert Boromir to make a Hobbit strength +3.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Boromir", card.getBlueprint().getTitle());
 		assertEquals("Son of Denethor", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

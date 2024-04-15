@@ -40,7 +40,6 @@ public class Card_09_008_Tests
 		 * Type: Artifact
 		 * Subtype: Ring
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a Dwarf.<br>Bearer is <b>damage +1</b>.<br><b>Maneuver:</b> Take a [dwarven] event into hand from your discard pile. Discard this artifact.
 		*/
 

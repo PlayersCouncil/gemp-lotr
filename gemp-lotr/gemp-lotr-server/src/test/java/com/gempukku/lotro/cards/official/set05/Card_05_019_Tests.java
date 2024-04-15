@@ -41,7 +41,6 @@ public class Card_05_019_Tests
 		 * Subtype: Ent
 		 * Strength: 10
 		 * Vitality: 4
-
 		 * Game Text: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow Lindenroot to skirmish.<br><b>Skirmish:</b> Exert Lindenroot to wound an [isengard] minion he is skirmishing.
 		*/
 

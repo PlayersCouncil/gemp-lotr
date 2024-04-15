@@ -40,12 +40,13 @@ public class Card_01_221_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 3
-
 		 * Game Text: Bearer must be The Witch-king.<br>He is <b>damage +1</b>.<br><b>Response:</b> If The Witch-king wins a skirmish, exert him to discard a Free Peoples condition.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Pale Blade", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

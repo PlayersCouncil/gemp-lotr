@@ -42,12 +42,13 @@ public class Card_00_056_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 5
-
 		 * Game Text: While you can spot 2 other Men, Ghân-buri-Ghân cannot be overwhelmed unless his strength is tripled.<br>While at a forest site, Ghân-buri-Ghân is <b>defender +1</b>.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Ghân-buri-Ghân", card.getBlueprint().getTitle());
 		assertEquals("Chieftain of the Woses", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

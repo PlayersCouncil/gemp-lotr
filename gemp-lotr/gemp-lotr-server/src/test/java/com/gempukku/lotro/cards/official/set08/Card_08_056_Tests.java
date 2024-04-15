@@ -41,7 +41,6 @@ public class Card_08_056_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Corsair</b>.<br>When you play this minion, if you have initiative, you may discard an ally to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		*/

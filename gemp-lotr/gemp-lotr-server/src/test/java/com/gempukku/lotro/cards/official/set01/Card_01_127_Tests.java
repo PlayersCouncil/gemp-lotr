@@ -41,13 +41,14 @@ public class Card_01_127_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Archer</b>. <b>Damage +1</b>.<br><b>Maneuver:</b> Spot another Uruk-hai to make Lurtz <b>fierce</b> until the regroup phase.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Lurtz", card.getBlueprint().getTitle());
 		assertEquals("Servant of Isengard", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

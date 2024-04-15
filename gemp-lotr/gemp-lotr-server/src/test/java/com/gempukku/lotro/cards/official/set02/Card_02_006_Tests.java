@@ -41,7 +41,6 @@ public class Card_02_006_Tests
 		 * Subtype: Dwarf
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: To play, spot a Dwarf.<br>While skirmishing an Uruk-hai, Frór is strength +3.
 		*/
 

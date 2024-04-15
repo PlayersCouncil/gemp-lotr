@@ -41,9 +41,7 @@ public class Card_04_315_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ring-bound</b>.<br><b>Fellowship:</b> Play Sam's Pack from your draw deck.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_07_352_Tests
 		 * Shadow Number: 3
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 6K
 		 * Game Text: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each Hobbit companion.
 		*/

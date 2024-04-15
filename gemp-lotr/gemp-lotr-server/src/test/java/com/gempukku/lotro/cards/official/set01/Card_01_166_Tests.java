@@ -40,12 +40,13 @@ public class Card_01_166_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 3
-
 		 * Game Text: Bearer must be Cave Troll of Moria.<br>Cave Troll of Moria is <b>damage +1</b>.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Cave Troll's Hammer", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

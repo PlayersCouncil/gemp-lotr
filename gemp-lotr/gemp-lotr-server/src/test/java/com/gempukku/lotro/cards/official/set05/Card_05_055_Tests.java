@@ -41,7 +41,6 @@ public class Card_05_055_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Warg-rider</b>.<br>While this minion is not exhausted, it is <b>fierce</b>.<br>Each time an [isengard] Orc wins a skirmish, you may exert this minion to control a site.
 		*/

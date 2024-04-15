@@ -39,7 +39,6 @@ public class Card_10_033_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 [gondor] Men.<br>Each time you lose initiative, you may wound a minion.
 		*/
 

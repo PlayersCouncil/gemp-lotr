@@ -41,7 +41,6 @@ public class Card_09_015_Tests
 		 * Subtype: Elf
 		 * Strength: 9
 		 * Vitality: 4
-
 		 * Game Text: To play, spot 2 [elven] companions.<br><b>Regroup:</b> Exert Gil-galad to wound each wounded minion.
 		*/
 

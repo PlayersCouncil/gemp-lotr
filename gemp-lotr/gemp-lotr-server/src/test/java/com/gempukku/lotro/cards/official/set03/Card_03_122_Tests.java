@@ -41,9 +41,7 @@ public class Card_03_122_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Ranger</b>.<br><b>Fellowship:</b> Add (2) to heal Boromir.
 		*/
 

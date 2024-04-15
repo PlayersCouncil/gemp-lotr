@@ -41,7 +41,6 @@ public class Card_06_015_Tests
 		 * Subtype: Elf
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: At the start of each turn, heal Elrond.<br><b>Fellowship:</b> Exert Elrond to discard the top card of your draw deck. If it is an [elven] card, you may take it into hand and heal an Elf companion.
 		*/

@@ -41,7 +41,6 @@ public class Card_05_062_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>When you play this minion, you may place an [isengard] token on a machine.
 		*/

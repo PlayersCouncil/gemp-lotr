@@ -41,9 +41,7 @@ public class Card_05_122_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Valiant</b>.<br><b>Maneuver:</b> Play a [rohan] possession on Éowyn to heal her.
 		*/
 

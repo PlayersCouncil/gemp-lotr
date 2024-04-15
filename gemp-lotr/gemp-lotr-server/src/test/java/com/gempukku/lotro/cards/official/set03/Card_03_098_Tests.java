@@ -41,7 +41,6 @@ public class Card_03_098_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: While this minion bears a weapon, he is strength +2.
 		*/

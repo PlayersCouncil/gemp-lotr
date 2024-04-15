@@ -41,14 +41,14 @@ public class Card_01_030_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Ranger</b>.<br>While skirmishing a Nazgûl, Arwen is strength +3.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Arwen", card.getBlueprint().getTitle());
 		assertEquals("Daughter of Elrond", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

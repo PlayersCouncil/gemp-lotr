@@ -41,7 +41,6 @@ public class Card_05_107_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -3.<br><b>Maneuver:</b> Exert Orc Patrol twice and spot another [sauron] Orc to discard a condition.
 		*/

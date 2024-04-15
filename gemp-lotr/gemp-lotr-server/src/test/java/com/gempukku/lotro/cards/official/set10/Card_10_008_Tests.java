@@ -41,7 +41,6 @@ public class Card_10_008_Tests
 		 * Subtype: Elf
 		 * Strength: 7
 		 * Vitality: 4
-
 		 * Game Text: To play, spot 2 Elves.<br><b>Skirmish:</b> Exert Círdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile.
 		*/
 

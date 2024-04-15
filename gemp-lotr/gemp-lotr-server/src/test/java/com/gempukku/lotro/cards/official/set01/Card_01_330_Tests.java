@@ -39,7 +39,6 @@ public class Card_01_330_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2
 		 * Game Text: <b>River</b>. While only Hobbits are in the fellowship, there are no assignment and skirmish phases at Buckleberry Ferry.
 		*/

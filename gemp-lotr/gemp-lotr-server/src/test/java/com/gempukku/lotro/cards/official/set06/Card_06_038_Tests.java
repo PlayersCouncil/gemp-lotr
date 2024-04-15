@@ -39,7 +39,6 @@ public class Card_06_038_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If Sméagol wins a skirmish, add a burden to discard a minion.
 		*/
 

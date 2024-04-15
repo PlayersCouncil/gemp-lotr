@@ -39,7 +39,6 @@ public class Card_05_110_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Regroup:</b> Spot a [sauron] Orc and remove (3) to stack that minion here.<br><b>Shadow:</b> Play a [sauron] Orc stacked here as if played from hand.
 		*/
 

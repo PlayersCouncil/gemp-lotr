@@ -41,9 +41,7 @@ public class Card_06_050_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Skirmish:</b> Remove an [elven] token to make a minion skirmishing Aragorn strength -3.<br><b>Skirmish:</b> Remove a [dwarven] token to heal a Dwarf.<br><b>Regroup:</b> If Aragorn is mounted, remove a [rohan] token to wound a minion twice.
 		*/
 

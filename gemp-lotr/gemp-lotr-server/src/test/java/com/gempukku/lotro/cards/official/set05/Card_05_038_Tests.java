@@ -39,7 +39,6 @@ public class Card_05_038_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Regroup:</b> Exert a knight to transfer a [gondor] fortification borne by a minion to your support area.
 		*/
 

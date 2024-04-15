@@ -39,7 +39,6 @@ public class Card_06_055_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Ring
-
 		 * Game Text: Bearer must be Aragorn.<br>At the start of each of your turns, you may spot a culture token to heal a companion of that culture.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_06_125_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Spot Sméagol and discard 3 cards from hand to wound a minion Sméagol is skirmishing once (or twice if that minion is a [wraith] minion).
 		*/
 

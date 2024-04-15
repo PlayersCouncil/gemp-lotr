@@ -41,7 +41,6 @@ public class Card_08_095_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Assignment:</b> Spot a [sauron] engine or a site you control to assign this minion to an unbound companion.
 		*/

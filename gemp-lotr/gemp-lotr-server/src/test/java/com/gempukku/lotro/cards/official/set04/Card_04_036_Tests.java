@@ -40,7 +40,6 @@ public class Card_04_036_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [dunland] Man.<br>Each time bearer wins a skirmish, you may discard 2 Free Peoples possessions.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_07_096_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Knight</b>.<br><b>Fellowship:</b> Discard a fortification to remove a threat.
 		*/
 

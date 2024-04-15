@@ -41,9 +41,7 @@ public class Card_07_071_Tests
 		 * Subtype: 
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ring-bound</b>. To play, add a burden.<br><b>Assignment:</b> Assign a minion to Sméagol and add 2 threats to exhaust that minion.
 		*/
 

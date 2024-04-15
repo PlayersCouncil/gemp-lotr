@@ -39,12 +39,13 @@ public class Card_01_010_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Bearer must be a Dwarf.<br>When you play this condition, heal bearer up to 2 times. At the start of each of your turns, exert bearer.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Dwarven Heart", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -41,7 +41,6 @@ public class Card_02_083_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 11
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Twilight</b>.<br>Each time Úlairë Enquëa wins a skirmish, you may exert him to wound the Ring-bearer once (or twice if you can spot 5 burdens).
 		*/

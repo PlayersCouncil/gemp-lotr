@@ -40,12 +40,13 @@ public class Card_01_282_Tests
 		 * Type: Condition
 		 * Subtype: 
 		 * Strength: -1
-
 		 * Game Text: To play, exert a [sauron] Orc. Plays on Aragorn.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Weight of a Legacy", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

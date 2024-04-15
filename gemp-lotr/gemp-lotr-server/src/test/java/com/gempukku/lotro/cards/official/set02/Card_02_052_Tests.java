@@ -41,7 +41,6 @@ public class Card_02_052_Tests
 		 * Subtype: Balrog
 		 * Strength: 17
 		 * Vitality: 5
-
 		 * Site Number: 4
 		 * Game Text: <b>Damage +1</b>. <b>Fierce</b>. To play, spot a [moria] Orc. Discard The Balrog if not underground.<br><b>Shadow:</b> Exert The Balrog and remove (2) to play a [moria] Orc from your discard pile.
 		*/

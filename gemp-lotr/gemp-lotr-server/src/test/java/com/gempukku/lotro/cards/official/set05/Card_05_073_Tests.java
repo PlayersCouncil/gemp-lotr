@@ -40,7 +40,6 @@ public class Card_05_073_Tests
 		 * Type: Possession
 		 * Subtype: Mount
 		 * Strength: 3
-
 		 * Game Text: Bearer must be a Southron.<br>Bearer is <b>fierce</b>.<br>Each time bearer wins a skirmish, you may add (2).
 		*/
 

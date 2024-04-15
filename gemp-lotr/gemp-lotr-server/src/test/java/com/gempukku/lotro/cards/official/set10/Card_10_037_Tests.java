@@ -41,7 +41,6 @@ public class Card_10_037_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Corsair</b>. To play, spot a [raider] Man.<br><b>Shadow:</b> Exert this minion to play a [raider] support area possession from your draw deck.
 		*/

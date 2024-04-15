@@ -40,7 +40,6 @@ public class Card_09_006_Tests
 		 * Type: Artifact
 		 * Subtype: Ring
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a Dwarf.<br>Bearer is <b>damage +1</b>.<br><b>Maneuver:</b> For each Dwarf you spot, reveal a card from the top of your draw deck. Take all Free Peoples cards revealed into hand and discard the rest. Discard this artifact.
 		*/
 

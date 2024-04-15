@@ -41,13 +41,14 @@ public class Card_01_237_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br>For each other Nazgûl you can spot, The Witch-king is strength +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Witch-king", card.getBlueprint().getTitle());
 		assertEquals("Lord of Angmar", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

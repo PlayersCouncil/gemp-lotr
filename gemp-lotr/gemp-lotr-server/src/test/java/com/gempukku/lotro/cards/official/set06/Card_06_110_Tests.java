@@ -39,7 +39,6 @@ public class Card_06_110_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Spot Sam and Sméagol (or Gollum) to choose an opponent who must reveal his or her hand. Wound a minion X times, where X is the number of different cultures revealed.
 		*/
 

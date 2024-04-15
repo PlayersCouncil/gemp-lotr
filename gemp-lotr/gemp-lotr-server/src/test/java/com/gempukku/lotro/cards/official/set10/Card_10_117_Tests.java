@@ -39,7 +39,6 @@ public class Card_10_117_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3K
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 2 threats, add a threat to play a fortification from your draw deck.
 		*/

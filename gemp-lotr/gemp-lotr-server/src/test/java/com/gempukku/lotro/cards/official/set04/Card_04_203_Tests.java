@@ -41,7 +41,6 @@ public class Card_04_203_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>The twilight cost of this minion is -1 for each site you control.
 		*/

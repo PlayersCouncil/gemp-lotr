@@ -40,7 +40,6 @@ public class Card_02_043_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Lurtz.<br>He is <b>damage +1</b>.<br>Each time Lurtz wins a skirmish, the Free Peoples player must discard the top 2 cards of his or her draw deck.
 		*/
 

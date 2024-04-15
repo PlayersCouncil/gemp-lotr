@@ -39,7 +39,6 @@ public class Card_10_022_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Assignment:</b> Assign Gollum to a companion bearing an artifact. The Free Peoples player may add a burden to prevent this and assign Gollum.<br><b>Regroup:</b> Exert Gollum twice to discard a possession. Discard this condition.
 		*/
 

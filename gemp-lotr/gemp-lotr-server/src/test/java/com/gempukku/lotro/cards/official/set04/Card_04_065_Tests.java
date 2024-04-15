@@ -41,7 +41,6 @@ public class Card_04_065_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: To play, spot an Elf.<br>While Erethón bears a ranged weapon, he is strength +1 and <b>damage +1</b>, and he does not add to the fellowship archery total.
 		*/
 

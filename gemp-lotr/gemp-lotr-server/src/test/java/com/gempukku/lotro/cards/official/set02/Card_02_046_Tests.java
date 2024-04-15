@@ -41,7 +41,6 @@ public class Card_02_046_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert Uruk Captain to play an Uruk-hai from your discard pile.
 		*/

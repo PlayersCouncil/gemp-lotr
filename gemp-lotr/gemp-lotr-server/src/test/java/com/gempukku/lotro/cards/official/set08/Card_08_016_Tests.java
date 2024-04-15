@@ -39,7 +39,6 @@ public class Card_08_016_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Exert Gandalf to make a minion skirmishing an unbound companion strength -1 for each Gandalf signet you spot.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_016_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

@@ -39,7 +39,6 @@ public class Card_02_057_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If a skirmish that involved The Balrog bearing Whip of Many Thongs is about to end, wound a companion in that skirmish twice.
 		*/
 

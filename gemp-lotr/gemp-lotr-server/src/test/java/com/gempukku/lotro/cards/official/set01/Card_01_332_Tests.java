@@ -39,7 +39,6 @@ public class Card_01_332_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2
 		 * Game Text: <b>Marsh</b>. Each time a Hobbit moves to Midgewater Marshes, that Hobbit must exert.
 		*/

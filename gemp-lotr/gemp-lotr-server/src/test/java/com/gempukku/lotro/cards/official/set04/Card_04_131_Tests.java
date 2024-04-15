@@ -39,7 +39,6 @@ public class Card_04_131_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Ranged weapon
-
 		 * Game Text: Bearer must be Ring-bound Man.<br><b>Skirmish:</b> If bearer is skirmishing a Man or a roaming minion, exert bearer to wound that minion.
 		*/
 

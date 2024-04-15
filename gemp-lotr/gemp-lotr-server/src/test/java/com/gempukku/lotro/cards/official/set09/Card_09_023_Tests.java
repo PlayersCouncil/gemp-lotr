@@ -39,9 +39,7 @@ public class Card_09_023_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Ring
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Elrond or Gil-galad.<br><b>Skirmish:</b> Discard the top card of your draw deck. Make a minion skirmishing an Elf strength -X, where X is the twilight cost of the discarded card. Discard this artifact.
 		*/
 

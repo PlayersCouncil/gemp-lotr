@@ -41,7 +41,6 @@ public class Card_07_082_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: While you have only 4 or 5 cards in hand, Cirion is strength +2.
 		*/
 

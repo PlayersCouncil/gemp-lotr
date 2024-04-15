@@ -39,7 +39,6 @@ public class Card_10_096_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time a roaming [sauron] minion takes a wound, you may add a [sauron] token here.<br><b>Regroup:</b> Exert an Uruk-hai or discard a [sauron] minion to add a [sauron] token here.<br><b>Skirmish:</b> Remove 2 [sauron] tokens from here to make a [sauron] minion strength +2.
 		*/
 

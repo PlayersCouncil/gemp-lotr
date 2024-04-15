@@ -40,7 +40,6 @@ public class Card_04_026_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 3
-
 		 * Game Text: Bearer must be a [dunland] Man.
 		*/
 

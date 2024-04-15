@@ -41,9 +41,7 @@ public class Card_05_007_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Damage +1</b>.<br>Each time Gimli wins a skirmish, you may wound a minion assigned to skirmish an unbound companion.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_09_040_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If an [isengard] minion wins a skirmish, until the regroup phase, make that minion strength +1 for each site you control and <b>fierce</b>.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_09_040_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

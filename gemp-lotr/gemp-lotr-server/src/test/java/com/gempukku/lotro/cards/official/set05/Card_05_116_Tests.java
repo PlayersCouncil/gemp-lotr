@@ -40,7 +40,6 @@ public class Card_05_116_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Frodo.<br><b>Skirmish:</b> Exert Frodo to make Sméagol strength +2 or Gollum strength -2.
 		*/
 

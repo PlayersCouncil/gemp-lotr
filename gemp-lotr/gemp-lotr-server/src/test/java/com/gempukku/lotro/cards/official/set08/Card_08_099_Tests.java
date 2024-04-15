@@ -41,7 +41,6 @@ public class Card_08_099_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Regroup:</b> If this minion is stacked on a site you control, discard this minion to make the move limit for this turn -1.
 		*/

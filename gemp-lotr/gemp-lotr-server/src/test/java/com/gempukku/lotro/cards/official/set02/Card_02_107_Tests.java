@@ -39,7 +39,6 @@ public class Card_02_107_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot 2 Hobbits. Plays to your support area.<br>Each Nazgûl is strength -4. Discard this condition during the regroup phase.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_07_049_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Bearer must be Gandalf.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to Gandalf."<br><b>Regroup:</b> Discard this condition to discard a minion and heal a companion 3 times.
 		*/
 

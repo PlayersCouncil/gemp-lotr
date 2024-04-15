@@ -41,7 +41,6 @@ public class Card_03_069_Tests
 		 * Subtype: Wizard
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.<br><b>Assignment:</b> Exert Saruman to assign an [isengard] minion to a companion (except the Ring-bearer). That companion may exert to prevent this.
 		*/

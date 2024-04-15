@@ -41,13 +41,14 @@ public class Card_01_155_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Response:</b> If the Ring-bearer puts on The One Ring, exert this minion. Discard a card from the top of your draw deck for each [isengard] minion you spot. Add a burden for each Shadow card discarded in this way.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Uruk Spy", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -40,7 +40,6 @@ public class Card_04_157_Tests
 		 * Type: Condition
 		 * Subtype: 
 		 * Strength: -1
-
 		 * Game Text: <b>Spell</b>. To play, exert Saruman or an [isengard] Man. Plays on a Free Peoples Man.<br>Special abilities in bearer's game text may not be used.
 		*/
 

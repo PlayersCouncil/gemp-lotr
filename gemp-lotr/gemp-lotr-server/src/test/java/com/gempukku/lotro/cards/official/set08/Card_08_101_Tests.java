@@ -41,7 +41,6 @@ public class Card_08_101_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Shadow:</b> If you have initiative, exert this minion to add a burden and make the Free Peoples player draw a card.
 		*/

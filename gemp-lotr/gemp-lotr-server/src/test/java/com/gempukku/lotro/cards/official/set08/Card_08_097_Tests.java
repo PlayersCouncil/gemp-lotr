@@ -41,7 +41,6 @@ public class Card_08_097_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Archery:</b> Exert this minion or stack it on a site you control to make the fellowship archery total -2.
 		*/

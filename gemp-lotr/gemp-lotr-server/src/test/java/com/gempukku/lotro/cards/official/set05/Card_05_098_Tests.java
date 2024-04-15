@@ -41,7 +41,6 @@ public class Card_05_098_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: When you play this minion, you may exert him and spot 5 burdens to draw a card.
 		*/

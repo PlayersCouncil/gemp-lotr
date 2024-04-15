@@ -39,7 +39,6 @@ public class Card_04_354_Tests
 		 * Shadow Number: 3
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 6T
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Play a possession to draw a card.
 		*/

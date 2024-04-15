@@ -40,12 +40,13 @@ public class Card_01_047_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Arwen.<br>She is <b>damage +1</b>.<br><b>Skirmish:</b> Exert Arwen or discard 2 cards from hand to make her strength +1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gwemegil", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

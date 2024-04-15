@@ -39,7 +39,6 @@ public class Card_06_019_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot an Elf to reveal the top card of your draw deck. You may discard it, return it to the top of your draw deck, or take it into hand.
 		*/
 

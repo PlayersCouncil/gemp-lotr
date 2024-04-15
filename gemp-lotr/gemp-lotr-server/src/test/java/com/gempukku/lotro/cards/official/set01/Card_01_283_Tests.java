@@ -39,12 +39,13 @@ public class Card_01_283_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot a [sauron] Orc. Plays on a companion (except an Elf).<br>While at a sanctuary, bearer cannot heal.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("You Bring Great Evil", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

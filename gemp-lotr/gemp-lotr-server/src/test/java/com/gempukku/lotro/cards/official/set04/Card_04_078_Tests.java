@@ -41,7 +41,6 @@ public class Card_04_078_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: Each minion skirmishing this companion is strength -2 for each wound on that minion.
 		*/
 

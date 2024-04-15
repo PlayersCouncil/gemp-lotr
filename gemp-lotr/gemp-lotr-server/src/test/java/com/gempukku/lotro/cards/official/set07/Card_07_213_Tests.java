@@ -41,7 +41,6 @@ public class Card_07_213_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: Úlairë Lemenya is strength +1 for each other [wraith] minion you can spot.<br>While you can spot 3 [wraith] minions Úlairë Lemenya is <b>fierce</b>.<br>While you can spot 4 [wraith] minions Úlairë Lemenya is <b>damage +1</b>.
 		*/

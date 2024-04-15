@@ -39,7 +39,6 @@ public class Card_04_242_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Shadow:</b> Remove (3) and exert a [raider] Man to place a [raider] token here.<br><b>Maneuver:</b> Remove a [raider] token here to add (1).
 		*/
 

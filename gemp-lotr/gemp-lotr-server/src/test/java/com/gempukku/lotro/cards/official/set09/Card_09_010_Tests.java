@@ -41,7 +41,6 @@ public class Card_09_010_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: You may play [dwarven] skirmish events stacked on [dwarven] conditions as if from hand.
 		*/
 

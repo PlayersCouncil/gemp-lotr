@@ -39,7 +39,6 @@ public class Card_01_360_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9
 		 * Game Text: <b>Maneuver:</b> Exert your minion to make that minion <b>fierce</b> until the regroup phase.
 		*/

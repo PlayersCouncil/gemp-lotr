@@ -39,7 +39,6 @@ public class Card_02_041_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Exert an Uruk-hai and spot X burdens to shuffle X minions from your discard pile into your draw deck.
 		*/
 

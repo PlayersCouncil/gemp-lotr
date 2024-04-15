@@ -41,7 +41,6 @@ public class Card_10_091_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Shadow:</b> If you cannot spot another minion and there are 3 or fewer twilight tokens, add (3) (or (5) if this minion is roaming).
 		*/

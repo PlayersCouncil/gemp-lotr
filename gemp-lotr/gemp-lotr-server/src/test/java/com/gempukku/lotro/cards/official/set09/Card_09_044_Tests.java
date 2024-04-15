@@ -39,9 +39,7 @@ public class Card_09_044_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Ring
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be a Nazgûl.<br><b>Maneuver:</b> Remove a burden to heal each Nazgûl.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
 		*/
 

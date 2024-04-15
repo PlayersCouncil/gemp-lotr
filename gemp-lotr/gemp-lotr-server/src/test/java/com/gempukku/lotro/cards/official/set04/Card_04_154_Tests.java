@@ -41,7 +41,6 @@ public class Card_04_154_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Maneuver:</b> Exert Gríma and spot an unbound companion bearing 3 or more cards to return each Free Peoples card that companion bears to its owner's hand.
 		*/

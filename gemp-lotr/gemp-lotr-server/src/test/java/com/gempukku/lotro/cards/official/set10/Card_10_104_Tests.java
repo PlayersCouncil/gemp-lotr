@@ -39,7 +39,6 @@ public class Card_10_104_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fellowship:</b> Add a burden to choose 2 [shire] events with different card titles from your discard pile. Choose an opponent and make him or her choose 1 of those cards for you to take into hand.
 		*/
 

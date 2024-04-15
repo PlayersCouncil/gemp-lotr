@@ -41,7 +41,6 @@ public class Card_02_067_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Archer</b>.<br>While you can spot another [moria] archer, add 1 to the minion archery total.
 		*/

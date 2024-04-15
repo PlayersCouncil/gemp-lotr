@@ -39,7 +39,6 @@ public class Card_04_213_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. Plays to your support area.<br>Each time the fellowship moves during the regroup phase, you may discard 2 cards from hand to take an [isengard] tracker from your discard pile into hand.
 		*/
 

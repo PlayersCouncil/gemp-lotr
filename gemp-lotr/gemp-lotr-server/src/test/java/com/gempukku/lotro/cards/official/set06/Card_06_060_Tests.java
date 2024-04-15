@@ -41,7 +41,6 @@ public class Card_06_060_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>Berserk Butcher is strength +1 for each wound on each character in its skirmish.<br><b>Maneuver:</b> Remove an [isengard] token from a machine and exert Berserk Butcher twice to prevent all wounds to Uruk-hai until the assignment phase.
 		*/

@@ -39,7 +39,6 @@ public class Card_04_275_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert Théoden to make a companion who has the Théoden signet <b>defender +1</b> until the regroup phase.
 		*/
 

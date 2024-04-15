@@ -39,7 +39,6 @@ public class Card_04_096_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Spot Gandalf and 3 twilight tokens to prevent all wounds to a companion who has the Gandalf signet.
 		*/
 

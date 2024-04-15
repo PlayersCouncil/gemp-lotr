@@ -41,7 +41,6 @@ public class Card_07_305_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: While you can spot 6 companions and another [sauron] Orc, this minion is strength +9 and <b>fierce</b>.
 		*/

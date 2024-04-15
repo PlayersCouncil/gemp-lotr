@@ -41,7 +41,6 @@ public class Card_08_072_Tests
 		 * Subtype: Orc
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: While you have initiative, each [wraith] minion is an <b>archer</b>.
 		*/

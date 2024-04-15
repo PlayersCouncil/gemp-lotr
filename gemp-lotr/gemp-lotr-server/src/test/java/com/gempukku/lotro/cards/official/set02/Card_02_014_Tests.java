@@ -39,7 +39,6 @@ public class Card_02_014_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Plays to your support area.<br>Each time a Dwarf companion moves from an underground site, you may heal that Dwarf.
 		*/
 

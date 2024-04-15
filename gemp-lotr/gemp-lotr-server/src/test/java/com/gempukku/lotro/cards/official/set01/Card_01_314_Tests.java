@@ -39,12 +39,13 @@ public class Card_01_314_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. To play, spot Bilbo. Plays on any character. Limit 1 per character.<br>Each time bearer skirmishes a Troll or Uruk-hai, bearer is strength +3.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Stone Trolls", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_10_024_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: While you have initiative, each [gollum] minion is <b>damage +1</b>.<br><b>Skirmish:</b> Discard this condition to make a [gollum] minion strength +1 for each culture you can spot.
 		*/
 

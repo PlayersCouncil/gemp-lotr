@@ -41,7 +41,6 @@ public class Card_07_296_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Discard 3 cards from hand to make this minion strength +3.
 		*/

@@ -41,9 +41,7 @@ public class Card_04_048_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Damage +1</b>.<br>Gimli is strength +1 for each unbound Hobbit companion you can spot.
 		*/
 

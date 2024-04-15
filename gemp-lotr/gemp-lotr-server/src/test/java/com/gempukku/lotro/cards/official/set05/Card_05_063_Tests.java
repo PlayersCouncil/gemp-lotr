@@ -41,7 +41,6 @@ public class Card_05_063_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>This minion is strength +1 for each wound on a character in its skirmish.
 		*/

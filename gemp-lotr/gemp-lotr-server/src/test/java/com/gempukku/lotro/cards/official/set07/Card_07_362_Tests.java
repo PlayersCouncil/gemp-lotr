@@ -39,7 +39,6 @@ public class Card_07_362_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9K
 		 * Game Text: <b>Shadow:</b> Spot 8 burdens to make the Ring-bearer wear The One Ring until the regroup phase.
 		*/

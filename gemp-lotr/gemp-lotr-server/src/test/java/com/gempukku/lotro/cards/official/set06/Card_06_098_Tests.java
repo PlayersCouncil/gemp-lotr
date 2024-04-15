@@ -40,7 +40,6 @@ public class Card_06_098_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a [sauron] Orc.<br>Each time bearer wins a skirmish, you may add (1) for each site you control.
 		*/
 

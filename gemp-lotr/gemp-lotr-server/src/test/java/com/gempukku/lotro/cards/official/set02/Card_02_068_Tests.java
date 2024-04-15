@@ -39,7 +39,6 @@ public class Card_02_068_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert The Balrog to add a burden.
 		*/
 

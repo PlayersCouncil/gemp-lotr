@@ -41,7 +41,6 @@ public class Card_06_074_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Warg-rider</b>.<br>While Sharku is not exhausted, he is <b>fierce</b>.<br><b>Regroup:</b> Exert Sharku to add (1).
 		*/

@@ -42,12 +42,13 @@ public class Card_00_059_Tests
 		 * Strength: 7
 		 * Vitality: 3
 		 * Resistance: 5
-
 		 * Game Text: If you can spot a [rohan] Man, you may play Erkenbrand any time you could play a skirmish event.<br>When you play Erkenbrand, you may discard a Shadow possession.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Erkenbrand", card.getBlueprint().getTitle());
 		assertEquals("Master of Westfold", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

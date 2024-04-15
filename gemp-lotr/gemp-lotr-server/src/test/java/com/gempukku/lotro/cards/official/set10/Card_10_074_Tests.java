@@ -39,7 +39,6 @@ public class Card_10_074_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If your [rohan] Man wins a skirmish, discard a [rohan] possession to wound a minion or to liberate a site.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_074_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

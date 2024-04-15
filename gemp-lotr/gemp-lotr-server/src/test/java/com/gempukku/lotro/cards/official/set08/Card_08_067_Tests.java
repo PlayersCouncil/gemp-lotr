@@ -39,7 +39,6 @@ public class Card_08_067_Tests
 		 * Twilight Cost: 4
 		 * Type: Event
 		 * Subtype: Assignment
-
 		 * Game Text: Exert an enduring [wraith] minion twice to assign that minion to an unbound companion.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_067_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.ASSIGNMENT));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}
 

@@ -41,7 +41,6 @@ public class Card_08_039_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Knight</b>.<br>Each time this companion wins a skirmish, you may wound a minion he is skirmishing.
 		*/
 

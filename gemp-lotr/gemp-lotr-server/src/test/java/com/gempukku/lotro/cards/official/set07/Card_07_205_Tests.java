@@ -39,7 +39,6 @@ public class Card_07_205_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a Nazgûl.<br><b>Shadow:</b> If you have initiative and there are 3 characters in the dead pile, spot 3 burdens, 3 threats and a Nazgûl to corrupt the Ring-bearer.
 		*/
 

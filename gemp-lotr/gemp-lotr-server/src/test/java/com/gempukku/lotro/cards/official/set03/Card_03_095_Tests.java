@@ -41,7 +41,6 @@ public class Card_03_095_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Maneuver:</b> Exert this minion and discard your [sauron] condition to discard a Free Peoples condition.
 		*/

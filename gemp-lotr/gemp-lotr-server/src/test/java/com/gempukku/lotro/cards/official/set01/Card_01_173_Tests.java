@@ -39,12 +39,13 @@ public class Card_01_173_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time you play a [moria] weapon, add (1).<br><b>Response:</b> If a [moria] Orc is about to take a wound, discard this condition to prevent that wound.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Armory", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

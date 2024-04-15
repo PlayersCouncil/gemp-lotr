@@ -39,7 +39,6 @@ public class Card_04_355_Tests
 		 * Shadow Number: 7
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7T
 		 * Game Text: <b>Underground</b>. Skirmish events may not be played and skirmish special abilities may not be used.
 		*/

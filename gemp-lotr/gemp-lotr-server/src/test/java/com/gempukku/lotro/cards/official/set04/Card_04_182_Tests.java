@@ -41,7 +41,6 @@ public class Card_04_182_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Archer</b>.<br>When you play this minion, you may place an [isengard] token on a machine.
 		*/

@@ -39,7 +39,6 @@ public class Card_05_087_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Fortification</b>. Plays to your support area.<br><b>Archery:</b> Spot 2 [rohan] Men to remove 2 tokens from a machine or to make the minion archery total -3. Discard this condition.
 		*/
 

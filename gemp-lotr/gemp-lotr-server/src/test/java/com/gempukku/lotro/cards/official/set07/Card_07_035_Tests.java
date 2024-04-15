@@ -39,7 +39,6 @@ public class Card_07_035_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Spot Gandalf and discard 2 cards from hand to make an opponent discard all but 2 Shadow conditions.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_035_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

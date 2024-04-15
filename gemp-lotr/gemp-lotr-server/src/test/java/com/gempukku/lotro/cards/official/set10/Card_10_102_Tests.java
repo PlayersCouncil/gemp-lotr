@@ -40,7 +40,6 @@ public class Card_10_102_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a [sauron] minion.<br>If bearer is an Uruk-hai, it is strength +2.
 		*/
 

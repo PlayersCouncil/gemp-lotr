@@ -39,7 +39,6 @@ public class Card_10_120_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8K
 		 * Game Text: <b>Skirmish:</b> Spot your [wraith] Orc and remove 2 threats to make that [wraith] Orc strength +3.
 		*/

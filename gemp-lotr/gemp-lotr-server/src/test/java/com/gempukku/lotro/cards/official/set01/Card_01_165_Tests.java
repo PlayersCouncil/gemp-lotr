@@ -41,13 +41,14 @@ public class Card_01_165_Tests
 		 * Subtype: Troll
 		 * Strength: 15
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: <b>Damage +1</b>. <b>Fierce</b>. To play, spot a [moria] Orc.<br>At an underground site, Cave Troll of Moria's twilight cost is -3.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Cave Troll of Moria", card.getBlueprint().getTitle());
 		assertEquals("Scourge of the Black Pit", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

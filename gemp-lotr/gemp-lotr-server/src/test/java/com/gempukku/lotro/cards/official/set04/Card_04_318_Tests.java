@@ -39,7 +39,6 @@ public class Card_04_318_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Add a burden to discard a condition borne by a Hobbit.
 		*/
 

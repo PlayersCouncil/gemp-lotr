@@ -41,7 +41,6 @@ public class Card_07_275_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br>While this minion is stacked on a site you control, besiegers are <b>fierce</b>.
 		*/

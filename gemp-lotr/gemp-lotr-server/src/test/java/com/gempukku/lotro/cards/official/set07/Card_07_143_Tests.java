@@ -41,7 +41,6 @@ public class Card_07_143_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>.<br><b>Maneuver:</b> If you cannot spot 2 burdens, spot another Easterling and discard a card from hand to add a burden.
 		*/

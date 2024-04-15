@@ -39,7 +39,6 @@ public class Card_03_026_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Fellowship</b> <i>or</i> <b>Maneuver:</b> Exert an Elf to discard an [isengard] possession or [isengard] artifact.
 		*/
 

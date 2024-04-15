@@ -39,12 +39,13 @@ public class Card_01_260_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. Plays to your support area.<br>While you can spot 7 companions, the move limit for this turn is -1 (to a minimum of 1).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Number Must Be Few", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

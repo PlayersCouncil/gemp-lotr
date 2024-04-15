@@ -39,7 +39,6 @@ public class Card_08_014_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: At sites 1[K] to 5[K], heal Gandalf. At any other site, prevent a Hobbit from being overwhelmed unless his or her strength is tripled.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_014_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

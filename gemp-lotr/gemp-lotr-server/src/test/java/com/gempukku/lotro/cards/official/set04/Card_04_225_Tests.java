@@ -41,7 +41,6 @@ public class Card_04_225_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Spot 2 burdens and remove (2) to make an Easterling strength +2.<br><b>Skirmish:</b> Spot 4 burdens and remove (2) to make an Easterling strength +3.<br><b>Skirmish:</b> Spot 6 burdens and remove (2) to make an Easterling strength +4.
 		*/

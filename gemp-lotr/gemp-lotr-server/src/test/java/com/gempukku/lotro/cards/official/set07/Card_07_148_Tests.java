@@ -39,7 +39,6 @@ public class Card_07_148_Tests
 		 * Twilight Cost: 7
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Spot 2 [raider] Men to discard a companion (except the Ring-bearer).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_148_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(7, card.getBlueprint().getTwilightCost());
 	}
 

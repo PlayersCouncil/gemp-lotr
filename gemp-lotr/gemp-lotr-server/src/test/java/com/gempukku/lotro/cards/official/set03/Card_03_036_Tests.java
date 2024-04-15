@@ -39,7 +39,6 @@ public class Card_03_036_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Response:</b> If a companion is about to take a wound, spot 4 twilight tokens and exert Gandalf to prevent that wound.
 		*/
 

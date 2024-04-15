@@ -39,7 +39,6 @@ public class Card_08_024_Tests
 		 * Twilight Cost: 4
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time a companion takes a wound during a skirmish that involves a [gollum] minion, exert a companion.
 		*/
 

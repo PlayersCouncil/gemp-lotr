@@ -39,7 +39,6 @@ public class Card_02_020_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert an Elf ally to discard a condition (or 2 conditions if you spot an Orc).
 		*/
 

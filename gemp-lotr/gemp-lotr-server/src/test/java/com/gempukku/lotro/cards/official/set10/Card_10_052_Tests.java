@@ -39,7 +39,6 @@ public class Card_10_052_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Shadow:</b> If you have initiative, spot a [raider] Man and discard this condition to reconcile your hand.<br><b>Skirmish:</b> Discard this condition to make a [raider] Man strength +2.
 		*/
 

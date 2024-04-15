@@ -39,7 +39,6 @@ public class Card_04_317_Tests
 		 * Twilight Cost: 0
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: Bearer must be a Ring-bound Hobbit.<br>At the start of each turn, you may add (2) to heal a Ring-bound companion.
 		*/
 

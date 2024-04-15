@@ -39,7 +39,6 @@ public class Card_04_363_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9T
 		 * Game Text: <b>Shadow:</b> Remove 2 burdens to play a minion from your discard pile.
 		*/

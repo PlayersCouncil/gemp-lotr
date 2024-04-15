@@ -41,7 +41,6 @@ public class Card_04_228_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>.<br>Each time this minion is assigned to an unbound companion, you may exert him to add a burden.
 		*/

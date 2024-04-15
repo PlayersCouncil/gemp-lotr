@@ -41,7 +41,6 @@ public class Card_08_053_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Corsair</b>.<br>When you play this minion, you may remove a threat to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		*/

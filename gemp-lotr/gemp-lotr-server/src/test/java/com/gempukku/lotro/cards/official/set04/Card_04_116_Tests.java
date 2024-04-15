@@ -41,9 +41,7 @@ public class Card_04_116_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Ring-bound</b>. <b>Ranger</b>.<br>The twilight cost of each other [gondor] Man in your starting fellowship is -1.<br>While skirmishing a roaming minion, Faramir is strength +2.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_02_112_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While you can spot Frodo and Sam and neither is exhausted, each is strength +1.
 		*/
 

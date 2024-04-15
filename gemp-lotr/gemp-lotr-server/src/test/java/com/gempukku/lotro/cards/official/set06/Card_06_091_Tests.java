@@ -39,7 +39,6 @@ public class Card_06_091_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Discard a mount borne by a [rohan] Man to prevent that Man from being overwhelmed unless his or her strength is tripled.
 		*/
 

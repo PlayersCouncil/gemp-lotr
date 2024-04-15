@@ -39,7 +39,6 @@ public class Card_07_353_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7K
 		 * Game Text: <b>River</b>. <b>Shadow:</b> Exert 2 minions and spot 6 companions to draw 2 cards.
 		*/

@@ -39,7 +39,6 @@ public class Card_03_028_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Tale</b>.<br><b>Skirmish:</b> Exert an Elf at a river or forest to cancel a skirmish involving that Elf.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_03_028_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
 		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}

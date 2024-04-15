@@ -41,9 +41,7 @@ public class Card_03_121_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Archer</b>.<br>While Legolas is at a river or forest, add 1 to the fellowship archery total.
 		*/
 

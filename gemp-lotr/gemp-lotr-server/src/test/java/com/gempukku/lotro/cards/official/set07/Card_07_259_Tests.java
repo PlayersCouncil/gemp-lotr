@@ -39,7 +39,6 @@ public class Card_07_259_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a [rohan] Man strength +2. If that Man is mounted, choose an opponent who must place a random card from hand beneath his or her draw deck.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_259_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

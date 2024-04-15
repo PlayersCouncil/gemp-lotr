@@ -41,7 +41,6 @@ public class Card_07_239_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 3T
 		 * Game Text: <b>Villager</b>.<br><b>Fellowship:</b> If you have initiative, discard 2 cards from hand to heal a [rohan] Man.
 		*/

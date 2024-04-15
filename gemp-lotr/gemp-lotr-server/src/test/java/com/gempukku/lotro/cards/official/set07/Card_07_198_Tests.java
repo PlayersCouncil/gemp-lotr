@@ -41,7 +41,6 @@ public class Card_07_198_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: While you can spot a Nazgûl, this minion may only take wounds during skirmish phases.
 		*/

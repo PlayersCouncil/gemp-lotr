@@ -41,7 +41,6 @@ public class Card_03_056_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Shadow:</b> Exert this minion to add (1).
 		*/

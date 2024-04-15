@@ -41,13 +41,14 @@ public class Card_01_069_Tests
 		 * Subtype: Man
 		 * Strength: 3
 		 * Vitality: 3
-
 		 * Site Number: 1
 		 * Game Text: To play, spot Gandalf.<br><b>Maneuver:</b> Exert Albert Dreary to discard an [isengard] or [moria] condition.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Albert Dreary", card.getBlueprint().getTitle());
 		assertEquals("Entertainer from Bree", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

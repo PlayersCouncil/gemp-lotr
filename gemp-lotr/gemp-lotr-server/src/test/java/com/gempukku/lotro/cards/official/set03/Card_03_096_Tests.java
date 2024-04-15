@@ -41,7 +41,6 @@ public class Card_03_096_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: For each Free Peoples card borne by a character this minion is skirmishing, that character is strength -1.
 		*/

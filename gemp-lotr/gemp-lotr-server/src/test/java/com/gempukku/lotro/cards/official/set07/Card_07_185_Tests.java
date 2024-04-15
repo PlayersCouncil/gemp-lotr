@@ -39,7 +39,6 @@ public class Card_07_185_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a Nazgûl.<br><b>Skirmish:</b> Remove (3) and spot 3 Nazgûl to discard a possession or condition borne by a companion a Nazgûl is skirmishing.
 		*/
 

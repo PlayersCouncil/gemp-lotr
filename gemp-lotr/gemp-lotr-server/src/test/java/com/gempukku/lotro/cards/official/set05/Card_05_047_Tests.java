@@ -41,7 +41,6 @@ public class Card_05_047_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>Berserk Slayer is strength +2 for each wound on a character in its skirmish.<br><b>Skirmish:</b> Remove 5 [isengard] tokens from a machine and exert Berserk Slayer twice to wound every companion.
 		*/

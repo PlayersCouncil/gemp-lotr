@@ -39,7 +39,6 @@ public class Card_02_019_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert an Elf to wound each Nazgûl once (or twice if at a river).
 		*/
 

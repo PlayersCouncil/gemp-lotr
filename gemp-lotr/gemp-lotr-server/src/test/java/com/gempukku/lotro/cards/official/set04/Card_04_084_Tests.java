@@ -39,7 +39,6 @@ public class Card_04_084_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Skirmish</b> <i>or</i> <b>Regroup:</b> Spot 3 Elf companions to liberate a site or exert a minion.
 		*/
 

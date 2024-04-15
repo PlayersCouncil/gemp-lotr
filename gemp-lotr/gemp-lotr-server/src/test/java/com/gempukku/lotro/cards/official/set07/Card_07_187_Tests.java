@@ -41,7 +41,6 @@ public class Card_07_187_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: While the Ring-bearer is exhausted, this minion is strength +3, <b>fierce</b> and <b>damage +1</b>.
 		*/

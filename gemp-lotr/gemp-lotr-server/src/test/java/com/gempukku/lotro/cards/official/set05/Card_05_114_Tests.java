@@ -39,9 +39,7 @@ public class Card_05_114_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Vitality: 1
-
 		 * Game Text: Plays on Sam.<br><b>Response:</b> If a regroup special ability is used, discard Sméagol or Gollum to cancel that action.
 		*/
 

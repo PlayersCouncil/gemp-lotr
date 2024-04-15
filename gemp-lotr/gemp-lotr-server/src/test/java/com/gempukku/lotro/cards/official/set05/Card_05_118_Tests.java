@@ -39,7 +39,6 @@ public class Card_05_118_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7T
 		 * Game Text: <b>Regroup:</b> Spot your minion and remove (9) to make the fellowship move again this turn (if the move limit allows).
 		*/

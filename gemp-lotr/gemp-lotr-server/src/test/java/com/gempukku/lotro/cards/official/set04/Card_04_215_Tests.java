@@ -39,7 +39,6 @@ public class Card_04_215_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert an [isengard] Man. Plays on a Free Peoples Man. When you play this condition, exert bearer.<br>Wounds may not be removed from bearer.
 		*/
 

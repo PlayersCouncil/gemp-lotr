@@ -39,7 +39,6 @@ public class Card_03_009_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Plays to your support area.<br><b>Skirmish:</b> Exert an [elven] ally to discard the bottom card of your draw deck. If that card is an [elven] card, make a minion skirmishing an Elf strength -1.
 		*/
 

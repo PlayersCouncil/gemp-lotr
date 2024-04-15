@@ -39,7 +39,6 @@ public class Card_05_057_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Exert an Uruk-hai to place an [isengard] token on this card.<br><b>Skirmish:</b> Spot an [isengard] token here to heal an Uruk-hai. Discard this condition.
 		*/
 

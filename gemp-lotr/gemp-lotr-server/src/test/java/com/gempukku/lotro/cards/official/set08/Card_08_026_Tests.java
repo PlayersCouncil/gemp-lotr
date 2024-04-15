@@ -41,7 +41,6 @@ public class Card_08_026_Tests
 		 * Subtype: Spider
 		 * Strength: 8
 		 * Vitality: 8
-
 		 * Site Number: 8
 		 * Game Text: <b>Enduring</b>. <b>Fierce</b>.<br>While in a fierce skirmish, Shelob is <b>damage +1</b>.
 		*/

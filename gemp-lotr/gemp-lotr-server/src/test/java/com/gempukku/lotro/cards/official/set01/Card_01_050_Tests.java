@@ -41,14 +41,14 @@ public class Card_01_050_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Archer</b>.<br><b>Archery:</b> Exert Legolas to wound a minion; Legolas does not add to the fellowship archery total.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Legolas", card.getBlueprint().getTitle());
 		assertEquals("Greenleaf", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

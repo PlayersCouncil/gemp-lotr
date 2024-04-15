@@ -41,9 +41,7 @@ public class Card_08_121_Tests
 		 * Subtype: Hobbit
 		 * Strength: 5
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: To play, spot a [rohan] companion.<br><b>Skirmish:</b> Discard 4 cards from hand to make Merry strength +2 for each [rohan] companion you spot.
 		*/
 

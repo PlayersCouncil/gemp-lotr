@@ -41,7 +41,6 @@ public class Card_04_013_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: Each time this minion wins a skirmish, you may discard a Free Peoples possession (or 2 possessions if you spot 6 companions).
 		*/

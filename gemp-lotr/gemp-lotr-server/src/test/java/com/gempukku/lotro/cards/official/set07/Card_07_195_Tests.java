@@ -39,7 +39,6 @@ public class Card_07_195_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a Nazgûl.<br>Each time the Free Peoples player draws a card (except during the regroup phase), add a threat.<br><b>Regroup:</b> Discard a Nazgûl and this condition to add a threat.
 		*/
 

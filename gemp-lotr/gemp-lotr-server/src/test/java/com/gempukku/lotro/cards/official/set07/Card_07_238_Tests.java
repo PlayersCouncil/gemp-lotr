@@ -39,7 +39,6 @@ public class Card_07_238_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: Choose an opponent. For each mounted companion you spot, that opponent must remove (1) or place a random card from hand beneath his or her draw deck.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_238_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

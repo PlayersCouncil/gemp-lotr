@@ -39,7 +39,6 @@ public class Card_07_331_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1K
 		 * Game Text: <b>Fellowship:</b> Spot Gandalf to add (2). Each player may draw a card.
 		*/

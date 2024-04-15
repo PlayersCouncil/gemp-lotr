@@ -39,7 +39,6 @@ public class Card_04_147_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot 2 [isengard] archers. Plays to your support area.<br>The Free Peoples player may not play archery events or use archery special abilities. Discard this condition during the regroup phase.
 		*/
 

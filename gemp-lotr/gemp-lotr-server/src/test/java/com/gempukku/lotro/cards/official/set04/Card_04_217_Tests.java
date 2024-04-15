@@ -41,7 +41,6 @@ public class Card_04_217_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. To play, spot a [raider] Man.<br><b>Regroup:</b> Exert Desert Lancers twice to take control of a site.
 		*/

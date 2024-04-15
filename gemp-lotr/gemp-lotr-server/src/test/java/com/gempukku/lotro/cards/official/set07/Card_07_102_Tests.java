@@ -39,7 +39,6 @@ public class Card_07_102_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 3 [gondor] Men.<br><b>Regroup:</b> While you have only 4 cards in hand, you may discard 2 cards from hand to play a [gondor] fortification from your discard pile.
 		*/
 

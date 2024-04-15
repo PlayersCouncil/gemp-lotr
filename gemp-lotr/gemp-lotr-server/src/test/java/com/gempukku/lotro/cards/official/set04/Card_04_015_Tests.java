@@ -41,7 +41,6 @@ public class Card_04_015_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: While skirmishing a [rohan] Man, this minion is strength +2.<br><b>Assignment:</b> Spot an ally to make that ally participate in skirmishes and assign this minion to skirmish that ally.
 		*/

@@ -41,7 +41,6 @@ public class Card_05_108_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>When you play this minion, you may exert him and remove (2) to draw a card.
 		*/

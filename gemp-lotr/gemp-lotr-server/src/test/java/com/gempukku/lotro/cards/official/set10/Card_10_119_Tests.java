@@ -39,7 +39,6 @@ public class Card_10_119_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 5K
 		 * Game Text: Wounds cannot be prevented or healed. Burdens cannot be removed.
 		*/

@@ -39,12 +39,13 @@ public class Card_01_279_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert a [sauron] Orc. Plays on the Ring-bearer.<br>Add a burden at the end of each turn during which bearer was not assigned to a skirmish (and another companion was).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Thin and Stretched", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

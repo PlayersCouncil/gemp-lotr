@@ -39,7 +39,6 @@ public class Card_04_079_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If an Elf wins a skirmish, exert that Elf to liberate a site or wound a minion.
 		*/
 

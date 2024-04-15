@@ -40,7 +40,6 @@ public class Card_06_061_Tests
 		 * Type: Condition
 		 * Subtype: 
 		 * Strength: -1
-
 		 * Game Text: To play, spot an [isengard] Man. Plays on a companion (except the Ring-bearer).<br><b>Assignment:</b> Assign an [isengard] minion with less strength than bearer to skirmish bearer. Discard this condition.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_06_042_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If Gollum wins a skirmish, add a burden.
 		*/
 

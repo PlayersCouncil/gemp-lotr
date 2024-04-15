@@ -41,7 +41,6 @@ public class Card_07_141_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>.<br><b>Skirmish:</b> Exert this minion to make him <b>damage +1</b>.
 		*/

@@ -39,12 +39,13 @@ public class Card_01_144_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Response:</b> If your Uruk-hai wins a skirmish, remove (1) to heal him.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Uruk Bloodlust", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

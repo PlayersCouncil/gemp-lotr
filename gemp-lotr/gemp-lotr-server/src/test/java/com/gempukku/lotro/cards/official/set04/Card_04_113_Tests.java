@@ -39,7 +39,6 @@ public class Card_04_113_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Exert a Ring-bound Man to cancel a skirmish involving a roaming minion.
 		*/
 

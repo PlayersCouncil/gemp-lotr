@@ -39,7 +39,6 @@ public class Card_04_298_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: Bearer must be a Ring-bound Hobbit.<br><b>Fellowship:</b> Discard this possession to remove a burden.
 		*/
 

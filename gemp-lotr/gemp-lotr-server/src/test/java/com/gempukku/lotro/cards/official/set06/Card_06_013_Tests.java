@@ -41,9 +41,7 @@ public class Card_06_013_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Skirmish:</b> Exert an Elf to make a minion skirmishing Arwen strength -1.
 		*/
 

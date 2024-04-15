@@ -41,13 +41,14 @@ public class Card_01_301_Tests
 		 * Subtype: Hobbit
 		 * Strength: 2
 		 * Vitality: 2
-
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> If the twilight pool has fewer than 3 twilight tokens, add (2) to reveal the top 3 cards of your draw deck. Take all [shire] cards revealed into hand and discard the rest.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Master Proudfoot", card.getBlueprint().getTitle());
 		assertEquals("Distant Relative of Bilbo", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

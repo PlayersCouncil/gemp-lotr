@@ -41,7 +41,6 @@ public class Card_06_087_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: When you play Úlairë Nertëa, spot another Nazgûl to make the Free Peoples player exert a Ring-bound companion for each Free Peoples culture you can spot over 2.
 		*/

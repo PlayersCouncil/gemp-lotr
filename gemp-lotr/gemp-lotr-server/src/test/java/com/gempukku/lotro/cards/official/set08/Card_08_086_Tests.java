@@ -39,7 +39,6 @@ public class Card_08_086_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Fellowship:</b> Exert a [rohan] companion and either a [gondor] Man or a [shire] companion to add a [rohan] token here.<br><b>Skirmish:</b> Remove a [rohan] token here to exert a minion skirmishing a companion.
 		*/
 

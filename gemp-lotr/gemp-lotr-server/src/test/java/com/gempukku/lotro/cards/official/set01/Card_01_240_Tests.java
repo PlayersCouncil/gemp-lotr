@@ -41,13 +41,14 @@ public class Card_01_240_Tests
 		 * Subtype: Orc
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Response:</b> If this minion wins a skirmish, remove (2) to make the Free Peoples player discard a card at random from hand.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Band of the Eye", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

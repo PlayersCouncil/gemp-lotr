@@ -41,7 +41,6 @@ public class Card_04_009_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: Each time this minion wins a skirmish, you may play a [dunland] Man from hand; his twilight cost is -2. That Man is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
 		*/

@@ -41,7 +41,6 @@ public class Card_05_125_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Warg-rider</b>.<br>While Foul Horde is not exhausted, it is <b>fierce</b>.<br>While Foul Horde has at least 3 vitality, it is <b>ambush</b> (1).<br>While Foul Horde has at least 4 vitality, it is <b>damage +1</b>.
 		*/

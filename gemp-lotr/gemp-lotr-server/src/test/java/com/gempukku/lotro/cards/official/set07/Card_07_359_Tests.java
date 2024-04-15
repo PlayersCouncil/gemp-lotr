@@ -39,7 +39,6 @@ public class Card_07_359_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8K
 		 * Game Text: <b>Shadow:</b> Remove 2 threats and play Gollum from your discard pile to add 2 burdens.
 		*/

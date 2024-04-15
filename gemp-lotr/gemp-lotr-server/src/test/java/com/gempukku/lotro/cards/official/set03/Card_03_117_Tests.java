@@ -39,7 +39,6 @@ public class Card_03_117_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8
 		 * Game Text: <b>River</b>. Maneuver events may not be played.
 		*/

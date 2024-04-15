@@ -41,14 +41,14 @@ public class Card_00_067_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Ring-bearer (resistance 10).</b><br>The twilight cost of each artifact, possession, and [shire] tale played on Frodo is -1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Frodo", card.getBlueprint().getTitle());
 		assertEquals("Mr. Underhill", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

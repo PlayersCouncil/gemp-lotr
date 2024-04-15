@@ -41,7 +41,6 @@ public class Card_04_104_Tests
 		 * Subtype: Ent
 		 * Strength: 12
 		 * Vitality: 4
-
 		 * Site Number: 2T & 8T
 		 * Game Text: <b>Unhasty</b>.<br><b>Fellowship:</b> Exert Treebeard and discard an unbound companion from hand to heal an unbound companion.
 		*/

@@ -41,7 +41,6 @@ public class Card_06_032_Tests
 		 * Subtype: Ent
 		 * Strength: 10
 		 * Vitality: 4
-
 		 * Game Text: To play, spot 2 Ent companions.<br>Host of Fangorn's twilight cost is -2 for each Ent or unbound Hobbit you can spot.
 		*/
 

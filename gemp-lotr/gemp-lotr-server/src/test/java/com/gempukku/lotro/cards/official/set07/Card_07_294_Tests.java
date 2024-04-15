@@ -41,7 +41,6 @@ public class Card_07_294_Tests
 		 * Subtype: Orc
 		 * Strength: 15
 		 * Vitality: 4
-
 		 * Site Number: 6
 		 * Game Text: <b>Archer</b>.<br>If you have initiative, the minion archery total is +1 and Orc Archer Troop is <b>fierce</b>.
 		*/

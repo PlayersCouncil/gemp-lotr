@@ -39,7 +39,6 @@ public class Card_04_110_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Archery</b> <i>or</i> <b>Skirmish:</b> Exert 2 Ring-bound Men to wound each roaming minion.
 		*/
 

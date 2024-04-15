@@ -41,7 +41,6 @@ public class Card_07_059_Tests
 		 * Subtype: 
 		 * Strength: 5
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Skirmish:</b> Exert Gollum twice or remove a threat to make him strength +2.
 		*/

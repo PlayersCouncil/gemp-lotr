@@ -39,7 +39,6 @@ public class Card_02_087_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Exert a [sauron] Orc and spot X burdens to draw X cards (limit 5).
 		*/
 

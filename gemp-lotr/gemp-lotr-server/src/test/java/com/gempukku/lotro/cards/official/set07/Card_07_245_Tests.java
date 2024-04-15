@@ -39,7 +39,6 @@ public class Card_07_245_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be a [rohan] Man.<br><b>Response:</b> If you have initiative and bearer is about to take a wound in a skirmish, discard 3 cards from hand to prevent that wound.
 		*/
 

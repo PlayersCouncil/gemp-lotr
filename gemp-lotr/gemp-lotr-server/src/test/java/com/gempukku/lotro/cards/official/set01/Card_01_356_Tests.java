@@ -39,7 +39,6 @@ public class Card_01_356_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8
 		 * Game Text: <b>River</b>. For each companion in the fellowship over 4, add 2 to the minion archery total.
 		*/

@@ -41,9 +41,7 @@ public class Card_08_015_Tests
 		 * Subtype: Wizard
 		 * Strength: 7
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: When Gandalf is in your starting fellowship, his twilight cost is -2.
 		*/
 

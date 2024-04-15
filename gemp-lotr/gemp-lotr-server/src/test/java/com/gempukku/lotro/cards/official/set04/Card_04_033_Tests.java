@@ -41,7 +41,6 @@ public class Card_04_033_Tests
 		 * Subtype: Wizard
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: Saruman may not be assigned to a skirmish.<br>Each time the fellowship moves, the Free Peoples player must exert a companion for each [dunland] Man you can spot.<br><b>Skirmish:</b> Exert Saruman to make a [dunland] Man strength +2.
 		*/

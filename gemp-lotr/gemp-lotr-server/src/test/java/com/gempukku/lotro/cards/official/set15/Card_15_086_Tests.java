@@ -33,7 +33,7 @@ public class Card_15_086_Tests
 		/**
 		 * Set: 15
 		 * Name: Mûmak Commander, Giant Among the Swertings
-		 * Unique: False
+		 * Unique: True
 		 * Side: Shadow
 		 * Culture: Men
 		 * Twilight Cost: 6

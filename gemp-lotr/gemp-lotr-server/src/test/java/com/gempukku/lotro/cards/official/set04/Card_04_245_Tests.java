@@ -41,7 +41,6 @@ public class Card_04_245_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Archer</b>.<br>While you can spot another Southron, the minion archery total is +1 for each site you control.
 		*/

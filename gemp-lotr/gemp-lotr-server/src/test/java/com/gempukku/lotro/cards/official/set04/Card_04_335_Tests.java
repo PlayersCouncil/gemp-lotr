@@ -39,7 +39,6 @@ public class Card_04_335_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2T
 		 * Game Text: <b>Battleground</b>. <b>Plains</b>. Each time an Uruk-hai is played, that minion must exert.
 		*/

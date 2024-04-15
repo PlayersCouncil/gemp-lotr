@@ -39,7 +39,6 @@ public class Card_04_060_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot 3 Elves. Plays to your support area.<br>For each wound on each minion, that minion is strength -2. Discard this condition during the regroup phase.
 		*/
 

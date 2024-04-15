@@ -41,7 +41,6 @@ public class Card_10_007_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: At the start of each skirmish involving Celeborn, you may reveal the top card of your draw deck. If it is an [elven] card, you may discard it to wound each minion in that skirmish.
 		*/
 

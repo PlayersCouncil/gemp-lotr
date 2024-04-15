@@ -41,7 +41,6 @@ public class Card_07_107_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Response:</b> If a possession or engine is played by your opponent, remove a [gondor] token from your condition to make that opponent remove (1). If he or she cannot, discard that possession or engine.
 		*/
 

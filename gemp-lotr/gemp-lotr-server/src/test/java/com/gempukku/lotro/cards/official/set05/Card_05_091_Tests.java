@@ -39,7 +39,6 @@ public class Card_05_091_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Shield
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>The minion archery total is -1.<br><b>Regroup:</b> Discard this possession to heal bearer.
 		*/
 

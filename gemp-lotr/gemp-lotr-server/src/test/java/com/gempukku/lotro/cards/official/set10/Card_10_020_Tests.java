@@ -39,7 +39,6 @@ public class Card_10_020_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Any site 9 is a <b>mountain</b>.<br><b>Shadow:</b> If the fellowship is at any site 9, play Gollum from your discard pile.<br><b>Response:</b> If the Free Peoples player uses a maneuver or archery special ability, exert Gollum to cancel its effect.
 		*/
 

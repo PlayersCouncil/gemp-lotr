@@ -39,7 +39,6 @@ public class Card_04_155_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If a special ability of an ally or unbound companion is used, exert Gríma to cancel that action.
 		*/
 

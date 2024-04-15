@@ -41,7 +41,6 @@ public class Card_02_024_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: To play, spot Gandalf.<br><b>Fellowship:</b> Exert Hugin to reveal a Free Peoples card from your discard pile and place it beneath your draw deck.
 		*/

@@ -41,7 +41,6 @@ public class Card_09_002_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: When you play Freca, you may spot another [dunland] Man to take control of a site.<br>When Freca is killed, the Free Peoples player may liberate a site.
 		*/

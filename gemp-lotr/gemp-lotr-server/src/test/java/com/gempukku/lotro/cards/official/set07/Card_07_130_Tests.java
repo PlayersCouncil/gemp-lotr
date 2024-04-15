@@ -39,7 +39,6 @@ public class Card_07_130_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Regroup:</b> Spot 2 [raider] Men and remove (3) to add a threat (limit 1).
 		*/
 

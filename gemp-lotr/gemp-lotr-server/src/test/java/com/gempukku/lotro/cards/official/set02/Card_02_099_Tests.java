@@ -39,7 +39,6 @@ public class Card_02_099_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Stealth</b>.<br><b>Regroup:</b> Spot 2 Hobbits to make each site's Shadow number -2 until the end of the turn.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_02_099_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.STEALTH));
 		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}

@@ -40,7 +40,6 @@ public class Card_07_002_Tests
 		 * Type: Onering
 		 * Subtype: 
 		 * Strength: 2
-
 		 * Game Text: <b>Maneuver:</b> Add a burden to wear The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound, add a burden instead.
 		*/
 

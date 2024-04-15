@@ -41,7 +41,6 @@ public class Card_07_167_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Archer</b>. <b>Fierce</b>. To play, spot a [raider] Man.<br><b>Archery:</b> Exert this minion and remove a threat to make the minion archery total +1.
 		*/

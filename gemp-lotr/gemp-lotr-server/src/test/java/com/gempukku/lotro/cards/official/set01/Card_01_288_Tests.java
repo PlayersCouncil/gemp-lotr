@@ -41,13 +41,14 @@ public class Card_01_288_Tests
 		 * Subtype: Hobbit
 		 * Strength: 2
 		 * Vitality: 3
-
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> Exert Farmer Maggot to heal Merry or Pippin.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Farmer Maggot", card.getBlueprint().getTitle());
 		assertEquals("Chaser of Rascals", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

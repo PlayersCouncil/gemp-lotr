@@ -39,12 +39,13 @@ public class Card_01_238_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot a Nazgûl. Plays to your support area.<br><b>Archery:</b> Remove (1) to make the fellowship archery total -1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Wreathed in Shadow", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

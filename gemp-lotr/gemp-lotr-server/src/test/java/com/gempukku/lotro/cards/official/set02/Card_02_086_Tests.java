@@ -39,7 +39,6 @@ public class Card_02_086_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Spot a twilight Nazgûl and the Ring-bearer wearing The One Ring to add 3 burdens.
 		*/
 

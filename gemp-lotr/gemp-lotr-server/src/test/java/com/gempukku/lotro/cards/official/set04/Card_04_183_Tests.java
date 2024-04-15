@@ -41,7 +41,6 @@ public class Card_04_183_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Archer</b>.<br><b>Archery:</b> Exert this minion to make the Free Peoples player wound an unbound companion; this minion does not add to the minion archery total.
 		*/

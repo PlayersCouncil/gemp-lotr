@@ -39,7 +39,6 @@ public class Card_04_360_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9T
 		 * Game Text: <b>Battleground</b>. The Shadow number of Fortress of Orthanc is +2 for each companion over 4.
 		*/

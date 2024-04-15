@@ -41,7 +41,6 @@ public class Card_05_045_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>Berserk Rager is strength +1 for each wound on a character in its skirmish.<br><b>Skirmish:</b> Remove 3 [isengard] tokens from a machine and exert Berserk Rager twice to wound every ally twice.
 		*/

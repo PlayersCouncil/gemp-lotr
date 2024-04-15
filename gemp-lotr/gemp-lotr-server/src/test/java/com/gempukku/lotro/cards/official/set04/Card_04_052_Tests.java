@@ -39,7 +39,6 @@ public class Card_04_052_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time Gimli wins a skirmish, place a [dwarven] token on this card.<br>While you can spot X [dwarven] tokens on this card and the same number of [elven] tokens on Final Count, Gimli is strength +X (limit +3).
 		*/
 

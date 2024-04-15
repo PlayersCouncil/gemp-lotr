@@ -39,7 +39,6 @@ public class Card_03_033_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot Gandalf to reveal a card at random from an opponent's hand. You may add (X) to discard that card, where X is the twilight cost of the card revealed.
 		*/
 

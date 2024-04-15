@@ -39,7 +39,6 @@ public class Card_01_353_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7
 		 * Game Text: <b>River</b>. When the fellowship moves to Anduin Confluence, discard every ally.
 		*/

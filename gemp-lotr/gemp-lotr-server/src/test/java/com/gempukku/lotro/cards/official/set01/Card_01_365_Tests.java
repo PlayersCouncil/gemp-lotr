@@ -41,9 +41,7 @@ public class Card_01_365_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Ranger</b>.<br>At the start of each of your turns, you may heal another companion who has the Aragorn signet.
 		*/
 

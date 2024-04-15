@@ -40,7 +40,6 @@ public class Card_07_156_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [raider] Man.<br><b>Skirmish:</b> Exert bearer to add (2).
 		*/
 

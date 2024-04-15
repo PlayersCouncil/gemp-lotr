@@ -39,7 +39,6 @@ public class Card_07_338_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3K
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 3 threats, add a threat to heal a companion.
 		*/

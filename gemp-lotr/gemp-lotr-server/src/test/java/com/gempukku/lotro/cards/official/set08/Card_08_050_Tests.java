@@ -39,7 +39,6 @@ public class Card_08_050_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: When you play this possession, you may add a [raider] token here.<br><b>Shadow:</b> Remove X [raider] tokens here to play a corsair from your discard pile; its twilight cost is -X. Discard this possession.
 		*/
 

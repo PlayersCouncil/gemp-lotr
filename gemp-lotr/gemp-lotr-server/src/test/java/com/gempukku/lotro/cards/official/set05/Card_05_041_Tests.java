@@ -39,7 +39,6 @@ public class Card_05_041_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Exert Aragorn twice to play any number of possessions from your discard pile onto companions with the Aragorn signet.
 		*/
 

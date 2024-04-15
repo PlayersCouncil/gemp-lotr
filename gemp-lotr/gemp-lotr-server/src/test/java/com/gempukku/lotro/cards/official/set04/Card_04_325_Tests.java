@@ -39,7 +39,6 @@ public class Card_04_325_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1T
 		 * Game Text: <b>Fellowship:</b> Exert 2 unbound companions to play Legolas from your draw deck.
 		*/

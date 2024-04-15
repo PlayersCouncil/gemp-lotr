@@ -41,7 +41,6 @@ public class Card_10_068_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 11
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Enduring</b>.<br>Shadow cards cannot exert Úlairë Enquëa during a skirmish phase.<br><b>Skirmish:</b> If Úlairë Enqueä is skirmishing, heal him to add a burden.
 		*/

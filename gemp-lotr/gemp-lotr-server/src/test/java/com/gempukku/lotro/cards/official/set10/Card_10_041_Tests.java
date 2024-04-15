@@ -41,7 +41,6 @@ public class Card_10_041_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>. <b>Fierce</b>.<br>When you play this minion, you may spot another Easterling to add a burden for each companion over 5.
 		*/

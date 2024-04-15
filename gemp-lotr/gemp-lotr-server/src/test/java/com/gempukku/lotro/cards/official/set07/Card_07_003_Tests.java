@@ -39,7 +39,6 @@ public class Card_07_003_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a Dwarf strength +2 (+4 if you spot a card stacked on a [dwarven] condition).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_003_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

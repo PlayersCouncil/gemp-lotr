@@ -39,7 +39,6 @@ public class Card_04_273_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a [rohan] Man strength +2 (or +3 if you spot a villager).
 		*/
 

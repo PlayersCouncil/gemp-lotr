@@ -39,7 +39,6 @@ public class Card_05_085_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Spot 3 valiant Men to discard up to 2 conditions and liberate a site.
 		*/
 

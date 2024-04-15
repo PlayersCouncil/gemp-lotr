@@ -39,7 +39,6 @@ public class Card_01_329_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2
 		 * Game Text: <b>Forest</b>. Stealth events may not be played.
 		*/

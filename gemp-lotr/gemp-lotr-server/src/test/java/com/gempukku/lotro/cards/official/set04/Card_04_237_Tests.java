@@ -39,7 +39,6 @@ public class Card_04_237_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>At the end of each phase during which the fellowship has moved to 7[T], 8[T], or 9[T] and the twilight pool has fewer than 7 twilight tokens, you may add (8).<br><b>Skirmish:</b> Discard this condition to make a [raider] Man strength +2.
 		*/
 

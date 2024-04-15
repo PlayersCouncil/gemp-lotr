@@ -39,7 +39,6 @@ public class Card_08_002_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Spot a Dwarf who is damage +X to place X wounds on minions.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_002_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

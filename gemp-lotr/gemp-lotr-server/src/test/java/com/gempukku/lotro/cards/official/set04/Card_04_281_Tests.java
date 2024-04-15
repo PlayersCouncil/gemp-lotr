@@ -41,7 +41,6 @@ public class Card_04_281_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 4T
 		 * Game Text: <b>Villager</b>.<br>Discard Hlafwine if an opponent controls his home site.<br><b>Skirmish:</b> Exert Hlafwine to make a [rohan] Man strength +2.
 		*/

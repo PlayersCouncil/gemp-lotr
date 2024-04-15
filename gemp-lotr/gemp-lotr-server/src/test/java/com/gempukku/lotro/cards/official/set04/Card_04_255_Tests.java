@@ -40,7 +40,6 @@ public class Card_04_255_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a Southron.<br><b>Skirmish:</b> Remove (4) and exert bearer to wound a companion or ally bearer is skirmishing.
 		*/
 

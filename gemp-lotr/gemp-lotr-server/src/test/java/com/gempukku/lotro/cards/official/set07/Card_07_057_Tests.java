@@ -39,7 +39,6 @@ public class Card_07_057_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time Gollum or Sméagol is played, add a threat.<br><b>Regroup:</b> Discard this condition to return Gollum to his owner's hand.
 		*/
 

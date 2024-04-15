@@ -41,9 +41,7 @@ public class Card_04_311_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Skirmish:</b> If Merry is not assigned to a skirmish, discard him to remove a [sauron] Orc from a skirmish involving an unbound companion.
 		*/
 

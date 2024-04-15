@@ -41,14 +41,14 @@ public class Card_01_289_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Ring-bearer (resistance 10).</b><br>At the start of each of your turns, you may heal a Hobbit ally.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Frodo", card.getBlueprint().getTitle());
 		assertEquals("Old Bilbo's Heir", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

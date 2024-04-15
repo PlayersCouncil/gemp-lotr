@@ -39,12 +39,13 @@ public class Card_01_274_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert a [sauron] Orc. Plays to your support area.<br>While there are 3 or more companions in the dead pile, the move limit for this turn is -1 (to a minimum of 1).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Sauron's Defenses", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

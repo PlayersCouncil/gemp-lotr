@@ -39,7 +39,6 @@ public class Card_04_145_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: <b>Archery:</b> Exert an [isengard] archer to make the minion archery total +1 and the fellowship archery total -1.
 		*/
 

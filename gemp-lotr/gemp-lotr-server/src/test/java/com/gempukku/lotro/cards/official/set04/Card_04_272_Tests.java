@@ -40,7 +40,6 @@ public class Card_04_272_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 3
-
 		 * Game Text: Bearer must be Éowyn.<br>While you can spot a villager, Éowyn is <b>damage +1</b>.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_08_066_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a corsair strength +1 for each [raider] token you spot (limit +6). If you have initiative, you may place this event on top of your draw deck.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_066_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

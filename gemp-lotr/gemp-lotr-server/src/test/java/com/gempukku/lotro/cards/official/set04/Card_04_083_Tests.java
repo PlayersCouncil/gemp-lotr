@@ -39,7 +39,6 @@ public class Card_04_083_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make an Elf strength +2 (or +3 if you spot 3 Elf companions).
 		*/
 

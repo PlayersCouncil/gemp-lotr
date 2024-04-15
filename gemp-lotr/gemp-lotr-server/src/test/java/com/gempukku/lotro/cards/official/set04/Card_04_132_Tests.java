@@ -40,7 +40,6 @@ public class Card_04_132_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Aragorn.<br>While skirmishing an Uruk-hai, Aragorn is strength +2.
 		*/
 

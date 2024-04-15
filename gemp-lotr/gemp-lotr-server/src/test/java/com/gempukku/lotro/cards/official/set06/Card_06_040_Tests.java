@@ -41,7 +41,6 @@ public class Card_06_040_Tests
 		 * Subtype: 
 		 * Strength: 5
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Skirmish:</b> Discard a card from hand to make Gollum strength +1 (or +2 if skirmishing a Ring-bound companion).
 		*/

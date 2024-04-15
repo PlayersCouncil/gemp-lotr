@@ -41,7 +41,6 @@ public class Card_02_073_Tests
 		 * Subtype: Creature
 		 * Strength: 11
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: <b>Damage +1</b>.<br>While you can spot Watcher in the Water, discard all other minions (except tentacles).<br>Each tentacle is strength +2 and <b>damage</b> <b>+1</b>. This minion may not bear possessions and is discarded if not at a marsh.
 		*/

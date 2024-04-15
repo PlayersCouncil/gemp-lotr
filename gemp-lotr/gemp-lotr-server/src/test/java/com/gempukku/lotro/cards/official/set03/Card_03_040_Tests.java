@@ -39,7 +39,6 @@ public class Card_03_040_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>You may heal a [gondor] companion at the end of each turn during which no companion or ally lost a skirmish.
 		*/
 

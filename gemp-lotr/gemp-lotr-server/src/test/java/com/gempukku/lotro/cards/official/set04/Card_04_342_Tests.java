@@ -39,7 +39,6 @@ public class Card_04_342_Tests
 		 * Shadow Number: 1
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3T
 		 * Game Text: <b>Plains</b>. <b>Sanctuary</b>. Each [dunland] Man may not take wounds during the archery phase.
 		*/

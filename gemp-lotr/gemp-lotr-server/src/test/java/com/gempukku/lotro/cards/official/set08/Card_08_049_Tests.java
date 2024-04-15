@@ -41,7 +41,6 @@ public class Card_08_049_Tests
 		 * Subtype: Man
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Corsair</b>. <b>Fierce</b>.<br><b>Skirmish:</b> If you have initiative, remove a [raider] token to discard a possession borne by a character skirmishing this minion.
 		*/

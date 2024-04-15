@@ -41,7 +41,6 @@ public class Card_04_194_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Tracker</b>. <b>Fierce</b>.<br>While skirmishing a character bearing a search card, this minion is strength +2 and <b>damage +1</b>.
 		*/

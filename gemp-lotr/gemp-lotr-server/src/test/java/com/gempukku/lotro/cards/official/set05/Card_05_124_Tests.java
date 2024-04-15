@@ -39,7 +39,6 @@ public class Card_05_124_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: <b>Archery:</b> Exert 3 Elf companions to make the fellowship archery total +2.
 		*/
 

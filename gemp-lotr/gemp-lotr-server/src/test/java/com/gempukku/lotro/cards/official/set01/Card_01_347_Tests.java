@@ -39,7 +39,6 @@ public class Card_01_347_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4
 		 * Game Text: <b>Underground</b>. Each companion and minion bearing a hand weapon is <b>damage +1</b>.
 		*/

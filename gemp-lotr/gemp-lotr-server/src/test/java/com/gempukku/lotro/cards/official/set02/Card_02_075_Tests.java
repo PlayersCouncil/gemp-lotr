@@ -41,7 +41,6 @@ public class Card_02_075_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 1
-
 		 * Site Number: 2
 		 * Game Text: Nazgûl are not roaming.<br>The Free Peoples player may not assign a character to skirmish Bill Ferny. Discard Bill Ferny if underground.
 		*/

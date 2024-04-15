@@ -41,7 +41,6 @@ public class Card_02_060_Tests
 		 * Subtype: Orc
 		 * Strength: 4
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Archer</b>.
 		*/

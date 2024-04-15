@@ -41,7 +41,6 @@ public class Card_04_021_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: Each time the fellowship moves, you may spot another [dunland] Man to take control of a site.
 		*/

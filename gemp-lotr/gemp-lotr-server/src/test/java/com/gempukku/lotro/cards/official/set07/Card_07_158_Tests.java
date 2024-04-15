@@ -39,7 +39,6 @@ public class Card_07_158_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [raider] Man.<br>Each time the fellowship moves, the Free Peoples player must exert 2 companions, if you have initiative.
 		*/
 

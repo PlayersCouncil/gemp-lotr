@@ -39,7 +39,6 @@ public class Card_08_006_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Spot a Dwarf who is damage +X to make him strength +X.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_006_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

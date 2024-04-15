@@ -39,7 +39,6 @@ public class Card_04_340_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3T
 		 * Game Text: <b>Sanctuary</b>. Each [rohan] ally may not participate in archery fire or skirmishes at Streets of Edoras.
 		*/

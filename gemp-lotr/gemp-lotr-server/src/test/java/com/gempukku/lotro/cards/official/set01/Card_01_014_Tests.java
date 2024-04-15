@@ -40,12 +40,13 @@ public class Card_01_014_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Gimli.<br>He is <b>damage +1</b>.<br>Each time Gimli wins a skirmish, you may wound an Orc.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gimli's Battle Axe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

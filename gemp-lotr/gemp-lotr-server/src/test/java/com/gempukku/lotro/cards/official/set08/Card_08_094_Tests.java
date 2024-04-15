@@ -41,7 +41,6 @@ public class Card_08_094_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>. To play, spot a [sauron] Orc.<br>When you play this minion, if you can spot another besieger, you may add a threat for each companion over 4.<br><b>Shadow:</b> Remove a threat to play a [sauron] engine from your discard pile.
 		*/

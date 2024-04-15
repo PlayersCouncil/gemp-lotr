@@ -39,7 +39,6 @@ public class Card_04_279_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Spot 2 mounted [rohan] Men to liberate a site or draw 3 cards.
 		*/
 

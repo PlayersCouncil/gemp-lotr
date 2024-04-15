@@ -41,7 +41,6 @@ public class Card_10_086_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br>While you control a site, this minion's twilight cost is -2.<br><b>Regroup:</b> Stack this minion on a site you control.
 		*/

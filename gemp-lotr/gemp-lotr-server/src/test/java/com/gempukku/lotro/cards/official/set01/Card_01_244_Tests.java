@@ -39,12 +39,13 @@ public class Card_01_244_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert a [sauron] Orc. Plays on a companion.<br>Each time bearer is assigned to a skirmish, the Free Peoples player chooses to either discard 3 cards from hand or add a burden.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Desperate Defense of the Ring", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

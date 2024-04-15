@@ -41,7 +41,6 @@ public class Card_05_076_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Ambush (2)</b>.<br><b>Response:</b> If a Southron is about to take a wound, remove (3) to prevent that wound.
 		*/

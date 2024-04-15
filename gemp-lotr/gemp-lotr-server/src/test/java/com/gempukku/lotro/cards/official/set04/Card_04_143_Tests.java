@@ -39,7 +39,6 @@ public class Card_04_143_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Assignment
-
 		 * Game Text: <b>Search</b>.<br><b>Assignment:</b> Exert an [isengard] tracker to assign it to an unbound companion. That companion may exert to prevent this (unless that companion is a Hobbit).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_04_143_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SEARCH));
 		assertTrue(scn.HasKeyword(card, Keyword.ASSIGNMENT));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}

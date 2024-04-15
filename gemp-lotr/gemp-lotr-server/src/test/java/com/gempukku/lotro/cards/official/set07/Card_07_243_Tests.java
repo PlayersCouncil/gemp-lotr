@@ -39,7 +39,6 @@ public class Card_07_243_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a [rohan] Man strength +4. Any Shadow player may place a random card from hand beneath his or her draw deck to make that Man strength +2 instead.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_243_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

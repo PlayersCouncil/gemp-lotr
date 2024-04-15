@@ -41,7 +41,6 @@ public class Card_07_139_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>.<br><b>Skirmish:</b> If you have initiative or you spot 3 Easterlings, discard 2 cards from hand to heal another Easterling.
 		*/

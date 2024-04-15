@@ -39,7 +39,6 @@ public class Card_02_012_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Discard the top 3 cards from your draw deck to make a Dwarf strength +1 (limit +3) and, if underground, <b>damage +1</b> (limit +3).
 		*/
 

@@ -39,7 +39,6 @@ public class Card_04_137_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Shadow:</b> Play an Uruk-hai to place an [isengard] token on this card.<br><b>Regroup:</b> Remove 3 [isengard] tokens from this card and discard an Uruk-hai to take control of a site.
 		*/
 

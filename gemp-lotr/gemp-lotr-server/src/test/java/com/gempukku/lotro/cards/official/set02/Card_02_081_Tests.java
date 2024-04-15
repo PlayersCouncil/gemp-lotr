@@ -39,7 +39,6 @@ public class Card_02_081_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert 2 Nazgûl and spot X burdens to exert X companions.
 		*/
 

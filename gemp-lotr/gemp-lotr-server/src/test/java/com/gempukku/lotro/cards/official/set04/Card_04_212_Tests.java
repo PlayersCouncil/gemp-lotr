@@ -39,7 +39,6 @@ public class Card_04_212_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. Plays on a companion or ally. Limit 1 per character.<br>Each time the Free Peoples player assigns bearer to skirmish an [isengard] tracker, bearer must exert.
 		*/
 

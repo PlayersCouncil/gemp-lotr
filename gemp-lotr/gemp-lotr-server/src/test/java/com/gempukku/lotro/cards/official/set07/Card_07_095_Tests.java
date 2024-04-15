@@ -39,7 +39,6 @@ public class Card_07_095_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 3 [gondor] companions.<br>While no opponent controls a site, wound a minion at the start of each regroup phase.<br><b>Regroup:</b> Discard this condition to place a [gondor] fortification from your discard pile on top of your draw deck.
 		*/
 

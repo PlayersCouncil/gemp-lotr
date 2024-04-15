@@ -39,7 +39,6 @@ public class Card_08_022_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Gollum is <b>fierce</b>.<br><b>Shadow:</b> Spot 6 companions to play Gollum from your discard pile and exert a companion. Place this condition on top of your draw deck.
 		*/
 

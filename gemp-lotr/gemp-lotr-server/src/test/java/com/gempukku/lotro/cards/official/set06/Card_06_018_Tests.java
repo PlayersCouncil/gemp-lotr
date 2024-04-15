@@ -41,7 +41,6 @@ public class Card_06_018_Tests
 		 * Subtype: Elf
 		 * Strength: 3
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: At the start of each turn, heal Galadriel.<br><b>Skirmish:</b> Exert Galadriel to discard the top card of your draw deck. If it is a Shadow card, make a minion skirmishing an Elf strength -3.
 		*/

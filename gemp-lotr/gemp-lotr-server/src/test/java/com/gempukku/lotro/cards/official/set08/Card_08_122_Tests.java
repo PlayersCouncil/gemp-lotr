@@ -41,9 +41,7 @@ public class Card_08_122_Tests
 		 * Subtype: Hobbit
 		 * Strength: 5
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: To play, spot a [gondor] Man.<br><b>Skirmish:</b> Discard 4 cards from hand to wound a minion Pippin is skirmishing twice if that minion bears a fortification.
 		*/
 

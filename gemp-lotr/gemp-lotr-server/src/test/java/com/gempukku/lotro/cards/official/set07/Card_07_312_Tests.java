@@ -39,7 +39,6 @@ public class Card_07_312_Tests
 		 * Twilight Cost: 4
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If your [sauron] Orc wins a skirmish, make all your [sauron] Orcs <b>fierce</b> until the regroup phase.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_312_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}
 

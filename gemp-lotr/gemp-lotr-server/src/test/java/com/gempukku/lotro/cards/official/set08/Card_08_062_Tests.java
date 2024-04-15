@@ -41,7 +41,6 @@ public class Card_08_062_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>.<br>While you can spot 4 burdens, Heavy Axeman is strength +4 and <b>fierce</b>.
 		*/

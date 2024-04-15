@@ -40,7 +40,6 @@ public class Card_06_029_Tests
 		 * Type: Condition
 		 * Subtype: 
 		 * Strength: 2
-
 		 * Game Text: To play, exert an unbound Hobbit. Bearer must be an Ent. Limit 1 per bearer.
 		*/
 

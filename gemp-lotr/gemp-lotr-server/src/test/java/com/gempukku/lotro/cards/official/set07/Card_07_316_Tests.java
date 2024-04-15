@@ -39,7 +39,6 @@ public class Card_07_316_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Engine</b>. To play, spot a [sauron] Orc.<br>All [sauron] Orcs are strength +1 for each besieger stacked on a site.<br><b>Regroup:</b> Discard a besieger to take control of a site. Discard this condition.
 		*/
 

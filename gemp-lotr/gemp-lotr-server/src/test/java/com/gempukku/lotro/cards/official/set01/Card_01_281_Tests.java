@@ -39,12 +39,13 @@ public class Card_01_281_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. To play, exert a [sauron] tracker. Plays to your support area.<br>Each time the fellowship moves, the Free Peoples player must exert a companion.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Under the Watching Eye", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_07_325_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 Hobbits.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition and exert a Hobbit companion to play the fellowship's next site (replacing opponent's site if necessary).
 		*/
 

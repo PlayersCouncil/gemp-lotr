@@ -41,7 +41,6 @@ public class Card_08_054_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Corsair</b>.<br>When you play this minion, you may remove 2 culture tokens to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		*/

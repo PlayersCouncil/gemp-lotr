@@ -39,7 +39,6 @@ public class Card_04_305_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a Hobbit wins a skirmish, you may place a [shire] token here.<br><b>Fellowship:</b> Remove a burden for each [shire] token here (limit 3). Discard this condition.
 		*/
 

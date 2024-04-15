@@ -41,7 +41,6 @@ public class Card_06_103_Tests
 		 * Subtype: Troll
 		 * Strength: 13
 		 * Vitality: 4
-
 		 * Site Number: 6
 		 * Game Text: <b>Fierce</b>.<br>While you can spot a Troll, Gate Troll's twilight cost is -4.<br>For each other [sauron] minion you can spot, this minion is strength +1.
 		*/

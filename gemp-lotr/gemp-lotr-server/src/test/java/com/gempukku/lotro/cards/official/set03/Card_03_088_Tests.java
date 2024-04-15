@@ -39,7 +39,6 @@ public class Card_03_088_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Search</b>.<br><b>Shadow:</b> Spot a [sauron] minion and a Nazgûl to make the Free Peoples player discard a card from the top of his or her deck for each burden you can spot.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_03_088_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SEARCH));
 		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}

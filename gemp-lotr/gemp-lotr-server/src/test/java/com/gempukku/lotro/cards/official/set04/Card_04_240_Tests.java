@@ -39,7 +39,6 @@ public class Card_04_240_Tests
 		 * Twilight Cost: 4
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert a [raider] Man to add a burden for each companion over 4. The Free Peoples player may discard 2 companions (except the Ring-bearer) to prevent this.
 		*/
 

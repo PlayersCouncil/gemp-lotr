@@ -41,7 +41,6 @@ public class Card_03_061_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: While you can spot another [isengard] Orc, no player may use archery special abilities.<br><b>Regroup:</b> Exert this minion and spot 3 wounds on the Ring-bearer to exert every companion.
 		*/

@@ -41,13 +41,14 @@ public class Card_01_154_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 7
 		 * Vitality: 1
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>When you play this minion, you may make the Free Peoples player discard the top card of his draw deck.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Uruk Soldier", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

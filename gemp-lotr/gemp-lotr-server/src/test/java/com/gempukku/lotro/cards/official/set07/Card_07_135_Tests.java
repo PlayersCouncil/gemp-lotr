@@ -41,7 +41,6 @@ public class Card_07_135_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Ambush (1)</b>.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
 		*/

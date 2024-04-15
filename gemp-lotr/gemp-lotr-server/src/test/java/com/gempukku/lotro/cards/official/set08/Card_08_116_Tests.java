@@ -39,7 +39,6 @@ public class Card_08_116_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If the fellowship moves during the regroup phase, exert an unbound Hobbit to place a Shadow card from your discard pile on top of your draw deck.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_116_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

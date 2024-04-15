@@ -39,7 +39,6 @@ public class Card_04_337_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3T
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Place your hand beneath your draw deck and draw 4 cards.
 		*/

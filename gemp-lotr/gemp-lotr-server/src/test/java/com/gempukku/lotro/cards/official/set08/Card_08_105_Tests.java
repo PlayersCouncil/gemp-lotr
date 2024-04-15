@@ -41,7 +41,6 @@ public class Card_08_105_Tests
 		 * Subtype: Troll
 		 * Strength: 18
 		 * Vitality: 4
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>. <b>Fierce</b>.<br>The twilight cost of this minion is -2 for each [sauron] minion stacked on a site.<br>Each time this minion wins a skirmish, you may play a besieger stacked on a site you control. That besieger is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
 		*/

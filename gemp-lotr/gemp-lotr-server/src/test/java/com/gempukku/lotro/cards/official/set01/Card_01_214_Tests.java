@@ -39,12 +39,13 @@ public class Card_01_214_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If a Nazgûl wins a skirmish, the Free Peoples player chooses to either exert the Ring-bearer or add a burden.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("In the Ringwraith's Wake", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

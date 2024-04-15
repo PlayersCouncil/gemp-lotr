@@ -56,6 +56,7 @@ public class Card_11_164_Tests
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.RING_BEARER));
 		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
 		assertTrue(scn.HasKeyword(card, Keyword.CAN_START_WITH_RING));
 		assertEquals(0, card.getBlueprint().getTwilightCost());

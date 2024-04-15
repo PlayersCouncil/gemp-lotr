@@ -39,7 +39,6 @@ public class Card_02_120_Tests
 		 * Shadow Number: 3
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 6
 		 * Game Text: <b>River</b>. <b>Sanctuary</b>. When the fellowship moves to Valley of the Silverlode, each Hobbit companion may heal.
 		*/

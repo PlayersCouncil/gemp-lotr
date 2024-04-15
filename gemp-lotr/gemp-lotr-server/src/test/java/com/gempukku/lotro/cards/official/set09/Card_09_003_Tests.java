@@ -41,7 +41,6 @@ public class Card_09_003_Tests
 		 * Subtype: Dwarf
 		 * Strength: 7
 		 * Vitality: 4
-
 		 * Game Text: <b>Damage +1</b>.<br>While you can spot 2 Dwarves, Durin III is twilight cost -2.<br>Durin III is strength +1 for each artifact and each possession he bears.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_04_046_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Plays to your support area.<br>When you play this condition, reveal the top 6 cards of your draw deck and stack them here.<br><b>Fellowship:</b> Spot a Dwarf and discard the top card of your draw deck to take a Free Peoples card stacked here into hand.
 		*/
 

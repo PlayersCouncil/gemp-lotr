@@ -39,7 +39,6 @@ public class Card_02_117_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> Play a [shire] ally to draw a card.
 		*/

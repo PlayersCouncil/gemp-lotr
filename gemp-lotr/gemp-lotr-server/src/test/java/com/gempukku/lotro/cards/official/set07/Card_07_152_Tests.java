@@ -33,7 +33,7 @@ public class Card_07_152_Tests
 		/**
 		 * Set: 7
 		 * Name: Mûmak Commander
-		 * Unique: False
+		 * Unique: True
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 8
@@ -41,7 +41,6 @@ public class Card_07_152_Tests
 		 * Subtype: Man
 		 * Strength: 16
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br>To play, spot a [raider] Man.<br>While you can spot 6 threats, each time this minion wins a skirmish, the companion he was skirmishing is killed.
 		*/
@@ -52,7 +51,7 @@ public class Card_07_152_Tests
 
 		assertEquals("Mûmak Commander", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());

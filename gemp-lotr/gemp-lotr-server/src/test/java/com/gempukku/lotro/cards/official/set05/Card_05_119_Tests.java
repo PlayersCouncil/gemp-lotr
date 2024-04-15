@@ -39,7 +39,6 @@ public class Card_05_119_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8T
 		 * Game Text: <b>Plains</b>. <b>Response:</b> If your mounted minion is about to take a wound, remove (2) to prevent that wound.
 		*/

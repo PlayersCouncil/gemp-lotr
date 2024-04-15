@@ -39,12 +39,13 @@ public class Card_01_142_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. To play, spot an Uruk-hai. Plays to your support area.<br>While the Ring-bearer is exhausted or you can spot 5 burdens, the move limit for this turn is -1 (to a minimum of 1).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Traitor's Voice", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

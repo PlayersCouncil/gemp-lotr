@@ -39,7 +39,6 @@ public class Card_09_029_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: While Gollum is at a mountain, river, or underground site, he is strength +2.<br><b>Regroup:</b> Spot Gollum to reveal your hand. Place all Shadow cards revealed beneath your draw deck. Discard this condition.
 		*/
 

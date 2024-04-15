@@ -40,7 +40,6 @@ public class Card_07_039_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Gandalf.<br>He is <b>damage +1</b>.<br><b>Skirmish:</b> If you have more cards in hand than each opponent, discard 2 cards from hand to make an opponent exert a minion.
 		*/
 

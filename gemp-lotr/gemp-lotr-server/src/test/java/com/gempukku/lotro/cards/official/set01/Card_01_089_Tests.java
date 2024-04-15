@@ -41,14 +41,14 @@ public class Card_01_089_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Ranger</b>.<br><b>Maneuver:</b> Exert Aragorn to make him <b>defender +1</b> until the regroup phase.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
 		assertEquals("Ranger of the North", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

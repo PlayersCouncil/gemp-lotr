@@ -41,7 +41,6 @@ public class Card_10_023_Tests
 		 * Subtype: Spider
 		 * Strength: 8
 		 * Vitality: 8
-
 		 * Site Number: 8
 		 * Game Text: <b>Enduring</b>. <b>Fierce</b>.<br>When you play Shelob, if you can spot Gollum, you may spot a companion. That companion cannot be assigned to a skirmish until the end of the turn.
 		*/

@@ -41,7 +41,6 @@ public class Card_08_036_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Game Text: <b>Knight</b>. <b>Archer</b>.<br>To play, spot 3 [gondor] companions.<br>While you can spot a fortification, Garrison of Gondor is <b>defender +1</b>.
 		*/
 

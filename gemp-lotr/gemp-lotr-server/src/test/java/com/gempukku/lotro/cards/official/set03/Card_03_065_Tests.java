@@ -41,7 +41,6 @@ public class Card_03_065_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: <b>Regroup:</b> Exert Orc Overseer twice to exhaust a companion (except the Ring-bearer).
 		*/

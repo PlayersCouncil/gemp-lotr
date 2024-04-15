@@ -41,7 +41,6 @@ public class Card_07_212_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 11
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br>While you can spot 6 companions, Úlairë Enquëa is <b>damage +1</b>.<br>Each time a companion is killed, you may exert Úlairë Enquëa to exert the Ring-bearer.
 		*/

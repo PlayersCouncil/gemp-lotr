@@ -39,7 +39,6 @@ public class Card_05_008_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Maneuver:</b> Exert a Dwarf companion to make each minion at a battleground lose all <b>damage</b> bonuses until the regroup phase.
 		*/
 

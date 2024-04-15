@@ -41,7 +41,6 @@ public class Card_10_050_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br>While the total number of other minions and twilight tokens is 3 or fewer, this minion is strength +3 and <b>fierce</b>.
 		*/

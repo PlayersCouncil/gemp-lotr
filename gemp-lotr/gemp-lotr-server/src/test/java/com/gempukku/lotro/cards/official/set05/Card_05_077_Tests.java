@@ -39,7 +39,6 @@ public class Card_05_077_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot a Southron. Plays to your support area.<br><b>Maneuver:</b> Discard this condition to add (1) for each Man with ambush you spot.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_03_084_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot a Nazgûl to reveal a card at random from the Free Peoples player's hand. Exert a companion bearing a ranged weapon X times, where X is the twilight cost of the card revealed.
 		*/
 

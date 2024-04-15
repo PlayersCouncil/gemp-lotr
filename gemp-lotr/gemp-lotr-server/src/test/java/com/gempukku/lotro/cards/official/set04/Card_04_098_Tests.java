@@ -39,7 +39,6 @@ public class Card_04_098_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Spell</b>.<br><b>Maneuver:</b> Exert Gandalf to wound each minion who has strength of 6 or less.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_04_098_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}

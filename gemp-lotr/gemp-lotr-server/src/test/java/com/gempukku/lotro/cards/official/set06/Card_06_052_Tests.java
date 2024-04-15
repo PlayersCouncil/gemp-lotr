@@ -39,7 +39,6 @@ public class Card_06_052_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Fortification</b>. Plays to your support area.<br>When you play this condition, you may spot a [gondor] Man to place 2 [gondor] tokens here.<br><b>Skirmish:</b> Discard this condition or remove a [gondor] token from here to make a [gondor] Man strength +1.
 		*/
 

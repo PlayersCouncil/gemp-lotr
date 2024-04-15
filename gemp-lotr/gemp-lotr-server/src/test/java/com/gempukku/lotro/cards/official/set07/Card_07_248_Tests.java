@@ -40,7 +40,6 @@ public class Card_07_248_Tests
 		 * Type: Possession
 		 * Subtype: Ranged weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a [rohan] Man.<br><b>Archery:</b> Discard this possession to make the fellowship archery total +1.
 		*/
 

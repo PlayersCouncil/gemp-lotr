@@ -39,7 +39,6 @@ public class Card_03_039_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Tale</b>.<br><b>Maneuver:</b> Exert a [gondor] companion to make that companion strength +3 and <b>defender +1</b> until the regroup phase.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_03_039_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}

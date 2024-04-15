@@ -41,7 +41,6 @@ public class Card_07_284_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Response:</b> If a companion is overwhelmed during a skirmish involving a [sauron] Orc and threat wounds are about to be placed, remove a threat to assign this minion to the Ring-bearer (even if the Ring-bearer is already assigned).
 		*/

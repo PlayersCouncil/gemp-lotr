@@ -41,7 +41,6 @@ public class Card_08_055_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Corsair</b>.<br><b>Skirmish:</b> If you have initiative, remove a [raider] token to make a corsair <b>fierce</b> until the regroup phase.
 		*/

@@ -41,7 +41,6 @@ public class Card_05_035_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Knight</b>.
 		*/
 

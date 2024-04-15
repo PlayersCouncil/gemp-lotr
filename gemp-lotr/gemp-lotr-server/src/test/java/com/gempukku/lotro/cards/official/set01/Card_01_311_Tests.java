@@ -41,14 +41,14 @@ public class Card_01_311_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Fellowship:</b> Exert Sam to remove a burden.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Sam", card.getBlueprint().getTitle());
 		assertEquals("Son of Hamfast", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

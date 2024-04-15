@@ -41,7 +41,6 @@ public class Card_10_004_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Skirmish:</b> Exert Aegnor to make a minion skirmishing an unbound [elven] companion strength -1 for each archer you spot.
 		*/
 

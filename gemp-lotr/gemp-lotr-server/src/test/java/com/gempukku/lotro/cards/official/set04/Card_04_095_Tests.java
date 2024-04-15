@@ -39,7 +39,6 @@ public class Card_04_095_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Spell</b>.<br><b>Response:</b> If you play a [gandalf] event, exert Gandalf twice to place that event in your hand instead of your discard pile.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_04_095_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

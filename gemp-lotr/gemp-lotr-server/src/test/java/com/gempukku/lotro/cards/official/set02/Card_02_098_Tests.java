@@ -39,7 +39,6 @@ public class Card_02_098_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Exert a companion to place a Free Peoples card from your discard pile beneath your draw deck (or 2 Free Peoples cards if that companion has the Frodo signet).
 		*/
 

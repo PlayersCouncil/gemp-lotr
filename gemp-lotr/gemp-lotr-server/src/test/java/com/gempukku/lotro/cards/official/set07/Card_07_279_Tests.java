@@ -41,7 +41,6 @@ public class Card_07_279_Tests
 		 * Subtype: Orc
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Skirmish:</b> Stack your besieger on a site you control to make Gorgoroth Troop strength +2.
 		*/

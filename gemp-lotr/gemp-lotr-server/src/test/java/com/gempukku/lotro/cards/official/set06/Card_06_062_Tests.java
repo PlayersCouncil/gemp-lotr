@@ -39,7 +39,6 @@ public class Card_06_062_Tests
 		 * Twilight Cost: 4
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Discard 4 [isengard] Orcs to wound a companion 4 times (except the Ring-bearer).
 		*/
 

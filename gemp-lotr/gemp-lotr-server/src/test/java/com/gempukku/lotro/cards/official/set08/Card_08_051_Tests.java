@@ -41,7 +41,6 @@ public class Card_08_051_Tests
 		 * Subtype: Man
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: <b>Corsair</b>. <b>Enduring</b>. <b>Fierce</b>.<br><b>Shadow:</b> Exert Castamir of Umbar and play a corsair to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		*/

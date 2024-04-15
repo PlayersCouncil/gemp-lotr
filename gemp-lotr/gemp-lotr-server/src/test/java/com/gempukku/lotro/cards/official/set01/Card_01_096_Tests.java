@@ -41,14 +41,14 @@ public class Card_01_096_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Ranger</b>.<br>Boromir is not overwhelmed unless his strength is tripled.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Boromir", card.getBlueprint().getTitle());
 		assertEquals("Lord of Gondor", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

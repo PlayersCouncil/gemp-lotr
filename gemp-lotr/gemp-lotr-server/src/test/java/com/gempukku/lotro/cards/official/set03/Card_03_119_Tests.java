@@ -39,7 +39,6 @@ public class Card_03_119_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3
 		 * Game Text: <b>Sanctuary</b>. When the fellowship moves to House of Elrond, the Free Peoples player may spot 2 Elves to remove a burden.
 		*/

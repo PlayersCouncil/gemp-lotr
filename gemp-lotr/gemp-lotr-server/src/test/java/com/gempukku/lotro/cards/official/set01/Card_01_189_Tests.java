@@ -39,12 +39,13 @@ public class Card_01_189_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If the Ring-bearer exerts or takes a wound, discard a card from the top of your draw deck for each [moria] minion you spot. For each Shadow card discarded in this way, add a burden (limit 3 burdens).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Lost to the Goblins", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

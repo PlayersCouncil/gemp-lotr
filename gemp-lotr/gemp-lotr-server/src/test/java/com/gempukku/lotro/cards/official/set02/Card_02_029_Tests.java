@@ -40,7 +40,6 @@ public class Card_02_029_Tests
 		 * Type: Possession
 		 * Subtype: Staff
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a Wizard.<br><b>Skirmish:</b> Exert bearer twice to make a minion strength -3.
 		*/
 

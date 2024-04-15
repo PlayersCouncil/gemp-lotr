@@ -41,7 +41,6 @@ public class Card_04_085_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: To play, spot an Elf.<br><b>Regroup:</b> Exert Thandronen to discard a minion stacked on a condition or stacked on a site.
 		*/
 

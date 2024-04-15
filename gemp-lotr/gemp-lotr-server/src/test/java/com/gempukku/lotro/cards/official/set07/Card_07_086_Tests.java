@@ -41,9 +41,7 @@ public class Card_07_086_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: Denethor is strength +1 for each other [gondor] Man you can spot (limit +4).
 		*/
 

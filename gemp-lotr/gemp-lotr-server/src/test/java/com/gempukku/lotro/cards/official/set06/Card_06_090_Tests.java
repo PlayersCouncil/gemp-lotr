@@ -39,7 +39,6 @@ public class Card_06_090_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Hand weapon
-
 		 * Game Text: Bearer must be a [rohan] companion.<br>Each time bearer wins a skirmish, you may exert a minion.<br><b>Response:</b> If bearer wins a skirmish, discard this possession to liberate a site.
 		*/
 

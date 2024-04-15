@@ -41,7 +41,6 @@ public class Card_04_206_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br>While you control a site, this minion is <b>damage +1</b>.
 		*/

@@ -41,7 +41,6 @@ public class Card_07_190_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may spot a Nazgûl to add 2 threats. The Free Peoples player may wound the Ring-bearer to prevent this.<br><b>Skirmish:</b> Remove a threat to make this minion strength +3.
 		*/

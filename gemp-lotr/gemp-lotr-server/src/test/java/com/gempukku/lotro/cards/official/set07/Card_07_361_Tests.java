@@ -39,7 +39,6 @@ public class Card_07_361_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9K
 		 * Game Text: <b>Shadow:</b> Remove a threat and spot your minion to draw a card.
 		*/

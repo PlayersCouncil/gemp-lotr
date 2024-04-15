@@ -39,7 +39,6 @@ public class Card_04_118_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Ranged weapon
-
 		 * Game Text: Bearer must be Faramir.<br>He is an <b>archer</b>.<br><b>Skirmish:</b> If Faramir is skirmishing a Man or a roaming minion, exert Faramir to wound that minion.
 		*/
 

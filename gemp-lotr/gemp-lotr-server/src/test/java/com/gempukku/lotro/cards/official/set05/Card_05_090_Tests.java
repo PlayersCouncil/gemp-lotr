@@ -41,7 +41,6 @@ public class Card_05_090_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: <b>Valiant</b>.<br><b>Regroup:</b> Exert this companion and spot a [rohan] possession to return that possession to hand.
 		*/
 

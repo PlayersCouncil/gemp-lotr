@@ -41,7 +41,6 @@ public class Card_03_020_Tests
 		 * Subtype: Elf
 		 * Strength: 4
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: To play, spot an Elf.<br><b>Skirmish:</b> Exert Golradir to make an Orc strength -1.
 		*/

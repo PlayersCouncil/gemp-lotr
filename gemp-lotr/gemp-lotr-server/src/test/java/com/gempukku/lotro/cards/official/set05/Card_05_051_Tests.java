@@ -41,7 +41,6 @@ public class Card_05_051_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Maneuver:</b> Spot 4 Free Peoples cultures and exert Gríma to return an unbound companion, and all cards on him or her, to their owners' hands.
 		*/

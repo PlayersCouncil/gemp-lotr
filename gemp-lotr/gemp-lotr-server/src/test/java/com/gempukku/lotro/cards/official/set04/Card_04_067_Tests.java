@@ -41,7 +41,6 @@ public class Card_04_067_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: To play, spot an Elf.<br><b>Skirmish:</b> Exert Fereveldir and remove an [elven] token from your condition to wound a minion Fereveldir is skirmishing.
 		*/
 

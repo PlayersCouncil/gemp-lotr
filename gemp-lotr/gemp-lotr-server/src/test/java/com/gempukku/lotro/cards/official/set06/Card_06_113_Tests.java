@@ -41,9 +41,7 @@ public class Card_06_113_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Regroup:</b> Discard Merry to heal a [gandalf] companion.
 		*/
 

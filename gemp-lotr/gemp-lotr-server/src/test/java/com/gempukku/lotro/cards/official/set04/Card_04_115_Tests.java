@@ -39,7 +39,6 @@ public class Card_04_115_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert a [gondor] Man to wound a minion once (or twice if that minion is an Uruk-hai).
 		*/
 

@@ -41,7 +41,6 @@ public class Card_07_021_Tests
 		 * Subtype: Elf
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Game Text: To play, spot Aragorn or an Elf.<br>At the start of each turn, you may exert Elrond to heal a character bearing an artifact.
 		*/
 

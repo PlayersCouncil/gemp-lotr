@@ -41,13 +41,14 @@ public class Card_01_280_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: Each time this minion wins a skirmish, the Free Peoples player discards 2 cards at random from hand.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Tower Lieutenant", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

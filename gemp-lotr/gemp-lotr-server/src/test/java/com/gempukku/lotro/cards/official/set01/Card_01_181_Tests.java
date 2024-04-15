@@ -41,13 +41,14 @@ public class Card_01_181_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may place a [moria] Orc from your discard pile beneath your draw deck.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Sneak", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

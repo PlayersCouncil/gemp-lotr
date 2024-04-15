@@ -39,7 +39,6 @@ public class Card_04_352_Tests
 		 * Shadow Number: 3
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 6T
 		 * Game Text: <b>Underground</b>. <b>Sanctuary</b>. <b>Maneuver:</b> Remove (2) and spot your Uruk-hai to make it <b>fierce</b> until the regroup phase.
 		*/

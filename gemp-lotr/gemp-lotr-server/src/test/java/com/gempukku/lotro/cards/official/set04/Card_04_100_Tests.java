@@ -40,7 +40,6 @@ public class Card_04_100_Tests
 		 * Type: Possession
 		 * Subtype: Mount
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Gandalf. Discard any hand weapon he bears. Gandalf may not bear a hand weapon.<br>At the start of each skirmish involving Gandalf, each minion skirmishing him must exert.
 		*/
 

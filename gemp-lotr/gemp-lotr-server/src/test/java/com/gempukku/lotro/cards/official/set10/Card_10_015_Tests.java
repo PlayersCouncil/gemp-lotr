@@ -39,7 +39,6 @@ public class Card_10_015_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time you lose initiative (except during the fellowship phase), you may spot a [gandalf] companion to choose an opponent who must discard one of his or her conditions.
 		*/
 

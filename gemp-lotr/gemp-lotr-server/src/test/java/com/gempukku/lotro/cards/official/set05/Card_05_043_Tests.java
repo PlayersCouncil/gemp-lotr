@@ -39,7 +39,6 @@ public class Card_05_043_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a [gondor] Man strength +2 (or +4 if skirmishing a minion bearing a [gondor] fortification).
 		*/
 

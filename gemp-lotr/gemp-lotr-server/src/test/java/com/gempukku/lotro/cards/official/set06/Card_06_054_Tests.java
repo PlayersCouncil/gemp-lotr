@@ -39,7 +39,6 @@ public class Card_06_054_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert 2 rangers to discard a minion (or 2 [wraith] minions).
 		*/
 

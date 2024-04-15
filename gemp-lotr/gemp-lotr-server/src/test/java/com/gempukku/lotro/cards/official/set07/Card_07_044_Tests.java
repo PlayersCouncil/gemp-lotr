@@ -39,7 +39,6 @@ public class Card_07_044_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: At the start of your regroup phase, you may discard 2 cards from hand to heal Gandalf.
 		*/
 

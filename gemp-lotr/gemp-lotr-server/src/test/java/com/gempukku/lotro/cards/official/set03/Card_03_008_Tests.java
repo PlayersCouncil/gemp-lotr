@@ -41,9 +41,7 @@ public class Card_03_008_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: While you can spot 3 [elven] allies whose home is site 3, each minion skirmishing Arwen is strength -3.
 		*/
 

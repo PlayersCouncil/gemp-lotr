@@ -39,12 +39,13 @@ public class Card_01_249_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each [sauron] Orc skirmishing a [gondor] character is strength +2.<br>Discard this condition if your [sauron] Orc loses a skirmish.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gleaming Spires Will Crumble", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

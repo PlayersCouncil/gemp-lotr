@@ -41,7 +41,6 @@ public class Card_10_081_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Damage +1</b>.
 		*/

@@ -40,7 +40,6 @@ public class Card_06_085_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a Nazgûl.<br>While bearer is Úlairë Toldëa, each time he wins a skirmish the Free Peoples player must discard a Free Peoples possession or a Free Peoples condition.
 		*/
 

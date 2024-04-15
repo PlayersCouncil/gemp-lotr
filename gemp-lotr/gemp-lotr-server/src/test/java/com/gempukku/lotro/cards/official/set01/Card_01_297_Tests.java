@@ -41,13 +41,14 @@ public class Card_01_297_Tests
 		 * Subtype: Hobbit
 		 * Strength: 2
 		 * Vitality: 2
-
 		 * Site Number: 1
 		 * Game Text: At the start of each of your turns, heal this ally.<br><b>Fellowship:</b> Exert this ally to heal another Hobbit ally whose home is site 1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Hobbit Party Guest", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

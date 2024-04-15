@@ -39,7 +39,6 @@ public class Card_06_075_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving an [isengard] Man, you may spot a possession to stack that possession here.
 		*/
 

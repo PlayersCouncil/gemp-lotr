@@ -39,7 +39,6 @@ public class Card_07_313_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [sauron] Orc.<br><b>Regroup:</b> Play a [sauron] condition to place a [sauron] token on this card.<br>While there are 3 tokens on this card, the Shadow has initiative, regardless of the Free Peoples player's hand.
 		*/
 

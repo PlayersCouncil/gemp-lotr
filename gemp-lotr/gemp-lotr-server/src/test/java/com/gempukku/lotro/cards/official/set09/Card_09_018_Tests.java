@@ -40,7 +40,6 @@ public class Card_09_018_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Merry.<br><b>Skirmish:</b> Exert Merry twice or discard this possession to wound a minion he is skirmishing. Any Shadow player may remove (1) to prevent this.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_07_015_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Bearer must be an [elven] companion.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Ancient Blade."<br><b>Regroup:</b> Discard this condition to discard a minion and reconcile your hand.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_04_150_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Archer</b>. <b>Damage +1</b>.<br><b>Archery:</b> Exert Elite Crossbowmen to make the Free Peoples player wound an unbound companion; this minion does not add to the minion archery total.
 		*/

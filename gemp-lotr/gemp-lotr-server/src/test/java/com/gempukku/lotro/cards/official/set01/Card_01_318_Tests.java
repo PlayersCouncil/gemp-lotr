@@ -39,12 +39,13 @@ public class Card_01_318_Tests
 		 * Twilight Cost: 0
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Fellowship</b> <i>or</i> &nbsp;<b>Regroup:</b> Exert 2 Hobbits and discard Thrór's Map to play the fellowship's next site (replacing opponent's site if necessary).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Thrór's Map", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

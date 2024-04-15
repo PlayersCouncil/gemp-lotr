@@ -39,7 +39,6 @@ public class Card_03_032_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Spell</b>.<br><b>Fellowship:</b> Spot Gandalf to shuffle up to 2 [gandalf] or up to 2 [shire] cards from your discard pile into your draw deck.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_03_032_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}

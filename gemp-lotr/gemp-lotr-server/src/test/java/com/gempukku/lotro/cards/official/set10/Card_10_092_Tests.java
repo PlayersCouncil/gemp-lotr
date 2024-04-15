@@ -41,7 +41,6 @@ public class Card_10_092_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>. <b>Fierce</b>.<br><b>Shadow:</b> Exert this minion and spot another [sauron] minion to control a site. If you cannot spot 3 Free Peoples cultures, the Free Peoples player may exert a companion to prevent this.
 		*/

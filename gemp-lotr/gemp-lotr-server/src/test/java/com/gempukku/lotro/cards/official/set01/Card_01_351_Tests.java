@@ -39,7 +39,6 @@ public class Card_01_351_Tests
 		 * Shadow Number: 3
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 6
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Exert an Elf to look at an opponent's hand.
 		*/

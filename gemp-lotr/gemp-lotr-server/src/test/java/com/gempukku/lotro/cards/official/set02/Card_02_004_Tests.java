@@ -39,9 +39,7 @@ public class Card_02_004_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be a Dwarf.<br><b>Skirmish:</b> Discard this condition to make bearer strength +1.
 		*/
 

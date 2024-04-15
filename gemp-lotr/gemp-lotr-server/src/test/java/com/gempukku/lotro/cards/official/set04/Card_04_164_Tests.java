@@ -41,7 +41,6 @@ public class Card_04_164_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 12
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br><b>Assignment:</b> Exert Orthanc Champion to assign it to an unbound companion. That companion may exert to prevent this.
 		*/

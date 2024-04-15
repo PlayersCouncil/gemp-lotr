@@ -39,7 +39,6 @@ public class Card_04_102_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Spell</b>.<br><b>Regroup:</b> Exert Gandalf to discard up to 2 wounded minions.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_04_102_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}

@@ -39,7 +39,6 @@ public class Card_10_111_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Spot 2 Hobbit companions to make a Shadow player discard a minion (or spot 4 Hobbit companions to make that player discard 2 minions).
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_111_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

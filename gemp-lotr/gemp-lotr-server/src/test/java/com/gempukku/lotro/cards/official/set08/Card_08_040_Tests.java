@@ -40,7 +40,6 @@ public class Card_08_040_Tests
 		 * Type: Possession
 		 * Subtype: Mount
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a knight.<br>Each time bearer wins a skirmish, you may wound a minion who is not assigned to a skirmish.
 		*/
 

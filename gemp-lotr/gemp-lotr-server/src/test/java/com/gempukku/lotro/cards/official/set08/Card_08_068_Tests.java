@@ -39,7 +39,6 @@ public class Card_08_068_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Exert a Nazgûl to make him strength +2 and <b>damage +1</b>. If the character he is skirmishing is killed, the Free Peoples player must place his or her hand beneath his or her draw deck.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_068_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

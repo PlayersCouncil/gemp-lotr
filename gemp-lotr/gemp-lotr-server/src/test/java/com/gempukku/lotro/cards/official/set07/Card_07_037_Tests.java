@@ -41,9 +41,7 @@ public class Card_07_037_Tests
 		 * Subtype: Wizard
 		 * Strength: 7
 		 * Vitality: 4
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Skirmish:</b> Place 3 cards from hand on top of your draw deck to make a minion skirmishing an unbound companion strength -3. Any Shadow player may place 3 cards from his or her hand on top of his or her draw deck to prevent this.
 		*/
 

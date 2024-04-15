@@ -39,7 +39,6 @@ public class Card_02_039_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert an Uruk-hai to discard an armor possession, helm possession, or shield possession (or all such Free Peoples possessions if you can spot 6 companions).
 		*/
 

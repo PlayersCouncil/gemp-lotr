@@ -39,7 +39,6 @@ public class Card_07_075_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If a minion is about to take a wound, spot Gollum to prevent that wound.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_075_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

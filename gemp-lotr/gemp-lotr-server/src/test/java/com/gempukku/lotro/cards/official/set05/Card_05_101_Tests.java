@@ -39,7 +39,6 @@ public class Card_05_101_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert 2 [sauron] Orcs. Plays to your support area.<br>The Shadow number of each site is +1 for each wound on a Hobbit (limit +3).
 		*/
 

@@ -39,12 +39,13 @@ public class Card_01_107_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Shield
-
 		 * Game Text: Bearer must be a Man.<br>The minion archery total is -1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Great Shield", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_06_089_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Regroup:</b> Exert a Nazgûl to place a [wraith] token on this card.<br><b>Shadow:</b> Remove 3 [wraith] tokens from here to add (2).
 		*/
 

@@ -41,7 +41,6 @@ public class Card_06_088_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br>Each time Úlairë Toldëa wins a skirmish, the Free Peoples player must exert a companion or add a burden.
 		*/

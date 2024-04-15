@@ -41,7 +41,6 @@ public class Card_04_122_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: <b>Ring-bound</b>. <b>Ranger</b>.<br>The site number of each minion assigned to skirmish a Ring-bound Man is +2.
 		*/
 

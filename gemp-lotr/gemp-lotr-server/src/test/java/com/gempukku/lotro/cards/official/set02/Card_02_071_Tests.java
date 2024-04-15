@@ -39,7 +39,6 @@ public class Card_02_071_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot a [moria] Orc. Plays on a Hobbit companion.<br>Bearer may be exerted only by Shadow cards.
 		*/
 

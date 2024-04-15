@@ -39,7 +39,6 @@ public class Card_07_262_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Play a besieger stacked on a site you control or remove a burden to play a [sauron] Orc from your discard pile.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_262_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

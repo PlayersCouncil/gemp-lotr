@@ -39,7 +39,6 @@ public class Card_03_011_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot an Elf to make each opponent discard a card from his or her hand. Draw a card for each card discarded in this way.
 		*/
 

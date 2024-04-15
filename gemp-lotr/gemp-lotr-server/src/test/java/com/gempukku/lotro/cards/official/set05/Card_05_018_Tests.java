@@ -39,7 +39,6 @@ public class Card_05_018_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Spell</b>.<br><b>Maneuver:</b> Spot 3 twilight tokens and exert Gandalf to wound a minion twice.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_05_018_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}

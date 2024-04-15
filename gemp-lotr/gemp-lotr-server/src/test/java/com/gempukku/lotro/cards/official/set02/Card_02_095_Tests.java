@@ -40,7 +40,6 @@ public class Card_02_095_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a [sauron] Orc.<br>Bearer is strength +2 while skirmishing a Man or Elf.
 		*/
 

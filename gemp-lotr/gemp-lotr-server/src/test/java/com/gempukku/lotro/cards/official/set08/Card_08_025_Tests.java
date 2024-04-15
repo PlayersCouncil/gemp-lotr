@@ -41,7 +41,6 @@ public class Card_08_025_Tests
 		 * Subtype: Spider
 		 * Strength: 8
 		 * Vitality: 8
-
 		 * Site Number: 8
 		 * Game Text: <b>Fierce</b>.<br>When you play Shelob, you may play a [gollum] possession from your draw deck.<br>Shelob is strength +3 for each minion stacked on a [gollum] possession.
 		*/

@@ -41,7 +41,6 @@ public class Card_06_095_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: To play, spot a [rohan] Man.<br><b>Skirmish:</b> Heal a minion skirmishing Hrethel to make Hrethel strength +3 (limit +3).
 		*/
 

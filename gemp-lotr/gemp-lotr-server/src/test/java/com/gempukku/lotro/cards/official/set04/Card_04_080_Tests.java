@@ -41,7 +41,6 @@ public class Card_04_080_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Game Text: To play, spot an Elf.<br>The twilight cost of each ranged weapon played on Ordulus is -1.
 		*/
 

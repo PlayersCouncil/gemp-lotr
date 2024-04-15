@@ -39,7 +39,6 @@ public class Card_10_017_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If the fellowship moves during the regroup phase, exert your Wizard to discard each minion.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_017_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

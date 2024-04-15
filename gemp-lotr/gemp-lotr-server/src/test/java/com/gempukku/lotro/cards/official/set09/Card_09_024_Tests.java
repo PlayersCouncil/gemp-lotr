@@ -39,9 +39,7 @@ public class Card_09_024_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Vitality: 1
-
 		 * Game Text: To play, spot an Ent. Bearer must be a companion. Limit 1 per bearer.<br><b>Skirmish:</b> Exert bearer to make him or her <b>damage +1</b>.
 		*/
 

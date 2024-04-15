@@ -39,9 +39,7 @@ public class Card_09_034_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Hand weapon
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be a [gondor] Man.<br>If bearer is Elendil or Isildur, he is strength +1 for each [gondor] artifact you can spot (limit +6).<br><b>Response:</b> If bearer is about to take a wound, exert 2 [gondor] Men to prevent that.
 		*/
 

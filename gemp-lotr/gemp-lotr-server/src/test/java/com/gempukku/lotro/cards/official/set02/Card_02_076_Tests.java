@@ -39,7 +39,6 @@ public class Card_02_076_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot Frodo and a Nazgûl. Plays on Sam.<br>Sam's game text does not apply.
 		*/
 

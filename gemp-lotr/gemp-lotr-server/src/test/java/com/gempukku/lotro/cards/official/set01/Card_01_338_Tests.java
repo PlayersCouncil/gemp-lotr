@@ -39,7 +39,6 @@ public class Card_01_338_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3
 		 * Game Text: <b>River</b>. <b>Sanctuary</b>. The twilight cost of the first Nazgûl played to Ford of Bruinen each turn is -5.
 		*/

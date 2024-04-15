@@ -41,7 +41,6 @@ public class Card_05_097_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: When you play a [sauron] condition, you may exert this minion and remove (2) to draw a card.
 		*/

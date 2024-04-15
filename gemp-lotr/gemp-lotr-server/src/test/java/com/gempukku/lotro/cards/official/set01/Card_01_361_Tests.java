@@ -39,7 +39,6 @@ public class Card_01_361_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9
 		 * Game Text: The twilight cost of each [isengard] minion is -1.
 		*/

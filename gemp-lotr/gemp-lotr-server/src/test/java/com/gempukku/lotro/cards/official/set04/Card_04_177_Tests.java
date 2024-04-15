@@ -40,7 +40,6 @@ public class Card_04_177_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 3
-
 		 * Game Text: Bearer must be an Uruk-hai.<br><b>Shadow:</b> If bearer is Uglúk, exert it and discard a minion from hand to play a minion. Its twilight cost is -3.
 		*/
 

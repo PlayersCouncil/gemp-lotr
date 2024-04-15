@@ -39,7 +39,6 @@ public class Card_07_334_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1K
 		 * Game Text: Each [gondor] companion is <b>defender +1</b> until the end of the turn.
 		*/

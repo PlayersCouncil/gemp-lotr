@@ -39,7 +39,6 @@ public class Card_04_107_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert an Ent. Plays on that Ent.<br><b>Response:</b> If an [isengard] minion is killed, discard this condition to reveal the top 10 cards of an opponent's draw deck. Discard 1 Shadow card and 1 Free Peoples card revealed. Your opponent reshuffles that deck.
 		*/
 

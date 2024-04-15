@@ -39,7 +39,6 @@ public class Card_05_034_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Discard all Shadow cards borne by a minion bearing a [gondor] fortification.
 		*/
 

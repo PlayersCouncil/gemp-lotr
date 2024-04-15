@@ -41,7 +41,6 @@ public class Card_07_277_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Shadow:</b> Discard 2 cards from hand to play a [sauron] Orc stacked on a site you control (discard 1 card from hand instead if that Orc is a besieger).
 		*/

@@ -41,7 +41,6 @@ public class Card_04_244_Tests
 		 * Subtype: Man
 		 * Strength: 16
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. To play, spot a [raider] Man.<br><b>Regroup:</b> Exert Regiment of Haradrim twice to take control of a site.
 		*/

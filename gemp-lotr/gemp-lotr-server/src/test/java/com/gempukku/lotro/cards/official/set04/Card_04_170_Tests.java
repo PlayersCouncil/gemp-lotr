@@ -39,7 +39,6 @@ public class Card_04_170_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time the Free Peoples player assigns an ally to a skirmish, you may play an [isengard] minion from your discard pile. That minion's twilight cost is -2.
 		*/
 

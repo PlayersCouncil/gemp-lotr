@@ -41,7 +41,6 @@ public class Card_03_066_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 5 burdens and exert Orthanc Berserker twice to exhaust a companion (except the Ring-bearer).
 		*/

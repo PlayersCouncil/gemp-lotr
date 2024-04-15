@@ -39,7 +39,6 @@ public class Card_04_045_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot a Dwarf to take a Free Peoples card stacked on a [dwarven] condition into hand.
 		*/
 

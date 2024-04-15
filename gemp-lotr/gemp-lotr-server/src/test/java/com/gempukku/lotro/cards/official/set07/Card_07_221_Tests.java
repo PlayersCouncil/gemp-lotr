@@ -41,7 +41,6 @@ public class Card_07_221_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br>When you play The Witch-king, you may remove a threat to take a [wraith] card into hand from your discard pile.<br>The Ring-bearer cannot take threat wounds.
 		*/

@@ -41,9 +41,7 @@ public class Card_04_316_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Ring-bound</b>.<br><b>Response:</b> If a Shadow card is about to add any number of burdens, spot Frodo and exert Sam to prevent this.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
 

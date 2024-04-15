@@ -39,7 +39,6 @@ public class Card_05_117_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Play Sméagol from your discard pile to heal each Ring-bound Hobbit twice.
 		*/
 

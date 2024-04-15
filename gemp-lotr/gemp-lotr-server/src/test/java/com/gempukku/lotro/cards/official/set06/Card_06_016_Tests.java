@@ -39,7 +39,6 @@ public class Card_06_016_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Reveal the top card of your draw deck to make a minion skirmishing an Elf strength -X, where X is the twilight cost of the revealed card.
 		*/
 

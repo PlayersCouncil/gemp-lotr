@@ -39,7 +39,6 @@ public class Card_08_059_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: When you play this possession, you may add a [raider] token here.<br>While you can spot 6 [raider] tokens and a [raider] Man, the Shadow has initiative, regardless of the Free Peoples player's hand.<br><b>Regroup:</b> Add (1) for each [raider] token you can spot. Discard this possession.
 		*/
 

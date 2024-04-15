@@ -39,7 +39,6 @@ public class Card_04_241_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a [raider] Man strength +3 (or +5 if you spot 6 companions).
 		*/
 

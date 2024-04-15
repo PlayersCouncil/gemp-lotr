@@ -41,7 +41,6 @@ public class Card_02_085_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Twilight</b>.<br>Return to Its Master may not be played.<br>Each time The Witch-king wins a skirmish, you may exert him to wound the Ring-bearer twice.
 		*/

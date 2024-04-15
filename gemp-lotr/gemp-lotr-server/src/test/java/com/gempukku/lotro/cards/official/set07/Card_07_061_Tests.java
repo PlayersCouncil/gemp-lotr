@@ -39,7 +39,6 @@ public class Card_07_061_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Spot Gollum or Sméagol to make a Nazgûl, [sauron] minion, or [gollum] minion strength +2.<br>If you have initiative, you may play this event from your discard pile; place it under your draw deck instead of discarding it.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_061_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

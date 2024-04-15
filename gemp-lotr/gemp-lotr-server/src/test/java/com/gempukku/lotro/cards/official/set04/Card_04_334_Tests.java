@@ -39,7 +39,6 @@ public class Card_04_334_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2T
 		 * Game Text: Each [dunland] Man may not take wounds during the archery phase.
 		*/

@@ -39,7 +39,6 @@ public class Card_07_074_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Play Gollum from your discard pile to add (1) for each threat you spot.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_074_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

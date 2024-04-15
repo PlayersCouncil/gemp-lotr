@@ -41,7 +41,6 @@ public class Card_05_100_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -3.<br><b>Shadow:</b> Exert Grishnákh twice and spot another [sauron] Orc to draw 3 cards. The Free Peoples player may add 2 burdens to prevent this.
 		*/

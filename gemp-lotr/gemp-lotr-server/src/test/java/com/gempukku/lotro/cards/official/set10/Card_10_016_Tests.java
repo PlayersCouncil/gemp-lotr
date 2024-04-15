@@ -39,7 +39,6 @@ public class Card_10_016_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: Exert your Wizard to choose a number. Make each minion with that twilight cost strength -2 until the regroup phase.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_016_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

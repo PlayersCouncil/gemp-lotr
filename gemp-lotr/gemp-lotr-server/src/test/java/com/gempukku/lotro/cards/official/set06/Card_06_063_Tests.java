@@ -39,7 +39,6 @@ public class Card_06_063_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a regroup action discards an [isengard] Orc, you may stack that Orc on this card.<br><b>Shadow:</b> Discard 2 cards stacked here and remove (1) to play an [isengard] Orc from your discard pile.
 		*/
 

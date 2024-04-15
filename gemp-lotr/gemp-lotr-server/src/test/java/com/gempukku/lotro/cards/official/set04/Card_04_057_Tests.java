@@ -39,7 +39,6 @@ public class Card_04_057_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a Dwarf wins a skirmish, you may place a [dwarven] token on this card.<br><b>Skirmish:</b> Make an unbound companion strength +1 for each [dwarven] token here (limit +3). Discard this condition.
 		*/
 

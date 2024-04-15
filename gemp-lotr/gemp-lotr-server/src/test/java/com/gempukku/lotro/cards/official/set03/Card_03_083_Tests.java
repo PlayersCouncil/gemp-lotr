@@ -39,7 +39,6 @@ public class Card_03_083_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time the fellowship moves, add (1) for each burden you can spot.<br>At the end of each of your Shadow phases, exert a Nazgûl or discard this condition.
 		*/
 

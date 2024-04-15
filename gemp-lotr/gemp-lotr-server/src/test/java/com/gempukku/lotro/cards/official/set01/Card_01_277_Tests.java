@@ -39,12 +39,13 @@ public class Card_01_277_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Exert a [sauron] Orc to discard a Free Peoples condition.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Shadow's Reach", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

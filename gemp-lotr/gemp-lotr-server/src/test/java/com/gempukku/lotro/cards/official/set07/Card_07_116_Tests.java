@@ -41,7 +41,6 @@ public class Card_07_116_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Ranger</b>.<br><b>Regroup:</b> Discard 2 cards from hand to exhaust a minion.
 		*/
 

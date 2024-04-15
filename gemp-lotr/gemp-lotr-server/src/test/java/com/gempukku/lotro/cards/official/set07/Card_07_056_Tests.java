@@ -39,7 +39,6 @@ public class Card_07_056_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Stealth</b>.<br>Bearer must be Sméagol.<br>If Sméagol is about to be killed in a skirmish, he is discarded instead.
 		*/
 

@@ -39,18 +39,21 @@ public class Card_01_123_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Spell</b>. <b>Weather</b>.<br><b>Maneuver:</b> Exert an [isengard] minion and spot 5 companions to discard an exhausted companion (except the Ring-bearer).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Caradhras Has Not Forgiven Us", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
+		assertTrue(scn.HasKeyword(card, Keyword.WEATHER));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}

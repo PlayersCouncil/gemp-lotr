@@ -41,7 +41,6 @@ public class Card_05_025_Tests
 		 * Subtype: 
 		 * Strength: 5
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: Gollum is strength +1 for each burden.<br>Each time Gollum wins a skirmish, you may add a burden.
 		*/

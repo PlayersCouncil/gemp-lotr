@@ -39,7 +39,6 @@ public class Card_07_342_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4K
 		 * Game Text: <b>Skirmish:</b> Spot your minion and remove 2 burdens to make that minion <b>damage +1</b>.
 		*/

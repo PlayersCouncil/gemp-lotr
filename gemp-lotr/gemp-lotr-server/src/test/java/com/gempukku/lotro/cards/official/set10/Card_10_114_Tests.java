@@ -39,7 +39,6 @@ public class Card_10_114_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 [shire] companions.<br>Each time a minion is played, you may exert a Hobbit companion to exert that minion (limit once per turn).
 		*/
 

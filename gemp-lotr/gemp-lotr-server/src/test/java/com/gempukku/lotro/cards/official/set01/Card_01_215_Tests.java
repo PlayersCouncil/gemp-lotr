@@ -39,18 +39,20 @@ public class Card_01_215_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Search</b>.<br><b>Shadow:</b> Spot X Nazgûl to reveal the top X cards of your draw deck. Take into your hand all [wraith] cards revealed and discard the rest.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Master's Will", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SEARCH));
 		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}

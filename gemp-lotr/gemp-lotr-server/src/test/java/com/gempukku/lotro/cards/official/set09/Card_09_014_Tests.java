@@ -42,7 +42,6 @@ public class Card_09_014_Tests
 		 * Strength: 3
 		 * Vitality: 3
 		 * Resistance: 3
-
 		 * Game Text: While Galadriel bears an artifact or The One Ring, she is resistance +1 for each [elven] companion you can spot.
 		*/
 

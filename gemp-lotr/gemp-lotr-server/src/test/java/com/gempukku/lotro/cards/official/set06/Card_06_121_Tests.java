@@ -41,9 +41,7 @@ public class Card_06_121_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Ring-bound</b>. <b>Ranger</b>.<br>If Faramir is in your starting fellowship, his twilight cost is -1.<br><b>Fellowship:</b> Play a ranger to heal a Ring-bound companion.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_07_170_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Archer</b>.<br>While you have initiative, the Ring-bearer cannot take wounds during the archery phase and this minion is <b>ambush</b> (8).
 		*/

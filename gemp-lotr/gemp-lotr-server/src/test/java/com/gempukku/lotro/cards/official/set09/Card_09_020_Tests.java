@@ -39,9 +39,7 @@ public class Card_09_020_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Ring
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Galadriel.<br><b>Maneuver:</b> Heal 2 companions and place up to 2 cards from your hand on top of your draw deck. Discard this artifact.
 		*/
 

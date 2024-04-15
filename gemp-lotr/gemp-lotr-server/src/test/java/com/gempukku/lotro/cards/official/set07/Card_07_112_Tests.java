@@ -39,7 +39,6 @@ public class Card_07_112_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: When you play this condition, place a [gondor] token here for each of the following characters you can spot: Aragorn, Boromir, Denethor or Faramir.<br><b>Skirmish:</b> Remove a token from here or discard this condition to make a [gondor] companion strength +1 and <b>damage +1</b>.
 		*/
 

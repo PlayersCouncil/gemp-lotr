@@ -39,7 +39,6 @@ public class Card_03_042_Tests
 		 * Twilight Cost: 0
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: Bearer must be Boromir.<br><b>Maneuver:</b> Exert Boromir and spot an ally. Until the regroup phase, that ally is strength +3 and participates in archery fire and skirmishes.
 		*/
 

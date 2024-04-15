@@ -41,7 +41,6 @@ public class Card_06_072_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: While you can spot a companion bearing an [isengard] condition, this minion is strength +2.
 		*/

@@ -39,7 +39,6 @@ public class Card_01_325_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> Spot Gandalf to play Gandalf's Cart from your draw deck.
 		*/

@@ -39,7 +39,6 @@ public class Card_06_053_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a [gondor] Man strength +2 (and exert a minion if you spot a [rohan] token).
 		*/
 

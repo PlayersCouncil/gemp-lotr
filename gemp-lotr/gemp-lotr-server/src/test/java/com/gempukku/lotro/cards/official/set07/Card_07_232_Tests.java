@@ -39,7 +39,6 @@ public class Card_07_232_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Mount
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br><b>Regroup:</b> If bearer is Éomer, exert him to discard a condition. Any Shadow player may remove (1) to prevent this.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_03_099_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: For each card in your hand, this minion is strength +1.
 		*/

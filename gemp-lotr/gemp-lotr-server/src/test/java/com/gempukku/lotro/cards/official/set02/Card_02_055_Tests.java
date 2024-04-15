@@ -39,7 +39,6 @@ public class Card_02_055_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each unique [moria] minion is strength +1.<br><b>Shadow:</b> Spot an opponent's site to replace it with your marsh or underground site of the same number.
 		*/
 

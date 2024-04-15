@@ -39,7 +39,6 @@ public class Card_01_337_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3
 		 * Game Text: <b>Sanctuary</b>. When the fellowship moves from Council Courtyard, remove (2).
 		*/

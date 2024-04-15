@@ -39,9 +39,7 @@ public class Card_09_019_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Ring
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Círdan or Gandalf.<br><b>Fellowship:</b> Remove X culture tokens, where X is equal to bearer's vitality. Discard this artifact.
 		*/
 

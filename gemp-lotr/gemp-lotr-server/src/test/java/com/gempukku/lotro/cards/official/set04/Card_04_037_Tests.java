@@ -39,7 +39,6 @@ public class Card_04_037_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If a [dunland] Man wins a skirmish, make him <b>fierce</b> and strength +4 until the regroup phase.
 		*/
 

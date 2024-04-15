@@ -41,7 +41,6 @@ public class Card_10_027_Tests
 		 * Subtype: Wraith
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Enduring</b>. To play, add a threat.<br>When you play this companion, exert him twice.
 		*/
 

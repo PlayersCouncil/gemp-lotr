@@ -39,7 +39,6 @@ public class Card_07_343_Tests
 		 * Shadow Number: 4
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4K
 		 * Game Text: <b>Plains</b>. <b>Archery:</b> Spot your minion and remove 3 burdens to make the minion archery total +3.
 		*/

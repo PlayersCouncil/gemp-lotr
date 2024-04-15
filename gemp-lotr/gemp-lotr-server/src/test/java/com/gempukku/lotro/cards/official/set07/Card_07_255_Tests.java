@@ -41,9 +41,7 @@ public class Card_07_255_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: While you can spot a [rohan] Man, Théoden's twilight cost is -1.<br><b>Fellowship:</b> If the twilight pool has fewer than 2 twilight tokens, play a [rohan] possession on Théoden and add (2) to heal another [rohan] companion.
 		*/
 

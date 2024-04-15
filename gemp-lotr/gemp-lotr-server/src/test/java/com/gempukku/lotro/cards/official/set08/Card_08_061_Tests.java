@@ -39,7 +39,6 @@ public class Card_08_061_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: While you can spot a [raider] minion at site 4[K], the Shadow has initiative, regardless of the Free Peoples player's hand.<br><b>Response:</b> If a companion is played, discard a [raider] card from hand to add (5). Discard this condition.
 		*/
 

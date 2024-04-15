@@ -41,7 +41,6 @@ public class Card_07_292_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Remove 3 threats to make a [sauron] minion strength +8.
 		*/

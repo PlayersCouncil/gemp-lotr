@@ -39,7 +39,6 @@ public class Card_04_008_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a [dunland] Man strength +1 for each companion you spot.
 		*/
 

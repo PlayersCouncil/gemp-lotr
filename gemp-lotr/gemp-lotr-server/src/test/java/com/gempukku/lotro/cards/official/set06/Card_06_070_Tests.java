@@ -41,7 +41,6 @@ public class Card_06_070_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Regroup:</b> If stacked on an [isengard] card, discard this card and remove (2) to exhaust a companion.
 		*/

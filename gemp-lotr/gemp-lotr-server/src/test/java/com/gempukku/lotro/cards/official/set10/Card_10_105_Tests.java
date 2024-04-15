@@ -39,7 +39,6 @@ public class Card_10_105_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: If a Hobbit companion is not assigned to a skirmish, exert that Hobbit to have him or her replace a companion (except the Ring-bearer) in a skirmish.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_105_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

@@ -39,12 +39,13 @@ public class Card_01_224_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If the Ring-bearer wears The One Ring at the end of a skirmish phase, cancel all remaining assignments and assign a Nazgûl to skirmish the Ring-bearer; The One Ring's game text does not apply during this skirmish.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Return to Its Master", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

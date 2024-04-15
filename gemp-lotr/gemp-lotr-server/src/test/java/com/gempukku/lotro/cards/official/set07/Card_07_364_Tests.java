@@ -41,9 +41,7 @@ public class Card_07_364_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: While you cannot spot 4 threats, Aragorn is strength +1 for each threat.<br><b>Regroup:</b> Exert Aragorn twice to remove 3 threats.
 		*/
 

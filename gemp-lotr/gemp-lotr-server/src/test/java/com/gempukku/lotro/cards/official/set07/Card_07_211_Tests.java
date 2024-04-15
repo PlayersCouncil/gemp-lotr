@@ -41,7 +41,6 @@ public class Card_07_211_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br>When you play Úlairë Cantëa, add a threat for each companion over 4.<br><b>Maneuver:</b> Remove 2 threats and spot another [wraith] minion to discard a possession.
 		*/

@@ -14,50 +14,51 @@ import static org.junit.Assert.*;
 // Wielder of the Flame
 public class Card_10_030_Tests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new GenericCardTestHelper(
                 new HashMap<>() {{
                     put("endgame", "10_30");
                     put("aragorn", "1_89");
 
                     put("troop", "1_143");
                 }}
-        );
-    }
+		);
+	}
 
-    @Test
-    public void EndoftheGameStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void EndoftheGameStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
-        /**
-         * Set: 10
-         * Name: End of the Game
-         * Unique: False
-         * Side: Free Peoples
-         * Culture: Gondor
-         * Twilight Cost: 0
-         * Type: Event
-         * Subtype: Skirmish
+		/**
+		 * Set: 10
+		 * Name: End of the Game
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Skirmish
          * Game Text: Make an exhausted [GONDOR] companion strength +2. If that companion wins this skirmish, heal that
          *   companion or make him or her damage +1.
-         */
+		*/
 
-        var scn = GetScenario();
+		var scn = GetScenario();
 
         var card = scn.GetFreepsCard("endgame");
 
-        assertEquals("End of the Game", card.getBlueprint().getTitle());
-        assertNull(card.getBlueprint().getSubtitle());
-        assertFalse(card.getBlueprint().isUnique());
-        assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-        assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-        assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertEquals(0, card.getBlueprint().getTwilightCost());
-    }
+		assertEquals("End of the Game", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
+	}
 
     @Test
     public void DoesNotWorkIfNoExhaustedGondorCompanions() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        var scn = GetScenario();
+		//Pre-game setup
+		var scn = GetScenario();
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
@@ -68,7 +69,7 @@ public class Card_10_030_Tests
         var troop = scn.GetShadowCard("troop");
         scn.ShadowMoveCharToTable(troop);
 
-        scn.StartGame();
+		scn.StartGame();
 
         scn.AddWoundsToChar(frodo, 3);
 
@@ -190,5 +191,5 @@ public class Card_10_030_Tests
         scn.FreepsChooseMultipleChoiceOption("damage +1");
         assertEquals(3, scn.GetWoundsOn(aragorn));
         assertEquals(2, scn.GetWoundsOn(troop));
-    }
+	}
 }

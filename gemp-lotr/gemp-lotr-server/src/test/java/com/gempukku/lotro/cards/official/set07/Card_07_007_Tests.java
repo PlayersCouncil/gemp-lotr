@@ -41,9 +41,7 @@ public class Card_07_007_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Damage +1</b>.<br><b>Response:</b> If a [dwarven] condition is about to be discarded by an opponent, exert a Dwarf or discard a [dwarven] card from hand to prevent that.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_10_029_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: For each [gondor] companion you spot, reveal 1 card at random from a Shadow player's hand. Choose a revealed Shadow card to be discarded, then its owner draws a card.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_029_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

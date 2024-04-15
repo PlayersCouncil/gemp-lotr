@@ -39,7 +39,6 @@ public class Card_10_106_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: If there are 4 or more [shire] cards in your discard pile, make a Hobbit strength +1 for each Hobbit you can spot.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_106_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

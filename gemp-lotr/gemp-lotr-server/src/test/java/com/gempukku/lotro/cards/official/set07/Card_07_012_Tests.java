@@ -39,7 +39,6 @@ public class Card_07_012_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Regroup:</b> Exert a Dwarf companion to stack a card from your discard pile here.<br><b>Skirmish:</b> Wound a minion skirmishing a Dwarf once for each [dwarven] card stacked here. Discard this condition.
 		*/
 

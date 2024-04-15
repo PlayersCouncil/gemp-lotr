@@ -39,7 +39,6 @@ public class Card_05_094_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Discard this condition to make a mounted [rohan] Man strength +3 (and heal that Man if at a plains).
 		*/
 

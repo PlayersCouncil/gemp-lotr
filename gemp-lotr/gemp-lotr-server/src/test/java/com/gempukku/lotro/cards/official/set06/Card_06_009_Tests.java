@@ -39,7 +39,6 @@ public class Card_06_009_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert Gimli twice to make him and each Elf companion strength +3 until the regroup phase.
 		*/
 

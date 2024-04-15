@@ -39,7 +39,6 @@ public class Card_04_029_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While a [dunland] Man is stacked on a site, the Shadow number of each site is +5.
 		*/
 

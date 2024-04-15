@@ -39,7 +39,6 @@ public class Card_10_051_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If a Free Peoples possession is played, spot a [raider] card to discard that possession. If that possession was a [gondor] or [rohan] possession, wound an unbound Man.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_051_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

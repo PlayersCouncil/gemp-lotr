@@ -39,7 +39,6 @@ public class Card_03_054_Tests
 		 * Twilight Cost: 4
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot an [isengard] Orc. Plays to your support area.<br><b>Shadow:</b> Discard this condition to add (3).
 		*/
 

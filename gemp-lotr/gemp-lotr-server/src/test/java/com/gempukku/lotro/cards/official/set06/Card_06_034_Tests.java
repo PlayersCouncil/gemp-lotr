@@ -39,7 +39,6 @@ public class Card_06_034_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Exert an Ent to make him strength +1 for each Ent you spot (limit +4).
 		*/
 

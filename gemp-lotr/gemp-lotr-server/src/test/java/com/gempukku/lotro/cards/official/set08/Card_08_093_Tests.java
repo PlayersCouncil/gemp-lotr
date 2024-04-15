@@ -39,7 +39,6 @@ public class Card_08_093_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Regroup:</b> Discard a [sauron] minion, spot a companion (except the Ring-bearer), and remove X burdens, where X is that companion's vitality, to return that companion to its owner's hand.
 		*/
 

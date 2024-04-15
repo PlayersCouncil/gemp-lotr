@@ -39,9 +39,7 @@ public class Card_03_023_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Ring
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Galadriel.<br>At the start of each regroup phase, you may discard up to 2 cards from hand to draw the same number of cards.
 		*/
 

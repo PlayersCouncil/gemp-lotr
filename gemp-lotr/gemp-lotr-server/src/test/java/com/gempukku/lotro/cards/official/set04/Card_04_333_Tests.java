@@ -39,7 +39,6 @@ public class Card_04_333_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2T
 		 * Game Text: <b>Plains</b>. At the start of each fellowship phase, heal up to 3 wounds from companions.
 		*/

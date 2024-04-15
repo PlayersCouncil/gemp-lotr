@@ -39,7 +39,6 @@ public class Card_06_008_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If a [dunland] Man wins a skirmish, discard all conditions.
 		*/
 

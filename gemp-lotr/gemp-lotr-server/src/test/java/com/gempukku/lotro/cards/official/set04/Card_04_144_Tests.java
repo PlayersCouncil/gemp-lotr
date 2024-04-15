@@ -39,7 +39,6 @@ public class Card_04_144_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Shadow:</b> If you control a site, play an Uruk-hai to discard a Free Peoples condition.
 		*/
 

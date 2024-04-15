@@ -39,7 +39,6 @@ public class Card_08_118_Tests
 		 * Shadow Number: 4
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4K
 		 * Game Text: <b>Underground</b>. <b>Shadow:</b> Remove 2 burdens to play an enduring minion from your draw deck or discard pile.
 		*/

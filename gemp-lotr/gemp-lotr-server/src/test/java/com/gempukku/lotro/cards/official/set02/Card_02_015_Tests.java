@@ -39,7 +39,6 @@ public class Card_02_015_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Exert a Dwarf to make an opponent draw 2 cards. That player then chooses to either discard 2 Shadow cards from hand or skip his or her next Shadow phase.
 		*/
 

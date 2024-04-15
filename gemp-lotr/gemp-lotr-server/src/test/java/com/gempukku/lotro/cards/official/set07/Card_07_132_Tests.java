@@ -41,7 +41,6 @@ public class Card_07_132_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br>While you can spot 2 threats, this minion is <b>damage +1</b>.
 		*/

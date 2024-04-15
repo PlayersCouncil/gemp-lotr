@@ -39,12 +39,13 @@ public class Card_01_073_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Fellowship:</b> Stack a Free Peoples artifact (or possession) from hand on this card, or play a card stacked here as if played from hand.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gandalf's Cart", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

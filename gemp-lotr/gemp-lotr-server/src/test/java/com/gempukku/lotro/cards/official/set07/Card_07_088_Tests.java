@@ -41,7 +41,6 @@ public class Card_07_088_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: At the start of the regroup phase, if you have only 4 cards in hand, you may spot another [gondor] Man to discard a minion.
 		*/
 

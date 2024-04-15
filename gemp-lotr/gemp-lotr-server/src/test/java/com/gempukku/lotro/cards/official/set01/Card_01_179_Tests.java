@@ -41,13 +41,14 @@ public class Card_01_179_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may play a weapon from your discard pile on your [moria] Orc.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Scavengers", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

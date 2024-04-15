@@ -41,7 +41,6 @@ public class Card_07_172_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br>While you can spot 2 threats, this minion is an <b>archer</b>.<br>While you can spot 3 threats, this minion is <b>fierce</b>.<br>While you can spot 4 threats, this minion is <b>damage +1</b>.
 		*/

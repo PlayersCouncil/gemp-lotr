@@ -41,14 +41,14 @@ public class Card_01_051_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Archer</b>.<br>While skirmishing a Nazgûl, Legolas is strength +3.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Legolas", card.getBlueprint().getTitle());
 		assertEquals("Prince of Mirkwood", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

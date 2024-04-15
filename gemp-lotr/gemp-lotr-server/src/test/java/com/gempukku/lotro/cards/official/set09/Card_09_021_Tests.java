@@ -40,7 +40,6 @@ public class Card_09_021_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Pippin.<br><b>Skirmish:</b> Exert Pippin twice or discard this possession to wound a minion an Elf is skirmishing. Any Shadow player may remove (1) to prevent this.
 		*/
 

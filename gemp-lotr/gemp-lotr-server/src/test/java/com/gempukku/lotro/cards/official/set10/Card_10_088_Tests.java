@@ -41,7 +41,6 @@ public class Card_10_088_Tests
 		 * Subtype: Orc
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Besieger</b>.<br>When you play Gothmog, the Free Peoples player must wound a companion for each site you control.<br>While you control a site, Gothmog is <b>fierce</b>.
 		*/

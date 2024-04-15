@@ -39,7 +39,6 @@ public class Card_04_088_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time Gandalf wins a skirmish, you may place a [gandalf] token here.<br><b>Skirmish:</b> Wound a minion skirmishing Gandalf for each [gandalf] token here. Discard this condition.
 		*/
 

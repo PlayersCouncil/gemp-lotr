@@ -39,7 +39,6 @@ public class Card_04_031_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Assignment:</b> Spot a site you control and remove (2) to assign a [dunland] Man to an unbound companion.
 		*/
 

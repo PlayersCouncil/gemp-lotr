@@ -41,7 +41,6 @@ public class Card_07_164_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Archer</b>.<br>While you can spot 6 twilight tokens, other [raider] Men are <b>damage +1</b>.<br>While you can spot 9 twilight tokens, other [raider] Men are <b>damage +1</b>.
 		*/

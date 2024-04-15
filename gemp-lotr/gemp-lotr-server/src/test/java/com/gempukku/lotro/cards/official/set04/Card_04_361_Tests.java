@@ -39,7 +39,6 @@ public class Card_04_361_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9T
 		 * Game Text: <b>Battleground</b>. <b>Shadow:</b> Play Saruman from your discard pile; his twilight cost is -2.
 		*/

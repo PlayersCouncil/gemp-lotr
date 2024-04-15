@@ -41,7 +41,6 @@ public class Card_07_235_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Skirmish:</b> Discard a [rohan] condition to make Guthláf strength +1.
 		*/
 

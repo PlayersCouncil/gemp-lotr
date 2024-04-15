@@ -41,7 +41,6 @@ public class Card_02_063_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may heal a [moria] minion.
 		*/

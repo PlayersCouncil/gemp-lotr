@@ -39,7 +39,6 @@ public class Card_02_069_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make an Elf or Dwarf skirmishing a [moria] Orc strength -1 (or -3 if you spot an Elf and a Dwarf).
 		*/
 

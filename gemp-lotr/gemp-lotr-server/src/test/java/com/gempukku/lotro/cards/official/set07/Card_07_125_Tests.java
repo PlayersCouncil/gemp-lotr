@@ -39,8 +39,6 @@ public class Card_07_125_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
-		 * Site Number: 4
 		 * Game Text: <b>Fortification</b>.<br><b>Skirmish:</b> Exert a [gondor] Man or spot 2 rangers to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
 		*/
 

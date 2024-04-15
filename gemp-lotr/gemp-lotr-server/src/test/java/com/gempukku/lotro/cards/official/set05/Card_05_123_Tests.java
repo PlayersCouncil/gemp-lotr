@@ -39,7 +39,6 @@ public class Card_05_123_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert a Dwarf to wound a minion. You may take the next maneuver action.
 		*/
 

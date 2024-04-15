@@ -41,7 +41,6 @@ public class Card_08_079_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Enduring</b>.<br><b>Regroup:</b> Exert Úlairë Attëa and spot your [wraith] minion to return that minion to your hand.
 		*/

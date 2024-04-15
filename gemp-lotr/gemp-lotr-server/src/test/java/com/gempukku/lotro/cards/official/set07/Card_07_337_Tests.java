@@ -39,7 +39,6 @@ public class Card_07_337_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2K
 		 * Game Text: <b>Plains</b>. If the Shadow has initiative, the Shadow number of this site is +3.
 		*/

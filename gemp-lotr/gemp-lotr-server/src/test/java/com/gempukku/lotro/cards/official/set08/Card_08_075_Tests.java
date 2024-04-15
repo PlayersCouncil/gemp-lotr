@@ -41,7 +41,6 @@ public class Card_08_075_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: While you can spot 3 burdens, the minion archery total is +2.
 		*/

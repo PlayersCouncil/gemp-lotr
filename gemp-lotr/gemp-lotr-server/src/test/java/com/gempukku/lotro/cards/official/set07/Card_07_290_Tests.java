@@ -41,7 +41,6 @@ public class Card_07_290_Tests
 		 * Subtype: Orc
 		 * Strength: 3
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Remove a threat to make this minion strength +4.
 		*/

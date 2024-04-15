@@ -41,9 +41,7 @@ public class Card_04_090_Tests
 		 * Subtype: Wizard
 		 * Strength: 7
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: While you can spot 3 twilight tokens, Gandalf is strength +3.
 		*/
 

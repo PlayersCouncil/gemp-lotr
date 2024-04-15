@@ -39,7 +39,6 @@ public class Card_03_015_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time the fellowship moves, you may spot 3 [elven] allies to wound a minion.
 		*/
 

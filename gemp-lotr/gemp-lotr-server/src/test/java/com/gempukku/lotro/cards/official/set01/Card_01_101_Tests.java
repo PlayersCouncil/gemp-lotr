@@ -39,12 +39,13 @@ public class Card_01_101_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be a Man.<br>Bearer may not be overwhelmed unless his or her strength is tripled.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Coat of Mail", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

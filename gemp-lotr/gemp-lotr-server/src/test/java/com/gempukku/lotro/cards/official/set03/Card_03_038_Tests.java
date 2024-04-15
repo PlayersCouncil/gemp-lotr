@@ -41,9 +41,7 @@ public class Card_03_038_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ranger</b>.<br>Each time the fellowship moves during the fellowship phase, remove (2).
 		*/
 

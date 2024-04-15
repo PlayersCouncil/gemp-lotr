@@ -39,9 +39,7 @@ public class Card_03_034_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Ring
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Gandalf.<br>At the start of each of your turns, you may add (3) to remove a burden.
 		*/
 

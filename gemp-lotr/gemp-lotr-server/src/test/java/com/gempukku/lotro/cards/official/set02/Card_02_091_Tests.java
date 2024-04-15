@@ -39,7 +39,6 @@ public class Card_02_091_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If the Ring-bearer puts on The One Ring, spot a [sauron] minion to make the Free Peoples player discard his or her hand.
 		*/
 

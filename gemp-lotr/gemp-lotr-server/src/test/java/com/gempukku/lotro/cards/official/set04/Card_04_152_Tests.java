@@ -39,7 +39,6 @@ public class Card_04_152_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Assignment
-
 		 * Game Text: <b>Assignment:</b> Prevent an [isengard] tracker from being assigned to a skirmish by any player.
 		*/
 

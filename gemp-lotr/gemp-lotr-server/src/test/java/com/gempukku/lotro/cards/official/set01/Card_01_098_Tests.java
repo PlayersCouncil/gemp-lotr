@@ -39,12 +39,13 @@ public class Card_01_098_Tests
 		 * Twilight Cost: 0
 		 * Type: Possession
 		 * Subtype: Cloak
-
 		 * Game Text: Bearer must be Boromir.<br><b>Maneuver:</b> Exert Boromir to discard a weather condition.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Boromir's Cloak", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

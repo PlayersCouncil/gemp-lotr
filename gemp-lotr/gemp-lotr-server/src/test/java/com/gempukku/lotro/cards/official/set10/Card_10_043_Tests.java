@@ -39,7 +39,6 @@ public class Card_10_043_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [raider] Man.<br>While there is a character in the dead pile, each companion of the same culture as that character is strength -1.<br><b>Skirmish:</b> Exert your Southron to make him strength +1.
 		*/
 

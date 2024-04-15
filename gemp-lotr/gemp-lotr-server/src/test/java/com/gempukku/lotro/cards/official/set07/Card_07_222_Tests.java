@@ -41,7 +41,6 @@ public class Card_07_222_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 3T
 		 * Game Text: <b>Villager</b>.<br><b>Skirmish:</b> If you have initiative, discard a card from hand to make a [rohan] Man strength +1.
 		*/

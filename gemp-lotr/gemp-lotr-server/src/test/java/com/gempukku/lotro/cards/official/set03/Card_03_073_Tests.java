@@ -39,7 +39,6 @@ public class Card_03_073_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Discard X [isengard] Orcs to make the Free Peoples player wound X companions.
 		*/
 

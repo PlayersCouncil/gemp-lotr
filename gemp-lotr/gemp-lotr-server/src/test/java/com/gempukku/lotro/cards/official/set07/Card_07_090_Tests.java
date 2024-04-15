@@ -41,9 +41,7 @@ public class Card_07_090_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Ranger</b>. To play, spot a [gondor] Man.<br>Each time Faramir wins a skirmish involving a fierce minion, you may exert Faramir to discard that minion.
 		*/
 

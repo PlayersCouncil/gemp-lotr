@@ -39,7 +39,6 @@ public class Card_07_206_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Response:</b> If your [wraith] minion wins a skirmish, place a [wraith] token here (limit 1 per site).<br><b>Regroup:</b> Spot 3 [wraith] tokens here to exhaust the Ring-bearer. Discard this condition.
 		*/
 

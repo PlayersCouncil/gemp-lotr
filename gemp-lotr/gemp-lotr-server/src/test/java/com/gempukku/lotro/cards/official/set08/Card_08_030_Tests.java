@@ -39,7 +39,6 @@ public class Card_08_030_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: <b>Regroup:</b> If there are fewer than 3 cards stacked here, spot your Orc or [gollum] minion to stack that minion here.<br><b>Shadow:</b> Play a [gollum] minion stacked here as if played from hand.
 		*/
 

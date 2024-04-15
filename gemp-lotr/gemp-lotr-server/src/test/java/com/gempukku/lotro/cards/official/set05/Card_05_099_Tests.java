@@ -41,7 +41,6 @@ public class Card_05_099_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: When you play this minion, you may exert him and spot 6 companions to draw a card.
 		*/

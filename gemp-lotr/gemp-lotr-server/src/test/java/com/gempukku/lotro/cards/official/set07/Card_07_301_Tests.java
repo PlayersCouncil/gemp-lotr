@@ -41,7 +41,6 @@ public class Card_07_301_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: While you can spot 3 other [sauron] Orcs, this minion is strength +5.
 		*/

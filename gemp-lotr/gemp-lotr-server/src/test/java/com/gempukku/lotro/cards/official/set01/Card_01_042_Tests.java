@@ -39,12 +39,13 @@ public class Card_01_042_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Cloak
-
 		 * Game Text: To play, spot an Elf. Bearer must be a companion.<br>The minion archery total is -1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Elven Cloak", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -39,12 +39,13 @@ public class Card_01_210_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Spot 3 burdens to make a Nazgûl strength +1 and <b>damage +1</b>, or spot 6 burdens to make a Nazgûl strength +3 and <b>damage +2</b>.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Dark Whispers", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

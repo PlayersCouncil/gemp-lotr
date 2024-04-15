@@ -41,7 +41,6 @@ public class Card_07_097_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 1
-
 		 * Site Number: 3T
 		 * Game Text: <b>Maneuver:</b> If you have initiative, discard 2 cards from hand to make the site number of a minion +2 until the regroup phase.
 		*/

@@ -39,7 +39,6 @@ public class Card_07_358_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8K
 		 * Game Text: <b>Shadow:</b> Remove 2 threats to play a Nazgûl from your discard pile. His twilight cost is -2.
 		*/

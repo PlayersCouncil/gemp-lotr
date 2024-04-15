@@ -41,7 +41,6 @@ public class Card_05_004_Tests
 		 * Subtype: Man
 		 * Strength: 18
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: The twilight cost of this minion is -2 during the skirmish phase.<br>When you play this minion, the Free Peoples player may discard 4 cards from hand to discard it.
 		*/

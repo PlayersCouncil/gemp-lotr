@@ -39,7 +39,6 @@ public class Card_05_030_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow, Skirmish
-
 		 * Game Text: <b>Shadow:</b> Play Gollum from your draw deck or discard pile.<br><b>Skirmish:</b> Discard a card at random from hand to make Gollum strength +3.
 		*/
 

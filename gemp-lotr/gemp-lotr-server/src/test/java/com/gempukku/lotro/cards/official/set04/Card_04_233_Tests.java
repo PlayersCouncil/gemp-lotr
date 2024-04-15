@@ -39,7 +39,6 @@ public class Card_04_233_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a Southron strength +1 for each burden you spot (limit +5), or make a [raider] Man strength +2.
 		*/
 

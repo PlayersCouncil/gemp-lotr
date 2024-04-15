@@ -41,7 +41,6 @@ public class Card_07_225_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: When this companion is in your starting fellowship, his twilight cost is -1.<br>While skirmishing a wounded minion, this companion is strength +2.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_03_059_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Response:</b> If an [isengard] Orc is about to take a wound, remove (2) to prevent that wound.
 		*/

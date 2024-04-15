@@ -41,9 +41,7 @@ public class Card_10_072_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Skirmish:</b> Exert Éowyn to choose an opponent. That opponent must wound a minion for each wound on each minion skirmishing Éowyn.
 		*/
 

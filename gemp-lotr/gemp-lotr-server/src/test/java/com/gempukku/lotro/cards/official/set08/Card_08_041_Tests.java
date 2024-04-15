@@ -41,9 +41,7 @@ public class Card_08_041_Tests
 		 * Subtype: Wraith
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Enduring</b>. To play, add a threat.<br><b>Skirmish:</b> Discard 3 cards from hand to discard a possession borne by a minion skirmishing this companion.
 		*/
 

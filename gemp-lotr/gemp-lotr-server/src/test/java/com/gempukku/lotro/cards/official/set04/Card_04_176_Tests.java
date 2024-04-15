@@ -41,7 +41,6 @@ public class Card_04_176_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Tracker</b>. <b>Fierce</b>.<br>The roaming penalty for each [isengard] tracker you play is -2.<br>While you can spot 2 [isengard] trackers, Uglúk is strength +3.<br>While you can spot 3 [isengard] trackers, Uglúk is <b>damage +1</b>.
 		*/

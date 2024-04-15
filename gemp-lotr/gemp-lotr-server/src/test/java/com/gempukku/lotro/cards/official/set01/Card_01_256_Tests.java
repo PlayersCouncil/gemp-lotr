@@ -41,13 +41,14 @@ public class Card_01_256_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 4
-
 		 * Site Number: 6
 		 * Game Text: For each companion you can spot, this minion is strength +1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Morgul Hunter", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -41,9 +41,7 @@ public class Card_08_043_Tests
 		 * Subtype: Wraith
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Enduring</b>. To play, spot 2 exhausted [gondor] Wraiths and add 2 threats.<br>While Shadow Host is exhausted, it is <b>defender +1</b>.
 		*/
 

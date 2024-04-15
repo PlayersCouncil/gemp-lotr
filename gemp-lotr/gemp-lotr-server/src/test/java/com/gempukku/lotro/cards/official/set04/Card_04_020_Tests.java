@@ -41,7 +41,6 @@ public class Card_04_020_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: <b>Shadow:</b> Spot a site you control and exert Hill Chief to draw 3 cards.
 		*/

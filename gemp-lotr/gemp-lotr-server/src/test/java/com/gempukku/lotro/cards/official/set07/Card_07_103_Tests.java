@@ -39,7 +39,6 @@ public class Card_07_103_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: At the start of your regroup phase, you may spot a [gondor] Man and discard a card from hand to remove a threat.
 		*/
 

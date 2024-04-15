@@ -39,7 +39,6 @@ public class Card_03_081_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot a Nazgûl. Plays to your support area.<br>Each time a [wraith] card adds a burden, the Free Peoples player must exert a companion.
 		*/
 

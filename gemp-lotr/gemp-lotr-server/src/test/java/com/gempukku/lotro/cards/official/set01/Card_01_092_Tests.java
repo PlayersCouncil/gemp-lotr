@@ -39,12 +39,13 @@ public class Card_01_092_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be a Man.<br>Bearer takes no more than 1 wound during each skirmish phase.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Armor", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_07_066_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Exert Sméagol to reveal an opponent's hand. That opponent must discard a card from hand for each culture revealed.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_066_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

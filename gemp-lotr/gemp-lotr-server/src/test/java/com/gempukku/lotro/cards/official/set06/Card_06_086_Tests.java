@@ -41,7 +41,6 @@ public class Card_06_086_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: <b>Regroup:</b> Exert Úlairë Lemenya and discard 3 cards from hand to return a companion (except the Ring-bearer) to owner's hand.
 		*/

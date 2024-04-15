@@ -41,7 +41,6 @@ public class Card_03_025_Tests
 		 * Subtype: Elf
 		 * Strength: 4
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: To play, spot an Elf.<br><b>Skirmish:</b> Exert Saelbeth to make an Uruk-hai strength -1.
 		*/

@@ -41,7 +41,6 @@ public class Card_05_058_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Warg-rider</b>.<br>While Sharku is not exhausted, he is <b>fierce</b>.<br>Each time you play an [isengard] mount, you may make the Free Peoples player exert a companion (except a Hobbit).
 		*/

@@ -39,7 +39,6 @@ public class Card_10_116_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Tale</b>.<br><b>Skirmish:</b> Prevent a Hobbit from being overwhelmed unless a Shadow event is (or was) played during this skirmish. Discard this condition.
 		*/
 

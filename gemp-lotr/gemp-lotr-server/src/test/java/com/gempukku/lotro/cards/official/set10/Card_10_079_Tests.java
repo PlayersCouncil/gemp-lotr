@@ -39,7 +39,6 @@ public class Card_10_079_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [sauron] minion.<br>Each time the fellowship moves to any site 8 or 9, exert each Ring-bound companion.<br><b>Shadow:</b> Discard this condition to play a [sauron] minion. Its twilight cost is -2.
 		*/
 

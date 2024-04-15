@@ -39,7 +39,6 @@ public class Card_04_353_Tests
 		 * Shadow Number: 3
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 6T
 		 * Game Text: <b>Battleground</b>. <b>Sanctuary</b>. Each [rohan] ally may participate in archery fire and skirmishes at Great Hall.
 		*/

@@ -39,7 +39,6 @@ public class Card_04_358_Tests
 		 * Shadow Number: 7
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8T
 		 * Game Text: <b>Shadow:</b> Play a [dunland] minion to draw a card.
 		*/

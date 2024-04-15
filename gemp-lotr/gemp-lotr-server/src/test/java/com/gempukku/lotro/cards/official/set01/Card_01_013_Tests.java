@@ -41,14 +41,14 @@ public class Card_01_013_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert Gimli to make him strength +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gimli", card.getBlueprint().getTitle());
 		assertEquals("Son of Glóin", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

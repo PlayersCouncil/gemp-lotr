@@ -41,7 +41,6 @@ public class Card_05_036_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: <b>Knight</b>.<br><b>Fellowship:</b> Discard a [gondor] condition to heal this companion.
 		*/
 

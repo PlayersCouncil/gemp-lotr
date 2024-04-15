@@ -41,9 +41,7 @@ public class Card_07_228_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Valiant</b>.<br>While skirmishing a mounted minion, Éowyn is strength +2.<br>While skirmishing a fierce minion, Éowyn is strength +2.
 		*/
 

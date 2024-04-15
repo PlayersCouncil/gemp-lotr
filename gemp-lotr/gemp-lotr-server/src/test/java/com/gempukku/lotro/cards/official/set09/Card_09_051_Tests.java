@@ -41,7 +41,6 @@ public class Card_09_051_Tests
 		 * Subtype: 
 		 * Strength: 4
 		 * Vitality: 6
-
 		 * Site Number: 2
 		 * Game Text: Each time the fellowship moves to a river, heal Goldberry and Tom Bombadil.<br><b>Skirmish:</b> If the fellowship is at a river, exert Goldberry to make a companion strength +1.
 		*/

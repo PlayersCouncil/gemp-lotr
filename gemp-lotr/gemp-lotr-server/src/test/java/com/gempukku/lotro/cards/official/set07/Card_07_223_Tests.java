@@ -39,7 +39,6 @@ public class Card_07_223_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: Spot a mounted [rohan] Man to exert a minion. That minion's owner may exert a companion and if he or she does so, you may exert a minion; repeat this until a player does not exert a character.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_223_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

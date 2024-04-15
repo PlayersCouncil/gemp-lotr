@@ -41,9 +41,7 @@ public class Card_07_365_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Valiant</b>. While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br><b>Skirmish:</b> If you have initiative, discard 3 cards from hand to make Éomer strength +1 for each valiant companion you spot.
 		*/
 

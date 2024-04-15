@@ -39,7 +39,6 @@ public class Card_04_223_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert a [raider] Man to discard a Free Peoples condition (or 2 Free Peoples conditions if you spot 3 burdens).
 		*/
 

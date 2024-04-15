@@ -39,7 +39,6 @@ public class Card_04_125_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While the fellowship is at site 6[T], each roaming minion skirmishing a Ring-bound companion is strength -2.<br><b>Skirmish:</b> Spot a [gondor] Man and discard this condition to wound a roaming minion.
 		*/
 

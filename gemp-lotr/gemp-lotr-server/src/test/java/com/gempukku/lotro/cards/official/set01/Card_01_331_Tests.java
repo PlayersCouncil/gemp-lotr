@@ -39,7 +39,6 @@ public class Card_01_331_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2
 		 * Game Text: <b>Plains</b>. <b>Skirmish:</b> Exert your companion or minion to make that character strength +2.
 		*/

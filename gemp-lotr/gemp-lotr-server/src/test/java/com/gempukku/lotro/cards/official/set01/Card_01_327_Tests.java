@@ -39,7 +39,6 @@ public class Card_01_327_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2
 		 * Game Text: While you can spot a ranger, the move limit is +1 for this turn.
 		*/

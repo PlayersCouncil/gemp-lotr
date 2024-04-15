@@ -41,7 +41,6 @@ public class Card_07_264_Tests
 		 * Subtype: Orc
 		 * Strength: 19
 		 * Vitality: 5
-
 		 * Site Number: 6
 		 * Game Text: <b>Shadow:</b> Discard a [sauron] Orc to add a threat.<br><b>Skirmish:</b> Remove a threat to make Army of Udûn strength +1.<br><b>Regroup:</b> Discard Army of Udûn and X other [sauron] Orcs to add X threats.
 		*/

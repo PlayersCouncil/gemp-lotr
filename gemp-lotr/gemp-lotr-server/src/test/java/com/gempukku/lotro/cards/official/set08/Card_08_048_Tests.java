@@ -39,7 +39,6 @@ public class Card_08_048_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time the fellowship moves, add a threat or discard this condition.<br>While you have initiative, exhausted [gondor] Wraiths cannot take wounds.
 		*/
 

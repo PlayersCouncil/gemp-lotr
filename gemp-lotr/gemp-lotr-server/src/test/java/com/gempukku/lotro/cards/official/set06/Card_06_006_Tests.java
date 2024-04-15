@@ -41,7 +41,6 @@ public class Card_06_006_Tests
 		 * Subtype: Man
 		 * Strength: 17
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: Each time this minion wins a skirmish, you may play a [dunland] Man from hand. That Man is <b>fierce</b> and <b>damage +2</b> until the regroup phase.
 		*/

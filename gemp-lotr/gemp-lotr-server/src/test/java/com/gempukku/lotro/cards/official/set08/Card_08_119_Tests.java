@@ -39,7 +39,6 @@ public class Card_08_119_Tests
 		 * Shadow Number: 7
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 5K
 		 * Game Text: At the start of the regroup phase, the Free Peoples player must add 3 threats or choose an opponent who may take control of a site.
 		*/

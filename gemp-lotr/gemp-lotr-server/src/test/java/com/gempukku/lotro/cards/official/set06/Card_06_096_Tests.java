@@ -39,7 +39,6 @@ public class Card_06_096_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot 3 mounted [rohan] Men to make the move limit for this turn +2. Each Shadow player may draw 6 cards.
 		*/
 

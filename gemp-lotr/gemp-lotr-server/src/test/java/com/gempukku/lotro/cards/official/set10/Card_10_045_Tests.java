@@ -41,7 +41,6 @@ public class Card_10_045_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br>When you play this minion, you may play a mount on him from your discard pile. Its twilight cost is -2.
 		*/

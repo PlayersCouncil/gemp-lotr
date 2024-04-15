@@ -39,7 +39,6 @@ public class Card_03_029_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time an opponent draws a card (or takes a card into hand) during the Shadow phase, you may remove (1).<br><b>Maneuver:</b> Exert Gandalf to wound Saruman twice.
 		*/
 

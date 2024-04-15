@@ -39,7 +39,6 @@ public class Card_04_106_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot an Elf, a [gondor] Man, and a Dwarf to play Gandalf from your dead pile.
 		*/
 

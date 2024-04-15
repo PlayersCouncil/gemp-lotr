@@ -41,7 +41,6 @@ public class Card_09_028_Tests
 		 * Subtype: 
 		 * Strength: 5
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Shadow:</b> Exert Gollum twice to exert the Ring-bearer.<br><b>Shadow:</b> Remove a burden to add (1).<br><b>Skirmish:</b> Remove a burden to add (2).<br><b>Regroup:</b> Remove a burden to add (3).<br><b>Regroup:</b> Exert Gollum twice to wound the Ring-bearer.
 		*/

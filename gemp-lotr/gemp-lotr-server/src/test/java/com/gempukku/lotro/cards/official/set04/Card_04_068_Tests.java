@@ -41,7 +41,6 @@ public class Card_04_068_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: To play, spot an Elf.<br><b>Skirmish:</b> Exert Ferevellon to make a minion skirmishing him strength -2.
 		*/
 

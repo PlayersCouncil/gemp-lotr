@@ -41,9 +41,7 @@ public class Card_04_049_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert Gimli to make an unbound companion strength +1 (or +2 if that companion is Legolas).
 		*/
 

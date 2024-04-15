@@ -39,12 +39,13 @@ public class Card_01_316_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Stealth</b>. To play, exert a Hobbit. Plays to your support area.<br>Each time the fellowship moves, spot 2 Hobbit companions to make the Shadow number -1 (or spot 4 to make it -2).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("A Talent for Not Being Seen", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -41,7 +41,6 @@ public class Card_07_115_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: <b>Ranger</b>.<br>While skirmishing a roaming minion, this companion is strength +2 and <b>damage +1</b>.
 		*/
 

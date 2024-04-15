@@ -39,7 +39,6 @@ public class Card_07_179_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Shadow:</b> Spot a Nazgûl and remove a threat to play a Nazgûl. Its twilight cost is -2.
 		*/
 

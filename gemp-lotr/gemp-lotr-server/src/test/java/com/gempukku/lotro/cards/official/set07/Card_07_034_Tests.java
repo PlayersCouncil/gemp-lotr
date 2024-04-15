@@ -39,7 +39,6 @@ public class Card_07_034_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each time Gandalf wins a skirmish, you may exert him to draw 2 cards.
 		*/
 

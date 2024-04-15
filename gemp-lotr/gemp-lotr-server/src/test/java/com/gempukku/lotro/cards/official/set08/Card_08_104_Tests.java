@@ -39,7 +39,6 @@ public class Card_08_104_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: While you can spot a [sauron] minion at site 5[K], the Shadow has initiative, regardless of the Free Peoples player's hand.<br><b>Response:</b> If a companion is played, discard a [sauron] card from hand to take control of a site. Discard this condition.
 		*/
 

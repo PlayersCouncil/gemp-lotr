@@ -39,7 +39,6 @@ public class Card_07_155_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Ranged weapon
-
 		 * Game Text: Bearer must be a [raider] Man.<br>Bearer is an <b>archer</b> and <b>ambush</b> (5).
 		*/
 

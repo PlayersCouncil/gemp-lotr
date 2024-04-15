@@ -39,7 +39,6 @@ public class Card_09_046_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Support area
-
 		 * Game Text: <b>Assignment:</b> Exert a [gondor] Man to play a [rohan] Man. You may exert that [rohan] Man to play a possession on him or her. Discard this artifact.
 		*/
 

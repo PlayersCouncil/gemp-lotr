@@ -40,7 +40,6 @@ public class Card_04_306_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a Hobbit.
 		*/
 

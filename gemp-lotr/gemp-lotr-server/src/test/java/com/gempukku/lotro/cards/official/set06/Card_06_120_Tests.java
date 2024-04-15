@@ -39,7 +39,6 @@ public class Card_06_120_Tests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 9T
 		 * Game Text: <b>Response:</b> If your minion is about to take a wound, discard 2 cards from hand to prevent that wound.
 		*/

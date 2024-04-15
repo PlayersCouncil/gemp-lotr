@@ -41,7 +41,6 @@ public class Card_04_264_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Response:</b> If your opponent is about to take control of a site, exert Ceorl and a villager to prevent this.
 		*/
 

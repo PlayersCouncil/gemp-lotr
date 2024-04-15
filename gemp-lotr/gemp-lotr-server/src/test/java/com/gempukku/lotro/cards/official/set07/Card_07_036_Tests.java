@@ -41,9 +41,7 @@ public class Card_07_036_Tests
 		 * Subtype: Wizard
 		 * Strength: 9
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: While you cannot spot 3 companions of the same culture, Gandalf is strength -2.
 		*/
 

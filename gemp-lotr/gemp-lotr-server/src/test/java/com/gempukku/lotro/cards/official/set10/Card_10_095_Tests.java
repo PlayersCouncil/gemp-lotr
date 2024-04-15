@@ -41,7 +41,6 @@ public class Card_10_095_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Enduring</b>.<br>For each wound on this minion, it is strength +2.
 		*/

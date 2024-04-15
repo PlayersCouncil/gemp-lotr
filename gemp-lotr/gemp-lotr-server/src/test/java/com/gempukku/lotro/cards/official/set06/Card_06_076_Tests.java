@@ -41,7 +41,6 @@ public class Card_06_076_Tests
 		 * Subtype: Balrog
 		 * Strength: 17
 		 * Vitality: 5
-
 		 * Site Number: 4
 		 * Game Text: <b>Damage +2</b>.<br>The twilight cost of The Balrog is -3 if you can spot a [moria] minion.<br>The Balrog cannot be assigned to skirmish companions or allies of strength less than 6.
 		*/

@@ -39,7 +39,6 @@ public class Card_03_063_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert an [isengard] minion to make the Free Peoples player exert X companions, where X is the number of these races you can spot in the fellowship: Dwarf, Elf, Man, and Wizard.
 		*/
 

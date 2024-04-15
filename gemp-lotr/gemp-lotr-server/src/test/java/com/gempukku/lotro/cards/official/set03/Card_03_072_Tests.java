@@ -39,7 +39,6 @@ public class Card_03_072_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each character skirmishing an [isengard] Orc loses all <b>damage</b> bonuses from weapons.
 		*/
 

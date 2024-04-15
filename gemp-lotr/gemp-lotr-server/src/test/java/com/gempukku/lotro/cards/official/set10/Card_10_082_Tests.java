@@ -41,7 +41,6 @@ public class Card_10_082_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Damage +1</b>.<br>While you can spot 3 possessions, this minion is <b>fierce</b>.
 		*/

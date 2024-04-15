@@ -41,9 +41,7 @@ public class Card_10_006_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Frodo
-
 		 * Game Text: Each minion skirmishing Arwen is strength -2 for each wounded minion you can spot.
 		*/
 

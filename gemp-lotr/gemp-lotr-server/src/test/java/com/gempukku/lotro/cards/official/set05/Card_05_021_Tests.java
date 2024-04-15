@@ -39,7 +39,6 @@ public class Card_05_021_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Discard Sméagol to discard a minion. An opponent may exert a minion twice to prevent this.
 		*/
 

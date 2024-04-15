@@ -39,7 +39,6 @@ public class Card_10_035_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: Each site on the adventure path is a <b>battleground</b>.<br>While you have initiative, each Uruk-hai is strength +1.
 		*/
 

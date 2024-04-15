@@ -39,12 +39,13 @@ public class Card_01_183_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Response:</b> If your [moria] Orc wins a skirmish, discard cards and wounds on that Orc and stack that Orc on this condition.<br><b>Shadow:</b> Play an Orc stacked here as if played from hand.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Swarms", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

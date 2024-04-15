@@ -42,7 +42,6 @@ public class Card_09_049_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 8
-
 		 * Game Text: <b>Ring-bound</b>.<br>Each time the fellowship moves, if the twilight pool has 2 or fewer twilight tokens, add 2 burdens or add (3).<br><b>Regroup:</b> Add a burden to play a [shire] tale.
 		*/
 

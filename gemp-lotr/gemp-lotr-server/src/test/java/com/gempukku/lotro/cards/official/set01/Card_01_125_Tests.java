@@ -39,12 +39,13 @@ public class Card_01_125_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot an Uruk-hai. Plays to your support area.<br><b>Maneuver:</b> Spot 6 companions and remove (2) to wound a companion (except the Ring-bearer).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Greed", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

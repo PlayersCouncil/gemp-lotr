@@ -39,7 +39,6 @@ public class Card_04_121_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While the fellowship is at site 5[T], the site number of each Man in a skirmish is +2.<br><b>Regroup:</b> Discard this condition and exert a Ring-bound Man to liberate a site.
 		*/
 

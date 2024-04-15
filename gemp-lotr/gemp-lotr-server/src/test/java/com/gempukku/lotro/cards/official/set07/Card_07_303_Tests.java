@@ -41,7 +41,6 @@ public class Card_07_303_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 6
 		 * Game Text: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>While you have initiative, this minion is strength +5.
 		*/
@@ -50,8 +49,7 @@ public class Card_07_303_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		//Decipher messed up and made Orc Pursuer (5C108) first.
-		assertEquals("Orc Pursuer(2)", card.getBlueprint().getTitle());
+		assertEquals("Orc Pursuer", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());

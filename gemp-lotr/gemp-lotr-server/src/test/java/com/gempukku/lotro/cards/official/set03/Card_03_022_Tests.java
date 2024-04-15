@@ -39,7 +39,6 @@ public class Card_03_022_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Fellowship</b> <i>or</i> <b>Regroup:</b> Spot Elrond (or 2 [elven] allies) to heal a companion or ally.
 		*/
 

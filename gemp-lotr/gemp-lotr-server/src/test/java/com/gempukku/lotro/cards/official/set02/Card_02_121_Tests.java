@@ -41,9 +41,7 @@ public class Card_02_121_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Damage +1</b>.<br>Each underground site's Shadow number is -2.
 		*/
 

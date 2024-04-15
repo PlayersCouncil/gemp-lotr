@@ -41,7 +41,6 @@ public class Card_07_311_Tests
 		 * Subtype: Orc
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br><b>Skirmish:</b> Discard 2 cards from hand to make a besieger <b>fierce</b> until the regroup phase.
 		*/

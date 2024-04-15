@@ -39,7 +39,6 @@ public class Card_09_036_Tests
 		 * Twilight Cost: 1
 		 * Type: Artifact
 		 * Subtype: Support area
-
 		 * Game Text: <b>Tale</b>. To play, spot a [gondor] Man.<br>The Ring-bearer is resistance +1 for each [gondor] artifact you can spot (limit +3).<br><b>Fellowship:</b> Discard this artifact to play a ring from your discard pile.
 		*/
 

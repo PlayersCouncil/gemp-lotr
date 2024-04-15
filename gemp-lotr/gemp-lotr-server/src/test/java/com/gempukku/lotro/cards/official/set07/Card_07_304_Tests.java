@@ -41,7 +41,6 @@ public class Card_07_304_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Discard this minion to make another [sauron] Orc strength +4.
 		*/

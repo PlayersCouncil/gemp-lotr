@@ -41,13 +41,14 @@ public class Card_01_057_Tests
 		 * Subtype: Elf
 		 * Strength: 3
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Archer</b>.<br><b>Archery:</b> Exert Rúmil to wound an Orc.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Rúmil", card.getBlueprint().getTitle());
 		assertEquals("Elven Protector", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

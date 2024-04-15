@@ -41,7 +41,6 @@ public class Card_01_001_Tests
 		 * Subtype: 
 		 * Strength: 1
 		 * Vitality: 1
-
 		 * Game Text: <b>Response:</b> If bearer is about to take a wound, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound, add 2 burdens instead.
 		*/
 

@@ -40,7 +40,6 @@ public class Card_02_003_Tests
 		 * Type: Possession
 		 * Subtype: Bracers
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a Dwarf.<br><b>Response:</b> If bearer is about to take a wound, discard this possession to prevent that wound.
 		*/
 

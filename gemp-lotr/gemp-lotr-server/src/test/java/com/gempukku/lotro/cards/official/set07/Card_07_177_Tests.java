@@ -39,7 +39,6 @@ public class Card_07_177_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Skirmish:</b> Transfer this condition from your support area to a character skirmishing a Nazgûl.<br>During the turn this card is transferred, the Shadow has initiative, regardless of the Free Peoples player's hand.
 		*/
 

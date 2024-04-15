@@ -39,7 +39,6 @@ public class Card_01_349_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 5
 		 * Game Text: <b>Underground</b>. <b>Shadow:</b> Play The Balrog from your draw deck or hand; The Balrog's twilight cost is -6.
 		*/

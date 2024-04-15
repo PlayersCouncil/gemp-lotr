@@ -40,7 +40,6 @@ public class Card_08_052_Tests
 		 * Type: Possession
 		 * Subtype: Ranged weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a corsair.<br>While you have initiative, bearer is an <b>archer</b> and <b>fierce</b>.
 		*/
 

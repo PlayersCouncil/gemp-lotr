@@ -39,7 +39,6 @@ public class Card_04_050_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Plays to your support area.<br><b>Skirmish:</b> Stack a Free Peoples card from hand here to make a Dwarf <b>damage</b> <b>+1</b>.
 		*/
 

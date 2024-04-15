@@ -41,7 +41,6 @@ public class Card_04_286_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: <b>Skirmish:</b> If this companion is mounted, exert him to exert a minion skirmishing an unbound companion.
 		*/
 

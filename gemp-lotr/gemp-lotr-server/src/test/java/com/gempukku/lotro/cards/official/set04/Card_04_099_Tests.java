@@ -39,7 +39,6 @@ public class Card_04_099_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Fellowship</b> <i>or</i> <b>Maneuver:</b> Spot Gandalf to discard a Shadow possession or Shadow artifact.
 		*/
 

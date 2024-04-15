@@ -41,7 +41,6 @@ public class Card_10_077_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: Each roaming [sauron] minion is <b>fierce</b>.
 		*/

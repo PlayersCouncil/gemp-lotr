@@ -39,7 +39,6 @@ public class Card_04_066_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make a minion skirmishing an Elf strength -2 for each wound on that minion.
 		*/
 

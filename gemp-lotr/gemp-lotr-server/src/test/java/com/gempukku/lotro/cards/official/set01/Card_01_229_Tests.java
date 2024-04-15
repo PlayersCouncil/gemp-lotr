@@ -41,13 +41,14 @@ public class Card_01_229_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br><b>Skirmish:</b> Remove (1) to make Úlairë Attëa strength +1 (limit +5).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Úlairë Attëa", card.getBlueprint().getTitle());
 		assertEquals("Keeper of Dol Guldur", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_07_269_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: The site number of each [sauron] Orc is -1 for each threat.<br>While you can spot 3 threats, each [sauron] Orc that is not roaming is strength +1.
 		*/
 

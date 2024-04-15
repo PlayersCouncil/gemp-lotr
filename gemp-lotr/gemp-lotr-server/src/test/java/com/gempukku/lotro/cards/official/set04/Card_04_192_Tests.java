@@ -41,7 +41,6 @@ public class Card_04_192_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br><b>Shadow:</b> Exert this minion to play an Uruk-hai; its twilight cost is -1 for each other Uruk-hai you can spot.
 		*/

@@ -41,7 +41,6 @@ public class Card_05_072_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Ambush (2)</b>.<br><b>Maneuver:</b> Exert this minion and spot 4 Free Peoples cultures to exert every companion.
 		*/

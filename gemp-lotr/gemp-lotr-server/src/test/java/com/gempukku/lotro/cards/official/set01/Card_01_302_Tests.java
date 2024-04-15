@@ -41,14 +41,14 @@ public class Card_01_302_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Skirmish:</b> If Merry is not assigned to a skirmish, exert him twice to add his strength to another companion.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Merry", card.getBlueprint().getTitle());
 		assertEquals("Friend to Sam", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

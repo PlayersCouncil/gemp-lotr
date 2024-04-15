@@ -39,7 +39,6 @@ public class Card_03_051_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Reveal a card at random from the Free Peoples player's hand. Heal X [isengard] minions, where X is the twilight cost of the card revealed.
 		*/
 

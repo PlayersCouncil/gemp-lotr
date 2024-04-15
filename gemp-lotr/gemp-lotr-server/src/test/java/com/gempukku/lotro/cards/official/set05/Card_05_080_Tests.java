@@ -39,7 +39,6 @@ public class Card_05_080_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Fortification</b>. Plays to your support area.<br><b>Maneuver:</b> Spot 2 [rohan] Men to discard a possession or a machine. Discard this condition.
 		*/
 

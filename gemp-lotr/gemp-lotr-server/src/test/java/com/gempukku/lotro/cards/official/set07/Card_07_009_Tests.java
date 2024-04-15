@@ -40,7 +40,6 @@ public class Card_07_009_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a Dwarf.<br>While you can spot a threat, bearer is <b>damage +1</b>.<br>While you can spot 2 threats, bearer is strength +1.<br>While you can spot 3 threats, the fellowship archery total is +1.
 		*/
 

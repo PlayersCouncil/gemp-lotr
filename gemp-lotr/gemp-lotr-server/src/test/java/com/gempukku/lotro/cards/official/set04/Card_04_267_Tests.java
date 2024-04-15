@@ -41,9 +41,7 @@ public class Card_04_267_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Theoden
-
 		 * Game Text: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br>Éomer is strength +2 for each wound on each minion he is skirmishing.
 		*/
 

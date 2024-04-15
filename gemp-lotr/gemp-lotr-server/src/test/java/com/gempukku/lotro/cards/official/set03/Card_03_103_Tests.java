@@ -39,7 +39,6 @@ public class Card_03_103_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot a [sauron] minion to wound Galadriel 3 times. The Free Peoples player may discard 2 Elves to prevent this.
 		*/
 

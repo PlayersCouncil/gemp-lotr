@@ -41,12 +41,13 @@ public class Card_00_062_Tests
 		 * Subtype: Dwarf
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Game Text: <b>Damage +1</b>.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gimli", card.getBlueprint().getTitle());
 		assertEquals("Dwarven Delegate", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

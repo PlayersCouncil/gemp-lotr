@@ -41,7 +41,6 @@ public class Card_04_169_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Archer</b>.<br>The twilight cost of each [isengard] archer is -1.<br><b>Archery:</b> Exert Ranged Commander to make the Free Peoples player wound an unbound companion; this minion does not add to the minion archery total.
 		*/

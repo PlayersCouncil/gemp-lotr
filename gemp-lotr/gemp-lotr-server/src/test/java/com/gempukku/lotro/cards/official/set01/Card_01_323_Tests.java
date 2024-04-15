@@ -39,7 +39,6 @@ public class Card_01_323_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1
 		 * Game Text: The twilight cost of each Hobbit is -1.
 		*/

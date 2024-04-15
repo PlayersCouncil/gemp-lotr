@@ -39,7 +39,6 @@ public class Card_04_019_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area. When you play this possession, you may draw a card.<br><b>Response:</b> If a [dunland] Man is about to take a wound, remove (2) or discard this possession to prevent that wound.
 		*/
 

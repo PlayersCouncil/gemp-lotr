@@ -40,7 +40,6 @@ public class Card_09_045_Tests
 		 * Type: Possession
 		 * Subtype: 
 		 * Strength: 1
-
 		 * Game Text: Bearer must be Merry or Pippin.<br>Bearer gains the Théoden signet.<br><b>Response:</b> If bearer wins a skirmish, exert him to discard each minion involved in that skirmish.
 		*/
 

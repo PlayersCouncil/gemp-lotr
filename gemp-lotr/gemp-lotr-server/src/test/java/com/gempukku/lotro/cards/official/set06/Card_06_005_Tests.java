@@ -41,7 +41,6 @@ public class Card_06_005_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: The twilight cost of this minion during a skirmish phase is -2.
 		*/

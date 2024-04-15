@@ -41,7 +41,6 @@ public class Card_06_033_Tests
 		 * Subtype: Ent
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Game Text: Quickbeam's twilight cost is -1 for each Ent or unbound Hobbit you can spot.
 		*/
 

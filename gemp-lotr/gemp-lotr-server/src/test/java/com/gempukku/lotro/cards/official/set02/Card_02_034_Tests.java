@@ -39,7 +39,6 @@ public class Card_02_034_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If a companion is about to take a wound, exert a [gondor] companion to prevent that wound.
 		*/
 

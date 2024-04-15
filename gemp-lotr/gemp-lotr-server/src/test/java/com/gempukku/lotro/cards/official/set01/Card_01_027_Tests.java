@@ -41,13 +41,14 @@ public class Card_01_027_Tests
 		 * Subtype: Dwarf
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: <b>Maneuver:</b> Exert Thrarin to allow him to participate in archery fire and skirmishes until the regroup phase.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Thrarin", card.getBlueprint().getTitle());
 		assertEquals("Dwarven Smith", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

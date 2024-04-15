@@ -39,7 +39,6 @@ public class Card_03_082_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Spot an [isengard] minion to make a Nazgûl <b>damage +1</b>.
 		*/
 

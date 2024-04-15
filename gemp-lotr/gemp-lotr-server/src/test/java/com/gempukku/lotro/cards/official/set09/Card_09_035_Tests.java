@@ -39,7 +39,6 @@ public class Card_09_035_Tests
 		 * Twilight Cost: 1
 		 * Type: Artifact
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot an unbound [gondor] Man.<br><b>Response:</b> If a [gondor] Man is about to take a wound, discard this artifact to prevent that.
 		*/
 

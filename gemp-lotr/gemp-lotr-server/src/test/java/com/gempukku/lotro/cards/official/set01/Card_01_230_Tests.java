@@ -41,13 +41,14 @@ public class Card_01_230_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br><b>Skirmish:</b> Exert Úlairë Cantëa to discard a weapon borne by a character he is skirmishing.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Úlairë Cantëa", card.getBlueprint().getTitle());
 		assertEquals("Lieutenant of Dol Guldur", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

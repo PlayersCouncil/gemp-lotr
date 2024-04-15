@@ -41,13 +41,14 @@ public class Card_01_185_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: When you play this minion, you may discard a [dwarven] ally or [dwarven] condition.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Warrior", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -40,12 +40,13 @@ public class Card_01_208_Tests
 		 * Type: Possession
 		 * Subtype: Mount
 		 * Strength: 2
-
 		 * Game Text: Bearer must be a Nazgûl.<br>While at a plains site, bearer is strength +2. Discard this possession when at an underground site.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Black Steed", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_04_243_Tests
 		 * Twilight Cost: 6
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: <b>Archery:</b> Exert a [raider] archer to make the minion archery total +1 for each burden (limit +5).
 		*/
 

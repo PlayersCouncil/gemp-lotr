@@ -41,7 +41,6 @@ public class Card_06_101_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Maneuver:</b> Exert this minion twice to make the Free Peoples player name 3 cultures. Wound each companion and ally not of a named culture.
 		*/

@@ -39,7 +39,6 @@ public class Card_07_028_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot an Elf.<br>At the start of your regroup phase, you may discard this condition or a card from hand to heal an Elf.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_10_080_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a [sauron] minion strength +2 for each site you control. If you have initiative, that minion is <b>fierce</b> until the regroup phase.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_080_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

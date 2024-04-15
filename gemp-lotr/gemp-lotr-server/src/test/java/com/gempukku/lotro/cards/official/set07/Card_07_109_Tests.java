@@ -39,7 +39,6 @@ public class Card_07_109_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, add 2 threats.<br><b>Skirmish:</b> Exert a [gondor] Man to wound a roaming minion that Man is skirmishing.<br>Discard this condition at the start of the regroup phase.
 		*/
 

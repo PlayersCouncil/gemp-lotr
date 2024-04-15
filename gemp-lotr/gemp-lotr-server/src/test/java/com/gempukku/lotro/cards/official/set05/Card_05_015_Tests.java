@@ -41,7 +41,6 @@ public class Card_05_015_Tests
 		 * Subtype: Ent
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Game Text: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow Birchseed to skirmish.<br><b>Fellowship:</b> Exert Birchseed to heal an unbound Hobbit.
 		*/
 

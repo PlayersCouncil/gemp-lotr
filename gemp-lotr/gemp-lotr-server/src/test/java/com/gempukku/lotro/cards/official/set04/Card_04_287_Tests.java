@@ -39,7 +39,6 @@ public class Card_04_287_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Mount
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
 		*/
 

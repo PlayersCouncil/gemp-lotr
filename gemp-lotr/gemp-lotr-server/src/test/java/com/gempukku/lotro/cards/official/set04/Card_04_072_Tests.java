@@ -39,7 +39,6 @@ public class Card_04_072_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot 3 Elves. Plays to your support area.<br>Each wounded minion is prevented from being <b>fierce</b>. Discard this condition during the regroup phase.
 		*/
 

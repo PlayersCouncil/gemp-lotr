@@ -39,7 +39,6 @@ public class Card_02_078_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot a twilight Nazgûl to add a burden.
 		*/
 

@@ -39,12 +39,13 @@ public class Card_01_046_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert an Elf ally. Plays to your support area.<br>When the fellowship moves from a river during the fellowship phase, the move limit for this turn is +1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gift of Boats", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

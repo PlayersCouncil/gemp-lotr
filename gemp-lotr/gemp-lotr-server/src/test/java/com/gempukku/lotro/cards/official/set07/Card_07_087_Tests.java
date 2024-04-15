@@ -41,7 +41,6 @@ public class Card_07_087_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Regroup:</b> While you have exactly 5 cards in hand, you may exert Derufin to discard an engine, machine, or possession.
 		*/
 

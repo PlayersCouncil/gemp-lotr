@@ -41,9 +41,7 @@ public class Card_04_109_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Defender +1</b>.
 		*/
 

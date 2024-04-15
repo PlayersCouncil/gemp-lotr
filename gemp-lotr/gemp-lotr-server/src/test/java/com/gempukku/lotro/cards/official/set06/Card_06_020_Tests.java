@@ -39,7 +39,6 @@ public class Card_06_020_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot an Elf to reveal the top card of your draw deck. Heal up to 2 companions whose culture matches the revealed card. You may discard the revealed card.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_03_114_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Plays to your support area.<br><b>Response:</b> If a Shadow card is about to add any number of twilight tokens, exert a Hobbit ally to prevent this.
 		*/
 

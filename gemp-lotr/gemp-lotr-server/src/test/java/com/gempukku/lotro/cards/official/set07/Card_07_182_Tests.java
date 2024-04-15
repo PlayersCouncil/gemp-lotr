@@ -39,7 +39,6 @@ public class Card_07_182_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If a skirmish that involved a Nazgûl is about to end, discard a possession borne by a companion in that skirmish.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_182_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

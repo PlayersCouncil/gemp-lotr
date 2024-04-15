@@ -40,7 +40,6 @@ public class Card_08_113_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Frodo or Sam.<br><b>Response:</b> If a fierce skirmish involving bearer is about to end, add a threat to discard a minion involved in that skirmish.
 		*/
 

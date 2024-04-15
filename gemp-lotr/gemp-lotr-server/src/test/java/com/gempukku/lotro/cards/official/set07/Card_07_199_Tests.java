@@ -41,7 +41,6 @@ public class Card_07_199_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: Nazgûl are strength +1.
 		*/

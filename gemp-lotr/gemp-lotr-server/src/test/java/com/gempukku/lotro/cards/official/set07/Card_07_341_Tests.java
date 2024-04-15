@@ -39,7 +39,6 @@ public class Card_07_341_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4K
 		 * Game Text: <b>River</b>. <b>Skirmish:</b> Spot your minion and remove a burden to make that minion strength +2.
 		*/

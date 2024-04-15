@@ -41,7 +41,6 @@ public class Card_02_025_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: To play, spot Gandalf.<br>Each time you play a shield, armor, helm, or hand weapon, its twilight cost is -1.
 		*/

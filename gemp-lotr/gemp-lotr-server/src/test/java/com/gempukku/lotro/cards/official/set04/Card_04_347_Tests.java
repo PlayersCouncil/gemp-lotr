@@ -39,7 +39,6 @@ public class Card_04_347_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 5T
 		 * Game Text: <b>Battleground</b>. <b>Plains</b>. The twilight cost of the first Uruk-hai played at Deep of Helm each turn is -3.
 		*/

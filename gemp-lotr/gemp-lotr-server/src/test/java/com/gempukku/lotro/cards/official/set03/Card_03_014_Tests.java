@@ -41,7 +41,6 @@ public class Card_03_014_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: To play, spot an Elf.<br><b>Response:</b> If an Elf is about to take a wound from a [sauron] minion or [sauron] event, exert Erestor to prevent that wound.
 		*/

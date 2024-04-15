@@ -41,7 +41,6 @@ public class Card_05_104_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -3.<br><b>Skirmish:</b> Discard another [sauron] Orc and exert Orc Cutthroat to wound a companion he is skirmishing.
 		*/

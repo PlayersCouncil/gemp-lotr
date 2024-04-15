@@ -39,7 +39,6 @@ public class Card_06_084_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Regroup:</b> Exert a Nazgûl twice to play a [wraith] or [sauron] minion. That minion's twilight cost is -8 and it comes into play exhausted.
 		*/
 

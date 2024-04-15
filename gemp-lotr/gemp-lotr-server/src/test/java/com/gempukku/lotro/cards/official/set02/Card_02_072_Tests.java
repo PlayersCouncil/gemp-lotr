@@ -39,7 +39,6 @@ public class Card_02_072_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Exert a [moria] minion and spot X burdens to add (X) (limit (5)).
 		*/
 

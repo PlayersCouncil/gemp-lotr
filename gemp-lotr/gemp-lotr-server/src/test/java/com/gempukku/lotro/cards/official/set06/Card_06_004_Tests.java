@@ -41,7 +41,6 @@ public class Card_06_004_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: When you play this minion, you may spot 2 other [dunland] Men to take control of a site. The Free Peoples player may discard 2 cards from hand to prevent this.
 		*/

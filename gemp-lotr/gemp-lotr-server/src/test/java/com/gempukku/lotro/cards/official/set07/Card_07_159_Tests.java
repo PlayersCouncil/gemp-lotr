@@ -39,7 +39,6 @@ public class Card_07_159_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Maneuver:</b> If you cannot spot 2 burdens, exert an Easterling to add a burden.<br><b>Skirmish:</b> Discard this condition to make an Easterling strength +2.
 		*/
 

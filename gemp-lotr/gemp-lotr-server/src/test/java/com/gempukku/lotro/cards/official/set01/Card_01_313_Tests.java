@@ -40,12 +40,13 @@ public class Card_01_313_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Frodo.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Exert Frodo to reveal an opponent's hand. Remove (1) for each Orc revealed (limit (4)).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Sting", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

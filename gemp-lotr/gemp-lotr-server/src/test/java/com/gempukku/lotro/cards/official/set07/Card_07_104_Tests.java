@@ -39,7 +39,6 @@ public class Card_07_104_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: Spot a [gondor] companion to reveal the top 5 cards of an opponent's draw deck. For each Shadow card revealed, add a threat. For each Free Peoples card revealed, place a [gondor] token on one of your conditions with a [gondor] token on it. Shuffle that draw deck.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_104_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

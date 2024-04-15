@@ -39,7 +39,6 @@ public class Card_03_091_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Regroup:</b> Exert a [sauron] minion to make the Free Peoples player discard the top card from his or her draw deck.
 		*/
 

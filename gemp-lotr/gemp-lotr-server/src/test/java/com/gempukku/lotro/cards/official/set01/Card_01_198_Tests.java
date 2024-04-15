@@ -39,12 +39,13 @@ public class Card_01_198_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. To play, exert a [moria] minion. Plays to your support area.<br>Each time the fellowship moves to site 4, 5, or 6 and contains a Dwarf or Elf, the Free Peoples player discards 2 cards at random from hand.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Through the Misty Mountains", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

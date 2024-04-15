@@ -39,7 +39,6 @@ public class Card_07_336_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2K
 		 * Game Text: <b>Plains</b>. If the Shadow has initiative, minions are not roaming.
 		*/

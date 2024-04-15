@@ -39,7 +39,6 @@ public class Card_07_314_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Response:</b> If your [sauron] minion wins a skirmish, place a [sauron] token here (limit 1 per site).<br><b>Regroup:</b> Add (2) for each token here. Discard this condition.
 		*/
 

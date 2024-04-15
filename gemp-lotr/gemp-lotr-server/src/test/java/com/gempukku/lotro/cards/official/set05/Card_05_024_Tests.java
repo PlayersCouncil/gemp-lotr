@@ -41,7 +41,6 @@ public class Card_05_024_Tests
 		 * Subtype: 
 		 * Strength: 5
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Regroup:</b> Discard Gollum to exert a companion or ally.
 		*/

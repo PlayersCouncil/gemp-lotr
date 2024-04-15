@@ -41,7 +41,6 @@ public class Card_07_302_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: Each time a companion is overwhelmed in a skirmish that involves a [sauron] Orc, add 3 burdens.
 		*/

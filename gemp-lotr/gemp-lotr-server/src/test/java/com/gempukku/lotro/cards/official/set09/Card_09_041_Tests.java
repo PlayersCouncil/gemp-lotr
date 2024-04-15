@@ -41,7 +41,6 @@ public class Card_09_041_Tests
 		 * Subtype: Orc
 		 * Strength: 15
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: When you play Host of Moria, you may play a [moria] card from your discard pile.
 		*/

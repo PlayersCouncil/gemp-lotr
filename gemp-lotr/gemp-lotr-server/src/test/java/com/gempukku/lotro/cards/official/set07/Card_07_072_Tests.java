@@ -41,9 +41,7 @@ public class Card_07_072_Tests
 		 * Subtype: 
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Frodo
-
 		 * Game Text: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> If you have initiative, discard 2 cards from your hand. Sméagol cannot be overwhelmed unless his strength is tripled.
 		*/
 

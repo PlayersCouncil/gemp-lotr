@@ -41,7 +41,6 @@ public class Card_03_111_Tests
 		 * Subtype: Hobbit
 		 * Strength: 1
 		 * Vitality: 2
-
 		 * Site Number: 1
 		 * Game Text: Each time a Shadow card makes you discard a card from hand, you may also discard a minion or Shadow condition.
 		*/

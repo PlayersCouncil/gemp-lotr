@@ -41,12 +41,13 @@ public class Card_00_064_Tests
 		 * Subtype: Wizard
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Game Text: 
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Gandalf", card.getBlueprint().getTitle());
 		assertEquals("Stormcrow", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

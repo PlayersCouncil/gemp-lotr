@@ -41,7 +41,6 @@ public class Card_04_191_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 12
 		 * Vitality: 4
-
 		 * Site Number: 5
 		 * Game Text: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert this minion at a battleground to make another Uruk-hai strength +1.
 		*/

@@ -39,7 +39,6 @@ public class Card_07_010_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: When you play this condition, you may stack 2 cards from hand here and draw a card for each [dwarven] card you stack.<br><b>Skirmish:</b> Make a Dwarf strength +2. Also, make that Dwarf <b>damage +2</b> for each [dwarven] card stacked on this condition. Discard this condition.
 		*/
 

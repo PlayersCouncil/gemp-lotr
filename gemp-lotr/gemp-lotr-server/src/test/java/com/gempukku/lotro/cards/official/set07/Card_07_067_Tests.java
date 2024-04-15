@@ -39,7 +39,6 @@ public class Card_07_067_Tests
 		 * Twilight Cost: 5
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot Gollum and add up to 9 threats.<br>Gollum is strength +2.<br>Discard this condition and remove 9 threats at the start of the regroup phase.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_04_082_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time an Elf wins a skirmish, you may place an [elven] token on this card.<br><b>Skirmish:</b> Make a minion skirmishing an Elf strength -1 for each [elven] token here (limit -3). Discard this condition.
 		*/
 

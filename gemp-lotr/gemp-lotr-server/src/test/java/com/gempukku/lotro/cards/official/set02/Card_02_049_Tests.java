@@ -41,7 +41,6 @@ public class Card_02_049_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Archer</b>.<br>Each other [moria] archer is strength +2.
 		*/

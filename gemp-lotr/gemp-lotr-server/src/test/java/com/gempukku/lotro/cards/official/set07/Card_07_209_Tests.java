@@ -39,7 +39,6 @@ public class Card_07_209_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Skirmish:</b> Transfer this condition from your support area to a character skirmishing a Nazgûl.<br>Each time bearer exerts, add (1).
 		*/
 

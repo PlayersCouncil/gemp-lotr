@@ -41,9 +41,7 @@ public class Card_04_302_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br><b>Fellowship:</b> Play a Ring-bound companion to remove a burden.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_07_293_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Discard a card from your hand to make a companion skirmishing this minion strength -1 for each other [sauron] Orc you spot (limit -3).
 		*/

@@ -39,7 +39,6 @@ public class Card_03_118_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7
 		 * Game Text: <b>River</b>. While the fellowship is at The Great River, cards may not be played from draw decks or discard piles.
 		*/

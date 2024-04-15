@@ -41,7 +41,6 @@ public class Card_05_059_Tests
 		 * Subtype: Mount
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: Bearer must be a warg-rider.<br>If bearer is Sharku, he is <b>damage +1</b>.<br><b>Response:</b> If a skirmish special ability is used in a skirmish involving bearer, exert bearer to cancel that action.
 		*/
 

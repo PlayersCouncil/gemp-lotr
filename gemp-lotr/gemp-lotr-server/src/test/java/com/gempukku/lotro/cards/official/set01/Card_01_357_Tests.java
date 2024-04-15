@@ -39,7 +39,6 @@ public class Card_01_357_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 8
 		 * Game Text: <b>River</b>. For each minion archer at Brown Lands, the minion archery total is +1 (limit +4).
 		*/

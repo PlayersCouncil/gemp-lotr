@@ -39,7 +39,6 @@ public class Card_04_351_Tests
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 5T
 		 * Game Text: <b>Battleground</b>. The fellowship archery total is +1. The minion archery total is -1.
 		*/

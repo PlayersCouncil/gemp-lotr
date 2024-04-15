@@ -41,9 +41,7 @@ public class Card_04_365_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Fellowship:</b> Play a [rohan] possession on a [rohan] companion to heal that companion (limit once per turn).
 		*/
 

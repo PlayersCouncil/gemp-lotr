@@ -39,7 +39,6 @@ public class Card_03_001_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Bearer must be a Dwarf.<br>At the start of each fellowship phase when the fellowship is at site 4 or higher, you may draw a card for each Dwarf companion.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_04_130_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Ring-bound</b>. <b>Ranger</b>.<br>When this companion is in your starting fellowship, his twilight cost is -1.<br>While skirmishing a roaming minion, this companion is strength +2.
 		*/
 

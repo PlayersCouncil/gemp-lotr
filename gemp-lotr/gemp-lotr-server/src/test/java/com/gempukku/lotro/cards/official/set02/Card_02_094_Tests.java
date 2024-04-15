@@ -39,7 +39,6 @@ public class Card_02_094_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert a [sauron] Orc. Plays on the Ring-bearer.<br>Each time the Free Peoples player draws a card (or takes a card into hand) during the fellowship phase, add a burden.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_08_001_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: While you have initiative, each Dwarf is <b>damage +1</b>.<br><b>Fellowship:</b> Spot a Dwarf who is damage +X to draw X cards. Discard this condition.
 		*/
 

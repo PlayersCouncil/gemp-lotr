@@ -39,7 +39,6 @@ public class Card_04_139_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, exert Saruman or an [isengard] Man. Plays on a Free Peoples Man.<br>Each time another ally or companion loses a skirmish, bearer must exert.
 		*/
 

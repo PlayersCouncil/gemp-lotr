@@ -41,7 +41,6 @@ public class Card_04_173_Tests
 		 * Subtype: Wizard
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.<br>When you play Saruman, you may discard a condition.<br><b>Shadow:</b> Exert Saruman to play Saruman's Staff from your discard pile.
 		*/

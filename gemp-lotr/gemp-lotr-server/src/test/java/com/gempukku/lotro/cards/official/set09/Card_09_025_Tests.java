@@ -41,7 +41,6 @@ public class Card_09_025_Tests
 		 * Subtype: Tree
 		 * Strength: 6
 		 * Vitality: 4
-
 		 * Game Text: <b>Damage +1</b>.<br>This companion is strength +1 for each Ent you can spot.<br><b>Response:</b> If this companion is about to take a wound, exert an Ent to prevent that.
 		*/
 

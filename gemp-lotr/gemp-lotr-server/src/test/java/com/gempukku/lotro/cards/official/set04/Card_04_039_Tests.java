@@ -39,7 +39,6 @@ public class Card_04_039_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot 3 [dunland] Men to discard a Free Peoples possession or condition.
 		*/
 

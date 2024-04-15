@@ -41,7 +41,6 @@ public class Card_05_105_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Regroup:</b> Spot a [sauron] condition and exert this minion to take control of a site.
 		*/

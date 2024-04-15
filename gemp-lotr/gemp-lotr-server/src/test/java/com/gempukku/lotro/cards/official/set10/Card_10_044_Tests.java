@@ -39,7 +39,6 @@ public class Card_10_044_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: Until the end of the assignment phase, each time a Southron is about to take a wound, prevent that.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_044_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

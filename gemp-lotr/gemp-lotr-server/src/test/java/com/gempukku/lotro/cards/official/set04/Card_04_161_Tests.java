@@ -39,7 +39,6 @@ public class Card_04_161_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Spot Saruman or an [isengard] Man to make an unbound companion strength -2.
 		*/
 

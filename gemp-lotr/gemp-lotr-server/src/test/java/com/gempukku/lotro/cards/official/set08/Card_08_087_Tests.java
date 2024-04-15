@@ -41,9 +41,7 @@ public class Card_08_087_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Valiant</b>.<br>When you play Éomer (except in your starting fellowship), you may reveal the top 10 cards of your draw deck. You may play each [rohan] possession revealed. Shuffle your draw deck.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_03_005_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. To play, exert a Dwarf. Plays to your support area.<br>The twilight cost of each [moria] weapon is +2.<br><b>Fellowship:</b> Discard this condition to discard up to 2 [moria] conditions.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_02_116_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1
 		 * Game Text: <b>Forest</b>. <b>Fellowship:</b> Exert a Hobbit to play your site 2 (replacing opponent's site if necessary).
 		*/

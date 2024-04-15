@@ -39,7 +39,6 @@ public class Card_08_088_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Shield
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>The minion archery total is -1.<br><b>Skirmish:</b> If bearer is Éowyn, add a threat and discard Éowyn's Shield to discard a hand weapon borne by a minion she is skirmishing.
 		*/
 

@@ -39,9 +39,7 @@ public class Card_05_039_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Vitality: -2
-
 		 * Game Text: <b>Fortification</b>. Plays to your support area.<br><b>Skirmish:</b> Exert 2 [gondor] Men to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
 		*/
 

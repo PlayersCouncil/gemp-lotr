@@ -41,7 +41,6 @@ public class Card_04_010_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: &nbsp; &nbsp;
 		*/

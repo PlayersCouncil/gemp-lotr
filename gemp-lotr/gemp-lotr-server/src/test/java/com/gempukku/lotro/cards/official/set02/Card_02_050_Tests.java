@@ -40,7 +40,6 @@ public class Card_02_050_Tests
 		 * Type: Artifact
 		 * Subtype: Hand weapon
 		 * Strength: 3
-
 		 * Game Text: Bearer must be The Balrog.<br>It is <b>damage +1</b>.<br>This weapon may be borne in addition to 1 other hand weapon.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_07_306_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>If you have initiative when you play this minion, you may spot another [sauron] Orc to draw 2 cards.
 		*/

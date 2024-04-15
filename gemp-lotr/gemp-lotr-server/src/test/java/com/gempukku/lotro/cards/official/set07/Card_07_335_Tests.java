@@ -39,7 +39,6 @@ public class Card_07_335_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2K
 		 * Game Text: <b>Shadow:</b> If the Shadow has initiative, spot your minion to make the move limit for this turn -1.
 		*/

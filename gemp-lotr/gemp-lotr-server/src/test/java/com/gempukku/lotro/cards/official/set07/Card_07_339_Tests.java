@@ -28,7 +28,7 @@ public class Card_07_339_Tests
 	}
 
 	@Test
-	public void HallofKingsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HalloftheKingsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 7
@@ -39,7 +39,6 @@ public class Card_07_339_Tests
 		 * Shadow Number: 1
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3K
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 3 threats, add a threat to draw a card.
 		*/
@@ -61,7 +60,7 @@ public class Card_07_339_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void HallofKingsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HalloftheKingsTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

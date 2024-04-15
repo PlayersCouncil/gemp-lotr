@@ -41,7 +41,6 @@ public class Card_07_113_Tests
 		 * Subtype: Armor
 		 * Strength: 2
 		 * Vitality: -1
-
 		 * Game Text: Bearer must be Pippin.<br>While you can spot 3 [gondor] Men, Pippin may take no more than 1 wound in a skirmish.
 		*/
 

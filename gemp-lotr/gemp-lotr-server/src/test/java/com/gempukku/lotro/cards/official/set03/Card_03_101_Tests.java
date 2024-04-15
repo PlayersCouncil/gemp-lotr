@@ -41,7 +41,6 @@ public class Card_03_101_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Maneuver:</b> Exert this minion and discard your [sauron] condition to make the Free Peoples player discard the top 2 cards from his or her draw deck.
 		*/

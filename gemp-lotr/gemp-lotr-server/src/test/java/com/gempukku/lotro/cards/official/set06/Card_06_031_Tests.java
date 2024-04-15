@@ -40,7 +40,6 @@ public class Card_06_031_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Gandalf.<br>He is <b>damage +1</b>.<br>Each time you play a spell during a skirmish, you may make Gandalf <b>damage +1</b> until the end of that skirmish.
 		*/
 

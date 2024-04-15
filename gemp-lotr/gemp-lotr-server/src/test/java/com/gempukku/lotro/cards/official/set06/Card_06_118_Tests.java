@@ -39,7 +39,6 @@ public class Card_06_118_Tests
 		 * Shadow Number: 3
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 6T
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Spot 3 companions with the Théoden signet and discard your hand to draw 4 cards.
 		*/

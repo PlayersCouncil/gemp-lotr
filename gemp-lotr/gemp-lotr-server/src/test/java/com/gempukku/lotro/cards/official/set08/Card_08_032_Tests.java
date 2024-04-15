@@ -39,7 +39,6 @@ public class Card_08_032_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 [gondor] knights.<br><b>Maneuver:</b> Discard 2 cards from hand to reveal the top card of an opponent's draw deck. Choose an opponent who must discard a Shadow card that has a twilight cost that is the same as the twilight cost of the revealed card.
 		*/
 

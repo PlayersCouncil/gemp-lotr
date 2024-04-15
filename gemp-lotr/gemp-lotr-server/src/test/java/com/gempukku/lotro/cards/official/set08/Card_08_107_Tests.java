@@ -39,7 +39,6 @@ public class Card_08_107_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Engine</b>. To play, spot a [sauron] minion.<br><b>Regroup:</b> Remove a threat to stack your [sauron] minion on a site you control.<br><b>Shadow:</b> Remove a threat to play a [sauron] minion stacked on a site you control.
 		*/
 

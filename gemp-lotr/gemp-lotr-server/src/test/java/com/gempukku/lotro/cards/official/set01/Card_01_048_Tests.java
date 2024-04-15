@@ -41,12 +41,13 @@ public class Card_01_048_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: To play, spot an Elf.<br>While Haldir is at site 6, 7, or 8, he is strength +2.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Haldir", card.getBlueprint().getTitle());
 		assertEquals("Elf of the Golden Wood", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

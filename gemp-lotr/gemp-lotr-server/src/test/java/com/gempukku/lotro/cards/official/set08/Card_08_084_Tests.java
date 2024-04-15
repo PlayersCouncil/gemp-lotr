@@ -41,7 +41,6 @@ public class Card_08_084_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Enduring</b>.<br>Each Man skirmishing The Witch-king loses all strength bonuses from weapons.
 		*/

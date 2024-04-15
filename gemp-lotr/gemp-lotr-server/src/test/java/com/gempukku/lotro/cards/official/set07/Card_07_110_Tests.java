@@ -41,7 +41,6 @@ public class Card_07_110_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Ranger</b>.<br><b>Skirmish:</b> If you have initiative, discard 2 cards from hand to wound a roaming minion Madril is skirmishing.
 		*/
 

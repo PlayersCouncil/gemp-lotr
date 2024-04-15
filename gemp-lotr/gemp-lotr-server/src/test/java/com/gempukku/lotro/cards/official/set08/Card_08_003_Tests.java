@@ -39,7 +39,6 @@ public class Card_08_003_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent discard X Shadow cards.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_003_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

@@ -41,7 +41,6 @@ public class Card_10_093_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Shadow:</b> Spot 4 Free Peoples cultures and exert another [sauron] minion twice to add (3) and draw a card.
 		*/

@@ -39,7 +39,6 @@ public class Card_07_093_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be a [gondor] Man.<br><b>Response:</b> If bearer is about to be overwhelmed, discard a [gondor] fortification or a card from hand to make bearer strength +2.
 		*/
 

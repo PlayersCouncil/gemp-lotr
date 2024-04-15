@@ -39,7 +39,6 @@ public class Card_07_283_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 [sauron] Orcs and add up to 3 threats.<br>Each time a companion is about to be killed, you may remove a threat to make all minions <b>fierce</b> until the regroup phase.<br>Discard this condition and remove 3 threats at the start of the regroup phase.
 		*/
 

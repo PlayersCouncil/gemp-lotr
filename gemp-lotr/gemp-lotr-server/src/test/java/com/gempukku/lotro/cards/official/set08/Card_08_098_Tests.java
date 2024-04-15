@@ -41,7 +41,6 @@ public class Card_08_098_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Besieger</b>.<br>When you play this minion, you may remove a burden to play a besieger stacked on a site you control.
 		*/

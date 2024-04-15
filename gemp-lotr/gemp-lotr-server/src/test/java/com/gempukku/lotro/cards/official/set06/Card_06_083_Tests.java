@@ -40,7 +40,6 @@ public class Card_06_083_Tests
 		 * Type: Possession
 		 * Subtype: Mount
 		 * Strength: 2
-
 		 * Game Text: To play, discard 2 cards from hand. Bearer must be a Nazgûl.<br>Bearer is <b>fierce</b>.
 		*/
 

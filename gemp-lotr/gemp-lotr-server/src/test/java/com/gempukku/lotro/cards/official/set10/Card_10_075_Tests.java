@@ -41,7 +41,6 @@ public class Card_10_075_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: Each roaming [sauron] minion is <b>damage +1</b>.
 		*/

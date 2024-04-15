@@ -41,7 +41,6 @@ public class Card_06_078_Tests
 		 * Subtype: Man
 		 * Strength: 13
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Spot 2 burdens and exert this minion to make an Easterling strength +1.<br><b>Skirmish:</b> Spot 4 burdens and exert this minion to make an Easterling strength +2.<br><b>Skirmish:</b> Spot 6 burdens and exert this minion to make an Easterling strength +3.
 		*/

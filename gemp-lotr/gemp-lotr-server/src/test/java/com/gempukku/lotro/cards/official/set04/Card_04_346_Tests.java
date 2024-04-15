@@ -39,7 +39,6 @@ public class Card_04_346_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4T
 		 * Game Text: <b>Battleground</b>. The Shadow number of this site is +1 for each mounted companion.
 		*/

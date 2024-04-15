@@ -39,7 +39,6 @@ public class Card_04_307_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Exert Sam to make him strength +3. If Sam wins this skirmish, you may remove a burden.
 		*/
 

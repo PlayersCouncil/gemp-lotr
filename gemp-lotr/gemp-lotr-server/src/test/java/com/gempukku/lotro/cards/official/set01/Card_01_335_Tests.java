@@ -39,7 +39,6 @@ public class Card_01_335_Tests
 		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2
 		 * Game Text: Each Nazgûl's twilight cost is -1.
 		*/

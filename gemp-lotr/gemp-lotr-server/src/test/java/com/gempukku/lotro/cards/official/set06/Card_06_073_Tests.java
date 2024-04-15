@@ -39,7 +39,6 @@ public class Card_06_073_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a regroup action discards an [isengard] Orc, you may stack that Orc on this card.<br><b>Response:</b> If an [isengard] Orc is about to take a wound, discard 2 cards stacked here to prevent that wound.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_02_007_Tests
 		 * Subtype: Dwarf
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: For each [dwarven] tale you can spot, Glóin is strength +1 (limit +4).
 		*/
 

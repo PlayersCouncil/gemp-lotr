@@ -40,7 +40,6 @@ public class Card_02_108_Tests
 		 * Type: Condition
 		 * Subtype: 
 		 * Strength: 1
-
 		 * Game Text: <b>Tale</b>. Bearer must be the Ring-bearer.<br><b>Skirmish:</b> Discard this condition to take off The One Ring or to cancel a skirmish involving the Ring-bearer and a Nazgûl.
 		*/
 

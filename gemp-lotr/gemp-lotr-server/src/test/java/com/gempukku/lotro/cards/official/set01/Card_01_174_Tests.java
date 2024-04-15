@@ -41,13 +41,14 @@ public class Card_01_174_Tests
 		 * Subtype: Orc
 		 * Strength: 5
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: This minion is <b>damage +2</b> while in the same skirmish as another [moria] Orc.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Goblin Backstabber", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

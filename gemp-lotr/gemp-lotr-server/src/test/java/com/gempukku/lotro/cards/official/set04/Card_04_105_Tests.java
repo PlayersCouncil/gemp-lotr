@@ -39,7 +39,6 @@ public class Card_04_105_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Make Gandalf strength +1 for each twilight token you spot (limit +5).
 		*/
 

@@ -39,7 +39,6 @@ public class Card_04_141_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If a companion or ally is killed, exert an [isengard] minion to add a burden (or 2 burdens if Aragorn, Gandalf, or Théoden is killed).
 		*/
 

@@ -39,7 +39,6 @@ public class Card_01_333_Tests
 		 * Shadow Number: 1
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2
 		 * Game Text: <b>Plains</b>. Each time a minion is played, the Free Peoples player discards a card from hand.
 		*/

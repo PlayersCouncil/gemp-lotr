@@ -40,7 +40,6 @@ public class Card_04_064_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be an Elf.<br><b>Skirmish:</b> Exert bearer or discard 2 cards from hand to make a minion skirmishing bearer strength -1.
 		*/
 

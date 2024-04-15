@@ -41,7 +41,6 @@ public class Card_03_100_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Discard your [sauron] condition to make a character skirmishing this minion strength -1.
 		*/

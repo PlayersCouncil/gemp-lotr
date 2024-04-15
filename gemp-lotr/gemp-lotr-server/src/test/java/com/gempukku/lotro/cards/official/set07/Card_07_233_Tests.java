@@ -41,7 +41,6 @@ public class Card_07_233_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Valiant</b>.<br><b>Skirmish:</b> Replace the fellowship's site with your plains site of the same number to discard a card from hand.
 		*/
 

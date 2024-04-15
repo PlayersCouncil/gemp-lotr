@@ -41,7 +41,6 @@ public class Card_04_138_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Site Number: 5
 		 * Game Text: <b>Archer</b>. <b>Damage +1</b>.<br>While you control a site, the minion archery total is +1.
 		*/

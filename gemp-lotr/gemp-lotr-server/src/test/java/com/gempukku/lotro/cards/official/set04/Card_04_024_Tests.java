@@ -41,7 +41,6 @@ public class Card_04_024_Tests
 		 * Subtype: Man
 		 * Strength: 10
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: Each time this minion wins a skirmish, you may stack it on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -2.
 		*/

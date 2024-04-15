@@ -41,7 +41,6 @@ public class Card_07_189_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: While you can spot a Nazgûl, this minion is strength +2.
 		*/

@@ -39,7 +39,6 @@ public class Card_03_085_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot a Nazgûl to wound Gandalf twice. The Free Peoples player may discard 2 [gandalf] cards from hand to prevent this.
 		*/
 

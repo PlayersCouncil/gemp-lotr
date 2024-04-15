@@ -39,7 +39,6 @@ public class Card_05_060_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Play an Uruk-hai to place an [isengard] token on a machine.<br><b>Response:</b> If one or more machines are about to be discarded by an opponent, discard this condition to prevent that.
 		*/
 

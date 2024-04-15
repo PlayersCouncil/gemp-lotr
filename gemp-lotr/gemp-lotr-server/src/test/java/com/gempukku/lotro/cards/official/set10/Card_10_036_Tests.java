@@ -39,7 +39,6 @@ public class Card_10_036_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Regroup:</b> Spot a Southron, remove a threat, and remove (3) to wound an unbound companion.
 		*/
 

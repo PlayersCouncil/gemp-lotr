@@ -39,7 +39,6 @@ public class Card_04_059_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Exert X Elf companions to make a minion skirmishing an unbound companion strength -X.
 		*/
 

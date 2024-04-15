@@ -39,7 +39,6 @@ public class Card_04_034_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving a [dunland] Man, you may place a [dunland] token on this card.<br><b>Maneuver:</b> Discard a Free Peoples possession for each [dunland] token here (limit 3). Discard this condition.
 		*/
 

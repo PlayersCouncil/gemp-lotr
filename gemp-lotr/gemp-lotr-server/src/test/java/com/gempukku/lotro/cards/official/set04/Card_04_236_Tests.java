@@ -39,7 +39,6 @@ public class Card_04_236_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving a Southron, you may remove (4) to make the Free Peoples player wound a Ring-bound companion.
 		*/
 

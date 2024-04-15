@@ -41,13 +41,14 @@ public class Card_01_233_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 2
 		 * Game Text: <b>Fierce</b>.<br><b>Shadow:</b> Exert Úlairë Nelya and spot an opponent's site to replace it with your site of the same number.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Úlairë Nelya", card.getBlueprint().getTitle());
 		assertEquals("Lieutenant of Morgul", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

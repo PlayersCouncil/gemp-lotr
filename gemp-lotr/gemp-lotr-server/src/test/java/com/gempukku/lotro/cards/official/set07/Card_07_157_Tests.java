@@ -39,7 +39,6 @@ public class Card_07_157_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Exert a [raider] Man to wound a companion he is skirmishing twice.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_157_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 	}
 

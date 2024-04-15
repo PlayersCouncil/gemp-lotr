@@ -41,7 +41,6 @@ public class Card_06_122_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 3
 		 * Game Text: <b>Fierce</b>.<br>Each time a companion is killed in a skirmish involving a Nazgûl, wound an ally twice or exert a companion.
 		*/

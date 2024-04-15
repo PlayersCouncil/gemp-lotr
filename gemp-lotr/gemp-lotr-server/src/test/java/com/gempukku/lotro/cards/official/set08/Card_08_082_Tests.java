@@ -39,7 +39,6 @@ public class Card_08_082_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a Nazgûl strength +2. If that Nazgûl wins this skirmish, the Shadow has initiative until the end of the turn, regardless of the Free Peoples player's hand.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_082_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

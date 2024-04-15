@@ -39,12 +39,13 @@ public class Card_01_292_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Pipe
-
 		 * Game Text: Bearer must be a Hobbit.<br><b>Fellowship:</b> Discard a pipeweed possession and spot X pipes to remove (X).
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Gaffer's Pipe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_03_090_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert a [sauron] minion to make the Free Peoples player discard a card at random from his or her hand.
 		*/
 

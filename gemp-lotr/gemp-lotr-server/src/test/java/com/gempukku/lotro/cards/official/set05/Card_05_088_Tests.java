@@ -40,7 +40,6 @@ public class Card_05_088_Tests
 		 * Type: Possession
 		 * Subtype: Ranged weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a [rohan] Man.<br><b>Archery:</b> Exert bearer and discard this possession to wound a minion.
 		*/
 

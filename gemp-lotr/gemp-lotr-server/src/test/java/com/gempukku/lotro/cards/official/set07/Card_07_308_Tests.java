@@ -39,7 +39,6 @@ public class Card_07_308_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 [sauron] Orcs.<br><b>Regroup:</b> Exert a [sauron] Orc and remove a threat to shuffle a [sauron] Orc from play into your draw deck.
 		*/
 

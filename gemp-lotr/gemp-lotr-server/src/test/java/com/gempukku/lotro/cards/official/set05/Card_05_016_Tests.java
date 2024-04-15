@@ -39,7 +39,6 @@ public class Card_05_016_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Spell</b>.<br><b>Maneuver:</b> Exert Gandalf 3 times to make an unbound companion with the Gandalf signet strength +5, <b>defender +1</b>, <b>damage +2</b>, and unable to take wounds until the regroup phase.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_05_016_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 	}

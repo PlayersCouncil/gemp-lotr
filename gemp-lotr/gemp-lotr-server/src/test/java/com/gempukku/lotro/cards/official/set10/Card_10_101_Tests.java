@@ -41,7 +41,6 @@ public class Card_10_101_Tests
 		 * Subtype: Troll
 		 * Strength: 14
 		 * Vitality: 4
-
 		 * Site Number: 6
 		 * Game Text: <b>Damage +1</b>. <b>Fierce</b>. To play, spot a [sauron] minion.<br>This minion is strength +1 for each possession you can spot.
 		*/

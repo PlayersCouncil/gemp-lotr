@@ -41,7 +41,6 @@ public class Card_06_106_Tests
 		 * Subtype: Troll
 		 * Strength: 14
 		 * Vitality: 5
-
 		 * Site Number: 6
 		 * Game Text: <b>Fierce</b>.<br>While you can spot a Troll, this minion's twilight cost is -4.<br><b>Skirmish:</b> Discard a [sauron] card from hand to make this minion strength +1.
 		*/

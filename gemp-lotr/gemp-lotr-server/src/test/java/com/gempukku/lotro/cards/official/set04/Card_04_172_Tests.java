@@ -39,7 +39,6 @@ public class Card_04_172_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot Saruman or an [isengard] Man. Plays on a Free Peoples Man.<br>Each time the Free Peoples player assigns bearer to a skirmish, exert each ally.
 		*/
 

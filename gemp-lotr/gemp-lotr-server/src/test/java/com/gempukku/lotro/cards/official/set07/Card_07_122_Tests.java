@@ -39,7 +39,6 @@ public class Card_07_122_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 [gondor] Men.<br>The twilight cost of each of your [gondor] fortifications is -1.<br><b>Response:</b> If an opponent is about to control a site, discard 2 [gondor] fortifications to prevent this.
 		*/
 

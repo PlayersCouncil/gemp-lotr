@@ -39,7 +39,6 @@ public class Card_02_105_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be Frodo.<br>The minion archery total is -1.<br>Each minion skirmishing Frodo does not gain strength bonuses from weapons and loses all <b>damage</b> bonuses.
 		*/
 

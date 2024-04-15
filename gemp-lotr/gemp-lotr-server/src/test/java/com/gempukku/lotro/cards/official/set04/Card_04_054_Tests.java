@@ -39,7 +39,6 @@ public class Card_04_054_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Shuffle any number of [dwarven] conditions (and all cards stacked on them) into your draw deck.
 		*/
 

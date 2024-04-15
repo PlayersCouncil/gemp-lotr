@@ -39,7 +39,6 @@ public class Card_04_290_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Fellowship:</b> Add (2) and place a villager from hand beneath your draw deck to heal a [rohan] ally.
 		*/
 

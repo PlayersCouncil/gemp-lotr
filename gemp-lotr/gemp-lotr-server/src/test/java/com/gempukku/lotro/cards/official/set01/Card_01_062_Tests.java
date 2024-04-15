@@ -39,12 +39,13 @@ public class Card_01_062_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Bearer must be an Elf companion.<br><b>Archery:</b> If bearer is an archer, exert bearer to make the fellowship archery total +1.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Splendor of Their Banners", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

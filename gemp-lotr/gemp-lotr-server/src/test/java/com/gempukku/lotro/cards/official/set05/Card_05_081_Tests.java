@@ -41,7 +41,6 @@ public class Card_05_081_Tests
 		 * Subtype: Man
 		 * Strength: 4
 		 * Vitality: 2
-
 		 * Site Number: 4T
 		 * Game Text: <b>Villager</b>.<br><b>Fellowship:</b> Exert Ecglaf and spot 2 valiant Men to play a [rohan] possession from your discard pile.
 		*/

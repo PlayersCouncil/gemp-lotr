@@ -41,7 +41,6 @@ public class Card_03_060_Tests
 		 * Subtype: Orc
 		 * Strength: 8
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Regroup:</b> Exert this minion to discard a weapon (or all Free Peoples possessions if you can spot 5 companions).
 		*/

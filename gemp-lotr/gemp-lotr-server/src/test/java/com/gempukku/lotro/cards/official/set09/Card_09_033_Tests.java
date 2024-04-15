@@ -42,7 +42,6 @@ public class Card_09_033_Tests
 		 * Strength: 7
 		 * Vitality: 3
 		 * Resistance: 6
-
 		 * Game Text: While Isildur is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or exert 3 companions.<br>While Isildur bears The One Ring or an artifact, each [gondor] knight is strength +1.
 		*/
 

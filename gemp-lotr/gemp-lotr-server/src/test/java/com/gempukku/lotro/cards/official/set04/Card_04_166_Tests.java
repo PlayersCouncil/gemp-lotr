@@ -39,7 +39,6 @@ public class Card_04_166_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: 
-
 		 * Game Text: To play, spot an [isengard] minion. Plays to your support area.<br><b>Shadow:</b> Spot an [isengard] minion and remove (2) to reveal the top card of any draw deck. You may place that card beneath that draw deck.
 		*/
 

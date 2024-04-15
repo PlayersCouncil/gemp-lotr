@@ -39,7 +39,6 @@ public class Card_07_309_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: To play, spot 2 [sauron] Orcs.<br>Discard any number of cards from hand. The Free Peoples player then discards any number of cards from hand. For each card you discarded more than the Free Peoples player, make a [sauron] Orc strength +2.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_309_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

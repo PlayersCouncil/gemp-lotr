@@ -39,7 +39,6 @@ public class Card_06_007_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Shadow:</b> Spot 2 sites you control and remove (2) to play a [dunland] Man from your discard pile.
 		*/
 

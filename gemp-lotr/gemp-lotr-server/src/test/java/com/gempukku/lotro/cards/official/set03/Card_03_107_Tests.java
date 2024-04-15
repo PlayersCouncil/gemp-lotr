@@ -39,7 +39,6 @@ public class Card_03_107_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Pipe
-
 		 * Game Text: Bearer must be Frodo.<br><b>Fellowship:</b> Discard a pipeweed possession and spot X pipes to heal a companion with the Frodo signet X times.
 		*/
 

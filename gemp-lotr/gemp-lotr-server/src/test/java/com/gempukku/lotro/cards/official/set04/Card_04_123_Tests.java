@@ -39,7 +39,6 @@ public class Card_04_123_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot Aragorn to heal a companion who has the Aragorn signet twice.
 		*/
 

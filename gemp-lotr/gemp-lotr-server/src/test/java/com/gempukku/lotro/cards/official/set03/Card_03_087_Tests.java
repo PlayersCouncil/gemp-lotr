@@ -39,7 +39,6 @@ public class Card_03_087_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert a [sauron] minion to reveal a card at random from the Free Peoples player's hand. That player must discard X cards from hand, where X is the twilight cost of the card revealed.
 		*/
 

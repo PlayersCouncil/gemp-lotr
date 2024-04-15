@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 
 public class Card_02_028_Tests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new GenericCardTestHelper(
                 new HashMap<>() {{
                     put("wielder", "2_28");
                     put("gandalf", "1_364");
@@ -22,53 +22,54 @@ public class Card_02_028_Tests
                     put("runner", "1_178");
 
                 }}
-        );
-    }
+		);
+	}
 
-    @Test
-    public void WielderoftheFlameStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void WielderoftheFlameStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
-        /**
-         * Set: 2
-         * Name: Wielder of the Flame
-         * Unique: False
-         * Side: Free Peoples
-         * Culture: Gandalf
-         * Twilight Cost: 1
-         * Type: Event
-         * Subtype: Maneuver
+		/**
+		 * Set: 2
+		 * Name: Wielder of the Flame
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Maneuver
 
-         * Game Text: <b>Spell</b>.<br><b>Maneuver:</b> Spot Gandalf to make a companion <b>defender +1</b> until the regroup phase. Any Shadow player may remove (3) to prevent this.
-         */
+		 * Game Text: <b>Spell</b>.<br><b>Maneuver:</b> Spot Gandalf to make a companion <b>defender +1</b> until the regroup phase. Any Shadow player may remove (3) to prevent this.
+		*/
 
-        var scn = GetScenario();
+		var scn = GetScenario();
 
         var card = scn.GetFreepsCard("wielder");
 
-        assertEquals("Wielder of the Flame", card.getBlueprint().getTitle());
-        assertNull(card.getBlueprint().getSubtitle());
-        assertFalse(card.getBlueprint().isUnique());
-        assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-        assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-        assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
-        assertEquals(1, card.getBlueprint().getTwilightCost());
-    }
+		assertEquals("Wielder of the Flame", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
+		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+	}
 
-    // Uncomment any @Test markers below once this is ready to be used
-    //@Test
-    public void WielderoftheFlameTest1() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        var scn = GetScenario();
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void WielderoftheFlameTest1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
 
-        var card = scn.GetFreepsCard("card");
-        scn.FreepsMoveCardToHand(card);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
-        scn.StartGame();
-        scn.FreepsPlayCard(card);
+		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-        assertEquals(1, scn.GetTwilight());
-    }
+		assertEquals(1, scn.GetTwilight());
+	}
 
     @Test
     public void WielderAbilityCanBePrevented() throws DecisionResultInvalidException, CardNotFoundException {

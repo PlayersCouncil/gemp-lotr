@@ -39,7 +39,6 @@ public class Card_02_106_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Stealth</b>. Plays to your support area.<br><b>Response:</b> If a Hobbit is about to take a wound, discard this condition to prevent that wound.
 		*/
 

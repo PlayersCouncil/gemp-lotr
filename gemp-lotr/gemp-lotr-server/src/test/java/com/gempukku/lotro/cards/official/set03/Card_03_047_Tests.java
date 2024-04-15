@@ -39,7 +39,6 @@ public class Card_03_047_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert Aragorn to make each companion with the Aragorn signet <b>damage +1</b> until the regroup phase.
 		*/
 

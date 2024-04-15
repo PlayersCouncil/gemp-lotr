@@ -39,9 +39,7 @@ public class Card_04_111_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Faramir.<br><b>Skirmish:</b> Discard a [gondor] card from hand to make a Ring-bound Man strength +1.
 		*/
 

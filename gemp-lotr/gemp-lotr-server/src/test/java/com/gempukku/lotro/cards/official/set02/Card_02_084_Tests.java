@@ -41,7 +41,6 @@ public class Card_02_084_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 2
 		 * Game Text: <b>Twilight</b>.<br>While you can spot 2 burdens or 2 wounds on the Ring-bearer, Úlairë Nelya is <b>fierce</b> and <b>damage +1</b>.
 		*/

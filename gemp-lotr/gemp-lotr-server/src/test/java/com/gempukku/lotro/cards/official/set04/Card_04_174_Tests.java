@@ -40,7 +40,6 @@ public class Card_04_174_Tests
 		 * Type: Artifact
 		 * Subtype: Staff
 		 * Strength: 2
-
 		 * Game Text: Plays on Saruman.<br>He is <b>fierce</b> and <b>damage +1</b>.<br><b>Maneuver:</b> Make the first sentence of Saruman's game text not apply until the regroup phase.
 		*/
 

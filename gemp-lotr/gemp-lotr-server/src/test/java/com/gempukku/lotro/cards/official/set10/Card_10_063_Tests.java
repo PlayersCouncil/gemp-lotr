@@ -41,7 +41,6 @@ public class Card_10_063_Tests
 		 * Subtype: Orc
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Assignment:</b> Assign this minion to an unbound companion bearing a hand weapon.
 		*/

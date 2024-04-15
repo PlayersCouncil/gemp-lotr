@@ -42,7 +42,6 @@ public class Card_09_004_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 4
-
 		 * Game Text: <b>Damage +1</b>.<br>While Gimli is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or 2 threats.<br>While Gimli is damage +X, he is resistance +X.
 		*/
 

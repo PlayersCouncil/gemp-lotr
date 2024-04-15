@@ -41,7 +41,6 @@ public class Card_10_094_Tests
 		 * Subtype: Orc
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: To play, spot a [sauron] minion.<br><b>Shadow:</b> Remove 2 threats to discard a condition.
 		*/

@@ -39,7 +39,6 @@ public class Card_03_031_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Stealth</b>.<br><b>Maneuver:</b> At sites 1 to 5, spot Gandalf to prevent Hobbits from being assigned to skirmishes until the regroup phase. At any other site, spot Gandalf to make a Hobbit strength +3 until the regroup phase.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_03_031_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.STEALTH));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}

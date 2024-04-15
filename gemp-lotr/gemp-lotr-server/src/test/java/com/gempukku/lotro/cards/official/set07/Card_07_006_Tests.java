@@ -41,9 +41,7 @@ public class Card_07_006_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Theoden
-
 		 * Game Text: <b>Damage +1</b>.<br>While you have initiative, Gimli is strength +2.
 		*/
 

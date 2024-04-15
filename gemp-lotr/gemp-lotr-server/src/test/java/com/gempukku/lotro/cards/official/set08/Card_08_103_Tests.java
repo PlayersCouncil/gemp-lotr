@@ -39,7 +39,6 @@ public class Card_08_103_Tests
 		 * Twilight Cost: 3
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: <b>Engine</b>.<br><b>Shadow:</b> Play a [sauron] minion to add a [sauron] token here.<br><b>Regroup:</b> Remove X [sauron] tokens here to discard a Free Peoples card (except a companion) with a twilight cost of X. Discard a [sauron] minion or this possession.
 		*/
 

@@ -40,7 +40,6 @@ public class Card_08_064_Tests
 		 * Type: Possession
 		 * Subtype: Mount
 		 * Strength: 3
-
 		 * Game Text: Bearer must be a Southron.<br>Bearer is <b>fierce</b>.<br>While you have initiative or can spot 4 threats, bearer is <b>damage +1</b>.
 		*/
 

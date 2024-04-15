@@ -39,7 +39,6 @@ public class Card_04_274_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Mount
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>If bearer is Éomer, he is <b>defender +1</b>.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
 		*/
 

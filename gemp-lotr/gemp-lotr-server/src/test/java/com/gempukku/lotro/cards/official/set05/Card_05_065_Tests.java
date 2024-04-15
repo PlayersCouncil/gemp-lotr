@@ -41,7 +41,6 @@ public class Card_05_065_Tests
 		 * Subtype: Mount
 		 * Strength: 3
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be a warg-rider.<br><b>Response:</b> If a skirmish special ability is used in a skirmish involving bearer, exert bearer to cancel that action.
 		*/
 

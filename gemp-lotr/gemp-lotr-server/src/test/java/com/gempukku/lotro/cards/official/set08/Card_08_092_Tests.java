@@ -41,9 +41,7 @@ public class Card_08_092_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Valiant</b>.<br>While you can spot a [rohan] Man, Théoden's twilight cost is -1.<br>When Théoden is killed, you may play a [rohan] companion from your discard pile or draw deck.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_04_211_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Play an [isengard] archer to place an [isengard] token on this card.<br><b>Archery:</b> Remove 2 [isengard] tokens from this card to make the minion archery total +2. Discard this condition.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_07_216_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 2
 		 * Game Text: <b>Fierce</b>.<br><b>Regroup:</b> If you have initiative, discard Úlairë Nelya to exert each Ring-bound companion.
 		*/

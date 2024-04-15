@@ -41,7 +41,6 @@ public class Card_04_012_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 1
-
 		 * Site Number: 3
 		 * Game Text: Each time this minion wins a skirmish, you may make him strength +2 and <b>fierce</b> until the regroup phase.
 		*/

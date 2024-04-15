@@ -39,12 +39,13 @@ public class Card_01_028_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Spot a Dwarf to reveal the top 3 cards of your draw deck. Take all Free People cards revealed into hand and discard the rest.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Wealth of Moria", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

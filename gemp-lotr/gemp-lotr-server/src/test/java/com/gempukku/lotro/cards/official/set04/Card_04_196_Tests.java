@@ -40,7 +40,6 @@ public class Card_04_196_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be an Uruk-hai.<br><b>Maneuver:</b> Exert bearer to discard a Free Peoples mount.
 		*/
 

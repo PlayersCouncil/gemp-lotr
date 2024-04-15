@@ -39,12 +39,13 @@ public class Card_01_170_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Spot a Hobbit (except the Ring-bearer) to reveal cards from the top of your draw deck until you reveal one that is not a [moria] minion. Take the revealed cards into hand.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Fool of a Took!", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

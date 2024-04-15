@@ -39,7 +39,6 @@ public class Card_10_012_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 Elves.<br>Each time you lose initiative, make a minion strength -4 until the regroup phase.
 		*/
 

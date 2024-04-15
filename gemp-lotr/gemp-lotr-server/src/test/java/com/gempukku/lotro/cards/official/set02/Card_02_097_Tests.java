@@ -39,7 +39,6 @@ public class Card_02_097_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Tale</b>. Bearer must be Bilbo.<br>Bilbo may not take wounds (except during the archery phase).<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Exert Bilbo or discard this condition to remove (1).
 		*/
 

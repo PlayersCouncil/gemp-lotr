@@ -39,7 +39,6 @@ public class Card_07_250_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Mount
-
 		 * Game Text: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br><b>Regroup:</b> If bearer is Théoden, exert him to liberate a site. Any Shadow player may remove (2) to prevent this.
 		*/
 

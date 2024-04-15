@@ -40,7 +40,6 @@ public class Card_07_203_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be a [wraith] minion.<br>While you can spot 5 threats, bearer is <b>damage +1</b>.
 		*/
 

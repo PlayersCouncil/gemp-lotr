@@ -39,7 +39,6 @@ public class Card_10_001_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Response
-
 		 * Game Text: If an opponent plays a minion, exert a Dwarf who is damage +X to exert that minion X times.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_10_001_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

@@ -41,7 +41,6 @@ public class Card_07_160_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br><b>Maneuver:</b> Exert this minion to add (5). The Free Peoples player may add a threat to prevent this.
 		*/

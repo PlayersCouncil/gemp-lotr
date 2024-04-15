@@ -41,7 +41,6 @@ public class Card_07_287_Tests
 		 * Subtype: Orc
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Skirmish:</b> Exert 3 [sauron] Orcs to add 3 threats.<br>When this minion is discarded, remove 3 threats.
 		*/

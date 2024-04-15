@@ -39,7 +39,6 @@ public class Card_04_339_Tests
 		 * Shadow Number: 0
 		 * Type: Sanctuary
 		 * Subtype: 
-
 		 * Site Number: 3T
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Exert a [rohan] Man to play a [rohan] mount from your draw deck (limit once per turn).
 		*/

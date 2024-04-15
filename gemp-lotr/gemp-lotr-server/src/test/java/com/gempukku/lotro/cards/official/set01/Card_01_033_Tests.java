@@ -40,12 +40,13 @@ public class Card_01_033_Tests
 		 * Type: Possession
 		 * Subtype: Ranged weapon
 		 * Strength: 1
-
 		 * Game Text: Bearer must be Legolas.<br>Each time Legolas wins a skirmish, you may wound a minion.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Bow of the Galadhrim", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

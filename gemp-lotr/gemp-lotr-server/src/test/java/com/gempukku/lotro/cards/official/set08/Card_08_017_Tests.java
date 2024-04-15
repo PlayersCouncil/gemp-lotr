@@ -39,7 +39,6 @@ public class Card_08_017_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: If Gandalf is not assigned to a skirmish, spot Shadowfax or exert Gandalf to have Gandalf replace an unbound companion in a skirmish.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_08_017_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

@@ -39,12 +39,13 @@ public class Card_01_242_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: <b>Search</b>. To play, spot a [sauron] Orc. Plays to your support area.<br><b>Shadow:</b> Remove (3) to reveal the top card of your draw deck. If it is a [sauron] card, take it into hand. Otherwise, discard it and one other card from hand.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("The Dark Lord's Summons", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

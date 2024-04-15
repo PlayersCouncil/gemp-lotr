@@ -39,18 +39,20 @@ public class Card_01_205_Tests
 		 * Twilight Cost: 5
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert a Nazgûl to discard a Free Peoples possession or Free Peoples condition. If you can spot no such card, discard an ally or companion (except the Ring-bearer) instead.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Beauty Is Fading", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.INSTEAD));
 		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 	}

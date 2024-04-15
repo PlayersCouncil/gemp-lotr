@@ -41,7 +41,6 @@ public class Card_07_236_Tests
 		 * Subtype: Hand weapon
 		 * Strength: 2
 		 * Vitality: 1
-
 		 * Game Text: Bearer must be Théoden.<br>He is <b>damage +1</b>.<br><b>Response:</b> If Théoden is about to take a wound and you cannot spot 3 threats, add 2 threats to prevent that wound.
 		*/
 

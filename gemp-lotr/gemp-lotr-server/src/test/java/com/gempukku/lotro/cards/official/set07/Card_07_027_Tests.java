@@ -39,7 +39,6 @@ public class Card_07_027_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: Exert 2 [elven] companions to discard the top 3 cards of your draw deck. Make the fellowship archery total +1 for each [elven] card discarded.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_027_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.ARCHERY));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

@@ -39,7 +39,6 @@ public class Card_04_328_Tests
 		 * Shadow Number: 
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 1T
 		 * Game Text: <b>Plains</b>. <b>Fellowship:</b> Exert 2 unbound companions to play Aragorn from your draw deck.
 		*/

@@ -41,7 +41,6 @@ public class Card_06_104_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Shadow:</b> Exert this minion to draw X cards and add (X), where X is the number of Free Peoples cultures you spot over 2.
 		*/

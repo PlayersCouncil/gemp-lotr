@@ -41,7 +41,6 @@ public class Card_02_082_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 12
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Twilight</b>.<br>When you play Úlairë Attëa, you may wound an ally.
 		*/

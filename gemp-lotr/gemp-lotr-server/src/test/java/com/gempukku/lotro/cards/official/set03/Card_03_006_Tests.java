@@ -39,7 +39,6 @@ public class Card_03_006_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: <b>Fellowship:</b> Reveal a card at random from an opponent's hand. Shuffle up to X [dwarven] cards from your discard pile into your draw deck, where X is the twilight cost of the card revealed.
 		*/
 

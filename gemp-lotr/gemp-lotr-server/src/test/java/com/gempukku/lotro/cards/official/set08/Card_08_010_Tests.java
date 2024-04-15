@@ -41,9 +41,7 @@ public class Card_08_010_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Archer</b>.<br>While you can spot 3 wounded minions, each minion skirmishing Legolas is strength -3.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_07_127_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
-
 		 * Game Text: While no opponent controls a site, Vorondil is strength +2.<br><b>Regroup:</b> Exert 3 [gondor] Men or 2 knights to liberate a site.
 		*/
 

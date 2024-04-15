@@ -39,7 +39,6 @@ public class Card_03_049_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Spot an [isengard] minion to discard up to 3 cards from hand and draw an equal number of cards.
 		*/
 

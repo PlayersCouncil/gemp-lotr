@@ -39,7 +39,6 @@ public class Card_05_095_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While the fellowship is at site 4[T], Ring-bound companions skirmishing [sauron] Orcs are strength -1.<br><b>Maneuver:</b> Spot 2 [sauron] Orcs to play up to 2 [sauron] conditions from your discard pile. Discard this condition.
 		*/
 

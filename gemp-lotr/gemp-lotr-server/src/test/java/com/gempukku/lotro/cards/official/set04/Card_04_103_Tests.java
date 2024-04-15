@@ -41,7 +41,6 @@ public class Card_04_103_Tests
 		 * Subtype: Ent
 		 * Strength: 12
 		 * Vitality: 4
-
 		 * Site Number: 2T & 8T
 		 * Game Text: <b>Unhasty</b>.<br><b>Response:</b> If an unbound Hobbit is about to be discarded, stack him here instead.<br><b>Fellowship:</b> Exert Treebeard and add (1) to play an unbound Hobbit stacked here.
 		*/

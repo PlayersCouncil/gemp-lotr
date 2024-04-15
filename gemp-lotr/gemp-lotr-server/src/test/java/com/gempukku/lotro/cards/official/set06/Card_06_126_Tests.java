@@ -39,7 +39,6 @@ public class Card_06_126_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While you can spot 3 rangers, the site number of each minion skirmishing a ranger is +2.
 		*/
 

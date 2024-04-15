@@ -39,7 +39,6 @@ public class Card_05_112_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Spot Sam and discard Sméagol or Gollum to remove 3 burdens.
 		*/
 

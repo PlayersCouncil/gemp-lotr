@@ -39,7 +39,6 @@ public class Card_07_077_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Bearer must be Sméagol.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to Sméagol."<br><b>Regroup:</b> Discard this condition to discard a minion and play a companion from your discard pile.
 		*/
 

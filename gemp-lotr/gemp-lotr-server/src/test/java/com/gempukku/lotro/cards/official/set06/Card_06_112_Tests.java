@@ -39,7 +39,6 @@ public class Card_06_112_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: <b>Skirmish:</b> Exert an unbound Hobbit to make him strength +1 and <b>damage +1</b> for each [gandalf] companion you can spot.
 		*/
 

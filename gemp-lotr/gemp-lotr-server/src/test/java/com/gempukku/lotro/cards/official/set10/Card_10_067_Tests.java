@@ -41,7 +41,6 @@ public class Card_10_067_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 10
 		 * Vitality: 3
-
 		 * Site Number: 3
 		 * Game Text: <b>Enduring</b>. <b>Fierce</b>.<br>Shadow cards cannot exert Úlairë Cantëa during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Cantëa to discard a possession borne by a character he is skirmishing.
 		*/

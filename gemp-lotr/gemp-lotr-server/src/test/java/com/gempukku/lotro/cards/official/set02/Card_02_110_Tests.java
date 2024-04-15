@@ -41,9 +41,7 @@ public class Card_02_110_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Fellowship:</b> Play Gandalf or Aragorn; his twilight cost is -2.
 		*/
 

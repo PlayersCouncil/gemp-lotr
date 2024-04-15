@@ -39,7 +39,6 @@ public class Card_03_116_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 4
 		 * Game Text: When the fellowship moves to Eregion Hills, add a burden.
 		*/

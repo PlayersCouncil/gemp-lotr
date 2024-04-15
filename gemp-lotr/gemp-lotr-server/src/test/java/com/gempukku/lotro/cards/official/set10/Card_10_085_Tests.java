@@ -39,7 +39,6 @@ public class Card_10_085_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: While you have initiative, each of your [sauron] minions is strength +2.<br><b>Skirmish:</b> Discard this condition to make a [sauron] minion strength +2 (or +4 if it is roaming).
 		*/
 

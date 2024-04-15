@@ -41,7 +41,6 @@ public class Card_06_023_Tests
 		 * Subtype: Elf
 		 * Strength: 9
 		 * Vitality: 3
-
 		 * Game Text: To play, spot 3 Elf companions.<br>While Naith Warband bears a ranged weapon, it takes no more than 1 wound during each skirmish phase and does not add to the fellowship archery total.
 		*/
 

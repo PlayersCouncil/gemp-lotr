@@ -41,7 +41,6 @@ public class Card_05_066_Tests
 		 * Subtype: Orc
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Warg-rider</b>. When you play this minion, you may play an [isengard] mount from your discard pile.<br>While this minion is not exhausted, he is <b>fierce</b>.
 		*/

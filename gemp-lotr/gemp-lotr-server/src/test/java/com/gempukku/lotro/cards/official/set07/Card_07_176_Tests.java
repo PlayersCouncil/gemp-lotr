@@ -39,7 +39,6 @@ public class Card_07_176_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: Spot a Nazgûl to discard any number of cards from your hand. The Free Peoples player then discards any number of cards from his or her hand. For each card you discarded more than the Free Peoples player, add a threat.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_176_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

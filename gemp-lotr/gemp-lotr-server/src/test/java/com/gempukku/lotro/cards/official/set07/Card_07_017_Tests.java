@@ -40,7 +40,6 @@ public class Card_07_017_Tests
 		 * Type: Possession
 		 * Subtype: Mount
 		 * Strength: 2
-
 		 * Game Text: Bearer must be an Elf.<br><b>Skirmish:</b> If bearer is Arwen, exert her to make each minion skirmishing her strength -2.
 		*/
 

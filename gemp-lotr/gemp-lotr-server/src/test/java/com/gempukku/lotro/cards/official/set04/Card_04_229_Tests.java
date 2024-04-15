@@ -41,7 +41,6 @@ public class Card_04_229_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 1
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>.<br>When you play this minion, you may spot another Easterling to add (1) for each burden (limit (4)).
 		*/

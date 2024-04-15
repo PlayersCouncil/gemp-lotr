@@ -39,7 +39,6 @@ public class Card_07_258_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a mounted [rohan] Man strength +1 for each mounted companion. If that Man is skirmishing a [raider] minion, also make him or her strength +2 and <b>damage +2</b>.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_258_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

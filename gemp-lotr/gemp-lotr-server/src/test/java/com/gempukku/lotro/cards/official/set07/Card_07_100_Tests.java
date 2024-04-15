@@ -39,7 +39,6 @@ public class Card_07_100_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Archery
-
 		 * Game Text: Exert a [gondor] Man and spot 3 fortifications to make the fellowship archery total +2.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_100_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.ARCHERY));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 

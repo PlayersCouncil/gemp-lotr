@@ -41,7 +41,6 @@ public class Card_02_047_Tests
 		 * Subtype: Uruk-hai
 		 * Strength: 7
 		 * Vitality: 2
-
 		 * Site Number: 5
 		 * Game Text: <b>Tracker</b>. <b>Damage +1</b>.<br>The roaming penalty for each [isengard] minion you play is -1.<br><b>Response:</b> If an event is played that spots or exerts a ranger, exert this minion to cancel that event.
 		*/

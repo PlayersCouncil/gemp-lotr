@@ -39,7 +39,6 @@ public class Card_06_082_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot a mounted [raider] Man to discard a companion (except the Ring-bearer). The Free Peoples player may add (4) to prevent this.
 		*/
 

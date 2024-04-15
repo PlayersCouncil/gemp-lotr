@@ -39,7 +39,6 @@ public class Card_02_008_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot a Dwarf. Plays to your support area.<br>At a site which is not underground, each [moria] Orc's twilight cost is +2. Discard this condition during the regroup phase.
 		*/
 

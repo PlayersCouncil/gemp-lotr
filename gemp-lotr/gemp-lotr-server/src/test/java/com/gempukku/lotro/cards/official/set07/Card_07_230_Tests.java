@@ -40,7 +40,6 @@ public class Card_07_230_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 3
-
 		 * Game Text: Bearer must be Éowyn.<br>You may play this possession any time you could play a skirmish event.<br>When you play this possession, you may wound a minion Éowyn is skirmishing.
 		*/
 

@@ -41,7 +41,6 @@ public class Card_06_108_Tests
 		 * Subtype: Wraith
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Twilight</b>.<br><b>Regroup:</b> Spot another [sauron] or twilight minion and discard this minion to add a burden.
 		*/

@@ -41,7 +41,6 @@ public class Card_06_124_Tests
 		 * Subtype: Ent
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Game Text: Skinbark's twilight cost is -1 for each Ent or unbound Hobbit you can spot.<br><b>Response:</b> If an unbound Hobbit is about to take a wound, exert Skinbark to prevent that wound.
 		*/
 

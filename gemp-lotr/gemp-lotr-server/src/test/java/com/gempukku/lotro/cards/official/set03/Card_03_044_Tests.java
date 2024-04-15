@@ -39,7 +39,6 @@ public class Card_03_044_Tests
 		 * Twilight Cost: 1
 		 * Type: Artifact
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Fellowship:</b> Stack a [gondor] card from hand here.<br><b>Fellowship:</b> Add (1) to take a card stacked here into hand.
 		*/
 

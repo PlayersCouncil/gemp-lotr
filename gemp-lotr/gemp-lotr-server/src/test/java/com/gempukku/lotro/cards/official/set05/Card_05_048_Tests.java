@@ -39,7 +39,6 @@ public class Card_05_048_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot X Uruk-hai. The Free Peoples player may assign X wounds to your minions. Play X [isengard] weapons from your discard pile.
 		*/
 

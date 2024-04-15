@@ -39,7 +39,6 @@ public class Card_04_035_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Spot 2 sites you control to make each of your [dunland] Men <b>fierce</b> until the regroup phase.
 		*/
 

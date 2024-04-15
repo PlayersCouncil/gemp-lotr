@@ -41,7 +41,6 @@ public class Card_04_269_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: Each time the fellowship moves to a plains site, each minion must exert.
 		*/
 

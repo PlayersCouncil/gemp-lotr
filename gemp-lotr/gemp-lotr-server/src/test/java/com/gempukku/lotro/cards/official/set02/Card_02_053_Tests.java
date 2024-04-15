@@ -40,7 +40,6 @@ public class Card_02_053_Tests
 		 * Type: Possession
 		 * Subtype: 
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Cave Troll of Moria.<br>The Free Peoples player may choose for the archery phase to be skipped.<br>Each time Cave Troll of Moria takes a wound during the archery phase, you may wound an archer companion.
 		*/
 

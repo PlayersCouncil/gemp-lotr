@@ -39,7 +39,6 @@ public class Card_03_053_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Shadow
-
 		 * Game Text: <b>Shadow:</b> Spot an Uruk-hai and a [moria] minion to draw 3 cards.
 		*/
 

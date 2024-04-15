@@ -39,7 +39,6 @@ public class Card_03_003_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>Each time you play a [dwarven] tale, you may heal a Dwarf companion.
 		*/
 

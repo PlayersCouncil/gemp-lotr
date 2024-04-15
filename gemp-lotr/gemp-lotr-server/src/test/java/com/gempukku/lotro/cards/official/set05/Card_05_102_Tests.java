@@ -39,7 +39,6 @@ public class Card_05_102_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>The twilight cost of the first [sauron] Orc played at site 4[T] is -3.<br><b>Shadow:</b> Spot 2 [sauron] Orcs and discard 4 cards from hand to draw 3 cards. Discard this condition.
 		*/
 

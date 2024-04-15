@@ -39,7 +39,6 @@ public class Card_02_080_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-
 		 * Game Text: <b>Maneuver:</b> Exert The Witch-king to discard a tale or weapon.
 		*/
 

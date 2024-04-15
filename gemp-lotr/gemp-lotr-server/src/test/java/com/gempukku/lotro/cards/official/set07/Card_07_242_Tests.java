@@ -40,7 +40,6 @@ public class Card_07_242_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-
 		 * Game Text: Bearer must be Merry.<br><b>Maneuver:</b> Exert Merry twice to exert a minion once for each [rohan] companion you spot.
 		*/
 

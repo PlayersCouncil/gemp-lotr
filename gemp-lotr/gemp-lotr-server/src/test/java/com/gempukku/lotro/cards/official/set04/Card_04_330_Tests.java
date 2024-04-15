@@ -39,7 +39,6 @@ public class Card_04_330_Tests
 		 * Shadow Number: 2
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 2T
 		 * Game Text: <b>Forest</b>. While you can spot an unbound Hobbit at Derndingle, the move limit is +1 for this turn.
 		*/

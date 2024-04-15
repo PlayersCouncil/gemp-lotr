@@ -41,7 +41,6 @@ public class Card_05_056_Tests
 		 * Subtype: Wizard
 		 * Strength: 8
 		 * Vitality: 4
-
 		 * Site Number: 4
 		 * Game Text: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.<br>Each time the fellowship moves, you may heal each [isengard] Orc twice.<br><b>Shadow:</b> Exert Saruman to play an [isengard] possession from your discard pile.
 		*/

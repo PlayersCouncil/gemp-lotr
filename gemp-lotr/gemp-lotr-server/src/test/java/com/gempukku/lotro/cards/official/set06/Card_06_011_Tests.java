@@ -39,7 +39,6 @@ public class Card_06_011_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-
 		 * Game Text: While this card is stacked on a [dwarven] condition, Gimli is strength +1.<br><b>Fellowship:</b> Place this card or another [dwarven] card from hand on top of or beneath your draw deck.
 		*/
 

@@ -39,7 +39,6 @@ public class Card_07_099_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-
 		 * Game Text: Make a [gondor] companion strength +2 and, if you can spot 2 [gondor] fortifications, exert a minion that companion is skirmishing.
 		*/
 
@@ -53,6 +52,7 @@ public class Card_07_099_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

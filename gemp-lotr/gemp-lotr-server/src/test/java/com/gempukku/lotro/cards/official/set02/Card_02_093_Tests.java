@@ -41,7 +41,6 @@ public class Card_02_093_Tests
 		 * Subtype: Orc
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 6
 		 * Game Text: <b>Maneuver:</b> Exert Tower Assassin to wound an ally.
 		*/

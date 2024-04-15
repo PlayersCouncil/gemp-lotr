@@ -39,7 +39,6 @@ public class Card_04_119_Tests
 		 * Twilight Cost: 0
 		 * Type: Possession
 		 * Subtype: Cloak
-
 		 * Game Text: Bearer must be Faramir.<br>Each roaming minion skirmishing a Ring-bound Man is strength -1.
 		*/
 

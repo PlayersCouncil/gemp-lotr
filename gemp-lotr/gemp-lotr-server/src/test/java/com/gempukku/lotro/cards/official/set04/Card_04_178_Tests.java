@@ -41,7 +41,6 @@ public class Card_04_178_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: Each time the Free Peoples player assigns a companion or ally to an [isengard] Man, that companion or ally must exert.
 		*/

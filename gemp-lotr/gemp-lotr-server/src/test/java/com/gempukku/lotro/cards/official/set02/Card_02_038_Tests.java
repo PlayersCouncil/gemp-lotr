@@ -39,7 +39,6 @@ public class Card_02_038_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Shield
-
 		 * Game Text: Bearer must be a [gondor] companion.<br>The minion archery total is -1.<br>If bearer is Boromir, each minion skirmishing him does not gain strength bonuses from weapons.
 		*/
 

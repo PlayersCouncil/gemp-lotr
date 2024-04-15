@@ -39,7 +39,6 @@ public class Card_04_261_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br>While you can spot a [raider] Man, each Free Peoples event that spots or exerts a ranger gains this cost: "wound a companion."<br><b>Skirmish:</b> Discard this condition to make a [raider] Man strength +2.
 		*/
 

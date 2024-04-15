@@ -41,7 +41,6 @@ public class Card_07_246_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Skirmish:</b> Discard a card from hand to exert a minion skirmishing this companion.
 		*/
 

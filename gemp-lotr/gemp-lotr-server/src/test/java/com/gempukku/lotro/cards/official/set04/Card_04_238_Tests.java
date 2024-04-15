@@ -39,7 +39,6 @@ public class Card_04_238_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Shadow:</b> Spot a site you control, spot 3 Southrons and remove (2) to draw a card.
 		*/
 

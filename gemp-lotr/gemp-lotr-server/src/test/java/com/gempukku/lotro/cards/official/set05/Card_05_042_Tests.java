@@ -41,7 +41,6 @@ public class Card_05_042_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Game Text: <b>Knight</b>. To play, spot a knight.<br><b>Maneuver:</b> Exert Turgon to wound a minion bearing a [gondor] fortification.
 		*/
 

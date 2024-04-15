@@ -39,7 +39,6 @@ public class Card_02_033_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: 
-
 		 * Game Text: <b>Response:</b> If a [gondor] companion wins a skirmish, discard an exhausted Orc. That minion's owner may remove (3) to prevent this.
 		*/
 

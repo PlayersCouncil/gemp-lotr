@@ -41,7 +41,6 @@ public class Card_02_096_Tests
 		 * Subtype: Hobbit
 		 * Strength: 2
 		 * Vitality: 3
-
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> Exert Bilbo and discard a tale to discard a Shadow condition from an opponent's support area.
 		*/

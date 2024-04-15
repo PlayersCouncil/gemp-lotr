@@ -39,7 +39,6 @@ public class Card_04_047_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Exert a Dwarf and stack a Free Peoples card from hand here to prevent all wounds to that Dwarf.
 		*/
 

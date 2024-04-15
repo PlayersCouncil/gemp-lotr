@@ -41,9 +41,7 @@ public class Card_07_025_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Aragorn
-
 		 * Game Text: <b>Archer</b>.<br><b>Archery:</b> If you have initiative, discard 4 cards from hand to wound a minion.
 		*/
 

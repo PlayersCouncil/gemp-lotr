@@ -41,7 +41,6 @@ public class Card_03_058_Tests
 		 * Subtype: Orc
 		 * Strength: 7
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Regroup:</b> Exert this minion to make the Free Peoples player wound a companion.
 		*/

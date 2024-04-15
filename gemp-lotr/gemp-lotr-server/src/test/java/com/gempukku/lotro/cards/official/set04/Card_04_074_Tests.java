@@ -41,9 +41,7 @@ public class Card_04_074_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-
 		 * Signet: Gandalf
-
 		 * Game Text: <b>Archer</b>.<br><b>Skirmish:</b> Exert Legolas to make a minion skirmishing an unbound companion strength -1 (or -2 if that companion is Gimli).
 		*/
 

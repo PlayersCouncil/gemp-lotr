@@ -39,7 +39,6 @@ public class Card_04_168_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Spot a site you control and remove (2) to cancel a skirmish involving an Uruk-hai.
 		*/
 

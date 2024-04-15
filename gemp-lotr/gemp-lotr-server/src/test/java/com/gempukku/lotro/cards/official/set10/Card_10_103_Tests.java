@@ -39,7 +39,6 @@ public class Card_10_103_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a [sauron] minion.<br>Each time the fellowship moves during the regroup phase, you may remove a threat to wound an unbound companion.
 		*/
 

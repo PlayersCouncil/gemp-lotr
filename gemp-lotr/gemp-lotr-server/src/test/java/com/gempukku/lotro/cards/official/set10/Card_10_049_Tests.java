@@ -41,7 +41,6 @@ public class Card_10_049_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 2
-
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>.<br>Each time a Man is assigned to skirmish this minion, wound that Man.
 		*/

@@ -39,7 +39,6 @@ public class Card_02_035_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: To play, spot a ranger. Plays to your support area.<br>While the fellowship is at a forest, the minion archery total is -2.
 		*/
 

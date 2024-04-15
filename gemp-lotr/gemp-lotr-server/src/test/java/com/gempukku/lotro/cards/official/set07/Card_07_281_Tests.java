@@ -39,7 +39,6 @@ public class Card_07_281_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: <b>Engine</b>.<br><b>Shadow:</b> Play a besieger to place a [sauron] token here.<br><b>Skirmish:</b> Remove a [sauron] token from a condition to make a [sauron] Orc strength +1 (limit +2).
 		*/
 

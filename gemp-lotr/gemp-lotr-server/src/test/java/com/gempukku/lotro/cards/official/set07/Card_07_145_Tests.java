@@ -41,7 +41,6 @@ public class Card_07_145_Tests
 		 * Subtype: Man
 		 * Strength: 11
 		 * Vitality: 3
-
 		 * Site Number: 4
 		 * Game Text: <b>Easterling</b>. <b>Fierce</b>.<br>Each time Easterling Regiment wins a skirmish, you may add (1) for each burden.
 		*/

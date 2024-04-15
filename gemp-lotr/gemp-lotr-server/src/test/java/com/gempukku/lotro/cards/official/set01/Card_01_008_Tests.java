@@ -39,12 +39,13 @@ public class Card_01_008_Tests
 		 * Twilight Cost: 0
 		 * Type: Possession
 		 * Subtype: Armor
-
 		 * Game Text: Bearer must be a Dwarf.<br>Bearer may not be overwhelmed unless his or her strength is tripled.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Dwarven Armor", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());

@@ -39,7 +39,6 @@ public class Card_06_093_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Regroup
-
 		 * Game Text: <b>Regroup:</b> Exert 2 mounted [rohan] Men to discard up to 2 wounded minions.
 		*/
 

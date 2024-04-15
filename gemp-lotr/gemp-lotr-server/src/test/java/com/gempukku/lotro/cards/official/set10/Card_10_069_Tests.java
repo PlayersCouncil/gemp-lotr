@@ -41,7 +41,6 @@ public class Card_10_069_Tests
 		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 2
-
 		 * Site Number: 3
 		 * Game Text: <b>Enduring</b>. <b>Fierce</b>.<br>Shadow cards cannot exert Úlairë Lemenya during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Lemenya to wound up to 3 other [wraith] minions.
 		*/

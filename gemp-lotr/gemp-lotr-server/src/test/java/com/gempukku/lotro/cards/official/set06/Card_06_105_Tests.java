@@ -39,7 +39,6 @@ public class Card_06_105_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-
 		 * Game Text: Plays to your support area.<br><b>Regroup:</b> Exert a [sauron] Orc to play a Nazgûl or [sauron] minion. Its twilight cost is -4 and it comes into play exhausted.
 		*/
 

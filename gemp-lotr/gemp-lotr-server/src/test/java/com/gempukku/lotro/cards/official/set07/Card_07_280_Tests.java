@@ -39,7 +39,6 @@ public class Card_07_280_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot a besieger or a site you control.<br><b>Maneuver:</b> Discard an engine to discard a condition from the Free Peoples support area.
 		*/
 

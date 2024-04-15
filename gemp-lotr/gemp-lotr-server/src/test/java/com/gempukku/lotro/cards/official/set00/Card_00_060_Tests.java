@@ -39,12 +39,13 @@ public class Card_00_060_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-
 		 * Game Text: To play, spot 2 [shire] companions.<br>Each time a Shadow card adds a burden or a threat, add a [shire] token here.<br><b>Fellowship:</b> Remove 2 [shire] tokens from here to remove a burden.
 		*/
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsCard("card");
+
 		assertEquals("Tom Bombadil's Hat", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());

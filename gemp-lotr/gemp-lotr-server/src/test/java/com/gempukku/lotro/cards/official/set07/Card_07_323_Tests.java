@@ -41,9 +41,7 @@ public class Card_07_323_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-
 		 * Signet: Gandalf
-
 		 * Game Text: While you cannot spot 4 threats, Pippin is strength +1 for each threat you can spot.
 		*/
 

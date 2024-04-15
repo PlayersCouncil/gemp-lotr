@@ -39,7 +39,6 @@ public class Card_07_355_Tests
 		 * Shadow Number: 6
 		 * Type: Site
 		 * Subtype: 
-
 		 * Site Number: 7K
 		 * Game Text: <b>River</b>. <b>Shadow:</b> Spot your minion and 6 companions to make the move limit for this turn -1.
 		*/
