@@ -10,7 +10,8 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.util.JsonUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;import org.hjson.JsonValue;
+import org.apache.logging.log4j.Logger;
+import org.hjson.JsonValue;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -21,8 +22,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
-public class LotroCardBlueprintLibrary {
-    private static final Logger logger = LogManager.getLogger(LotroCardBlueprintLibrary.class);
+public class LotroCardBlueprintLibrary2 {
+    private static final Logger logger = LogManager.getLogger(LotroCardBlueprintLibrary2.class);
 
     private final String[] _packageNames =
             new String[]{
@@ -47,11 +48,11 @@ public class LotroCardBlueprintLibrary {
 
     private final List<ICallback> _refreshCallbacks = new ArrayList<>();
 
-    public LotroCardBlueprintLibrary() {
+    public LotroCardBlueprintLibrary2() {
         this(AppConfig.getCardsPath(), AppConfig.getMappingsPath(), AppConfig.getSetDefinitionsPath(), AppConfig.getResourceFile("rarities"));
     }
 
-    public LotroCardBlueprintLibrary(File cardsPath, File mappingsPath, File setDefinitionPath, File raritiesFolder) {
+    public LotroCardBlueprintLibrary2(File cardsPath, File mappingsPath, File setDefinitionPath, File raritiesFolder) {
         _cardPath = cardsPath;
         _mappingsPath = mappingsPath;
         _setDefsPath = setDefinitionPath;
@@ -249,7 +250,6 @@ public class LotroCardBlueprintLibrary {
                         try {
                             // Ensure it's loaded
                             LotroCardBlueprint blueprint = findJavaBlueprint(blueprintId);
-                            blueprint.setId(blueprintId);
                             _blueprints.put(blueprintId, blueprint);
                         } catch (CardNotFoundException exp) {
                             throw new RuntimeException("Unable to start the server, due to invalid (missing) card definition - " + blueprintId);
