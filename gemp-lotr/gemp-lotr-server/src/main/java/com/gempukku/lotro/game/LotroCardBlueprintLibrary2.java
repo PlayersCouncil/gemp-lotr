@@ -2,25 +2,31 @@ package com.gempukku.lotro.game;
 
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
+import com.gempukku.lotro.cards.set18.wraith.Card18_133;
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.game.packs.DefaultSetDefinition;
 import com.gempukku.lotro.game.packs.SetDefinition;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.util.JsonUtils;
+import com.google.common.reflect.ClassPath;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.checkerframework.checker.regex.qual.Regex;
 import org.hjson.JsonValue;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.annotation.RegEx;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.Semaphore;
+import java.util.regex.Pattern;
 
 public class LotroCardBlueprintLibrary2 {
     private static final Logger logger = LogManager.getLogger(LotroCardBlueprintLibrary2.class);
@@ -237,26 +243,36 @@ public class LotroCardBlueprintLibrary2 {
         logger.debug("Loaded JSON card file " + file.getName());
     }
 
-    private void cacheAllJavaBlueprints() {
-        for (var setDef : _allSets.values()) {
-            if(!setDef.NeedsLoading())
-                continue;
+    //com.gempukku.lotro.cards.set10.dwarven.Card10_001$1
+    private final Pattern cardClassPattern = Pattern.compile("com\\.gempukku\\.lotro\\.cards\\.set\\d+\\.(\\w+\\.)?Card(\\d+)_(\\d+)");
 
-            logger.debug("Loading Java cards for set " + setDef.getSetId());
-            final Set<String> allCards = setDef.getAllCards();
-            for (String blueprintId : allCards) {
-                if (getBaseBlueprintId(blueprintId).equals(blueprintId)) {
-                    if (!_blueprints.containsKey(blueprintId)) {
-                        try {
-                            // Ensure it's loaded
-                            LotroCardBlueprint blueprint = findJavaBlueprint(blueprintId);
-                            _blueprints.put(blueprintId, blueprint);
-                        } catch (CardNotFoundException exp) {
-                            throw new RuntimeException("Unable to start the server, due to invalid (missing) card definition - " + blueprintId);
-                        }
-                    }
+    private void cacheAllJavaBlueprints() {
+        try {
+            logger.debug("Loading remaining Java cards...");
+            var classes = getClasses("com.gempukku.lotro.cards");
+
+            for(var clazz : classes) {
+                if(!clazz.getPackageName().contains("cards.set"))
+                    continue;
+
+                var match = cardClassPattern.matcher(clazz.getName());
+                if(!match.matches())
+                    continue;
+
+                String bpId = match.group(2) + "_" + Integer.parseInt(match.group(3));
+
+                try {
+                    var blueprint = (LotroCardBlueprint) clazz.getDeclaredConstructor().newInstance();
+                    blueprint.setId(bpId);
+                    _blueprints.put(bpId, blueprint);
+                } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+                    // Ignore
                 }
             }
+
+            logger.debug("Java card loading complete.");
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Unable to start the server: failure while searching for Java cards.", e);
         }
     }
 
@@ -394,10 +410,10 @@ public class LotroCardBlueprintLibrary2 {
             }
             collectionReady.release();
 
-            if(bp != null)
-                return bp;
+            if(bp == null)
+                throw new CardNotFoundException(blueprintId);
 
-            return findJavaBlueprint(blueprintId);
+            return bp;
         } catch (InterruptedException exp) {
             throw new RuntimeException("LotroCardBlueprintLibrary.getLotroCardBlueprint() interrupted: ", exp);
         }
@@ -409,49 +425,6 @@ public class LotroCardBlueprintLibrary2 {
         if (blueprintId.endsWith("T"))
             blueprintId = blueprintId.substring(0, blueprintId.length() - 1);
         return blueprintId;
-    }
-
-    private LotroCardBlueprint findJavaBlueprint(String blueprintId) throws CardNotFoundException {
-        if (_blueprintMapping.containsKey(blueprintId))
-            return getLotroCardBlueprint(_blueprintMapping.get(blueprintId));
-
-        String[] blueprintParts = blueprintId.split("_");
-
-        String setNumber = blueprintParts[0];
-        String cardNumber = blueprintParts[1];
-
-        for (String packageName : _packageNames) {
-            LotroCardBlueprint blueprint;
-            try {
-                blueprint = tryLoadingFromPackage(packageName, setNumber, cardNumber);
-            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException e) {
-                throw new CardNotFoundException(blueprintId);
-            }
-            if (blueprint != null)
-                return blueprint;
-        }
-
-        throw new CardNotFoundException(blueprintId);
-    }
-
-    private LotroCardBlueprint tryLoadingFromPackage(String packageName, String setNumber, String cardNumber) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
-        try {
-            Class clazz = Class.forName("com.gempukku.lotro.cards.set" + setNumber + packageName + ".Card" + setNumber + "_" + normalizeId(cardNumber));
-            return (LotroCardBlueprint) clazz.getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException | InvocationTargetException e) {
-            // Ignore
-            return null;
-        }
-    }
-
-    private String normalizeId(String blueprintPart) {
-        int id = Integer.parseInt(blueprintPart);
-        if (id < 10)
-            return "00" + id;
-        else if (id < 100)
-            return "0" + id;
-        else
-            return String.valueOf(id);
     }
 
     private void readSetRarityFile(DefaultSetDefinition rarity, String setNo, String rarityFile) throws IOException {
@@ -475,5 +448,60 @@ public class LotroCardBlueprintLibrary2 {
         } finally {
             IOUtils.closeQuietly(bufferedReader);
         }
+    }
+
+    // The below taken from here: https://stackoverflow.com/a/520344/888539
+
+    /**
+     * Scans all classes accessible from the context class loader which belong to the given package and subpackages.
+     *
+     * @param packageName The base package
+     * @return The classes
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
+    private static Class[] getClasses(String packageName)
+            throws ClassNotFoundException, IOException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        assert classLoader != null;
+        String path = packageName.replace('.', '/');
+        Enumeration<URL> resources = classLoader.getResources(path);
+        List<File> dirs = new ArrayList<File>();
+        while (resources.hasMoreElements()) {
+            URL resource = resources.nextElement();
+            dirs.add(new File(resource.getFile()));
+        }
+        ArrayList<Class> classes = new ArrayList<Class>();
+        for (File directory : dirs) {
+            classes.addAll(findClasses(directory, packageName));
+        }
+        return classes.toArray(new Class[classes.size()]);
+    }
+
+    /**
+     * Recursive method used to find all classes in a given directory and subdirs.
+     *
+     * @param directory   The base directory
+     * @param packageName The package name for classes found inside the base directory
+     * @return The classes
+     * @throws ClassNotFoundException
+     */
+    private static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException {
+        List<Class> classes = new ArrayList<Class>();
+        if (!directory.exists()) {
+            return classes;
+        }
+        File[] files = directory.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                assert !file.getName().contains(".");
+                classes.addAll(findClasses(file, packageName + "." + file.getName()));
+            } else if (file.getName().endsWith(".class")) {
+                if(file.getAbsolutePath().contains("test"))
+                    continue;
+                classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+            }
+        }
+        return classes;
     }
 }
