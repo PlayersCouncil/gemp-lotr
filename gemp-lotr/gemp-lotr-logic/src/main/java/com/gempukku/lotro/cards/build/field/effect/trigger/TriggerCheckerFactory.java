@@ -40,6 +40,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("fpstartedassigning", new FPStartedAssigning());
         triggerCheckers.put("heals", new Heals());
         triggerCheckers.put("killed", new Killed());
+        triggerCheckers.put("killedinskirmish", new KilledInSkirmish());
         triggerCheckers.put("losesinitiative", new LosesInitiative());
         triggerCheckers.put("losesskirmish", new LosesSkirmish());
         triggerCheckers.put("moves", new Moves());

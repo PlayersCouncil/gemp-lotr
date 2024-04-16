@@ -7,7 +7,13 @@ import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.modifiers.SpecialFlagModifier;
 import org.json.simple.JSONObject;
 
-public class SarumanFirstSentenceInactive implements ModifierSourceProducer {
+public class AddModifierFlag implements ModifierSourceProducer {
+    private ModifierFlag modifierFlag;
+
+    public AddModifierFlag(ModifierFlag modifierFlag) {
+        this.modifierFlag = modifierFlag;
+    }
+
     @Override
     public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(object,"requires");
@@ -19,7 +25,7 @@ public class SarumanFirstSentenceInactive implements ModifierSourceProducer {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
                 return new SpecialFlagModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext), ModifierFlag.SARUMAN_FIRST_SENTENCE_INACTIVE);
+                        new RequirementCondition(requirements, actionContext), modifierFlag);
             }
         };
     }

@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.ModifierSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
+import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("addkeyword", new AddKeyword());
         modifierProducers.put("addnotwilightforcompanionmove", new AddNoTwilightForCompanionMove());
         modifierProducers.put("addsignet", new AddSignet());
+        modifierProducers.put("alliestakearcheryfirewoundsinsteadofcompanions", new AddModifierFlag(ModifierFlag.ALLIES_TAKE_ARCHERY_FIRE_WOUNDS_INSTEAD_OF_COMPANIONS));
         modifierProducers.put("allycanparticipateinarcheryfireandskirmishes", new AllyCanParticipateInArcheryFireAndSkirmishes());
         modifierProducers.put("allycanparticipateinarcheryfire", new AllyCanParticipateInArcheryFire());
         modifierProducers.put("allycanparticipateinskirmishes", new AllyCanParticipateInSkirmishes());
@@ -37,12 +39,12 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantheal", new CantHeal());
         modifierProducers.put("cantlookorrevealhand", new CantLookOrRevealHand());
         modifierProducers.put("cantplaycards", new CantPlayCards());
-        modifierProducers.put("cantplaycardsfromdeckordiscardpile", new CantPlayCardsFromDeckOrDiscardPile());
+        modifierProducers.put("cantplaycardsfromdeckordiscardpile", new AddModifierFlag(ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK));
         modifierProducers.put("cantplaycardson", new CantPlayCardsOn());
         modifierProducers.put("cantplayphaseevents", new CantPlayPhaseEvents());
         modifierProducers.put("cantplayphaseeventsorphasespecialabilities", new CantPlayPhaseEventsOrPhaseSpecialAbilities());
         modifierProducers.put("cantplayphasespecialabilities", new CantPlayPhaseSpecialAbilities());
-        modifierProducers.put("cantpreventwounds", new CantPreventWounds());
+        modifierProducers.put("cantpreventwounds", new AddModifierFlag(ModifierFlag.CANT_PREVENT_WOUNDS));
         modifierProducers.put("cantremoveburdens", new CantRemoveBurdens());
         modifierProducers.put("cantreplacesite", new CantReplaceSite());
         modifierProducers.put("canttakearcherywounds", new CantTakeArcheryWounds());
@@ -56,7 +58,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("fpusesresinsteadofstr", new FPUsesResInsteadOfStr());
         modifierProducers.put("fpusesvitinsteadofstr", new FPUsesVitInsteadOfStr());
         modifierProducers.put("fpcantassigntoskirmish", new FPCantAssignToSkirmish());
-        modifierProducers.put("hastomoveifable", new HasToMoveIfAble());
+        modifierProducers.put("hastomoveifable", new AddModifierFlag(ModifierFlag.HAS_TO_MOVE_IF_POSSIBLE));
         modifierProducers.put("itemclassspot", new ItemClassSpot());
         modifierProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
         modifierProducers.put("modifycost", new ModifyCost());
@@ -71,8 +73,8 @@ public class ModifierSourceFactory {
         modifierProducers.put("opponentscantplayphaseeventsorphasespecialabilities", new OpponentsCantPlayPhaseEventsOrPhaseSpecialAbilities());
         modifierProducers.put("opponentmaynotdiscard", new OpponentMayNotDiscard());
         modifierProducers.put("removekeyword", new RemoveKeyword());
-        modifierProducers.put("ringtextisinactive", new RingTextIsInactive());
-        modifierProducers.put("sarumanfirstsentenceinactive", new SarumanFirstSentenceInactive());
+        modifierProducers.put("ringtextisinactive", new AddModifierFlag(ModifierFlag.RING_TEXT_INACTIVE));
+        modifierProducers.put("sarumanfirstsentenceinactive", new AddModifierFlag(ModifierFlag.SARUMAN_FIRST_SENTENCE_INACTIVE));
         modifierProducers.put("shadowhasinitiative", new ShadowHasInitiative());
         modifierProducers.put("shadowusesvitinsteadofstr", new ShadowUsesVitInsteadOfStr());
         modifierProducers.put("skipphase", new SkipPhase());

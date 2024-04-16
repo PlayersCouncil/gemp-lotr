@@ -27,6 +27,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("cancelevent", new CancelEvent());
         effectAppenderProducers.put("cancelskirmish", new CancelSkirmish());
         effectAppenderProducers.put("cancelskirmishbetween", new CancelSkirmishBetween());
+        effectAppenderProducers.put("cancelspecialability", new CancelSpecialAbility());
         effectAppenderProducers.put("choice", new Choice());
         effectAppenderProducers.put("chooseactivecards", new ChooseActiveCards());
         effectAppenderProducers.put("chooseakeyword", new ChooseAKeyword());
@@ -88,6 +89,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
         effectAppenderProducers.put("modifysitenumber", new ModifySiteNumber());
         effectAppenderProducers.put("modifystrength", new ModifyStrength());
+        effectAppenderProducers.put("multiple", new Multiple());
         effectAppenderProducers.put("negatewound", new NegateWound());
         effectAppenderProducers.put("optional", new Optional());
         effectAppenderProducers.put("placenowoundforexert", new PlaceNoWoundForExert());
