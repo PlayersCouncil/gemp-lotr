@@ -860,7 +860,7 @@
 					type: addTokens
 					culture: elven
 					filter: self
-					amount: 2
+					count: 2
 				}
 			}
 			{

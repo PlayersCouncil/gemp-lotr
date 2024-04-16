@@ -42,7 +42,7 @@
 					type: addTokens
 					culture: elven
 					filter: self
-					amount: {
+					count: {
 						type: ForEachYouCanSpot
 						limit: 3
 						filter: hunter

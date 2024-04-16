@@ -27,9 +27,9 @@ import java.util.List;
 public class AddTokens implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "amount", "culture", "filter", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "count", "culture", "filter", "memorize");
 
-        final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), 1, environment);
+        final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final Culture culture = FieldUtils.getEnum(Culture.class, effectObject.get("culture"), "culture");
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "self");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");

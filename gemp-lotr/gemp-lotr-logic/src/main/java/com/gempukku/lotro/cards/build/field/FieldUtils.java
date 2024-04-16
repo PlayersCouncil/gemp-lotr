@@ -8,7 +8,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.Map;
 import java.util.Set;
 
 public class FieldUtils {
@@ -75,6 +74,8 @@ public class FieldUtils {
 
     public static Side getSide(Object value, String key) throws InvalidCardDefinitionException {
         final String string = getString(value, key);
+        if (string == null)
+            throw new InvalidCardDefinitionException("Unknown side '" + string + "' in " + key + " field");
         final Side side = Side.Parse(string);
         if (side == null)
             throw new InvalidCardDefinitionException("Unknown side '" + string + "' in " + key + " field");

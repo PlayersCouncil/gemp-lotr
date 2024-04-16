@@ -47,7 +47,7 @@
 				effect: [
 					{
 						type: AddTokens
-						amount: 1
+						count: 1
 						culture: isengard
 						filter: self
 					}

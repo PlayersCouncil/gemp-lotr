@@ -125,9 +125,10 @@ public class ValueResolver {
                 final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
                 return actionContext -> new MultiplyEvaluator(multiplier, new ForEachThreatEvaluator());
             } else if (type.equalsIgnoreCase("forEachBurden")) {
-                FieldUtils.validateAllowedFields(object, "multiplier");
+                FieldUtils.validateAllowedFields(object, "multiplier", "limit");
                 final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
-                return actionContext -> new MultiplyEvaluator(multiplier, new ForEachBurdenEvaluator());
+                final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
+                return actionContext -> new MultiplyEvaluator(multiplier, new LimitEvaluator(new ForEachBurdenEvaluator(), new ConstantEvaluator(limit)));
             } else if (type.equalsIgnoreCase("forEachWound")) {
                 FieldUtils.validateAllowedFields(object, "filter", "multiplier");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");

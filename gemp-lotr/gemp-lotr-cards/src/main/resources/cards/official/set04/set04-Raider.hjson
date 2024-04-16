@@ -22,17 +22,37 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesSkirmish
+		            filter: or(companion,ally)
+		            against: culture(raider),man
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: raider
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: archery
+		        effect: [
+		            {
+		                type: heal
+		                filter: choose(culture(raider),archer)
+		                count: {
+		                    type: forEachToken
+		                    culture: raider
+		                    filter: self
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving a [raider] Man, you may place a [raider] token here.<br><b>Archery:</b> Heal a [raider] archer for each [raider] token here. Discard this condition.
 		lore: Haradrim is the Gondorian name for Southrons.
 		promotext: ""
@@ -70,17 +90,27 @@
 		vitality: 3
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. To play, spot a [raider] Man.<br><b>Regroup:</b> Exert Desert Lancers twice to take control of a site.
 		lore: Mordor has allied itself with... the cruel Haradrim....'
 		promotext: ""
@@ -121,17 +151,44 @@
 			Southron
 			Ambush 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotBurdens
+						amount: 4
+					}
+					filter: self
+					amount: 5
+				}
 			}
 			{
-				
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotBurdens
+						amount: 5
+					}
+					filter: self
+					keyword: fierce
+				}
 			}
-		]*/
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotBurdens
+						amount: 6
+					}
+					filter: self
+					keyword: damage+1
+				}
+			}
+		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>While you can spot 4 burdens, this minion is strength +5.<br>While you can spot 5 burdens, this minion is <b>fierce</b>.<br>While you can spot 6 burdens, this minion is <b>damage +1</b>.
 		lore: ""
 		promotext: ""
@@ -172,17 +229,29 @@
 			Southron
 			Archer
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: exert
+		                filter: choose(companion,not(ringBearer))
+		            }
+		            {
+		                type: addModifier
+		                modifier: {
+		                    type: doesNotAddToArcheryTotal
+		                    filter: self
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Exert Desert Lord to exert a companion (except the Ring-bearer); Desert Lord does not add to the minion archery total.
 		lore: Southron legends tell of powerful warrior leaders and the kingdoms they have conquered.
 		promotext: ""
@@ -220,17 +289,28 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+                requires: {
+                    type: canSpot
+                    filter: self,inSkirmish
+                }
+                cost: {
+                    type: removeTwilight
+                    amount: 3
+                }
+                effect: {
+                    type: wound
+                    filter: choose(or(companion,ally),inSkirmishAgainst(self))
+                }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
 		lore: Not nice; very cruel wicked Men they look.'
 		promotext: ""
@@ -268,17 +348,28 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+                requires: {
+                    type: canSpot
+                    filter: self,inSkirmish
+                }
+                cost: {
+                    type: removeTwilight
+                    amount: 3
+                }
+                effect: {
+                    type: wound
+                    filter: choose(or(companion,ally),inSkirmishAgainst(self))
+                }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
 		lore: Long spears are used by Southrons to attack while riding desert beasts.
 		promotext: ""
@@ -316,17 +407,28 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+                requires: {
+                    type: canSpot
+                    filter: self,inSkirmish
+                }
+                cost: {
+                    type: removeTwilight
+                    amount: 3
+                }
+                effect: {
+                    type: wound
+                    filter: choose(or(companion,ally),inSkirmishAgainst(self))
+                }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
 		lore: The Haradrim wear cloaks and head wraps to survive the deserts of their homeland.
 		promotext: ""
@@ -360,20 +462,28 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(culture(raider),man)
 			},
 			effect: [
 				{
-					
+					type: discard
+					filter: choose(side(free),condition)
+					count: {
+					    type: condition
+					    condition: {
+					        type: canSpotBurdens
+					        amount: 3
+					    }
+					    true: 2
+					    false: 1
+					}
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a [raider] Man to discard a Free Peoples condition (or 2 Free Peoples conditions if you spot 3 burdens).
 		lore: The voices and the clink of weapons and harness were very close.
 		promotext: ""
@@ -411,17 +521,32 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpotBurdens
+		                amount: 2
+		            }
+		            filter: self
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotBurdens
+		                amount: 2
+		            }
+		            filter: self
+		            keyword: fierce
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br>While you can spot 2 burdens, this minion is strength +3 and <b>fierce</b>.
 		lore: Poleaxes wielded by tall Easterling warriors cut through armor and bone.
 		promotext: ""
@@ -462,17 +587,62 @@
 			Easterling
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        text: Make Easterling strength +2
+		        requires: {
+		            type: canSpotBurdens
+		            amount: 2
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(easterling)
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        text: Make Easterling strength +3
+		        requires: {
+		            type: canSpotBurdens
+		            amount: 4
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(easterling)
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        text: Make Easterling strength +4
+		        requires: {
+		            type: canSpotBurdens
+		            amount: 6
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(easterling)
+		            amount: 4
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Spot 2 burdens and remove (2) to make an Easterling strength +2.<br><b>Skirmish:</b> Spot 4 burdens and remove (2) to make an Easterling strength +3.<br><b>Skirmish:</b> Spot 6 burdens and remove (2) to make an Easterling strength +4.
 		lore: ""
 		promotext: ""
@@ -510,17 +680,25 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: assignedAgainst
+		            filter: self
+		            against: unbound,companion
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: addBurdens
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br>Each time this minion is assigned to an unbound companion, you may exert him to add a burden.
 		lore: Armored Easterlings protect their commanders from enemy assaults.
 		promotext: ""
@@ -558,17 +736,33 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotBurdens
+		                amount: 3
+		            }
+		            filter: self
+		            keyword: fierce
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotBurdens
+		                amount: 3
+		            }
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br>While you can spot 3 burdens, this minion is <b>fierce</b> and <b>damage +1</b>.
 		lore: Sometimes called the Men of Rhûn, the Easterlings hated Gondor for her riches.
 		promotext: ""
@@ -606,17 +800,25 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: assignedAgainst
+		            filter: self
+		            against: unbound,companion
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: addBurdens
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br>Each time this minion is assigned to an unbound companion, you may exert him to add a burden.
 		lore: Easterlings... have passed through the Black Gate....'
 		promotext: ""
@@ -654,17 +856,27 @@
 		vitality: 1
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,easterling
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: {
+		                type: forEachBurden
+		                limit: 4
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br>When you play this minion, you may spot another Easterling to add (1) for each burden (limit (4)).
 		lore: Enemy formations are threatened by the spears of Easterling light troops.
 		promotext: ""
@@ -702,17 +914,33 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotBurdens
+		                amount: 3
+		            }
+		            filter: self
+		            keyword: fierce
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotBurdens
+		                amount: 3
+		            }
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br>While you can spot 3 burdens, this minion is <b>fierce</b> and <b>damage +1</b>.
 		lore: Trained Easterling fighters formed ranks of axes and spears to charge the knights of Gondor.
 		promotext: ""
@@ -746,17 +974,37 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: siteBlock(two towers),siteNumber(2)
+		        }
+		        effect: {
+		            type: exert
+		            filter: all(ringBound,companion)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: [
+		            {
+		                type: discard
+		                filter: self
+		            }
+		            {
+		                type: exert
+		                filter: choose(culture(raider),man)
+		            }
+		        ]
+		        effect: {
+		            type: exert
+		            filter: choose(ringBound,companion)
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br>Each Ring-bound companion moving from site 2[T] must exert twice.<br><b>Maneuver:</b> Discard this condition and exert a [raider] Man to exert a Ring-bound companion.
 		lore: The Emyn Muil was a strange, twisted knot of hills.
 		promotext: ""
@@ -797,17 +1045,29 @@
 			Southron
 			Archer
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: exert
+		                filter: choose(companion,not(ringBearer))
+		            }
+		            {
+		                type: addModifier
+		                modifier: {
+		                    type: doesNotAddToArcheryTotal
+		                    filter: self
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Exert this minion to exert a companion (except the Ring-bearer); this minion does not add to the minion archery total.
 		lore: Veteran bowmen are highly valued in the kingdoms of the South.
 		promotext: ""
@@ -841,20 +1101,33 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: choice
+					texts: [
+					    Make a Southron strength +1 for each burden
+					    Make a RAIDER Man strength +2
+					]
+					effects: [
+					    {
+					        type: modifyStrength
+					        filter: choose(southron)
+					        amount: {
+					            type: forEachBurden
+					            limit: 5
+					        }
+					    }
+					    {
+					        type: modifyStrength
+					        filter: choose(culture(raider),man)
+					        amount: 2
+					    }
+					]
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a Southron strength +1 for each burden you spot (limit +5), or make a [raider] Man strength +2.
 		lore: Despite their foreign ways, the Men from the South and East were formidable fighters.
 		promotext: ""
@@ -887,21 +1160,23 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		keywords: Skirmish
-		/*requires: {
-			
-		}
+		keywords: [
+		    Maneuver
+		    Skirmish
+		]
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(southron)
 			},
 			effect: [
 				{
-					
+					type: addTwilight
+					amount: 3
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver</b> <i>or</i> <b>Skirmish:</b> Exert a Southron to add (3).
 		lore: Our scouts report more Haradrim making their way up here....'
 		promotext: ""
@@ -935,20 +1210,19 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(raider),man,inSkirmishAgainst(ringBound,companion)
+			}
 			effect: [
 				{
-					
+					type: addBurdens
+					amount: 1
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Spot a [raider] Man skirmishing a Ring-bound companion to add a burden.
 		lore: These were Men of other race, out of the wide Eastlands....
 		promotext: ""
@@ -982,17 +1256,26 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesSkirmish
+		            filter: or(companion,ally)
+		            against: southron
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 4
+		        }
+		        effect: {
+		            type: wound
+		            player: fp
+		            filter: choose(ringBound,companion)
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving a Southron, you may remove (4) to make the Free Peoples player wound a Ring-bound companion.
 		lore: Blood-curdling cries rout the Southrons' enemies from the battlefield.
 		promotext: ""
@@ -1026,17 +1309,71 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: [
+                    {
+                        type: endOfPhase
+                        phase: fellowship
+                    }
+                    {
+                        type: endOfPhase
+                        phase: regroup
+                    }
+                ]
+		        requires: [
+                    {
+                        type: location
+                        filter: siteBlock(two towers),siteNumber(7-9)
+                    }
+                    {
+                        type: twilightPoolLessThan
+                        amount: 7
+                    }
+                    {
+                        type: or
+                        requires: [
+                            {
+                                type: phase
+                                phase: fellowship
+                            }
+                            {
+                                type: and
+                                requires: [
+                                    {
+                                        type: phase
+                                        phase: regroup
+                                    }
+                                    {
+                                        type: moveCountMinimum
+                                        amount: 2
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+                effect: {
+                    type: addTwilight
+                    amount: 8
+                }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(raider),man)
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br>At the end of each phase during which the fellowship has moved to 7[T], 8[T], or 9[T] and the twilight pool has fewer than 7 twilight tokens, you may add (8).<br><b>Skirmish:</b> Discard this condition to make a [raider] Man strength +2.
 		lore: ""
 		promotext: ""
@@ -1070,17 +1407,30 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: [
+                    {
+                        type: controlsSite
+                    }
+                    {
+                        type: canSpot
+                        filter: southron
+                        count: 3
+                    }
+                ]
+                cost: {
+                    type: removeTwilight
+                    amount: 2
+                }
+                effect: {
+                    type: drawCards
+                    count: 1
+                }
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Shadow:</b> Spot a site you control, spot 3 Southrons and remove (2) to draw a card.
 		lore: The savage Haradrim, men from the kingdoms south of Gondor and Mordor, were called Southrons.
 		promotext: ""
@@ -1114,20 +1464,24 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(culture(raider),man)
+					amount: {
+					    type: condition
+					    condition: {
+					        type: canSpotBurdens
+					        amount: 4
+					    }
+					    true: 4
+					    false: 3
+					}
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a [raider] Man strength +3 (or +4 if you spot 4 burdens).
 		lore: Sudden war came upon Gondor out of Rhûn, land of the East.
 		promotext: ""
@@ -1161,20 +1515,34 @@
 		twilight: 4
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(culture(raider),man)
 			},
 			effect: [
 				{
-					
+					type: preventable
+					text: Would you like to discard 2 companions to prevent adding burdens for each companion over 4?
+					player: fp
+					cost: {
+					    type: discard
+					    player: fp
+					    filter: choose(companion,not(ringBearer))
+					    count: 2
+					}
+					effect: {
+					    type: addBurdens
+					    amount: {
+					        type: forEachYouCanSpot
+					        filter: companion
+					        over: 4
+					    }
+					}
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Exert a [raider] Man to add a burden for each companion over 4. The Free Peoples player may discard 2 companions (except the Ring-bearer) to prevent this.
 		lore: They heard singing and coarse shouting. At first it seemed a long way off, but it drew nearer....
 		promotext: ""
@@ -1208,20 +1576,25 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+			        type: modifyStrength
+			        filter: choose(culture(raider),man)
+			        amount: {
+			            type: condition
+			            condition: {
+			                type: canSpot
+			                filter: companion
+			                count: 6
+			            }
+			            true: 5
+			            false: 3
+			        }
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a [raider] Man strength +3 (or +5 if you spot 6 companions).
 		lore: Easterlings traveled up the ancient roads of Gondor to swell the hosts of the Dark Tower.
 		promotext: ""
@@ -1255,17 +1628,42 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: [
+		            {
+		                type: removeTwilight
+		                amount: 3
+		            }
+		            {
+		                type: exert
+		                filter: choose(culture(raider),man)
+		            }
+		        ]
+		        effect: {
+		            type: addTokens
+		            culture: raider
+		            filter: self
+		            count: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: removeTokens
+		            culture: raider
+		            filter: self
+		            count: 1
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Shadow:</b> Remove (3) and exert a [raider] Man to place a [raider] token here.<br><b>Maneuver:</b> Remove a [raider] token here to add (1).
 		lore: The Easterlings raid their enemies to gather supplies and equipment.
 		promotext: ""
@@ -1299,20 +1697,23 @@
 		twilight: 6
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(culture(raider),archer)
 			},
 			effect: [
 				{
-					
+					type: modifyArcheryTotal
+					side: shadow
+					amount: {
+					    type: forEachBurden
+					    limit: 5
+					}
 				}
 			]
-		}*/
+		}
 		gametext: <b>Archery:</b> Exert a [raider] archer to make the minion archery total +1 for each burden (limit +5).
 		lore: Wars between the southern kingdoms taught speed and precision to the archers of the Haradrim.
 		promotext: ""
@@ -1350,17 +1751,27 @@
 		vitality: 4
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. To play, spot a [raider] Man.<br><b>Regroup:</b> Exert Regiment of Haradrim twice to take control of a site.
 		lore: One of their regiments is due by our reckoning to pass by, some time ere noon....'
 		promotext: ""
@@ -1401,17 +1812,23 @@
 			Southron
 			Archer
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyArcheryTotal
+		            requires: {
+		                type: canSpot
+		                filter: another,southron
+		            }
+		            side: shadow
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: controlledSite
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you can spot another Southron, the minion archery total is +1 for each site you control.
 		lore: They have passed on to the Black Gate; but more may follow.'
 		promotext: ""
@@ -1449,17 +1866,26 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesSkirmish
+		            filter: or(companion,ally)
+		            against: southron
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 1
+		        }
+		        effect: {
+		            type: wound
+		            player: fp
+		            filter: choose(ringBound,companion)
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>Each time a companion or ally loses a skirmish involving a Southron, you may remove (1) to make the Free Peoples player wound a Ring-bound companion.
 		lore: Some of the Southrons have broken from the trap and are flying from the road.'
 		promotext: ""
@@ -1493,18 +1919,29 @@
 		twilight: 3
 		type: Possession
 		itemclass: Ranged weapon
-		#target: a [raider] Man
-		/*requires: {
-			
-		}
+		target: culture(raider),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: archer
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyArcheryTotal
+		            requires: {
+		                type: canSpot
+		                filter: not(bearer),culture(raider),man
+		            }
+		            side: shadow
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: Bearer must be a [raider] Man.<br>Bearer is an <b>archer</b>.<br>While you can spot another [raider] Man, the minion archery total is +1.
 		lore: Volleys from Southron bows are deadly in large numbers.
 		promotext: ""
@@ -1545,17 +1982,29 @@
 			Southron
 			Archer
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: exert
+		                filter: choose(companion,not(ringBearer))
+		            }
+		            {
+		                type: addModifier
+		                modifier: {
+		                    type: doesNotAddToArcheryTotal
+		                    filter: self
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Exert this minion to exert a companion (except the Ring-bearer); this minion does not add to the minion archery total.
 		lore: The Southron armies deploy archers to harass enemy troop formations.
 		promotext: ""
@@ -1596,17 +2045,39 @@
 			Southron
 			Ambush 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: assignment
+		        requires: [
+                    {
+                        type: canSpot
+                        filter: companion
+                        count: 6
+                    }
+                    {
+                        type: canSpot
+                        filter: self,notAssignedToSkirmish
+                    }
+                ]
+                effect: {
+                    type: preventable
+                    player: fp
+                    text: Would you like to discard an unbound companion to prevent Southron Commander from being assigned to the Ring-bearer?
+                    cost: {
+                        type: discard
+                        player: fp
+                        filter: choose(unbound,companion)
+                    }
+                    effect: {
+                        type: assignFpCharacterToSkirmish
+                        fpCharacter: choose(ringBearer)
+                        against: self
+                    }
+                }
+
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Assignment:</b> Spot 6 companions to assign this minion to the Ring-bearer. The Free Peoples player may discard an unbound companion to prevent this.
 		lore: Almost as bad as Orcs, and much bigger.'
 		promotext: ""
@@ -1644,17 +2115,25 @@
 		vitality: 3
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: removeTwilight
+                        amount: 5
+                    }
+                ]
+                effect: {
+                    type: takeControlOfSite
+                }
+		    }
+		]
 		gametext: <b>Southron</b>.<br><b>Regroup:</b> Exert this minion and remove (5) to take control of a site.
 		lore: Scouts find oases for Southron armies as they cross the deserts of Harad.
 		promotext: ""
@@ -1695,17 +2174,26 @@
 			Southron
 			Ambush 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+                    type: exert
+                    filter: self
+                }
+                requires: {
+                    type: canSpot
+                    filter: companion
+                    count: 5
+                }
+                effect: {
+                    type: exert
+                    player: fp
+                    filter: choose(companion)
+                }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Maneuver:</b> Exert this minion and spot 5 companions to make the Free Peoples player exert a companion.
 		lore: ...they have come out of the South beyond the Great River's end....'
 		promotext: ""
@@ -1746,17 +2234,6 @@
 			Southron
 			Ambush 2
 		]
-		/*requires: {
-			
-		}
-		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
 		gametext: <b>Southron</b>. <b>Ambush (2)</b>.
 		lore: They have black eyes, and long black hair, and gold rings in their ears....'
 		promotext: ""
@@ -1794,17 +2271,24 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: controlledSite
+		                multiplier: 2
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br><b>Maneuver:</b> Exert this minion to add (2) for each site you control.
 		lore: Pickets guarded the borders of the Southron encampment.
 		promotext: ""
@@ -1845,17 +2329,6 @@
 			Southron
 			Ambush 2
 		]
-		/*requires: {
-			
-		}
-		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
 		gametext: <b>Southron</b>. <b>Ambush (2)</b>.
 		lore: The kingdoms of Harad fight countless wars and train thousands of warriors.
 		promotext: ""
@@ -1890,18 +2363,27 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a Southron
-		/*requires: {
-			
-		}
+		target: Southron
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: [
+		            {
+		                type: removeTwilight
+		                amount: 4
+		            }
+		            {
+		                type: exert
+		                filter: bearer
+		            }
+		        ]
+		        effect: {
+		            type: wound
+		            filter: choose(or(companion,ally),inSkirmishAgainst(bearer))
+		        }
+		    }
+		]
 		gametext: Bearer must be a Southron.<br><b>Skirmish:</b> Remove (4) and exert bearer to wound a companion or ally bearer is skirmishing.
 		lore: Long pikes defend the Southrons against the armored knights of Gondor.
 		promotext: ""
@@ -1943,17 +2425,45 @@
 			Archer
 			Ambush 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: southron
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: assignment
+		        requires: [
+                    {
+                        type: canSpot
+                        filter: companion
+                        count: 7
+                    }
+                    {
+                        type: canSpot
+                        filter: self,notAssignedToSkirmish
+                    }
+                ]
+		        effect: {
+		            type: preventable
+		            player: fp
+		            text: Would you like to make opponent discard a companion to prevent assigning Southron Troop to the Ring-bearer?
+		            cost: {
+		                type: discard
+		                player: shadow
+		                filter: choose(companion,not(ringBearer))
+		            }
+		            effect: {
+		                type: assignFpCharacterToSkirmish
+		                fpCharacter: choose(ringBearer)
+		                against: self
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Archer</b>. <b>Ambush (1)</b>. To play, spot a Southron.<br><b>Assignment:</b> Spot 7 companions to assign this minion to the Ring-bearer. The Free Peoples player may make you discard a companion (except the Ring-bearer) to prevent this.
 		lore: ""
 		promotext: ""
@@ -1994,17 +2504,27 @@
 			Southron
 			Ambush 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: companion
+		            count: 6
+		        }
+		        effect: {
+		            type: exert
+		            player: fp
+		            filter: choose(companion)
+		            count: 2
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Maneuver:</b> Exert this minion and spot 6 companions to make the Free Peoples player exert 2 companions.
 		lore: He caught a glimpse of swarthy men... running down the slope some way off....
 		promotext: ""
@@ -2045,17 +2565,42 @@
 			Southron
 			Ambush 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: assignment
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: [
+		            {
+		                type: canSpot
+		                filter: companion
+		                count: 5
+		            }
+		            {
+		                type: canSpot
+		                filter: self,notAssignedToSkirmish
+		            }
+		        ]
+		        effect: {
+		            type: preventable
+		            player: fp
+		            text: Would you like to add 4 twilight to prevent Southron Wanderer getting assigned to skirmish against the Ring-bearer
+		            cost: {
+		                type: addTwilight
+		                amount: 4
+		            }
+		            effect: {
+		                type: assignFpCharacterToSkirmish
+		                fpCharacter: choose(ringBearer)
+		                against: self
+		            }
+		        }
+
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Assignment:</b> Exert this minion and spot 5 companions to assign this minion to the Ring-bearer. The Free Peoples player may add (4) to prevent this.
 		lore: Some desert warriors have no allegiance and work for any faction that will pay them.
 		promotext: ""
@@ -2089,20 +2634,31 @@
 		twilight: 2
 		type: Event
 		keywords: Assignment
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: chooseActiveCards
+					text: Choose an Easterling to assign to Ring-bearer
+					filter: choose(easterling,assignableToSkirmishAgainst(ringBearer))
+					memorize: chosenEasterling
+				}
+				{
+				    type: preventable
+				    player: fp
+				    text: Would you like to add burden to prevent assigning {chosenEasterling} to the Ring-bearer?
+				    cost: {
+				        type: addBurdens
+				        amount: 1
+				    }
+				    effect: {
+				        type: assignFpCharacterToSkirmish
+				        fpCharacter: choose(ringBearer)
+				        against: memory(chosenEasterling)
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: <b>Assignment:</b> Assign an Easterling to the Ring-bearer. The Free Peoples player may add a burden to prevent this.
 		lore: Then he knew that the hope that had for one wild moment stirred in his heart was vain.
 		promotext: ""
@@ -2136,20 +2692,15 @@
 		twilight: 3
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: wound
+					filter: choose(or(companion,ally),inSkirmishAgainst(culture(raider),man))
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Wound a companion or ally skirmishing a [raider] Man.
 		lore: The Southrons fight with tactics the men of Gondor have never before seen.
 		promotext: ""
@@ -2183,17 +2734,37 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: extraCostToPlay
+		            requires: {
+		                type: canSpot
+		                filter: culture(raider),man
+		            }
+		            filter: side(free),event
+		            requiresRanger: true
+		            cost: {
+		                type: wound
+		                filter: choose(companion)
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(raider),man)
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br>While you can spot a [raider] Man, each Free Peoples event that spots or exerts a ranger gains this cost: "wound a companion."<br><b>Skirmish:</b> Discard this condition to make a [raider] Man strength +2.
 		lore: Massed Southron troops prepared to attack Gondor.
 		promotext: ""

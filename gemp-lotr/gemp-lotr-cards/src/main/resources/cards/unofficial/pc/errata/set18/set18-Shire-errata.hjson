@@ -230,7 +230,7 @@
 				}
 				cost: {
 					type: addtokens
-					amount: 1
+					count: 1
 					culture: shire
 					filter: self
 				}

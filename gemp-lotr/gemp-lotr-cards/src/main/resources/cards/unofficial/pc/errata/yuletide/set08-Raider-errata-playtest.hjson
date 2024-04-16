@@ -68,7 +68,7 @@
 					type: addTokens
 					culture: raider
 					filter: choose(hasToken(raider))
-					amount: 2
+					count: 2
 				}
 			}
 		]

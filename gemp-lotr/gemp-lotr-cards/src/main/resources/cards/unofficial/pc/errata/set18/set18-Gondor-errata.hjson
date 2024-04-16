@@ -125,7 +125,7 @@
 				}
 				effect: {
 					type: addtokens
-					amount: 1
+					count: 1
 					culture: gondor
 					filter: self
 				}
