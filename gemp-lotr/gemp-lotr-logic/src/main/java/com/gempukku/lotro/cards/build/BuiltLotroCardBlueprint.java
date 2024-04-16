@@ -17,6 +17,7 @@ import com.gempukku.lotro.logic.timing.EffectResult;
 import java.util.*;
 
 public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
+    private String id;
     private String title;
     private String sanitizedTitle;
     private String subtitle;
@@ -37,6 +38,12 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private Direction direction;
     private SitesBlock allyHomeBlock;
     private int[] allyHomeSites = new int[0];
+
+    private String gameText;
+    private String formattedGameText;
+    private String loreText;
+    private String promoText;
+
 
     private List<Requirement> requirements;
     private List<FilterableSource> targetFilters;
@@ -83,6 +90,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private ExtraPossessionClassTest extraPossessionClassTest;
 
     // Building methods
+
+    public void setBlueprintId(String id) {
+        this.id = id;
+    }
 
     public void setAllyHomeSites(SitesBlock block, int[] numbers) {
         this.allyHomeBlock = block;
@@ -270,6 +281,19 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         this.subtitle = subtitle;
     }
 
+    public void setGameText(String text) {
+        this.formattedGameText = GameText.ConvertTextToHTML(text.trim());
+        this.gameText = GameText.SanitizeHTMLToSearchText(formattedGameText);
+    }
+
+    public void setLore(String text) {
+        this.loreText = GameText.ConvertTextToHTML(text.trim());
+    }
+
+    public void setPromoText(String text) {
+        this.promoText = GameText.ConvertTextToHTML(text.trim());
+    }
+
     public void setUnique(boolean unique) {
         this.unique = unique;
     }
@@ -331,6 +355,19 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     // Implemented methods
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        if(this.id != null)
+            throw new UnsupportedOperationException("Id for this blueprint has already been set");
+
+        this.id = id;
+    }
 
     @Override
     public Side getSide() {

@@ -45,9 +45,9 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("target", new TargetFieldProcessor());
         fieldProcessors.put("effects", new EffectFieldProcessor());
 
-        fieldProcessors.put("gametext", new NullProcessor());
-        fieldProcessors.put("lore", new NullProcessor());
-        fieldProcessors.put("promotext", new NullProcessor());
+        fieldProcessors.put("gametext", new GameTextFieldProcessor());
+        fieldProcessors.put("lore", new LoreFieldProcessor());
+        fieldProcessors.put("promotext", new PromoTextFieldProcessor());
 
         //Soon!  But not yet
         fieldProcessors.put("cardinfo", new NullProcessor());

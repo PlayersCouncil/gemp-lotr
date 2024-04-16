@@ -200,16 +200,19 @@ public class LotroCardBlueprintLibrary {
             final JSONObject cardsFile = (JSONObject) parser.parse(json);
             final Set<Map.Entry<String, JSONObject>> cardsInFile = cardsFile.entrySet();
             for (Map.Entry<String, JSONObject> cardEntry : cardsInFile) {
-                String blueprint = cardEntry.getKey();
-                if (validateNew)
-                    if (_blueprints.containsKey(blueprint))
-                        logger.error(blueprint + " - Replacing existing card definition!");
+                String blueprintId = cardEntry.getKey();
+                if (validateNew && _blueprints.containsKey(blueprintId)) {
+                    logger.error(blueprintId + " from " +
+                            file.getAbsolutePath() + " - Replacing existing card definition!");
+                }
                 final JSONObject cardDefinition = cardEntry.getValue();
                 try {
-                    final LotroCardBlueprint lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(cardDefinition);
-                    _blueprints.put(blueprint, lotroCardBlueprint);
+                    final var lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(cardDefinition);
+                    lotroCardBlueprint.setId(blueprintId);
+                    _blueprints.put(blueprintId, lotroCardBlueprint);
                 } catch (InvalidCardDefinitionException exp) {
-                    logger.error("Unable to load card " + blueprint, exp);
+                    logger.error("Unable to load card " + blueprintId +
+                            " from " + file.getAbsolutePath(), exp);
                 }
             }
         } catch (FileNotFoundException exp) {
@@ -238,6 +241,7 @@ public class LotroCardBlueprintLibrary {
                         try {
                             // Ensure it's loaded
                             LotroCardBlueprint blueprint = findJavaBlueprint(blueprintId);
+                            blueprint.setId(blueprintId);
                             _blueprints.put(blueprintId, blueprint);
                         } catch (CardNotFoundException exp) {
                             throw new RuntimeException("Unable to start the server, due to invalid (missing) card definition - " + blueprintId);
@@ -440,30 +444,6 @@ public class LotroCardBlueprintLibrary {
             return "0" + id;
         else
             return String.valueOf(id);
-    }
-
-    private void determineNeedsLoadingFlag(JSONObject setDefinition, Set<String> flags) {
-        Boolean needsLoading = (Boolean) setDefinition.get("needsLoading");
-        if (needsLoading == null)
-            needsLoading = true;
-        if (needsLoading)
-            flags.add("needsLoading");
-    }
-
-    private void determineMerchantableFlag(JSONObject setDefinition, Set<String> flags) {
-        Boolean merchantable = (Boolean) setDefinition.get("merchantable");
-        if (merchantable == null)
-            merchantable = true;
-        if (merchantable)
-            flags.add("merchantable");
-    }
-
-    private void determineOriginalSetFlag(JSONObject setDefinition, Set<String> flags) {
-        Boolean originalSet = (Boolean) setDefinition.get("originalSet");
-        if (originalSet == null)
-            originalSet = true;
-        if (originalSet)
-            flags.add("originalSet");
     }
 
     private void readSetRarityFile(DefaultSetDefinition rarity, String setNo, String rarityFile) throws IOException {
