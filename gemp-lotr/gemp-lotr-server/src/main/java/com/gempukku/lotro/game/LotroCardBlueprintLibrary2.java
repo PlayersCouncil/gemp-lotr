@@ -249,11 +249,13 @@ public class LotroCardBlueprintLibrary2 {
     private void cacheAllJavaBlueprints() {
         try {
             logger.debug("Loading remaining Java cards...");
-            var classes = getClasses("com.gempukku.lotro.cards");
+            final ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-            for(var clazz : classes) {
-                if(!clazz.getPackageName().contains("cards.set"))
+            for(var info : ClassPath.from(loader).getTopLevelClasses()) {
+                if(info.getName().contains("Test") || !info.getName().contains("cards.set"))
                     continue;
+
+                var clazz = info.load();
 
                 var match = cardClassPattern.matcher(clazz.getName());
                 if(!match.matches())
@@ -271,7 +273,7 @@ public class LotroCardBlueprintLibrary2 {
             }
 
             logger.debug("Java card loading complete.");
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException("Unable to start the server: failure while searching for Java cards.", e);
         }
     }
