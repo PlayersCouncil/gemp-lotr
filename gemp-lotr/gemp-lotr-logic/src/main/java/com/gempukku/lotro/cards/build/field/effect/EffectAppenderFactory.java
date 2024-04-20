@@ -102,11 +102,12 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("playsite", new PlaySite());
         effectAppenderProducers.put("preventable", new PreventableAppenderProducer());
         effectAppenderProducers.put("preventallwounds", new PreventAllWounds());
-        effectAppenderProducers.put("preventburden", new PreventBurden());
+        effectAppenderProducers.put("preventburden", new PreventEffect());
         effectAppenderProducers.put("preventdiscard", new PreventCardEffectAppender());
+        effectAppenderProducers.put("preventeffect", new PreventEffect());
         effectAppenderProducers.put("preventexert", new PreventExert());
         effectAppenderProducers.put("preventheal", new PreventCardEffectAppender());
-        effectAppenderProducers.put("preventtwilight", new PreventTwilight());
+        effectAppenderProducers.put("preventtwilight", new PreventEffect());
         effectAppenderProducers.put("preventwound", new PreventWound());
         effectAppenderProducers.put("putcardsfromdeckintohand", new PutCardsFromDeckIntoHand());
         effectAppenderProducers.put("putcardsfromdeckontopofdeck", new PutCardsFromDeckOnTopOfDeck());

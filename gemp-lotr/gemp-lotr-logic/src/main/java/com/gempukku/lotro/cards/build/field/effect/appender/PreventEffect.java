@@ -7,12 +7,11 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
-import com.gempukku.lotro.logic.effects.AddTwilightEffect;
-import com.gempukku.lotro.logic.effects.PreventEffect;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.Preventable;
 import org.json.simple.JSONObject;
 
-public class PreventTwilight implements EffectAppenderProducer {
+public class PreventEffect implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject);
@@ -23,8 +22,8 @@ public class PreventTwilight implements EffectAppenderProducer {
                 new DelayedAppender() {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                        AddTwilightEffect addTwilightEffect = (AddTwilightEffect) actionContext.getEffect();
-                        return new PreventEffect(addTwilightEffect);
+                        Preventable preventable = (Preventable) actionContext.getEffect();
+                        return new com.gempukku.lotro.logic.effects.PreventEffect(preventable);
                     }
                 });
 

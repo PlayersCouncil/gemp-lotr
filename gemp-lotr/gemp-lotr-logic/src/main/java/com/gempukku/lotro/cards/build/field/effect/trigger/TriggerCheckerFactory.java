@@ -13,12 +13,13 @@ public class TriggerCheckerFactory {
 
     public TriggerCheckerFactory() {
         triggerCheckers.put("abouttoaddburden", new AboutToAddBurden());
-        triggerCheckers.put("abouttoaddtwilight", new AboutToAddBurden());
+        triggerCheckers.put("abouttoaddtwilight", new AboutToAddTwilight());
         triggerCheckers.put("abouttobekilled", new AboutToBeKilled());
         triggerCheckers.put("abouttodiscard", new AboutToDiscardFromPlay());
         triggerCheckers.put("abouttoexert", new AboutToExert());
         triggerCheckers.put("abouttoheal", new AboutToHeal());
         triggerCheckers.put("abouttomoveto", new AboutToMoveTo());
+        triggerCheckers.put("abouttotakecontrolofsite", new AboutToTakeControlOfSite());
         triggerCheckers.put("abouttotakewound", new AboutToTakeWound());
         triggerCheckers.put("addsburden", new AddsBurden());
         triggerCheckers.put("addsthreat", new AddsThreat());
