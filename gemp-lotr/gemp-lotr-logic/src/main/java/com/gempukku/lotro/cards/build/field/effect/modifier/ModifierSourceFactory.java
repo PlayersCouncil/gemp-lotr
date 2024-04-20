@@ -22,6 +22,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("allycanparticipateinarcheryfireandskirmishes", new AllyCanParticipateInArcheryFireAndSkirmishes());
         modifierProducers.put("allycanparticipateinarcheryfire", new AllyCanParticipateInArcheryFire());
         modifierProducers.put("allycanparticipateinskirmishes", new AllyCanParticipateInSkirmishes());
+        modifierProducers.put("allymaynotparticipateinarcheryfireorskirmishes", new AllyMayNotParticipateInArcheryFireOrSkirmishes());
         modifierProducers.put("archerytotal", new ArcheryTotal());
         modifierProducers.put("cancelkeywordbonusfrom", new CancelKeywordBonusFrom());
         modifierProducers.put("cancelstrengthbonusfrom", new CancelStrengthBonusFrom());
@@ -38,6 +39,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantdiscardcardsfromhandortopofdrawdeck", new CantDiscardCardsFromHandOrTopOfDrawDeck());
         modifierProducers.put("cantheal", new CantHeal());
         modifierProducers.put("cantlookorrevealhand", new CantLookOrRevealHand());
+        modifierProducers.put("cantmove", new AddModifierFlag(ModifierFlag.CANT_MOVE));
         modifierProducers.put("cantplaycards", new CantPlayCards());
         modifierProducers.put("cantplaycardsfromdeckordiscardpile", new AddModifierFlag(ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK));
         modifierProducers.put("cantplaycardson", new CantPlayCardsOn());

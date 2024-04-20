@@ -439,7 +439,8 @@ public class PlayConditions {
     }
 
     public static boolean canMove(LotroGame game) {
-        return game.getGameState().getMoveCount() < game.getModifiersQuerying().getMoveLimit(game, 2);
+        return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_MOVE)
+                && game.getGameState().getMoveCount() < game.getModifiersQuerying().getMoveLimit(game, 2);
     }
 
     public static boolean canRemoveAnyCultureTokens(LotroGame game, int count, Filterable... fromFilters) {
