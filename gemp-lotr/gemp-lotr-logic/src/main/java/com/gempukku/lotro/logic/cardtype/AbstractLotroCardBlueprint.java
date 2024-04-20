@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class AbstractLotroCardBlueprint implements LotroCardBlueprint {
+
+    private String _id;
     private final int _twilightCost;
     private final String _name;
     private final String _sanitizedName;
@@ -87,6 +89,19 @@ public abstract class AbstractLotroCardBlueprint implements LotroCardBlueprint {
     @Override
     public final CardType getCardType() {
         return _cardType;
+    }
+
+    @Override
+    public final String getId() {
+        return _id;
+    }
+
+    @Override
+    public void setId(String id) {
+        if(_id != null)
+            throw new UnsupportedOperationException("Id for this blueprint has already been set");
+
+        _id = id;
     }
 
     @Override

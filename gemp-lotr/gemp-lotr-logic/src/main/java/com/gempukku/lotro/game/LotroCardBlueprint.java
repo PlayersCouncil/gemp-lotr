@@ -16,6 +16,15 @@ public interface LotroCardBlueprint {
         LEFT, RIGHT
     }
 
+    default LotroCardBlueprint getParent() {
+        return this;
+    }
+
+    String getId();
+
+    //This isn't ideal, but there's 2,000 java cards that already exist.
+    // Adding the argument to their constructors would be a chore.
+    void setId(String id);
     Side getSide();
 
     CardType getCardType();
