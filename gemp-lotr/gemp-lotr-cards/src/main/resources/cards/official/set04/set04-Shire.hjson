@@ -203,6 +203,7 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 10
+		keyword: can start with ring
 		effects: [
 		    {
 		        type: modifier
@@ -255,7 +256,10 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 10
-		keywords: Ring-bound
+		keywords: [
+		    Ring-bound
+		    can start with ring
+		]
 		effects: [
 		    {
 		        type: activated
