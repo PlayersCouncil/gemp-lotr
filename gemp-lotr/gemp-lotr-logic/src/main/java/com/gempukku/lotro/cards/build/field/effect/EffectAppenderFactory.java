@@ -101,6 +101,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("playnextsite", new PlayNextSite());
         effectAppenderProducers.put("playsite", new PlaySite());
         effectAppenderProducers.put("preventable", new PreventableAppenderProducer());
+        effectAppenderProducers.put("preventaddingallburdens", new PreventAddingAllBurdens());
         effectAppenderProducers.put("preventallwounds", new PreventAllWounds());
         effectAppenderProducers.put("preventburden", new PreventEffect());
         effectAppenderProducers.put("preventdiscard", new PreventCardEffectAppender());
@@ -128,6 +129,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("reinforcetokens", new ReinforceTokens());
         effectAppenderProducers.put("removeburdens", new RemoveBurdens());
         effectAppenderProducers.put("removecardsindiscardfromgame", new RemoveCardsInDiscardFromGame());
+        effectAppenderProducers.put("removecharacterfromskirmish", new RemoveCharacterFromSkirmish());
         effectAppenderProducers.put("removefromthegame", new RemoveFromTheGame());
         effectAppenderProducers.put("removekeyword", new RemoveKeyword());
         effectAppenderProducers.put("removetext", new RemoveText());
