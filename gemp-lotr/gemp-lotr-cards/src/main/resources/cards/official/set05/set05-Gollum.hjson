@@ -22,20 +22,30 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: discard
+				filter: choose(name(Sméagol))
 			},
 			effect: [
 				{
-					
+					type: preventable
+					player: shadow
+					text: Would you like to exert a minion twice to prevent discarding a minion?
+					cost: {
+					    type: exert
+					    player: shadow
+					    filter: choose(minion)
+					    times: 2
+					}
+					effect: {
+					    type: discard
+					    filter: choose(minion)
+					}
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Discard Sméagol to discard a minion. An opponent may exert a minion twice to prevent this.
 		lore: Now I wonder where he's got to?'
 		promotext: ""
@@ -69,17 +79,35 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: site,zone(adventure path)
+		            keyword: marsh
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: [
+                    {
+                        type: exert
+                        filter: choose(name(Gollum))
+                        times: 2
+                    }
+                    {
+                        type: discard
+                        filter: self
+                    }
+                ]
+                effect: {
+                    type: playCardFromDiscard
+                    filter: choose(minion)
+                }
+		    }
+		]
 		gametext: Plays to your support area.<br>Each site on the adventure path is a <b>marsh</b>.<br><b>Shadow:</b> Exert Gollum twice and discard this condition to play a minion from your discard pile.
 		lore: No birds here. There are snakeses, wormses, things in the pools. Lots of things, lots of nasty things.'
 		promotext: ""
@@ -112,17 +140,20 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
-		/*requires: {
-			
-		}
+		target: name(Sméagol)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(or(name(Sméagol),name(Gollum)))
+		        }
+		        effect: {
+		            type: playNextSite
+		        }
+		    }
+		]
 		gametext: Plays on Sméagol.<br><b>Regroup:</b> Exert Sméagol or Gollum to play the fellowship's next site (replacing opponent's site if necessary).
 		lore: Follow Sméagol very carefully, and you may go a long way, quite a long way, before He catches you, yes perhaps.'
 		promotext: ""
@@ -156,21 +187,23 @@
 		culture: Gollum
 		twilight: 2
 		type: Minion
-		race: 
 		strength: 5
 		vitality: 4
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(or(companion,ally))
+		        }
+		    }
+		]
 		gametext: <b>Regroup:</b> Discard Gollum to exert a companion or ally.
 		lore: ...we won't let you go, either. You're full of wickedness and mischief, Gollum.'
 		promotext: ""
@@ -204,21 +237,32 @@
 		culture: Gollum
 		twilight: 2
 		type: Minion
-		race: 
 		strength: 5
 		vitality: 4
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachBurden
+		            }
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
+		]
 		gametext: Gollum is strength +1 for each burden.<br>Each time Gollum wins a skirmish, you may add a burden.
 		lore: Still he's a Baggins, my precious, yes, a Baggins. A Baggins stole it. He found it and he said nothing. We hates Bagginses.'
 		promotext: ""
@@ -252,20 +296,21 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
+			requires: {
+			    type: canSpot
+			    filter: or(name(Sméagol),name(Gollum))
+			}
 			effect: [
 				{
-					
+					type: addTwilight
+					amount: {
+					    type: forEachBurden
+					}
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Spot Sméagol or Gollum to add (1) for each burden.
 		lore: That's what it is. It's that Gollum! Snakes and adders! And to think I thought that we'd puzzle him with our bit of a climb!'
 		promotext: ""
@@ -299,17 +344,23 @@
 		twilight: 1
 		type: Condition
 		strength: 1
-		/*requires: {
-			
-		}
+		target: name(Sméagol)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(name(Sméagol))
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: Plays on Sméagol.<br><b>Skirmish:</b> Discard this condition to make Sméagol <b>damage +1</b>.
 		lore: Throttle us in our sleep, that's his plan.'
 		promotext: ""
@@ -343,23 +394,51 @@
 		culture: Gollum
 		twilight: 0
 		type: Companion
-		race: 
 		strength: 3
 		vitality: 4
 		signet: Frodo
 		resistance: 6
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addBurdens
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(or(name(Sméagol),name(Gollum)))
+		            times: 2
+		        }
+		        effect: [
+                    {
+                        type: revealTopCardsOfDrawDeck
+                        count: 4
+                        memorize: revealedCards
+                    }
+                    {
+                        type: repeat
+                        amount: {
+                            type: forEachMatchingInMemory
+                            filter: side(shadow)
+                            memory: revealedCards
+                        }
+                        effect: {
+                            type: wound
+                            filter: choose(minion)
+                        }
+                    }
+                    {
+                        type: putCardsFromDeckOnBottomOfDeck
+                        filter: memory(revealedCards)
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br><b>Regroup:</b> Exert Sméagol (or Gollum) twice to reveal the top 4 cards of your draw deck. Wound a minion for each Shadow card revealed. Place those 4 cards beneath your draw deck in any order.
 		lore: Could you find anything fit for a hungry hobbit?'
 		promotext: ""
@@ -393,23 +472,40 @@
 		culture: Gollum
 		twilight: 0
 		type: Companion
-		race: 
 		strength: 3
 		vitality: 4
 		signet: Frodo
 		resistance: 6
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addBurdens
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: addBurdens
+		        }
+		        effect: [
+		            {
+		                type: modifyStrength
+		                filter: self
+		                amount: 2
+		            }
+		            {
+		                type: addModifier
+		                modifier: {
+		                    type: cantTakeWounds
+		                    filter: self
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> Add a burden to make Sméagol strength +2 and take no wounds.
 		lore: ...that it is my fate to receive help from you, where I least looked for it, and your fate to help me whom you long pursued with evil purpose.'
 		promotext: ""
@@ -446,20 +542,48 @@
 			Shadow
 			Skirmish
 		]
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
-			},
-			effect: [
-				{
-					
-				}
-			]
-		}*/
+			    type: if
+			    condition: {
+			        type: phase
+			        phase: shadow
+			    }
+			    true: {
+			        type: costToEffect
+			        effect: {
+			            type: choice
+			            texts: [
+			                Play Gollum from your draw deck
+			                Play Gollum from your discard pile
+			            ]
+			            effects: [
+			                {
+			                    type: playCardFromDrawDeck
+			                    filter: choose(name(Gollum))
+			                }
+			                {
+			                    type: playCardFromDiscard
+			                    filter: choose(name(Gollum))
+			                }
+			            ]
+			        }
+			    }
+			    false: {
+			        type: costToEffect
+			        cost: {
+			            type: discardCardAtRandomFromHand
+			            forced: false
+			        }
+			        effect: {
+			            type: modifyStrength
+			            filter: choose(name(Gollum))
+			            amount: 3
+			        }
+			    }
+			}
+		}
 		gametext: <b>Shadow:</b> Play Gollum from your draw deck or discard pile.<br><b>Skirmish:</b> Discard a card at random from hand to make Gollum strength +3.
 		lore: No, sweet one. See, my precious: if we has it, then we can escape, even from Him, eh?'
 		promotext: ""

@@ -462,6 +462,9 @@ public class FilterFactory {
                 });
         parameterFilters.put("zone",
                 (parameter, environment) -> {
+                    // Fix for faulty "Sanitize" method, which removes spaces and underscores, therefore making it
+                    // impossible to match ADVENTURE_PATH Zone
+                    if (parameter.equals("adventurepath")) parameter = "adventure path";
                     final Zone zone = FieldUtils.getEnum(Zone.class, parameter, "parameter");
                     return actionContext -> zone;
                 });
