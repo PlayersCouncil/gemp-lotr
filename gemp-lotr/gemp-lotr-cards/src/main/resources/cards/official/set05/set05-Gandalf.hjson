@@ -27,17 +27,49 @@
 		vitality: 4
 		resistance: 6
 		keywords: Unhasty
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: assignment
+		        cost: {
+		            type: choice
+		            texts: [
+		                Exert an unbound Hobbit
+		                Discard 2 cards from hand
+		            ]
+		            effects: [
+		                {
+                            type: exert
+                            filter: choose(unbound,hobbit)
+                        }
+                        {
+                            type: discardFromHand
+                            forced: false
+                            count: 2
+                        }
+                    ]
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+                        type: unhastyCompanionCanParticipateInSkirmishes
+                        filter: self
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(unbound,hobbit)
+		        }
+		    }
+		]
 		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow Birchseed to skirmish.<br><b>Fellowship:</b> Exert Birchseed to heal an unbound Hobbit.
 		lore: Slender and royal, he presided over many Entmoots.
 		promotext: ""
@@ -74,20 +106,45 @@
 			Spell
 			Maneuver
 		]
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(name(Gandalf))
+				times: 3
 			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(unbound,companion,signet(Gandalf))
+					amount: 5
+					until: regroup
+					memorize: chosenCompanion
+				}
+				{
+				    type: addKeyword
+				    filter: memory(chosenCompanion)
+				    keyword: defender
+				    amount: 1
+				    until: regroup
+				}
+				{
+				    type: addKeyword
+				    filter: memory(chosenCompanion)
+				    keyword: damage
+				    amount: 2
+				    until: regroup
+				}
+				{
+				    type: addModifier
+				    modifier: {
+				        type: cantTakeWounds
+				        filter: memory(chosenCompanion)
+				    }
+				    until: regroup
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Exert Gandalf 3 times to make an unbound companion with the Gandalf signet strength +5, <b>defender +1</b>, <b>damage +2</b>, and unable to take wounds until the regroup phase.
 		lore: Down leaped Shadowfax, like a deer....
 		promotext: ""
@@ -125,17 +182,49 @@
 		vitality: 3
 		resistance: 6
 		keywords: Unhasty
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: assignment
+		        cost: {
+		            type: choice
+		            texts: [
+		                Exert an unbound Hobbit
+		                Discard 2 cards from hand
+		            ]
+		            effects: [
+		                {
+                            type: exert
+                            filter: choose(unbound,hobbit)
+                        }
+                        {
+                            type: discardFromHand
+                            forced: false
+                            count: 2
+                        }
+                    ]
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+                        type: unhastyCompanionCanParticipateInSkirmishes
+                        filter: self
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(unbound,hobbit)
+		        }
+		    }
+		]
 		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow this companion to skirmish.
 		lore: We keep off strangers and the foolhardy; and we train and we teach, we walk and we weed.'
 		promotext: ""
@@ -172,20 +261,24 @@
 			Spell
 			Maneuver
 		]
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
+			requires: {
+			    type: canSpotTwilight
+			    amount: 3
+			}
 			cost: {
-				
+				type: exert
+				filter: choose(name(Gandalf))
 			},
 			effect: [
 				{
-					
+					type: wound
+					filter: choose(minion)
+					times: 2
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Spot 3 twilight tokens and exert Gandalf to wound a minion twice.
 		lore: The White Rider was upon them, and the terror of his coming filled the enemy with madness.
 		promotext: ""
@@ -224,17 +317,61 @@
 		vitality: 4
 		resistance: 6
 		keywords: Unhasty
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: assignment
+		        cost: {
+		            type: choice
+		            texts: [
+		                Exert an unbound Hobbit
+		                Discard 2 cards from hand
+		            ]
+		            effects: [
+		                {
+                            type: exert
+                            filter: choose(unbound,hobbit)
+                        }
+                        {
+                            type: discardFromHand
+                            forced: false
+                            count: 2
+                        }
+                    ]
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+                        type: unhastyCompanionCanParticipateInSkirmishes
+                        filter: self
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(unbound,hobbit)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(culture(isengard),minion,inSkirmishAgainst(self))
+		        }
+		    }
+		]
 		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow Lindenroot to skirmish.<br><b>Skirmish:</b> Exert Lindenroot to wound an [isengard] minion he is skirmishing.
 		lore: A most well-founded and considerate Ent.
 		promotext: ""
@@ -271,20 +408,30 @@
 			Spell
 			Maneuver
 		]
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(name(Gandalf))
 			},
 			effect: [
 				{
-					
+					type: preventable
+					player: shadow
+					text: Would you like to discard a minion to prevent Free Player discarding up to 2 shadow possessions?
+					cost: {
+					    type: discard
+					    player: shadow
+					    filter: choose(minion)
+					}
+					effect: {
+					    type: discard
+					    filter: choose(side(shadow),possession)
+					    count: 0-2
+					}
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Exert Gandalf to discard up to 2 Shadow possessions. Any Shadow player may discard a minion to prevent this.
 		lore: Indeed my friends, none of you have any weapon that could hurt me.'
 		promotext: ""

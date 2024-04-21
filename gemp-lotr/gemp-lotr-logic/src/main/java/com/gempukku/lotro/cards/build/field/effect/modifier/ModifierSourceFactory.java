@@ -80,6 +80,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("shadowhasinitiative", new ShadowHasInitiative());
         modifierProducers.put("shadowusesvitinsteadofstr", new ShadowUsesVitInsteadOfStr());
         modifierProducers.put("skipphase", new SkipPhase());
+        modifierProducers.put("unhastycompanioncanparticipateinskirmishes", new UnhastyCompanionCanParticipateInSkirmishes());
     }
 
     public ModifierSource getModifier(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
