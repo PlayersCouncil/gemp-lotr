@@ -139,6 +139,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("removetwilight", new RemoveTwilight());
         effectAppenderProducers.put("reordertopcardsofdrawdeck", new ReorderTopCardsOfDrawDeck());
         effectAppenderProducers.put("repeat", new Repeat());
+        effectAppenderProducers.put("dowhile", new DoWhile());
         effectAppenderProducers.put("replaceinassignment", new ReplaceInAssignment());
         effectAppenderProducers.put("replaceinskirmish", new ReplaceInSkirmish());
         effectAppenderProducers.put("resetwhileinzonedata", new ResetWhileInZoneData());
