@@ -19,20 +19,22 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1T
+		site: 1
 		block: Towers
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: play
+		            filter: choose(companion,signet(Frodo))
+		        }
+		        effect: {
+		            type: removeBurdens
+		        }
+		    }
+		]
 		gametext: <b>Fellowship:</b> Play a companion with the Frodo signet to remove a burden.
 		lore: ""
 		promotext: ""
@@ -63,20 +65,24 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1T
+		site: 1
 		block: Towers
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: exert
+		            filter: choose(name(Aragorn))
+		            times: 2
+		        }
+		        effect: {
+		            type: playCardFromDrawDeck
+		            filter: choose(companion,signet(Aragorn))
+		        }
+		    }
+		]
 		gametext: <b>Fellowship:</b> Exert Aragorn twice to play a companion with the Aragorn signet from your draw deck.
 		lore: ""
 		promotext: ""
@@ -107,21 +113,25 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 3T
+		site: 3
 		block: Towers
 		direction: Left
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: exert
+		            filter: choose(companion,signet(Gandalf))
+		            count: 3
+		        }
+		        effect: {
+		            type: playCardFromDeadPile
+		            filter: choose(unbound,companion)
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Exert 3 companions with the Gandalf signet to play an unbound companion from your dead pile.
 		lore: ""
 		promotext: ""
@@ -152,21 +162,29 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6T
+		site: 6
 		block: Towers
 		direction: Right
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        requires: {
+		            type: canSpot
+		            filter: companion,signet(Théoden)
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 1000
+		        }
+		        effect: {
+		            type: drawCards
+		            count: 4
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Spot 3 companions with the Théoden signet and discard your hand to draw 4 cards.
 		lore: ""
 		promotext: ""
@@ -197,20 +215,22 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8T
+		site: 8
 		block: Towers
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        effect: {
+		            type: discard
+		            filter: all(ally)
+		        }
+		    }
+		]
 		gametext: When the fellowship moves to this site, discard all allies.
 		lore: ""
 		promotext: ""
@@ -241,20 +261,27 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9T
+		site: 9
 		block: Towers
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: your,minion
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(your,minion)
+		        }
+		    }
+		]
 		gametext: <b>Response:</b> If your minion is about to take a wound, discard 2 cards from hand to prevent that wound.
 		lore: ""
 		promotext: ""
