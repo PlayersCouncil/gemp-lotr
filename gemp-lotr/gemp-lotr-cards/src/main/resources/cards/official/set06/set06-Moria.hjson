@@ -27,17 +27,24 @@
 		vitality: 5
 		site: 4
 		keywords: Damage+2
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: modifyOwnCost
+				requires: {
+				    type: canSpot
+				    filter: culture(moria),minion
+				}
+				amount: -3
 			}
 			{
-				
+				type: modifier
+				modifier: {
+				    type: cantBeAssignedToSkirmishAgainst
+				    minion: self
+				    fpCharacter: strengthLessThan(6)
+				}
 			}
-		]*/
+		]
 		gametext: <b>Damage +2</b>.<br>The twilight cost of The Balrog is -3 if you can spot a [moria] minion.<br>The Balrog cannot be assigned to skirmish companions or allies of strength less than 6.
 		lore: ...he burst into new flame.'
 		promotext: ""
@@ -71,17 +78,33 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: modifier
+				modifier: {
+				    type: modifyCost
+				    requires: {
+				        type: location
+				        filter: siteNumber(2-3),siteBlock(two towers)
+				    }
+				    filter: name(The Balrog)
+				    amount: -3
+				}
 			}
 			{
-				
+				type: activated
+				phase: skirmish
+				cost: {
+				    type: discard
+				    filter: self
+				}
+				effect: {
+				    type: modifyStrength
+				    filter: choose(unique,culture(moria),minion)
+				    amount: 3
+				}
 			}
-		]*/
+		]
 		gametext: Plays to your support area. At sites 2[T] and 3[T], The Balrog's twilight cost is -3.<br><b>Skirmish:</b> Discard this condition to make a unique [moria] minion strength +3.
 		lore: ...carved in the living rock of Zirakzigil, the pinnacle of the Silvertine.'
 		promotext: ""

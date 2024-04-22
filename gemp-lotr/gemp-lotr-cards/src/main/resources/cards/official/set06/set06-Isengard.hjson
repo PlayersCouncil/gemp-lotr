@@ -305,17 +305,9 @@
 		        phase: assignment
 		        effect: [
 		            {
-		                type: memorizeNumber
-		                amount: {
-		                    type: forEachStrength
-		                    filter: bearer
-		                }
-		                memory: bearerStrength
-		            }
-		            {
 		                type: assignFPCharacterToSkirmish
 		                fpCharacter: bearer
-		                against: choose(culture(isengard),minion,strengthLessThan(memory(bearerStrength)))
+		                against: choose(culture(isengard),minion,strengthLessThanFilter(bearer))
 		            }
 		        ]
 		    }

@@ -446,6 +446,18 @@ public class FilterFactory {
 
                     return (actionContext) -> Filters.siteNumberBetweenInclusive(min, max);
                 });
+        parameterFilters.put("strengthlessthanfilter",
+                (parameter, environment) -> {
+                    FilterableSource filter = environment.getFilterFactory().createFilter(parameter, environment);
+                    return (actionContext) -> {
+                        int strength = 0;
+                        LotroGame game = actionContext.getGame();
+                        for (PhysicalCard physicalCard : Filters.filterActive(game, filter.getFilterable(actionContext))) {
+                            strength += game.getModifiersQuerying().getStrength(game, physicalCard);
+                        }
+                        return Filters.lessStrengthThan(strength);
+                    };
+                });
         parameterFilters.put("strengthlessthan",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
