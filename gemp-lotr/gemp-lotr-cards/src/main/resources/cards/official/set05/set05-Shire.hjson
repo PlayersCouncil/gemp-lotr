@@ -26,18 +26,22 @@
 		strength: 3
 		vitality: 4
 		signet: Aragorn
-		resistance: 6
-		/*requires: {
-			
-		}
+		resistance: 10
+		keyword: can start with ring
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: addBurdens
+		            amount: 1
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            filter: choose(name(Sméagol))
+		        }
+		    }
+		]
 		gametext: <b>Ring-bearer (resistance 10).</b><br><b>Fellowship:</b> Add a burden to play Sméagol from your discard pile.
 		lore: We promises, yes I promise!... Good master, good Sméagol, gollum, gollum!'
 		promotext: ""
@@ -71,20 +75,23 @@
 		twilight: 0
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
+			requires: {
+			    type: canSpot
+			    filter: name(Sam)
+			}
 			cost: {
-				
+				type: discard
+				filter: choose(or(name(Sméagol),name(Gollum)))
 			},
 			effect: [
 				{
-					
+					type: removeBurdens
+					amount: 3
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Spot Sam and discard Sméagol or Gollum to remove 3 burdens.
 		lore: ...he'll come back, you'll see. The promise will hold yet a while. And he won't leave his Precious, anyway.'
 		promotext: ""
@@ -118,20 +125,20 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: addBurdens
+				amount: 3
 			},
 			effect: [
 				{
-					
+					type: wound
+					filter: choose(minion,inSkirmishAgainst(companion,signet(Frodo)))
+					times: 2
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Add 3 burdens to wound a minion skirmishing a companion who has the Frodo signet twice.
 		lore: Don't take the Precious to Him!... Keep it, nice master, and be kind to Sméagol.'
 		promotext: ""
@@ -165,17 +172,23 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
-		/*requires: {
-			
-		}
+		target: name(Sam)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: usesSpecialAbility
+		            phase: regroup
+		        }
+		        cost: {
+		            type: discard
+		            filter: choose(or(name(Sméagol),name(Gollum)))
+		        }
+		        effect: {
+		            type: cancelSpecialAbility
+		        }
+		    }
+		]
 		gametext: Plays on Sam.<br><b>Response:</b> If a regroup special ability is used, discard Sméagol or Gollum to cancel that action.
 		lore: What a hobbit needs with coney... is some herbs and roots, especially taters – not to mention bread.'
 		promotext: ""
@@ -213,19 +226,39 @@
 		strength: 3
 		vitality: 4
 		signet: Aragorn
-		resistance: 6
+		resistance: 5
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeOverwhelmedMultiplier
+		            requires: [
+                        {
+                            type: canSpot
+                            filter: name(Frodo)
+                        }
+                        {
+                            type: canSpot
+                            filter: name(Sméagol)
+                        }
+                    ]
+		            filter: self
+		            multiplier: 3
+		        }
+		    }
 			{
-				
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bound</b>.<br>While you can spot Frodo and Sméagol, Sam may not be overwhelmed unless his strength is tripled.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		lore: Trust Sméagol now? Very, very good.'
 		promotext: ""
@@ -261,18 +294,36 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: title(Frodo)
-		/*requires: {
-			
-		}
+		target: title(Frodo)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Make Sméagol strength +2
+		                Make Gollum strength -2
+		            ]
+		            effects: [
+		                {
+		                    type: modifyStrength
+		                    filter: choose(name(Sméagol))
+		                    amount: 2
+		                }
+		                {
+		                    type: modifyStrength
+		                    filter: choose(name(Gollum))
+		                    amount: -2
+		                }
+		            ]
+		        }
+		    }
+		]
 		gametext: Bearer must be Frodo.<br><b>Skirmish:</b> Exert Frodo to make Sméagol strength +2 or Gollum strength -2.
 		lore: This is Sting. You have seen it before once upon a time.'
 		promotext: ""
@@ -306,20 +357,20 @@
 		twilight: 0
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: playCardFromDiscard
+				filter: choose(name(Sméagol))
 			},
 			effect: [
 				{
-					
+					type: heal
+					filter: all(ringBound,hobbit)
+					times: 2
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Play Sméagol from your discard pile to heal each Ring-bound Hobbit twice.
 		lore: You will have to come with us, that's all, while we keep an eye on you.'
 		promotext: ""
