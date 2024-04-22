@@ -25,17 +25,41 @@
 			Fortification
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		            count: 2
+		        }
+		        effect: [
+		            {
+		                type: choice
+		                texts: [
+		                    Remove 2 tokens from a machine
+		                    Take a {rohan} possession into hand from your discard pile
+		                ]
+		                effects: [
+                            {
+                                type: removeTokens
+                                filter: choose(machine)
+                                count: 2
+                            }
+                            {
+                                type: putCardsFromDiscardIntoHand
+                                filter: choose(culture(rohan),possession)
+                            }
+		                ]
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Fortification</b>. Plays to your support area.<br><b>Maneuver:</b> Spot 2 [rohan] Men to remove 2 tokens from a machine or to take a [rohan] possession into hand from your discard pile. Discard this condition.
 		lore: Choose from these ere we go, and may they serve you well!'
 		promotext: ""
@@ -72,17 +96,27 @@
 			Fortification
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		            count: 2
+		        }
+		        effect: [
+                    {
+                        type: discard
+                        filter: choose(or(possession,machine))
+                    }
+                    {
+                        type: discard
+                        filter: self
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Fortification</b>. Plays to your support area.<br><b>Maneuver:</b> Spot 2 [rohan] Men to discard a possession or a machine. Discard this condition.
 		lore: Here and there were clefts in the stone through which men could shoot.
 		promotext: ""
@@ -116,22 +150,30 @@
 		culture: Rohan
 		twilight: 1
 		type: Ally
-		allyHome: towers,4
+		allyHome: two towers,4
 		race: Man
 		strength: 4
 		vitality: 2
 		keywords: Villager
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: valiant,man
+		            count: 2
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            filter: choose(culture(rohan),possession)
+		        }
+		    }
+		]
 		gametext: <b>Villager</b>.<br><b>Fellowship:</b> Exert Ecglaf and spot 2 valiant Men to play a [rohan] possession from your discard pile.
 		lore: Like many of the Rohirrim, Ecglaf no longer had a home awaiting his return.
 		promotext: ""
@@ -170,17 +212,37 @@
 		vitality: 3
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: play
+		            filter: choose(culture(rohan),possession)
+		            on: self
+		        }
+		        effect: [
+                    {
+                        type: modifyStrength
+                        filter: self
+                        amount: 2
+                    }
+                    {
+                        type: addKeyword
+                        filter: self
+                        keyword: damage
+                        amount: 1
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Valiant</b>. To play, spot a [rohan] Man.<br><b>Skirmish:</b> Play a [rohan] possession on Gamling to make him strength +2 and <b>damage +1</b>.
 		lore: He was one of Théoden's most trusted lieutenants.
 		promotext: ""
@@ -218,17 +280,6 @@
 		vitality: 3
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
-		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
 		gametext: <b>Valiant</b>.
 		lore: The king and the men of his household were in the Hornburg....
 		promotext: ""
@@ -262,20 +313,21 @@
 		twilight: 3
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(name(Théoden))
+				times: 2
 			},
 			effect: [
 				{
-					
+					type: heal
+					filter: all(another,companion,signet(Théoden))
+					times: 2
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Exert Théoden twice to heal every other companion with the Théoden signet twice.
 		lore: The last host of the Eorlingas has ridden forth. It will not return without battle.'
 		promotext: ""
@@ -309,20 +361,24 @@
 		twilight: 1
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
+			requires: {
+				type: canSpot
+				filter: valiant,man
+				count: 3
 			},
 			effect: [
 				{
-					
+					type: discard
+					filter: choose(condition)
+					count: 0-2
+				}
+				{
+				    type: liberateSite
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Spot 3 valiant Men to discard up to 2 conditions and liberate a site.
 		lore: Let us drive through such foes as are already between us and the fastness.'
 		promotext: ""
@@ -356,20 +412,23 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
+			requires: {
+				type: canSpot
+				filter: valiant,man
+				count: 3
 			},
 			effect: [
 				{
-					
+					type: addKeyword
+					filter: choose(valiant,man)
+					keyword: defender
+					amount: 1
+					until: regroup
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Spot 3 valiant Men to make one of those Men <b>defender +1</b> until the regroup phase.
 		lore: We must draw all our forces now behind the walls.'
 		promotext: ""
@@ -406,17 +465,42 @@
 			Fortification
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		            count: 2
+		        }
+		        effect: [
+		            {
+		                type: choice
+		                texts: [
+		                    Remove 2 tokens from a machine
+		                    Make the minion archery total -3
+		                ]
+		                effects: [
+		                    {
+		                        type: removeTokens
+		                        filter: choose(machine)
+		                        count: 2
+		                    }
+		                    {
+		                        type: modifyArcheryTotal
+		                        side: shadow
+		                        amount: -3
+		                    }
+		                ]
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Fortification</b>. Plays to your support area.<br><b>Archery:</b> Spot 2 [rohan] Men to remove 2 tokens from a machine or to make the minion archery total -3. Discard this condition.
 		lore: Upon the spur of rock from the cliff stood high walls of ancient stone.
 		promotext: ""
@@ -451,18 +535,27 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: a [rohan] Man
-		/*requires: {
-			
-		}
+		target: culture(rohan),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        cost: [
+                    {
+                        type: exert
+                        filter: bearer
+                    }
+                    {
+                        type: discard
+                        filter: self
+                    }
+                ]
+                effect: {
+                    type: wound
+                    filter: choose(minion)
+                }
+		    }
+		]
 		gametext: Bearer must be a [rohan] Man.<br><b>Archery:</b> Exert bearer and discard this possession to wound a minion.
 		lore: The Rohirrim have good bowmen after their fashion, but there are too few here, too few.'
 		promotext: ""
@@ -496,18 +589,38 @@
 		twilight: 1
 		type: Possession
 		itemclass: Helm
-		#target: a [rohan] Man
-		/*requires: {
-			
-		}
+		target: culture(rohan),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: [
+		            {
+		                type: memorizeActive
+		                filter: bearer
+		                memory: bearer
+		            }
+                    {
+                        type: discard
+                        filter: self
+                    }
+		        ]
+		        effect: {
+		            type: preventable
+		            player: shadow
+		            text: Would you like to exert a minion in skirmish to prevent cancelling skirmish involving {bearer}?
+		            cost: {
+		                type: exert
+		                player: shadow
+		                filter: choose(minion,inSkirmish)
+		            }
+		            effect: {
+		                type: cancelSkirmish
+		                filter: memory(bearer)
+		            }
+		        }
+		    }
+		]
 		gametext: Bearer must be a [rohan] Man.<br><b>Skirmish:</b> Discard this possession to cancel a skirmish involving bearer. A minion in this skirmish may exert to prevent this.
 		lore: The armory of Helm's Deep provided raiment of war for her defenders.
 		promotext: ""
@@ -545,17 +658,24 @@
 		vitality: 3
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),possession,canBeReturnedToHand
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: returnToHand
+		            filter: choose(culture(rohan),possession)
+		        }
+		    }
+		]
 		gametext: <b>Valiant</b>.<br><b>Regroup:</b> Exert this companion and spot a [rohan] possession to return that possession to hand.
 		lore: ...scouts rode out far ahead, passing like shadows in the folds of the land.
 		promotext: ""
@@ -589,18 +709,36 @@
 		twilight: 1
 		type: Possession
 		itemclass: Shield
-		#target: a [rohan] Man
-		/*requires: {
-			
-		}
+		target: culture(rohan),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyArcheryTotal
+		            side: shadow
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+		            {
+		                type: memorizeActive
+		                filter: bearer
+		                memory: bearer
+		            }
+                    {
+                        type: discard
+                        filter: self
+                    }
+		        ]
+		        effect: {
+		            type: heal
+		            filter: memory(bearer)
+		        }
+		    }
+		]
 		gametext: Bearer must be a [rohan] Man.<br>The minion archery total is -1.<br><b>Regroup:</b> Discard this possession to heal bearer.
 		lore: The Rohirrim carried round wooden shields, usable on foot and on horseback.
 		promotext: ""
@@ -634,22 +772,30 @@
 		culture: Rohan
 		twilight: 1
 		type: Ally
-		allyHome: towers,4
+		allyHome: two towers,4
 		race: Man
 		strength: 4
 		vitality: 2
 		keywords: Villager
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: valiant,man
+		            count: 5
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(minion)
+		        }
+		    }
+		]
 		gametext: <b>Villager</b>.<br><b>Regroup:</b> Exert Sigewulf and spot 5 valiant Men to discard a minion.
 		lore: The courage of Sigewulf and other Rohirrim like him will not be forgotten.
 		promotext: ""
@@ -689,17 +835,21 @@
 		signet: Gandalf
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: play
+		            filter: choose(culture(rohan),possession)
+		            on: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(culture(rohan),ally)
+		        }
+		    }
+		]
 		gametext: <b>Valiant</b>.<br><b>Maneuver:</b> Play a [rohan] possession on Théoden to heal a [rohan] ally.
 		lore: You thought I remained in Meduseld bent like an old tree under winter snow.... But a west wind has shaken the boughs.'
 		promotext: ""
@@ -733,17 +883,35 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: modifyStrength
+		                filter: choose(mounted,culture(rohan),man)
+		                amount: 3
+		                memorize: chosenMan
+		            }
+		            {
+		                type: conditional
+		                requires: {
+		                    type: location
+		                    filter: plains
+		                }
+		                effect: {
+		                    type: heal
+		                    filter: memory(chosenMan)
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Skirmish:</b> Discard this condition to make a mounted [rohan] Man strength +3 (and heal that Man if at a plains).
 		lore: ...with a rush like the sudden onset of a great wind the last host of Rohan rode thundering into the West.
 		promotext: ""
@@ -783,17 +951,21 @@
 		signet: Gandalf
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: play
+		            filter: choose(culture(rohan),possession)
+		            on: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: self
+		        }
+		    }
+		]
 		gametext: <b>Valiant</b>.<br><b>Maneuver:</b> Play a [rohan] possession on Éowyn to heal her.
 		lore: Let the heralds announce to the folk that Lady Éowyn will lead them!'
 		promotext: ""
@@ -827,18 +999,38 @@
 		twilight: 1
 		type: Possession
 		itemclass: Helm
-		#target: a [rohan] Man
-		/*requires: {
-			
-		}
+		target: culture(rohan),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: [
+		            {
+		                type: memorizeActive
+		                filter: bearer
+		                memory: bearer
+		            }
+                    {
+                        type: discard
+                        filter: self
+                    }
+		        ]
+		        effect: {
+		            type: preventable
+		            player: shadow
+		            text: Would you like to exert a minion in skirmish to prevent cancelling skirmish involving {bearer}?
+		            cost: {
+		                type: exert
+		                player: shadow
+		                filter: choose(minion,inSkirmish)
+		            }
+		            effect: {
+		                type: cancelSkirmish
+		                filter: memory(bearer)
+		            }
+		        }
+		    }
+		]
 		gametext: Bearer must be a [rohan] Man.<br><b>Skirmish:</b> Discard this possession to cancel a skirmish involving bearer. A minion in this skirmish may exert to prevent this.
 		lore: A helm split by an Uruk blade often still saves the rider who wears it.
 		promotext: ""
@@ -872,17 +1064,35 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: modifyStrength
+		                filter: choose(mounted,culture(rohan),man)
+		                amount: 3
+		                memorize: chosenMan
+		            }
+		            {
+		                type: conditional
+		                requires: {
+		                    type: location
+		                    filter: plains
+		                }
+		                effect: {
+		                    type: heal
+		                    filter: memory(chosenMan)
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Skirmish:</b> Discard this condition to make a mounted [rohan] Man strength +3 (and heal that Man if at a plains).
 		lore: The roar of hooves was enough to rout the Uruk-hai without sword or spear.
 		promotext: ""
