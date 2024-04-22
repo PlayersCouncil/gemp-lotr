@@ -17,6 +17,8 @@ public class AddKeyword implements ModifierSourceProducer {
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
         final String keywordString = FieldUtils.getString(object.get("keyword"), "keyword");
+        if (keywordString == null)
+            throw new InvalidCardDefinitionException("Keyword needs to be defined for 'addKeyword'");
 
         final String[] keywordSplit = keywordString.split("\\+");
         Keyword keyword = FieldUtils.getEnum(Keyword.class, keywordSplit[0], "keyword");

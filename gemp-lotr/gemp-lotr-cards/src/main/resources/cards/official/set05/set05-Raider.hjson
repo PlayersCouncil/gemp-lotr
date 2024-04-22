@@ -26,17 +26,21 @@
 		vitality: 4
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            removedTwilight: 3
+		            filter: choose(culture(raider),mount)
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br><b>Skirmish:</b> Remove (3) to play a [raider] mount from your discard pile.
 		lore: The desert lords of Harad support their huge forces with mammoth war beasts.
 		promotext: ""
@@ -74,17 +78,28 @@
 		vitality: 3
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: removeTwilight
+		            amount: 9
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,southron
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+                        type: modifyMoveLimit
+                        amount: -1
+		            }
+		            until: endOfTurn
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br><b>Regroup:</b> Remove (9) and spot another Southron to make the move limit -1 for this turn (to a minimum of 1).
 		lore: The quick movements of Southron soldiers cut off all paths of retreat.
 		promotext: ""
@@ -125,17 +140,24 @@
 			Southron
 			Ambush 2
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpotFPCultures
+		            amount: 4
+		        }
+		        effect: {
+		            type: exert
+		            filter: all(companion)
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (2)</b>.<br><b>Maneuver:</b> Exert this minion and spot 4 Free Peoples cultures to exert every companion.
 		lore: They strike only when their prey is haggard and tired.
 		promotext: ""
@@ -170,18 +192,29 @@
 		type: Possession
 		strength: 3
 		itemclass: Mount
-		#target: a Southron
-		/*requires: {
-			
-		}
+		target: southron
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: fierce
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: Bearer must be a Southron.<br>Bearer is <b>fierce</b>.<br>Each time bearer wins a skirmish, you may add (2).
 		lore: Sam saw a vast shape crash out of the trees and come careening down the slope.
 		promotext: ""
@@ -222,17 +255,16 @@
 			Southron
 			Ambush 2
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+                type: modifyOwnCost
+                requires: {
+                    type: canSpot
+                    filter: southron
+                }
+                amount: -2
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (2)</b>.<br>While you can spot a Southron, this minion's twilight cost is -2.
 		lore: Hardy desert warriors needed little rest.
 		promotext: ""
@@ -273,17 +305,16 @@
 			Southron
 			Ambush 2
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+                type: modifyOwnCost
+                requires: {
+                    type: canSpot
+                    filter: southron
+                }
+                amount: -2
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (2)</b>.<br>While you can spot a Southron, this minion's twilight cost is -2.
 		lore: Swift scouts track enemy movements to set up surprise attacks.
 		promotext: ""
@@ -324,17 +355,23 @@
 			Southron
 			Ambush 2
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: southron
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(southron)
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (2)</b>.<br><b>Response:</b> If a Southron is about to take a wound, remove (3) to prevent that wound.
 		lore: Men of Harad were used to long journeys.
 		promotext: ""
@@ -368,17 +405,38 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: southron
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: chooseHowManyToSpot
+                        text: How many Men with ambush to spot?
+                        filter: man,ambush
+                        memorize: spotCount
+                    }
+                    {
+                        type: addTwilight
+                        amount: {
+                            type: fromMemory
+                            memory: spotCount
+                        }
+                    }
+                ]
+		    }
+		]
 		gametext: To play, spot a Southron. Plays to your support area.<br><b>Maneuver:</b> Discard this condition to add (1) for each Man with ambush you spot.
 		lore: Lacking arms and armor, the Haradrim use swift movements to outnumber their opponents.
 		promotext: ""
@@ -413,18 +471,31 @@
 		type: Possession
 		strength: 4
 		itemclass: Mount
-		#target: a Southron
-		/*requires: {
-			
-		}
+		target: southron
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: fierce
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesSkirmish
+		            filter: character
+		            against: bearer
+		            overwhelm: true
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 5
+		        }
+		    }
+		]
 		gametext: Bearer must be a Southron.<br>Bearer is <b>fierce</b>.<br>Each time bearer overwhelms a character, you may add (5).
 		lore: Big as a house, much bigger than a house, it looked to him, a grey-clad moving hill.'
 		promotext: ""
@@ -462,17 +533,21 @@
 		vitality: 4
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            removedTwilight: 3
+		            filter: choose(culture(raider),mount)
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br><b>Skirmish:</b> Remove (3) to play a [raider] mount from your discard pile.
 		lore: Lacking shields and armor, Southron forces rely on speed and numbers.
 		promotext: ""
