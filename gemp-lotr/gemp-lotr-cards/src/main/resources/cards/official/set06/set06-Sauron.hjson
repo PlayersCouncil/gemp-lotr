@@ -23,18 +23,24 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: a [sauron] Orc
-		/*requires: {
-			
-		}
+		target: culture(sauron),orc
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: controlledSite
+		            }
+		        }
+		    }
+		]
 		gametext: Bearer must be a [sauron] Orc.<br>Each time bearer wins a skirmish, you may add (1) for each site you control.
 		lore: Stony-faced they were, with dark window-holes staring north and east and west, and each window was full of sleepless eyes.
 		promotext: ""
@@ -72,17 +78,24 @@
 		vitality: 2
 		site: 4
 		keywords: Twilight
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(or(culture(sauron),twilight),minion)
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: twilight,minion
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Twilight</b>.<br><b>Skirmish:</b> Exert this minion to make a [sauron] or twilight minion strength +1 for each twilight minion you can spot.
 		lore: I tried once; but you cannot reach them. Only shapes to see, perhaps, not to touch.'
 		promotext: ""
@@ -123,17 +136,27 @@
 			Twilight
 			Damage+1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: choice
+		            texts: [
+		                Remove a burden
+		                Spot a twilight minion
+		            ]
+		            effects: [
+		                {
+		                    type: removeBurdens
+		                }
+		                {
+		                    type: spot
+		                    filter: choose(twilight,minion)
+		                }
+		            ]
+		        }
+		    }
+		]
 		gametext: <b>Twilight</b>. <b>Damage +1</b>.<br>To play this minion, remove a burden or spot a twilight minion.
 		lore: The Dead can't really be there! Is it some devilry hatched in the Dark Land?'
 		promotext: ""
@@ -170,17 +193,31 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        effect: [
+		            {
+		                type: chooseActiveCards
+		                player: fp
+		                filter: choose(or(companion,ally))
+		                count: 0-3
+		                text: Choose up to 3 characters of cultures you want to spare, characters of not chosen cultures will get wounded
+		                memorize: chosenCharacters
+		            }
+		            {
+		                type: wound
+		                filter: all(or(companion,ally),not(cultureFromMemory(chosenCharacters)))
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Maneuver:</b> Exert this minion twice to make the Free Peoples player name 3 cultures. Wound each companion and ally not of a named culture.
 		lore: Now the watch-towers, which had fallen into decay, were repaired, and filled with arms, and garrisoned with ceaseless vigilance.
 		promotext: ""
@@ -217,17 +254,25 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,culture(sauron),minion
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(condition)
+		        }
+		    }
+		]
 		gametext: <b>Maneuver:</b> Exert this minion twice and spot another [sauron] minion to discard a condition.
 		lore: In it there was a single gate of iron, and upon its battlement sentinels paced unceasingly.
 		promotext: ""
@@ -265,17 +310,27 @@
 		vitality: 4
 		site: 6
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: canSpot
+		            filter: troll
+		        }
+		        amount: -4
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: another,culture(sauron),minion
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Fierce</b>.<br>While you can spot a Troll, Gate Troll's twilight cost is -4.<br>For each other [sauron] minion you can spot, this minion is strength +1.
 		lore: This was Cirith Gorgor, the Haunted Pass, the entrance to the land of the Enemy.
 		promotext: ""
@@ -312,17 +367,36 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: chooseANumber
+                        text: Choose value for X
+                        from: 0
+                        to: {
+                            type: forEachFPCulture
+                            over: 2
+                        }
+                        memorize: chosenNumber
+                    }
+                    {
+                        type: drawCards
+                        count: memory(chosenNumber)
+                    }
+                    {
+                        type: addtwilight
+                        amount: memory(chosenNumber)
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Shadow:</b> Exert this minion to draw X cards and add (X), where X is the number of Free Peoples cultures you spot over 2.
 		lore: You've spoken more than enough, Uglúk,' sneered the evil voice. 'I wonder how they would like it in Lugbúrz.'
 		promotext: ""
@@ -356,17 +430,28 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(culture(sauron),orc)
+		        }
+		        effect: [
+                    {
+                        type: play
+                        filter: choose(or(nazgul,culture(sauron)),minion)
+                        cost: -4
+                        memorize: playedMinion
+                    }
+                    {
+                        type: exhaust
+                        filter: memory(playedMinion)
+                    }
+                ]
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Regroup:</b> Exert a [sauron] Orc to play a Nazgûl or [sauron] minion. Its twilight cost is -4 and it comes into play exhausted.
 		lore: A winged Nazgûl awaits us northward on the east-bank.'
 		promotext: ""
@@ -404,17 +489,30 @@
 		vitality: 5
 		site: 6
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: canSpot
+		            filter: troll
+		        }
+		        amount: -4
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            filter: choose(culture(sauron))
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Fierce</b>.<br>While you can spot a Troll, this minion's twilight cost is -4.<br><b>Skirmish:</b> Discard a [sauron] card from hand to make this minion strength +1.
 		lore: ...Trolls are only counterfeits, made by the Enemy in the Great Darkness, in mockery of Ents....'
 		promotext: ""
@@ -449,18 +547,20 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [sauron] Troll
-		/*requires: {
-			
-		}
+		target: culture(sauron),troll
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: drawCards
+		        }
+		    }
+		]
 		gametext: Bearer must be a [sauron] Troll.<br>When you play this possession, you may draw a card.
 		lore: Trolls they were, but filled with the evil will of their master.
 		promotext: ""
@@ -498,17 +598,23 @@
 		vitality: 2
 		site: 4
 		keywords: Twilight
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: another,or(culture(sauron),twilight),minion
+		        }
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
+		]
 		gametext: <b>Twilight</b>.<br><b>Regroup:</b> Spot another [sauron] or twilight minion and discard this minion to add a burden.
 		lore: They do not see what lies ahead / When Sun has failed and Moon is dead.'
 		promotext: ""
@@ -546,17 +652,27 @@
 		vitality: 4
 		site: 6
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: canSpot
+		            filter: troll
+		        }
+		        amount: -4
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: another,culture(sauron),minion
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Fierce</b>.<br>While you can spot a Troll, Gate Troll's twilight cost is -4.<br>For each other [sauron] minion you can spot, this minion is strength +1.
 		lore: ...what the plague did you bring us here for?'
 		promotext: ""

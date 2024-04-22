@@ -13,9 +13,10 @@ import org.json.simple.JSONObject;
 public class ChooseActiveCards implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "memorize", "text");
+        FieldUtils.validateAllowedFields(effectObject, "count", "player", "filter", "memorize", "text");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
+        final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
         if (memorize == null)
@@ -24,6 +25,6 @@ public class ChooseActiveCards implements EffectAppenderProducer {
         if (text == null)
             throw new InvalidCardDefinitionException("You need to define text to show");
 
-        return CardResolver.resolveCards(filter, valueSource, memorize, "you", text, environment);
+        return CardResolver.resolveCards(filter, valueSource, memorize, player, text, environment);
     }
 }
