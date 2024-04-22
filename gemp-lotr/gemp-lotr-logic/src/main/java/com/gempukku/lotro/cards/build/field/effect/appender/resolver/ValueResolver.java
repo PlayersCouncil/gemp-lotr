@@ -12,6 +12,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ValueResolver {
     public static ValueSource resolveEvaluator(Object value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
@@ -103,6 +105,18 @@ public class ValueResolver {
                 return actionContext -> (game, cardAffected) -> actionContext.getCardFromMemory(memory).getSiteNumber();
             } else if (type.equalsIgnoreCase("regionNumber")) {
                 return (actionContext) -> (game, cardAffected) -> GameUtils.getRegion(actionContext.getGame());
+            } else if (type.equalsIgnoreCase("forEachCultureInMemory")) {
+                FieldUtils.validateAllowedFields(object, "memory", "limit", "multiplier");
+                final String memory = FieldUtils.getString(object.get("memory"), "memory");
+                final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
+                final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
+                return (actionContext) -> {
+                    Set<Culture> cultures = new HashSet<>();
+                    for (PhysicalCard card : actionContext.getCardsFromMemory(memory)) {
+                        cultures.add(card.getBlueprint().getCulture());
+                    }
+                    return new ConstantEvaluator(Math.min(limit, multiplier * cultures.size()));
+                };
             } else if (type.equalsIgnoreCase("forEachInMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "limit", "multiplier");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");

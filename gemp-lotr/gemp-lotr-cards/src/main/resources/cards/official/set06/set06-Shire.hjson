@@ -21,17 +21,47 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
-		/*requires: {
-			
-		}
+		target: name(Frodo)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: bearer,exhausted
+		        }
+		        effect: [
+                    {
+                        type: negateWound
+                        filter: choose(bearer,exhausted)
+                    }
+                    {
+                        type: addBurdens
+                    }
+                ]
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: siteNumber(9)
+		        }
+		        effect: {
+		            type: corruptRingBearer
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: cantSpot
+		            filter: minion
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
+		]
 		gametext: Bearer must be Frodo.<br>Each time Frodo is about to be killed by a wound, add a burden instead.<br>When the fellowship moves to site 9, Frodo is corrupted.<br><b>Regroup:</b> If you can spot no minions, discard this condition.
 		lore: ""
 		promotext: ""
@@ -65,20 +95,34 @@
 		twilight: 1
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
+			requires: [
+                {
+                    type: canSpot
+                    filter: name(Sam)
+                }
+                {
+                    type: canSpot
+                    filter: or(name(Sméagol),name(Gollum))
+                }
+            ]
 			effect: [
 				{
-					
+    			    type: revealHand
+    			    hand: shadow
+    			    memorize: revealedCards
+				}
+				{
+				    type: wound
+				    filter: choose(minion)
+				    times: {
+				        type: forEachCultureInMemory
+				        memory: revealedCards
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Spot Sam and Sméagol (or Gollum) to choose an opponent who must reveal his or her hand. Wound a minion X times, where X is the number of different cultures revealed.
 		lore: No more than you deserve.'
 		promotext: ""
@@ -112,17 +156,50 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: shire
+		            filter: self
+		            count: 2
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: unbound,hobbit
+		        }
+		        cost: {
+		            type: choice
+		            texts: [
+		                Discard this condition
+		                Remove a {shire} token from here
+		            ]
+		            effects: [
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		                {
+		                    type: removeTokens
+		                    culture: shire
+		                    filter: self
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(unbound,hobbit)
+		        }
+		    }
+		]
 		gametext: Plays to your support area. When you play this condition, place 2 [shire] tokens here.<br><b>Response:</b> If an unbound Hobbit is about to take a wound, discard this condition or remove a [shire] token from here to prevent that wound.
 		lore: ""
 		promotext: ""
@@ -156,20 +233,33 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(unbound,hobbit)
+				memorize: exertedHobbit
 			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: memory(exertedHobbit)
+					amount: {
+					    type: forEachYouCanSpot
+					    filter: culture(gandalf),companion
+					}
+				}
+				{
+					type: addKeyword
+					filter: memory(exertedHobbit)
+					keyword: damage
+					amount: {
+					    type: forEachYouCanSpot
+					    filter: culture(gandalf),companion
+					}
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Exert an unbound Hobbit to make him strength +1 and <b>damage +1</b> for each [gandalf] companion you can spot.
 		lore: The coming of the hobbits and the tidings that they brought have spilled it: it will soon be running like a flood....'
 		promotext: ""
@@ -208,17 +298,20 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(culture(gandalf),companion)
+		        }
+		    }
+		]
 		gametext: <b>Regroup:</b> Discard Merry to heal a [gandalf] companion.
 		lore: Don't talk to it Merry. Don't encourage it.'
 		promotext: ""
@@ -257,17 +350,21 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            player: shadow
+		            filter: choose(minion)
+		        }
+		    }
+		]
 		gametext: <b>Regroup:</b> Discard Pippin to choose a Shadow player who must wound one of his or her minions.
 		lore: By root and twig, but this is a strange business: up sprout a little folk that are not in the old lists....'
 		promotext: ""
