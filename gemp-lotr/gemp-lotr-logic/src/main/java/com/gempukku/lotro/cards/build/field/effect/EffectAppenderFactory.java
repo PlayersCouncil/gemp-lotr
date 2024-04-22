@@ -60,7 +60,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("discardcardsfromdrawdeck", new DiscardCardsFromDrawDeck());
         effectAppenderProducers.put("discardfromhand", new DiscardFromHand());
         effectAppenderProducers.put("discardstackedcards", new DiscardStackedCards());
-        effectAppenderProducers.put("discardtopcardsfromdeck", new DiscardTopCardFromDeck());
+        effectAppenderProducers.put("discardtopcardsfromdeck", new DiscardTopCardsFromDeck());
         effectAppenderProducers.put("drawcards", new DrawCards());
         effectAppenderProducers.put("enableparticipationinarcheryfireandskirmishes", new EnableParticipationInArcheryFireAndSkirmishes());
         effectAppenderProducers.put("enableparticipationinskirmishes", new EnableParticipationInSkirmishes());
