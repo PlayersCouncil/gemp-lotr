@@ -45,7 +45,7 @@ public class Card8_066 extends AbstractEvent {
                                 if (PlayConditions.hasInitiative(game, Side.SHADOW))
                                     action.appendEffect(
                                             new OptionalEffect(action, playerId,
-                                                    new PutPlayedEventOnTopOfDeckEffect(action)));
+                                                    new PutPlayedEventOnTopOfDeckEffect(self)));
                             }
                         };
                         spotDecision.setDefaultValue(count);

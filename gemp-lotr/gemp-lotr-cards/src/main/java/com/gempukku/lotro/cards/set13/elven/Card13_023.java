@@ -1,11 +1,5 @@
 package com.gempukku.lotro.cards.set13.elven;
 
-import com.gempukku.lotro.logic.cardtype.AbstractCompanion;
-import com.gempukku.lotro.logic.timing.PlayConditions;
-import com.gempukku.lotro.logic.timing.TriggerConditions;
-import com.gempukku.lotro.logic.effects.PutPlayedEventOnTopOfDeckEffect;
-import com.gempukku.lotro.logic.effects.SelfExertEffect;
-import com.gempukku.lotro.logic.timing.results.PlayEventResult;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Phase;
@@ -14,7 +8,13 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.ActivateCardAction;
+import com.gempukku.lotro.logic.cardtype.AbstractCompanion;
+import com.gempukku.lotro.logic.effects.PutPlayedEventOnTopOfDeckEffect;
+import com.gempukku.lotro.logic.effects.SelfExertEffect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.logic.timing.TriggerConditions;
+import com.gempukku.lotro.logic.timing.results.PlayEventResult;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +46,7 @@ public class Card13_023 extends AbstractCompanion {
             action.appendCost(
                     new SelfExertEffect(action, self));
             action.appendEffect(
-                    new PutPlayedEventOnTopOfDeckEffect(((PlayEventResult) effectResult).getPlayEventAction()));
+                    new PutPlayedEventOnTopOfDeckEffect(((PlayEventResult) effectResult).getPlayedCard()));
             return Collections.singletonList(action);
         }
         return null;

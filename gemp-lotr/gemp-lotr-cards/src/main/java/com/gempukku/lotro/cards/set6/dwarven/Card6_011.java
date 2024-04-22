@@ -59,7 +59,7 @@ public class Card6_011 extends AbstractEvent {
                             protected void validDecisionMade(int index, String result) {
                                 if (index == 0)
                                     action.insertEffect(
-                                            new PutPlayedEventOnTopOfDeckEffect(action));
+                                            new PutPlayedEventOnTopOfDeckEffect(self));
                                 else
                                     action.insertEffect(
                                             new PutPlayedEventOnBottomOfDeckEffect(self));

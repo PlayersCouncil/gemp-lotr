@@ -32,7 +32,7 @@ public class Card7_029 extends AbstractEvent {
                 new ChooseAndAddUntilEOPStrengthBonusEffect(action, self, playerId, 2, Race.ELF));
         action.appendEffect(
                 new OptionalEffect(action, playerId,
-                        new PutPlayedEventOnTopOfDeckEffect(action)));
+                        new PutPlayedEventOnTopOfDeckEffect(self)));
         return action;
     }
 }

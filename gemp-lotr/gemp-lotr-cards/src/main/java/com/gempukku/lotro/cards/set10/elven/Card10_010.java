@@ -32,7 +32,7 @@ public class Card10_010 extends AbstractEvent {
         if (Filters.canSpot(game, CardType.SITE, Zone.SUPPORT))
             action.appendEffect(
                     new OptionalEffect(action, playerId,
-                            new PutPlayedEventOnTopOfDeckEffect(action)));
+                            new PutPlayedEventOnTopOfDeckEffect(self)));
         return action;
     }
 }
