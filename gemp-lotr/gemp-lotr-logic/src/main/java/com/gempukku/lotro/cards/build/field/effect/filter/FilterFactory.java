@@ -47,6 +47,26 @@ public class FilterFactory {
                 (actionContext -> Filters.siteControlledByOtherPlayer(actionContext.getPerformingPlayer())));
         simpleFilters.put("controlledsite",
                 (actionContext -> Filters.siteControlled(actionContext.getPerformingPlayer())));
+        simpleFilters.put("culturewithtokens",
+                (actionContext -> {
+                    final Set<Culture> cultureTokens = new HashSet<>();
+                    LotroGame game = actionContext.getGame();
+                    for (PhysicalCard physicalCard : Filters.filterActive(game, Filters.hasAnyCultureTokens(1))) {
+                        Map<Token, Integer> tokens = game.getGameState().getTokens(physicalCard);
+                        for (Map.Entry<Token, Integer> tokenIntegerEntry : tokens.entrySet()) {
+                            if (tokenIntegerEntry.getValue() > 0) {
+                                Culture culture = tokenIntegerEntry.getKey().getCulture();
+                                if (culture != null)
+                                    cultureTokens.add(culture);
+                            }
+                        }
+                    }
+
+                    return (Filter) (game1, physicalCard) -> {
+                        Culture culture = physicalCard.getBlueprint().getCulture();
+                        return cultureTokens.contains(culture);
+                    };
+                }));
         simpleFilters.put("currentsite",
                 (actionContext) -> Filters.currentSite);
         simpleFilters.put("currentsitenumber",

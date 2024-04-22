@@ -30,17 +30,22 @@
 			Ring-bound
 			Ranger
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: modifySiteNumber
+		            filter: choose(minion)
+		            amount: 3
+		            until: regroup
+		        }
+		    }
+		]
 		gametext: <b>Ring-bound</b>. <b>Ranger</b>.<br>Each time Anborn wins a skirmish, you may make a minion's site number +3 until the regroup phase.
 		lore: Perhaps under the shadow of the Unnamed some of the beasts of Mirkwood are wandering hither to our woods.'
 		promotext: ""
@@ -74,17 +79,21 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            requires: {
+		                type: canSpot
+		                filter: ranger
+		                count: 3
+		            }
+		            filter: minion,inSkirmishAgainst(ranger)
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br>While you can spot 3 rangers, the site number of each minion skirmishing a ranger is +2.
 		lore: ...they go ever more heedlessly, we learn, thinking that the power of their new master is great enough....'
 		promotext: ""
@@ -123,17 +132,55 @@
 		vitality: 4
 		signet: Theoden
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        text: Remove an {elven} token to make minion skirmishing Aragorin strength -3
+		        cost: {
+		            type: removeTokens
+		            culture: elven
+		            filter: choose(any)
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(minion,inSkirmishAgainst(self))
+		            amount: -3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        text: Remove a {dwarven} token to heal a Dwarf
+		        cost: {
+		            type: removeTokens
+		            culture: dwarven
+		            filter: choose(any)
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(dwarf)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: self,mounted
+		        }
+		        cost: {
+		            type: removeTokens
+		            culture: rohan
+		            filter: choose(any)
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion)
+		            times: 2
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Remove an [elven] token to make a minion skirmishing Aragorn strength -3.<br><b>Skirmish:</b> Remove a [dwarven] token to heal a Dwarf.<br><b>Regroup:</b> If Aragorn is mounted, remove a [rohan] token to wound a minion twice.
 		lore: ...this is the hour when we draw swords together.'
 		promotext: ""
@@ -167,18 +214,37 @@
 		twilight: 1
 		type: Possession
 		itemclass: Hand weapon
-		#target: a [gondor] companion
-		/*requires: {
-			
-		}
+		target: culture(gondor),companion
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        text: Heal another {gondor} companion
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(not(bearer),culture(gondor),companion)
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        text: Discard to liberate a site
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: liberateSite
+		        }
+		    }
+		]
 		gametext: Bearer must be a [gondor] companion.<br>Each time bearer wins a skirmish, you may heal another [gondor] companion.<br><b>Response:</b> If bearer wins a skirmish, discard this possession to liberate a site.
 		lore: What brought they from the foundered land / Over the flowing sea?... / and one white tree.'
 		promotext: ""
@@ -215,17 +281,53 @@
 			Fortification
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(gondor),man
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: gondor
+		            filter: self
+		            count: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: choice
+		            texts: [
+		                Discard this condition
+		                Remove a {gondor} token from here
+		            ]
+		            effects: [
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		                {
+		                    type: removeTokens
+		                    filter: self
+		                    culture: gondor
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(gondor),man)
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Fortification</b>. Plays to your support area.<br>When you play this condition, you may spot a [gondor] Man to place 2 [gondor] tokens here.<br><b>Skirmish:</b> Discard this condition or remove a [gondor] token from here to make a [gondor] Man strength +1.
 		lore: So ever do we watch the shores nigh Osgiliath....'
 		promotext: ""
@@ -259,20 +361,27 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(culture(gondor),man)
+					amount: 2
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: canSpotCultureTokens
+				        culture: rohan
+				    }
+				    effect: {
+				        type: exert
+				        filter: choose(minion)
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a [gondor] Man strength +2 (and exert a minion if you spot a [rohan] token).
 		lore: I fear neither death nor pain.'
 		promotext: ""
@@ -306,20 +415,35 @@
 		twilight: 0
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
+			requiresRanger: true
 			cost: {
-				
+				type: exert
+				filter: choose(ranger)
+				count: 2
 			},
 			effect: [
 				{
-					
+					type: choice
+					texts: [
+					    Discard a minion
+					    Discard 2 {wraith} minions
+					]
+					effects: [
+					    {
+					        type: discard
+					        filter: choose(minion)
+					    }
+					    {
+					        type: discard
+					        filter: choose(culture(wraith),minion)
+					        count: 2
+					    }
+					]
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Exert 2 rangers to discard a minion (or 2 [wraith] minions).
 		lore: But still we will not sit idle and let Him do all as He would....'
 		promotext: ""
@@ -353,18 +477,20 @@
 		twilight: 0
 		type: Artifact
 		itemclass: Ring
-		#target: title(Aragorn)
-		/*requires: {
-			
-		}
+		target: title(Aragorn)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfTurn
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(companion,cultureWithTokens)
+		        }
+		    }
+		]
 		gametext: Bearer must be Aragorn.<br>At the start of each of your turns, you may spot a culture token to heal a companion of that culture.
 		lore: This is a thing of worth beyond your reckoning. For its ancientry alone. It has no power, save the esteem in which those hold it who love my house.'
 		promotext: ""
@@ -398,20 +524,27 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(culture(gondor),man)
+					amount: 2
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: canSpotCultureTokens
+				        culture: elven
+				    }
+				    effect: {
+				        type: heal
+				        filter: choose(companion)
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a [gondor] Man strength +2 (and heal a companion if you spot an [elven] token).
 		lore: You cannot falter now.'
 		promotext: ""
@@ -454,17 +587,28 @@
 			Ring-bound
 			Ranger
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: phase
+		            phase: play starting fellowship
+		        }
+		        amount: -1
+		    }
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: play
+		            filter: choose(ranger)
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(ringBound,companion)
+		        }
+		    }
+		]
 		gametext: <b>Ring-bound</b>. <b>Ranger</b>.<br>If Faramir is in your starting fellowship, his twilight cost is -1.<br><b>Fellowship:</b> Play a ranger to heal a Ring-bound companion.
 		lore: Not while Faramir is Captain... his life is charmed, or fate spares him for some other end.'
 		promotext: ""
@@ -498,17 +642,21 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            requires: {
+		                type: canSpot
+		                filter: ranger
+		                count: 3
+		            }
+		            filter: minion,inSkirmishAgainst(ranger)
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br>While you can spot 3 rangers, the site number of each minion skirmishing a ranger is +2.
 		lore: Presently the noise of fighting broke out near at hand, just above their hiding-place.
 		promotext: ""
