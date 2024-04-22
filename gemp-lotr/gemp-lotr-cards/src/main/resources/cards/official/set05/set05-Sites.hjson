@@ -19,20 +19,29 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 7T
+		site: 7
 		block: Towers
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: your,minion
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 9
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+		                type: hasToMoveIfAble
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Regroup:</b> Spot your minion and remove (9) to make the fellowship move again this turn (if the move limit allows).
 		lore: ""
 		promotext: ""
@@ -63,21 +72,27 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8T
+		site: 8
 		block: Towers
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: your,mounted,minion
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(your,mounted,minion)
+		        }
+		    }
+		]
 		gametext: <b>Plains</b>. <b>Response:</b> If your mounted minion is about to take a wound, remove (2) to prevent that wound.
 		lore: ""
 		promotext: ""
@@ -108,21 +123,18 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9T
+		site: 9
 		block: Towers
 		direction: Right
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: winsAfterReconcile
+		        }
+		    }
+		]
 		gametext: <b>Underground</b>. The Free Peoples player wins the game only if the Ring-bearer survives until Shadow players reconcile.
 		lore: ""
 		promotext: ""

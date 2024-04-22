@@ -81,6 +81,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("shadowusesvitinsteadofstr", new ShadowUsesVitInsteadOfStr());
         modifierProducers.put("skipphase", new SkipPhase());
         modifierProducers.put("unhastycompanioncanparticipateinskirmishes", new UnhastyCompanionCanParticipateInSkirmishes());
+        modifierProducers.put("winsafterreconcile", new AddModifierFlag(ModifierFlag.WIN_CHECK_AFTER_SHADOW_RECONCILE));
     }
 
     public ModifierSource getModifier(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
