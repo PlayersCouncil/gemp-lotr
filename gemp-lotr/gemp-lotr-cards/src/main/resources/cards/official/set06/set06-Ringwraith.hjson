@@ -23,18 +23,25 @@
 		type: Possession
 		strength: 2
 		itemclass: Mount
-		#target: a Nazgûl
-		/*requires: {
-			
-		}
+		target: nazgul
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: fierce
+		        }
+		    }
+		]
 		gametext: To play, discard 2 cards from hand. Bearer must be a Nazgûl.<br>Bearer is <b>fierce</b>.
 		lore: And these winged creatures that they ride on now, they can probably see more than any other creature. They are like great carrion birds.'
 		promotext: ""
@@ -68,17 +75,29 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(nazgul)
+		            times: 2
+		        }
+		        effect: [
+		            {
+		                type: play
+		                filter: choose(or(culture(wraith),culture(sauron)),minion)
+		                cost: -8
+		                memorize: playedMinion
+		            }
+		            {
+		                type: exhaust
+		                filter: memory(playedMinion)
+		            }
+		        ]
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Regroup:</b> Exert a Nazgûl twice to play a [wraith] or [sauron] minion. That minion's twilight cost is -8 and it comes into play exhausted.
 		lore: It leaped into all of their minds that the Black Wings had spied them and had sent armed soldiers to seize them....
 		promotext: ""
@@ -113,18 +132,25 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a Nazgûl
-		/*requires: {
-			
-		}
+		target: nazgul
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        requires: {
+		            type: canSpot
+		            filter: bearer,name(Úlairë Toldëa)
+		        }
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: discard
+		            player: fp
+		            filter: choose(side(free),or(possession,condition))
+		        }
+		    }
+		]
 		gametext: Bearer must be a Nazgûl.<br>While bearer is Úlairë Toldëa, each time he wins a skirmish the Free Peoples player must discard a Free Peoples possession or a Free Peoples condition.
 		lore: The weapons of the Nine are wrought with sorcery.
 		promotext: ""
@@ -158,21 +184,31 @@
 		culture: Wraith
 		twilight: 4
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+		            {
+		                type: exert
+		                filter: self
+		            }
+		            {
+		                type: discardFromHand
+		                forced: false
+		                count: 3
+		            }
+		        ]
+		        effect: {
+		            type: returnToHand
+		            filter: choose(companion,not(ringBearer))
+		        }
+		    }
+		]
 		gametext: <b>Regroup:</b> Exert Úlairë Lemenya and discard 3 cards from hand to return a companion (except the Ring-bearer) to owner's hand.
 		lore: ...the helpless horror that had come with the cry in the wind and the shadow on the moon....
 		promotext: ""
@@ -206,21 +242,32 @@
 		culture: Wraith
 		twilight: 4
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,nazgul
+		        }
+		        effect: {
+		            type: exert
+		            player: fp
+		            filter: choose(ringBound,companion)
+		            count: {
+		                type: forEachFPCulture
+		                over: 2
+		            }
+		        }
+		    }
+		]
 		gametext: When you play Úlairë Nertëa, spot another Nazgûl to make the Free Peoples player exert a Ring-bound companion for each Free Peoples culture you can spot over 2.
 		lore: A vast winged shape passed over the moon like a black cloud... The stars fainted before it....
 		promotext: ""
@@ -254,22 +301,39 @@
 		culture: Wraith
 		twilight: 6
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 12
 		vitality: 3
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: choice
+		            player: fp
+		            texts: [
+		                Exert a companion
+		                Add a burden
+		            ]
+		            effects: [
+		                {
+		                    type: exert
+		                    player: fp
+		                    filter: choose(companion)
+		                }
+		                {
+		                    type: addBurdens
+		                    player: fp
+		                }
+		            ]
+		        }
+		    }
+		]
 		gametext: <b>Fierce</b>.<br>Each time Úlairë Toldëa wins a skirmish, the Free Peoples player must exert a companion or add a burden.
 		lore: They are calling for it. Calling for the precious.'
 		promotext: ""
@@ -303,17 +367,35 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(nazgul)
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: wraith
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: removeTokens
+		            culture: wraith
+		            count: 3
+		            filter: self
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Regroup:</b> Exert a Nazgûl to place a [wraith] token on this card.<br><b>Shadow:</b> Remove 3 [wraith] tokens from here to add (2).
 		lore: It scudded across the moon... outrunning the wind in its fell speed.
 		promotext: ""
@@ -347,22 +429,48 @@
 		culture: Wraith
 		twilight: 8
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 14
 		vitality: 4
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: killed
+		            filter: companion
+		        }
+                requires: [
+                    {
+                        type: phase
+                        phase: skirmish
+                    }
+                    {
+                        type: canSpot
+                        filter: nazgul,inSkirmish
+                    }
+                ]
+		        effect: {
+		            type: choice
+		            texts: [
+		                Wound an ally twice
+		                Exert a companion
+		            ]
+		            effects: [
+		                {
+		                    type: wound
+		                    filter: choose(ally)
+		                    times: 2
+		                }
+		                {
+		                    type: exert
+		                    filter: choose(companion)
+		                }
+		            ]
+		        }
+		    }
+		]
 		gametext: <b>Fierce</b>.<br>Each time a companion is killed in a skirmish involving a Nazgûl, wound an ally twice or exert a companion.
 		lore: Dead? No, you cannot kill them.'
 		promotext: ""

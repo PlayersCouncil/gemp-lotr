@@ -69,7 +69,11 @@ public class FieldUtils {
         if (value == null)
             return null;
         final String string = getString(value, key);
-        return Enum.valueOf(enumClass, string.toUpperCase().replace(' ', '_').replace('-', '_'));
+        try {
+            return Enum.valueOf(enumClass, string.toUpperCase().replace(' ', '_').replace('-', '_'));
+        } catch (IllegalArgumentException exp) {
+            throw new InvalidCardDefinitionException("Unknown enum value - " + string + ", in " + key + " field");
+        }
     }
 
     public static Side getSide(Object value, String key) throws InvalidCardDefinitionException {
@@ -114,6 +118,7 @@ public class FieldUtils {
     }
 
     private static final JSONParser parser = new JSONParser();
+
     public static JSONObject parseSubObject(String jsonString) throws ParseException {
         String json = JsonValue.readHjson(jsonString).toString();
         var subObject = (JSONObject) parser.parse(json);
