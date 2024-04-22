@@ -19,7 +19,7 @@ public class WoundExtraPlayCostModifier extends AbstractExtraPlayCostModifier {
     }
 
     public WoundExtraPlayCostModifier(PhysicalCard source, Filterable affects, Condition condition, int count, Filterable... wounding) {
-        super(source, "Wound to play", Filters.and(affects), condition);
+        super(source, "Wound to play", Filters.changeToFilter(affects), condition);
         this.count = count;
         this.wounding = wounding;
     }

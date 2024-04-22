@@ -19,7 +19,7 @@ public class SpotExtraPlayCostModifier extends AbstractExtraPlayCostModifier {
     }
 
     public SpotExtraPlayCostModifier(PhysicalCard source, Filterable affects, Condition condition, int count, Filterable ...spotFilter) {
-        super(source, "Spot to play", Filters.and(affects), condition);
+        super(source, "Spot to play", Filters.changeToFilter(affects), condition);
         this.count = count;
         this.spotFilter = spotFilter;
     }

@@ -22,7 +22,7 @@ public class LostSkirmishThisTurn implements RequirementProducer {
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
         return (actionContext) -> {
-            Filter filterable = Filters.and(filterableSource.getFilterable(actionContext));
+            Filter filterable = Filters.changeToFilter(filterableSource.getFilterable(actionContext));
             LotroGame game = actionContext.getGame();
 
             for (EffectResult effectResult : game.getActionsEnvironment().getTurnEffectResults()) {

@@ -35,6 +35,9 @@ public class ValueResolver {
                 return new RangeEvaluator(min, max);
             } else if (stringValue.equalsIgnoreCase("any")) {
                 return new RangeEvaluator(0, Integer.MAX_VALUE);
+            } else if (stringValue.startsWith("memory(") && stringValue.endsWith(")")) {
+                String memory = stringValue.substring("memory(".length(), stringValue.length() - 1);
+                return actionContext -> new ConstantEvaluator(Integer.parseInt(actionContext.getValueFromMemory(memory)));
             } else {
                 int v = Integer.parseInt(stringValue);
                 return new ConstantEvaluator(v);
@@ -254,13 +257,15 @@ public class ValueResolver {
                     return new ConstantEvaluator(result);
                 };
             } else if (type.equalsIgnoreCase("forEachFPCulture")) {
-                FieldUtils.validateAllowedFields(object, "limit", "over");
+                FieldUtils.validateAllowedFields(object, "limit", "over", "multiplier");
                 final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
                 final int over = FieldUtils.getInteger(object.get("over"), "over", 0);
+                final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
                 return actionContext -> {
                     int spottable = GameUtils.getSpottableFPCulturesCount(actionContext.getGame(), actionContext.getPerformingPlayer());
                     int result = Math.max(0, spottable - over);
                     result = Math.min(limit, result);
+                    result *= multiplier;
                     return new ConstantEvaluator(result);
                 };
             } else if (type.equalsIgnoreCase("forEachShadowCulture")) {

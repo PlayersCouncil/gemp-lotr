@@ -11,7 +11,7 @@ public class CantReturnToHandModifier extends AbstractModifier {
 
     public CantReturnToHandModifier(PhysicalCard source, String text, Filterable affectFilter, Filterable sourceFilter) {
         super(source, text, affectFilter, ModifierEffect.RETURN_TO_HAND_MODIFIER);
-        _sourceFilter = Filters.and(sourceFilter);
+        _sourceFilter = Filters.changeToFilter(sourceFilter);
     }
 
     @Override

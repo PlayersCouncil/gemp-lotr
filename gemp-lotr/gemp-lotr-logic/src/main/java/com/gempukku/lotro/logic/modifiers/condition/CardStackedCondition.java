@@ -13,7 +13,7 @@ public class CardStackedCondition implements Condition {
 
     public CardStackedCondition(int minimumCount, Filterable stackedOn, Filterable... cardStacked) {
         _minimumCount = minimumCount;
-        _stackedOn = Filters.and(stackedOn);
+        _stackedOn = Filters.changeToFilter(stackedOn);
         _cardStacked = Filters.and(cardStacked);
     }
 

@@ -36,7 +36,7 @@ public class RevealedCardFromHand implements TriggerCheckerProducer {
                         return false;
                     final Filterable filterable = filterableSource.getFilterable(actionContext);
                     final PhysicalCard revealedCard = revealCardFromHandResult.getRevealedCard();
-                    return Filters.and(filterable).accepts(actionContext.getGame(), revealedCard);
+                    return Filters.accepts(actionContext.getGame(), filterable, revealedCard);
                 }
                 return false;
             }

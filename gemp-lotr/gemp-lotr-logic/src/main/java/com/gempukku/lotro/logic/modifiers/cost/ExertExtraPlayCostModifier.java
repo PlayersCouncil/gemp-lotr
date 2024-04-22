@@ -19,7 +19,7 @@ public class ExertExtraPlayCostModifier extends AbstractExtraPlayCostModifier {
     }
 
     public ExertExtraPlayCostModifier(PhysicalCard source, Filterable affects, Condition condition, int count, Filterable ...exerting) {
-        super(source, "Exert to play", Filters.and(affects), condition);
+        super(source, "Exert to play", Filters.changeToFilter(affects), condition);
         this.count = count;
         this.exerting = exerting;
     }

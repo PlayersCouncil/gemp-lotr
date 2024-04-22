@@ -13,7 +13,7 @@ public class CantTakeWoundsFromLosingSkirmishModifier extends AbstractModifier {
 
     public CantTakeWoundsFromLosingSkirmishModifier(PhysicalCard source, Filterable affectFilter, Filterable winnersFilter) {
         super(source, "Can't take wounds", affectFilter, ModifierEffect.WOUND_MODIFIER);
-        _winnersFilter = Filters.and(winnersFilter);
+        _winnersFilter = Filters.changeToFilter(winnersFilter);
     }
 
     @Override

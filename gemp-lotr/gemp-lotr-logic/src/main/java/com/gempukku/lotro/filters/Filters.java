@@ -1017,7 +1017,7 @@ public class Filters {
         return filtersInt;
     }
 
-    private static Filter changeToFilter(Filterable filter) {
+    public static Filter changeToFilter(Filterable filter) {
         if (filter instanceof Filter)
             return (Filter) filter;
         else if (filter instanceof PhysicalCard)
@@ -1087,6 +1087,10 @@ public class Filters {
                 return true;
             }
         };
+    }
+
+    public static boolean accepts(LotroGame game, Filterable filterable, PhysicalCard physicalCard) {
+        return changeToFilter(filterable).accepts(game, physicalCard);
     }
 
     private static Filter orInternal(final Filter... filters) {

@@ -17,7 +17,7 @@ public class CantWoundWithCardModifier extends AbstractModifier {
 
     public CantWoundWithCardModifier(PhysicalCard source, Filterable affectFilter, Condition condition, Filterable preventWoundWithFilter) {
         super(source, "Affected by wound preventing effect", affectFilter, condition, ModifierEffect.WOUND_MODIFIER);
-        _preventWoundWithFilter = Filters.and(preventWoundWithFilter);
+        _preventWoundWithFilter = Filters.changeToFilter(preventWoundWithFilter);
     }
 
     @Override

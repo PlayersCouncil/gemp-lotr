@@ -28,6 +28,9 @@ public class StackCardsFromDiscard implements EffectAppenderProducer {
         final String where = FieldUtils.getString(effectObject.get("where"), "where");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
 
+        if (where == null)
+            throw new InvalidCardDefinitionException("Where needs to be defined for 'stackCardsFromDiscard'");
+
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(

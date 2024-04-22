@@ -18,7 +18,7 @@ public class CancelKeywordBonusTargetModifier extends AbstractModifier implement
     public CancelKeywordBonusTargetModifier(PhysicalCard source, Keyword keyword, Condition condition, Filterable affectFilter, Filterable sourceFilter) {
         super(source, "Cancel " + keyword.getHumanReadable() + " keyword", affectFilter, condition, ModifierEffect.CANCEL_KEYWORD_BONUS_TARGET_MODIFIER);
         _keyword = keyword;
-        _sourceFilter = Filters.and(sourceFilter);
+        _sourceFilter = Filters.changeToFilter(sourceFilter);
     }
 
     @Override

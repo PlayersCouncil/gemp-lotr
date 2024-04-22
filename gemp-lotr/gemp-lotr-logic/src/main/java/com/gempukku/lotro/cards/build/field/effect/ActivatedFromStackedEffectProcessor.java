@@ -63,7 +63,7 @@ public class ActivatedFromStackedEffectProcessor implements EffectProcessor {
             actionSource.addPlayRequirement(
                     (actionContext) -> {
                         PhysicalCard stackedOnCard = actionContext.getSource().getStackedOn();
-                        return stackedOnCard != null && Filters.and(stackedOnFilterableSource.getFilterable(actionContext)).accepts(actionContext.getGame(), stackedOnCard);
+                        return stackedOnCard != null && Filters.accepts(actionContext.getGame(), stackedOnFilterableSource.getFilterable(actionContext), stackedOnCard);
                     }
             );
             EffectUtils.processRequirementsCostsAndEffects(value, environment, actionSource);

@@ -40,7 +40,7 @@ public class GetCardsFromTopOfDeck implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 final Filterable filterable = filterableSource.getFilterable(actionContext);
-                final Filter acceptFilter = Filters.and(filterable);
+                final Filter acceptFilter = Filters.changeToFilter(filterable);
                 return new UnrespondableEffect() {
                     @Override
                     protected void doPlayEffect(LotroGame game) {

@@ -161,7 +161,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("shufflehandintodrawdeck", new ShuffleHandIntoDrawDeck());
         effectAppenderProducers.put("sideplayercantplayphaseeventsorusephasespecialabilities", new SidePlayerCantPlayPhaseEventsOrUsePhaseSpecialAbilities());
         effectAppenderProducers.put("spot", new Spot());
-        effectAppenderProducers.put("stackcards", new StackCardsFromPlay());
+        effectAppenderProducers.put("stackcards", new StackCards());
         effectAppenderProducers.put("stackcardsfromdeck", new StackCardsFromDeck());
         effectAppenderProducers.put("stackcardsfromdiscard", new StackCardsFromDiscard());
         effectAppenderProducers.put("stackcardsfromhand", new StackCardsFromHand());

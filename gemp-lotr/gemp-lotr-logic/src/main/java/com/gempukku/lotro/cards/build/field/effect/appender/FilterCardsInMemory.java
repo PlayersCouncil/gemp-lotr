@@ -52,7 +52,7 @@ public class FilterCardsInMemory implements EffectAppenderProducer {
                         List<PhysicalCard> matchingCards = new LinkedList<>();
                         List<PhysicalCard> notMatchingCards = new LinkedList<>();
                         for (PhysicalCard physicalCard : cardsFromMemory) {
-                            if (Filters.and(filterable).accepts(game, physicalCard))
+                            if (Filters.accepts(game, filterable, physicalCard))
                                 matchingCards.add(physicalCard);
                             else
                                 notMatchingCards.add(physicalCard);

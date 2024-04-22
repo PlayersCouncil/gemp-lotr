@@ -63,7 +63,7 @@ public class TriggerConditions {
     public static boolean winsSkirmishInvolving(LotroGame game, EffectResult effectResult, Filterable winnerFilter, Filterable involvingFilter) {
         if (effectResult.getType() == EffectResult.Type.CHARACTER_WON_SKIRMISH) {
             CharacterWonSkirmishResult wonResult = (CharacterWonSkirmishResult) effectResult;
-            return Filters.and(winnerFilter).accepts(game, wonResult.getWinner())
+            return Filters.accepts(game, winnerFilter, wonResult.getWinner())
                     && Filters.filter(wonResult.getInvolving(), game, involvingFilter).size() > 0;
         }
         return false;
@@ -80,7 +80,7 @@ public class TriggerConditions {
     public static boolean losesSkirmishInvolving(LotroGame game, EffectResult effectResult, Filterable loserFilter, Filterable involvingFilter) {
         if (effectResult.getType() == EffectResult.Type.CHARACTER_LOST_SKIRMISH) {
             CharacterLostSkirmishResult wonResult = (CharacterLostSkirmishResult) effectResult;
-            return Filters.and(loserFilter).accepts(game, wonResult.getLoser())
+            return Filters.accepts(game, loserFilter, wonResult.getLoser())
                     && Filters.filter(wonResult.getInvolving(), game, involvingFilter).size() > 0;
         }
         return false;
@@ -207,7 +207,7 @@ public class TriggerConditions {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_DISCARDED_FROM_HAND) {
             DiscardCardFromHandResult discardResult = (DiscardCardFromHandResult) effectResult;
             if (discardResult.getSource() != null
-                    && Filters.and(discardedBy).accepts(game, discardResult.getSource()))
+                    && Filters.accepts(game, discardedBy, discardResult.getSource()))
                 return Filters.and(discarded).accepts(game, discardResult.getDiscardedCard());
         }
         return false;
@@ -233,7 +233,7 @@ public class TriggerConditions {
                     (
                             (Filters.or(CardType.ALLY, CardType.COMPANION).accepts(game, wounded) &&
                                     wounded.getZone() == Zone.DEAD) ||
-                                    (Filters.and(CardType.MINION).accepts(game, wounded) &&
+                                    (Filters.accepts(game, CardType.MINION, wounded) &&
                                             wounded.getZone() != Zone.SHADOW_CHARACTERS)
                     );
         }
@@ -268,7 +268,7 @@ public class TriggerConditions {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_EXERTED) {
             ExertResult exertResult = (ExertResult) effectResult;
             if (exertResult.getAction().getActionSource() != null
-                    && Filters.and(exertedBy).accepts(game, exertResult.getAction().getActionSource()))
+                    && Filters.accepts(game, exertedBy, exertResult.getAction().getActionSource()))
                 return Filters.and(exerted).accepts(game, exertResult.getExertedCard());
         }
         return false;
@@ -419,7 +419,7 @@ public class TriggerConditions {
     public static boolean isGettingDiscardedBy(Effect effect, LotroGame game, Filterable sourceFilter, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_DISCARD_FROM_PLAY) {
             PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
-            if (effect.getSource() != null && Filters.and(sourceFilter).accepts(game, effect.getSource()))
+            if (effect.getSource() != null && Filters.accepts(game, sourceFilter, effect.getSource()))
                 return Filters.filter(preventableEffect.getAffectedCardsMinusPrevented(game), game, filters).size() > 0;
         }
         return false;
@@ -428,7 +428,7 @@ public class TriggerConditions {
     public static boolean isGettingDiscardedByOpponent(Effect effect, LotroGame game, String playerId, Filterable sourceFilter, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_DISCARD_FROM_PLAY) {
             PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
-            if (effect.getSource() != null && Filters.and(sourceFilter).accepts(game, effect.getSource())
+            if (effect.getSource() != null && Filters.accepts(game, sourceFilter, effect.getSource())
                     && !effect.getPerformingPlayer().equals(playerId))
                 return Filters.filter(preventableEffect.getAffectedCardsMinusPrevented(game), game, filters).size() > 0;
         }
@@ -473,7 +473,7 @@ public class TriggerConditions {
             final PlayCardResult playResult = (PlayCardResult) effectResult;
             PhysicalCard playedCard = playResult.getPlayedCard();
             return (playResult.getPlayedFrom() == Zone.STACKED
-                    && Filters.and(stackedOnFilter).accepts(game, playResult.getAttachedOrStackedPlayedFrom())
+                    && Filters.accepts(game, stackedOnFilter, playResult.getAttachedOrStackedPlayedFrom())
                     && Filters.and(filters).accepts(game, playedCard));
         }
         return false;
@@ -487,7 +487,7 @@ public class TriggerConditions {
                 return false;
             PhysicalCard playedCard = playResult.getPlayedCard();
             return Filters.and(filters).accepts(game, playedCard)
-                    && Filters.and(targetFilter).accepts(game, attachedTo);
+                    && Filters.accepts(game, targetFilter, attachedTo);
         }
         return false;
     }
@@ -523,9 +523,9 @@ public class TriggerConditions {
     public static boolean transferredCard(LotroGame game, EffectResult effectResult, Filterable transferredCard, Filterable transferredFrom, Filterable transferredTo) {
         if (effectResult.getType() == EffectResult.Type.CARD_TRANSFERRED) {
             CardTransferredResult transferResult = (CardTransferredResult) effectResult;
-            return (Filters.and(transferredCard).accepts(game, transferResult.getTransferredCard())
-                    && (transferredFrom == null || (transferResult.getTransferredFrom() != null && Filters.and(transferredFrom).accepts(game, transferResult.getTransferredFrom())))
-                    && (transferredTo == null || (transferResult.getTransferredTo() != null && Filters.and(transferredTo).accepts(game, transferResult.getTransferredTo()))));
+            return (Filters.accepts(game, transferredCard, transferResult.getTransferredCard())
+                    && (transferredFrom == null || (transferResult.getTransferredFrom() != null && Filters.accepts(game, transferredFrom, transferResult.getTransferredFrom())))
+                    && (transferredTo == null || (transferResult.getTransferredTo() != null && Filters.accepts(game, transferredTo, transferResult.getTransferredTo()))));
         }
         return false;
     }

@@ -15,7 +15,7 @@ public class CantDiscardFromPlayModifier extends AbstractModifier {
 
     public CantDiscardFromPlayModifier(PhysicalCard source, String text, Condition condition, Filterable affectFilter, Filterable sourceFilter) {
         super(source, text, affectFilter, condition, ModifierEffect.DISCARD_FROM_PLAY_MODIFIER);
-        _sourceFilter = Filters.and(sourceFilter);
+        _sourceFilter = Filters.changeToFilter(sourceFilter);
     }
 
     @Override

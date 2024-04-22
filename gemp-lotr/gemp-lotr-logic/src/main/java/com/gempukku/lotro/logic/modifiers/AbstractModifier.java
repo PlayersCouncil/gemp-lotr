@@ -28,7 +28,7 @@ public abstract class AbstractModifier implements Modifier {
     protected AbstractModifier(PhysicalCard source, String text, Filterable affectFilter, Condition condition, ModifierEffect effect) {
         _physicalCard = source;
         _text = text;
-        _affectFilter = (affectFilter != null) ? Filters.and(affectFilter) : null;
+        _affectFilter = (affectFilter != null) ? Filters.changeToFilter(affectFilter) : null;
         _condition = condition;
         _effect = effect;
     }
