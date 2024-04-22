@@ -22,20 +22,22 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
 		effects: {
-			type: event
+			type: responseEvent
+			trigger: {
+			    type: winsSkirmish
+			    filter: name(Sméagol)
+			}
 			cost: {
-				
+				type: addBurdens
 			},
 			effect: [
 				{
-					
+					type: discard
+					filter: choose(minion)
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If Sméagol wins a skirmish, add a burden to discard a minion.
 		lore: Careful, careful now or Hobbits go down to join the dead ones and light little candles.'
 		promotext: ""
@@ -69,17 +71,36 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: name(Sméagol)
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 3
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,inSkirmishAgainst(name(Sméagol)))
+		            memorize: chosenMinion
+		            times: {
+		                type: condition
+		                condition: {
+		                    type: memoryMatches
+		                    memory: chosenMinion
+		                    filter: culture(wraith),minion
+		                }
+		                true: 2
+		                false: 1
+		            }
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Skirmish:</b> Spot Sméagol and discard 3 cards from hand to wound a minion Sméagol is skirmishing once (or twice if that minion is a [wraith] minion).
 		lore: You should not look in when the candles are lit.'
 		promotext: ""
@@ -113,21 +134,32 @@
 		culture: Gollum
 		twilight: 2
 		type: Minion
-		race: 
 		strength: 5
 		vitality: 4
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: condition
+		                condition: {
+		                    type: canSpot
+		                    filter: self,inSkirmishAgainst(ringBound,companion)
+		                }
+		                true: 2
+		                false: 1
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Discard a card from hand to make Gollum strength +1 (or +2 if skirmishing a Ring-bound companion).
 		lore: Must take it. The Wraiths are searching. Must take it.'
 		promotext: ""
@@ -161,20 +193,28 @@
 		twilight: 5
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(name(Gollum))
+				times: 3
 			},
 			effect: [
 				{
-					
+					type: wound
+					filter: all(companion)
+				}
+				{
+				    type: addModifier
+				    modifier: {
+				        type: modifyMoveLimit
+				        amount: -1
+				    }
+				    until: endOfTurn
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Exert Gollum 3 times to wound each companion. The move limit for this turn is -1.
 		lore: Kill them! Kill them! Kill them both! And then we take the Precious! We be the Master!'
 		promotext: ""
@@ -208,20 +248,18 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
 		effects: {
-			type: event
-			cost: {
-				
-			},
+			type: responseEvent
+			trigger: {
+                type: winsSkirmish
+                filter: name(Gollum)
+			}
 			effect: [
 				{
-					
+					type: addBurdens
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If Gollum wins a skirmish, add a burden.
 		lore: We ought to wring their filthy little necks!'
 		promotext: ""
@@ -255,20 +293,24 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
 		effects: {
-			type: event
-			cost: {
-				
-			},
+			type: responseEvent
+			trigger: {
+			    type: winsSkirmish
+			    filter: name(Sméagol)
+			    memorize: winner
+			}
 			effect: [
 				{
-					
+					type: heal
+					filter: memory(winner)
+				}
+				{
+				    type: removeBurdens
+				    amount: 2
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If Sméagol wins a skirmish, heal him and remove 2 burdens.
 		lore: They'll wake too quick and kill us... Not now. Not Yet.'
 		promotext: ""
@@ -302,20 +344,47 @@
 		twilight: 5
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
+			cost: [
+                {
+                    type: exert
+                    filter: choose(name(Sméagol))
+                    times: 3
+                    memorize: smeagol
+                }
+                {
+                    type: discard
+                    filter: memory(smeagol)
+                }
+            ]
 			effect: [
 				{
-					
+					type: wound
+					filter: all(minion)
+				}
+				{
+				    type: addModifier
+				    modifier: {
+				        type: modifyMoveLimit
+				        amount: 1
+				    }
+				    until: endOfTurn
+				}
+				{
+				    type: addTrigger
+				    trigger: {
+				        type: moves
+				    }
+				    effect: {
+				        type: putCardsFromDiscardIntoHand
+				        player: shadow
+				        filter: choose(side(shadow))
+				        count: 0-3
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Exert Sméagol 3 times and discard him to wound each minion. The move limit for this turn is +1. If the fellowship moves, each Shadow player may take up to 3 Shadow cards into hand from his or her discard pile.
 		lore: Soft and quick as shadows we must be!'
 		promotext: ""
@@ -349,23 +418,32 @@
 		culture: Gollum
 		twilight: 0
 		type: Companion
-		race: 
 		strength: 3
 		vitality: 4
 		signet: Frodo
 		resistance: 6
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addBurdens
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> Discard a card from hand to make Sméagol strength +1.
 		lore: And we're so lonely... We'll be nice to them, very nice, if they'll be nice to us, won't we, yes, yess.'
 		promotext: ""
@@ -399,17 +477,36 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: name(Gollum)
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 3
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(companion,inSkirmishAgainst(name(Gollum)))
+		            memorize: chosenCompanion
+		            times: {
+		                type: condition
+		                condition: {
+		                    type: memoryMatches
+		                    memory: chosenCompanion
+		                    filter: culture(shire),companion
+		                }
+		                true: 2
+		                false: 1
+		            }
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Skirmish:</b> Spot Gollum and discard 3 cards from hand to wound a companion Gollum is skirmishing once (or twice if that companion is a [shire] companion).
 		lore: Where iss it, where iss it: my precious....'
 		promotext: ""
@@ -443,20 +540,19 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
 		effects: {
-			type: event
-			cost: {
-				
-			},
+			type: responseEvent
+			trigger: {
+			    type: winsSkirmish
+			    filter: name(Gollum)
+			}
 			effect: [
 				{
-					
+					type: wound
+					filter: choose(companion,not(ringBearer))
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If Gollum wins a skirmish, wound a companion (except the Ring- bearer).
 		lore: No, sweet one. See, my precious: if we has it, then we can escape, even from Him, eh?'
 		promotext: ""
@@ -490,17 +586,36 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: name(Sméagol)
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 3
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,inSkirmishAgainst(name(Sméagol)))
+		            memorize: chosenMinion
+		            times: {
+		                type: condition
+		                condition: {
+		                    type: memoryMatches
+		                    memory: chosenMinion
+		                    filter: culture(wraith),minion
+		                }
+		                true: 2
+		                false: 1
+		            }
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Skirmish:</b> Spot Sméagol and discard 3 cards from hand to wound a minion Sméagol is skirmishing once (or twice if that minion is a [wraith] minion).
 		lore: There was a faint hiss, a noisome smell went up, the lights flickered and danced and swirled.'
 		promotext: ""
