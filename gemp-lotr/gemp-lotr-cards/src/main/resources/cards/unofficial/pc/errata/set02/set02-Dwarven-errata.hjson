@@ -164,7 +164,7 @@
 				}
 				{
 					type: Repeat
-					amount: 9
+					times: 9
 					effect: {
 						type: conditional
 						requires: {

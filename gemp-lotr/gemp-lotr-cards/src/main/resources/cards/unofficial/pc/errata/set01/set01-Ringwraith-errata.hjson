@@ -61,7 +61,7 @@
 					]
 					effect: {
 						type: Repeat
-						amount: {
+						times: {
 							type: forEachYouCanSpot
 							filter: companion
 							over: 4

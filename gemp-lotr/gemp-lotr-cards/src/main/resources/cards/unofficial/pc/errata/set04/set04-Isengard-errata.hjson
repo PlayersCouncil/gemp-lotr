@@ -50,7 +50,7 @@
 					}
 					{
 						type: Repeat
-						amount: {
+						times: {
 							type: Sum
 							source: [
 								1

@@ -122,11 +122,19 @@ public abstract class AbstractCostToEffectAction implements CostToEffectAction {
         return sum;
     }
 
+    protected final boolean hasNextCost() {
+        return !_costs.isEmpty();
+    }
+
     protected final Effect getNextCost() {
         Effect cost = _costs.poll();
         if (cost != null)
             _processedCosts.add(cost);
         return cost;
+    }
+
+    protected final boolean hasNextEffect() {
+        return !_effects.isEmpty();
     }
 
     protected final Effect getNextEffect() {

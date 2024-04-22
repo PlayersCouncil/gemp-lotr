@@ -1228,7 +1228,7 @@
 			effect: [
 				{
 					type: repeat
-					amount: 3
+					times: 3
 					effect: {
 						type: playCardFromDiscard
 						filter: choose(tracker)

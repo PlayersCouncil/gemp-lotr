@@ -392,7 +392,7 @@
 				}
 				effect: {
 					type: repeat
-					amount: {
+					times: {
 						type: ForEachInDeadPile
 						filter: any
 					}
@@ -432,7 +432,7 @@
 				}
 				effect: {
 					type: repeat
-					amount: {
+					times: {
 						type: ForEachInDeadPile
 						filter: any
 					}

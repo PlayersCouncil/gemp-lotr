@@ -490,7 +490,7 @@
 					}
 					{
 						type: repeat
-						amount: {
+						times: {
 							type: fromMemory
 							memory: spottedElfCount
 						}
@@ -740,7 +740,7 @@
 			effect: [
 				{
 					type: repeat
-					amount: {
+					times: {
 						type: forEachVitality
 						filter: bearer
 					}

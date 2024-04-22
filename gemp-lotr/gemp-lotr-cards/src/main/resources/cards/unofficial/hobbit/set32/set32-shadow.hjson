@@ -185,7 +185,7 @@
 				}
 				effect: {
 					type: repeat
-					amount: {
+					times: {
 						type: forEachYouCanSpot
 						filter: culture(dwarven),companion
 						over: 3

@@ -419,10 +419,11 @@ public class TriggerConditions {
         return false;
     }
 
-    public static boolean isGettingDiscardedByOpponent(Effect effect, LotroGame game, String playerId, Filterable... filters) {
+    public static boolean isGettingDiscardedByOpponent(Effect effect, LotroGame game, String playerId, Filterable sourceFilter, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_DISCARD_FROM_PLAY) {
             PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
-            if (effect.getSource() != null && !effect.getPerformingPlayer().equals(playerId))
+            if (effect.getSource() != null && Filters.and(sourceFilter).accepts(game, effect.getSource())
+                    && !effect.getPerformingPlayer().equals(playerId))
                 return Filters.filter(preventableEffect.getAffectedCardsMinusPrevented(game), game, filters).size() > 0;
         }
         return false;

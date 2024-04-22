@@ -109,7 +109,7 @@
 					}
 					{
 						type: repeat
-						amount: {
+						times: {
 							type: forEachInHand
 							filter: side(shadow)
 						}

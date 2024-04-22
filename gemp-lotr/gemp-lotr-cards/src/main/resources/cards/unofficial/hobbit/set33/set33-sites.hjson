@@ -112,7 +112,7 @@
 								}
 								{
 									type: repeat
-									amount: {
+									times: {
 										type: forEachYouCanSpot
 										filter: follower,culture(dwarven),not(memory(transferredFollowers))
 									}

@@ -512,7 +512,7 @@
 					filter: choose(uruk-hai)
 					count: 0-1
 				}
-				amount: {
+				times: {
 					type: forEachYouCanSpot
 					filter: companion
 				}

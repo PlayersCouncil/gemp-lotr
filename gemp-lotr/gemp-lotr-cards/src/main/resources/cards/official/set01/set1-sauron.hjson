@@ -23,7 +23,7 @@
             ]
 			effect: {
 				type: repeat
-				amount: {
+				times: {
 					type: forEachYouCanSpot
 					filter: companion
 					over: 4
@@ -371,7 +371,7 @@
             ]
 			effect: {
 				type: repeat
-				amount: {
+				times: {
 					type: forEachYouCanSpot
 					filter: companion
 					over: 5

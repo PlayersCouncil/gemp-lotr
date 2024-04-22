@@ -132,7 +132,7 @@
 				}
 				effect: {
 					type: repeat
-					amount: {
+					times: {
 						type: forEachThreat
 					}
 					effect: {

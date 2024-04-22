@@ -519,6 +519,15 @@ public class Filters {
         };
     }
 
+    public static Filter canBeReturnedToHand(final PhysicalCard source) {
+        return new Filter() {
+            @Override
+            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
+                return game.getModifiersQuerying().canBeReturnedToHand(game, physicalCard, source);
+            }
+        };
+    }
+
     public static Filter canExert(final PhysicalCard source) {
         return canExert(source, 1);
     }

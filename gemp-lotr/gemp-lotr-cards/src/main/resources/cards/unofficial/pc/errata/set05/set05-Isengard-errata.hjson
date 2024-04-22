@@ -63,7 +63,7 @@
 				effect: [
 					{
 						type: repeat
-						amount: {
+						times: {
 							type: ForEachToken
 							filter: self
 							culture: isengard

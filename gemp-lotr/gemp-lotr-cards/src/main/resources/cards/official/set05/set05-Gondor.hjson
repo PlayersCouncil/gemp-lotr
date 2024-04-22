@@ -566,39 +566,18 @@
 			effect: [
 				{
 					type: doWhile
-					condition: [
-                        {
-                            type: memoryIs
-                            memory: answer
-                            value: yes
-                        }
-                        {
-                            type: memoryMatches
-                            memory: playedCard
-                            filter: possession
-                        }
-                    ]
-					effect: [
-                        {
-                            type: chooseYesOrNo
-                            text: Would you like to play next possession?
-                            memorize: answer
-					    }
-					    {
-					        type: conditional
-					        requires: {
-                                type: memoryIs
-                                memory: answer
-                                value: yes
-					        }
-					        effect: {
-                                type: playCardFromDiscard
-                                filter: choose(possession)
-                                on: companion,signet(Aragorn)
-                                memorize: playedCard
-					        }
-					    }
-					]
+					effect: {
+                        type: playCardFromDiscard
+                        optional: true
+                        filter: choose(possession)
+                        on: companion,signet(Aragorn)
+                        memorize: playedCard
+					}
+					condition: {
+                        type: memoryMatches
+                        memory: playedCard
+                        filter: possession
+                    }
 				}
 			]
 		}

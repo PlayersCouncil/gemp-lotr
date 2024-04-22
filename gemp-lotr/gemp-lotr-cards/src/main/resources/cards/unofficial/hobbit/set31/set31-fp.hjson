@@ -65,7 +65,7 @@
 					}
 					effect: {
 						type: repeat
-						amount: {
+						times: {
 							type: twilightCostInMemory
 							memory: discardedFollower
 						}

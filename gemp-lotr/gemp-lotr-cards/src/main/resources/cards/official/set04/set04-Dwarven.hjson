@@ -802,7 +802,7 @@
 				}
 				{
 				    type: repeat
-				    amount: {
+				    times: {
 				        type: forEachInMemory
 				        memory: stackedCards
 				    }

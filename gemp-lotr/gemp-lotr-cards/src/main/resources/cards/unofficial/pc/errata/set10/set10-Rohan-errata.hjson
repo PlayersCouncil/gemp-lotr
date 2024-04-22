@@ -62,7 +62,7 @@
 					}
 					{
 						type: Repeat
-						amount: {
+						times: {
 							type: ForEachWound
 							filter: minion,InSkirmishAgainst(self)
 						}

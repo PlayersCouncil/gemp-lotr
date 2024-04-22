@@ -405,7 +405,7 @@
 			}
 			effect: {
 				type: repeat
-				amount: {
+				times: {
 					type: forEachYouCanSpot
 					filter: companion
 					over: 5

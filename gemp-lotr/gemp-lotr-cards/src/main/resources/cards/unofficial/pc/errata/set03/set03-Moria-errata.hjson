@@ -53,7 +53,7 @@
 				}
 				{
 					type: repeat
-					amount: {
+					times: {
 						type: sum
 						source: [
 							{
