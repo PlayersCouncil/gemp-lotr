@@ -5,10 +5,6 @@ import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.FieldProcessor;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.effect.*;
-import com.gempukku.lotro.cards.build.field.effect.modifier.Modifier;
-import com.gempukku.lotro.cards.build.field.effect.modifier.ModifyOwnCost;
-import com.gempukku.lotro.cards.build.field.effect.modifier.PermanentSiteModifier;
-import com.gempukku.lotro.cards.build.field.effect.modifier.StackedOnModifier;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.build.field.effect.modifier;
+package com.gempukku.lotro.cards.build.field.effect;
 
 import com.gempukku.lotro.cards.build.BuiltLotroCardBlueprint;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
@@ -8,7 +8,7 @@ import com.gempukku.lotro.cards.build.field.EffectProcessor;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import org.json.simple.JSONObject;
 
-public class StackedOnModifier implements EffectProcessor {
+public class Modifier implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(value, "modifier");
@@ -16,6 +16,6 @@ public class StackedOnModifier implements EffectProcessor {
         JSONObject jsonObject = (JSONObject) value.get("modifier");
         final ModifierSource modifier = environment.getModifierSourceFactory().getModifier(jsonObject, environment);
 
-        blueprint.appendStackedOnModifier(modifier);
+        blueprint.appendInPlayModifier(modifier);
     }
 }
