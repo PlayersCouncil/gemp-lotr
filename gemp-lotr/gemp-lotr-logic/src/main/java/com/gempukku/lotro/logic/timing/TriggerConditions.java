@@ -282,6 +282,12 @@ public class TriggerConditions {
         return false;
     }
 
+    public static boolean forEachCardRevealedFromHand(EffectResult effectResult) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_REVEALED_FROM_HAND)
+            return true;
+        return false;
+    }
+
     public static boolean revealedCardsFromTopOfDeck(EffectResult effectResult, String playerId) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_REVEALED_FROM_TOP_OF_DECK) {
             RevealCardFromTopOfDeckResult revealCardFromTopOfDeckResult = (RevealCardFromTopOfDeckResult) effectResult;

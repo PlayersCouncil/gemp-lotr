@@ -22,17 +22,44 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: location
+		                filter: siteNumber(4),siteBlock(two towers)
+		            }
+		            filter: ringBound,companion,inSkirmishAgainst(culture(sauron),orc)
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		            count: 2
+		        }
+		        effect: [
+		            {
+		                type: repeat
+		                times: 2
+		                effect: {
+                            type: playCardFromDiscard
+                            filter: choose(culture(sauron),condition)
+                            optional: true
+		                }
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: Plays to your support area.<br>While the fellowship is at site 4[T], Ring-bound companions skirmishing [sauron] Orcs are strength -1.<br><b>Maneuver:</b> Spot 2 [sauron] Orcs to play up to 2 [sauron] conditions from your discard pile. Discard this condition.
 		lore: ""
 		promotext: ""
@@ -69,20 +96,39 @@
 			Skirmish
 			Response
 		]
-		/*requires: {
-			
-		}
-		effects: {
-			type: event
-			cost: {
-				
-			},
-			effect: [
-				{
-					
-				}
-			]
-		}*/
+		effects: [
+            {
+                type: event
+                effect: [
+                    {
+                        type: modifyStrength
+                        filter: choose(or(companion,ally),inSkirmishAgainst(culture(sauron),orc))
+                        amount: {
+                            type: forEachYouCanSpot
+                            filter: ringBound,companion
+                            multiplier: -1
+                        }
+                    }
+                ]
+            }
+            {
+                type: responseEvent
+                trigger: {
+                    type: revealedCardFromHand
+                    player: fp
+                    filter: self
+                }
+                cost: {
+                    type: discardFromHand
+                    forced: false
+                    filter: self
+                }
+                effect: {
+                    type: addBurdens
+                    amount: 2
+                }
+            }
+		]
 		gametext: <b>Skirmish:</b> Make a companion or ally skirmishing a [sauron] Orc strength -1 for each Ring-bound companion.<br><b>Response:</b> If a Free Peoples player reveals this card from your hand, discard this card to add 2 burdens.
 		lore: The Lidless Eye looked out from Sauron's fortress.
 		promotext: ""
@@ -119,17 +165,30 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: culture(sauron),condition
+		        }
+		        cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: removeTwilight
+                        amount: 2
+                    }
+                ]
+                effect: {
+                    type: drawCards
+                    count: 1
+                }
+		    }
+		]
 		gametext: When you play a [sauron] condition, you may exert this minion and remove (2) to draw a card.
 		lore: ...a host of orcs lurked, ready at a signal to issue forth like black ants going to war.
 		promotext: ""
@@ -166,17 +225,28 @@
 		strength: 5
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpotBurdens
+		            amount: 5
+		        }
+		        effect: {
+		            type: drawCards
+		            count: 1
+		        }
+		    }
+		]
 		gametext: When you play this minion, you may exert him and spot 5 burdens to draw a card.
 		lore: Another dreadful day of fear and toil had come to Mordor; and the night-guards were summoned....
 		promotext: ""
@@ -213,17 +283,29 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: companion
+		            count: 6
+		        }
+		        effect: {
+		            type: drawCards
+		            count: 1
+		        }
+		    }
+		]
 		gametext: When you play this minion, you may exert him and spot 6 companions to draw a card.
 		lore: ...the day-guards, evil-eyed and fell, were marching to their posts.
 		promotext: ""
@@ -262,17 +344,42 @@
 		vitality: 3
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: culture(sauron),orc
+		            amount: -3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,culture(sauron),orc
+		        }
+		        effect: {
+		            type: preventable
+		            player: fp
+		            text: Would you like to add 2 burdens to prevent opponent drawing 3 cards?
+		            cost: {
+		                type: addBurdens
+		                amount: 2
+		            }
+		            effect: {
+		                type: drawCards
+		                count: 3
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -3.<br><b>Shadow:</b> Exert Grishnákh twice and spot another [sauron] Orc to draw 3 cards. The Free Peoples player may add 2 burdens to prevent this.
 		lore: They might agree with me, with Grishnákh....'
 		promotext: ""
@@ -306,17 +413,28 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: exert
+		            filter: choose(culture(sauron),orc)
+		            count: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyCost
+		            filter: site
+		            amount: {
+		                type: forEachWound
+		                filter: hobbit
+		                limit: 3
+		            }
+		        }
+		    }
+		]
 		gametext: To play, exert 2 [sauron] Orcs. Plays to your support area.<br>The Shadow number of each site is +1 for each wound on a Hobbit (limit +3).
 		lore: If I had my way, you'd wish you were dead now.'
 		promotext: ""
@@ -350,17 +468,53 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyCost
+		            requires: [
+		                {
+		                    type: location
+		                    filter: siteNumber(4),siteBlock(two towers)
+		                }
+                        {
+                            type: not
+                            requires: {
+                                type: playedCardThisPhase
+                                filter: culture(sauron),orc
+                            }
+                        }
+		            ]
+		            filter: culture(sauron),orc
+		            amount: -3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		            count: 2
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 4
+		        }
+		        effect: [
+		            {
+		                type: drawCards
+		                count: 3
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: Plays to your support area.<br>The twilight cost of the first [sauron] Orc played at site 4[T] is -3.<br><b>Shadow:</b> Spot 2 [sauron] Orcs and discard 4 cards from hand to draw 3 cards. Discard this condition.
 		lore: The black gate of Mordor were called the Morannon.
 		promotext: ""
@@ -397,17 +551,28 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),condition
+		        }
+		        effect: {
+		            type: drawCards
+		            count: {
+		                type: forEachYouCanSpot
+		                filter: controlledSite
+		                limit: 3
+		            }
+		        }
+		    }
+		]
 		gametext: When you play this minion, you may spot a [sauron] condition to draw a card for each site you control (limit 3).
 		lore: ...far away from hidden holds and outposts in the hills came answering calls....
 		promotext: ""
@@ -445,17 +610,34 @@
 		vitality: 3
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: culture(sauron),orc
+		            amount: -3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: [
+		            {
+		                type: discard
+		                filter: choose(another,culture(sauron),orc)
+		            }
+		            {
+		                type: exert
+		                filter: self
+		            }
+		        ]
+		        effect: {
+                    type: wound
+                    filter: choose(companion,inSkirmishAgainst(self))
+		        }
+		    }
+		]
 		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -3.<br><b>Skirmish:</b> Discard another [sauron] Orc and exert Orc Cutthroat to wound a companion he is skirmishing.
 		lore: A few Orc casualties were of no concern to him.
 		promotext: ""
@@ -492,17 +674,23 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),condition
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
+		]
 		gametext: <b>Regroup:</b> Spot a [sauron] condition and exert this minion to take control of a site.
 		lore: The Orcs of Mordor extended the will of Sauron to control the weak Men of the East.
 		promotext: ""
@@ -539,17 +727,23 @@
 		strength: 5
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),condition
+		        }
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
+		]
 		gametext: <b>Regroup:</b> Spot a [sauron] condition and discard this minion to take control of a site.
 		lore: Barad-dûr sent Orcs to all corners of Middle-earth.
 		promotext: ""
@@ -587,17 +781,33 @@
 		vitality: 3
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: culture(sauron),orc
+		            amount: -3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,culture(sauron),orc
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(condition)
+		        }
+		    }
+		]
 		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -3.<br><b>Maneuver:</b> Exert Orc Patrol twice and spot another [sauron] Orc to discard a condition.
 		lore: Sauron's Orcs ranged far and wide, searching for Baggins and the Ring.
 		promotext: ""
@@ -635,17 +845,38 @@
 		vitality: 2
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: culture(sauron),orc
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: removeTwilight
+                        amount: 2
+                    }
+                ]
+		        effect: {
+		            type: drawCards
+		            count: 1
+		        }
+		    }
+		]
 		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>When you play this minion, you may exert him and remove (2) to draw a card.
 		lore: ...why not kill them now? They're a cursed nuisance, and we're in a hurry.'
 		promotext: ""
@@ -683,17 +914,39 @@
 		vitality: 2
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: culture(sauron),orc
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        cost: [
+		            {
+		                type: exert
+		                filter: self
+		            }
+		            {
+		                type: discardFromHand
+		                forced: false
+		                count: 2
+		            }
+		        ]
+		        effect: {
+		            type: drawCards
+		            count: 1
+		        }
+		    }
+		]
 		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>When you play this minion, you may exert him and discard 2 cards from hand to draw a card.
 		lore: There's no time to kill them properly.... No time for play on this trip.'
 		promotext: ""
@@ -727,17 +980,37 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+                    {
+                        type: spot
+                        filter: choose(culture(sauron),orc)
+                        memorize: spottedOrc
+                    }
+                    {
+                        type: removeTwilight
+                        amount: 3
+                    }
+		        ]
+		        effect: {
+		            type: stackCards
+		            filter: memory(spottedOrc)
+		            where: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        effect: {
+		            type: playCardFromStacked
+		            filter: choose(culture(sauron),orc)
+		            on: self
+		        }
+		    }
+		]
 		gametext: Plays to your support area.<br><b>Regroup:</b> Spot a [sauron] Orc and remove (3) to stack that minion here.<br><b>Shadow:</b> Play a [sauron] Orc stacked here as if played from hand.
 		lore: None could pass the Teeth of Mordor and not feel their bite....
 		promotext: ""

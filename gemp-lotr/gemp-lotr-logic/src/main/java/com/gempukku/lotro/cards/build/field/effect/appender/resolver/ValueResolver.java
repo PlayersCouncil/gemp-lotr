@@ -130,14 +130,15 @@ public class ValueResolver {
                 final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
                 return actionContext -> new MultiplyEvaluator(multiplier, new LimitEvaluator(new ForEachBurdenEvaluator(), new ConstantEvaluator(limit)));
             } else if (type.equalsIgnoreCase("forEachWound")) {
-                FieldUtils.validateAllowedFields(object, "filter", "multiplier");
+                FieldUtils.validateAllowedFields(object, "filter", "multiplier", "limit");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
                 final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
+                final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
                 return (actionContext) -> {
                     if (filter.equals("any")) {
                         return new MultiplyEvaluator(multiplier,
-                                (game, cardAffected) -> actionContext.getGame().getGameState().getWounds(cardAffected));
+                                (game, cardAffected) -> Math.min(limit, actionContext.getGame().getGameState().getWounds(cardAffected)));
                     } else {
                         return new MultiplyEvaluator(multiplier,
                                 (game, cardAffected) -> {
@@ -147,7 +148,7 @@ public class ValueResolver {
                                         wounds += actionContext.getGame().getGameState().getWounds(physicalCard);
                                     }
 
-                                    return wounds;
+                                    return Math.min(limit, wounds);
                                 });
                     }
                 };
