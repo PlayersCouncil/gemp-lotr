@@ -60,6 +60,9 @@
             {
                 type: activated
                 phase: skirmish
+                requires: {
+                    type: ringIsActive
+                }
                 cost: {
                     type: addBurdens
                 }
