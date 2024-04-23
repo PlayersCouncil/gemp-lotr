@@ -21,17 +21,64 @@
 		twilight: 0
 		type: The One Ring
 		strength: 1
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						filter: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
 			}
 			{
-				
+				type: activatedTrigger
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				effect: [
+					{
+						type: putOnRing
+					}
+					{
+						type: negateWound
+						filter: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
 			}
-		]*/
+		]
 		gametext: <b>Response:</b> If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound during a skirmish, add a burden instead.
 		lore: One Ring to rule them all....
 		promotext: ""
@@ -64,17 +111,45 @@
 		twilight: 0
 		type: The One Ring
 		strength: 2
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: activated
+				phase: maneuver
+				requires: {
+                    type: ringIsActive
+                }
+				cost: {
+				    type: addBurdens
+				}
+				effect: {
+                    type: putOnRing
+                }
 			}
 			{
-				
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						filter: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
 			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Add a burden to wear The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound, add a burden instead.
 		lore: ...One Ring to find them....
 		promotext: ""
