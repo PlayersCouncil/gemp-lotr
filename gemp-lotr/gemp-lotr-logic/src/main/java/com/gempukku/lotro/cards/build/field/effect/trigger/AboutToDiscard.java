@@ -8,7 +8,7 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.logic.timing.TriggerConditions;
 import org.json.simple.JSONObject;
 
-public class AboutToDiscardFromPlay implements TriggerCheckerProducer {
+public class AboutToDiscard implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(value, "source", "filter", "opponent");

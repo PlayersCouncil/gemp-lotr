@@ -210,16 +210,17 @@ public class ValueResolver {
                         actionContext.getGame().getGameState().getCurrentPhase(), limitSource.getEvaluator(actionContext),
                         valueSource.getEvaluator(actionContext));
             } else if (type.equalsIgnoreCase("countStacked")) {
-                FieldUtils.validateAllowedFields(object, "on", "filter");
+                FieldUtils.validateAllowedFields(object, "on", "filter", "multiplier");
                 final String on = FieldUtils.getString(object.get("on"), "on");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
                 final FilterableSource onFilter = environment.getFilterFactory().generateFilter(on, environment);
+                final ValueSource multiplier = resolveEvaluator(object.get("multiplier"), 1, environment);
 
                 return (actionContext) -> {
                     final Filterable on1 = onFilter.getFilterable(actionContext);
-                    return new CountStackedEvaluator(on1, filterableSource.getFilterable(actionContext));
+                    return new MultiplyEvaluator(multiplier.getEvaluator(actionContext), new CountStackedEvaluator(on1, filterableSource.getFilterable(actionContext)));
                 };
             } else if (type.equalsIgnoreCase("forEachYouCanSpot")) {
                 FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");

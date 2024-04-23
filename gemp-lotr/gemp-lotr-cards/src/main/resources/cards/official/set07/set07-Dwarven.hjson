@@ -22,20 +22,24 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(dwarf)
+					amount: {
+					    type: condition
+					    condition: {
+					        type: canSpot
+					        filter: culture(dwarven),condition,hasStacked(any)
+					    }
+					    true: 4
+					    false: 2
+					}
 				}
 			]
-		}*/
+		}
 		gametext: Make a Dwarf strength +2 (+4 if you spot a card stacked on a [dwarven] condition).
 		lore: We're going to follow you, lad – even on the dark Road....'
 		promotext: ""
@@ -69,20 +73,22 @@
 		twilight: 2
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
+			requires: {
+			    type: canSpot
+			    filter: dwarf
+			}
 			cost: {
-				
+				type: addThreats
 			},
 			effect: [
 				{
-					
+					type: drawCards
+					count: 3
 				}
 			]
-		}*/
+		}
 		gametext: Spot a Dwarf and add a threat to draw 3 cards.
 		lore: Beyond the eyes of Dwarves are such fortellings....'
 		promotext: ""
@@ -116,17 +122,56 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: dwarf
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Add a threat
+		                Discard this condition
+		            ]
+		            effects: [
+		                {
+		                    type: addThreats
+		                }
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: heal
+		                filter: choose(dwarf)
+		                times: 2
+		            }
+		            {
+		                type: putCardsFromDiscardIntoHand
+		                filter: choose(culture(dwarven),skirmish,event)
+		            }
+		        ]
+		    }
+		]
 		gametext: To play, spot a Dwarf.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to heal a Dwarf twice and take a [dwarven] skirmish event into hand from your discard pile.
 		lore: ""
 		promotext: ""
@@ -166,17 +211,20 @@
 		signet: Theoden
 		resistance: 6
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            requires: {
+		                type: haveInitiative
+		                side: free people
+		            }
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: <b>Damage +1</b>.<br>While you have initiative, Gimli is strength +2.
 		lore: I will go with you even on the Paths of the Dead, and to whatever end they may lead....'
 		promotext: ""
@@ -216,17 +264,38 @@
 		signet: Aragorn
 		resistance: 6
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToDiscard
+		            filter: culture(dwarven),condition
+		            opponent: true
+		        }
+		        cost: {
+		            type: choice
+		            texts: [
+		                Exert a Dwarf
+		                Discard a {dwarven} card from hand
+		            ]
+		            effects: [
+		                {
+		                    type: exert
+		                    filter: choose(dwarf)
+		                }
+		                {
+		                    type: discardFromHand
+		                    forced: false
+		                    filter: choose(culture(dwarven))
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: preventDiscard
+		            filter: choose(culture(dwarven),condition)
+		        }
+		    }
+		]
 		gametext: <b>Damage +1</b>.<br><b>Response:</b> If a [dwarven] condition is about to be discarded by an opponent, exert a Dwarf or discard a [dwarven] card from hand to prevent that.
 		lore: There are countless things still to see in Middle-earth, and great works to do.'
 		promotext: ""
@@ -260,18 +329,29 @@
 		twilight: 2
 		type: Possession
 		itemclass: Armor
-		#target: title(Gimli)
-		/*requires: {
-			
-		}
+		target: title(Gimli)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        requires: {
+		            type: haveInitiative
+		            side: free people
+		        }
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: name(Gimli)
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: all(name(Gimli))
+		        }
+		    }
+		]
 		gametext: Bearer must be Gimli.<br><b>Response:</b> If you have initiative and Gimli is about to take a wound, discard 2 cards from hand to prevent that wound.
 		lore: I hope that the forgotten people will not have forgotten how to fight....'
 		promotext: ""
@@ -307,18 +387,46 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a Dwarf
-		/*requires: {
-			
-		}
+		target: dwarf
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotThreats
+		                amount: 1
+		            }
+		            filter: bearer
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpotThreats
+		                amount: 2
+		            }
+		            filter: bearer
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyArcheryTotal
+		            requires: {
+		                type: canSpotThreats
+		                amount: 3
+		            }
+		            side: free people
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: Bearer must be a Dwarf.<br>While you can spot a threat, bearer is <b>damage +1</b>.<br>While you can spot 2 threats, bearer is strength +1.<br>While you can spot 3 threats, the fellowship archery total is +1.
 		lore: ""
 		promotext: ""
@@ -352,17 +460,58 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: stackCardsFromHand
+		                where: self
+		                count: 2
+                        memorize: stackedCards
+		            }
+		            {
+		                type: drawCards
+		                count: {
+		                    type: forEachInMemory
+		                    memory: stackedCards
+		                }
+		            }
+		        ]
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        effect: [
+		            {
+		                type: modifyStrength
+		                filter: choose(dwarf)
+		                amount: 2
+		                memorize: chosenDwarf
+		            }
+		            {
+		                type: addKeyword
+		                filter: memory(chosenDwarf)
+		                keyword: damage
+		                amount: {
+		                    type: countStacked
+		                    on: self
+		                    filter: culture(dwarven)
+		                    multiplier: 2
+		                }
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: When you play this condition, you may stack 2 cards from hand here and draw a card for each [dwarven] card you stack.<br><b>Skirmish:</b> Make a Dwarf strength +2. Also, make that Dwarf <b>damage +2</b> for each [dwarven] card stacked on this condition. Discard this condition.
 		lore: ""
 		promotext: ""
@@ -396,20 +545,39 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(dwarf)
+					amount: 2
+					memorize: chosenDwarf
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: canSpot
+				        filter: memory(chosenDwarf),canExert
+				    }
+				    effect: {
+                        type: optional
+                        text: Would you like to exert {chosenDwarf} to draw 2 cards?
+                        effect: {
+                            type: costToEffect
+                            cost: {
+                                type: exert
+                                filter: memory(chosenDwarf)
+                            }
+                            effect: {
+                                type: drawCards
+                                count: 2
+                            }
+                        }
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: Make a Dwarf strength +2. You may also exert that Dwarf to draw 2 cards.
 		lore: Had I known what was before me, I think that not for any friendship would I have taken the Paths of the Dead.'
 		promotext: ""
@@ -443,17 +611,39 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(dwarf)
+		        }
+		        effect: {
+		            type: stackCardsFromDiscard
+		            where: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        effect: [
+		            {
+		                type: wound
+		                filter: choose(minion,inSkirmishAgainst(dwarf))
+		                times: {
+		                    type: countStacked
+		                    on: self
+		                    filter: culture(dwarven)
+		                }
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Regroup:</b> Exert a Dwarf companion to stack a card from your discard pile here.<br><b>Skirmish:</b> Wound a minion skirmishing a Dwarf once for each [dwarven] card stacked here. Discard this condition.
 		lore: ""
 		promotext: ""
@@ -486,17 +676,35 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		/*requires: {
-			
-		}
+		target: culture(dwarven),companion
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addActivated
+		            filter: minion
+		            phase: assignment
+		            text: Assign this minion to bearer of Reckless Pride.
+		            effect: {
+		                type: assignFpCharacterToSkirmish
+		                fpCharacter: choose(hasAttached(name(Reckless Pride)))
+		                against: self
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: drawCards
+		            count: 4
+		        }
+		    }
+		]
 		gametext: Bearer must be a [dwarven] companion.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Reckless Pride."<br><b>Regroup:</b> Discard this condition to draw 4 cards.
 		lore: ""
 		promotext: ""
@@ -530,20 +738,39 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		effects: {
-			type: event
-			cost: {
-				
-			},
-			effect: [
-				{
-					
-				}
-			]
-		}*/
+		effects: [
+            {
+                type: event
+                requires: {
+                    type: canSpot
+                    filter: dwarf
+                }
+                effect: [
+                    {
+                        type: drawCards
+                    }
+                ]
+            }
+            {
+                type: activatedFromStacked
+                phase: maneuver
+                stackedOn: culture(dwarven),condition
+                requires: {
+                    type: canSpot
+                    filter: dwarf,companion
+                }
+                cost: {
+                    type: discardStackedCards
+                    filter: self
+                    on: culture(dwarven),condition
+                }
+                effect: {
+                    type: exert
+                    filter: choose(minion)
+                    times: 2
+                }
+            }
+        ]
 		gametext: Choose one: Spot a Dwarf to draw a card; or, if this card is stacked on a [dwarven] condition, spot a Dwarf companion and discard this event to exert a minion twice.
 		lore: Food and drink would pay off some of my score against you.'
 		promotext: ""
