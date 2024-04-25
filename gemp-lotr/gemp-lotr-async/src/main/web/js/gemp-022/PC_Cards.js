@@ -548,12 +548,6 @@ var PCCards = {
 	'58_51'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN08E051.2_card.jpg',
 	// Dwarven Axe (1C9) [Errata]
 	'51_9'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E009.2_card.jpg',
-	// Barliman Butterbur A, Prancing Pony Proprietor (1U70) [Errata]
-	'51_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.A_card.jpg',
-	// Barliman Butterbur B, Prancing Pony Proprietor (1U70) [Errata]
-	'51_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.B_card.jpg',
-	// Barliman Butterbur C, Prancing Pony Proprietor (1U70) [Errata]
-	'51_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.C_card.jpg',
 	// Barliman Butterbur, Prancing Pony Proprietor (1U70) [Errata]
 	'51_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.1_card.jpg',
 	// A Wizard Is Never Late (1R87) [Errata]
@@ -574,8 +568,6 @@ var PCCards = {
 	'52_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E076.1_card.jpg',
 	// Elrond, Herald to Gil-galad (3R13) [Errata]
 	'53_13'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E013.1_card.jpg',
-	// Elrond, Herald to Gil-galad (3R13) [Errata]
-	'53_13'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E013.B_card.jpg',
 	// Phial of Galadriel (3U24) [Errata]
 	'53_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E024.1_card.jpg',
 	// Can You Protect Me From Yourself? (3R50) [Errata]
