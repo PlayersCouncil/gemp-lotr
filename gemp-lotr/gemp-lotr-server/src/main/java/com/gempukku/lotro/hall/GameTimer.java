@@ -12,6 +12,13 @@ public record GameTimer(boolean longGame, String name, int maxSecondsPerPlayer, 
     public static final GameTimer EXPANDED_CHAMPIONSHIP_TIMER = new GameTimer(false, "WC_Expanded", 60 * 25, 60 * 10);
     public static final GameTimer TOURNAMENT_TIMER = new GameTimer(false, "Tournament", 60 * 40, 60 * 5);
 
+    @Override
+    public String toString() {
+
+        return "This game table uses the '" + name + "' timer.  Each player has a total time bank of "
+                + (maxSecondsPerPlayer / 60) + " minutes, and will time out with a loss if they take longer than "
+                + (maxSecondsPerDecision / 60) + " minutes between actions.";
+    }
     public static GameTimer ResolveTimer(String timer) {
         if (timer != null) {
             switch (timer.toLowerCase()) {

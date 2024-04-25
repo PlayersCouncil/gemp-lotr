@@ -199,7 +199,7 @@ public class GameRecorder {
                     deckElement.setAttribute("rb", deck.getRingBearer());
                     deckElement.setAttribute("ring", deck.getRing());
                     deckElement.setAttribute("sites", String.join(",", deck.getSites()));
-                    deckElement.setAttribute("deck", String.join(",", deck.getAdventureCards()));
+                    deckElement.setAttribute("deck", String.join(",", deck.getDrawDeckCards()));
 
                     info.appendChild(deckElement);
                 }

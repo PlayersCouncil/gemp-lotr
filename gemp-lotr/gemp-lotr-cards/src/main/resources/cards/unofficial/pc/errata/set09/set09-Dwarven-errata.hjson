@@ -1,0 +1,73 @@
+{
+	59_4: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN09E004.1_card.jpg
+			javaClass: false
+			parent: 9_4
+			parentPath: errata/pc
+			version: 1
+			collInfo: 9R+4
+			rarity: R+
+			setNum: "9"
+			cardNum: 4
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Gimli
+		subtitle: Bearer of Grudges
+		unique: true
+		culture: dwarven
+		twilight: 2
+		type: companion
+		race: dwarf
+		strength: 6
+		vitality: 3
+		resistance: 5
+		keyword: [
+			damage+1
+			can_start_with_ring
+		]
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,ring bearer,inSkirmish
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add 2 burdens
+						Add 2 threats
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 2
+						}
+						{
+							type: addThreats
+							amount: 2
+						}
+					]
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: self
+					amount: {
+						type: forEachKeyword
+						filter: self
+						keyword: damage
+					}
+				}
+			}
+		]
+	}
+}

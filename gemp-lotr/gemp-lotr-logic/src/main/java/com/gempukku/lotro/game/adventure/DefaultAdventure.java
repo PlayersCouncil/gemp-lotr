@@ -11,9 +11,11 @@ import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.effects.PlaySiteEffect;
 import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.timing.PlayerOrderFeedback;
+import com.gempukku.lotro.logic.timing.PregameSetupFeedback;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 import com.gempukku.lotro.logic.timing.processes.pregame.BiddingGameProcess;
+import com.gempukku.lotro.logic.timing.processes.pregame.MappingPreBidGameProcess;
 import com.gempukku.lotro.logic.timing.processes.turn.ShadowPhasesGameProcess;
 import com.gempukku.lotro.logic.timing.processes.turn.archery.FellowshipPlayerChoosesShadowPlayerToAssignDamageToGameProcess;
 import com.gempukku.lotro.logic.timing.processes.turn.assign.ShadowPlayersAssignTheirMinionsGameProcess;
@@ -90,8 +92,8 @@ public class DefaultAdventure implements Adventure {
     }
 
     @Override
-    public GameProcess getStartingGameProcess(Set<String> players, PlayerOrderFeedback playerOrderFeedback) {
-        return new BiddingGameProcess(players, playerOrderFeedback);
+    public GameProcess getStartingGameProcess(Set<String> players, PlayerOrderFeedback playerOrderFeedback, PregameSetupFeedback pregameSetupFeedback) {
+        return new MappingPreBidGameProcess(players, playerOrderFeedback, pregameSetupFeedback);
     }
 
     @Override

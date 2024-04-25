@@ -17,7 +17,7 @@ public class CollectionUtils {
             incrementCardCount(counts, ringBearer, 1);
         for (String site : deck.getSites())
             incrementCardCount(counts, site, 1);
-        for (String adventureCard : deck.getAdventureCards())
+        for (String adventureCard : deck.getDrawDeckCards())
             incrementCardCount(counts, adventureCard, 1);
         return counts;
     }

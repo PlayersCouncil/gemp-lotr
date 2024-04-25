@@ -1,49 +1,25 @@
-
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_028_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-                new HashMap<>() {{
-                    put("wisp", "101_28");
-                    put("wisp2", "101_28");
-                    put("wisp3", "101_28");
-
-                    put("saruman1", "4_173");
-                    put("saruman2", "4_173");
-                    put("saruman3", "4_173");
-
-                    put("flock", "101_25");
-                    put("flock2", "101_25");
-                    put("flock3", "101_25");
-                    put("flock4", "101_25");
-
-                    put("filler1", "1_12");
-                    put("filler2", "1_12");
-                    put("filler3", "1_12");
-                    put("filler4", "1_12");
-                    put("filler5", "1_12");
-                    put("filler6", "1_12");
-                    put("filler7", "1_12");
-                    put("filler8", "1_12");
-                    put("filler9", "1_12");
-                }},
+				new HashMap<>()
+				{{
+					put("card", "101_28");
+					// put other cards in here as needed for the test case
+				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
@@ -54,156 +30,46 @@ public class Card_V1_028_Tests
 	public void JustaWispofCloudStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V1
-		* Title: Just a Wisp of Cloud
-		* Side: Free Peoples
-		* Culture: isengard
-		* Twilight Cost: 1
-		* Type: event
-		* Subtype: Maneuver
-		* Game Text: Spell. Weather. 
-		* 	Place Saruman from your draw deck or discard pile on top of your draw deck.  You may discard up to X cards from hand, where X is the number of Crows you can spot.
+		 * Set: V1
+		 * Name: Just a Wisp of Cloud
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Shadow
+		 * Game Text: Spell. Weather. 
+		* 	Discard a Free Peoples card from hand to play Saruman from your draw deck or discard pile; his twilight cost is -1 for each Crow you can spot.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl wisp = scn.GetFreepsCard("wisp");
+		var card = scn.GetFreepsCard("card");
 
-		assertFalse(wisp.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, wisp.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, wisp.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, wisp.getBlueprint().getCardType());
-		//assertEquals(Race.CREATURE, wisp.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(wisp, Keyword.SPELL));
-		assertTrue(scn.HasKeyword(wisp, Keyword.WEATHER));
-		assertTrue(scn.HasKeyword(wisp, Keyword.MANEUVER));
-		assertEquals(1, wisp.getBlueprint().getTwilightCost());
-		//assertEquals(, wisp.getBlueprint().getStrength());
-		//assertEquals(, wisp.getBlueprint().getVitality());
-		//assertEquals(, wisp.getBlueprint().getResistance());
-		//assertEquals(Signet., wisp.getBlueprint().getSignet());
-		//assertEquals(, wisp.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals("Just a Wisp of Cloud", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
+		assertTrue(scn.HasKeyword(card, Keyword.WEATHER));
+		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void WispTopdecksSarumanFromDeckOrDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void JustaWispofCloudTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl wisp = scn.GetShadowCard("wisp");
-		PhysicalCardImpl wisp2 = scn.GetShadowCard("wisp2");
-		PhysicalCardImpl wisp3 = scn.GetShadowCard("wisp3");
-
-		PhysicalCardImpl saruman1 = scn.GetShadowCard("saruman1");
-		PhysicalCardImpl saruman2 = scn.GetShadowCard("saruman2");
-		PhysicalCardImpl saruman3 = scn.GetShadowCard("saruman3");
-
-		scn.ShadowMoveCardToHand(wisp, wisp2, wisp3);
-		scn.ShadowMoveCharToTable("flock2");
-		scn.ShadowMoveCardsToBottomOfDeck(saruman1);
-		scn.ShadowMoveCardToDiscard(saruman2);
-		scn.ShadowMoveCardToDiscard(saruman3);
-
-		//Max out the move limit so we don't have to juggle play back and forth
-		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.ShadowPlayAvailable(wisp));
-		assertEquals(Zone.DECK, saruman1.getZone());
-		assertEquals(saruman1, scn.GetShadowBottomOfDeck());
-		assertEquals(Zone.DISCARD, saruman2.getZone());
-		assertEquals(Zone.DISCARD, saruman3.getZone());
-
-		// When the ability is invoked and there are sarumen in both draw deck and discard, the player
-		// must first decide between deck and discard, and then choose among the revealed copies.
-		scn.ShadowPlayCard(wisp);
-		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
-		assertEquals(2, scn.GetShadowCardChoiceCount());
-		scn.ShadowChooseCardBPFromSelection(saruman2);
-		assertEquals(Zone.DECK, saruman2.getZone());
-		assertEquals(saruman2, scn.GetShadowTopOfDeck());
-		scn.ShadowDeclineOptionalTrigger(); // the discard part
-
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.ShadowPlayAvailable(wisp2));
-		assertEquals(Zone.DECK, saruman1.getZone());
-		assertEquals(saruman1, scn.GetShadowBottomOfDeck());
-		assertEquals(Zone.HAND, saruman2.getZone()); // it was drawn during regroup
-		assertEquals(Zone.DISCARD, saruman3.getZone());
-
-		// When the ability is invoked and there is a single saruman in both draw deck and discard, the player
-		// chooses between deck/discard, but then does not have to choose among copies (as there is only 1)
-		scn.ShadowPlayCard(wisp2);
-		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
-//		assertEquals(1, scn.GetShadowCardChoiceCount());
-//		scn.ShadowChooseCardBPFromSelection(weather1);
-		assertEquals(Zone.DECK, saruman3.getZone());
-		assertEquals(saruman3, scn.GetShadowTopOfDeck());
-
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		//scn.ShadowDeclineReconciliation();
-		scn.ShadowChooseCard("filler5"); // reconciling a card away so we draw the saruman from the top
-		scn.FreepsChooseToMove();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.ShadowPlayAvailable(wisp3));
-		assertEquals(Zone.DECK, saruman1.getZone());
-		assertEquals(saruman1, scn.GetShadowBottomOfDeck());
-		assertEquals(Zone.HAND, saruman2.getZone());
-		assertEquals(Zone.HAND, saruman3.getZone()); // it was drawn during regroup
-
-		// When the ability is invoked and there is a single saruman between draw deck and discard, the player
-		// does not need to choose either pile source nor which copy
-		scn.ShadowPlayCard(wisp3);
-		assertFalse(scn.ShadowDecisionAvailable("Choose action to perform"));
-//		scn.ShadowChooseMultipleChoiceOption("draw deck");
-//		assertEquals(1, scn.GetShadowCardChoiceCount());
-//		scn.ShadowChooseCardBPFromSelection(weather1);
-		assertEquals(Zone.DECK, saruman1.getZone());
-		assertEquals(saruman1, scn.GetShadowTopOfDeck());
-	}
-
-	@Test
-	public void WispOptionallyDiscardsCardsFromHandBasedOnCrows() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl wisp = scn.GetShadowCard("wisp");
-		PhysicalCardImpl wisp2 = scn.GetShadowCard("wisp2");
-		PhysicalCardImpl wisp3 = scn.GetShadowCard("wisp3");
-
-		PhysicalCardImpl saruman1 = scn.GetShadowCard("saruman1");
-		PhysicalCardImpl saruman2 = scn.GetShadowCard("saruman2");
-		PhysicalCardImpl saruman3 = scn.GetShadowCard("saruman3");
-
-		scn.ShadowMoveCardToHand(wisp, wisp2, wisp3, saruman1, saruman2);
-		scn.ShadowMoveCardToDiscard(saruman3);
-		scn.ShadowMoveCharToTable("flock", "flock2", "flock3", "flock4");
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.ShadowPlayAvailable(wisp));
-
-		scn.ShadowPlayCard(wisp);
-		assertTrue(scn.ShadowDecisionAvailable("Choose cards from hand to discard"));
-		assertEquals("0", scn.ShadowGetFirstADParam("min"));
-		assertEquals("4", scn.ShadowGetFirstADParam("max")); //number of crows in play
+		assertEquals(0, scn.GetTwilight());
 	}
 }

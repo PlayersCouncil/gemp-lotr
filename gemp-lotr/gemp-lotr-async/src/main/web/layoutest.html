@@ -1,0 +1,88 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
+	<link rel="stylesheet" type="text/css" href="css/gemp-001/deckBuild.css">
+
+<body style="position: absolute; width:100%; height:100%;  display: flex; margin: 0px;" class="ui-layout-container" cz-shortcut-listen="true">
+	
+	<div id="top-level">
+
+		<div id="deckDiv" class="flex-vert ui-layout-center ui-layout-pane ui-layout-pane-center" style="flex-grow: 1;">
+
+			<div id="manageDecks" style="background-color: yellow">
+
+				<button id="newDeckBut" title="New deck" class="menu-button">
+					<span class="ui-icon ui-icon-document"></span>
+				</button>
+
+				<button id="saveDeckBut" title="Save deck" class="menu-button">
+					<span class="ui-icon ui-icon-disk"></span>
+				</button>
+
+				<button id="renameDeckBut" title="Rename deck" class="menu-button">
+					<span class="ui-icon ui-icon-pencil"></span>
+				</button>
+
+				<button id="copyDeckBut" title="Copy deck to new" class="menu-button">
+					<span class="ui-icon ui-icon-copy"></span>
+				</button>
+
+				<button id="importDeckBut" title="Import Deck" class="menu-button">
+					<span class="ui-icon ui-icon-arrowthickstop-1-s"></span>
+				</button>
+
+				<button id="libraryListBut" title="Open Library" class="menu-button">
+					<span class="ui-icon ui-icon-bookmark"></span>
+				</button>
+
+				<button id="deckListBut" title="Deck list" class="menu-button">
+					<span class="ui-icon ui-icon-suitcase"></span>
+				</button>
+
+				<select id="formatSelect" style="float: right; width: 100px;">
+					<option value="fotr_block">Fellowship Block</option>
+				</select>
+
+				<button id="notesBut" title="Add/Edit Notes" class="menu-button">
+					<span class="ui-icon ui-icon-plus"></span>
+				</button>
+
+				<span id="editingDeck">New deck</span>
+
+				<select id="collectionSelect">
+					<option value="default">All cards</option>
+					<option value="permanent">My cards</option>
+					<option value="trophy">Trophies</option>
+				</select>
+			</div>
+			
+			<div id="deck-view" class="flex-horiz" style="background-color: red;">
+				<div id="decks" class="flex-vert" >
+					<div id="ring-pair" cla-ss="flex-horiz" >
+						<div id="ringBearerDiv" style="background-color:magenta">Ring Bearer</div>
+						<div id="ringDiv" style="background-color: green">Ring</div>
+					</div>
+					
+					<div id="sitesDiv" style="background-color:brown">Sites</div>
+				</div>
+
+				<div id="decksRegion" class="flex-vert" style="background-color:blue">
+					<div id="fp-cards" style="background-color:teal"></div>
+					<div id="sh-cards" style="background-color:brown"></div>
+					<div id="statsDiv" style="background-color:blue">
+						<div id="deckStats"></div>
+					</div>
+				</div>
+			</div>
+			
+			
+		</div>
+
+		<div id="collectionDiv" class="ui-layout-east ui-layout-pane ui-layout-pane-east" style="width: 328px; background-color:#333333; flex-grow: 0;">
+			<div id="cardCollectionDiv"></div>
+		</div>
+	</div>
+</body>
+
+</html>

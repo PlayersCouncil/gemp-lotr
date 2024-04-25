@@ -704,7 +704,7 @@ var GempLotrHallUI = Class.extend({
 								participantIdAppend = "&participantId=" + participantId;
 
 							var but = $("<button>Play Match</button>");
-							var link = $("<a href='game.html?gameId=" + gameId + participantIdAppend + "'></a>");
+							var link = $("<a href='game.html?gameId=" + gameId + participantIdAppend + "' target='_blank'></a>");
 							link.append(but);
 							but.button();
 							lastField.append(link);

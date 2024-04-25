@@ -4,14 +4,13 @@
 		function () {
 			hall.comm.getErrata(function(json){
 				//$("#errata-readout").text(JSON.stringify(json, null, 2));
-				
 				var top = $("<div style='display:flex; flex-direction:column; gap:20px; justify-content:center; align-items:center;'></div>");
 				
 				var results = {};
 				for(var bp in json) {
 					var info = json[bp];
-					var eid = info.ErrataIDs.PC;
-					var text = info.LinkText;
+					var eid = info.errataIDs.PC;
+					var text = info.linkText;
 					text = text.replace(eid, bp + "," + eid);
 					//console.log(text);
 					//result.append(text);

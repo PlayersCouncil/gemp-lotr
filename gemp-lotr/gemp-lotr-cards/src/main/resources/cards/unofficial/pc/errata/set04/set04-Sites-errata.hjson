@@ -1,0 +1,86 @@
+{
+	54_355: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN04E355.1_card.jpg
+			javaClass: false
+			parent: 4_355
+			parentPath: errata/pc
+			version: 1
+			collInfo: 4U355
+			rarity: U
+			setNum: "4"
+			cardNum: 355
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Cavern Entrance
+		unique: false
+		twilight: 7
+		type: Site
+		site: 7
+		block: Towers
+		direction: Right
+		effects: {
+			type: trigger
+			trigger: {
+				type: startOfPhase
+				phase: skirmish
+			}
+			effect: [
+				{
+					type: ForEachPlayer
+					effect: [
+						{
+							type: conditional
+							requires: {
+								type: CanSpot
+								filter: your,InSkirmish,character,not(exhausted)
+							}
+							effect: [
+								{
+									type: chooseYesOrNo
+									text: Would you like to exert your skirmishing character to prevent all special abilities from being used this skirmish?
+									memorize: choice
+								}
+								{
+									type: conditional
+									requires: {
+										type: memoryIs
+										memory: choice
+										value: yes
+									}
+									effect: {
+										type: CostToEffect
+										cost: {
+											type: exert
+											filter: choose(your,character,InSkirmish)
+										}
+										effect: [
+											{
+												type: addmodifier
+												modifier: {
+													type: cantUseSpecialAbilities
+													filter: or(side(freeps),side(shadow),site,the one ring)
+												}
+												until: end(skirmish)
+											}
+										]
+									}
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+		gametext: At the start of each skirmish, you may exert your character in that skirmish to prevent special abilities being used.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

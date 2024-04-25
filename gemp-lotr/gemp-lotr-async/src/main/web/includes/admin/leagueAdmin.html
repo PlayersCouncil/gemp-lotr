@@ -253,9 +253,9 @@ $(document).ready(
 			function (json) 
 			{
 				//console.log(json);
-				let drafts = json.DraftTemplates;
-				let formats = json.Formats;
-				let sealed = json.SealedTemplates
+				let drafts = json.draftTemplates;
+				let formats = json.formats;
+				let sealed = json.sealedTemplates
 				//console.log(drafts);
 				for (var prop in drafts) {
 					if (Object.prototype.hasOwnProperty.call(drafts, prop)) {
@@ -300,7 +300,7 @@ $(document).ready(
 						
 						let code = sealed[prop].Format;
 						let id = sealed[prop].ID;
-						let serieCount = sealed[prop].SeriesProduct.length;
+						let serieCount = sealed[prop].seriesProduct.length;
 						
 						var item = $("<option/>")
 							.attr("value", id)

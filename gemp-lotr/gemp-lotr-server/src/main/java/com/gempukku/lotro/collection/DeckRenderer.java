@@ -1,7 +1,6 @@
 package com.gempukku.lotro.collection;
 
 import com.gempukku.lotro.common.Names;
-import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.logic.GameUtils;
@@ -137,7 +136,7 @@ public class DeckRenderer {
         }
 
         DefaultCardCollection deckCards = new DefaultCardCollection();
-        for (String card : deck.getAdventureCards()) {
+        for (String card : deck.getDrawDeckCards()) {
             deckCards.addItem(_bpLibrary.getBaseBlueprintId(card), 1);
         }
         for (String site : deck.getSites()) {
@@ -216,7 +215,7 @@ public class DeckRenderer {
         }
 
         DefaultCardCollection deckCards = new DefaultCardCollection();
-        for (String card : deck.getAdventureCards()) {
+        for (String card : deck.getDrawDeckCards()) {
             deckCards.addItem(_bpLibrary.getBaseBlueprintId(card), 1);
         }
         for (String site : deck.getSites()) {

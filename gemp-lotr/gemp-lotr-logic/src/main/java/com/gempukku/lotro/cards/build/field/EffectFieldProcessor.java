@@ -20,6 +20,7 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("activatedtrigger", new ActivatedTriggerEffectProcessor());
         effectProcessors.put("aidcost", new AidCost());
         effectProcessors.put("copycard", new CopyCard());
+        effectProcessors.put("deckbuildingrestriction", new DeckBuildingRestrictionGameTextProcessor());
         effectProcessors.put("discardedfromplaytrigger", new DiscardedFromPlayTriggerEffectProcessor());
         effectProcessors.put("discount", new PotentialDiscount());
         effectProcessors.put("event", new EventEffectProcessor());

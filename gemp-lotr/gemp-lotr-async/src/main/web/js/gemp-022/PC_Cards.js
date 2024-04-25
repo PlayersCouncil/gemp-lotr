@@ -526,92 +526,92 @@ var PCCards = {
 	'1_385': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.4_card.jpg',
 	
 	//2023 Yuletide Errata
-	// Legolas, Keen-eyed (V1R9) [Errata] [Playtest]
-	'151_9'  : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S009.1_card.jpg',
-	// Gandalf, Olorin (V1R14) [Errata] [Playtest]
-	'151_14' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S014.1_card.jpg',
-	// Aragorn, Estel (V1R19) [Errata] [Playtest]
-	'151_19' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S019.1_card.jpg',
-	// Just a Wisp of Cloud (V1C28) [Errata] [Playtest]
-	'151_28' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S028.1_card.jpg',
-	// Crebain Flock (V1C25) [Errata] [Playtest]
-	'151_25' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S025.1_card.jpg',
-	// Crows of Isengard (V1C26) [Errata] [Playtest]
-	'151_26' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S026.1_card.jpg',
-	// Murder of Crows (V1R29) [Errata] [Playtest]
-	'151_29' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S029.1_card.jpg',
-	// Galadriel, Lady Redeemed (10R11) [Errata] [Playtest]
-	'80_11'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.3_card.jpg',
-	// Vilya (3R27) [Errata] [Playtest]
-	'73_27'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E027.2_card.jpg',
-	// Castamir of Umbar (8R51) [Errata] [Playtest]
-	'78_51'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN08E051.2_card.jpg',
-	// Dwarven Axe (1C9) [Errata] [Playtest]
-	'71_9'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E009.2_card.jpg',
-	// Barliman Butterbur A, Prancing Pony Proprietor (1U70) [Errata] [Playtest]
-	'71_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.1_card.jpg',
-	// Barliman Butterbur B, Prancing Pony Proprietor (1U70) [Errata] [Playtest]
-	'71_402' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.2_card.jpg',
-	// Barliman Butterbur C, Prancing Pony Proprietor (1U70) [Errata] [Playtest]
-	'71_403' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.3_card.jpg',
-	// Barliman Butterbur D, Prancing Pony Proprietor (1U70) [Errata] [Playtest]
-	'71_404' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.4_card.jpg',
-	// A Wizard Is Never Late (1R87) [Errata] [Playtest]
-	'71_87'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E087.1_card.jpg',
-	// Armor (1C92) [Errata] [Playtest]
-	'71_92'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E092.1_card.jpg',
-	// Coat of Mail (1C101) [Errata] [Playtest]
-	'71_101' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E101.1_card.jpg',
-	// Great Shield (1C107) [Errata] [Playtest]
-	'71_107' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E107.1_card.jpg',
-	// Strength of Kings (1R115) [Errata] [Playtest]
-	'71_115' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E115.1_card.jpg',
-	// Goblin Patrol Troop (1C177) [Errata] [Playtest]
-	'71_177' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E177.1_card.jpg',
-	// Secret Sentinels (2R20) [Errata] [Playtest]
-	'72_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E020.1_card.jpg',
-	// Helpless (2U76) [Errata] [Playtest]
-	'72_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E076.1_card.jpg',
-	// Elrond A, Herald to Gil-galad (3R13) [Errata] [Playtest]
-	'73_13'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E013.1_card.jpg',
-	// Elrond B, Herald to Gil-galad (3R13) [Errata] [Playtest]
-	'73_401' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E013.2_card.jpg',
-	// Phial of Galadriel (3U24) [Errata] [Playtest]
-	'73_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E024.1_card.jpg',
-	// Can You Protect Me From Yourself? (3R50) [Errata] [Playtest]
-	'73_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E050.1_card.jpg',
-	// Such a Little Thing (3R80) [Errata] [Playtest]
-	'73_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.1_card.jpg',
-	// Too Great and Terrible (3R85) [Errata] [Playtest]
-	'73_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.1_card.jpg',
-	// Terrible as the Dawn (3R103) [Errata] [Playtest]
-	'73_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.2_card.jpg',
-	// Why Shouldn't I Keep It? (3R105) [Errata] [Playtest]
-	'73_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.1_card.jpg',
-	// Forearmed (6U16) [Errata] [Playtest]
-	'76_16'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN06E016.1_card.jpg',
-	// Gimli, Bearer of Grudges (9R+4) [Errata] [Playtest]
-	'79_4'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E004.1_card.jpg',
-	// Galadriel, Bearer of Wisdom (9R+14) [Errata] [Playtest]
-	'79_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E014.1_card.jpg',
-	// Smeagol, Bearer of Great Secrets (9R+30) [Errata] [Playtest]
-	'79_30'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E030.1_card.jpg',
-	// Boromir, Bearer of Council (9R+31) [Errata] [Playtest]
-	'79_31'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E031.1_card.jpg',
-	// Isildur, Bearer of Heirlooms (9R+33) [Errata] [Playtest]
-	'79_33'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E033.1_card.jpg',
-	// Bilbo, Bearer of Things Burgled (9R+49) [Errata] [Playtest]
-	'79_49'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E049.1_card.jpg',
-	// Cavern Entrance (4U355) [Errata] [Playtest]
-	'74_355' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E355.1_card.jpg',
-	// Cavern Entrance (11S232) [Errata] [Playtest]
-	'81_232' : 'https://i.lotrtcgpc.net/errata/LOTR-EN11E232.2_card.jpg',
-	// Savagery to Match\Their Numbers (1R139) [Errata] [Playtest]
-	'71_139' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E139.3_card.jpg',
-	// Gondor Bowmen (3R41) [Errata] [Playtest]
-	'73_41'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E041.1_card.jpg',
-	// Shadowfax, Greatest of the Mearas (17R24) [Errata] [Playtest]
-	'87_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E024.1_card.jpg',
+	// Legolas, Keen-eyed (V1R9) [Errata]
+	'101_9'  : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S009.1_card.jpg',
+	// Gandalf, Olorin (V1R14) [Errata]
+	'101_14' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S014.1_card.jpg',
+	// Aragorn, Estel (V1R19) [Errata]
+	'101_19' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S019.1_card.jpg',
+	// Just a Wisp of Cloud (V1C28) [Errata]
+	'101_28' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S028.1_card.jpg',
+	// Crebain Flock (V1C25) [Errata]
+	'101_25' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S025.1_card.jpg',
+	// Crows of Isengard (V1C26) [Errata]
+	'101_26' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S026.1_card.jpg',
+	// Murder of Crows (V1R29) [Errata]
+	'101_29' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S029.1_card.jpg',
+	// Galadriel, Lady Redeemed (10R11) [Errata]
+	'60_11'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.3_card.jpg',
+	// Vilya (3R27) [Errata]
+	'53_27'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E027.2_card.jpg',
+	// Castamir of Umbar (8R51) [Errata]
+	'58_51'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN08E051.2_card.jpg',
+	// Dwarven Axe (1C9) [Errata]
+	'51_9'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E009.2_card.jpg',
+	// Barliman Butterbur A, Prancing Pony Proprietor (1U70) [Errata]
+	'51_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.A_card.jpg',
+	// Barliman Butterbur B, Prancing Pony Proprietor (1U70) [Errata]
+	'51_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.B_card.jpg',
+	// Barliman Butterbur C, Prancing Pony Proprietor (1U70) [Errata]
+	'51_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.C_card.jpg',
+	// Barliman Butterbur, Prancing Pony Proprietor (1U70) [Errata]
+	'51_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.1_card.jpg',
+	// A Wizard Is Never Late (1R87) [Errata]
+	'51_87'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E087.1_card.jpg',
+	// Armor (1C92) [Errata]
+	'51_92'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E092.1_card.jpg',
+	// Coat of Mail (1C101) [Errata]
+	'51_101' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E101.1_card.jpg',
+	// Great Shield (1C107) [Errata]
+	'51_107' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E107.1_card.jpg',
+	// Strength of Kings (1R115) [Errata]
+	'51_115' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E115.1_card.jpg',
+	// Goblin Patrol Troop (1C177) [Errata]
+	'51_177' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E177.1_card.jpg',
+	// Secret Sentinels (2R20) [Errata]
+	'52_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E020.1_card.jpg',
+	// Helpless (2U76) [Errata]
+	'52_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E076.1_card.jpg',
+	// Elrond, Herald to Gil-galad (3R13) [Errata]
+	'53_13'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E013.1_card.jpg',
+	// Elrond, Herald to Gil-galad (3R13) [Errata]
+	'53_13'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E013.B_card.jpg',
+	// Phial of Galadriel (3U24) [Errata]
+	'53_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E024.1_card.jpg',
+	// Can You Protect Me From Yourself? (3R50) [Errata]
+	'53_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E050.1_card.jpg',
+	// Such a Little Thing (3R80) [Errata]
+	'53_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.1_card.jpg',
+	// Too Great and Terrible (3R85) [Errata]
+	'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.1_card.jpg',
+	// Terrible as the Dawn (3R103) [Errata]
+	'53_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.2_card.jpg',
+	// Why Shouldn't I Keep It? (3R105) [Errata]
+	'53_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.1_card.jpg',
+	// Forearmed (6U16) [Errata]
+	'56_16'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN06E016.1_card.jpg',
+	// Gimli, Bearer of Grudges (9R+4) [Errata]
+	'59_4'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E004.1_card.jpg',
+	// Galadriel, Bearer of Wisdom (9R+14) [Errata]
+	'59_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E014.1_card.jpg',
+	// Smeagol, Bearer of Great Secrets (9R+30) [Errata]
+	'59_30'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E030.1_card.jpg',
+	// Boromir, Bearer of Council (9R+31) [Errata]
+	'59_31'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E031.1_card.jpg',
+	// Isildur, Bearer of Heirlooms (9R+33) [Errata]
+	'59_33'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E033.1_card.jpg',
+	// Bilbo, Bearer of Things Burgled (9R+49) [Errata]
+	'59_49'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E049.1_card.jpg',
+	// Cavern Entrance (4U355) [Errata]
+	'54_355' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E355.1_card.jpg',
+	// Cavern Entrance (11S232) [Errata]
+	'61_232' : 'https://i.lotrtcgpc.net/errata/LOTR-EN11E232.2_card.jpg',
+	// Savagery to Match Their Numbers (1R139) [Errata]
+	'51_139' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E139.2_card.jpg',
+	// Gondor Bowmen (3R41) [Errata]
+	'53_41'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E041.1_card.jpg',
+	// Shadowfax, Greatest of the Mearas (17R24) [Errata]
+	'67_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E024.1_card.jpg',
 	
 	//Yuletide 2023
 	//Pippin Holiday Promo
@@ -623,8 +623,12 @@ var PCCards = {
 	//Aragorn,Elessar Telcontar FA
 	'10_127'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN10U025.0_card.jpg',
 	//Arwen, Queen of Elves and Men FA
-	'10_128'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN10U006.0_card.jpg'
+	'10_128'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN10U006.0_card.jpg',
 	
 	
+	//Maps
+	'100_2' : 'https://i.lotrtcgpc.net/sets/vset0/LOTR-ENV0S002.0_card.jpg',
+	'100_3' : 'https://i.lotrtcgpc.net/sets/vset0/LOTR-ENV0S003.0_card.jpg',
+	'100_4' : 'https://i.lotrtcgpc.net/sets/vset0/LOTR-ENV0S004.0_card.jpg'
 }
 

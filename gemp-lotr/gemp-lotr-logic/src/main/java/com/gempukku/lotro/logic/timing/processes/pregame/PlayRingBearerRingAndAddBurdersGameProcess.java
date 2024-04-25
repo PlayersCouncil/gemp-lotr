@@ -20,12 +20,13 @@ public class PlayRingBearerRingAndAddBurdersGameProcess implements GameProcess {
 
     @Override
     public void process(LotroGame game) {
-        GameState gameState = game.getGameState();
+        var gameState = game.getGameState();
+
         for (String playerId : gameState.getPlayerOrder().getAllPlayers()) {
-            PhysicalCard ringBearer = game.getGameState().getRingBearer(playerId);
+            var ringBearer = gameState.getRingBearer(playerId);
             gameState.addCardToZone(game, ringBearer, Zone.FREE_CHARACTERS);
 
-            PhysicalCard ring = game.getGameState().getRing(playerId);
+            PhysicalCard ring = gameState.getRing(playerId);
             if (ring != null)
                 gameState.attachCard(game, ring, ringBearer);
 

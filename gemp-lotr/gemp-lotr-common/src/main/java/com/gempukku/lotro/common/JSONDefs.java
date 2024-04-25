@@ -48,6 +48,7 @@ public class JSONDefs {
         public int minimumDeckSize = 60;
         public int maximumSameName = 4;
         public boolean mulliganRule = true;
+        public boolean usesMaps = false;
         public ArrayList<Integer> set;
         public ArrayList<String> banned = new ArrayList<>();
         public ArrayList<String> restricted = new ArrayList<>();

@@ -34,7 +34,9 @@ public class TurnProcedure {
     private final GameStats _gameStats;
     private final InitiativeChangeRule _initiativeChangeRule = new InitiativeChangeRule();
 
-    public TurnProcedure(LotroGame lotroGame, Set<String> players, final UserFeedback userFeedback, ActionStack actionStack, final PlayerOrderFeedback playerOrderFeedback, CharacterDeathRule characterDeathRule) {
+    public TurnProcedure(LotroGame lotroGame, Set<String> players, final UserFeedback userFeedback, ActionStack actionStack,
+            final PlayerOrderFeedback playerOrderFeedback, final PregameSetupFeedback pregameSetupFeedback,
+            CharacterDeathRule characterDeathRule) {
         _userFeedback = userFeedback;
         _game = lotroGame;
         _actionStack = actionStack;
@@ -42,7 +44,8 @@ public class TurnProcedure {
 
         _gameStats = new GameStats();
 
-        _gameProcess = lotroGame.getFormat().getAdventure().getStartingGameProcess(players, playerOrderFeedback);
+        _gameProcess = lotroGame.getFormat().getAdventure()
+                .getStartingGameProcess(players, playerOrderFeedback, pregameSetupFeedback);
     }
 
     public GameStats getGameStats() {

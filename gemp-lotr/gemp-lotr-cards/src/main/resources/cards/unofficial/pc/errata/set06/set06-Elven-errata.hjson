@@ -1,0 +1,69 @@
+{
+	56_16: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN06E016.1_card.jpg
+			javaClass: false
+			parent: 6_16
+			parentPath: errata/pc
+			version: 1
+			collInfo: 6U16
+			rarity: U
+			setNum: "6"
+			cardNum: 16
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Forearmed
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		keyword: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: RevealTopCardsOfDrawDeck
+					deck: you
+					count: 1
+					memorize: revealedCard
+				}
+				{
+					type: ModifyStrength
+					filter: choose(minion,InSkirmishAgainst(Elf))
+					amount: {
+						type: TwilightCostInMemory
+						memory: revealedCard
+						multiplier: -1
+					}
+					memorize: weakenedMinion
+				}
+				{
+					type: Conditional
+					requires: {
+						type: IsLessThanOrEqual
+						firstNumber: {
+							type: StrengthFromMemory
+							memory: weakenedMinion
+						}
+						secondNumber: 4
+					}
+					effect: {
+						type: DiscardCardsFromDrawDeck
+						filter: memory(revealedCard)
+					}
+				}
+			]
+		}
+		gametext: Reveal the top card of your draw deck to make a minion skirmishing an Elf strength –X, where X is the twilight cost of the revealed card.  If that minion is now 4 strength or less, discard the revealed card.
+		lore: “‘Give them a volley.'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

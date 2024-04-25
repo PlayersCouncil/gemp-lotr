@@ -9,6 +9,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.timing.PlayerOrderFeedback;
+import com.gempukku.lotro.logic.timing.PregameSetupFeedback;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 import com.gempukku.lotro.logic.timing.processes.pregame.SetupSoloAdventureGameProcess;
@@ -60,7 +61,7 @@ public class DefaultSoloAdventure extends SoloAdventure {
     }
 
     @Override
-    public GameProcess getStartingGameProcess(Set<String> players, PlayerOrderFeedback playerOrderFeedback) {
+    public GameProcess getStartingGameProcess(Set<String> players, PlayerOrderFeedback playerOrderFeedback, PregameSetupFeedback pregameSetupFeedback) {
         final String player = players.iterator().next();
         return new SetupSoloAdventureGameProcess(_adventureCard, _startingSite, player, playerOrderFeedback);
     }

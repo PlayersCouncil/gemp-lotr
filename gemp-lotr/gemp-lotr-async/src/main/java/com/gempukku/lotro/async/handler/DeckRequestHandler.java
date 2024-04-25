@@ -140,7 +140,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
 
             int fpCount = 0;
             int shadowCount = 0;
-            for (String card : deck.getAdventureCards()) {
+            for (String card : deck.getDrawDeckCards()) {
                 Side side = _library.getLotroCardBlueprint(card).getSide();
                 if (side == Side.SHADOW)
                     shadowCount++;
@@ -260,10 +260,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         String deckName = getQueryParameterSafely(queryDecoder, "deckName");
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-        String code = resourceOwner.getName() + "|" + deckName;
-
-        String base64 = Base64.getEncoder().encodeToString(code.getBytes(StandardCharsets.UTF_8));
-        String result = URLEncoder.encode(base64, StandardCharsets.UTF_8);
+        var result = LotroDeck.GenerateDeckSharingURL(deckName, resourceOwner.getName());
 
         responseWriter.writeHtmlResponse(result);
     }
@@ -368,8 +365,15 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         if (ring != null)
             result.append("<b>Ring:</b> " + generateCardTooltip(_library.getLotroCardBlueprint(ring), ring) + "<br/>");
 
+        var format = _formatLibrary.getFormatByName(deck.getTargetFormat());
+        if(format != null && format.usesMaps()) {
+            String map = deck.getMap();
+            if(map != null)
+                result.append("<b>Map:</b> " + generateCardTooltip(_library.getLotroCardBlueprint(map), map) + "<br/>");
+        }
+
         DefaultCardCollection deckCards = new DefaultCardCollection();
-        for (String card : deck.getAdventureCards())
+        for (String card : deck.getDrawDeckCards())
             deckCards.addItem(_library.getBaseBlueprintId(card), 1);
         for (String site : deck.getSites())
             deckCards.addItem(_library.getBaseBlueprintId(site), 1);
@@ -577,13 +581,19 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             deckElem.appendChild(ring);
         }
 
+        if (deck.getMap() != null) {
+            Element map = doc.createElement("map");
+            map.setAttribute("blueprintId", deck.getMap());
+            deckElem.appendChild(map);
+        }
+
         for (CardItem cardItem : _sortAndFilterCards.process("sort:siteNumber,twilight", createCardItems(deck.getSites()), _library, _formatLibrary)) {
             Element site = doc.createElement("site");
             site.setAttribute("blueprintId", cardItem.getBlueprintId());
             deckElem.appendChild(site);
         }
 
-        for (CardItem cardItem : _sortAndFilterCards.process("sort:cardType,culture,name", createCardItems(deck.getAdventureCards()), _library, _formatLibrary)) {
+        for (CardItem cardItem : _sortAndFilterCards.process("sort:cardType,culture,name", createCardItems(deck.getDrawDeckCards()), _library, _formatLibrary)) {
             Element card = doc.createElement("card");
             String side;
             try {

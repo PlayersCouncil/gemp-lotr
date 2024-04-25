@@ -2,20 +2,10 @@
 
 	60_8: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/60_8.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 10_8
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1?
 			collInfo: 10R8
 			rarity: R
@@ -81,32 +71,152 @@
 		lore: "...he was grey and old, save that his eyes were keen as stars...."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
 	}
 
+	# 60_11: {
+	# 	cardInfo: {
+	# 		imagePath: errata/60_11.jpg
+	# 		javaClass: false
+	# 		parent: 10_11
+	# 		parentPath: errata/pc
+	# 		version: 1
+	# 		collInfo: 10R11
+	# 		rarity: R
+	# 		setNum: "10"
+	# 		cardNum: 11
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Galadriel
+	# 	subtitle: Lady Redeemed
+	# 	unique: true
+	# 	culture: elven
+	# 	twilight: 3
+	# 	type: companion
+	# 	race: elf
+	# 	strength: 3
+	# 	vitality: 3
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: modifyOwnCost
+	# 			requires: {
+	# 				type: phase
+	# 				phase: play starting fellowship
+	# 			}
+	# 			amount: -3
+	# 		}
+	# 		{
+	# 			type: trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: startOfPhase
+	# 				phase: regroup
+	# 			}
+	# 			cost: {
+	# 				type: discardFromHand
+	# 				count: 1
+	# 				forced: false
+	# 				filter: choose(culture(elven),event)
+	# 			}
+	# 			effect: {
+	# 				type: discard
+	# 				filter: choose(side(shadow),or(condition,possession))
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: When Galadriel is in your starting fellowship, her twilight cost is -3.<br>At the start of the regroup phase, you may discard an [Elven] event from hand to discard a Shadow condition or Shadow possession.
+	# 	lore: "'I pass the test,' she said. 'I will diminish, and go into the West, and remain Galadriel.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
+	# 60_11: {
+	# 	cardInfo: {
+	# 		imagePath: errata/60_11.jpg
+	# 		javaClass: false
+	# 		parent: 10_11
+	# 		parentPath: errata/pc
+	# 		version: 2
+	# 		collInfo: 10R11
+	# 		rarity: R
+	# 		setNum: "10"
+	# 		cardNum: 11
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Galadriel
+	# 	subtitle: Lady Redeemed
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Elven
+	# 	twilight: 3
+	# 	type: Companion
+	# 	race: Elf
+	# 	strength: 3
+	# 	vitality: 3
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: modifyOwnCost
+	# 			requires: {
+	# 				type: phase
+	# 				phase: play starting fellowship
+	# 			}
+	# 			amount: -2
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: [
+	# 				fellowship
+	# 				regroup
+	# 			]
+	# 			cost: [
+	# 				{
+	# 					type: Exert
+	# 					filter: self
+	# 				}
+	# 				{
+	# 					type: discardFromHand
+	# 					count: 1
+	# 					forced: false
+	# 					filter: choose(culture(elven),event)
+	# 				}
+	# 			]
+	# 			effect: {
+	# 				type: discard
+	# 				filter: choose(side(shadow),or(condition,possession))
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: When Galadriel is in your starting fellowship, her twilight cost is –2. <br><b>Fellowship</b> <i>or</i> <b>Regroup:</b>  Exert Galadriel and discard an [elven] event from hand to discard a Shadow condition or Shadow possession.
+	# 	lore: "'I pass the test,' she said. 'I will diminish, and go into the West, and remain Galadriel.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	60_11: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/60_11.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 10_11
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
-			version: 1
+			version: 3
 			collInfo: 10R11
 			rarity: R
 			setNum: "10"
@@ -134,92 +244,13 @@
 				amount: -3
 			}
 			{
-				type: trigger
-				optional: true
-				trigger: {
-					type: startOfPhase
-					phase: regroup
-				}
-				cost: {
-					type: discardFromHand
-					count: 1
-					forced: false
-					filter: choose(culture(elven),event)
-				}
-				effect: {
-					type: discard
-					filter: choose(side(shadow),or(condition,possession))
-				}
-			}
-		]
-		gametext: When Galadriel is in your starting fellowship, her twilight cost is -3.<br>At the start of the regroup phase, you may discard an [Elven] event from hand to discard a Shadow condition or Shadow possession.
-		lore: "'I pass the test,' she said. 'I will diminish, and go into the West, and remain Galadriel.'"
-		promotext: ""
-		alts: {
-			//These are just CardInfo objects
-			promos: {
-			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
-			errata: {
-			}
-		}
-	}
-	
-	60_11: {
-		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: errata/60_11.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
-			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 10_11
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
-			version: 2
-			collInfo: 10R11
-			rarity: R
-			setNum: "10"
-			cardNum: 11
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
-		}
-		title: Galadriel
-		subtitle: Lady Redeemed
-		unique: true
-		side: Free Peoples
-		culture: Elven
-		twilight: 3
-		type: Companion
-		race: Elf
-		strength: 3
-		vitality: 3
-		resistance: 6
-		effects: [
-			{
-				type: modifyOwnCost
-				requires: {
-					type: phase
-					phase: play starting fellowship
-				}
-				amount: -2
-			}
-			{
 				type: activated
-				phase: [
-					fellowship
-					regroup
-				]
-				cost: [
-					{
-						type: Exert
-						filter: self
+				phase: regroup
+				requires: {
+						type: perPhaseLimit
+						limit: 1
 					}
+				cost: [
 					{
 						type: discardFromHand
 						count: 1
@@ -227,20 +258,24 @@
 						filter: choose(culture(elven),event)
 					}
 				]
-				effect: {
-					type: discard
-					filter: choose(side(shadow),or(condition,possession))
-				}
+				effect: [
+					{
+						type: discard
+						filter: choose(side(shadow),or(condition,possession))
+					}
+					{
+						type: incrementPerPhaseLimit
+						limit: 1
+					}
+				]
 			}
 		]
-		gametext: When Galadriel is in your starting fellowship, her twilight cost is –2. <br><b>Fellowship</b> <i>or</i> <b>Regroup:</b>  Exert Galadriel and discard an [elven] event from hand to discard a Shadow condition or Shadow possession.
+		gametext: When Galadriel is in your starting fellowship, her twilight cost is –3.<br>Regroup: Exert Galadriel and discard an [elven] event from hand to discard a Shadow condition or Shadow possession (limit once per phase).
 		lore: "'I pass the test,' she said. 'I will diminish, and go into the West, and remain Galadriel.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -248,20 +283,10 @@
 	
 	60_12: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/LOTR-EN10E012.1.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 10_12
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1
 			collInfo: 10U12
 			rarity: U
@@ -313,10 +338,8 @@
 		lore: "'The uttermost choice is before you: to repent and go to the Havens... or else to abide the Doom of Men.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}

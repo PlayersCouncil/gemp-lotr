@@ -37,29 +37,29 @@ public class Card_01_139_ErrataTests
 	public void SavagerytoMatchTheirNumbersStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Savagery to Match Their Numbers
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Isengard
-		* Twilight Cost: 2
-		* Type: event
-		* Subtype: 
-		* Game Text: <b>Skirmish:</b> Make an Uruk-hai strength +2.
-		* 	If you can spot 5 companions, also make it <b>fierce</b> and strength +2 more until the regroup phase.
+		 * Set: 1
+		 * Name: Savagery to Match Their Numbers
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: <b>Skirmish:</b> Make an Uruk-hai strength +2.
+		 * 	If you can spot 5 companions, also make it <b>fierce</b> and an additional strength +2 until the regroup phase.
 		*/
 
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var savagery = scn.GetFreepsCard("savagery");
+		var card = scn.GetFreepsCard("savagery");
 
-		assertFalse(savagery.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, savagery.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, savagery.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, savagery.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(savagery, Keyword.SKIRMISH));
-		assertEquals(2, savagery.getBlueprint().getTwilightCost());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
