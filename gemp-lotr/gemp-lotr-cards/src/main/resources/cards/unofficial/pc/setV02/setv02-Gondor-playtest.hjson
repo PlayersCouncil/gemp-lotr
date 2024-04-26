@@ -28,17 +28,48 @@
 		signet: Theoden
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: modifier
+				modifier: {
+					type: FPCultureSpot
+					requires: {
+						type: canSpot
+						count: 3
+						filter: valiant,companion
+					}
+					amount: -1
+				}
 			}
 			{
-				
+				type: activated
+				requires: {
+					type: canSpot
+					count: 1
+					filter: valiant,companion,inSkirmish
+				}
+				phase: skirmish
+				cost: {
+					type: exert
+					filter: self
+				}
+				effect: {
+					type: modifyStrength
+					filter: choose(valiant,companion,inSkirmish)
+					memorize: chosenCompanion
+					amount: {
+						type: requires
+						requires: {
+							type: memoryMatches
+							memory: chosenCompanion
+							filter: Exhausted
+						}
+						true: 3
+						false: 2
+					}
+				}
 			}
-		]*/
+		]
 		gametext: Valiant.<br>While you can spot 3 valiant companions, the number of free peoples cultures that can be counted is-1.<br>Skirmish: If a valiant companion is skirmishing a minion with a strength of 12 or higher, exert Aragorn to make that companion strength +2 (or +3 if that companion is exhausted).
 		lore: ""
 		promotext: ""
