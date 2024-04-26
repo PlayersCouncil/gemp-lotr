@@ -74,11 +74,124 @@ public class Card_V2_016_Tests
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var veowyn = scn.GetFreepsCard("veowyn");
+		var vgamling = scn.GetFreepsCard("vgamling");
+		var vrscout = scn.GetFreepsCard("vrscout");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCardToHand(card, veowyn, gandalf, vgamling, vrscout);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
 		assertEquals(4, scn.GetTwilight());
+
+		// Play companions of two additional (non-gondor, non-shire) cultures to get to 4 total to spot
+		scn.FreepsPlayCard(veowyn);
+		scn.FreepsPlayCard(gandalf);
+
+		assertEquals(4, scn.GetFreepsCultureCount());
+
+		scn.FreepsPlayCard(vgamling);
+
+		assertEquals(3, scn.GetFreepsCultureCount());
+
+		scn.FreepsPlayCard(vrscout);
+
+		assertEquals(4, scn.GetFreepsCultureCount());
+	}
+
+
+	@Test
+	public void ExertsToBoostValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		var veowyn = scn.GetFreepsCard("veowyn");
+		scn.FreepsMoveCardToHand(card, veowyn);
+
+		var twk = scn.GetShadowCard("twk");
+		scn.ShadowMoveCardToHand(twk);
+
+		scn.StartGame();
+
+		// Play Aragorn
+		scn.FreepsPlayCard(card);
+		assertEquals(4, scn.GetTwilight());
+
+		// Play companions of two additional (non-gondor, non-shire) cultures to get to 4 total to spot
+		scn.FreepsPlayCard(veowyn);
+
+		// Get the game state to where Grima is on the table and it's the shadow player's turn during the maneuver phase
+		scn.SkipToPhase(Phase.SHADOW);
+
+		scn.ShadowPlayCard(twk);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(veowyn, twk);
+		scn.FreepsResolveSkirmish(veowyn);
+
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals(0, scn.GetWoundsOn(card));
+		assertEquals(0, scn.GetWoundsOn(veowyn));
+		assertEquals(6, scn.GetStrength(veowyn));
+
+		scn.FreepsUseCardAction(card);
+		assertEquals(1, scn.GetWoundsOn(card));
+		assertEquals(0, scn.GetWoundsOn(veowyn));
+		// strength +2 because Eowyn isn't exhausted
+		assertEquals(8, scn.GetStrength(veowyn));
+
+		// Wound Eowyn twice and have the shadow player pass their skirmish action
+		scn.AddWoundsToChar(veowyn, 2);
+		scn.ShadowPassCurrentPhaseAction();
+
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals(1, scn.GetWoundsOn(card));
+		assertEquals(2, scn.GetWoundsOn(veowyn));
+		assertEquals(8, scn.GetStrength(veowyn));
+
+		scn.FreepsUseCardAction(card);
+		assertEquals(2, scn.GetWoundsOn(card));
+		assertEquals(2, scn.GetWoundsOn(veowyn));
+		// strength +3 because Eowyn isn't exhausted, now all she needs is Merry with a dagger to help her out
+		assertEquals(11, scn.GetStrength(veowyn));
+	}
+
+	@Test
+	public void CantExertToBoostNonValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCardToHand(card, gandalf);
+
+		var twk = scn.GetShadowCard("twk");
+		scn.ShadowMoveCardToHand(twk);
+
+		scn.StartGame();
+
+		// Play Aragorn
+		scn.FreepsPlayCard(card);
+		assertEquals(4, scn.GetTwilight());
+
+		scn.FreepsPlayCard(gandalf);
+
+		// Get the game state to where Grima is on the table and it's the shadow player's turn during the maneuver phase
+		scn.SkipToPhase(Phase.SHADOW);
+
+		scn.ShadowPlayCard(twk);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(gandalf, twk);
+		scn.FreepsResolveSkirmish(gandalf);
+
+		// Despite all evidence to the contrary, Gandalf isn't valiant so shouldn't be boostable
+		assertFalse(scn.FreepsActionAvailable(card));
 	}
 }
