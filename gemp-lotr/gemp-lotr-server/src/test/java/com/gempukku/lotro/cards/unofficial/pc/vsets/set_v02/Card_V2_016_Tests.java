@@ -77,13 +77,13 @@ public class Card_V2_016_Tests
 	// @Test
 	public void ReducesFPsCulturesSpottedWhenThreeValiantCompanionsArePresent() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl veowyn = scn.GetFreepsCard("veowyn");
-		PhysicalCardImpl vgamling = scn.GetFreepsCard("vgamling");
-		PhysicalCardImpl vrscout = scn.GetFreepsCard("vrscout");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
+		var card = scn.GetFreepsCard("card");
+		var veowyn = scn.GetFreepsCard("veowyn");
+		var vgamling = scn.GetFreepsCard("vgamling");
+		var vrscout = scn.GetFreepsCard("vrscout");
+		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.FreepsMoveCardToHand(card, veowyn, gandalf, vgamling, vrscout);
 
 		scn.StartGame();
@@ -96,28 +96,28 @@ public class Card_V2_016_Tests
 		scn.FreepsPlayCard(veowyn);
 		scn.FreepsPlayCard(gandalf);
 
-		// TODO assert that there are 4 cultures spotted (2 valiant companions)
+		assertEquals(4, scn.GetFreepsCultureCount());
 
 		scn.FreepsPlayCard(vgamling);
 
-		// TODO assert that there are 3 cultures spotted even though 4 are on the board (3 valiant companions)
+		assertEquals(3, scn.GetFreepsCultureCount());
 
 		scn.FreepsPlayCard(vrscout);
 
-		// TODO assert that there are 3 cultures spotted even though 4 are on the board (gt 3 valiant companions)
+		assertEquals(4, scn.GetFreepsCultureCount());
 	}
 
 
 	@Test
 	public void ExertsToBoostValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl veowyn = scn.GetFreepsCard("veowyn");
+		var card = scn.GetFreepsCard("card");
+		var veowyn = scn.GetFreepsCard("veowyn");
 		scn.FreepsMoveCardToHand(card, veowyn);
 
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
+		var twk = scn.GetShadowCard("twk");
 		scn.ShadowMoveCardToHand(twk);
 
 		scn.StartGame();
@@ -170,13 +170,13 @@ public class Card_V2_016_Tests
 	@Test
 	public void CantExertToBoostNonValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
+		var card = scn.GetFreepsCard("card");
+		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.FreepsMoveCardToHand(card, gandalf);
 
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
+		var twk = scn.GetShadowCard("twk");
 		scn.ShadowMoveCardToHand(twk);
 
 		scn.StartGame();

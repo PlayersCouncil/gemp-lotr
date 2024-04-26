@@ -311,6 +311,9 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public int GetBurdens() { return _game.getGameState().getBurdens(); }
 
+    public int GetFreepsCultureCount() { return GameUtils.getSpottableFPCulturesCount(_game, P1); }
+    public int GetShadowCultureCount() { return GameUtils.getSpottableShadowCulturesCount(_game, P1); }
+
     public boolean FreepsHasInitiative() { return PlayConditions.hasInitiative(_game, Side.FREE_PEOPLE); }
 
     public boolean ShadowHasInitiative() { return PlayConditions.hasInitiative(_game, Side.SHADOW); }
