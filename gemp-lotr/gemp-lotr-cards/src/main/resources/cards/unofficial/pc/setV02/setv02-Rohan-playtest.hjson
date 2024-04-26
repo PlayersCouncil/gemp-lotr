@@ -350,17 +350,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a valiant companion to make that companion defender +1. That companion is strength +1 for each minion skirmishing them until the regroup phase.
 		lore: "At his right hand was Aragorn, Elendil's heir, behind him rode the lords of the House of Eorl the Young."
 		promotext: ""
@@ -397,17 +400,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a valiant companion to have that companion replace a minion assigned to skirmish an unbound companion (and make them damage +1 if that unbound companion is Theoden). 
 		lore: "'Helm for Théoden King!'"
 		promotext: ""
@@ -488,17 +494,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Remove 2 tokens from X [rohan] conditions to make 3 valiant companions strength +X until the regroup phase.
 		lore: "Captains and champions fell or fled before them. Neither orc nor man withstood them."
 		promotext: ""

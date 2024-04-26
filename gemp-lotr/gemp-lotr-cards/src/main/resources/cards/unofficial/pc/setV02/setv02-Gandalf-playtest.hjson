@@ -161,21 +161,24 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keywords: Manuever
+		keywords: Maneuver
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Gandalf to make Theoden and each valiant companion strength +1 until the regroup phase (or strength +2 if every unbound companion is valiant).
 		lore: "'If this is bewitchment,' said Théoden, 'it seems to me more wholesome than your whisperings.'"
 		promotext: ""

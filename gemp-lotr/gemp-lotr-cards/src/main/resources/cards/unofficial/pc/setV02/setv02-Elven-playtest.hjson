@@ -27,9 +27,6 @@
 		vitality: 3
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
 			{
 				type: modifier
@@ -75,7 +72,6 @@
 					type: preventDiscard
 					filter: choose(culture(elven),rangedWeapon)
 				}
-				
 			}
 		]
 		gametext: Valiant. <br>While Haldir bears a ranged weapon, each valiant Elf is strength +1 and does not add to the fellowship archery total.<br>Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
@@ -114,17 +110,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 valiant elves to wound a minion (or wound a minion twice if each of those elves bears a ranged weapon).
 		lore: ""
 		promotext: ""
@@ -299,17 +298,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an [elven] companion to reinforce a [dwarven] token or spot a [dwarven] companion to reinforce an [elven] token. If you can spot both Legolas and Gimli you may reinforce both an [elven] and [dwarven] token an additional time.  
 		lore: ""
 		promotext: ""
@@ -346,17 +348,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert 2 valiant companions to take a valiant (elven) companion or (elven) possession into hand from your draw deck.
 		lore: ""
 		promotext: ""

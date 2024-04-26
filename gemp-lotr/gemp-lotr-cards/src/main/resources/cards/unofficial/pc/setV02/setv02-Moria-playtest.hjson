@@ -121,17 +121,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard X [Moria] minions to add X threats. The Free Peoples player may exert X companions to prevent this.
 		lore: "'There was none to see, or perhaps in after ages songs would still be sung of the Battle of the Peak.'"
 		promotext: ""

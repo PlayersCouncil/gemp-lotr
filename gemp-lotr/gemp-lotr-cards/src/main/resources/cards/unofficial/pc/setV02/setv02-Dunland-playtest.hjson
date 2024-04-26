@@ -163,17 +163,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Play a non-unique [Dunland] minion from your discard pile. If you have initiative, you may play a [dunland] possession on that minion from your discard pile.
 		lore: "They will not give way now for dusk or dawn..."
 		promotext: ""

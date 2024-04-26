@@ -484,17 +484,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Remove X tokens from a machine to assign an Uruk-hai costing X or less to an ally or unbound companion. 
 		lore: "'They have crept in the culvert again, while we talked, and they have lit the fire of Orthanc beneath our feet.'"
 		promotext: ""

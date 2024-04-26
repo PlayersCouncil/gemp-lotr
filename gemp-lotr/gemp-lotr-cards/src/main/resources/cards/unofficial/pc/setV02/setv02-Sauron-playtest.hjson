@@ -117,17 +117,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a Wraith to make a twilight minion strength +2. If that minion wins its skirmish you may exert it to add a burden.
 		lore: "Very soon it would nail him down, know just exactly where he was."
 		promotext: ""
@@ -259,17 +262,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Search.<br>Make a [Sauron] tracker strength +1 for each search card you can spot (limit +5).
 		lore: "'You'll wish there was more that you could tell to satisfy the Questioner, indeed you will: quite soon.'"
 		promotext: ""

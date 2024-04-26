@@ -75,17 +75,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Aragorn three times to make each valiant companion strength +2 until the regroup phase. <br>If Aragorn dies during this turn, make each valiant companion strength +1 for the rest of the turn. 
 		lore: ""
 		promotext: ""
