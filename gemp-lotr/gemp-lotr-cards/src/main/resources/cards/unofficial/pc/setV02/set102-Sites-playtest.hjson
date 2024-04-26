@@ -2,37 +2,30 @@
 
 	102_63: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_63.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_63.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_63
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U63
 			rarity: U
 			setNum: "V2"
 			cardNum: 63
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Eastemnet Hills
 		unique: false
 		twilight: 2
 		type: Site
-		site: 2T		block: Towers
+		site: 2T
+		block: Towers
 		direction: Left
-		/*requires: [
+		keywords: Mountain
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -45,10 +38,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -56,37 +47,30 @@
 
 	102_64: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_64.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_64.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_64
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U64
 			rarity: U
 			setNum: "V2"
 			cardNum: 64
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Theodred's Tomb
 		unique: false
 		twilight: 0
 		type: Site
-		site: 3T		block: Towers
+		site: 3T
+		block: Towers
 		direction: Left
-		/*requires: [
+		keywords: Sanctuary
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -99,10 +83,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -110,37 +92,30 @@
 
 	102_65: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_65.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_65.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_65
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U65
 			rarity: U
 			setNum: "V2"
 			cardNum: 65
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Westfold Plains
 		unique: false
 		twilight: 3
 		type: Site
-		site: 4T		block: Towers
+		site: 4T
+		block: Towers
 		direction: Left
-		/*requires: [
+		keywords: Plains
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -153,10 +128,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -164,37 +137,30 @@
 
 	102_66: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_66.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_66.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_66
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U66
 			rarity: U
 			setNum: "V2"
 			cardNum: 66
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Breached Wall
 		unique: false
 		twilight: 6
 		type: Site
-		site: 5T		block: Towers
+		site: 5T
+		block: Towers
 		direction: Left
-		/*requires: [
+		keywords: Battleground
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -207,10 +173,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -218,37 +182,30 @@
 
 	102_67: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_67.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_67.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_67
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U67
 			rarity: U
 			setNum: "V2"
 			cardNum: 67
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Isengard Gates
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6T		block: Towers
+		site: 6T
+		block: Towers
 		direction: Left
-		/*requires: [
+		keywords: Sanctuary
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -261,10 +218,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -272,37 +227,30 @@
 
 	102_68: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_68.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_68.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_68
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U68
 			rarity: U
 			setNum: "V2"
 			cardNum: 68
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Helm's Tower
 		unique: false
 		twilight: 6
 		type: Site
-		site: 7T		block: Towers
+		site: 7T
+		block: Towers
 		direction: Left
-		/*requires: [
+		keywords: Battleground
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -315,10 +263,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -326,37 +272,29 @@
 
 	102_69: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_69.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_69.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_69
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U69
 			rarity: U
 			setNum: "V2"
 			cardNum: 69
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Desolation of Saruman
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8T		block: Towers
+		site: 8T
+		block: Towers
 		direction: Left
-		/*requires: [
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -369,10 +307,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -380,37 +316,29 @@
 
 	102_70: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_70.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_70.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_70
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U70
 			rarity: U
 			setNum: "V2"
 			cardNum: 70
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Isengard Clefts
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9T		block: Towers
+		site: 9T
+		block: Towers
 		direction: Left
-		/*requires: [
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -423,10 +351,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}

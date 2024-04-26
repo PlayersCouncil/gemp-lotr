@@ -2,26 +2,17 @@
 
 	102_20: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_20.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_20.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_20
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2R20
 			rarity: R
 			setNum: "V2"
 			cardNum: 20
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Isengard Foreman
@@ -31,13 +22,12 @@
 		twilight: 3
 		type: Minion
 		race: Orc
-		#keyword: damage+1
 		strength: 7
 		vitality: 3
 		site: 4
-		/*requires: [
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -50,10 +40,8 @@
 		lore: "'He has taken up with foul folk, with the Orcs.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -61,26 +49,17 @@
 
 	102_21: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_21.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_21.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_21
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U21
 			rarity: U
 			setNum: "V2"
 			cardNum: 21
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Machinery of War
@@ -89,10 +68,10 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
-		/*requires: [
+		keywords: Support Area
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -105,10 +84,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -116,26 +93,17 @@
 
 	102_22: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_22.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_22.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_22
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U22
 			rarity: U
 			setNum: "V2"
 			cardNum: 22
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Fires of Industry
@@ -144,10 +112,10 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
-		/*requires: [
+		keywords: Support Area
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -160,10 +128,8 @@
 		lore: "'For bole and bough are burning now, the furnace roars...'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -171,26 +137,17 @@
 
 	102_23: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_23.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_23.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_23
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2C23
 			rarity: C
 			setNum: "V2"
 			cardNum: 23
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Isengard Grunt
@@ -200,12 +157,11 @@
 		twilight: 2
 		type: Minion
 		race: Orc
-		#keyword: damage+1
 		strength: 5
 		vitality: 3
-		/*requires: [
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -218,10 +174,8 @@
 		lore: "...Saruman was mustering a great force on his own account, in rivalry of Sauron and not in his service yet."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -229,26 +183,17 @@
 
 	102_24: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_24.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_24.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_24
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2R24
 			rarity: R
 			setNum: "V2"
 			cardNum: 24
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Wolf Pit
@@ -257,11 +202,10 @@
 		culture: Isengard
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
-		/*requires: [
+		keywords: Support Area
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -274,10 +218,8 @@
 		lore: "Horsemen were galloping on the grass of Rohan; wolves poured from Isengard."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -285,26 +227,17 @@
 
 	102_25: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_25.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_25.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_25
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U25
 			rarity: U
 			setNum: "V2"
 			cardNum: 25
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Strength of the Pack
@@ -313,10 +246,10 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
-		/*requires: [
+		keywords: Support Area
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -329,10 +262,8 @@
 		lore: "At a gap in the circle a great dark wolf-shape could be seen halted, gazing at them. A shuddering howl broke from him, as if he were a captain summoning his pack to the assault."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -340,26 +271,17 @@
 
 	102_26: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_26.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_26.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_26
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2C26
 			rarity: C
 			setNum: "V2"
 			cardNum: 26
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Hound of Isengard
@@ -368,14 +290,13 @@
 		culture: Isengard
 		twilight: 2
 		type: Possession
-		itemclass: Mount
-		#target: name(Gimli)
-		#keyword: support area
 		strength: 1
 		vitality: 1
-		/*requires: [
+		itemclass: Mount
+		#target: a Warg-rider
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -388,10 +309,8 @@
 		lore: "'He has taken Orcs into his service, and Wolf-riders, and evil Men...'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -399,26 +318,17 @@
 
 	102_27: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_27.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_27.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_27
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U27
 			rarity: U
 			setNum: "V2"
 			cardNum: 27
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Uruk Shield Wall
@@ -427,11 +337,13 @@
 		culture: Isengard
 		twilight: 1
 		type: Possession
-		#target: name(Gimli)
-		#keyword: support area
-		/*requires: [
-			
+		keywords: [
+			Machine
+			Support Area
 		]
+		/*requires: {
+			
+		}
 		effects: [
 			{
 				
@@ -444,10 +356,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -455,26 +365,17 @@
 
 	102_28: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_28.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_28.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_28
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2R28
 			rarity: R
 			setNum: "V2"
 			cardNum: 28
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Berserk Deathseeker
@@ -484,13 +385,13 @@
 		twilight: 5
 		type: Minion
 		race: Uruk-hai
-		#keyword: damage+1
 		strength: 10
 		vitality: 3
 		site: 5
-		/*requires: [
+		keywords: Damage+1
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -503,10 +404,8 @@
 		lore: "The foremost fell with Legolas' last arrow in his throat. but the rest sprang over him."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -514,26 +413,17 @@
 
 	102_29: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_29.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_29.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_29
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2C29
 			rarity: C
 			setNum: "V2"
 			cardNum: 29
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Berserk Fanatic
@@ -543,13 +433,13 @@
 		twilight: 3
 		type: Minion
 		race: Uruk-hai
-		#keyword: damage+1
 		strength: 8
 		vitality: 3
 		site: 5
-		/*requires: [
+		keywords: Damage+1
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -562,10 +452,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -573,26 +461,17 @@
 
 	102_30: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_30.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_30.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_30
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U30
 			rarity: U
 			setNum: "V2"
 			cardNum: 30
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Breaching Shot
@@ -601,10 +480,10 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keyword: Assignment
-		/*requires: [
+		keywords: Assignment
+		/*requires: {
 			
-		]
+		}
 		effects: {
 			type: event
 			cost: {
@@ -620,10 +499,8 @@
 		lore: "'They have crept in the culvert again, while we talked, and they have lit the fire of Orthanc beneath our feet.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -631,26 +508,17 @@
 
 	102_31: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_31.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_31.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_31
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U31
 			rarity: U
 			setNum: "V2"
 			cardNum: 31
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Uruk Occupier
@@ -660,13 +528,13 @@
 		twilight: 3
 		type: Minion
 		race: Uruk-hai
-		#keyword: damage+1
 		strength: 8
 		vitality: 3
 		site: 5
-		/*requires: [
+		keywords: Damage+1
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -679,10 +547,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -690,26 +556,17 @@
 
 	102_32: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_32.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_32.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_32
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2C32
 			rarity: C
 			setNum: "V2"
 			cardNum: 32
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Trail of Savagery
@@ -718,10 +575,10 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
-		/*requires: [
+		keywords: Support Area
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -734,10 +591,8 @@
 		lore: "'They are burning or despoiling all that is left in the vale.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -745,26 +600,17 @@
 
 	102_33: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_33.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_33.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_33
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2R33
 			rarity: R
 			setNum: "V2"
 			cardNum: 33
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Legion of Isengard
@@ -774,13 +620,13 @@
 		twilight: 8
 		type: Minion
 		race: Uruk-hai
-		#keyword: damage+1
 		strength: 15
 		vitality: 4
 		site: 5
-		/*requires: [
+		keywords: Damage+1
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -793,10 +639,8 @@
 		lore: "...blazoned upon every helm and shield the ghastly hand of Isengard was seen..."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -804,26 +648,17 @@
 
 	102_34: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_34.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_34.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_34
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U34
 			rarity: U
 			setNum: "V2"
 			cardNum: 34
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Saruman
@@ -834,13 +669,12 @@
 		twilight: 4
 		type: Minion
 		race: Wizard
-		#keyword: damage+1
 		strength: 8
 		vitality: 4
 		site: 4
-		/*requires: [
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -853,10 +687,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -864,26 +696,17 @@
 
 	102_35: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_35.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_35.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_35
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U35
 			rarity: U
 			setNum: "V2"
 			cardNum: 35
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Back on the Menu
@@ -892,10 +715,10 @@
 		culture: Isengard
 		twilight: 0
 		type: Condition
-		#keyword: support area
-		/*requires: [
+		keywords: Support Area
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -908,10 +731,8 @@
 		lore: "Five dead Orcs lay there. They had been hewn with many cruel strokes, and two had been beheaded."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -919,26 +740,17 @@
 
 	102_36: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_36.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_36.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_36
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2C36
 			rarity: C
 			setNum: "V2"
 			cardNum: 36
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Uruk Prowler
@@ -948,13 +760,16 @@
 		twilight: 2
 		type: Minion
 		race: Uruk-hai
-		#keyword: damage+1
 		strength: 7
 		vitality: 1
 		site: 5
-		/*requires: [
-			
+		keywords: [
+			Tracker
+			Fierce
 		]
+		/*requires: {
+			
+		}
 		effects: [
 			{
 				
@@ -967,10 +782,8 @@
 		lore: "'We came out of Isengard, and led you here, and we shall lead you back by the way we choose.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -978,26 +791,17 @@
 
 	102_37: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_37.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_37.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_37
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2C37
 			rarity: C
 			setNum: "V2"
 			cardNum: 37
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Uneasy Alliance
@@ -1006,10 +810,13 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		#keyword: support area
-		/*requires: [
-			
+		keywords: [
+			Search
+			Support Area
 		]
+		/*requires: {
+			
+		}
 		effects: [
 			{
 				
@@ -1022,10 +829,53 @@
 		lore: "...a quarrel seemed on the point of breaking out again between the Northerners and the Isengarders."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_72: {
+		cardInfo: {
+			imagePath: sets/V2/V2_72.jpg
+			javaClass: false
+			//parentId: 102_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R72
+			rarity: R
+			setNum: "V2"
+			cardNum: 72
+			style: Standard
+		}
+		title: Palantir of Orthanc
+		subtitle: Corrupted Relic
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Artifact
+		itemclass: Palantir
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Shadow: Discard two [isengard] cards from hand to play this card from your draw deck.<br>Each time the Fellowship moves you may draw a card for companion you can spot over 5.<br>Each time the fellowship moves, if you can spot more than (15), each [isengard] minion is strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
 			errata: {
 			}
 		}

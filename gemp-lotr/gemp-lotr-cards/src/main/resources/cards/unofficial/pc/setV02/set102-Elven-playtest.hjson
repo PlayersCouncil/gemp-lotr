@@ -2,26 +2,17 @@
 
 	102_5: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_5.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_05.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_5
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2R5
 			rarity: R
 			setNum: "V2"
 			cardNum: 5
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Haldir
@@ -32,13 +23,13 @@
 		twilight: 2
 		type: Companion
 		race: Elf
-		keyword: valiant
 		strength: 6
 		vitality: 3
 		resistance: 6
-		requires: [
+		keywords: Valiant
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				type: modifier
@@ -84,17 +75,15 @@
 					type: preventDiscard
 					filter: choose(culture(elven),rangedWeapon)
 				}
-
+				
 			}
 		]
 		gametext: Valiant. <br>While Haldir bears a ranged weapon, each valiant Elf is strength +1 and does not add to the fellowship archery total.<br>Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -102,26 +91,17 @@
 
 	102_6: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_6.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_06.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_6
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2C6
 			rarity: C
 			setNum: "V2"
 			cardNum: 6
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Leithio i Phillin!
@@ -130,10 +110,10 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: Archery
-		/*requires: [
+		keywords: Archery
+		/*requires: {
 			
-		]
+		}
 		effects: {
 			type: event
 			cost: {
@@ -145,14 +125,12 @@
 				}
 			]
 		}*/
-		gametext: Spot 3 valiant elves to wound a minion (or wound a minion twice if each of those elves bears a ranged weapon).
+		gametext: Spot 2 valiant elves to wound a minion (or wound a minion twice if each of those elves bears a ranged weapon).
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -160,26 +138,17 @@
 
 	102_7: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_7.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_07.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_7
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U7
 			rarity: U
 			setNum: "V2"
 			cardNum: 7
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Naith Armaments
@@ -188,14 +157,12 @@
 		culture: Elven
 		twilight: 2
 		type: Possession
-		itemclass: Hand/ranged weapon
-		#target: name(Gimli)
-		#keyword: support area
 		strength: 2
 		vitality: 1
-		/*requires: [
+		itemclass: Hand/ranged weapon
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -208,10 +175,8 @@
 		lore: "The great bow of Lórien sang..."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -219,26 +184,17 @@
 
 	102_8: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_8.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_08.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_8
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U8
 			rarity: U
 			setNum: "V2"
 			cardNum: 8
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Arwen
@@ -250,12 +206,11 @@
 		type: Ally
 		allyHome: fellowship,3
 		race: Elf
-		#keyword: damage+1
 		strength: 6
 		vitality: 3
-		/*requires: [
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -268,10 +223,8 @@
 		lore: "'Dark is the Shadow, and yet my heart rejoices; for you, Estel, shall be among the great whose valour will destroy it.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -279,26 +232,17 @@
 
 	102_9: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_9.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_09.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_9
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U9
 			rarity: U
 			setNum: "V2"
 			cardNum: 9
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Your Friends Are With You
@@ -307,10 +251,10 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		#keyword: support area
-		/*requires: [
+		keywords: Support Area
+		/*requires: {
 			
-		]
+		}
 		effects: [
 			{
 				
@@ -323,10 +267,8 @@
 		lore: "'Forth the Three Hunters!'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -334,26 +276,17 @@
 
 	102_10: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_10.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_10.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_10
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2C10
 			rarity: C
 			setNum: "V2"
 			cardNum: 10
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Deadly Contest
@@ -362,10 +295,10 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Maneuver
-		/*requires: [
+		keywords: Maneuver
+		/*requires: {
 			
-		]
+		}
 		effects: {
 			type: event
 			cost: {
@@ -381,10 +314,8 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -392,26 +323,17 @@
 
 	102_11: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: sets/102_11.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: sets/V2/V2_11.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 102_11
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: promos/placeholder
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
+			//parentId: 102_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: V2U11
 			rarity: U
 			setNum: "V2"
 			cardNum: 11
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: To Honor That Allegience
@@ -420,10 +342,10 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Fellowship
-		/*requires: [
+		keywords: Fellowship
+		/*requires: {
 			
-		]
+		}
 		effects: {
 			type: event
 			cost: {
@@ -439,10 +361,52 @@
 		lore: ""
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	102_71: {
+		cardInfo: {
+			imagePath: sets/V2/V2_71.jpg
+			javaClass: false
+			//parentId: 102_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R71
+			rarity: R
+			setNum: "V2"
+			cardNum: 71
+			style: Standard
+		}
+		title: Friendship of The Three Kindreds
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Condition
+		resistance: +2
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an [elven], [dwarven] or [gondor] ringbearer.<br>While you can spot an [elven], [dwarven] or [gondor] ringbearer, of a different culture to bearer, bearer is resistance +2.<br>At the end of each turn add a threat or discard this condition. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
 			errata: {
 			}
 		}
