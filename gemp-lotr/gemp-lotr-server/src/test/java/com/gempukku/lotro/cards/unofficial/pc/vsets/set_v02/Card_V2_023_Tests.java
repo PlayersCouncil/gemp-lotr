@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,45 +27,41 @@ public class Card_V2_023_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void IsengardGruntStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V2
-		* Title: Isengard Grunt
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Isengard
-		* Twilight Cost: 2
-		* Type: minion
-		* Subtype: Orc
-		* Strength: 5
-		* Vitality: 3
-		* Game Text: Skirmish: Exert this minion to prevent an [isengard] Orc from being overwhelmed unless its strength is tripled.
+		 * Set: V2
+		 * Name: Isengard Grunt
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 2
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 5
+		 * Vitality: 3
+		 * Site Number: *
+		 * Game Text: Skirmish: Exert this minion to prevent an [isengard] Orc from being overwhelmed unless its strength is tripled.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Isengard Grunt", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.ORC));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void IsengardGruntTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

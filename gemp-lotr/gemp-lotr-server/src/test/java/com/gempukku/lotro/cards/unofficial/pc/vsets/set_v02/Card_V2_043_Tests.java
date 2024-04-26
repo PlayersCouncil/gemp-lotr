@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,47 +27,44 @@ public class Card_V2_043_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void TheodenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V2
-		* Title: Theoden, Last of his House
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Rohan
-		* Twilight Cost: 3
-		* Type: companion
-		* Subtype: Man
-		* Strength: 6
-		* Vitality: 3
-		* Signet: Theoden
-		* Game Text: Valiant.
+		 * Set: V2
+		 * Name: Theoden, Last of his House
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Rohan
+		 * Twilight Cost: 3
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 6
+		 * Vitality: 3
+		 * Signet: Theoden
+		 * Game Text: Valiant.
 		* 	Theoden is strength +1 for each valiant companion assigned to a skirmish.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Theoden", card.getBlueprint().getTitle());
+		assertEquals("Last of his House", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MAN));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.VALIANT));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void TheodenTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

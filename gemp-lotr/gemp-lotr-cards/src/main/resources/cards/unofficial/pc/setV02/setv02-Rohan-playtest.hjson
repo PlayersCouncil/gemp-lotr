@@ -302,7 +302,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [rohan] companion
+		target: culture(rohan),companion
 		/*requires: {
 			
 		}
@@ -447,6 +447,7 @@
 		twilight: 1
 		type: Condition
 		strength: 2
+		target: culture(rohan),companion
 		/*requires: {
 			
 		}

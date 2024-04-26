@@ -69,6 +69,7 @@
 		twilight: 1
 		type: Condition
 		strength: 1
+		target: Hobbit,companion
 		/*requires: {
 			
 		}

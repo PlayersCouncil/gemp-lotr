@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,48 +27,45 @@ public class Card_V2_058_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void OrcSearcherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V2
-		* Title: Orc Searcher
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Sauron
-		* Twilight Cost: 2
-		* Type: minion
-		* Subtype: Orc
-		* Strength: 7
-		* Vitality: 2
-		* Site Number: 6
-		* Game Text: Tracker.
+		 * Set: V2
+		 * Name: Orc Searcher
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 2
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 7
+		 * Vitality: 2
+		 * Site Number: 6
+		 * Game Text: Tracker.
 		* 	The site number of each [Sauron] orc is -1.
 		* 	Skirmish: Discard this minion to cancel a skirmish involving an [isengard] tracker. 
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Orc Searcher", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.ORC));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void OrcSearcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

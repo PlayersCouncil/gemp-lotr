@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,36 @@ public class Card_V2_030_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void BreachingShotStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V2
-		* Title: Breaching Shot
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Isengard
-		* Twilight Cost: 2
-		* Type: event
-		* Subtype: Assignment
-		* Game Text: Remove X tokens from a machine to assign an Uruk-hai costing X or less to an ally or unbound companion. 
+		 * Set: V2
+		 * Name: Breaching Shot
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Assignment
+		 * Game Text: Remove X tokens from a machine to assign an Uruk-hai costing X or less to an ally or unbound companion. 
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Breaching Shot", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.ASSIGNMENT, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.ASSIGNMENT));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.ASSIGNMENT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void BreachingShotTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

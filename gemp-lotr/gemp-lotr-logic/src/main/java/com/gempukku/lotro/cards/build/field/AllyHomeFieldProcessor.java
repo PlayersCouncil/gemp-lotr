@@ -13,7 +13,7 @@ public class AllyHomeFieldProcessor implements FieldProcessor {
     public void processField(String key, Object value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         final String allyHome = FieldUtils.getString(value, "allyHome");
         final String[] allyHomeSplit = allyHome.split(",", 4);
-        SitesBlock sitesBlock = Enum.valueOf(SitesBlock.class, allyHomeSplit[0].toUpperCase().replace(' ', '_'));
+        SitesBlock sitesBlock = SitesBlock.findBlock(allyHomeSplit[0]);
 
         String[] sites = Arrays.copyOfRange(allyHomeSplit, 1, allyHomeSplit.length);
         int[] numbers = Arrays.stream(sites).mapToInt(Integer::parseInt).toArray();

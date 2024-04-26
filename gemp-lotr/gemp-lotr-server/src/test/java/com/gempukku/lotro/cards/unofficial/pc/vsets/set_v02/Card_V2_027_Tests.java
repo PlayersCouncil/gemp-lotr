@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,39 @@ public class Card_V2_027_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void UrukShieldWallStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V2
-		* Title: Uruk Shield Wall
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Isengard
-		* Twilight Cost: 1
-		* Type: possession
-		* Subtype: Support Area
-		* Game Text: Machine.
+		 * Set: V2
+		 * Name: Uruk Shield Wall
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Support area
+		 * Game Text: Machine.
 		* 	While you can spot X [isengard] tokens here, each time an [isengard] Uruk-hai costing X is about to take a wound, exert it instead.
 		* 	Maneuver: Exert an Uruk-hai to add an [isengard] token here.  
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Uruk Shield Wall", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		//assertEquals(Race.SUPPORT AREA, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.MACHINE));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void UrukShieldWallTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

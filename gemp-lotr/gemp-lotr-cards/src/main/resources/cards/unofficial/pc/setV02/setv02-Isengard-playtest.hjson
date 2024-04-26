@@ -293,7 +293,7 @@
 		strength: 1
 		vitality: 1
 		itemclass: Mount
-		#target: a Warg-rider
+		target: Warg-rider
 		/*requires: {
 			
 		}
@@ -862,6 +862,7 @@
 		twilight: 0
 		type: Artifact
 		itemclass: Palantir
+		target: Support Area
 		/*requires: {
 			
 		}

@@ -19,7 +19,7 @@
 		unique: false
 		twilight: 2
 		type: Site
-		site: 2T
+		site: 2
 		block: Towers
 		direction: Left
 		keywords: Mountain
@@ -64,7 +64,7 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 3T
+		site: 3
 		block: Towers
 		direction: Left
 		keywords: Sanctuary
@@ -109,7 +109,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 4T
+		site: 4
 		block: Towers
 		direction: Left
 		keywords: Plains
@@ -154,7 +154,7 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 5T
+		site: 5
 		block: Towers
 		direction: Left
 		keywords: Battleground
@@ -199,7 +199,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6T
+		site: 6
 		block: Towers
 		direction: Left
 		keywords: Sanctuary
@@ -244,7 +244,7 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 7T
+		site: 7
 		block: Towers
 		direction: Left
 		keywords: Battleground
@@ -289,7 +289,7 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8T
+		site: 8
 		block: Towers
 		direction: Left
 		/*requires: {
@@ -333,7 +333,7 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9T
+		site: 9
 		block: Towers
 		direction: Left
 		/*requires: {

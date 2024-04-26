@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,43 +27,36 @@ public class Card_V2_048_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void AndtheRedDawnStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V2
-		* Title: And the Red Dawn
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Rohan
-		* Twilight Cost: 2
-		* Type: condition
-		* Subtype: Support Area
-		* Game Text: Maneuver: Spot 3 valiant companions to discard your hand. For every Shadow card discarded, exert a minion. For every Free Peoples card discarded, heal a valiant or [rohan] companion. You may not make any more Maneuver actions.
+		 * Set: V2
+		 * Name: And the Red Dawn
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Rohan
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Maneuver: Spot 3 valiant companions to discard your hand. For every Shadow card discarded, exert a minion. For every Free Peoples card discarded, heal a valiant or [rohan] companion. You may not make any more Maneuver actions.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("And the Red Dawn", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		//assertEquals(Race.SUPPORT AREA, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.SUPPORT_AREA));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void AndtheRedDawnTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

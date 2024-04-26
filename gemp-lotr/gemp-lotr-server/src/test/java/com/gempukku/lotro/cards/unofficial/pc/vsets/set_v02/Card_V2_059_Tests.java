@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,44 +27,38 @@ public class Card_V2_059_Tests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void NoOnesGoingToSaveYouNowStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V2
-		* Title: No One's Going To Save You Now
-		* Unique: False
-		* Side: SHADOW
-		* Culture: Sauron
-		* Twilight Cost: 1
-		* Type: event
-		* Subtype: Skirmish
-		* Game Text: Search.
+		 * Set: V2
+		 * Name: No One's Going To Save You Now
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: Search.
 		* 	Make a [Sauron] tracker strength +1 for each search card you can spot (limit +5).
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
+		assertEquals("No One's Going To Save You Now", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race.SKIRMISH, card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.SKIRMISH));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SEARCH));
+		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void NoOnesGoingToSaveYouNowTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
