@@ -1059,7 +1059,7 @@
 				phase: skirmish
 				effect: [
 					{
-						type: cantBeOverwhelmedMultiplier
+						type: AlterOverwhelmMultiplier
 						filter: choose(unbound,hobbit)
 					}
 					{

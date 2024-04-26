@@ -106,7 +106,7 @@
 						filter: choose(minion)
 					}
 					{
-						type: doesNotAddToArcheryTotal
+						type: DisableArcheryTotalContribution
 						filter: choose(name(Aragorn))
 					}
 				]

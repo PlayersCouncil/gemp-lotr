@@ -10,12 +10,12 @@ import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.ActionStack;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.*;
 
 public class DefaultActionsEnvironment implements ActionsEnvironment {
-    private static final Logger LOG = Logger.getLogger(DefaultActionsEnvironment.class);
+    private static final Logger LOG = LogManager.getLogger(DefaultActionsEnvironment.class);
     private final LotroGame _lotroGame;
     private final ActionStack _actionStack;
     private final List<ActionProxy> _actionProxies = new LinkedList<>();

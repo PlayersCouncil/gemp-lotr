@@ -1,88 +1,87 @@
 {
-	75_8: {
-		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: errata/LOTR-EN05E008.1.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
-			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 5_8
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
-			version: 1
-			collInfo: 5U8
-			rarity: U
-			setNum: "5"
-			cardNum: 8
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
-		}
-		title: Horn of Helm
-		unique: true
-		culture: dwarven
-		twilight: 2
-		type: possession
-		keyword: support area
-		effects: [
-			{
-				type: modifier
-				modifier: {
-					type: FPCultureSpot
-					requires: [
-						{
-							type: CanSpot
-							filter: your,Man
-						}
-						{
-							type: CanSpot
-							filter: your,Elf
-						}
-						{
-							type: CanSpot
-							filter: your,Dwarf
-						}
-					]
-					amount: -1
-				}
-			}
-			{
-				type: activated
-				phase: maneuver
-				cost: {
-					type: exert
-					filter: choose(Dwarf,companion)
-				}
-				effect: {
-					type: addModifier
-					modifier: {
-						type: RemoveKeyword
-						requires: {
-							type: location
-							filter: battleground
-						}
-						filter: minion
-						keyword: damage
-					}
-				}
-			}
-		]
+	# 75_8: {
+	# 	cardInfo: {
+	# 	# 		imagePath: errata/LOTR-EN05E008.1.jpg
+	# 		//If this is true, then all gameplay-related info outside this cardInfo definition
+	# 		// will be ignored and the java class loaded instead.
+	# 		javaClass: false
+	# 		//This instructs the blueprint generator to insert this card as an alt of the listed
+	# 		// parent blueprint. Can of course be ommitted if not an errata or promo.
+	# 		parent: 5_8
+	# 		//This is the tree path to use within the alts structure on the parent.
+	# 		// Can of course be ommitted if parent is null. 
+	# 		parentPath: errata/pc
+	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
+	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+	# 		//Top-level cards should always be version 0.
+	# 		version: 1
+	# 		collInfo: 5U8
+	# 		rarity: U
+	# 		setNum: "5"
+	# 		cardNum: 8
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Horn of Helm
+	# 	unique: true
+	# 	culture: dwarven
+	# 	twilight: 2
+	# 	type: possession
+	# 	keyword: support area
+	# 	effects: [
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: FPCultureSpot
+	# 				requires: [
+	# 					{
+	# 						type: CanSpot
+	# 						filter: your,Man
+	# 					}
+	# 					{
+	# 						type: CanSpot
+	# 						filter: your,Elf
+	# 					}
+	# 					{
+	# 						type: CanSpot
+	# 						filter: your,Dwarf
+	# 					}
+	# 				]
+	# 				amount: -1
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: maneuver
+	# 			cost: {
+	# 				type: exert
+	# 				filter: choose(Dwarf,companion)
+	# 			}
+	# 			effect: {
+	# 				type: addModifier
+	# 				modifier: {
+	# 					type: RemoveKeyword
+	# 					requires: {
+	# 						type: location
+	# 						filter: battleground
+	# 					}
+	# 					filter: minion
+	# 					keyword: damage
+	# 				}
+	# 			}
+	# 		}
+	# 	]
 
-		gametext: While you can spot your Man, Elf, and Dwarf, the number of Free Peoples cultures that can be spotted is -1.\<b>Maneuver:</b> Exert a Dwarf companion to make each minion at a battleground lose all damage bonuses until the regroup phase.
-		lore: "...the sound of the great horn of Helm rang out."
-		promotext: ""
-		alts: {
-			//These are just CardInfo objects
-			promos: {
-			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
-			errata: {
-			}
-		}
-	}
+	# 	gametext: While you can spot your Man, Elf, and Dwarf, the number of Free Peoples cultures that can be spotted is -1.\<b>Maneuver:</b> Exert a Dwarf companion to make each minion at a battleground lose all damage bonuses until the regroup phase.
+	# 	lore: "...the sound of the great horn of Helm rang out."
+	# 	promotext: ""
+	# 	alts: {
+	# 		//These are just CardInfo objects
+	# 		promos: {
+	# 		}
+	# 		//These are full card definitions, with redundant info that is the same as the original card ommitted
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 }

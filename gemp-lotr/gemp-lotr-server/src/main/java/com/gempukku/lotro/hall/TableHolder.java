@@ -217,10 +217,9 @@ public class TableHolder {
         while (iterator.hasNext()) {
             final Map.Entry<String, GameTable> runningTable = iterator.next();
             LotroGameMediator lotroGameMediator = runningTable.getValue().getLotroGameMediator();
-            if (lotroGameMediator.isDestroyed()) {
+            if (lotroGameMediator == null || lotroGameMediator.isDestroyed()) {
                 iterator.remove();
                 changed = true;
-                ;
             }
         }
         return changed;

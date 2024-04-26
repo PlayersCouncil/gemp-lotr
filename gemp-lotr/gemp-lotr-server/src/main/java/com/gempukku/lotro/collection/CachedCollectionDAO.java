@@ -5,7 +5,7 @@ import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.CollectionDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.CardCollection;
-import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.collections4.map.LRUMap;
 
 import java.io.IOException;
 import java.sql.SQLException;

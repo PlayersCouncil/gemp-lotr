@@ -18,8 +18,8 @@ import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -38,7 +38,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
     private final SortAndFilterCards _sortAndFilterCards;
     private final ImportCards _importCards;
 
-    private static final Logger _log = Logger.getLogger(CollectionRequestHandler.class);
+    private static final Logger _log = LogManager.getLogger(CollectionRequestHandler.class);
 
     public CollectionRequestHandler(Map<Type, Object> context) {
         super(context);
@@ -279,6 +279,8 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
             group = "ring";
         else if (blueprint.getCardType() == CardType.SITE)
             group = "site";
+        else if (blueprint.getCardType() == CardType.MAP)
+            group = "map";
         else if (blueprint.hasKeyword(Keyword.CAN_START_WITH_RING))
             group = "ringBearer";
         else if (blueprint.getSide() == Side.FREE_PEOPLE)

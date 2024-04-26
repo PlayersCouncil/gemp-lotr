@@ -485,7 +485,7 @@
 						until: endOfTurn
 					}
 					{
-						type: allyCanParticipateInArcheryFireAndSkirmishes
+						type: EnableParticipationInArcheryFireAndSkirmishes
 						filter: self
 						until: endOfTurn
 					}

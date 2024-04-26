@@ -44,6 +44,7 @@ public class CardResolver {
                     @Override
                     protected void cardsChosen(LotroGame game, Collection<PhysicalCard> stackedCards) {
                         actionContext.setCardMemory(memory, stackedCards);
+                        game.getGameState().sendMessage(GameUtils.SubstituteText("{you} chooses {" + memory + "}.", actionContext));
                     }
 
                     @Override
@@ -86,6 +87,7 @@ public class CardResolver {
                     @Override
                     protected void cardsChosen(LotroGame game, Collection<PhysicalCard> stackedCards) {
                         actionContext.setCardMemory(memory, stackedCards);
+                        game.getGameState().sendMessage(GameUtils.SubstituteText("{you} chooses {" + memory + "}.", actionContext));
                     }
 
                     @Override
@@ -220,6 +222,7 @@ public class CardResolver {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
                         actionContext.setCardMemory(memory, cards);
+                        game.getGameState().sendMessage(GameUtils.SubstituteText("{you} chooses {" + memory + "}.", actionContext));
                     }
 
                     @Override
@@ -350,6 +353,7 @@ public class CardResolver {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
                         actionContext.setCardMemory(memory, cards);
+                        game.getGameState().sendMessage(GameUtils.SubstituteText("{you} chooses {" + memory + "}.", actionContext));
                     }
                 };
             };

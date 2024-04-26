@@ -88,12 +88,12 @@ public class LotroFormatLibrary {
             for (var def : defs) {
                 if(def == null)
                     continue;
-                var sealed = new SealedLeagueDefinition(def.Name, def.ID, _allFormats.get(def.Format), def.SeriesProduct);
+                var sealed = new SealedLeagueDefinition(def.name, def.id, _allFormats.get(def.format), def.seriesProduct);
 
-                if(_sealedTemplates.containsKey(def.ID)) {
-                    System.out.println("Overwriting existing sealed definition '" + def.ID + "'!");
+                if(_sealedTemplates.containsKey(def.id)) {
+                    System.out.println("Overwriting existing sealed definition '" + def.id + "'!");
                 }
-                _sealedTemplates.put(def.ID, sealed);
+                _sealedTemplates.put(def.id, sealed);
             }
 
         } catch (IOException e) {

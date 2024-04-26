@@ -1,20 +1,10 @@
 {
 	51_240: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/LOTR-EN01E240.1.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 1_240
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1
 			collInfo: 1R240
 			rarity: R
@@ -63,10 +53,8 @@
 		lore: Far more Orcs has Sauron bred in the pits under Barad-dûr than Saruman could ever imagine.
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -74,20 +62,10 @@
 	
 	51_245: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/LOTR-EN01E245.1.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 1_245
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1
 			collInfo: 1R245
 			rarity: R
@@ -139,10 +117,8 @@
 		lore: "'Go back, Sam. You can't swim. I'm going to Mordor alone.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -150,20 +126,10 @@
 	
 	51_248: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/51_248.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 1_248
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1?
 			collInfo: 1C248
 			rarity: C
@@ -196,10 +162,8 @@
 		lore: "'....the Dark Lord is not without allies. The Easterlings and Haradrim now pay tribute to Mordor.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -207,20 +171,10 @@
 	
 	51_252: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/LOTR-EN01E252.1.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 1_252
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1
 			collInfo: 1R252
 			rarity: R
@@ -275,10 +229,8 @@
 		lore: "Once more the desire to slip on the Ring came over Frodo; but this time it was stronger than before."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -286,20 +238,10 @@
 	
 	51_254: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/51_254.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 1_254
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1?
 			collInfo: 1R254
 			rarity: R
@@ -341,10 +283,8 @@
 		lore: The armies of Elendil and Gil-galad inflamed Sauron's anger and hatred.
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -352,20 +292,10 @@
 	
 	51_265: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/LOTR-EN01E265.1.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 1_265
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1
 			collInfo: 1R265
 			rarity: R
@@ -464,10 +394,8 @@
 		lore: For sport, Orcs hew cruelly at the bodies of those they slay.
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -475,20 +403,10 @@
 	
 	51_268: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/LOTR-EN01E268.1.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 1_268
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1
 			collInfo: 1C268
 			rarity: C
@@ -531,10 +449,8 @@
 		lore: Cruel questioners of Mordor tore the secret from poor Gollum, that Sauron's most prized possession once again was found.
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -542,20 +458,10 @@
 	
 	51_280: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/LOTR-EN01E280.1.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 1_280
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1
 			collInfo: 1U280
 			rarity: U
@@ -608,10 +514,8 @@
 		lore: Sauron shows favour to those in his dungeons with the ambition to squeeze the information he needs from those caught spying out his borders.
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -619,20 +523,10 @@
 
 	51_282: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/51_282.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 1_282
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1?
 			collInfo: 1R282
 			rarity: R
@@ -673,10 +567,8 @@
 		lore: "'It is because of Men, the Ring survives.... I was there the day the strength of Men failed.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}

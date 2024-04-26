@@ -38,17 +38,103 @@
 			}
 		}
 	}
+	# 101_14: {
+	# 	title: Gandalf
+	# 	subtitle: Olorin
+	# 	unique: true
+	# 	culture: gandalf
+	# 	twilight: 4
+	# 	type: companion
+	# 	race: wizard
+	# 	strength: 6
+	# 	vitality: 4
+	# 	signet: gandalf
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: startOfPhase
+	# 				phase: fellowship
+	# 			}
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: culture(elven),ally
+	# 				count: 2
+	# 			}
+	# 			cost: {
+	# 				type: exert
+	# 				filter: choose(name(Gandalf))
+	# 			}
+	# 			effect: {
+	# 				type: shuffleCardsFromDiscardIntoDrawDeck
+	# 				filter: choose(or(culture(gandalf),culture(elven)))
+	# 			}
+	# 		}
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: modifyStrength
+	# 				requires: {
+	# 					type: canSpot
+	# 					filter: culture(elven),ally
+	# 					count: 3
+	# 				}
+	# 				filter: name(Gandalf)
+	# 				amount: 2
+	# 			}
+	# 		}
+			
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: modifyStrength
+	# 				requires: [
+	# 					{
+	# 						type: canSpot
+	# 						filter: name(Elrond)
+	# 					}
+	# 					{
+	# 						type: canSpot
+	# 						filter: name(Galadriel)
+	# 					}
+	# 					{
+	# 						type: canSpot
+	# 						filter: name(Celeborn)
+	# 					}
+	# 				]
+	# 				filter: name(Gandalf)
+	# 				amount: 2
+	# 			}
+	# 		}
+	# 	]
+	# }
 	101_14: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S014.1_card.jpg
+			javaClass: false
+			parent: 101_14 
+			parentPath: errata/pc
+			version: 1
+			collInfo: V1R14
+			rarity: R
+			setNum: "V1"
+			cardNum: 14
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
 		title: Gandalf
 		subtitle: Olorin
 		unique: true
-		culture: gandalf
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 4
-		type: companion
-		race: wizard
-		strength: 6
+		type: Companion
+		race: Wizard
+		strength: 7
 		vitality: 4
-		signet: gandalf
+		signet: Gandalf
 		resistance: 6
 		effects: [
 			{
@@ -61,55 +147,40 @@
 				requires: {
 					type: canSpot
 					filter: culture(elven),ally
-					count: 2
+					count: 3
 				}
 				cost: {
 					type: exert
-					filter: choose(name(Gandalf))
+					filter: self
 				}
 				effect: {
-					type: shuffleCardsFromDiscardIntoDrawDeck
-					filter: choose(or(culture(gandalf),culture(elven)))
+					type: PutCardsFromDiscardIntoHand
+					filter: choose(event,or(culture(gandalf),culture(elven)))
 				}
-			}
+			}			
 			{
 				type: modifier
 				modifier: {
 					type: modifyStrength
-					requires: {
-						type: canSpot
-						filter: culture(elven),ally
-						count: 3
+					filter: self
+					amount: {
+						type: ForEachYouCanSpot
+						filter: or(name(Elrond),name(Galadriel),name(Celeborn),name(Saruman))
 					}
-					filter: name(Gandalf)
-					amount: 2
-				}
-			}
-			
-			{
-				type: modifier
-				modifier: {
-					type: modifyStrength
-					requires: [
-						{
-							type: canSpot
-							filter: name(Elrond)
-						}
-						{
-							type: canSpot
-							filter: name(Galadriel)
-						}
-						{
-							type: canSpot
-							filter: name(Celeborn)
-						}
-					]
-					filter: name(Gandalf)
-					amount: 2
 				}
 			}
 		]
+		gametext: At the start of your fellowship phase, you may spot 3 [elven] allies and exert Gandalf to take a [Gandalf] or [elven] event from your discard pile into your hand.<br>Gandalf is strength +1 for each of these characters you can spot: Celeborn, Elrond, Galadriel, Saruman.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+	
 	101_15: {
 		title: Gwaihir
 		subtitle: Lord of Eagles

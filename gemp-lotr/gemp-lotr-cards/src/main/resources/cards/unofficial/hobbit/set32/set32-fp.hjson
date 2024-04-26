@@ -37,7 +37,7 @@
 					filter: name(Thorin)
 				}
 				effect: {
-					type: allyCanParticipateInSkirmishes
+					type: EnableParticipationInSkirmishes
 					filter: all(culture(dwarven),ally)
 				}
 			}
@@ -254,7 +254,7 @@
 							filter: choose(culture(dwarven),ally)
 						}
 						{
-							type: allyCanParticipateInSkirmishes
+							type: EnableParticipationInSkirmishes
 							filter: choose(culture(dwarven),ally)
 							until: start(regroup)
 						}
@@ -560,7 +560,7 @@
 					filter: self
 				}
 				effect: {
-					type: allyCanParticipateInArcheryFireAndSkirmishes
+					type: EnableParticipationInArcheryFireAndSkirmishes
 					filter: choose(name(Bard))
 					until: start(regroup)
 				}
@@ -634,7 +634,7 @@
 				filter: self
 			}
 			effect: {
-				type: allyCanParticipateInArcheryFireAndSkirmishes
+				type: EnableParticipationInArcheryFireAndSkirmishes
 				filter: self
 				until: start(regroup)
 			}
@@ -776,7 +776,7 @@
           until: start(regroup)
         }
         {
-          type: allyCanParticipateInArcheryFireAndSkirmishes
+          type: EnableParticipationInArcheryFireAndSkirmishes
           filter: memory(exertedAlly)
           until: start(regroup)
         }

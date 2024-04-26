@@ -5,19 +5,18 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_08_051_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
 					put("card", "58_51");
 					// put other cards in here as needed for the test case
@@ -28,52 +27,52 @@ public class Card_08_051_ErrataTests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void CastamirofUmbarStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 8
-		* Title: *Castamir of Umbar
-		* Side: Free Peoples
-		* Culture: Raider
-		* Twilight Cost: 7
-		* Type: minion
-		* Subtype: Man
-		* Strength: 14
-		* Vitality: 4
-		* Site Number: 4
-		* Game Text: <b>Corsair.</b> Enduring. 
-		* 	Shadow: Exert Castamir of Umbar and play a corsair to add 2 [raider] tokens to a card that already has a [raider] token on it.
+		 * Set: 8
+		 * Name: Castamir of Umbar
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Raider
+		 * Twilight Cost: 7
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 14
+		 * Vitality: 4
+		 * Site Number: 4
+		 * Game Text: <b>Corsair.</b> Enduring.
+		* 	While in region 2 or 3, this minion is <b>fierce</b>.
+		* 	Shadow: Exert Castamir of Umbar and play a corsair to reinforce a [raider] card twice.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Castamir of Umbar", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.CORSAIR));
+		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
 		assertEquals(7, card.getBlueprint().getTwilightCost());
 		assertEquals(14, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		assertEquals(4, card.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void CastamirofUmbarTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("card");
 		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();

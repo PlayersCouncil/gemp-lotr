@@ -1,8 +1,7 @@
 package com.gempukku.lotro.cards.official.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -72,6 +71,10 @@ public class Card_01_040_Tests
         PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 
         assertTrue(elrond.getBlueprint().isUnique());
+        assertEquals(Side.FREE_PEOPLE, elrond.getBlueprint().getSide());
+        assertEquals(Culture.ELVEN, elrond.getBlueprint().getCulture());
+        assertEquals(CardType.ALLY, elrond.getBlueprint().getCardType());
+        assertEquals(Race.ELF, elrond.getBlueprint().getRace());
         assertEquals(4, elrond.getBlueprint().getTwilightCost());
         assertEquals(8, elrond.getBlueprint().getStrength());
         assertEquals(4, elrond.getBlueprint().getVitality());

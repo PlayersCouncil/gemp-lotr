@@ -35,7 +35,7 @@ public class ChooseAndRemoveTokens implements EffectAppenderProducer {
         final Culture culture = FieldUtils.getEnum(Culture.class, effectObject.get("culture"), "culture");
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "self");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
-        final String memorizeCard = FieldUtils.getString(effectObject.get("memorizeCard"), "memorizeCard");
+        final String memorizeCard = FieldUtils.getString(effectObject.get("memorizeCard"), "memorizeCard", "_temp2");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("limit"), 0, environment);
 
         final Token token = (culture != null) ? Token.findTokenForCulture(culture) : null;

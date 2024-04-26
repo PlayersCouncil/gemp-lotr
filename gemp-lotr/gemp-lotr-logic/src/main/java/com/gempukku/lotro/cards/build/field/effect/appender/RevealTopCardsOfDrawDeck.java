@@ -23,6 +23,9 @@ public class RevealTopCardsOfDrawDeck implements EffectAppenderProducer {
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
 
+        if (memorize == null)
+            throw new InvalidCardDefinitionException("You need to define what memory to use to store revealed cards");
+
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck, environment);
 
         return new DelayedAppender() {

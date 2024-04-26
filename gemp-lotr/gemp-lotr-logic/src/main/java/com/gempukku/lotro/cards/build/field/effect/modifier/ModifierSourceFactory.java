@@ -45,6 +45,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("canttakemorewoundsthan", new CantTakeMoreWoundsThan());
         modifierProducers.put("canttakewounds", new CantTakeWounds());
         modifierProducers.put("cantusespecialabilities", new CantUseSpecialAbilities());
+        modifierProducers.put("disablegametext", new DisableGameText());
         modifierProducers.put("extracosttoplay", new ExtraCostToPlay());
         modifierProducers.put("fpculturespot", new FPCultureSpot());
         modifierProducers.put("fpusesresinsteadofstr", new FPUsesResInsteadOfStr());

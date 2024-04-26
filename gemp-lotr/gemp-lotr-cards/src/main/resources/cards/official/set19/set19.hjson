@@ -270,7 +270,7 @@
 					filter: choose(minion)
 				}
 				{
-					type: doesNotAddToArcheryTotal
+					type: DisableArcheryTotalContribution
 					filter: self
 				}
 			]
@@ -761,7 +761,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: {
 						type: location
 						filter: not(marsh)
@@ -807,7 +807,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: {
 						type: location
 						filter: not(marsh)
@@ -846,7 +846,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: {
 						type: canSpot
 						filter: minion,not(self),not(tentacle)

@@ -30,6 +30,15 @@ public class FilterCardsInMemory implements EffectAppenderProducer {
         final String memorizeMatching = FieldUtils.getString(effectObject.get("memorizeMatching"), "memorizeMatching");
         final String memorizeNotMatching = FieldUtils.getString(effectObject.get("memorizeNotMatching"), "memorizeNotMatching");
 
+        if (filter == null)
+            throw new InvalidCardDefinitionException("Filter is required for a FilterCardsInMemory effect.");
+
+        if (memory == null)
+            throw new InvalidCardDefinitionException("Memory is required for a FilterCardsInMemory effect.");
+
+        if (memorizeMatching == null && memorizeNotMatching == null)
+            throw new InvalidCardDefinitionException("One of memorizeMatching or memorizeNotMatching is required for a FilterCardsInMemory effect.");
+
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
         return new DelayedAppender() {

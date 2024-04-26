@@ -1,0 +1,410 @@
+[
+	{
+		name: SHELBI - Aragorn Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Reluctant Adventurer
+			#    The One Ring, The Ruling Ring
+			1x2_102
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Steps of Edoras
+			1x7_334
+			#    Rohirrim Camp
+			1x7_336
+			#    Hall of the Kings
+			1x7_339
+			#    Anduin Banks
+			1x7_341
+			#    City Gates
+			1x7_344
+			#    Minas Tirith Sixth Circle
+			1x7_351
+			#    Ruined Capitol
+			1x7_355
+			#    Morgul Vale
+			1x7_357
+			#    Haunted Pass
+			1x7_361
+			#Free Peoples (30 cards)
+			#    Arwen, Evenstar of Her People
+			4x6_13
+			#    Aragorn, Captain of Gondor
+			1x7_81
+			#    Denethor, Wizened Steward
+			1x7_86
+			#    Gondorian Knight
+			1x5_35
+			#    Aragorn's Bow
+			1x1_90
+			#    Armor
+			1x1_92
+			#    Great Shield
+			1x1_107
+			#    Ranger's Sword
+			1x1_112
+			#    Hobbit Sword
+			2x1_299
+			#    Ring of Barahir
+			1x6_55
+			#    Arwen's Fate
+			2x1_93
+			#    Dagger Strike
+			1x1_102
+			#    Hard Choice
+			2x4_123
+			#    No Mere Ranger
+			2x2_36
+			#    Valiant Man of the West
+			2x1_118
+			#    Voice of Rauros
+			1x3_47
+			#    Gift of the Evenstar
+			1x3_19
+			#    Garrison of Osgiliath
+			2x6_52
+			#    The Choice of Luthien
+			2x1_100
+			#    The Saga of Elendil
+			1x1_114
+			#Shadow (30 cards)
+			#    Army of Udun
+			1x7_264
+			#    Morgul Slayer
+			2x3_93
+			#    Orc Archer Troop
+			1x7_294
+			#    Orc Assault Band
+			2x7_295
+			#    Orc Chaser
+			2x7_298
+			#    Orc Cutthroat
+			3x5_104
+			#    Orc Hunters
+			2x1_267
+			#    Orc Patrol
+			1x5_107
+			#    Orc Pillager
+			1x3_96
+			#    Orc Scouting Band
+			2x1_270
+			#    Orc Slayer
+			2x3_97
+			#    Orc Soldier
+			2x1_271
+			#    Orc Scimitar
+			3x1_269
+			#    A Host Avails Little
+			1x1_251
+			#    All Thought Bent on It
+			1x1_239
+			#    Mordor's Strength
+			3x1_255
+			#    Rope and Winch
+			1x7_309
+		]
+	},
+	{
+		name: SHELBI - Gandalf Starter
+		type: pack
+		items: [
+				#Ring-bearer (2 cards)
+			#    Frodo, Hope of Free Peoples
+			#    The One Ring, The Ruling Ring
+			1x7_317
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Isengard Ruined
+			1x7_331
+			#    West Road
+			1x7_337
+			#    Hall of the Kings
+			1x7_339
+			#    Anduin Banks
+			1x7_341
+			#    City Gates
+			1x7_344
+			#    Minas Tirith Fifth Circle
+			1x7_346
+			#    Ruined Capitol
+			1x7_355
+			#    Morgulduin
+			1x7_358
+			#    Haunted Pass
+			1x7_361
+			#Free Peoples (30 cards)
+			#    Gandalf, Mithrandir
+			1x6_30
+			#    Theoden, Leader of Spears
+			2x7_254
+			#    Veteran Horseman
+			1x7_257
+			#    Eowyn, Lady of Rohan
+			3x4_270
+			#    Glamdring, Lightning Brand
+			1x6_31
+			#    Shadowfax
+			1x4_100
+			#    Hobbit Sword
+			2x1_299
+			#    Gandalf's Staff, Focus of Power
+			1x7_38
+			#    Narya
+			1x3_34
+			#    All Save One
+			2x7_31
+			#    Depart Silently
+			2x3_31
+			#    Have Patience
+			2x4_93
+			#    King's Advisor
+			1x7_42
+			#    Roll of Thunder
+			2x4_99
+			#    Task Was Not Done
+			1x4_102
+			#    Threw Down My Enemy
+			1x6_36
+			#    Under the Living Earth
+			1x4_105
+			#    Wielder of the Flame
+			2x2_28
+			#    Wizardry Indeed
+			1x4_108
+			#    Hearken to Me
+			1x4_94
+			#    Steadfast Champion
+			1x7_49			
+			#Shadow (30 cards)
+			#    Ancient Chieftain
+			1x1_163
+			#    Goblin Flankers
+			2x2_61
+			#    Goblin Patrol Troop
+			2x1_177
+			#    Goblin Reinforcements
+			2x2_63
+			#    Goblin Scavengers
+			4x1_179
+			#    Goblin Spearman
+			4x2_65
+			#    Moria Scout
+			2x1_191
+			#    Southron Archer Legion
+			1x6_80
+			#    Ulaire Enquea
+			1x1_231
+			#    Goblin Spear
+			4x1_182
+			#    Moria Axe
+			2x1_190
+			#    Drums in the Deep
+			2x1_168
+			#    Host of Thousands
+			3x1_187
+		]
+	}
+	{
+		name: SHELBI - Gimli Starter
+		type: pack
+		items: [
+				#Ring-bearer (2 cards)
+			#    Frodo, Son of Drogo
+			#    The One Ring, The Ruling Ring
+			1x1_290
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Dunharrow Plateau
+			1x7_329
+			#    King's Tent
+			1x7_335
+			#    Hall of the Kings
+			1x7_339
+			#    Anduin Banks
+			1x7_341
+			#    City Gates
+			1x7_344
+			#    Minas Tirith Second Circle
+			1x7_349
+			#    Ruined Capitol
+			1x7_355
+			#    Cross Roads
+			1x7_356
+			#    Dagorlad
+			1x7_360
+			#Free Peoples (30 cards)
+			#    Gimli, Faithful Companion
+			1x7_6
+			#    Haldir, Emissary of the Galadhrim
+			2x4_71
+			#    Legolas, Elven Comrade
+			1x4_74
+			#    Lorien Swordsman
+			1x4_78
+			#    Axe of Erebor
+			1x4_41
+			#    Dwarven Bracers
+			1x2_3
+			#    Gimli's Armor
+			1x7_8
+			#    Gimli's Helm
+			1x1_15
+			#    Hand Axe
+			1x2_10
+			#    Hobbit Sword
+			2x1_299
+			#    Battle Tested
+			1x7_3
+			#    Calculated Risk
+			1x7_4
+			#    Come Here Lad
+			2x4_43
+			#    Lend Us Your Aid
+			1x6_9
+			#    Slaked Thirsts
+			1x7_14
+			#    Toss Me
+			4x6_11
+			#    Noble Intentions
+			1x1_304
+			#    Courtesy of My Hall
+			2x4_44
+			#    Endurance of Dwarves
+			1x2_4
+			#    Ever My Heart Rises
+			1x4_46
+			#    Here is Good Rock
+			2x4_50
+			#    More to My Liking
+			1x5_9
+			#Shadow (30 cards)
+			#    Desert Runner
+			3x7_133
+			#    Desert Scout
+			2x7_134
+			#    Desert Sneak
+			3x7_135
+			#    Desert Soldier
+			2x4_220
+			#    Desert Spearman
+			2x4_221
+			#    Desert Warrior
+			2x4_222
+			#    Elite Archer
+			2x4_232
+			#    Southron Bowman
+			2x4_248
+			#    Southron Chieftain
+			1x7_163
+			#    Southron Commander
+			2x4_249
+			#    Mumak
+			3x5_73
+			#    New Strength Came Now
+			2x7_154
+			#    Whirling Strike
+			2x4_260
+			#    Harsh Tongues
+			2x7_150
+		]
+	}
+	{
+		name: SHELBI - Treebeard Starter
+		type: pack
+		items: [
+				#Ring-bearer (2 cards)
+			#    Frodo, Hope of Free Peoples
+			#    The One Ring, The Ruling Ring
+			1x7_317
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Sleeping Quarters
+			1x7_333
+			#    West Road
+			1x7_337
+			#    Hall of the Kings
+			1x7_339
+			#    Anduin Banks
+			1x7_341
+			#    City Gates
+			1x7_344
+			#    Minas Tirith First Circle
+			1x7_347
+			#    Ruined Capitol
+			1x7_355
+			#    Morgulduin
+			1x7_358
+			#    Dagorlad
+			1x7_360
+			#Free Peoples (30 cards)
+			#    Birchseed, Tall Statesman
+			4x5_15
+			#    Forest Guardian
+			1x5_17
+			#    Treebeard, Guardian of the Forest
+			4x6_37
+			#    Merry, Impatient Hobbit
+			1x6_113
+			#    Hobbit Sword
+			2x1_299
+			#    A Wizard is Never Late
+			1x1_87
+			#    Boomed and Trumpeted
+			2x6_24
+			#    Crack into Rubble
+			1x6_25
+			#    Roused
+			2x6_34
+			#    Hobbit Appetite
+			1x1_294
+			#    Noble Intentions
+			2x1_304
+			#    Severed His Bonds
+			1x4_319
+			#    Store-Room
+			2x4_320
+			#    Stout and Sturdy
+			2x1_315
+			#    Enraged
+			3x6_26
+			#    Ent Moot
+			1x6_29
+			#Shadow (30 cards)
+			#    Morgul Brawler
+			1x7_187
+			#    Morgul Cur
+			2x7_189
+			#    Morgul Destroyer
+			1x7_190
+			#    Morgul Hound
+			2x7_192
+			#    Morgul Mongrel
+			1x7_194
+			#    Morgul Predator
+			2x7_196
+			#    Morgul Spawn
+			3x7_200
+			#    Morgul Spearman
+			4x7_201
+			#    Ulaire Enquea, Lieutenant of Morgul
+			2x1_231
+			#    Ulaire Lemenya, Winged Hunter
+			1x6_86
+			#    Ulaire Lemenya, Wraith on Wings
+			1x7_214
+			#    Ulaire Nelya, Black-Mantled Wraith
+			1x7_216
+			#    Ulaire Nertea, Winged Hunter
+			2x6_87
+			#    Ulaire Otsea, Lieutenant of Morgul
+			1x1_235
+			#    Morgul Axe
+			3x7_186
+			#    Sword of Minas Morgul
+			1x1_225
+			#    War Long Planned
+			2x7_220
+		]
+	}
+]

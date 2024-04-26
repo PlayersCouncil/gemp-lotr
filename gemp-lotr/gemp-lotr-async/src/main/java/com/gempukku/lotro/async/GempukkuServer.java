@@ -2,8 +2,8 @@ package com.gempukku.lotro.async;
 
 import com.gempukku.lotro.builder.DaoBuilder;
 import com.gempukku.lotro.builder.ServerBuilder;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class GempukkuServer {
     public GempukkuServer() {
         Map<Type, Object> objects = new HashMap<>();
 
-        var logger = Logger.getLogger(GempukkuServer.class);
+        var logger = LogManager.getLogger(GempukkuServer.class);
 
         //Libraries and other important prereq managers that are used by lots of other managers
         logger.info("GempukkuServer loading prerequisites...");

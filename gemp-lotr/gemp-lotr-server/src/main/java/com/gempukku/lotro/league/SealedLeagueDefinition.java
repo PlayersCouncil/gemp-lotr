@@ -41,10 +41,10 @@ public class SealedLeagueDefinition {
 
     public JSONDefs.SealedTemplate Serialize() {
         return new JSONDefs.SealedTemplate() {{
-           Name = _name;
-           ID = _id;
-           Format = _format.getCode();
-           SeriesProduct = _seriesProduct.stream()
+           name = _name;
+           id = _id;
+           format = _format.getCode();
+           seriesProduct = _seriesProduct.stream()
                    .map(x->x.stream().map(CardCollection.Item::toString).collect(Collectors.toList()))
                    .collect(Collectors.toList());
         }};

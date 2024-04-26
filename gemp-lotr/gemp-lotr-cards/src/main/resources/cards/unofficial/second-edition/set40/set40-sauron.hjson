@@ -308,7 +308,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: {
 						type: canSpot
 						filter: ring bearer,bearer
@@ -377,7 +377,7 @@
 					times: 2
 				}
 				effect: {
-					type: cantTakeWounds
+					type: DisableWounds
 					filter: choose(unbound,companion)
 				}
 			}
@@ -771,7 +771,7 @@
 					filter: choose(unbound,companion)
 				}
 				{
-					type: doesNotAddToArcheryTotal
+					type: DisableArcheryTotalContribution
 					filter: self
 				}
 			]

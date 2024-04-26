@@ -1,4 +1,3 @@
-
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
@@ -10,8 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_014_Tests
 {
@@ -28,6 +26,10 @@ public class Card_V1_014_Tests
 
 					put("boats", "1_46");
 					put("bb", "1_70");
+					put("defiance", "1_37");
+					put("sleep", "1_84");
+
+					put("saruman", "3_68");
 
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -40,53 +42,52 @@ public class Card_V1_014_Tests
 	public void GandalfStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V1
-		* Title: *Gandalf, Olorin
-		* Side: Free Peoples
-		* Culture: gandalf
-		* Twilight Cost: 4
-		* Type: companion
-		* Subtype: Wizard
-		* Strength: 6
-		* Vitality: 4
-		* Signet: Gandalf
-		* Game Text: At the start of your fellowship phase, you may spot 2 [elven] allies and exert Gandalf to shuffle a [Gandalf] or [elven] card from your discard pile into your draw deck.
-		* 	While you can spot 3 [elven] allies, Gandalf is strength +2.
-		* 	 While you can spot Elrond, Galadriel, and Celeborn, Gandalf is strength +2.
+		 * Set: V1
+		 * Name: Gandalf, Olorin
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 4
+		 * Type: Companion
+		 * Subtype: Wizard
+		 * Strength: 7
+		 * Vitality: 4
+		 * Signet: Gandalf
+		 * Game Text: At the start of your fellowship phase, you may spot 3 [elven] allies and exert Gandalf to take a [Gandalf] or [elven] event from your discard pile into your hand.
+		* 	Gandalf is strength +1 for each of these characters you can spot: Celeborn, Elrond, Galadriel, Saruman.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
+		var card = scn.GetFreepsCard("gandalf");
 
-		assertTrue(gandalf.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, gandalf.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, gandalf.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, gandalf.getBlueprint().getCardType());
-		assertEquals(Race.WIZARD, gandalf.getBlueprint().getRace());
-		//assertTrue(scn.HasKeyword(gandalf, Keyword.SUPPORT_AREA)); // test for keywords as needed
-		assertEquals(4, gandalf.getBlueprint().getTwilightCost());
-		assertEquals(6, gandalf.getBlueprint().getStrength());
-		assertEquals(4, gandalf.getBlueprint().getVitality());
-		//assertEquals(, gandalf.getBlueprint().getResistance());
-		assertEquals(Signet.GANDALF, gandalf.getBlueprint().getSignet());
-		//assertEquals(, gandalf.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals("Gandalf", card.getBlueprint().getTitle());
+		assertEquals("Olorin", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.WIZARD, card.getBlueprint().getRace());
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(7, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
 	@Test
-	public void GandalfExertsAndSpotsTwoElvenAlliesToShuffleACardFromDiscardIntoDeck() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GandalfExertsAndSpotsThreeElvenAlliesToShuffleACardFromDiscardIntoDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		PhysicalCardImpl boats = scn.GetFreepsCard("boats");
-		PhysicalCardImpl bb = scn.GetFreepsCard("bb");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var boats = scn.GetFreepsCard("boats");
+		var bb = scn.GetFreepsCard("bb");
+		var defiance = scn.GetFreepsCard("defiance");
+		var sleep = scn.GetFreepsCard("sleep");
 
 		scn.FreepsMoveCharToTable(gandalf);
 		scn.FreepsMoveCharToTable("galadriel", "orophin");
-		scn.FreepsMoveCardToDiscard(boats, bb);
+		scn.FreepsMoveCardToDiscard(boats, bb, defiance, sleep);
 
 		scn.StartGame();
 
@@ -94,96 +95,64 @@ public class Card_V1_014_Tests
 		assertEquals(Zone.DISCARD, boats.getZone());
 		assertEquals(Zone.DISCARD, bb.getZone());
 
+		//only 2 elven allies
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+
+		scn.FreepsMoveCharToTable("celeborn");
+
+		scn.SkipCurrentSite(); //Also skips through Shadow turn
+
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
+
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 		assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
-		//One each of Elven and Gandalf cards in the discard to choose from
+
+		//4 cards in discard: 1 gandalf event, 1 elven event, 1 gandalf ally, 1 elven condition
 		assertEquals(2, scn.GetFreepsCardChoiceCount());
-		scn.FreepsChooseCardBPFromSelection(boats);
+		scn.FreepsChooseCardBPFromSelection(sleep);
 
 		assertEquals(1, scn.GetWoundsOn(gandalf));
-		assertEquals(Zone.DECK, boats.getZone());
+		assertEquals(Zone.HAND, sleep.getZone());
+		assertEquals(Zone.DISCARD, defiance.getZone());
 		assertEquals(Zone.DISCARD, bb.getZone());
+		assertEquals(Zone.DISCARD, boats.getZone());
 	}
 
 	@Test
-	public void WhileThereAre3ElvenAlliesGandalfIsStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GandalfIsStrengthPlus1PerWhiteCouncilMember() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
-
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToHand(elrond, galadriel, orophin);
-
-		scn.StartGame();
-
-		assertEquals(6, scn.GetStrength(gandalf));
-
-		scn.FreepsPlayCard(elrond);
-		assertEquals(6, scn.GetStrength(gandalf));
-
-		scn.FreepsPlayCard(galadriel);
-		assertEquals(6, scn.GetStrength(gandalf));
-
-		scn.FreepsPlayCard(orophin);
-		assertEquals(8, scn.GetStrength(gandalf));
-	}
-
-	@Test
-	public void WhileThereAre3WhiteCouncilMembersGandalfIsStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		PhysicalCardImpl elrondcomp = scn.GetFreepsCard("elrondcomp");
-		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		PhysicalCardImpl celeborn = scn.GetFreepsCard("celeborn");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var elrondcomp = scn.GetFreepsCard("elrondcomp");
+		var galadriel = scn.GetFreepsCard("galadriel");
+		var celeborn = scn.GetFreepsCard("celeborn");
 
 		scn.FreepsMoveCharToTable(gandalf);
 		scn.FreepsMoveCardToHand(elrondcomp, galadriel, celeborn);
 
+		var saruman = scn.GetShadowCard("saruman");
+		scn.ShadowMoveCardToHand(saruman);
+
 		scn.StartGame();
 
-		assertEquals(6, scn.GetStrength(gandalf));
+		assertEquals(7, scn.GetStrength(gandalf));
 
 		scn.FreepsPlayCard(galadriel);
-		assertEquals(6, scn.GetStrength(gandalf));
+		assertEquals(8, scn.GetStrength(gandalf));
 
 		scn.FreepsPlayCard(elrondcomp);
-		assertEquals(6, scn.GetStrength(gandalf));
-
-		scn.FreepsPlayCard(celeborn);
-		assertEquals(8, scn.GetStrength(gandalf));
-	}
-
-	@Test
-	public void WhileThereAreBothAlliesAndWhiteCouncilMembersGandalfIsStrengthPlus4() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		PhysicalCardImpl celeborn = scn.GetFreepsCard("celeborn");
-
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToHand(elrond, galadriel, celeborn);
-
-		scn.StartGame();
-
-		assertEquals(6, scn.GetStrength(gandalf));
-
-		scn.FreepsPlayCard(elrond);
-		assertEquals(6, scn.GetStrength(gandalf));
-
-		scn.FreepsPlayCard(galadriel);
-		assertEquals(6, scn.GetStrength(gandalf));
+		assertEquals(9, scn.GetStrength(gandalf));
 
 		scn.FreepsPlayCard(celeborn);
 		assertEquals(10, scn.GetStrength(gandalf));
+
+		scn.SkipToPhase(Phase.SHADOW);
+
+		assertEquals(10, scn.GetStrength(gandalf));
+		scn.ShadowPlayCard(saruman);
+		assertEquals(11, scn.GetStrength(gandalf));
 	}
+
 }

@@ -21,6 +21,9 @@ public class ForEachPlayer implements EffectAppenderProducer {
 
         final JSONObject[] effectArray = FieldUtils.getObjectArray(effectObject.get("effect"), "effect");
 
+        if (effectArray.length == 0)
+            throw new InvalidCardDefinitionException("Effect is required for a ForEachPlayer effect.");
+
         final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
 
         return new DelayedAppender() {

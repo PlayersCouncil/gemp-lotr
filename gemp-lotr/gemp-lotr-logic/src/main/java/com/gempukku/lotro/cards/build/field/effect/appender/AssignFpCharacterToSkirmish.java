@@ -69,11 +69,16 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
         return result;
     }
 
+
     private FilterableSource getSource(String filter, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         if (filter.startsWith("choose(") && filter.endsWith(")"))
             return environment.getFilterFactory().generateFilter(filter.substring(filter.indexOf("(") + 1, filter.lastIndexOf(")")), environment);
         if (filter.equals("self"))
             return ActionContext::getSource;
-        throw new InvalidCardDefinitionException("The filters for this effect have to be of 'choose' type or 'self'");
+
+        return environment.getFilterFactory().generateFilter(filter, environment);
+        //What exactly was the point of this?  Pulling from other sources should be just fine.
+        //I wish I knew what bug this was addressing.
+        //throw new InvalidCardDefinitionException("The selectors for this effect have to be of 'choose' type or 'self'");
     }
 }

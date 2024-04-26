@@ -1,20 +1,10 @@
 {
 	67_15: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/LOTR-EN17E015.1.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 17_15
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1
 			collInfo: 17U15
 			rarity: U
@@ -81,14 +71,91 @@
 		lore: "'I once knew every spell in all the tongues of Men or Elves or Orcs...'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
 	}
 	
-	
+	67_24: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN17E024.1_card.jpg
+			javaClass: false
+			parent: 17_24
+			parentPath: errata/pc
+			version: 1
+			collInfo: 17R24
+			rarity: R
+			setNum: "17"
+			cardNum: 24
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Shadowfax
+		subtitle: Greatest of the Mearas
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		strength: 1
+		vitality: 1
+		resistance: 1
+		itemclass: Mount
+		target: culture(gandalf),wizard
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: Discard
+					filter: all(attachedTo(bearer),or(possession,weapon),another)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: CantBear
+					filter: bearer
+					cardFilter: hand weapon
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Moves
+				}
+				cost: [
+					{
+						type: exert
+						filter: bearer
+						times: 1				
+					}
+					{
+						type: AddThreats
+						amount: 1
+					}
+				]
+				effect: {
+					type: RemoveBurdens
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a [gandalf] Wizard.<br>When you play this, discard all other possessions and weapons on bearer. Bearer may not bear a hand weapon.<br>Each time the fellowship moves, you may exert bearer and add a threat to remove a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }

@@ -20,6 +20,9 @@ public class ChooseHowManyBurdensToSpot implements EffectAppenderProducer {
 
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
 
+        if (memorize == null)
+            throw new InvalidCardDefinitionException("ChooseHowManyBurdensToSpot requires a field to memorize the value");
+
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {

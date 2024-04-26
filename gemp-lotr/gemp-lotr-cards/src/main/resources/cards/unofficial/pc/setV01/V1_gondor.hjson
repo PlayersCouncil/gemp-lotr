@@ -1,15 +1,70 @@
 {
+	# 101_19: {
+	# 	title: Aragorn
+	# 	subtitle: Estel
+	# 	unique: true
+	# 	culture: gondor
+	# 	twilight: 4
+	# 	type: companion
+	# 	race: man
+	# 	strength: 8
+	# 	vitality: 4
+	# 	signet: gandalf
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: played
+	# 				filter: self
+	# 			}
+	# 			effect: {
+	# 				type: putCardsFromDeckIntoHand
+	# 				filter: choose(culture(elven),ally,maxTwilight(2))
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: skirmish
+	# 			cost: {
+	# 				type: discardFromHand
+	# 				forced: false
+	# 				filter: choose(culture(elven),skirmish,event)
+	# 			}
+	# 			effect: {
+	# 				type: modifyStrength
+	# 				filter: self
+	# 				amount: 2
+	# 			}
+	# 		}
+	# 	]
+	# }
 	101_19: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S019.1_card.jpg
+			javaClass: false
+			parent: 101_19 
+			parentPath: errata/pc
+			version: 1
+			collInfo: V1R19
+			rarity: R
+			setNum: "V1"
+			cardNum: 19
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
 		title: Aragorn
 		subtitle: Estel
 		unique: true
-		culture: gondor
+		side: Free Peoples
+		culture: Gondor
 		twilight: 4
-		type: companion
-		race: man
+		type: Companion
+		race: Man
 		strength: 8
 		vitality: 4
-		signet: gandalf
+		signet: Gandalf
 		resistance: 6
 		effects: [
 			{
@@ -21,24 +76,57 @@
 				}
 				effect: {
 					type: putCardsFromDeckIntoHand
-					filter: choose(culture(elven),ally,maxTwilight(2))
+					filter: choose(elf,maxTwilight(2))
 				}
 			}
 			{
 				type: activated
-				phase: skirmish
+				phase: maneuver
 				cost: {
 					type: discardFromHand
 					forced: false
-					filter: choose(culture(elven),skirmish,event)
+					filter: choose(culture(elven))
 				}
 				effect: {
-					type: modifyStrength
-					filter: self
-					amount: 2
+					type: Choice
+					texts: [
+						Make Aragorn damage +1
+						Make Aragorn an archer
+						Make Aragorn strength +2
+					]
+					effects: [
+						{
+							type: AddKeyword
+							filter: self
+							keyword: damage
+							amount: 1
+							until: start(regroup)
+						}
+						{
+							type: AddKeyword
+							filter: self
+							keyword: archer
+							until: start(regroup)
+						}
+						{
+							type: ModifyStrength
+							filter: self
+							amount: 2
+							until: start(regroup)
+						}
+					]
 				}
 			}
 		]
+		gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Maneuver: Discard an [elven] card from hand to make Aragorn <b>damage +1</b>, <b>archer</b>, or strength +2 until the regroup phase.
+		lore: "'I gave Hope to the Dúnedain, I have kept no hope for myself.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 	101_20: {
 		title: Boromir

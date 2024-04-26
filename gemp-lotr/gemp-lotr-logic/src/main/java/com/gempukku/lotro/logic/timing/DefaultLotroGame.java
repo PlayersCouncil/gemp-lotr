@@ -7,6 +7,7 @@ import com.gempukku.lotro.communication.UserFeedback;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.game.state.PreGameInfo;
 import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.PlayerOrder;
 import com.gempukku.lotro.logic.modifiers.ModifiersEnvironment;
@@ -14,12 +15,12 @@ import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.modifiers.ModifiersQuerying;
 import com.gempukku.lotro.logic.timing.rules.CharacterDeathRule;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.*;
 
 public class DefaultLotroGame implements LotroGame {
-    private static final Logger log = Logger.getLogger(DefaultLotroGame.class);
+    private static final Logger log = LogManager.getLogger(DefaultLotroGame.class);
 
     private final GameState _gameState;
     private final ModifiersLogic _modifiersLogic = new ModifiersLogic();
@@ -45,6 +46,11 @@ public class DefaultLotroGame implements LotroGame {
     private final LotroCardBlueprintLibrary _library;
 
     public DefaultLotroGame(LotroFormat format, Map<String, LotroDeck> decks, UserFeedback userFeedback, final LotroCardBlueprintLibrary library) {
+        this(format, decks, userFeedback, library, "No timer", false, "Test Match");
+    }
+
+    public DefaultLotroGame(LotroFormat format, Map<String, LotroDeck> decks, UserFeedback userFeedback, final LotroCardBlueprintLibrary library,
+            String timerInfo, boolean allowSpectators, String tournamentName ) {
         _library = library;
         _adventure = format.getAdventure();
         _format = format;
@@ -57,17 +63,39 @@ public class DefaultLotroGame implements LotroGame {
         final Map<String, List<String>> cards = new HashMap<>();
         final Map<String, String> ringBearers = new HashMap<>();
         final Map<String, String> rings = new HashMap<>();
+        final Map<String, String> maps = new HashMap<>();
+        final Map<String, String> notes = new HashMap<>();
+        final StringBuilder formatInfo = new StringBuilder();
         for (String playerId : decks.keySet()) {
             List<String> deck = new LinkedList<>();
 
             LotroDeck lotroDeck = decks.get(playerId);
             deck.addAll(lotroDeck.getSites());
-            deck.addAll(lotroDeck.getAdventureCards());
+            deck.addAll(lotroDeck.getDrawDeckCards());
 
             cards.put(playerId, deck);
             ringBearers.put(playerId, lotroDeck.getRingBearer());
             if (lotroDeck.getRing() != null)
                 rings.put(playerId, lotroDeck.getRing());
+
+            if(format.usesMaps()) {
+                maps.put(playerId, lotroDeck.getMap());
+            }
+
+            var note = "Deck used: <a href='" + lotroDeck.getURL(playerId) + "' target='_blank'>" + lotroDeck.getDeckName() +
+                    "</a> [" + lotroDeck.getTargetFormat() + "]<br/><br/>Deck Notes:<br/>";
+            if(lotroDeck.getNotes() != null) {
+                note += lotroDeck.getNotes();
+            }
+            else {
+                note += "No deck notes.";
+            }
+
+            notes.put(playerId, note);
+        }
+
+        if(format.getName().contains("PC")) {
+            formatInfo.append(LotroFormat.PCSummary);
         }
 
         _gameState = new GameState();
@@ -79,8 +107,16 @@ public class DefaultLotroGame implements LotroGame {
                 new PlayerOrderFeedback() {
                     @Override
                     public void setPlayerOrder(PlayerOrder playerOrder, String firstPlayer) {
-                        final GameStats gameStats = _turnProcedure.getGameStats();
-                        _gameState.init(playerOrder, firstPlayer, cards, ringBearers, rings, library, format);
+                        _gameState.init(playerOrder, firstPlayer, cards, ringBearers, rings, maps, library, format);
+                    }
+                },
+                new PregameSetupFeedback() {
+                    @Override
+                    public void populatePregameInfo() {
+                        var preGameInfo = new PreGameInfo(decks.keySet().stream().toList(), tournamentName, timerInfo,
+                                !allowSpectators, format, formatInfo.toString(), notes, maps);
+
+                        _gameState.initPreGame(preGameInfo);
                     }
                 }, characterDeathRule);
         _userFeedback = userFeedback;

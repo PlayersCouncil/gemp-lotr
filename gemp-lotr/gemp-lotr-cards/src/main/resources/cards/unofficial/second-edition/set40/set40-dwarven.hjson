@@ -128,7 +128,7 @@
 				count: 3
 			}
 			effect: {
-				type: cantTakeMoreWoundsThan
+				type: DisableWoundsOver
 				filter: choose(dwarf)
 				wounds: 1
 			}

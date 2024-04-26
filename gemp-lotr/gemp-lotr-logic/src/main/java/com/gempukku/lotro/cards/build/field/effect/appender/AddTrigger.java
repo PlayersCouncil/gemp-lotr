@@ -45,7 +45,10 @@ public class AddTrigger implements EffectAppenderProducer {
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 ActionProxy actionProxy = createActionProxy(action, actionContext, optional, trigger, requirements, costs, effects);
 
-                if (until.isEndOfTurn()) {
+                if (until.isPermanent()) {
+                    //TODO: alter this if we need an actual end-of-game proxy effect
+                    return null;
+                } else if (until.isEndOfTurn()){
                     return new AddUntilEndOfTurnActionProxyEffect(actionProxy);
                 } else if (until.isStart()) {
                     return new AddUntilStartOfPhaseActionProxyEffect(actionProxy, until.getPhase());

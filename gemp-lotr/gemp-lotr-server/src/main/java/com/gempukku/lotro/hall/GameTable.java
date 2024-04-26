@@ -36,7 +36,7 @@ public class GameTable {
 
     public boolean removePlayer(String playerId) {
         players.remove(playerId);
-        return players.size() == 0;
+        return players.isEmpty();
     }
 
     public boolean hasPlayer(String playerId) {

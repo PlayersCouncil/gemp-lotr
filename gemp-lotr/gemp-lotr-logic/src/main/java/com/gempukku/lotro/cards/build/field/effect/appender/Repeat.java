@@ -14,15 +14,17 @@ import com.gempukku.lotro.logic.effects.StackActionEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
+import java.util.Arrays;
+
 public class Repeat implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "amount", "effect");
 
         final ValueSource amountSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), environment);
-        final JSONObject effect = (JSONObject) effectObject.get("effect");
+        final JSONObject[] effectArray = FieldUtils.getObjectArray(effectObject.get("effect"), "effect");
 
-        final EffectAppender effectAppender = environment.getEffectAppenderFactory().getEffectAppender(effect, environment);
+        final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
 
         return new DelayedAppender() {
             @Override
@@ -30,8 +32,10 @@ public class Repeat implements EffectAppenderProducer {
                 final int count = amountSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
                 if (count > 0) {
                     SubAction subAction = new SubAction(action);
-                    for (int i = 0; i < count; i++)
-                        effectAppender.appendEffect(cost, subAction, actionContext);
+                    for (int i = 0; i < count; i++) {
+                        for (EffectAppender effectAppender : effectAppenders)
+                            effectAppender.appendEffect(false, subAction, actionContext);
+                    }
                     return new StackActionEffect(subAction);
                 } else {
                     return null;
@@ -40,12 +44,18 @@ public class Repeat implements EffectAppenderProducer {
 
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
-                return effectAppender.isPlayableInFull(actionContext);
+                for (EffectAppender effectAppender : effectAppenders) {
+                    if (effectAppender.isPlayabilityCheckedForEffect()
+                            && !effectAppender.isPlayableInFull(actionContext))
+                        return false;
+                }
+
+                return true;
             }
 
             @Override
             public boolean isPlayabilityCheckedForEffect() {
-                return effectAppender.isPlayabilityCheckedForEffect();
+                return Arrays.stream(effectAppenders).anyMatch(EffectAppender::isPlayabilityCheckedForEffect);
             }
         };
     }

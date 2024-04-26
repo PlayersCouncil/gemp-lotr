@@ -3,7 +3,7 @@ package com.gempukku.lotro.tournament;
 import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.competitive.BestOfOneStandingsProducer;
 import com.gempukku.lotro.competitive.PlayerStanding;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import java.util.*;

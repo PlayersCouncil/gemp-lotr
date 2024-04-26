@@ -64,7 +64,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: {
 						type: canSpot
 						filter: another,minion
@@ -85,7 +85,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: {
 						type: not
 						requires: {
@@ -125,7 +125,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: {
 						type: not
 						requires: {

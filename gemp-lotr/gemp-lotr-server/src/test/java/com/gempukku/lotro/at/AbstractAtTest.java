@@ -18,9 +18,9 @@ import java.util.*;
 import static org.junit.Assert.fail;
 
 public abstract class AbstractAtTest {
-    protected static LotroCardBlueprintLibrary _cardLibrary;
-    protected static LotroFormatLibrary _formatLibrary;
-    protected static ProductLibrary _productLibrary;
+    public static LotroCardBlueprintLibrary _cardLibrary;
+    public static LotroFormatLibrary _formatLibrary;
+    public static ProductLibrary _productLibrary;
     private final int cardId = 100;
 
     static {
@@ -29,20 +29,20 @@ public abstract class AbstractAtTest {
         _productLibrary = new ProductLibrary(_cardLibrary);
     }
 
-    protected DefaultLotroGame _game;
-    protected DefaultUserFeedback _userFeedback;
+    public DefaultLotroGame _game;
+    public DefaultUserFeedback _userFeedback;
     public static final String P1 = "player1";
     public static final String P2 = "player2";
 
-    protected PhysicalCardImpl createCard(String owner, String blueprintId) throws CardNotFoundException {
+    public PhysicalCardImpl createCard(String owner, String blueprintId) throws CardNotFoundException {
         return (PhysicalCardImpl) _game.getGameState().createPhysicalCard(owner, _cardLibrary, blueprintId);
     }
 
-    protected void initializeSimplestGame() throws DecisionResultInvalidException {
+    public void initializeSimplestGame() throws DecisionResultInvalidException {
         this.initializeSimplestGame(null);
     }
 
-    protected void initializeSimplestGame(Map<String, Collection<String>> additionalCardsInDeck) throws DecisionResultInvalidException {
+    public void initializeSimplestGame(Map<String, Collection<String>> additionalCardsInDeck) throws DecisionResultInvalidException {
         Map<String, LotroDeck> decks = new HashMap<>();
         addPlayerDeck(P1, decks, additionalCardsInDeck);
         addPlayerDeck(P2, decks, additionalCardsInDeck);
@@ -50,11 +50,11 @@ public abstract class AbstractAtTest {
         initializeGameWithDecks(decks);
     }
 
-    protected void initializeGameWithDecks(Map<String, LotroDeck> decks) throws DecisionResultInvalidException {
+    public void initializeGameWithDecks(Map<String, LotroDeck> decks) throws DecisionResultInvalidException {
         initializeGameWithDecks(decks, "multipath");
     }
 
-    protected void initializeGameWithDecks(Map<String, LotroDeck> decks, String formatName) throws DecisionResultInvalidException {
+    public void initializeGameWithDecks(Map<String, LotroDeck> decks, String formatName) throws DecisionResultInvalidException {
         _userFeedback = new DefaultUserFeedback();
 
         LotroFormatLibrary formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
@@ -72,13 +72,13 @@ public abstract class AbstractAtTest {
         playerDecided(P1, "0");
     }
 
-    protected void skipMulligans() throws DecisionResultInvalidException {
+    public void skipMulligans() throws DecisionResultInvalidException {
         // Mulligans
         playerDecided(P1, "0");
         playerDecided(P2, "0");
     }
 
-    protected void validateContents(String[] array1, String[] array2) {
+    public void validateContents(String[] array1, String[] array2) {
         if (array1.length != array2.length)
             fail("Array sizes differ");
         List<String> values = new ArrayList<>(Arrays.asList(array1));
@@ -88,14 +88,14 @@ public abstract class AbstractAtTest {
         }
     }
 
-    protected String[] toCardIdArray(PhysicalCard... cards) {
+    public String[] toCardIdArray(PhysicalCard... cards) {
         String[] result = new String[cards.length];
         for (int i = 0; i < cards.length; i++)
             result[i] = String.valueOf(cards[i].getCardId());
         return result;
     }
 
-    protected String getArbitraryCardId(AwaitingDecision awaitingDecision, String blueprintId) {
+    public String getArbitraryCardId(AwaitingDecision awaitingDecision, String blueprintId) {
         String[] blueprints = (String[]) awaitingDecision.getDecisionParameters().get("blueprintId");
         for (int i = 0; i < blueprints.length; i++)
             if (blueprints[i].equals(blueprintId))
@@ -103,7 +103,7 @@ public abstract class AbstractAtTest {
         return null;
     }
 
-    protected String getCardActionId(AwaitingDecision awaitingDecision, String actionTextStart) {
+    public String getCardActionId(AwaitingDecision awaitingDecision, String actionTextStart) {
         String[] actionTexts = (String[]) awaitingDecision.getDecisionParameters().get("actionText");
         for (int i = 0; i < actionTexts.length; i++)
             if (actionTexts[i].startsWith(actionTextStart))
@@ -111,11 +111,11 @@ public abstract class AbstractAtTest {
         return null;
     }
 
-    protected String getCardActionId(String playerId, String actionTextStart) {
+    public String getCardActionId(String playerId, String actionTextStart) {
         return getCardActionId(_userFeedback.getAwaitingDecision(playerId), actionTextStart);
     }
 
-    protected String getCardActionIdContains(AwaitingDecision awaitingDecision, String actionTextContains) {
+    public String getCardActionIdContains(AwaitingDecision awaitingDecision, String actionTextContains) {
         String[] actionTexts = (String[]) awaitingDecision.getDecisionParameters().get("actionText");
         for (int i = 0; i < actionTexts.length; i++)
             if (actionTexts[i].contains(actionTextContains))
@@ -123,7 +123,7 @@ public abstract class AbstractAtTest {
         return null;
     }
 
-    protected String getMultipleDecisionIndex(AwaitingDecision awaitingDecision, String result) {
+    public String getMultipleDecisionIndex(AwaitingDecision awaitingDecision, String result) {
         String[] actionTexts = (String[]) awaitingDecision.getDecisionParameters().get("results");
         for (int i = 0; i < actionTexts.length; i++)
             if (actionTexts[i].equals(result))
@@ -131,7 +131,7 @@ public abstract class AbstractAtTest {
         return null;
     }
 
-    protected void addPlayerDeck(String player, Map<String, LotroDeck> decks, Map<String, Collection<String>> additionalCardsInDeck) {
+    public void addPlayerDeck(String player, Map<String, LotroDeck> decks, Map<String, Collection<String>> additionalCardsInDeck) {
         LotroDeck deck = createSimplestDeck();
         if (additionalCardsInDeck != null) {
             Collection<String> extraCards = additionalCardsInDeck.get(player);
@@ -142,11 +142,11 @@ public abstract class AbstractAtTest {
         decks.put(player, deck);
     }
 
-    protected void moveCardToZone(PhysicalCardImpl card, Zone zone) {
+    public void moveCardToZone(PhysicalCardImpl card, Zone zone) {
         _game.getGameState().addCardToZone(_game, card, zone);
     }
 
-    protected void playerDecided(String player, String answer) throws DecisionResultInvalidException {
+    public void playerDecided(String player, String answer) throws DecisionResultInvalidException {
         AwaitingDecision decision = _userFeedback.getAwaitingDecision(player);
         _userFeedback.participantDecided(player);
         try {
@@ -158,20 +158,20 @@ public abstract class AbstractAtTest {
         _game.carryOutPendingActionsUntilDecisionNeeded();
     }
 
-    protected void carryOutEffectInPhaseActionByPlayer(String playerId, Effect effect) throws DecisionResultInvalidException {
+    public void carryOutEffectInPhaseActionByPlayer(String playerId, Effect effect) throws DecisionResultInvalidException {
         SystemQueueAction action = new SystemQueueAction();
         action.appendEffect(effect);
         carryOutEffectInPhaseActionByPlayer(playerId, action);
     }
 
-    protected void carryOutEffectInPhaseActionByPlayer(String playerId, Action action) throws DecisionResultInvalidException {
+    public void carryOutEffectInPhaseActionByPlayer(String playerId, Action action) throws DecisionResultInvalidException {
         CardActionSelectionDecision awaitingDecision = (CardActionSelectionDecision) _userFeedback.getAwaitingDecision(playerId);
         awaitingDecision.addAction(action);
 
         playerDecided(playerId, "0");
     }
 
-    protected LotroDeck createSimplestDeck() {
+    public LotroDeck createSimplestDeck() {
         LotroDeck lotroDeck = new LotroDeck("Some deck");
         // 10_121,1_2
         lotroDeck.setRingBearer("10_121");

@@ -5,7 +5,8 @@ import com.gempukku.lotro.SubscriptionExpiredException;
 import com.gempukku.lotro.db.IgnoreDAO;
 import com.gempukku.lotro.db.PlayerDAO;
 import com.gempukku.lotro.game.ChatCommunicationChannel;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -37,7 +38,7 @@ public class ChatRoomMediator {
                             boolean allowIncognito) {
         this.ignoreDAO = ignoreDAO;
         this.playerDAO = playerDAO;
-        _logger = Logger.getLogger("chat."+roomName);
+        _logger = LogManager.getLogger("chat."+roomName);
         _allowedPlayers = allowedPlayers;
         _channelInactivityTimeoutPeriod = 1000 * secondsTimeoutPeriod;
         _chatRoom = new ChatRoom(muteJoinPartMessages, allowIncognito);

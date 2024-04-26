@@ -7,15 +7,15 @@ import com.mysql.cj.util.StringUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.Map;
 
 public class LoginRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
 
-    private static final Logger _log = Logger.getLogger(LoginRequestHandler.class);
+    private static final Logger _log = LogManager.getLogger(LoginRequestHandler.class);
 
     public LoginRequestHandler(Map<Type, Object> context) {
         super(context);

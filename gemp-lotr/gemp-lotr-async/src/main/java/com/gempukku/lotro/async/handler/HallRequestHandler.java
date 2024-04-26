@@ -21,8 +21,8 @@ import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -40,7 +40,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private final LotroServer _lotroServer;
     private final LongPollingSystem longPollingSystem;
 
-    private static final Logger _log = Logger.getLogger(HallRequestHandler.class);
+    private static final Logger _log = LogManager.getLogger(HallRequestHandler.class);
 
     public HallRequestHandler(Map<Type, Object> context, LongPollingSystem longPollingSystem) {
         super(context);

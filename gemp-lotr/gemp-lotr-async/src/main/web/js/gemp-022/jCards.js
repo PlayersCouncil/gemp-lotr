@@ -195,7 +195,13 @@ var packBlueprints = {
     "Random Common Foil": "/gemp-lotr/images/boosters/random_foil.png",
     "Random Uncommon Foil": "/gemp-lotr/images/boosters/random_foil.png",
     "Random Rare Foil": "/gemp-lotr/images/boosters/random_foil.png",
-    "Random Ultra Rare Foil": "/gemp-lotr/images/boosters/random_foil.png"
+    "Random Ultra Rare Foil": "/gemp-lotr/images/boosters/random_foil.png",
+    
+    "(S)SHELBI - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
+    "SHELBI - Aragorn Starter":"/gemp-lotr/images/boosters/shelbi-aragorn.jpg",
+    "SHELBI - Gandalf Starter":"/gemp-lotr/images/boosters/shelbi-gandalf.jpg",
+    "SHELBI - Gimli Starter":"/gemp-lotr/images/boosters/shelbi-gimli.jpg",
+    "SHELBI - Treebeard Starter":"/gemp-lotr/images/boosters/shelbi-treebeard.jpg"
 };
 
 var Card = Class.extend({

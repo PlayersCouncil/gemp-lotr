@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -151,5 +152,92 @@ public class Card_01_234_ErrataTests
 		assertEquals(Zone.SHADOW_CHARACTERS, attea.getZone());
 
 		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+	}
+
+	@Test
+	public void CancelingNerteaAfterFirstMinionDoesntAskAgain() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+
+		PhysicalCardImpl twk = scn.GetShadowCard("twk");
+		PhysicalCardImpl attea = scn.GetShadowCard("attea");
+		PhysicalCardImpl nertea = scn.GetShadowCard("nertea");
+		PhysicalCardImpl runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCardToDiscard("rit", "twk", "attea");
+		scn.ShadowMoveCardToDiscard(twk, runner);
+		scn.ShadowMoveCardToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(30);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(nertea);
+		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		scn.ShadowChooseNo();
+
+		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+	}
+
+	@Test
+	public void NerteaDoesNotPromptIfNoUniqueRingwraithMinionsInDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+
+		PhysicalCardImpl nertea = scn.GetShadowCard("nertea");
+		scn.ShadowMoveCardToHand("twk", "attea");
+		scn.ShadowMoveCardToDiscard("rit", "runner");
+		scn.ShadowMoveCardToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(30);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(nertea);
+		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+	}
+
+	//Imported from the at tests
+	@Test
+	public void ulaireNerteaCantPlayMinionsOnGreatRiver() throws Exception {
+		var scn = GetScenario();
+		var _game = scn._game;
+
+		for (int i=0; i<4; i++) {
+			final PhysicalCardImpl pippin = scn.createCard(scn.P1, "1_306");
+			_game.getGameState().addCardToZone(_game, pippin, Zone.FREE_CHARACTERS);
+		}
+
+		scn.skipMulligans();
+
+		final PhysicalCardImpl greatRiver = scn.createCard(scn.P2, "3_118");
+		greatRiver.setSiteNumber(2);
+		_game.getGameState().addCardToZone(_game, greatRiver, Zone.ADVENTURE_PATH);
+
+		final PhysicalCardImpl ulaireNertea = scn.createCard(scn.P2, "1_234");
+		_game.getGameState().addCardToZone(_game, ulaireNertea, Zone.HAND);
+
+		final PhysicalCardImpl goblinRunner = scn.createCard(scn.P2, "1_178");
+		_game.getGameState().addCardToZone(_game, goblinRunner, Zone.DISCARD);
+
+		final PhysicalCardImpl ringwraithInTwilight = scn.createCard(scn.P2, "101_40");
+		_game.getGameState().addCardToZone(_game, ringwraithInTwilight, Zone.DISCARD);
+
+		final PhysicalCardImpl witchKing = scn.createCard(scn.P2, "2_85");
+		_game.getGameState().addCardToZone(_game, witchKing, Zone.DISCARD);
+
+		_game.getGameState().setTwilight(20);
+
+		// Fellowship phase
+		scn.playerDecided(scn.P1, "");
+
+		assertEquals(greatRiver, _game.getGameState().getCurrentSite());
+
+		scn.playerDecided(scn.P2, scn.getCardActionId(scn.P2, "Play Úlairë Nertëa"));
+
+		assertFalse(scn._userFeedback.getAwaitingDecision(scn.P2).getDecisionType() == AwaitingDecisionType.MULTIPLE_CHOICE);
 	}
 }

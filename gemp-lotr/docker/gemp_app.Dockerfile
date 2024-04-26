@@ -1,4 +1,4 @@
-FROM amazoncorretto:18-alpine-jdk
+FROM amazoncorretto:21-alpine-jdk
 
 RUN apk update; \
 	apk update \
@@ -21,22 +21,19 @@ RUN apk update; \
 		
 #####################################################################
 # The following is pulled from the official maven dockerfile:
-# https://github.com/carlossg/docker-maven/blob/26ba49149787c85b9c51222b47c00879b2a0afde/openjdk-14/Dockerfile
+# https://github.com/carlossg/docker-maven/blob/e545dcfa4d312e08330f4e07701763db3889db79/amazoncorretto-21/Dockerfile
 #####################################################################
 
-ARG MAVEN_VERSION=3.8.8
-ARG USER_HOME_DIR="/root"
-ARG SHA=332088670d14fa9ff346e6858ca0acca304666596fec86eea89253bd496d3c90deae2be5091be199f48e09d46cec817c6419d5161fb4ee37871503f472765d00
-ARG BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
-
-RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
-  && curl -fsSL -o /tmp/apache-maven.tar.gz ${BASE_URL}/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
-  && echo "${SHA}  /tmp/apache-maven.tar.gz" | sha512sum -c - \
-  && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
-  && rm -f /tmp/apache-maven.tar.gz \
-  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
-
 ENV MAVEN_HOME /usr/share/maven
+
+COPY --from=maven:3.9.6-eclipse-temurin-11 ${MAVEN_HOME} ${MAVEN_HOME}
+COPY --from=maven:3.9.6-eclipse-temurin-11 /usr/local/bin/mvn-entrypoint.sh /usr/local/bin/mvn-entrypoint.sh
+COPY --from=maven:3.9.6-eclipse-temurin-11 /usr/share/maven/ref/settings-docker.xml /usr/share/maven/ref/settings-docker.xml
+
+RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
+
+ARG MAVEN_VERSION=3.9.6
+ARG USER_HOME_DIR="/root"
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
 # Enables the JRE remote debugging; perhaps comment this out in a production build
@@ -51,6 +48,5 @@ RUN apk add --no-cache openrc; \
 	
 RUN touch /nohup.out
 	
-#RUN nohup java -jar /etc/gemp-lotr/gemp-lotr-async/target/web.jar &
-
+WORKDIR /etc/gemp-lotr
 

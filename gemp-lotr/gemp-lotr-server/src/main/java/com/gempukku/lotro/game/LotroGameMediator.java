@@ -16,13 +16,13 @@ import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class LotroGameMediator {
-    private static final Logger LOG = Logger.getLogger(LotroGameMediator.class);
+    private static final Logger LOG = LogManager.getLogger(LotroGameMediator.class);
 
     private final Map<String, GameCommunicationChannel> _communicationChannels = Collections.synchronizedMap(new HashMap<>());
     private final DefaultUserFeedback _userFeedback;
@@ -46,7 +46,8 @@ public class LotroGameMediator {
     private volatile boolean _destroyed;
 
     public LotroGameMediator(String gameId, LotroFormat lotroFormat, LotroGameParticipant[] participants, LotroCardBlueprintLibrary library,
-                             GameTimer gameTimer, boolean allowSpectators, boolean cancellable, boolean showInGameHall) {
+                             GameTimer gameTimer, boolean allowSpectators, boolean cancellable, boolean showInGameHall,
+                             String tournamentName) {
         _gameId = gameId;
         _timeSettings = gameTimer;
         _allowSpectators = allowSpectators;
@@ -63,7 +64,8 @@ public class LotroGameMediator {
         }
 
         _userFeedback = new DefaultUserFeedback();
-        _lotroGame = new DefaultLotroGame(lotroFormat, _playerDecks, _userFeedback, library);
+        _lotroGame = new DefaultLotroGame(lotroFormat, _playerDecks, _userFeedback, library, _timeSettings.toString(), _allowSpectators,
+                tournamentName);
         _userFeedback.setGame(_lotroGame);
     }
 

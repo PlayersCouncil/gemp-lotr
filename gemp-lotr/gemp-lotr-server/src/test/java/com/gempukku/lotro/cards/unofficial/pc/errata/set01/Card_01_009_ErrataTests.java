@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -19,11 +18,8 @@ public class Card_01_009_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("axe", "51_9");
-					put("gimli", "1_13");
-
-					put("scout", "1_191");
-					put("runner", "1_178");
+					put("card", "51_9");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -35,135 +31,45 @@ public class Card_01_009_ErrataTests
 	public void DwarvenAxeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Dwarven Axe
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 0
-		* Type: possession
-		* Subtype: Hand Weapon
-		* Strength: 2
-		* Game Text: Bearer must be a Dwarf. <br>Each time a minion loses a skirmish to bearer, that minion's owner must exert a minion or discard the bottom card of their draw deck.
+		 * Set: 1
+		 * Name: Dwarven Axe
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Hand weapon
+		 * Strength: 2
+		 * Game Text: Bearer must be a Dwarf. <br>Each time a minion loses a skirmish to bearer, you may make a minion strength -1 until the regroup phase.  The Shadow player may discard 2 cards from the bottom of their draw deck to prevent this.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("axe");
+		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Dwarven Axe", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	@Test
-	public void AxeMustBeBorneByDwarf() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void DwarvenAxeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var axe = scn.GetFreepsCard("axe");
-		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(axe, gimli);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
-		assertFalse(scn.FreepsPlayAvailable(axe));
-		scn.FreepsPlayCard(gimli);
-		assertTrue(scn.FreepsPlayAvailable(axe));
-	}
+		scn.FreepsPlayCard(card);
 
-	@Test
-	public void AxeCausesExertOrDeckDiscardChoice() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var axe = scn.GetFreepsCard("axe");
-		var gimli = scn.GetFreepsCard("gimli");
-		var frodo = scn.GetRingBearer();
-		scn.FreepsMoveCharToTable(gimli);
-		scn.AttachCardsTo(gimli, axe);
-
-		var scout = scn.GetShadowCard("scout");
-		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner,scout);
-
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Race.ORC, Keyword.FIERCE));
-
-		scn.StartGame();
-
-		scn.SkipToAssignments();
-		scn.FreepsDeclineAssignments();
-		scn.ShadowAssignToMinions(new PhysicalCardImpl[]{gimli, runner}, new PhysicalCardImpl[]{frodo,scout});
-
-		scn.FreepsResolveSkirmish(gimli);
-		scn.PassCurrentPhaseActions();
-		scn.FreepsResolveActionOrder("Axe");
-		assertTrue(scn.ShadowDecisionAvailable("choose"));
-
-		assertEquals(0, scn.GetWoundsOn(scout));
-		scn.ShadowChooseMultipleChoiceOption("exert");
-		assertEquals(1, scn.GetWoundsOn(scout));
-
-		scn.FreepsResolveSkirmish(frodo);
-		scn.PassCurrentPhaseActions();
-		scn.FreepsDeclineOptionalTrigger(); // ring
-
-		//Fierce assignment
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(gimli, scout);
-		scn.FreepsResolveSkirmish(gimli);
-		scn.PassCurrentPhaseActions();
-
-		var botcard = scn.GetShadowBottomOfDeck();
-		assertEquals(Zone.DECK, botcard.getZone());
-		assertEquals(2, scn.GetShadowDeckCount());
-		assertEquals(1, scn.GetShadowDiscardCount());
-		scn.FreepsResolveActionOrder("Axe");
-		assertEquals(Zone.DISCARD, botcard.getZone());
-		assertEquals(1, scn.GetShadowDeckCount());
-		assertEquals(3, scn.GetShadowDiscardCount());//runner, scout, and a card discarded from the deck
-
-	}
-
-	@Test
-	public void AxeAffectsMultipleMinionsSeparately() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var axe = scn.GetFreepsCard("axe");
-		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(gimli);
-		scn.AttachCardsTo(gimli, axe);
-
-		var scout = scn.GetShadowCard("scout");
-		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(scout, runner);
-
-		scn.StartGame();
-
-		scn.SkipToAssignments();
-		scn.FreepsDeclineAssignments();
-		scn.ShadowAssignToMinions(gimli, scout, runner);
-
-		//pump gimli up using his ability so he's strong enough to beat both orcs
-		scn.FreepsResolveSkirmish(gimli);
-		scn.FreepsUseCardAction(gimli);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsUseCardAction(gimli);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
-		scn.FreepsResolveActionOrder("Axe");
-		assertTrue(scn.ShadowDecisionAvailable("choose"));
-		scn.ShadowChooseMultipleChoiceOption("exert");
-
-		assertEquals(2, scn.GetShadowDeckCount());
-		assertEquals(0, scn.GetShadowDiscardCount());
-		scn.FreepsResolveActionOrder("Axe");
-		assertEquals(1, scn.GetShadowDeckCount());
-		assertEquals(3, scn.GetShadowDiscardCount());//runner, scout, and a card discarded from the deck
+		assertEquals(1, scn.GetTwilight());
 	}
 }

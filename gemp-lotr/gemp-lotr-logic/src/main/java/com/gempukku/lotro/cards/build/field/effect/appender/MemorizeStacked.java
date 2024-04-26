@@ -29,6 +29,9 @@ public class MemorizeStacked implements EffectAppenderProducer {
         final String on = FieldUtils.getString(effectObject.get("on"), "on");
         final String memory = FieldUtils.getString(effectObject.get("memory"), "memory");
 
+        if (memory == null)
+            throw new InvalidCardDefinitionException("Memory is required for a MemorizeStacked effect.");
+
         final FilterableSource filterSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource onFilterSource = environment.getFilterFactory().generateFilter(on, environment);
 

@@ -7,14 +7,14 @@ import com.gempukku.lotro.logic.PlayerOrder;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.GameStats;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GameState {
-    private static final Logger _log = Logger.getLogger(GameState.class);
+    private static final Logger _log = LogManager.getLogger(GameState.class);
     private static final int LAST_MESSAGE_STORED_COUNT = 15;
     private PlayerOrder _playerOrder;
 
@@ -54,6 +54,7 @@ public class GameState {
 
     private final Map<String, PhysicalCard> _ringBearers = new HashMap<>();
     private final Map<String, PhysicalCard> _rings = new HashMap<>();
+    private final Map<String, PhysicalCard> _maps = new HashMap<>();
 
     private final Map<String, AwaitingDecision> _playerDecisions = new HashMap<>();
 
@@ -63,13 +64,25 @@ public class GameState {
     private final Set<GameStateListener> _gameStateListeners = new HashSet<>();
     private final LinkedList<String> _lastMessages = new LinkedList<>();
 
+    private PreGameInfo _preGameInfo;
+
     private int _nextCardId = 0;
 
     private int nextCardId() {
         return _nextCardId++;
     }
 
-    public void init(PlayerOrder playerOrder, String firstPlayer, Map<String, List<String>> cards, Map<String, String> ringBearers, Map<String, String> rings, LotroCardBlueprintLibrary library, LotroFormat format) {
+    //This happens before the bidding, so it has to be done separately from init
+    public void initPreGame(PreGameInfo preGameInfo) {
+        _preGameInfo = preGameInfo;
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            listener.initializePregameBoard(preGameInfo);
+        }
+    }
+
+    public void init(PlayerOrder playerOrder, String firstPlayer, Map<String, List<String>> cards,
+            Map<String, String> ringBearers, Map<String, String> rings, Map<String, String> maps,
+            LotroCardBlueprintLibrary library, LotroFormat format) {
         _playerOrder = playerOrder;
         _currentPlayerId = firstPlayer;
         _format = format;
@@ -94,6 +107,10 @@ public class GameState {
                 String ringBlueprintId = rings.get(playerId);
                 if (ringBlueprintId != null)
                     _rings.put(playerId, createPhysicalCardImpl(playerId, library, ringBlueprintId));
+
+                if(format.usesMaps()) {
+                    _maps.put(playerId, createPhysicalCardImpl(playerId, library, maps.get(playerId)));
+                }
             } catch (CardNotFoundException exp) {
                 throw new RuntimeException("Unable to create game, due to either ring-bearer or ring being invalid cards");
             }
@@ -294,6 +311,10 @@ public class GameState {
         for (String lastMessage : _lastMessages)
             listener.sendMessage(lastMessage);
 
+        if(_preGameInfo != null) {
+            listener.initializePregameBoard(_preGameInfo);
+        }
+
         final AwaitingDecision awaitingDecision = _playerDecisions.get(playerId);
         if (awaitingDecision != null)
             listener.decisionRequired(playerId, awaitingDecision);
@@ -385,6 +406,10 @@ public class GameState {
 
     public PhysicalCard getRing(String playerId) {
         return _rings.get(playerId);
+    }
+
+    public PhysicalCard getMap(String playerId) {
+        return _maps.get(playerId);
     }
 
     private List<PhysicalCardImpl> getZoneCards(String playerId, CardType type, Zone zone) {
@@ -524,17 +549,23 @@ public class GameState {
         ((PhysicalCardImpl) card).setZone(zone);
 
         if (zone == Zone.ADVENTURE_PATH) {
-            for (GameStateListener listener : getAllGameStateListeners())
+            for (GameStateListener listener : getAllGameStateListeners()) {
                 listener.setSite(card);
+            }
+
+            ((PhysicalCardImpl) card).startAffectingGamePermanentSite(game);
         } else {
-            for (GameStateListener listener : getAllGameStateListeners())
+            for (GameStateListener listener : getAllGameStateListeners()) {
                 listener.cardCreated(card);
+            }
         }
 
         if (_currentPhase.isCardsAffectGame()) {
-            if (zone.isInPlay())
-                if (card.getBlueprint().getCardType() != CardType.SITE || (getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP && getCurrentSite() == card))
+            if (zone.isInPlay()) {
+                if (card.getBlueprint().getCardType() != CardType.SITE || (getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP && getCurrentSite() == card)) {
                     startAffecting(game, card);
+                }
+            }
 
             if (zone == Zone.STACKED)
                 startAffectingStacked(game, card);

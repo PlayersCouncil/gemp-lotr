@@ -25,7 +25,7 @@ public class PutCardsFromDiscardIntoHand implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "count", "filter", "player", "discard", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final String discard = FieldUtils.getString(effectObject.get("discard"), "disard", player);
+        final String discard = FieldUtils.getString(effectObject.get("discard"), "discard", player);
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");

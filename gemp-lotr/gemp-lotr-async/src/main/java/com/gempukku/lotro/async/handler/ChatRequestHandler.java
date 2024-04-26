@@ -16,8 +16,8 @@ import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import org.apache.log4j.Logger;
-import org.commonmark.Extension;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;import org.commonmark.Extension;
 import org.commonmark.ext.autolink.AutolinkExtension;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
 import org.commonmark.node.Image;
@@ -46,7 +46,7 @@ public class ChatRequestHandler extends LotroServerRequestHandler implements Uri
     private final Parser _markdownParser;
     private final HtmlRenderer _markdownRenderer;
 
-    private static final Logger _log = Logger.getLogger(ChatRequestHandler.class);
+    private static final Logger _log = LogManager.getLogger(ChatRequestHandler.class);
 
     public ChatRequestHandler(Map<Type, Object> context, LongPollingSystem longPollingSystem) {
         super(context);

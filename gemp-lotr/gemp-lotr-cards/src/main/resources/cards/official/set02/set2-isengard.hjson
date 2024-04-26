@@ -106,7 +106,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: {
 						type: location
 						filter: underground

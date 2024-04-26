@@ -34,7 +34,7 @@ public class ChooseANumber implements EffectAppenderProducer {
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                return new PlayoutDecisionEffect(actionContext.getPerformingPlayer(),
+                return new PlayoutDecisionEffect(playerSource.getPlayer(actionContext),
                     new IntegerAwaitingDecision(1, GameUtils.SubstituteText(displayText, actionContext),
                         fromSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null),
                         toSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null))

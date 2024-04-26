@@ -1,21 +1,10 @@
 {
-
 	53_38: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/53_38.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 3_38
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1?
 			collInfo: 3R38
 			rarity: R
@@ -56,10 +45,64 @@
 		lore: "'...his hood was cast back, and his dark hair was blowing in the wind, a light was in his eyes: a king returning from exile in his own land.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+	
+	53_41: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN03E041.1_card.jpg
+			javaClass: false
+			parent: 3_41
+			parentPath: errata/pc
+			version: 1
+			collInfo: 3R41
+			rarity: R
+			setNum: "3"
+			cardNum: 41
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Gondor Bowmen
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keyword: [
+			tale
+			support area
+		]
+		effects: [
+			{
+				type: Activated
+				phase: Archery
+				cost: [
+					{
+						type: Exert
+						filter: choose(culture(gondor),companion)
+					}
+					{
+						type: Discard
+						filter: self
+					}
+				]
+				effect: {
+					type: ModifyArcheryTotal
+					side: freeps
+					amount: 2
+				}
+			}
+		]
+		gametext: Tale.<br>Archery: Exert a [gondor] companion and discard this condition to make the fellowship archery total +2.
+		lore: Arrows of the Last Alliance brought death to Sauron's forces.
+		promotext: ""
+		alts: {
+			promos: {
+			}
 			errata: {
 			}
 		}
@@ -67,20 +110,10 @@
 	
 	53_42: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/53_42.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 3_42
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1?
 			collInfo: 3R42
 			rarity: R
@@ -125,7 +158,7 @@
 					until: start(regroup)
 				}
 				{
-					type: allyCanParticipateInArcheryFireAndSkirmishes
+					type: EnableParticipationInArcheryFireAndSkirmishes
 					filter: memory(chosenAlly)
 					until: start(regroup)
 				}
@@ -135,10 +168,8 @@
 		lore: "On a baldric he wore a great horn tipped with silver...."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}

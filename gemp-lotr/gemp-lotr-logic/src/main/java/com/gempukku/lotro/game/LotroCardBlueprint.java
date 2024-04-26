@@ -62,6 +62,7 @@ public interface LotroCardBlueprint {
     List<? extends Modifier> getInDiscardModifiers(LotroGame game, PhysicalCard self);
 
     List<? extends Modifier> getControlledSiteModifiers(LotroGame game, PhysicalCard self);
+    List<? extends Modifier> getPermanentSiteModifiers(LotroGame game, PhysicalCard self);
 
     boolean checkPlayRequirements(LotroGame game, PhysicalCard self);
 
@@ -128,4 +129,9 @@ public interface LotroCardBlueprint {
     void appendAidCosts(LotroGame game, CostToEffectAction action, PhysicalCard self);
 
     boolean skipUniquenessCheck();
+
+    default Result validatePreGameDeckCheck(List<PhysicalCardImpl> freeps, List<PhysicalCardImpl> shadow,
+            List<PhysicalCardImpl> sites, PhysicalCardImpl rb, PhysicalCardImpl ring, PhysicalCardImpl map) {
+        return new Result(true, null);
+    }
 }

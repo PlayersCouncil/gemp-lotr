@@ -395,7 +395,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: [
 						{
 							type: canSpotBurdens
@@ -587,7 +587,7 @@
 		effects: {
 			type: trigger
 			trigger: {
-				type: requires
+				type: ConstantlyCheck
 				requires: [
 					{
 						type: perTurnLimit
@@ -995,7 +995,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: [
 						{
 							type: perTurnLimit

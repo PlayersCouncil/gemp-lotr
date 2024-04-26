@@ -1,0 +1,84 @@
+{
+	59_49: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN09E049.1_card.jpg
+			javaClass: false
+			parent: 9_49
+			parentPath: errata/pc
+			version: 1?
+			collInfo: 9R+49
+			rarity: R+
+			setNum: "9"
+			cardNum: 49
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Bilbo
+		subtitle: Bearer of Things Burgled
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 9
+		keyword: [
+			can start with ring
+			ring-bound
+		]
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: not
+					requires: {
+						type: canSpotTwilight
+						amount: 3
+					}
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add 2 burdens
+						Add (3)
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 2
+						}
+						{
+							type: addTwilight
+							amount: 3
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: play
+					filter: choose(culture(shire),tale)
+				}
+			}
+		]
+		gametext: <b>Ring-bound.</b> <br>Each time the fellowship moves, if the twilight pool has 2 or fewer twilight tokens, add 2 burdens or add (3). <br><b>Regroup:</b> Add a burden to play a [shire] tale.
+		lore: “‘But what has it got in its pocketses, eh?'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

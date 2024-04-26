@@ -1,12 +1,12 @@
 package com.gempukku.lotro;
 
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.sql.SQLException;
 
 public abstract class AbstractServer {
-    private static final Logger _logger = Logger.getLogger(AbstractServer.class);
+    private static final Logger _logger = LogManager.getLogger(AbstractServer.class);
     private static final ServerCleaner _cleaningTask = new ServerCleaner();
 
     private boolean _started;

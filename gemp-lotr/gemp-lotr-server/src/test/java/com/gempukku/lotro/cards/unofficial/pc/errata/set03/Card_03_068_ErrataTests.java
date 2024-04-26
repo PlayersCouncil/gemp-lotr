@@ -27,6 +27,7 @@ public class Card_03_068_ErrataTests
         );
     }
 
+    @Test
     public void SarumanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
         /**
@@ -59,7 +60,7 @@ public class Card_03_068_ErrataTests
         assertEquals(4, saruman.getBlueprint().getTwilightCost());
         assertEquals(8, saruman.getBlueprint().getStrength());
         assertEquals(4, saruman.getBlueprint().getVitality());
-        assertEquals(4, saruman.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
+        assertEquals(4, saruman.getBlueprint().getSiteNumber());
     }
 
     @Test

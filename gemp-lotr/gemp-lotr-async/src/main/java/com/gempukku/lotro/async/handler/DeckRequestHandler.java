@@ -16,8 +16,9 @@ import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -39,7 +40,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private final SoloDraftDefinitions _draftLibrary;
     private final LotroServer _lotroServer;
 
-    private static final Logger _log = Logger.getLogger(DeckRequestHandler.class);
+    private static final Logger _log = LogManager.getLogger(DeckRequestHandler.class);
 
     public DeckRequestHandler(Map<Type, Object> context) {
         super(context);
@@ -100,7 +101,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                         .collect(Collectors.toMap(x-> x.code, x-> x));
                 data.SealedTemplates = _formatLibrary.GetAllSealedTemplates().values().stream()
                         .map(SealedLeagueDefinition::Serialize)
-                        .collect(Collectors.toMap(x-> x.Name, x-> x));
+                        .collect(Collectors.toMap(x-> x.name, x-> x));
                 data.DraftTemplates = _draftLibrary.getAllSoloDrafts().values().stream()
                         .map(soloDraft -> new JSONDefs.ItemStub(soloDraft.getCode(), soloDraft.getFormat()))
                         .collect(Collectors.toMap(x-> x.code, x-> x));
@@ -139,7 +140,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
 
             int fpCount = 0;
             int shadowCount = 0;
-            for (String card : deck.getAdventureCards()) {
+            for (String card : deck.getDrawDeckCards()) {
                 Side side = _library.getLotroCardBlueprint(card).getSide();
                 if (side == Side.SHADOW)
                     shadowCount++;
@@ -259,10 +260,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         String deckName = getQueryParameterSafely(queryDecoder, "deckName");
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-        String code = resourceOwner.getName() + "|" + deckName;
-
-        String base64 = Base64.getEncoder().encodeToString(code.getBytes(StandardCharsets.UTF_8));
-        String result = URLEncoder.encode(base64, StandardCharsets.UTF_8);
+        var result = LotroDeck.GenerateDeckSharingURL(deckName, resourceOwner.getName());
 
         responseWriter.writeHtmlResponse(result);
     }
@@ -355,10 +353,10 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                         
     </style>
     <body>""");
-        result.append("<h1>" + StringEscapeUtils.escapeHtml(deck.getDeckName()) + "</h1>");
-        result.append("<h2>Format: " + StringEscapeUtils.escapeHtml(deck.getTargetFormat()) + "</h2>");
+        result.append("<h1>" + StringEscapeUtils.escapeHtml3(deck.getDeckName()) + "</h1>");
+        result.append("<h2>Format: " + StringEscapeUtils.escapeHtml3(deck.getTargetFormat()) + "</h2>");
         if(author != null) {
-            result.append("<h2>Author: " + StringEscapeUtils.escapeHtml(author) + "</h2>");
+            result.append("<h2>Author: " + StringEscapeUtils.escapeHtml3(author) + "</h2>");
         }
         String ringBearer = deck.getRingBearer();
         if (ringBearer != null)
@@ -367,8 +365,15 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         if (ring != null)
             result.append("<b>Ring:</b> " + generateCardTooltip(_library.getLotroCardBlueprint(ring), ring) + "<br/>");
 
+        var format = _formatLibrary.getFormatByName(deck.getTargetFormat());
+        if(format != null && format.usesMaps()) {
+            String map = deck.getMap();
+            if(map != null)
+                result.append("<b>Map:</b> " + generateCardTooltip(_library.getLotroCardBlueprint(map), map) + "<br/>");
+        }
+
         DefaultCardCollection deckCards = new DefaultCardCollection();
-        for (String card : deck.getAdventureCards())
+        for (String card : deck.getDrawDeckCards())
             deckCards.addItem(_library.getBaseBlueprintId(card), 1);
         for (String site : deck.getSites())
             deckCards.addItem(_library.getBaseBlueprintId(site), 1);
@@ -576,13 +581,19 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             deckElem.appendChild(ring);
         }
 
+        if (deck.getMap() != null) {
+            Element map = doc.createElement("map");
+            map.setAttribute("blueprintId", deck.getMap());
+            deckElem.appendChild(map);
+        }
+
         for (CardItem cardItem : _sortAndFilterCards.process("sort:siteNumber,twilight", createCardItems(deck.getSites()), _library, _formatLibrary)) {
             Element site = doc.createElement("site");
             site.setAttribute("blueprintId", cardItem.getBlueprintId());
             deckElem.appendChild(site);
         }
 
-        for (CardItem cardItem : _sortAndFilterCards.process("sort:cardType,culture,name", createCardItems(deck.getAdventureCards()), _library, _formatLibrary)) {
+        for (CardItem cardItem : _sortAndFilterCards.process("sort:cardType,culture,name", createCardItems(deck.getDrawDeckCards()), _library, _formatLibrary)) {
             Element card = doc.createElement("card");
             String side;
             try {

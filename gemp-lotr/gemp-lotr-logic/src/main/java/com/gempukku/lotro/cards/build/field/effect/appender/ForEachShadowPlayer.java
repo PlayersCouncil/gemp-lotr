@@ -21,6 +21,9 @@ public class ForEachShadowPlayer implements EffectAppenderProducer {
 
         final JSONObject effect = (JSONObject) effectObject.get("effect");
 
+        if (effect == null)
+            throw new InvalidCardDefinitionException("Effect is required for a ForEachShadowPlayer effect.");
+
         final EffectAppender effectAppender = environment.getEffectAppenderFactory().getEffectAppender(effect, environment);
 
         return new DelayedAppender() {

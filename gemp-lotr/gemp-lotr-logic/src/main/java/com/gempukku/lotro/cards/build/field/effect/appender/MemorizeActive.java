@@ -26,6 +26,9 @@ public class MemorizeActive implements EffectAppenderProducer {
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
         final String memory = FieldUtils.getString(effectObject.get("memory"), "memory");
 
+        if (memory == null)
+            throw new InvalidCardDefinitionException("Memory is required for a Memorize effect.");
+
         final FilterableSource filterSource = environment.getFilterFactory().generateFilter(filter, environment);
 
         return new DelayedAppender() {

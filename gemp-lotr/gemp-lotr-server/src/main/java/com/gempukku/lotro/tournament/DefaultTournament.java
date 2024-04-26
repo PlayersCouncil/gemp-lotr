@@ -15,8 +15,8 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.PacksStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.XML;
 
 import java.time.ZonedDateTime;
@@ -502,7 +502,7 @@ public class DefaultTournament implements Tournament {
 
         StringBuilder summary = new StringBuilder();
         summary.append("<html><body>")
-                .append("<h1>").append(StringEscapeUtils.escapeHtml(_tournamentName)).append("</h1>")
+                .append("<h1>").append(StringEscapeUtils.escapeHtml3(_tournamentName)).append("</h1>")
                 .append("<ul>")
                 .append("<li>Format: ").append(_format).append("</li>")
                 .append("<li>Collection: ").append(_collectionType.getFullName()).append("</li>")

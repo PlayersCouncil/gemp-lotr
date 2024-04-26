@@ -1,21 +1,59 @@
 {
+	
+		51_70: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN01E070.1_card.jpg
+			javaClass: false
+			parent: 1_70
+			parentPath: errata/pc
+			version: 4
+			collInfo: 1U70
+			rarity: U
+			setNum: "1"
+			cardNum: 70
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Barliman Butterbur
+		subtitle: Prancing Pony Proprietor
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Ally
+		allyHome: fellowship,1
+		race: Man
+		strength: 1
+		vitality: 2
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				filter: self
+			}
+			effect: {
+				type: putCardsFromDiscardIntoHand
+				filter: choose(spell)
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert Barliman Butterbur to take a spell into hand from your discard pile.
+		lore: “‘You don't know much even about them, if you think old Barliman is stupid,' said Gandalf. ‘He is wise enough on his own ground.'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 	51_80: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/51_80.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 1_80
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1?
 			collInfo: 1R80
 			rarity: R
@@ -60,10 +98,48 @@
 		lore: The Men of Laketown come from the North, where they trade with the Dwarves of the Lonely Mountain.
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+	
+	51_87: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN01E087.1_card.jpg
+			javaClass: false
+			parent: 1_87
+			parentPath: errata/pc
+			version: 1
+			collInfo: 1R87
+			rarity: R
+			setNum: "1"
+			cardNum: 87
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: A Wizard Is Never Late
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		keyword: Fellowship
+		effects: {
+			type: event
+			effect: {
+				type: playCardFromDrawDeck
+				filter: choose(or(wizard,and(culture(gandalf),ally)))
+				nocheck: true
+			}
+		}
+		gametext: Play a Wizard or [gandalf] ally from your draw deck.
+		lore: “‘A wizard is never late, Frodo Baggins, nor is he early. He arrives precisely when he means to.'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
 			errata: {
 			}
 		}

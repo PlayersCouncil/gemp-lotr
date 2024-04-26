@@ -10,6 +10,7 @@ import com.gempukku.lotro.logic.timing.GameStats;
 import com.gempukku.polling.LongPollableResource;
 import com.gempukku.polling.WaitingRequest;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.gempukku.lotro.game.state.GameEvent.Type.*;
@@ -41,6 +42,16 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
                 .participantId(_self)
                 .allParticipantIds(participantIds)
                 .discardPublic(discardIsPublic)
+        );
+    }
+
+    @Override
+    public void initializePregameBoard(PreGameInfo preGameInfo) {
+        List<String> participantIds = new LinkedList<>(preGameInfo.participants());
+        appendEvent(new GameEvent(PRE_GAME_SETUP)
+                .participantId(_self)
+                .allParticipantIds(participantIds)
+                .preGameInfo(preGameInfo)
         );
     }
 
@@ -158,6 +169,11 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
     @Override
     public void setCurrentPlayerId(String currentPlayerId) {
         appendEvent(new GameEvent(TURN_CHANGE).participantId(currentPlayerId));
+    }
+
+    @Override
+    public String getAssignedPlayerId() {
+        return _self;
     }
 
     @Override

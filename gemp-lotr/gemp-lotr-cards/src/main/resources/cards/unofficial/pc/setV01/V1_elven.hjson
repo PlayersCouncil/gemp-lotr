@@ -105,53 +105,111 @@
 	}
 
 
+	# 101_9: {
+	# 	title: Legolas
+	# 	unique: true
+	# 	subtitle: Keen-eyed
+	# 	culture: elven
+	# 	twilight: 2
+	# 	type: companion
+	# 	race: elf
+	# 	keyword: [
+	# 		archer
+	# 	]
+	# 	strength: 6
+	# 	vitality: 3
+	# 	signet: aragorn
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: activated
+	# 			phase: archery
+	# 			cost: [
+	# 				{
+	# 					type: reduceArcheryTotal
+	# 					side: free people
+	# 					memorize: reducedBy
+	# 				}
+	# 			]
+	# 			effect: [
+	# 				{
+	# 					type: modifyStrength
+	# 					filter: self
+	# 					amount: {
+	# 						type: fromMemory
+	# 						memory: reducedBy
+	# 					}
+	# 					until:start(regroup)
+	# 				}
+	# 				{
+	# 					type: addmodifier
+	# 					modifier: {
+	# 						type: cantUseSpecialAbilities
+	# 						filter: side(free People)
+	# 					}
+	# 					until: start(assignment)
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# }
+	
 	101_9: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S009.1_card.jpg
+			javaClass: false
+			parent: 101_9
+			parentPath: errata/pc
+			version: 1
+			collInfo: V1R9
+			rarity: R
+			setNum: "V1"
+			cardNum: 9
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
 		title: Legolas
-		unique: true
 		subtitle: Keen-eyed
-		culture: elven
+		unique: true
+		side: Free Peoples
+		culture: Elven
 		twilight: 2
-		type: companion
-		race: elf
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
 		keyword: [
 			archer
 		]
-		strength: 6
-		vitality: 3
-		signet: aragorn
-		resistance: 6
-		effects: [
-			{
-				type: activated
-				phase: archery
-				cost: [
-					{
-						type: reduceArcheryTotal
-						side: free people
-						memorize: reducedBy
-					}
-				]
-				effect: [
-					{
-						type: modifyStrength
-						filter: self
-						amount: {
-							type: fromMemory
-							memory: reducedBy
-						}
-						until:start(regroup)
-					}
-					{
-						type: addmodifier
-						modifier: {
-							type: cantUseSpecialAbilities
-							filter: side(free People)
-						}
-						until: start(assignment)
-					}
-				]
+		effects: {
+			type: Trigger
+			optional: false
+			requires: {
+				type: Phase
+				phase: Archery
 			}
-		]
+			trigger: {
+				type: TakesWound
+				filter: minion
+			}
+			effect: {
+				type: ModifyStrength
+				amount: 1
+				filter: self
+				until: start(regroup)
+			}
+		}
+		gametext: Archer.<br>Each time a minion takes a wound during the archery phase, make Legolas strength +1 until the regroup phase.
+		lore: "He saw not a shadow, nor a blur, but the small figures of horsemen."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 

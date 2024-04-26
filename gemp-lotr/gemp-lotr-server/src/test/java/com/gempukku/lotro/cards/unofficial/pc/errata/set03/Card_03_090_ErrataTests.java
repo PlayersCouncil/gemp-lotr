@@ -45,7 +45,9 @@ public class Card_03_090_ErrataTests
 		* Twilight Cost: 0
 		* Type: event
 		* Subtype: Maneuver
-		* Game Text: Exert a unique [sauron] minion to exert a companion (except the Ring-bearer) and discard a possession attached to that companion.  The Free Peoples player may discard 1 hand at random from their hand to prevent this.
+		* Game Text: Exert a unique [sauron] minion to exert a companion (except the Ring-bearer) and
+		 * discard a possession attached to that companion.  The Free Peoples player may discard 1
+		 * card at random from their hand to prevent this.
 		*/
 
 		//Pre-game setup

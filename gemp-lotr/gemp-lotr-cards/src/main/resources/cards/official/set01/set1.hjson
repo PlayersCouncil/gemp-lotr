@@ -286,7 +286,7 @@
 		effects: {
 			type: trigger
 			trigger: {
-				type: requires
+				type: ConstantlyCheck
 				requires: {
 					type: canSpot
 					filter: ranger
@@ -659,7 +659,7 @@
 		effects: {
 			type: trigger
 			trigger: {
-				type: requires
+				type: ConstantlyCheck
 				requires: {
 					type: canSpot
 					filter: ranger

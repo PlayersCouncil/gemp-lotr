@@ -90,7 +90,7 @@
 				filter: choose(your,orc)
 			}
 			effect: {
-				type: cantBeAssignedToSkirmish
+				type: DisableSkirmishAssignment
 				filter: choose(or(name(Gandalf),and(culture(elven),ally)))
 			}
 		}

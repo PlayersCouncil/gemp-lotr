@@ -300,11 +300,11 @@ gl_theOneRing,1_2
 0_130,0_16
 #Eowyn, Lady of Rohan Promo MW
 0_131,0_17
-#Legolas, Greenleaf Winter Promo
+#Legolas, Greenleaf Holiday Promo
 1_378,1_50
-#Arwen, Queen of Elves and Men Winter Promo
+#Arwen, Queen of Elves and Men Holiday Promo
 10_125,10_6
-#Gimli, Lively Combatant
+#Gimli, Lively Combatant Holiday Promo
 11_271,11_8
 #Arwen, Daughter of Elrond MW
 1_379,1_30
@@ -360,3 +360,19 @@ gl_theOneRing,1_2
 9_58,9_35
 #Gollum, Dark as Darkness FA
 9_59,9_28
+#2023 WC Top 8 - Goblin Runner FA
+1_383,1_178
+#2023 WC World Challenger - Goblin Runner FA
+1_384,1_178
+#2023 WC World Champion- Goblin Runner FA
+1_385,1_178
+#2023 WC - Goblin Runner FA
+1_386,1_178
+#Aragorn,Elessar Telcontar FA
+10_127,10_25
+#Arwen, Queen of Elves and Men FA
+10_128,10_6
+#Pippin Holiday Promo
+1_387,1_307
+#Merry, Holiday Promo
+1_388,1_302

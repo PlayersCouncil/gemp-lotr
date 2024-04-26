@@ -2,7 +2,7 @@
 	{
 		name: Debug
 		code: debug
-		sites: SPECIAL
+		sites: MULTIPATH
 		maximumSameName: 100
 		set: [
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 101, 151
@@ -32,7 +32,7 @@
 		set: [
 			1, 2, 3, 101
 		]
-		erratasets: [
+		errataSets: [
 			51,52,53
 		]
 	}
@@ -53,13 +53,17 @@
 		name: Movie Block (PC)
 		code: pc_movie
 		order: 4
-		sites: KING
+		sites: MULTIPATH
+		usesMaps: true
 		winAtEndOfRegroup: true
 		discardPileIsPublic: true
 		set: [
-			1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 101
+			1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 101
 		]
-		erratasets: [
+		banned: [
+			"100_1"
+		]
+		errataSets: [
 			51,52,53,54,55,56,57,58,59,60
 		]
 	}
@@ -90,7 +94,7 @@
 		set: [
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 100, 101
 		]
-		erratasets: [
+		errataSets: [
 			51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69
 		]
 	}
@@ -368,7 +372,7 @@
 		name: Pre-Shadows Multipath
 		code: multipath
 		order: 27
-		sites: SPECIAL
+		sites: MULTIPATH
 		banned: [
 			"1_138", "1_311", "1_316", "1_331", "1_338", "1_354", "1_355", "1_360", 
 			"2_14", "2_75", "3_1", "3_113", "4_73", "4_338", "4_355", "4_357", "7_190", 
@@ -443,6 +447,9 @@
 			"4_73", "4_276", "4_304", "7_49", "8_1", "10_2", "10_11", "10_91", "11_31", 
 			"11_100", "11_132"
 		]
+		valid: [
+			"0_56-60"
+		]
 		set: [
 			4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 		]
@@ -503,7 +510,7 @@
 		name: Anything Goes
 		code: rev_tow_sta
 		order: 37
-		sites: SPECIAL
+		sites: MULTIPATH
 		cancelRingBearerSkirmish: true
 		set: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 			30, 31, 32, 33
@@ -576,12 +583,14 @@
 		order: 41
 		sites: FELLOWSHIP
 		cancelRingBearerSkirmish: true
+		winAtEndOfRegroup: true
+		discardPileIsPublic: true
 		hall: true
 		playtest: true
 		set: [
 			1, 2, 3, 101, 151
 		]
-		erratasets: [
+		errataSets: [
 			51,52,53
 			71,72,73
 		]
@@ -590,13 +599,16 @@
 		name: PLAYTEST - Movie Block (PC)
 		code: test_pc_movie
 		order: 42
-		sites: KING
+		sites: MULTIPATH
+		winAtEndOfRegroup: true
+		discardPileIsPublic: true
+		usesMaps: true
 		hall: true
 		playtest: true
 		set: [
 			1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 101, 151
 		]
-		erratasets: [
+		errataSets: [
 			51,52,53,54,55,56,57,58,59,60
 			71,72,73,74,75,76,77,78,79,80
 		]
@@ -606,12 +618,14 @@
 		code: test_pc_expanded
 		sites: SHADOWS
 		order: 43
+		winAtEndOfRegroup: true
+		discardPileIsPublic: true
 		hall: true
 		playtest: true
 		set: [
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 100, 101, 151
 		]
-		erratasets: [
+		errataSets: [
 			51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69
 			71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89
 		]
@@ -689,7 +703,7 @@
 		set: [
 			1, 2, 3, 101
 		]
-		erratasets: [
+		errataSets: [
 			51,52,53
 			71,72,73
 		]
@@ -742,7 +756,7 @@
 	{
 		name: Limited - Multipath Movie
 		code: limited_multipath
-		sites: SPECIAL
+		sites: MULTIPATH
 		cancelRingBearerSkirmish: false
 		maximumSameName: 100
 		set: [

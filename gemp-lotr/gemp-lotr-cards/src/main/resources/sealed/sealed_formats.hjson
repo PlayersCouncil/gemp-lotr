@@ -1671,7 +1671,7 @@
 	}
 	{
 		name: 37 Saruman Sealed
-		id: saruman_sealed
+		id:saruman_sealed
 		format: limited_hunters
 		seriesProduct: [
 			[
@@ -1684,15 +1684,20 @@
 			],
 		]
 	}
-	
 	{
-		name: 38 Debug Event Rewards
-		id: event_rewards_debu
-		format: limited_hunters
+		name: 39 Shelbi Sealed
+		id: shelbi_sealed
+		format: limited_king
 		seriesProduct: [
 			[
-				100xEvent Chase Booster
-				100xPlacement Random Chase Card Selector
+				1x(S)SHELBI - Starter
+				1xFotR - Booster
+				1xMoM - Booster
+				1xRotEL - Booster
+				1xTTT - Booster
+				1xBoHD - Booster
+				1xEoF - Booster
+				1xRotK - Booster
 			],
 		]
 	}

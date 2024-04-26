@@ -1,0 +1,209 @@
+{
+
+	59_26: {
+		cardInfo: {
+			imagePath: errata/59_26.jpg
+			javaClass: false
+			parent: 9_26
+			parentPath: errata/pc
+			version: 1?
+			collInfo: 9R+26
+			rarity: R+
+			setNum: "9"
+			cardNum: 26
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Radagast
+		subtitle: The Brown
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		#keyword: damage+1
+		strength: 7
+		vitality: 4
+		signet: Gandalf
+		resistance: 6,
+		effects: [
+			{
+				type: trigger
+				trigger: [
+					{
+						type: played
+						filter: self
+					}
+					{
+						type: startOfTurn
+					}
+				]
+				requires: {
+					type: perTurnLimit
+					limit: 1
+				}
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: addModifier
+						until: endOfTurn
+						modifier: {
+							type: modifyMoveLimit
+							amount: 1
+						}
+					}
+					{
+						type: AddTrigger
+						until: endOfTurn
+						optional: false
+						trigger: {
+							type: RemovedFromPlay
+							filter: title(Radagast)
+						}
+						effect: {
+							type: addModifier
+							until: endOfTurn
+							modifier: {
+								type: modifyMoveLimit
+								amount: -1
+							}
+						}
+					}
+				]
+			}
+			# {
+			# 	type: DiscardedFromPlayTrigger
+			# 	optional: false
+			# 	effect: [
+			# 		{
+			# 			type: addModifier
+			# 			until: endOfTurn
+			# 			modifier: {
+			# 				type: modifyMoveLimit
+			# 				amount: -1
+			# 			}
+			# 		}
+			# 	]
+			# }
+			# {
+			# 	type: KilledTrigger
+			# 	optional: false
+			# 	effect: [
+			# 		{
+			# 			type: addModifier
+			# 			until: endOfTurn
+			# 			modifier: {
+			# 				type: modifyMoveLimit
+			# 				amount: -1
+			# 			}
+			# 		}
+			# 	]
+			# }
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: optional
+					player: shadowPlayer
+					text: Would you like to discard 2 cards to draw 2 cards?
+					effect: {
+						type: costToEffect
+						cost: {
+							type: discardFromHand
+							forced: false
+							count: 2
+						}
+						effect: {
+							type: drawCards
+							count: 2
+						}
+					}
+				}
+			}
+		]
+		gametext: The move limit is +1. When Radagast leaves play, this bonus is immediately lost.<br>Each time the fellowship moves, each opponent may discard 2 cards from hand to draw 2 cards.
+		lore: "'...a master of shapes and changes of hue;<br>and he has much lore of herbs and beasts....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	59_27: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN09E027.1_card.jpg
+			javaClass: false
+			parent: 9_27
+			parentPath: errata/pc
+			version: 1
+			collInfo: 9R27
+			rarity: R
+			setNum: "9"
+			cardNum: 27
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Sent Back
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		keyword: support area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					filter: self
+				}
+				effect: [
+					{
+						type: chooseActiveCards
+						text: Choose Wizard to put in dead pile
+						filter: choose(your,wizard,inSkirmish)
+						memorize: chosenWizard
+					}
+					{
+						type: discard
+						filter: all(minion,inSkirmishAgainst(memory(chosenWizard)))
+					}
+					{
+						type: kill
+						filter: memory(chosenWizard)
+					}
+				]
+			}
+			{
+				type: activated
+				phase: [
+					fellowship
+				]
+				effect: {
+					type: play
+					filter: choose(wizard)
+					ignoreInDeadPile: true
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Discard this condition to discard each minion skirmishing your Wizard. Place that Wizard in your dead pile. <br><b>Fellowship</b>: Play a Wizard (even if another copy of that Wizard is in your dead pile).
+		lore: "'The Sun shines through you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

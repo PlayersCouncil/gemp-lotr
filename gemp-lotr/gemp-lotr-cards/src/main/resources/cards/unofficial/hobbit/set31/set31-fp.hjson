@@ -324,7 +324,7 @@
 				filter: self
 			}
 			effect: {
-				type: allyCanParticipateInArcheryFireAndSkirmishes
+				type: EnableParticipationInArcheryFireAndSkirmishes
 				filter: self
 				until: start(regroup)
 			}
@@ -418,7 +418,7 @@
 					until: start(regroup)
 				}
 				{
-					type: allyCanParticipateInArcheryFireAndSkirmishes
+					type: EnableParticipationInArcheryFireAndSkirmishes
 					filter: memory(chosenAlly)
 					until: start(regroup)
 				}
@@ -458,7 +458,7 @@
 				]
 			}
 			effect: {
-				type: allyCanParticipateInArcheryFireAndSkirmishes
+				type: EnableParticipationInArcheryFireAndSkirmishes
 				filter: self
 				until: start(regroup)
 			}
@@ -883,7 +883,7 @@
         }
       ]
       effect: {
-        type: allyCanParticipateInArcheryFireAndSkirmishes
+        type: EnableParticipationInArcheryFireAndSkirmishes
         filter: memory(chosenAlly)
         until: start(regroup)
       }

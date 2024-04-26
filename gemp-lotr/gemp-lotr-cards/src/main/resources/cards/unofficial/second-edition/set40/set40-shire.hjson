@@ -104,7 +104,7 @@
 				filter: self
 			}
 			effect: {
-				type: cantBeOverwhelmedMultiplier
+				type: AlterOverwhelmMultiplier
 				filter: choose(hobbit)
 				multiplier: 3
 			}
@@ -1011,7 +1011,7 @@
         ]
         effects: [
           {
-            type: cantBeOverwhelmedMultiplier
+            type: AlterOverwhelmMultiplier
             filter: choose(hobbit)
           }
           {

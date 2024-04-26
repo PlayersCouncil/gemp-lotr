@@ -22,7 +22,7 @@
 				filter: choose(name(Gandalf))
 			}
 			effect: {
-				type: allyCanParticipateInSkirmishes
+				type: EnableParticipationInSkirmishes
 				filter: all(wise,ally)
 				until: start(regroup)
 			}

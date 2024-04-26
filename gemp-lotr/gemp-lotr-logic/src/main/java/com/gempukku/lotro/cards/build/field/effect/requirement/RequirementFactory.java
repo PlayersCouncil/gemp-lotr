@@ -50,6 +50,7 @@ public class RequirementFactory {
         requirementProducers.put("movecountminimum", new MoveCountMinimum());
         requirementProducers.put("perphaselimit", new PerPhaseLimit());
         requirementProducers.put("perturnlimit", new PerTurnLimit());
+        requirementProducers.put("playablefromdiscard", new PlayableFromDiscard());
         requirementProducers.put("phase", new PhaseRequirement());
         requirementProducers.put("playedcardthisphase", new PlayedCardThisPhase());
         requirementProducers.put("ringisactive", new RingIsActive());

@@ -19,7 +19,7 @@ public class ChooseAndRemoveTwilight implements EffectAppenderProducer {
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "memorize");
 
-        final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
+        final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         MultiEffectAppender result = new MultiEffectAppender();
         result.addEffectAppender(

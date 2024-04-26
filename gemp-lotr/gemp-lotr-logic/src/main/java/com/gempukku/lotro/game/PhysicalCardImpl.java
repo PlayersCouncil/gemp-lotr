@@ -23,6 +23,7 @@ public class PhysicalCardImpl implements PhysicalCard {
     private List<ModifierHook> _modifierHooksStacked;
     private List<ModifierHook> _modifierHooksInDiscard;
     private List<ModifierHook> _modifierHooksControlledSite;
+    private List<ModifierHook> _modifierHooksPermanentSite;
 
     private Object _whileInZoneData;
 
@@ -118,12 +119,12 @@ public class PhysicalCardImpl implements PhysicalCard {
         }
     }
 
-    public void startAffectingGameControlledSite(LotroGame game) {
-        List<? extends Modifier> modifiers = _blueprint.getControlledSiteModifiers(game, this);
+    public void startAffectingGamePermanentSite(LotroGame game) {
+        List<? extends Modifier> modifiers = _blueprint.getPermanentSiteModifiers(game, this);
         if (modifiers != null) {
-            _modifierHooksControlledSite = new LinkedList<>();
+            _modifierHooksPermanentSite = new LinkedList<>();
             for (Modifier modifier : modifiers)
-                _modifierHooksControlledSite.add(game.getModifiersEnvironment().addAlwaysOnModifier(modifier));
+                _modifierHooksPermanentSite.add(game.getModifiersEnvironment().addAlwaysOnModifier(modifier));
         }
     }
 
@@ -132,6 +133,15 @@ public class PhysicalCardImpl implements PhysicalCard {
             for (ModifierHook modifierHook : _modifierHooksControlledSite)
                 modifierHook.stop();
             _modifierHooksControlledSite = null;
+        }
+    }
+
+    public void startAffectingGameControlledSite(LotroGame game) {
+        List<? extends Modifier> modifiers = _blueprint.getControlledSiteModifiers(game, this);
+        if (modifiers != null) {
+            _modifierHooksControlledSite = new LinkedList<>();
+            for (Modifier modifier : modifiers)
+                _modifierHooksControlledSite.add(game.getModifiersEnvironment().addAlwaysOnModifier(modifier));
         }
     }
 

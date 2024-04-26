@@ -73,6 +73,10 @@ public class GameUtils {
         return shadowPlayers.toArray(new String[shadowPlayers.size()]);
     }
 
+    public static String getFirstOpponent(LotroGame game, String playerId) {
+        return Arrays.stream(getOpponents(game, playerId)).findFirst().orElse(null);
+    }
+
     public static String[] getAllPlayers(LotroGame game) {
         final GameState gameState = game.getGameState();
         final PlayerOrder playerOrder = gameState.getPlayerOrder();
@@ -189,23 +193,60 @@ public class GameUtils {
         while (result.contains("{")) {
             int startIndex = result.indexOf("{");
             int endIndex = result.indexOf("}");
-            String memory = result.substring(startIndex + 1, endIndex);
+            String memoryName = result.substring(startIndex + 1, endIndex);
+            String memory = memoryName.toLowerCase();
+            String found = null;
             String culture = getCultureImage(memory);
             if(culture != null) {
-                result = result.replace("{" + memory + "}", culture);
+                found = culture;
             }
             else if(context != null){
-                String cardNames = GameUtils.getAppendedNames(context.getCardsFromMemory(memory));
-                if(cardNames.equalsIgnoreCase("none")) {
-                    try {
-                        cardNames = context.getValueFromMemory(memory);
-                    }
-                    catch(IllegalArgumentException ex) {
-                        cardNames = "none";
+                if(memory.equals("you")) {
+                    found = context.getPerformingPlayer();
+                    if(found == null) {
+                        found = "nobody";
                     }
                 }
-                result = result.replace("{" + memory + "}", cardNames);
+                else if(memory.equals("owner")) {
+                    var source = context.getSource();
+                    if(source != null) {
+                        found = source.getOwner();
+                    }
+                    if(found == null) {
+                        found = "nobody";
+                    }
+                }
+                else if(memory.equals("opponent")) {
+                    found = getFirstOpponent(context.getGame(), context.getSource().getOwner());
+                    if(found == null) {
+                        found = "nobody";
+                    }
+                }
+                else if(memory.equals("freeps") || memory.equals("free peoples")) {
+                    found = getFreePeoplePlayer(context.getGame());
+                    if(found == null) {
+                        found = "nobody";
+                    }
+                }
+                else if(memory.equals("shadow")) {
+                    found = getFirstShadowPlayer(context.getGame());
+                }
+                else {
+                    found = GameUtils.getAppendedNames(context.getCardsFromMemory(memory));
+                    if(found.equalsIgnoreCase("none")) {
+                        try {
+                            found = context.getValueFromMemory(memory);
+                        }
+                        catch(IllegalArgumentException ex) {
+                            found = "NONE";
+                        }
+                    }
+                }
             }
+            if(found == null) {
+                found = "NOTHING";
+            }
+            result = result.replace("{" + memoryName + "}", found);
         }
 
         return result;

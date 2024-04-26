@@ -10,8 +10,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -32,8 +32,8 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
     private final static long SIX_MONTHS = 1000L * 60L * 60L * 24L * 30L * 6L;
-    private static final Logger _log = Logger.getLogger(GempukkuHttpRequestHandler.class);
-    private static final Logger _accesslog = Logger.getLogger("access");
+    private static final Logger _log = LogManager.getLogger(GempukkuHttpRequestHandler.class);
+    private static final Logger _accesslog = LogManager.getLogger("access");
     private final Map<String, byte[]> _fileCache = Collections.synchronizedMap(new HashMap<>());
 
     private final Map<Type, Object> _objects;

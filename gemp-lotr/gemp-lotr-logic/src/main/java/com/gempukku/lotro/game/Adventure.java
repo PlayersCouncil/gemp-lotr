@@ -5,6 +5,7 @@ import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.timing.PlayerOrderFeedback;
+import com.gempukku.lotro.logic.timing.PregameSetupFeedback;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.Set;
 public interface Adventure {
     public void applyAdventureRules(LotroGame game, DefaultActionsEnvironment actionsEnvironment, ModifiersLogic modifiersLogic);
 
-    public GameProcess getStartingGameProcess(Set<String> players, PlayerOrderFeedback playerOrderFeedback);
+    public GameProcess getStartingGameProcess(Set<String> players, PlayerOrderFeedback playerOrderFeedback, PregameSetupFeedback pregameSetupFeedback);
 
     public GameProcess getAfterFellowshipPhaseGameProcess();
 

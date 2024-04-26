@@ -1,0 +1,124 @@
+package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
+
+import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Test;
+
+import java.util.HashMap;
+
+import static org.junit.Assert.*;
+
+public class Card_03_027_ErrataTests
+{
+
+	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new GenericCardTestHelper(
+				new HashMap<>()
+				{{
+					put("vilya", "53_27");
+					put("elrond", "3_13");
+					put("rumil", "1_57");
+					put("thrarin", "1_27");
+
+					put("runner", "1_178");
+					put("armory", "1_173");
+					put("bladetip", "1_209");
+				}},
+				GenericCardTestHelper.FellowshipSites,
+				GenericCardTestHelper.FOTRFrodo,
+				GenericCardTestHelper.RulingRing
+		);
+	}
+
+	@Test
+	public void VilyaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+
+		/**
+		* Set: 3
+		* Title: Vilya
+		* Unique: True
+		* Side: FREE_PEOPLE
+		* Culture: Elven
+		* Twilight Cost: 0
+		* Type: artifact
+		* Subtype: Ring
+		* Vitality: 1
+		* Game Text: Bearer must be Elrond.
+		* 	<b>Maneuver:</b> Exert Elrond and spot a Shadow condition to return that condition to its owner's hand.
+		 * 	That player may discard a card from hand.  Return Vilya to your hand.
+		*/
+
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var vilya = scn.GetFreepsCard("vilya");
+
+		assertTrue(vilya.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, vilya.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, vilya.getBlueprint().getCulture());
+		assertEquals(CardType.ARTIFACT, vilya.getBlueprint().getCardType());
+		assertTrue(vilya.getBlueprint().getPossessionClasses().contains(PossessionClass.RING));
+		assertEquals(0, vilya.getBlueprint().getTwilightCost());
+		assertEquals(1, vilya.getBlueprint().getVitality());
+	}
+
+	@Test
+	public void VilyaBorneByElrond() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var vilya = scn.GetFreepsCard("vilya");
+		var elrond = scn.GetFreepsCard("elrond");
+		var rumil = scn.GetFreepsCard("rumil");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		scn.FreepsMoveCardToHand(vilya, elrond);
+		scn.FreepsMoveCharToTable(rumil, thrarin);
+
+		scn.StartGame();
+
+		assertFalse(scn.FreepsPlayAvailable(vilya));
+		scn.FreepsPlayCard(elrond);
+		assertTrue(scn.FreepsPlayAvailable(vilya));
+		assertEquals(Zone.HAND, vilya.getZone());
+		scn.FreepsPlayCard(vilya);
+		assertEquals(Zone.ATTACHED, vilya.getZone());
+		assertSame(elrond, vilya.getAttachedTo());
+	}
+
+	@Test
+	public void ManeuverActionReturnsShadowConditionToHandAndSelfReturnsToHand() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var vilya = scn.GetFreepsCard("vilya");
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.FreepsMoveCharToTable(elrond);
+		scn.FreepsAttachCardsTo(elrond, vilya);
+
+		var runner = scn.GetShadowCard("runner");
+		var armory = scn.GetShadowCard("armory");
+		var bladetip = scn.GetShadowCard("bladetip");
+		scn.ShadowMoveCharToTable(runner);
+		scn.ShadowMoveCardToSupportArea(armory);
+		scn.AttachCardsTo(frodo, bladetip);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertTrue(scn.FreepsActionAvailable(vilya));
+		scn.FreepsUseCardAction(vilya);
+		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(Zone.ATTACHED, bladetip.getZone());
+		assertEquals(Zone.ATTACHED, vilya.getZone());
+		scn.FreepsChooseCard(bladetip);
+		assertEquals(Zone.HAND, bladetip.getZone());
+
+		assertTrue(scn.ShadowDecisionAvailable("Discard"));
+		scn.ShadowChooseYes();
+		assertEquals(Zone.DISCARD, bladetip.getZone());
+		assertEquals(Zone.HAND, vilya.getZone());
+	}
+}

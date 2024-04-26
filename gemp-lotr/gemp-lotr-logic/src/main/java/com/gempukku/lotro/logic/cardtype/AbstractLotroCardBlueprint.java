@@ -140,6 +140,11 @@ public abstract class AbstractLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     @Override
+    public List<? extends Modifier> getPermanentSiteModifiers(LotroGame game, PhysicalCard self) {
+        return null;
+    }
+
+    @Override
     public Race getRace() {
         return null;
     }

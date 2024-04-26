@@ -1,21 +1,10 @@
 {
-
-	73_13: {
+	53_13: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: errata/LOTR-EN03S013.1_card.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: errata/LOTR-EN03E013.1_card.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 3_13
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1
 			collInfo: 3R13
 			rarity: R
@@ -35,28 +24,52 @@
 		race: Elf
 		strength: 8
 		vitality: 4
-		
 		effects: [
 			{
 				type: Trigger
-				text: Would you like to add (2) to heal a home 3 ally twice?
-				optional: true,
+				optional: false
 				trigger: {
 					type: StartOfTurn
 				},
-				effect: {
-					type: CostToEffect
-					cost: {
-						type: AddTwilight
-						amount: 2
-					}
-					effect: {
-						type: heal
-						count: 1
-						times: 2
-						filter: choose(ally,allyHome(fellowship,3))
-					}
+				cost: {
+					type: ChooseActiveCards
+					count: 0-1
+					filter: choose(ally,allyHome(fellowship,3),wounded)
+					memorize: chosenAlly
+					text: Choose a home 3 ally to heal
 				}
+				effect: [
+					{
+						type: ChooseANumber
+						text: How many times to heal?
+						from: 0
+						to: {
+							type: Min
+							first: {
+								type: ForEachWound
+								filter: memory(chosenAlly)
+							}
+							second: 2
+						}
+						memorize: heals
+					}
+					{
+						type: Heal
+						count: 1
+						times: {
+							type: FromMemory
+							memory: heals
+						}
+						filter: memory(chosenAlly)
+					}
+					{
+						type: AddTwilight
+						amount: {
+							type: FromMemory
+							memory: heals
+						}
+					}
+				]
 			}
 			{
 				type: Activated
@@ -73,14 +86,12 @@
 				}
 			}
 		]
-		gametext: At the start of each of your turns, you may add (2) to spot an ally whose home site is 3 and heal that ally twice. <br><b>Regroup:</b> Exert Elrond twice to heal a companion.
+		gametext: At the start of each of your turns, you may spot an ally whose home is site 3 to heal that ally up to 2 times.  Add (1) per wound healed.<br>Regroup: Exert Elrond twice to heal a companion.
 		lore: “Venerable he seemed as a king crowned with many winters, and yet hale as a tried warrior....”
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
@@ -88,21 +99,11 @@
 	
 	53_17: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/53_17.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 3_17
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 3R17
 			rarity: R
 			setNum: "3"
@@ -166,32 +167,141 @@
 		lore: "'There is in her and in this land no evil, unless a man bring it hither himself. Then let him beware!'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}
 	}
 	
+	53_24: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN03E024.1_card.jpg
+			javaClass: false
+			parent: 3_24
+			parentPath: errata/pc
+			version: 1
+			collInfo: 3U24
+			rarity: U
+			setNum: "3"
+			cardNum: 24
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Phial of Galadriel
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Artifact
+		target: Ring-bearer
+		effects: [
+			{
+				type: ExtraCost
+				cost: {
+					type: exert
+					filter: choose(Elf)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: bearer
+					amount: 2
+				}
+			}
+		]
+		gametext: To play, exert an Elf.  Bearer must be the Ring-bearer. <br>Bearer’s resistance is +2.
+		lore: “‘May it be a light to you in dark places, when all other lights go out. Remember Galadriel and her Mirror!'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	# 53_27: {
+	# 	cardInfo: {
+	# 		imagePath: errata/LOTR-EN03E027.1_card.jpg
+	# 		javaClass: false
+	# 		parent: 3_27
+	# 		parentPath: errata/pc
+	# 		version: 1
+	# 		collInfo: 3R27
+	# 		rarity: R
+	# 		setNum: "3"
+	# 		cardNum: 27
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Vilya
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Elven
+	# 	twilight: 0
+	# 	vitality: 1
+	# 	type: Artifact
+	# 	itemclass: Ring
+	# 	target: name(Elrond)
+	# 	effects: [
+	# 		{
+	# 			type: Activated
+	# 			phase: Maneuver
+	# 			requires: {
+	# 				type: CanSpot
+	# 				filter: condition,side(shadow)
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: ChooseActiveCards
+	# 					filter: choose(condition,side(shadow))
+	# 					memorize: chosenShadowCondition
+	# 					text: Choose a Shadow condition to return to its owner's hand.
+	# 				}
+	# 				{
+	# 					type: ReturnToHand
+	# 					filter: memory(chosenShadowCondition)
+	# 				}
+	# 				{
+	# 					type: optional
+	# 					player: shadow
+	# 					text: Would you like to discard a card from hand?
+	# 					effect: {
+	# 						type: DiscardFromHand
+	# 						forced: false
+	# 						player: OwnerFromMemory(chosenShadowCondition)
+	# 						hand: OwnerFromMemory(chosenShadowCondition)
+	# 						count: 1
+	# 					}
+	# 				}
+	# 				{
+	# 					type: ReturnToHand
+	# 					filter: self
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: Bearer must be Elrond.<br><b>Maneuver:</b> Spot a Shadow condition to return that condition to its owner's hand.  That player may discard a card from hand.  Return Vilya to your hand.
+	# 	lore: “Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_27: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: errata/LOTR-EN03E027.1_card.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
+			imagePath: errata/LOTR-EN03E027.2_card.jpg
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 3_27
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
-			version: 1?
+			version: 2
 			collInfo: 3R27
 			rarity: R
 			setNum: "3"
@@ -203,11 +313,12 @@
 		unique: true
 		side: Free Peoples
 		culture: Elven
-		twilight: 0
-		vitality: 1
+		twilight: 1
 		type: Artifact
 		itemclass: Ring
 		target: name(Elrond)
+		#keyword: support area
+		vitality: 1
 		effects: [
 			{
 				type: Activated
@@ -215,6 +326,11 @@
 				requires: {
 					type: CanSpot
 					filter: condition,side(shadow)
+				}
+				cost: {
+					type: exert
+					filter: bearer
+					times: 2
 				}
 				effect: [
 					{
@@ -239,21 +355,15 @@
 							count: 1
 						}
 					}
-					{
-						type: ReturnToHand
-						filter: self
-					}
 				]
 			}
 		]
-		gametext: Bearer must be Elrond.<br><b>Maneuver:</b> Spot a Shadow condition to return that condition to its owner's hand.  That player may discard a card from hand.  Return Vilya to your hand.
-		lore: “Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
+		gametext: Bearer must be Elrond.<br>Maneuver: Exert bearer twice and spot a Shadow condition to return that condition to its owner's hand.  That player may discard a card from hand.
+		lore: "Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
 			errata: {
 			}
 		}

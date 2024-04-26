@@ -2,9 +2,13 @@ package com.gempukku.lotro.cards.build.field;
 
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.Side;
+import org.hjson.JsonValue;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.util.Map;
 import java.util.Set;
 
 public class FieldUtils {
@@ -17,7 +21,7 @@ public class FieldUtils {
         if (value == null)
             return defaultValue;
         if (!(value instanceof Number))
-            throw new InvalidCardDefinitionException("Unknown type in " + key + " field");
+            throw new InvalidCardDefinitionException("Value in " + key + " field must be an integer, not an evaluated value.");
         return ((Number) value).intValue();
     }
 
@@ -39,6 +43,8 @@ public class FieldUtils {
     public static String getString(Object value, String key, String defaultValue) throws InvalidCardDefinitionException {
         if (value == null)
             return defaultValue;
+        if ((value instanceof Number))
+            return value.toString();
         if (!(value instanceof String))
             throw new InvalidCardDefinitionException("Unknown type in " + key + " field");
         return (String) value;
@@ -104,6 +110,13 @@ public class FieldUtils {
             if (!key.equals("type") && !contains(fields, key))
                 throw new InvalidCardDefinitionException("Unrecognized field: " + key);
         }
+    }
+
+    private static final JSONParser parser = new JSONParser();
+    public static JSONObject parseSubObject(String jsonString) throws ParseException {
+        String json = JsonValue.readHjson(jsonString).toString();
+        var subObject = (JSONObject) parser.parse(json);
+        return subObject;
     }
 
     private static boolean contains(String[] fields, String key) {

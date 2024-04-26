@@ -26,6 +26,9 @@ public class Kill implements EffectAppenderProducer {
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
 
+        if (filter == null)
+            throw new InvalidCardDefinitionException("Selector is required for a Kill effect.");
+
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(

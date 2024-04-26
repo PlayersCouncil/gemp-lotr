@@ -8,15 +8,15 @@ import com.gempukku.lotro.db.DeckDAO;
 import com.gempukku.lotro.hall.GameSettings;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class LotroServer extends AbstractServer {
-    private static final Logger log = Logger.getLogger(LotroServer.class);
+    private static final Logger log = LogManager.getLogger(LotroServer.class);
 
     private final LotroCardBlueprintLibrary _lotroCardBlueprintLibrary;
 
@@ -112,7 +112,7 @@ public class LotroServer extends AbstractServer {
 
             LotroGameMediator lotroGameMediator = new LotroGameMediator(gameId, gameSettings.getLotroFormat(), participants, _lotroCardBlueprintLibrary,
                     gameSettings.getTimeSettings(),
-                    spectate, !gameSettings.isCompetitive(), gameSettings.isHiddenGame());
+                    spectate, !gameSettings.isCompetitive(), gameSettings.isHiddenGame(), tournamentName);
             lotroGameMediator.addGameResultListener(
                 new GameResultListener() {
                     @Override
@@ -126,16 +126,11 @@ public class LotroServer extends AbstractServer {
                     }
                 });
             var formatName = gameSettings.getLotroFormat().getName();
-            lotroGameMediator.sendMessageToPlayers("You're starting a game of " + formatName);
+            lotroGameMediator.sendMessageToPlayers("You are starting a game of " + formatName);
             if(formatName.contains("PC")) {
-                lotroGameMediator.sendMessageToPlayers("""
-                        As a reminder, PC formats incorporate the following changes:
-                         - <a href="https://wiki.lotrtcgpc.net/wiki/PC_Errata">PC Errata are in effect</a>
-                         - Set V1 is legal
-                         - Discard piles are public information for both sides
-                         - The game ends after Regroup actions are made (instead of at the start of Regroup)
-                        """);
+                lotroGameMediator.sendMessageToPlayers(LotroFormat.PCSummary);
             }
+
 
             StringBuilder players = new StringBuilder();
             Map<String, LotroDeck> decks =  new HashMap<>();
@@ -188,7 +183,7 @@ public class LotroServer extends AbstractServer {
                     cnt++;
             }
 
-            if (cnt != 3)
+            if (cnt < 3 || cnt > 4)
                 return null;
 
             return _deckDao.buildDeckFromContents(deckName, contents, targetFormat, notes);

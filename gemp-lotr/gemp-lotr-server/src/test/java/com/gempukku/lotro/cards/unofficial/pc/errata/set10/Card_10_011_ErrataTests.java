@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_10_011_ErrataTests
 {
@@ -18,7 +18,7 @@ public class Card_10_011_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("glr", "60_11");
+					put("card", "60_11");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -31,25 +31,26 @@ public class Card_10_011_ErrataTests
 	public void GaladrielStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 10
-		* Title: Galadriel, Lady Redeemed
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Elven
-		* Twilight Cost: 3
-		* Type: companion
-		* Subtype: Elf
-		* Strength: 3
-		* Vitality: 3
-		* Game Text: When Galadriel is in your starting fellowship, her twilight cost is –2. <br><b>Fellowship</b> <i>or</i> <b>Regroup:</b>  Discard an
-		* 	 [elven] event from hand to discard a Shadow condition or Shadow possession.
+		 * Set: 10
+		 * Name: Galadriel, Lady Redeemed
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 3
+		 * Type: Companion
+		 * Subtype: Elf
+		 * Strength: 3
+		 * Vitality: 3
+		 * Game Text: When Galadriel is in your starting fellowship, her twilight cost is –3.
+		* 	Regroup: Discard an [elven] event from hand to discard a Shadow condition or Shadow possession (limit once per phase).
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("glr");
+		var card = scn.GetFreepsCard("card");
 
+		assertEquals("Galadriel", card.getBlueprint().getTitle());
+		assertEquals("Lady Redeemed", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
@@ -58,9 +59,9 @@ public class Card_10_011_ErrataTests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void GaladrielTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup

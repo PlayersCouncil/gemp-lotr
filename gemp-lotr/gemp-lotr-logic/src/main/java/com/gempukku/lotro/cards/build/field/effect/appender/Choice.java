@@ -5,6 +5,7 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
+import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.actions.SubAction;
 import com.gempukku.lotro.logic.decisions.MultipleChoiceAwaitingDecision;
@@ -47,7 +48,7 @@ public class Choice implements EffectAppenderProducer {
                 for (EffectAppender possibleEffectAppender : possibleEffectAppenders) {
                     if (possibleEffectAppender.isPlayableInFull(delegateActionContext)) {
                         playableEffectAppenders.add(possibleEffectAppender);
-                        effectTexts.add(textArray[textIndex]);
+                        effectTexts.add(GameUtils.SubstituteText(textArray[textIndex], actionContext));
                     }
                     textIndex++;
                 }

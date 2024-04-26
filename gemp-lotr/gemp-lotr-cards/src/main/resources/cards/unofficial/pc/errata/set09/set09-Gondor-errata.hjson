@@ -1,0 +1,160 @@
+{
+	59_31: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN09E031.1_card.jpg
+			javaClass: false
+			parent: 9_31
+			parentPath: errata/pc
+			version: 1
+			collInfo: 9R+31
+			rarity: R+
+			setNum: "9"
+			cardNum: 31
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Boromir
+		subtitle: Bearer of Council
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 7
+		keyword: can start with ring
+		effects: [
+			{
+				type: trigger
+				requires: {
+					type: canSpot
+					filter: self,ring bearer,inSkirmish
+				}
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add 2 burdens
+						Wound Boromir twice
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 2
+						}
+						{
+							type: wound
+							filter: self
+							times: 2
+						}
+					]
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: discard
+					filter: all(minion,inSkirmish)
+				}
+			}
+		]
+		gametext: While Boromir is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or wound him twice. <br>Each time Boromir wins a skirmish, discard each minion he is skirmishing.
+		lore: “‘True-hearted Men, they will not be corrupted. We of Minas Tirith have been staunch....'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	59_33: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN09E033.1_card.jpg
+			javaClass: false
+			parent: 9_33
+			parentPath: errata/pc
+			version: 1
+			collInfo: 9R+33
+			rarity: R+
+			setNum: "9"
+			cardNum: 33
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Isildur
+		subtitle: Bearer of Heirlooms
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 7
+		keyword: can start with ring
+		effects: [
+			{
+				type: trigger
+				requires: {
+					type: canSpot
+					filter: self,ring bearer,inSkirmish
+				}
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add 2 burdens
+						Exert 3 companions
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 2
+						}
+						{
+							type: exert
+							count: 3
+							filter: choose(companion)
+						}
+					]
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(or(name(The One Ring),artifact))
+					}
+					filter: culture(gondor),knight
+					amount: 1
+				}
+			}
+		]
+		gametext: While Isildur is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or exert 3 companions. <br>While Isildur bears The One Ring or an artifact, each [gondor] knight is strength +1.
+		lore: “‘“But for my part I will risk no hurt to this thing: of all the works of Sauron the only fair.”'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

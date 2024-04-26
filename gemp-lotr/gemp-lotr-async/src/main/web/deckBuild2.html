@@ -1,0 +1,168 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>GEMP: LotR-TCG - Deckbuilder</title>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="images/icons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16x16.png">
+	<link rel="manifest" href="images/icons/site.webmanifest">
+
+	<link rel="stylesheet" type="text/css" href="css/gemp-001/deckBuild.css">
+
+	<link rel="stylesheet" type="text/css" href="css/dark-hive/jquery-ui-1.8.16.custom.css">
+	<link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css">
+	<link rel="stylesheet" type="text/css" href="js/jquery/styles/jquery.spinnercontrol.css">
+
+	<script type="text/javascript" src="js/jquery/jquery-1.6.2.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery-ui-1.8.16.custom.min.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery.cookie.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery.spinnercontrol.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery.layout.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery.touchSwipe.js"></script>
+
+	<script type="text/javascript" src="js/gemp-022/inheritance.js"></script>
+	<script type="text/javascript" src="js/gemp-022/common.js"></script>
+	<script type="text/javascript" src="js/gemp-022/logging.js"></script>
+	<script type="text/javascript" src="js/gemp-022/chat.js"></script>
+	<script type="text/javascript" src="js/gemp-022/communication.js"></script>
+	<script type="text/javascript" src="js/gemp-022/deliveryService.js"></script>
+	<script type="text/javascript" src="js/gemp-022/commonUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cardFilter.js"></script>
+
+	<script type="text/javascript" src="js/gemp-022/jCardGroup.js"></script>
+	<script type="text/javascript" src="js/gemp-022/hobbit.js"></script>
+	<script type="text/javascript" src="js/gemp-022/set40.js"></script>
+	<script type="text/javascript" src="js/gemp-022/jCards.js"></script>
+	<script type="text/javascript" src="js/gemp-022/PC_Cards.js"></script>
+
+	<script type="text/javascript" src="js/gemp-022/hallUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/leagueResultsUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tournamentResultsUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/statsUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/playerStatsUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/gameHistoryUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/deckBuildingUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/gameUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/gameAnimations.js"></script>
+	<script type="text/javascript" src="js/gemp-022/merchantUi.js"></script>
+
+
+
+	<script type="text/javascript" src="src/DeckBuilder/deckBuilder.js"></script>
+</head>
+
+<body class="ui-layout-container" cz-shortcut-listen="true">
+
+
+	<div id="deckDiv" class="ui-layout-center ui-layout-pane ui-layout-pane-center" style="padding:0px !important">
+		<div class="flex-vert" id="deck-overview">
+			
+			<div id="manage-deck-menu">
+
+				<button id="newDeckBut" title="New deck" class="menu-button">
+					<span class="ui-icon ui-icon-document"></span>
+				</button>
+
+				<button id="saveDeckBut" title="Save deck" class="menu-button">
+					<span class="ui-icon ui-icon-disk"></span>
+				</button>
+
+				<button id="renameDeckBut" title="Rename deck" class="menu-button">
+					<span class="ui-icon ui-icon-pencil"></span>
+				</button>
+
+				<button id="copyDeckBut" title="Copy deck to new" class="menu-button">
+					<span class="ui-icon ui-icon-copy"></span>
+				</button>
+
+				<button id="importDeckBut" title="Import Deck" class="menu-button">
+					<span class="ui-icon ui-icon-arrowthickstop-1-s"></span>
+				</button>
+
+				<button id="libraryListBut" title="Open Library" class="menu-button">
+					<span class="ui-icon ui-icon-bookmark"></span>
+				</button>
+
+				<button id="deckListBut" title="Deck list" class="menu-button">
+					<span class="ui-icon ui-icon-suitcase"></span>
+				</button>
+
+				<select id="formatSelect" style="">
+					<option value="fotr_block">Fellowship Block</option>
+				</select>
+
+				<button id="notesBut" title="Add/Edit Notes" class="menu-button">
+					<span class="ui-icon ui-icon-plus"></span>
+				</button>
+
+				<span id="editingDeck">New deck</span>
+
+				<select id="collectionSelect">
+					<option value="default">All cards</option>
+					<option value="permanent">My cards</option>
+					<option value="trophy">Trophies</option>
+				</select>
+			</div>
+			
+			<div id="deck-view" class="flex-horiz">
+				<div id="left-deck-parts" class="flex-vert" >
+					<div id="ring-pair" class="flex-horiz" >
+						<div id="ringBearerDiv">
+							Ring Bearer
+							<div id="rb-content" class="ui-widget-content card-group"></div>
+						</div>
+						<div id="ringDiv">
+							Ring
+							<div id="ring-content" class="ui-widget-content card-group"></div>
+						</div>
+						<div id="map-div">
+							Map
+							<div id="map-content" class="ui-widget-content card-group"></div>
+						</div>
+					</div>
+					
+					<div id="sitesDiv">
+						Sites
+						<div id="sites-content" class="ui-widget-content card-group"></div>
+					</div>
+				</div>
+
+				<div id="decksRegion" class="flex-vert" >
+					<div id="fp-cards">
+						<div id="freeps-content" class="ui-widget-content"></div>
+					</div>
+					<div id="sh-cards">
+						<div id="shadow-content" class="ui-widget-content"></div>
+					</div>
+					<div id="statsDiv">
+						<div id="deckStats"></div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+	</div>
+
+	<div id="collectionDiv" class="ui-layout-east ui-layout-pane ">
+		<div id="cardCollectionDiv"></div>
+	</div>
+
+	<div id="cardInfoDiv" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1"
+		role="dialog" aria-labelledby="ui-dialog-title-1">
+		<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+			<span class="ui-dialog-title" id="ui-dialog-title-1">Card information</span>
+			<a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button">
+				<span class="ui-icon ui-icon-closethick">close</span>
+			</a>
+		</div>
+
+		<div class="ui-dialog-content ui-widget-content"></div>
+	</div>
+
+</body>
+
+</html>

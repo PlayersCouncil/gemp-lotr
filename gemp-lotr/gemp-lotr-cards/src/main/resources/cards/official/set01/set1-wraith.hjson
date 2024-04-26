@@ -200,7 +200,7 @@
 			{
 				type: trigger
 				trigger: {
-					type: requires
+					type: ConstantlyCheck
 					requires: {
 						type: location
 						filter: underground
@@ -982,22 +982,61 @@
 				type: played
 				filter: self
 			}
-			effect: {
-				type: repeat
-				amount: {
-					type: forEachYouCanSpot
-					filter: companion
-					over: 4
+			effect: [
+				{
+					type: MemorizeValue
+					memory: choice
+					value: yes
 				}
-				effect: {
-					type: optional
-					text: Would you like to play a minion from your discard?
+				{
+					type: conditional
+					requires: [
+						{
+							type: CanSpot
+							filter: companion
+							count: 5
+						}
+						{
+							type: PlayableFromDiscard
+							filter: minion
+						}
+					]
 					effect: {
-						type: playCardFromDiscard
-						filter: choose(minion)
+						type: Repeat
+						amount: {
+							type: forEachYouCanSpot
+							filter: companion
+							over: 4
+						}
+						effect: {
+							type: conditional
+							requires: [
+								{
+									type: MemoryIs
+									memory: choice
+									value: yes
+								}
+								{
+									type: HasCardInDiscard
+									filter: playable,minion
+								}
+							]
+							effect: [
+								{
+									type: chooseYesOrNo
+									player: you
+									text: Would you like to play a minion from your discard pile?
+									memorize: choice
+								}
+								{
+									type: playCardFromDiscard
+									filter: choose(minion)
+								}
+							]
+						}
 					}
 				}
-			}
+			]
 		}
 	}
 	1_235: {

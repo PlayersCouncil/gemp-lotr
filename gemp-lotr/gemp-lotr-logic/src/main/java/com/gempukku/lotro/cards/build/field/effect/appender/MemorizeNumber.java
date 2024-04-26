@@ -19,8 +19,12 @@ public class MemorizeNumber implements EffectAppenderProducer {
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "amount", "memory");
 
-        final ValueSource amountSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), environment);
         final String memory = FieldUtils.getString(effectObject.get("memory"), "memory");
+
+        if (memory == null)
+            throw new InvalidCardDefinitionException("Memory is required for a MemorizeNumber effect.");
+
+        final ValueSource amountSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), environment);
 
         return new DelayedAppender() {
             @Override

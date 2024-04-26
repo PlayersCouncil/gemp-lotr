@@ -780,7 +780,7 @@
 				filter: self
 			}
 			effect: {
-				type: allyCanParticipateInArcheryFireAndSkirmishes
+				type: EnableParticipationInArcheryFireAndSkirmishes
 				filter: self
 				until: start(regroup)
 			}

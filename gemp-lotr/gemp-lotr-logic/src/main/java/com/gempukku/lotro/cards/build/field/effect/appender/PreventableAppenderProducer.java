@@ -49,6 +49,7 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
                                     new YesNoDecision(textToUse) {
                                         @Override
                                         protected void yes() {
+                                            actionContext.getGame().getGameState().sendMessage(GameUtils.SubstituteText("{" + player + "} chooses to prevent.", actionContext));
                                             DelegateActionContext delegate = new DelegateActionContext(actionContext,
                                                     preventingPlayer, actionContext.getGame(), actionContext.getSource(), actionContext.getEffectResult(),
                                                     actionContext.getEffect());
@@ -61,6 +62,7 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
                                                         protected void doPlayEffect(LotroGame game) {
                                                             // If the prevention was not carried out, need to do the original action anyway
                                                             if (!subAction.wasCarriedOut()) {
+                                                                game.getGameState().sendMessage(GameUtils.SubstituteText("{" + player + "} attempted to prevent, but could not carry it out.", actionContext));
                                                                 for (EffectAppender effectAppender : effectAppenders)
                                                                     effectAppender.appendEffect(false, subAction, actionContext);
                                                             }
@@ -68,7 +70,7 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
 
                                                         @Override
                                                         public boolean wasCarriedOut() {
-                                                            // Cheating a bit, we need to check, if the preventing effect was carried out,
+                                                            // Cheating a bit, we need to check if the preventing effect was carried out,
                                                             // but have no way of doing this, as we can do that through subAction only,
                                                             // and this checking effect should be ALWAYS considered fine, even before it
                                                             // was done
@@ -79,6 +81,7 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
 
                                         @Override
                                         protected void no() {
+                                            actionContext.getGame().getGameState().sendMessage(GameUtils.SubstituteText("{" + player + "} decides not to prevent.", actionContext));
                                             for (EffectAppender effectAppender : effectAppenders)
                                                 effectAppender.appendEffect(false, subAction, actionContext);
                                         }

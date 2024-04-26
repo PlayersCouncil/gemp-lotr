@@ -110,7 +110,7 @@
 						filter: memory(chosenMinion)
 					}
 					effect: {
-						type: cantBeAssignedToSkirmish
+						type: DisableSkirmishAssignment
 						filter: memory(chosenMinion)
 						until: start(regroup)
 					}
@@ -141,7 +141,7 @@
 				}
 				effect: [
 					{
-						type: cantBeOverwhelmedMultiplier
+						type: AlterOverwhelmMultiplier
 						filter: choose(culture(shire),companion,inSkirmish)
 						memorize: shireCompanion
 					}

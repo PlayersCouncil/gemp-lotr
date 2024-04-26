@@ -1,12 +1,11 @@
 package com.gempukku.lotro.collection;
 
 import com.gempukku.lotro.common.Names;
-import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,11 +103,11 @@ public class DeckRenderer {
 
         StringBuilder result = new StringBuilder();
         result.append("<div>")
-                .append("<h1>").append(StringEscapeUtils.escapeHtml(deck.getDeckName())).append("</h1>")
-                .append("<h2>Format: ").append(StringEscapeUtils.escapeHtml(deck.getTargetFormat())).append("</h2>");
+                .append("<h1>").append(StringEscapeUtils.escapeHtml3(deck.getDeckName())).append("</h1>")
+                .append("<h2>Format: ").append(StringEscapeUtils.escapeHtml3(deck.getTargetFormat())).append("</h2>");
 
         if(author != null) {
-            result.append("<h2>Author: ").append(StringEscapeUtils.escapeHtml(author)).append("</h2>");
+            result.append("<h2>Author: ").append(StringEscapeUtils.escapeHtml3(author)).append("</h2>");
         }
 
         if(replays != null && replays.size() > 0) {
@@ -137,7 +136,7 @@ public class DeckRenderer {
         }
 
         DefaultCardCollection deckCards = new DefaultCardCollection();
-        for (String card : deck.getAdventureCards()) {
+        for (String card : deck.getDrawDeckCards()) {
             deckCards.addItem(_bpLibrary.getBaseBlueprintId(card), 1);
         }
         for (String site : deck.getSites()) {
@@ -183,11 +182,11 @@ public class DeckRenderer {
 
         StringBuilder result = new StringBuilder();
         result.append("<div>")
-                .append("<h1>").append(StringEscapeUtils.escapeHtml(deck.getDeckName())).append("</h1>")
-                .append("<h2>Format: ").append(StringEscapeUtils.escapeHtml(deck.getTargetFormat())).append("</h2>");
+                .append("<h1>").append(StringEscapeUtils.escapeHtml3(deck.getDeckName())).append("</h1>")
+                .append("<h2>Format: ").append(StringEscapeUtils.escapeHtml3(deck.getTargetFormat())).append("</h2>");
 
         if(author != null) {
-            result.append("<h2>Author: ").append(StringEscapeUtils.escapeHtml(author)).append("</h2>");
+            result.append("<h2>Author: ").append(StringEscapeUtils.escapeHtml3(author)).append("</h2>");
         }
 
         if(replays != null && replays.size() > 0) {
@@ -216,7 +215,7 @@ public class DeckRenderer {
         }
 
         DefaultCardCollection deckCards = new DefaultCardCollection();
-        for (String card : deck.getAdventureCards()) {
+        for (String card : deck.getDrawDeckCards()) {
             deckCards.addItem(_bpLibrary.getBaseBlueprintId(card), 1);
         }
         for (String site : deck.getSites()) {

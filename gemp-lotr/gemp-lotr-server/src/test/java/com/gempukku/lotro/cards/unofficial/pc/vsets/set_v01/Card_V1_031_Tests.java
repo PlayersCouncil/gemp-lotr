@@ -112,7 +112,7 @@ public class Card_V1_031_Tests
 	}
 
 	@Test
-	public void PurposeSpots4StackedTentaclesToAssignToRB() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PurposeSpots4StackedTentaclesToAssignToRBIfPreventionDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		GenericCardTestHelper scn = GetScenario();
 
@@ -137,7 +137,45 @@ public class Card_V1_031_Tests
 		scn.FreepsPassCurrentPhaseAction();
 		assertTrue(scn.ShadowActionAvailable("One Purpose"));
 		scn.ShadowUseCardAction(purpose);
+
+		scn.FreepsChooseNo();
 		assertTrue(scn.IsCharAssigned(scn.GetRingBearer()));
+		//should now see One Purpose and the four tentacles stacked on it in the discard pile
+		assertEquals(5, scn.GetShadowDiscardCount());
+	}
+
+	@Test
+	public void PurposeRBAssignmentCanBePreventedByExertingRBTwice() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		PhysicalCardImpl merry = scn.GetFreepsCard("merry");
+		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(merry, aragorn);
+
+		PhysicalCardImpl purpose = scn.GetShadowCard("purpose");
+		PhysicalCardImpl htentacle = scn.GetShadowCard("htentacle");
+		scn.ShadowMoveCardToHand(htentacle);
+		scn.ShadowMoveCardToSupportArea(purpose);
+		scn.StackCardsOn(purpose,scn.GetShadowCard("ftentacle1"), scn.GetShadowCard("ftentacle2"), scn.GetShadowCard("ftentacle3"), scn.GetShadowCard("ftentacle4"));
+
+		scn.StartGame();
+		scn.SetTwilight(4);
+		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.MARSH));
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(htentacle);
+		scn.ShadowDeclineOptionalTrigger();
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowActionAvailable("One Purpose"));
+		scn.ShadowUseCardAction(purpose);
+
+		assertEquals(4, scn.GetVitality(frodo));
+		scn.FreepsChooseYes();
+		assertEquals(2, scn.GetVitality(frodo));
+		assertFalse(scn.IsCharAssigned(scn.GetRingBearer()));
 		//should now see One Purpose and the four tentacles stacked on it in the discard pile
 		assertEquals(5, scn.GetShadowDiscardCount());
 	}

@@ -1,0 +1,75 @@
+{
+	59_30: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN09E030.1_card.jpg
+			javaClass: false
+			parent: 9_30
+			parentPath: errata/pc
+			version: 1
+			collInfo: 9R+30
+			rarity: R+
+			setNum: "9"
+			cardNum: 30
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Smeagol
+		subtitle: Bearer of Great Secrets
+		unique: true
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Companion
+		#race: 
+		strength: 3
+		vitality: 4
+		resistance: 8
+		keyword: [
+			ring-bound
+			can start with ring
+		]
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: kill
+					filter: choose(unbound,companion)
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: self,ring bearer
+				}
+				cost: {
+					type: addBurdens
+					amount: 2
+				}
+				effect: {
+					type: discard
+					filter: all(minion)
+				}
+			}
+		]
+		gametext: <b>Ring-bound.</b> To play, add a burden. <br>Each time the fellowship moves, place an unbound companion in the dead pile. <br><b>Regroup:</b> If Sméagol is the Ring-bearer, add 2 burdens to discard each minion.
+		lore: “‘...he used it to find out secrets, and he put his knowledge to crooked and malicious uses.'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -21,6 +21,7 @@ public class DefaultLotroFormat implements LotroFormat {
     private boolean _validateShadowFPCount = true;
     private int _maximumSameName = 4;
     private final boolean _mulliganRule;
+    private final boolean _usesMaps;
     private final boolean _canCancelRingBearerSkirmish;
     private final boolean _hasRuleOfFour;
     private final boolean _winAtEndOfRegroup;
@@ -40,10 +41,28 @@ public class DefaultLotroFormat implements LotroFormat {
     private final List<String> _limit3Cards = new ArrayList<>();
     private final Map<String,String> _errataCardMap = new TreeMap<>();
 
+
     public DefaultLotroFormat(AdventureLibrary adventureLibrary, LotroCardBlueprintLibrary library, JSONDefs.Format def) throws InvalidPropertiesFormatException{
-        this(library, adventureLibrary.getAdventure(def.adventure), def.name, def.code, def.order, def.surveyUrl, SitesBlock.valueOf(def.sites),
-                def.validateShadowFPCount, def.minimumDeckSize, def.maximumSameName, def.mulliganRule, def.cancelRingBearerSkirmish,
-                def.ruleOfFour, def.winAtEndOfRegroup, def.discardPileIsPublic, def.winOnControlling5Sites, def.playtest, def.hall);
+
+        _adventure = adventureLibrary.getAdventure(def.adventure);
+        _library = library;
+        _name = def.name;
+        _code = def.code;
+        _order = def.order;
+        _surveyUrl = def.surveyUrl;
+        _siteBlock = SitesBlock.findBlock(def.sites);
+        _validateShadowFPCount = def.validateShadowFPCount;
+        _minimumDeckSize = def.minimumDeckSize;
+        _maximumSameName = def.maximumSameName;
+        _mulliganRule = def.mulliganRule;
+        _usesMaps = def.usesMaps;
+        _canCancelRingBearerSkirmish = def.cancelRingBearerSkirmish;
+        _hasRuleOfFour = def.ruleOfFour;
+        _winAtEndOfRegroup = def.winAtEndOfRegroup;
+        _discardPileIsPublic = def.discardPileIsPublic;
+        _winOnControlling5Sites = def.winOnControlling5Sites;
+        _isPlaytest = def.playtest;
+        _hallVisible = def.hall;
 
         if(def.set != null)
             def.set.forEach(this::addValidSet);
@@ -66,32 +85,6 @@ public class DefaultLotroFormat implements LotroFormat {
         }
         if(def.errata != null)
             def.errata.forEach(this::addCardErrata);
-    }
-
-    public DefaultLotroFormat(LotroCardBlueprintLibrary library,
-                              Adventure adventure, String name, String code, int order, String surveyUrl,
-                              SitesBlock siteBlock,
-                              boolean validateShadowFPCount, int minimumDeckSize, int maximumSameName, boolean mulliganRule,
-                              boolean canCancelRingBearerSkirmish, boolean hasRuleOfFour, boolean winAtEndOfRegroup, boolean discardPileIsPublic,
-                              boolean winOnControlling5Sites, boolean playtest, boolean hallVisible) {
-        _adventure = adventure;
-        _library = library;
-        _name = name;
-        _code = code;
-        _order = order;
-        _surveyUrl = surveyUrl;
-        _siteBlock = siteBlock;
-        _validateShadowFPCount = validateShadowFPCount;
-        _minimumDeckSize = minimumDeckSize;
-        _maximumSameName = maximumSameName;
-        _mulliganRule = mulliganRule;
-        _canCancelRingBearerSkirmish = canCancelRingBearerSkirmish;
-        _hasRuleOfFour = hasRuleOfFour;
-        _winAtEndOfRegroup = winAtEndOfRegroup;
-        _discardPileIsPublic = discardPileIsPublic;
-        _winOnControlling5Sites = winOnControlling5Sites;
-        _isPlaytest = playtest;
-        _hallVisible = hallVisible;
     }
 
     @Override
@@ -142,6 +135,11 @@ public class DefaultLotroFormat implements LotroFormat {
     @Override
     public boolean hasRuleOfFour() {
         return _hasRuleOfFour;
+    }
+
+    @Override
+    public boolean usesMaps() {
+        return _usesMaps;
     }
 
     @Override
@@ -296,7 +294,7 @@ public class DefaultLotroFormat implements LotroFormat {
             if (_validCards.contains(blueprintId) || _errataCardMap.containsValue(blueprintId))
                 return null;
 
-            if (_validSets.size() > 0 && !isValidInSets(blueprintId))
+            if (!_validSets.isEmpty() && !isValidInSets(blueprintId))
                 return "Deck contains card not from valid set: " + GameUtils.getFullName(_library.getLotroCardBlueprint(blueprintId));
 
             // Banned cards
@@ -362,6 +360,12 @@ public class DefaultLotroFormat implements LotroFormat {
             result.add(valid);
         }
 
+        // Map
+        valid = validateMap(deck);
+        if(valid != null && !valid.isEmpty()) {
+            result.add(valid);
+        }
+
         // Deck
         valid = validateDeckStructure(deck);
         if(valid != null && !valid.isEmpty()) {
@@ -370,7 +374,7 @@ public class DefaultLotroFormat implements LotroFormat {
 
         String prevLine = "";
         String newLine = "";
-        for (String card : deck.getAdventureCards()){
+        for (String card : deck.getDrawDeckCards()){
             newLine = validateCard(card);
             if(newLine == null || newLine.isEmpty())
                 continue;
@@ -413,7 +417,7 @@ public class DefaultLotroFormat implements LotroFormat {
         if (deck.getRingBearer() != null) {
             processCardCounts(deck.getRingBearer(), cardCountByName, cardCountByBaseBlueprintId);
         }
-        for (String blueprintId : deck.getAdventureCards())
+        for (String blueprintId : deck.getDrawDeckCards())
             processCardCounts(blueprintId, cardCountByName, cardCountByBaseBlueprintId);
         for (String blueprintId : deck.getSites())
             processCardCounts(blueprintId, cardCountByName, cardCountByBaseBlueprintId);
@@ -475,7 +479,10 @@ public class DefaultLotroFormat implements LotroFormat {
         if (deck.getRing() != null) {
             deckWithErrata.setRing(applyErrata(deck.getRing()));
         }
-        for (String card : deck.getAdventureCards()) {
+        if (deck.getMap() != null) {
+            deckWithErrata.setMap(applyErrata(deck.getMap()));
+        }
+        for (String card : deck.getDrawDeckCards()) {
             deckWithErrata.addCard(applyErrata(card));
         }
         for (String site : deck.getSites()) {
@@ -510,13 +517,13 @@ public class DefaultLotroFormat implements LotroFormat {
 
     private String validateDeckStructure(LotroDeck deck) {
         String result = "";
-        if (deck.getAdventureCards().size() < _minimumDeckSize) {
-            result += "Deck contains below minimum number of cards: " + deck.getAdventureCards().size() + "<" + _minimumDeckSize + ".\n";
+        if (deck.getDrawDeckCards().size() < _minimumDeckSize) {
+            result += "Deck contains below minimum number of cards: " + deck.getDrawDeckCards().size() + "<" + _minimumDeckSize + ".\n";
         }
         if (_validateShadowFPCount) {
             int shadow = 0;
             int fp = 0;
-            for (String blueprintId : deck.getAdventureCards()) {
+            for (String blueprintId : deck.getDrawDeckCards()) {
                 try {
                     LotroCardBlueprint card = _library.getLotroCardBlueprint(blueprintId);
                     if (card.getSide() == Side.SHADOW)
@@ -611,10 +618,10 @@ public class DefaultLotroFormat implements LotroFormat {
                 if (siteBlueprint.getCardType() != CardType.SITE) {
                     result += "Card assigned as Site is not really a site.\n";
                 }
-                else if (siteBlueprint.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.SPECIAL) {
+                else if (siteBlueprint.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.MULTIPATH) {
                     result += "Site does not match block: " + GameUtils.getFullName(siteBlueprint) + "\n";
                 }
-                else if (_siteBlock == SitesBlock.SPECIAL && siteBlueprint.getSiteBlock() == SitesBlock.SHADOWS) {
+                else if (_siteBlock == SitesBlock.MULTIPATH && siteBlueprint.getSiteBlock() == SitesBlock.SHADOWS) {
                     result += "Post-Shadows site not allowed: " + GameUtils.getFullName(siteBlueprint) + "\n";
                 }
                 else {
@@ -630,7 +637,7 @@ public class DefaultLotroFormat implements LotroFormat {
             }
 
         }
-        if (_siteBlock == SitesBlock.SPECIAL) {
+        if (_siteBlock == SitesBlock.MULTIPATH) {
             SitesBlock usedBlock = null;
             for (String site : deck.getSites()) {
                 try {
@@ -671,6 +678,52 @@ public class DefaultLotroFormat implements LotroFormat {
         }
 
         return validateCard(ringbp);
+    }
+
+    private String validateMap(LotroDeck deck) {
+        String mapBP = deck.getMap();
+        if (!_usesMaps)
+            return null;
+        if (mapBP == null)
+            return "Deck doesn't have a Map (try the King map if converting a Movie deck).";
+        try {
+            var map = _library.getLotroCardBlueprint(mapBP);
+            if (map.getCardType() != CardType.MAP)
+                return "Card assigned as Map is not a Map card.";
+
+            var check = validateCard(mapBP);
+            if(check != null)
+                return check;
+
+            var freeps = new ArrayList<PhysicalCardImpl>();
+            var shadow = new ArrayList<PhysicalCardImpl>();
+            var sites = new ArrayList<PhysicalCardImpl>();
+            for(var bp : deck.getDrawDeckCards()) {
+                var blueprint = _library.getLotroCardBlueprint(bp);
+                if(blueprint.getSide() == Side.FREE_PEOPLE) {
+                    freeps.add(new PhysicalCardImpl(0, bp, "", blueprint));
+                }
+                else if(blueprint.getSide() == Side.SHADOW) {
+                    shadow.add(new PhysicalCardImpl(0, bp, "", blueprint));
+                }
+            }
+
+            for(var bp : deck.getSites()) {
+                sites.add(new PhysicalCardImpl(0, bp, "", _library.getLotroCardBlueprint(bp)));
+            }
+
+            var rb = new PhysicalCardImpl(0, deck.getRingBearer(), "", _library.getLotroCardBlueprint(deck.getRingBearer()));
+            var ring = new PhysicalCardImpl(0, deck.getRing(), "", _library.getLotroCardBlueprint(deck.getRing()));
+
+            var result = map.validatePreGameDeckCheck(freeps, shadow, sites, rb, ring, new PhysicalCardImpl(0, mapBP, "", map));
+            if(!result.success())
+                return result.message();
+            return null;
+        }
+        catch(CardNotFoundException exception)
+        {
+            return CardRemovedError + ": " + mapBP;
+        }
     }
 
     private String validateRingBearer(LotroDeck deck) {
@@ -730,6 +783,7 @@ public class DefaultLotroFormat implements LotroFormat {
             minimumDeckSize = _minimumDeckSize;
             maximumSameName = _maximumSameName;
             mulliganRule = _mulliganRule;
+            usesMaps = _usesMaps;
             set = null;
             banned = null;
             restricted = null;

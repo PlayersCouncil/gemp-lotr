@@ -387,4 +387,16 @@
 			1xRoS - Evil Man Starter
 		]
 	}
+	
+	{
+		name: (S)SHELBI - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xSHELBI - Aragorn Starter
+			1xSHELBI - Gandalf Starter
+			1xSHELBI - Gimli Starter
+			1xSHELBI - Treebeard Starter
+		]
+	}
 ]

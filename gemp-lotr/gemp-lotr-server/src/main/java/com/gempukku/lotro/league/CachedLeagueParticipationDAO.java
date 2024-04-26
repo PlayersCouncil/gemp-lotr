@@ -3,7 +3,7 @@ package com.gempukku.lotro.league;
 import com.gempukku.lotro.cache.Cached;
 import com.gempukku.lotro.db.LeagueParticipationDAO;
 import com.gempukku.lotro.game.Player;
-import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.collections4.map.LRUMap;
 
 import java.util.Collection;
 import java.util.Collections;

@@ -76,7 +76,7 @@
 						filter: choose(minion)
 					}
 					{
-						type: doesNotAddToArcheryTotal
+						type: DisableArcheryTotalContribution
 						filter: bearer
 					}
 				]
@@ -544,7 +544,7 @@
 					memorize: exertedAlly
 				}
 				{
-					type: allyCanParticipateInArcheryFireAndSkirmishes
+					type: EnableParticipationInArcheryFireAndSkirmishes
 					filter: memory(exertedAlly)
 					until: start(regroup)
 				}
@@ -748,7 +748,7 @@
 					memorize: chosenAragorn
 				}
 				{
-					type: cantTakeMoreWoundsThan
+					type: DisableWoundsOver
 					filter: memory(chosenAragorn)
 					phase: skirmish
 					until: start(regroup)
