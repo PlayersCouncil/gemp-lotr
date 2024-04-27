@@ -23,6 +23,7 @@
 		block: Towers
 		direction: Left
 		keywords: Mountain
+		#Mountains are cool
 		/*requires: {
 			
 		}
