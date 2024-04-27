@@ -17,13 +17,14 @@ import org.json.simple.JSONObject;
 public class Spot implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "memorize", "text", "skipMemorize");
+        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "memorize", "text");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String text = FieldUtils.getString(effectObject.get("text"), "text", "Choose card to spot");
-        final boolean skipMemorize = FieldUtils.getBoolean(effectObject.get("skipMemorize"), "skipMemorize", false);
+
+        final boolean skipMemorize = memorize.equals("_temp");
 
         if (skipMemorize) {
             final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);

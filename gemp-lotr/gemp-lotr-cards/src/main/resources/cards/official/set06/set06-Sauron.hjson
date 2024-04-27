@@ -151,7 +151,7 @@
 		                }
 		                {
 		                    type: spot
-		                    filter: choose(twilight,minion)
+		                    filter: twilight,minion
 		                }
 		            ]
 		        }

@@ -17,7 +17,7 @@
 				effects: [
 					{
 						type: spot
-						filter: choose(culture(gandalf),staff)
+						filter: culture(gandalf),staff
 					}
 					{
 						type: playCardFromDrawDeck

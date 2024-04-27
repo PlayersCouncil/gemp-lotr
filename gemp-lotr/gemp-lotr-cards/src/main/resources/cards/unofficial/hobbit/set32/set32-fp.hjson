@@ -278,7 +278,7 @@
 				cost: [
 					{
 						type: spot
-						filter: choose(name(Gandalf))
+						filter: name(Gandalf)
 					}
 					{
 						type: addTwilight
