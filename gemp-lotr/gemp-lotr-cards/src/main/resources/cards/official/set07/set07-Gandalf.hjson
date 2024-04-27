@@ -22,20 +22,38 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(name(Gandalf))
+					amount: {
+					    type: condition
+					    condition: {
+					        type: haveInitiative
+					        side: free people
+					    }
+					    true: 4
+					    false: 2
+					}
+					memorize: chosenGandalf
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: haveInitiative
+				        side: free people
+				    }
+				    effect: {
+				        type: addKeyword
+				        filter: memory(chosenGandalf)
+				        keyword: damage
+				        amount: 1
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: Make Gandalf strength +2 (or +4 and <b>damage +1</b> if you have initiative).
 		lore: You cannot enter here....'
 		promotext: ""
@@ -72,23 +90,37 @@
 			Spell
 			Response
 		]
-		/*requires: {
-			
-		}
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: played
+				filter: event
+				memorize: playedEvent
 			}
 			cost: {
-				
+				type: exert
+				filter: choose(name(Gandalf))
 			}
 			effect: [
 				{
-					
+					type: choice
+					player: shadow
+					texts: [
+					    Remove (2) twilight
+					    Cancel {playedEvent}
+					]
+					effects: [
+					    {
+					        type: removeTwilight
+					        amount: 2
+					    }
+					    {
+					        type: cancelEvent
+					    }
+					]
 				}
 			]
-		]*/
+		}
 		gametext: <b>Spell</b>.<br>If an event is played, exert Gandalf to make that opponent remove (2) or cancel that event.
 		lore: We come to it at last... the greatest battle of our time.'
 		promotext: ""
@@ -122,20 +154,32 @@
 		twilight: 5
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(name(Gandalf))
+				times: 2
 			},
 			effect: [
 				{
-					
+					type: removeThreats
+					amount: {
+					    type: forEachThreat
+					}
+				}
+				{
+				    type: chooseActiveCards
+				    text: Choose companion of the culture you wish to heal
+				    filter: choose(companion,not(culture(Gandalf)))
+				    memorize: chosenCompanion
+				}
+				{
+				    type: heal
+				    filter: all(companion,cultureFromMemory(chosenCompanion))
 				}
 			]
-		}*/
+		}
 		gametext: Exert Gandalf twice to remove all threats and to heal all companions of one culture (except [gandalf]).
 		lore: Wherever he came men's hearts would lift again, and the winged shadows pass from memory.
 		promotext: ""
@@ -169,17 +213,25 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: name(Gandalf)
+		            memorize: winner
+		        }
+		        cost: {
+		            type: exert
+		            filter: memory(winner)
+		        }
+		        effect: {
+		            type: drawCards
+		            count: 2
+		        }
+		    }
+		]
 		gametext: Each time Gandalf wins a skirmish, you may exert him to draw 2 cards.
 		lore: Here in the Court of the Kings, Isildur grew a white tree, from a seed brought over the waters....'
 		promotext: ""
@@ -213,20 +265,32 @@
 		twilight: 3
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
+			requires: {
+			    type: canSpot
+			    filter: name(Gandalf)
+			}
 			cost: {
-				
+				type: discardFromHand
+				forced: false
+				count: 2
 			},
 			effect: [
 				{
-					
+					type: chooseActiveCards
+					player: shadow
+					text: Choose Shadow conditions to spare, all others will be discarded
+					filter: choose(side(shadow),condition)
+					count: 2
+					memorize: chosenConditions
+				}
+				{
+				    type: discard
+				    filter: all(side(shadow),condition,not(memory(chosenConditions)))
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gandalf and discard 2 cards from hand to make an opponent discard all but 2 Shadow conditions.
 		lore: There never was much hope....'
 		promotext: ""
@@ -265,17 +329,24 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: not
+		                requires: {
+                            type: canSpotSameCulture
+                            filter: companion
+                            count: 3
+    		            }
+    		        }
+    		        filter: self
+    		        amount: -2
+		        }
+		    }
+		]
 		gametext: While you cannot spot 3 companions of the same culture, Gandalf is strength -2.
 		lore: I come with counsel and tidings in this dark hour.'
 		promotext: ""
@@ -314,17 +385,32 @@
 		vitality: 4
 		signet: Theoden
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: putCardsFromHandOnTopOfDeck
+		            count: 3
+		        }
+		        effect: {
+		            type: preventable
+		            player: shadow
+		            text: Would you like to place 3 cards from your hand on top of your deck to prevent Gandalf's effect?
+		            cost: {
+		                type: putCardsFromHandOnTopOfDeck
+		                player: shadow
+		                hand: shadow
+		                count: 3
+		            }
+		            effect: {
+		                type: modifyStrength
+		                filter: choose(minion,inSkirmishAgainst(unbound,companion))
+		                amount: -3
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Place 3 cards from hand on top of your draw deck to make a minion skirmishing an unbound companion strength -3. Any Shadow player may place 3 cards from his or her hand on top of his or her draw deck to prevent this.
 		lore: ""
 		promotext: ""
@@ -360,18 +446,21 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Staff
-		#target: title(Gandalf)
-		/*requires: {
-			
-		}
+		target: title(Gandalf)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpotThreats
+		                amount: 4
+		            }
+		            filter: bearer
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: Bearer must be Gandalf.<br>While you can spot 4 twilight tokens, Gandalf is strength +1.
 		lore: But for Gandalf Stormcrow you would have seen a host of foes coming out of Anórien....'
 		promotext: ""
@@ -407,18 +496,43 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: title(Gandalf)
-		/*requires: {
-			
-		}
+		target: title(Gandalf)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: isGreaterThan
+		            firstNumber: {
+		                type: forEachInHand
+		                hand: fp
+		            }
+		            secondNumber: {
+		                type: forEachInHand
+		                hand: shadow
+		            }
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		        effect: {
+		            type: exert
+		            player: shadow
+		            filter: choose(minion)
+		        }
+		    }
+		]
 		gametext: Bearer must be Gandalf.<br>He is <b>damage +1</b>.<br><b>Skirmish:</b> If you have more cards in hand than each opponent, discard 2 cards from hand to make an opponent exert a minion.
 		lore: ""
 		promotext: ""
@@ -452,20 +566,20 @@
 		twilight: 3
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
+			requires: {
+			    type: canSpot
+			    filter: name(Gandalf)
+			}
 			effect: [
 				{
-					
+					type: heal
+					filter: choose(unbound,companion)
+					times: 2
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gandalf to heal an unbound companion twice.
 		lore: ""
 		promotext: ""
@@ -502,23 +616,23 @@
 			Spell
 			Response
 		]
-		/*requires: {
-			
-		}
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: aboutToTakeWound
+				filter: companion
 			}
-			cost: {
-				
+			requires: {
+			    type: canSpot
+			    filter: name(Gandalf)
 			}
 			effect: [
 				{
-					
+					type: preventWound
+					filter: choose(companion)
 				}
 			]
-		]*/
+		}
 		gametext: <b>Spell</b>.<br>If a companion is about to take a wound, spot Gandalf to prevent that wound.
 		lore: ""
 		promotext: ""
@@ -552,20 +666,33 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(name(Gandalf))
+				times: 2
 			},
 			effect: [
+			    {
+			        type: chooseHowManyToSpot
+			        filter: culture(rohan),companion
+			        memorize: spotCount
+			    }
 				{
-					
+					type: repeat
+					times: {
+					    type: fromMemory
+					    memory: spotCount
+					}
+					effect: {
+					    type: exert
+					    player: shadow
+					    filter: choose(minion)
+					}
 				}
 			]
-		}*/
+		}
 		gametext: Exert Gandalf twice to make an opponent exert a minion for each [rohan] companion you spot.
 		lore: Will they answer the summons, think you?'
 		promotext: ""
@@ -599,20 +726,36 @@
 		twilight: 3
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(name(Gandalf))
+				times: {
+				    type: condition
+				    condition: {
+				        type: haveInitiative
+				        side: free people
+				    }
+				    true: 2
+				    false: 3
+				}
 			},
 			effect: [
 				{
-					
+				    type: chooseActiveCards
+				    text: Choose companion of the culture you want to give strength +3 to
+				    filter: choose(unbound,companion,not(culture(Gandalf)))
+				    memorize: chosenCompanion
+				}
+				{
+				    type: modifyStrength
+				    filter: all(unbound,companion,cultureFromMemory(chosenCompanion))
+				    amount: 3
+				    until: regroup
 				}
 			]
-		}*/
+		}
 		gametext: Exert Gandalf three times (or twice if you have initiative) to make all unbound companions of one culture (except [gandalf]) strength +3 until the regroup phase.
 		lore: Théoden will honour your old alliance and come with a mighty army.'
 		promotext: ""
@@ -646,17 +789,25 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: regroup
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(name(Gandalf))
+		        }
+		    }
+		]
 		gametext: At the start of your regroup phase, you may discard 2 cards from hand to heal Gandalf.
 		lore: ...Gandalf says you must go ere nightfall, and the Lord of the Mark is eager for his own house.'
 		promotext: ""
@@ -690,17 +841,51 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: [
+                    {
+                        type: canSpot
+                        filter: name(Gandalf)
+                    }
+		        ]
+		    }
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addThreats
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: name(Gandalf)
+		            keyword: defender
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantTakeWounds
+		            filter: name(Gandalf)
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+                    type: startOfPhase
+                    phase: regroup
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
+		]
 		gametext: To play, spot Gandalf and add 3 threats.<br>Gandalf is <b>defender +1</b> and cannot take wounds.<br>Discard this condition at the start of the regroup phase.
 		lore: ""
 		promotext: ""
@@ -734,20 +919,20 @@
 		twilight: 4
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
+			requires: {
+			    type: canSpot
+			    filter: name(Gandalf)
+			}
 			effect: [
 				{
-					
+					type: heal
+					filter: choose(unbound,hobbit)
+					times: 3
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gandalf to heal an unbound Hobbit 3 times.
 		lore: All Wizards should have a Hobbit or two in their care... to teach them the meaning of humility!'
 		promotext: ""
@@ -781,20 +966,30 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
+			requires: {
+			    type: canSpot
+			    filter: name(Gandalf)
+			}
 			effect: [
 				{
-					
+					type: chooseHowManyToSpot
+					filter: culture(gondor),companion
+					text: Choose how many {gondor} companions to spot
+					memorize: spotCount
+				}
+				{
+				    type: modifyStrength
+				    filter: choose(culture(gondor),companion)
+				    amount: {
+				        type: fromMemory
+				        memory: spotCount
+				        limit: 4
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gandalf to make a [gondor] companion strength +1 for each [gondor] companion you spot (limit +4).
 		lore: Courage will now be your best defence against the storm that is at hand....'
 		promotext: ""
@@ -828,17 +1023,50 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: name(Gandalf)
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Add a threat
+		                Discard this condition
+		            ]
+		            effects: [
+		                {
+		                    type: addThreats
+		                }
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion)
+		            count: 2
+		        }
+		    }
+		]
 		gametext: To play, spot Gandalf.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to wound 2 minions.
 		lore: So it was that Gandalf took command of the last defence of the City of Gondor.
 		promotext: ""
@@ -871,17 +1099,42 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
-		/*requires: {
-			
-		}
+		target: title(Gandalf)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addActivated
+		            filter: minion
+		            phase: assignment
+		            text: Assign this minion to bearer of Steadfast Champion.
+		            effect: {
+		                type: assignFpCharacterToSkirmish
+		                fpCharacter: choose(hasAttached(name(Steadfast Champion)))
+		                against: self
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: discard
+		                filter: choose(minion)
+		            }
+		            {
+		                type: heal
+		                filter: choose(companion)
+		                times: 3
+		            }
+		        ]
+		    }
+		]
 		gametext: Bearer must be Gandalf.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to Gandalf."<br><b>Regroup:</b> Discard this condition to discard a minion and heal a companion 3 times.
 		lore: ""
 		promotext: ""
@@ -918,20 +1171,60 @@
 			Spell
 			Maneuver
 		]
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
+			requires: {
+			    type: canSpot
+			    filter: name(Gandalf),canExert
+			}
+			cost: [
+                {
+                    type: chooseANumber
+                    text: Choose how many times you wish to exert Gandalf
+                    from: 1
+                    to: {
+                        type: forEachVitality
+                        filter: name(Gandalf)
+                        over: 1
+                    }
+                    memorize: exertCount
+                }
+                {
+                    type: exert
+                    filter: choose(name(Gandalf))
+                    times: memory(exertCount)
+                }
+			]
 			effect: [
 				{
-					
+					type: wound
+					filter: choose(minion)
+					memorize: chosenMinion
+					times: {
+					    type: condition
+					    condition: {
+                            type: memoryMatches
+                            memory: chosenMinion
+                            filter: nazgul
+					    }
+					    true: {
+					        type: sum
+					        source: [
+					            {
+					                type: fromMemory
+					                memory: exertCount
+					            }
+					            1
+					        ]
+					    }
+					    false: {
+					        type: fromMemory
+					        memory: exertCount
+					    }
+					}
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br>Exert Gandalf X times to wound a minion X times. If that minion is a Nazgûl, wound it again.
 		lore: Minas Morgul is their lair.'
 		promotext: ""
@@ -965,20 +1258,29 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(name(Gandalf))
+				memorize: chosenGandalf
 			},
 			effect: [
+			    {
+			        type: chooseHowManyTwilightTokensToSpot
+			        memorize: spotCount
+			    }
 				{
-					
+					type: modifyStrength
+					filter: memory(chosenGandalf)
+					amount: {
+					    type: fromMemory
+					    memory: spotCount
+					    limit: 8
+					}
 				}
 			]
-		}*/
+		}
 		gametext: Exert Gandalf to make him strength +1 for each twilight token you spot (limit +8).
 		lore: ...here the hammerstroke will fall hardest....'
 		promotext: ""
@@ -1013,18 +1315,23 @@
 		type: Possession
 		strength: 1
 		itemclass: Staff
-		#target: a Wizard
-		/*requires: {
-			
-		}
+		target: wizard
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: bearer
+		            times: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(minion)
+		            amount: -3
+		        }
+		    }
+		]
 		gametext: Bearer must be a Wizard.<br><b>Skirmish:</b> Exert bearer twice to make a minion strength -3.
 		lore: ""
 		promotext: ""
