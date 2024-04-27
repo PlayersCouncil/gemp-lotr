@@ -17,6 +17,7 @@ public class RequirementFactory {
         requirementProducers.put("and", new AndRequirementProducer());
         requirementProducers.put("or", new OrRequirementProducer());
         requirementProducers.put("canmove", new CanMove());
+        requirementProducers.put("canselfbeplayed", new CanSelfBePlayed());
         requirementProducers.put("canspot", new CanSpot());
         requirementProducers.put("canspotburdens", new CanSpotBurdens());
         requirementProducers.put("canspotculturetokens", new CanSpotCultureTokens());

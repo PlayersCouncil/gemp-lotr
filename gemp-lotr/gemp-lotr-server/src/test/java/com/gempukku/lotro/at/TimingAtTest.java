@@ -173,11 +173,11 @@ public class TimingAtTest extends AbstractAtTest {
         Map<String, Collection<String>> extraCards = new HashMap<>();
         initializeSimplestGame(extraCards);
 
-        PhysicalCardImpl gimli = new PhysicalCardImpl(100, "1_13", P1, _cardLibrary.getLotroCardBlueprint("1_13"));
-        PhysicalCardImpl letThemCome = new PhysicalCardImpl(101, "1_20", P1, _cardLibrary.getLotroCardBlueprint("1_20"));
-        PhysicalCardImpl slakedThirsts = new PhysicalCardImpl(102, "7_14", P1, _cardLibrary.getLotroCardBlueprint("7_14"));
+        PhysicalCard gimli = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_13");
+        PhysicalCard letThemCome = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_20");
+        PhysicalCard slakedThirsts = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "7_14");
 
-        PhysicalCardImpl gollum = new PhysicalCardImpl(100, "7_58", P2, _cardLibrary.getLotroCardBlueprint("7_58"));
+        PhysicalCard gollum = _game.getGameState().createPhysicalCard(P2, _cardLibrary, "7_58");
 
         _game.getGameState().addCardToZone(_game, gimli, Zone.FREE_CHARACTERS);
         _game.getGameState().addCardToZone(_game, letThemCome, Zone.SUPPORT);

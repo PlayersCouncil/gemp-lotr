@@ -23,11 +23,13 @@ import java.util.List;
 public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "against");
+        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "against", "memorizeMinion");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String fpCharacter = FieldUtils.getString(effectObject.get("fpCharacter"), "fpCharacter");
         final String against = FieldUtils.getString(effectObject.get("against"), "against");
+
+        final String minionMemory = FieldUtils.getString(effectObject.get("memorizeMinion"), "memorizeMinion", "_tempMinion");
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
 
@@ -50,14 +52,14 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory("_tempFpCharacter");
                             return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar));
-                        }, "_tempMinion", player, "Choose minion to assign to character", environment));
+                        }, minionMemory, player, "Choose minion to assign to character", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
                     protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final String assigningPlayer = playerSource.getPlayer(actionContext);
                         final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory("_tempFpCharacter");
-                        final Collection<? extends PhysicalCard> minion = actionContext.getCardsFromMemory("_tempMinion");
+                        final Collection<? extends PhysicalCard> minion = actionContext.getCardsFromMemory(minionMemory);
                         if (fpChar.size() == 1 && minion.size() == 1) {
                             return Collections.singletonList(
                                     new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next()));

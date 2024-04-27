@@ -339,7 +339,7 @@ public class ValueResolver {
                 final int over = FieldUtils.getInteger(object.get("over"), "over", 0);
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
-                final FilterableSource vitalitySource = environment.getFilterFactory().generateFilter(filter, environment);
+                final FilterableSource strengthSource = environment.getFilterFactory().generateFilter(filter, environment);
 
                 return (actionContext) -> {
                     if (filter.equals("any")) {
@@ -348,7 +348,7 @@ public class ValueResolver {
                     } else {
                         return new MultiplyEvaluator(multiplier,
                                 (game, cardAffected) -> {
-                                    final Filterable filterable = vitalitySource.getFilterable(actionContext);
+                                    final Filterable filterable = strengthSource.getFilterable(actionContext);
                                     int strength = 0;
                                     for (PhysicalCard physicalCard : Filters.filterActive(game, filterable)) {
                                         strength += game.getModifiersQuerying().getStrength(game, physicalCard);

@@ -15,20 +15,31 @@ import org.json.simple.JSONObject;
 public class ExtraCost implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "cost");
+        FieldUtils.validateAllowedFields(value, "cost", "skipValidate");
 
-        final EffectAppender costAppender = environment.getEffectAppenderFactory().getEffectAppender((JSONObject) value.get("cost"), environment);
+        boolean skipValidate = FieldUtils.getBoolean(value.get("skipValidate"), "skipValidate", false);
+
+        final JSONObject[] costArray = FieldUtils.getObjectArray(value.get("cost"), "cost");
+        final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
 
         blueprint.appendExtraPlayCost(
                 (actionContext) -> new ExtraPlayCost() {
                     @Override
                     public void appendExtraCosts(LotroGame game, CostToEffectAction action, PhysicalCard card) {
-                        costAppender.appendEffect(true, action, actionContext);
+                        for (EffectAppender costAppender : costAppenders) {
+                            costAppender.appendEffect(true, action, actionContext);
+                        }
                     }
 
                     @Override
                     public boolean canPayExtraCostsToPlay(LotroGame game, PhysicalCard card) {
-                        return costAppender.isPlayableInFull(actionContext);
+                        if (skipValidate)
+                            return true;
+                        for (EffectAppender appender : costAppenders) {
+                            if (!appender.isPlayableInFull(actionContext))
+                                return false;
+                        }
+                        return true;
                     }
 
                     @Override

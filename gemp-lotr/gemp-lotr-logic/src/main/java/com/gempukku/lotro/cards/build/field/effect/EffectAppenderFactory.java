@@ -44,6 +44,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("choosecardsfromsinglestack", new ChooseCardsFromSingleStack());
         effectAppenderProducers.put("choosehowmanyburdenstospot", new ChooseHowManyBurdensToSpot());
         effectAppenderProducers.put("choosehowmanytospot", new ChooseHowManyToSpot());
+        effectAppenderProducers.put("choosehowmanythreatstospot", new ChooseHowManyBurdensToSpot());
         effectAppenderProducers.put("choosehowmanytwilighttokenstospot", new ChooseHowManyTwilightTokensToSpot());
         effectAppenderProducers.put("chooseopponent", new ChooseOpponent());
         effectAppenderProducers.put("chooseyesorno", new ChooseYesOrNo());
