@@ -21,17 +21,40 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
-		/*requires: {
-			
-		}
+		target: culture(elven),companion
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addActivated
+		            filter: minion
+		            phase: assignment
+		            text: Assign this minion to bearer of Reckless Pride.
+		            effect: {
+		                type: assignFpCharacterToSkirmish
+		                fpCharacter: choose(hasAttached(name(Reckless Pride)))
+		                against: self
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: discard
+		                filter: choose(minion)
+		            }
+		            {
+		                type: reconcileHand
+		            }
+		        ]
+		    }
+		]
 		gametext: Bearer must be an [elven] companion.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Ancient Blade."<br><b>Regroup:</b> Discard this condition to discard a minion and reconcile your hand.
 		lore: ""
 		promotext: ""
@@ -70,17 +93,16 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self,inSkirmishAgainst(fierce,minion)
+    		        amount: 3
+		        }
+		    }
+		]
 		gametext: While skirmishing a fierce minion, Arwen is strength +3.
 		lore: But she also sends word to you... Fair well, Elfstone!'
 		promotext: ""
@@ -116,18 +138,26 @@
 		type: Possession
 		strength: 2
 		itemclass: Mount
-		#target: title(an Elf)
-		/*requires: {
-			
-		}
+		target: elf
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: bearer,name(Arwen)
+		        }
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(minion,inSkirmishAgainst(bearer))
+		            amount: -2
+		        }
+		    }
+		]
 		gametext: Bearer must be an Elf.<br><b>Skirmish:</b> If bearer is Arwen, exert her to make each minion skirmishing her strength -2.
 		lore: ""
 		promotext: ""
@@ -163,18 +193,25 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: title(Legolas)
-		/*requires: {
-			
-		}
+		target: name(Legolas)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: culture(elven),skirmish,event
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: bearer,inSkirmish
+		        }
+		        effect: {
+		            type: heal
+		            filter: bearer
+		        }
+		    }
+		]
 		gametext: Bearer must be Legolas.<br>Each time you play an [elven] skirmish event during a skirmish involving Legolas, you may heal him.
 		lore: ""
 		promotext: ""
@@ -208,20 +245,23 @@
 		twilight: 1
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
+			requires: {
+			    type: canSpot
+			    filter: elf
+			}
 			cost: {
-				
+				type: discardFromHand
+				forced: false
+				count: 3
 			},
 			effect: [
 				{
-					
+					type: reconcileHand
 				}
 			]
-		}*/
+		}
 		gametext: Spot an Elf and discard 3 cards from hand to reconcile your hand.
 		lore: If thou art in haste, remember the Paths of the Dead.'
 		promotext: ""
@@ -255,20 +295,26 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(elf)
+					memorize: chosenElf
+					amount: {
+					    type: condition
+					    condition: {
+					        type: memoryMatches
+					        memory: chosenElf
+					        filter: inSkirmishAgainst(nazgul)
+					    }
+					    true: 4
+					    false: 2
+					}
 				}
 			]
-		}*/
+		}
 		gametext: Make an Elf strength +2 (or +4 if skirmishing a Nazgûl).
 		lore: ""
 		promotext: ""
@@ -306,17 +352,30 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: or(name(Aragorn),elf)
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfTurn
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(character,hasAttached(artifact))
+		        }
+		    }
+		]
 		gametext: To play, spot Aragorn or an Elf.<br>At the start of each turn, you may exert Elrond to heal a character bearing an artifact.
 		lore: Onen i-estel Edain.'
 		promotext: ""
@@ -350,17 +409,31 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		            count: 2
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: played
+		            filter: culture(elven),skirmish,event
+		        }
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: drawCards
+		            count: 3
+		        }
+		    }
+		]
 		gametext: To play, spot 2 Elves.<br><b>Response:</b> If an [elven] skirmish event is played, discard this condition to draw 3 cards.
 		lore: Either our hope cometh, or all hopes end.'
 		promotext: ""
@@ -394,17 +467,39 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(elf)
+		        }
+		        effect: [
+                    {
+                        type: revealTopCardsOfDrawDeck
+                        count: 1
+                        memorize: revealedCard
+                    }
+                    {
+                        type: conditional
+                        requires: {
+                            type: memoryMatches
+                            memory: revealedCard
+                            filter: culture(elven)
+                        }
+                        effect: {
+                            type: removeThreats
+                            amount: 3
+                        }
+                    }
+                    {
+                        type: putCardsFromDeckOnBottomOfDeck
+                        filter: memory(revealedCard)
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Regroup:</b> Exert an Elf to reveal the top card of your draw deck. If it is an [elven] card, remove 3 threats. Place the revealed card beneath your draw deck.
 		lore: The days are now short.'
 		promotext: ""
@@ -438,17 +533,64 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		            count: 3
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Add a threat
+		                Discard this condition
+		            ]
+		            effects: [
+		                {
+		                    type: addThreats
+		                    amount: 1
+		                }
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Discard a condition
+		                Draw 2 cards
+		            ]
+		            effects: [
+		                {
+		                    type: discard
+		                    filter: choose(condition)
+		                }
+		                {
+		                    type: drawCards
+		                    count: 2
+		                }
+		            ]
+		        }
+		    }
+		]
 		gametext: To play, spot 3 Elves.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to discard a condition or draw 2 cards.
 		lore: Then I thought in my heart that we drew near to the sea....'
 		promotext: ""
@@ -488,17 +630,25 @@
 		signet: Aragorn
 		resistance: 6
 		keywords: Archer
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        requires: {
+		            type: haveInitiative
+		            side: free people
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 4
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion)
+		        }
+		    }
+		]
 		gametext: <b>Archer</b>.<br><b>Archery:</b> If you have initiative, discard 4 cards from hand to wound a minion.
 		lore: I also will come... for I do not fear the Dead.'
 		promotext: ""
@@ -538,17 +688,27 @@
 		signet: Theoden
 		resistance: 6
 		keywords: Archer
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        requires: {
+		            type: not
+		            requires: {
+		                type: canSpotThreats
+		            }
+		        }
+		        cost: {
+		            type: addThreats
+		            amount: 1
+		        }
+		        effect: {
+		            type: modifyArcheryTotal
+		            side: free people
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Archer</b>.<br><b>Archery:</b> If you cannot spot a threat, add a threat to make the fellowship archery total +1.
 		lore: Alas for the wailing of the gulls! Did not the Lady tell me to beware of them?'
 		promotext: ""
@@ -582,20 +742,31 @@
 		twilight: 1
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(culture(elven),companion)
+				count: 2
 			},
 			effect: [
 				{
-					
+					type: discardTopCardsFromDeck
+					forced: false
+					count: 3
+					memorize: discardedCards
+				}
+				{
+				    type: modifyArcheryTotal
+				    side: free people
+				    amount: {
+				        type: forEachMatchingInMemory
+				        memory: discardedCards
+				        filter: culture(elven)
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: Exert 2 [elven] companions to discard the top 3 cards of your draw deck. Make the fellowship archery total +1 for each [elven] card discarded.
 		lore: Thus we passed over Gilrain, driving the allies of Mordor in rout before us....'
 		promotext: ""
@@ -629,17 +800,44 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: regroup
+		        }
+		        cost: {
+		            type: choice
+		            texts: [
+		                Discard this condition
+		                Discard a card from hand
+		            ]
+		            effects: [
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		                {
+		                    type: discardFromHand
+		                    forced: false
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(elf)
+		        }
+		    }
+		]
 		gametext: To play, spot an Elf.<br>At the start of your regroup phase, you may discard this condition or a card from hand to heal an Elf.
 		lore: But did I not also fortell that you shall neither have wife, nor bind any woman to you....'
 		promotext: ""
@@ -673,20 +871,23 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(elf)
+					amount: 2
+				}
+				{
+				    type: optional
+				    text: Would you like to put this event on top of your draw deck?
+				    effect: {
+				        type: putPlayedEventOnTopOfDrawDeck
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: Make an Elf strength +2. You may place this event on top of your draw deck.
 		lore: You must not go to the Havens Legolas. There will always be some folk... who need you.'
 		promotext: ""
@@ -720,20 +921,23 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(elf)
+					amount: 2
+				}
+				{
+				    type: optional
+				    text: Would you like to shuffle your draw deck?
+				    effect: {
+				        type: shuffleDeck
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: Make an Elf strength +2 and you may shuffle your draw deck.
 		lore: But defenders and foes alike gave up the battle....'
 		promotext: ""
