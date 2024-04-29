@@ -22,17 +22,48 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		            count: 2
+		        }
+		    }
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addThreats
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: aboutToBeKilled
+		            filter: companion
+		        }
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(companion,not(ringBearer))
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfPhase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
+		]
 		gametext: To play, spot 2 [raider] Men and add a threat.<br>Each time a companion is about to be killed, you may remove a threat to discard a companion (except the Ring-bearer).<br>Discard this condition at the start of the regroup phase.
 		lore: ""
 		promotext: ""
@@ -66,17 +97,25 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		            count: 2
+		        }
+		        limitPerPhase: 1
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: addThreats
+		        }
+		    }
+		]
 		gametext: <b>Regroup:</b> Spot 2 [raider] Men and remove (3) to add a threat (limit 1).
 		lore: ...yet not all unguessed.'
 		promotext: ""
@@ -114,17 +153,26 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        cost: {
+		            type: removeTwilight
+		        }
+		        effect: {
+    		        type: addThreats
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (1) to add a threat.
 		lore: ...the great monsters were unfought....
 		promotext: ""
@@ -162,17 +210,21 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotThreats
+		                amount: 2
+		            }
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>While you can spot 2 threats, this minion is <b>damage +1</b>.
 		lore: In the South the Haradrim are moving....'
 		promotext: ""
@@ -213,17 +265,25 @@
 			Southron
 			Ambush 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: assignedToSkirmish
+		            side: free people
+		            filter: self
+		        }
+		        requires: {
+		            type: haveInitiative
+		            side: shadow
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(character,assignedToSkirmish(self))
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
 		lore: New forces of the enemy were hastening up the road from the River....
 		promotext: ""
@@ -264,17 +324,25 @@
 			Southron
 			Ambush 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: assignedToSkirmish
+		            side: free people
+		            filter: self
+		        }
+		        requires: {
+		            type: haveInitiative
+		            side: shadow
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(character,assignedToSkirmish(self))
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
 		lore: ...and the Haradrim rallied about them.
 		promotext: ""
@@ -315,17 +383,25 @@
 			Southron
 			Ambush 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: assignedToSkirmish
+		            side: free people
+		            filter: self
+		        }
+		        requires: {
+		            type: haveInitiative
+		            side: shadow
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(character,assignedToSkirmish(self))
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
 		lore: ...from the southward fields came the footmen of Harad....
 		promotext: ""
@@ -363,17 +439,28 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(or(companion,ally),inSkirmishAgainst(self))
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
 		lore: ""
 		promotext: ""
@@ -411,17 +498,28 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(or(companion,ally),inSkirmishAgainst(self))
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
 		lore: ""
 		promotext: ""
@@ -459,17 +557,26 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        cost: {
+		            type: removeTwilight
+		        }
+		        effect: {
+		            type: addThreats
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (1) to add a threat.
 		lore: ...with red banners....
 		promotext: ""
@@ -507,17 +614,35 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: or
+		            requires: [
+                        {
+                            type: haveInitiative
+                            side: shadow
+                        }
+                        {
+                            type: canSpot
+                            filter: easterling
+                            count: 3
+                        }
+		            ]
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(another,easterling)
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> If you have initiative or you spot 3 Easterlings, discard 2 cards from hand to heal another Easterling.
 		lore: ...others held westward to hold off the forces of Gondor....
 		promotext: ""
@@ -555,17 +680,34 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: [
+		            {
+		                type: removeBurdens
+		            }
+		            {
+		                type: exert
+		                filter: self
+		            }
+		        ]
+		        effect: {
+		            type: heal
+		            filter: choose(another,easterling)
+		            count: {
+		                type: condition
+		                condition: {
+		                    type: haveInitiative
+		                    side: shadow
+		                }
+		                true: 2
+		                false: 1
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Remove a burden and exert this minion to heal another Easterling (or 2 Easterlings if you have initiative).
 		lore: The new host that we had tidings of has come first....'
 		promotext: ""
@@ -603,17 +745,22 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Exert this minion to make him <b>damage +1</b>.
 		lore: Soon there will be battle on the fields.'
 		promotext: ""
@@ -651,17 +798,22 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Exert this minion to make him <b>damage +1</b>.
 		lore: ...great forces were flowing in from the East.
 		promotext: ""
@@ -699,17 +851,32 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: [
+                    {
+                        type: not
+                        requires: {
+                            type: canSpotBurdens
+                            amount: 2
+                        }
+                    }
+                    {
+                        type: canSpot
+                        filter: another,easterling
+                    }
+                ]
+                cost: {
+                    type: discardFromHand
+                    forced: false
+                }
+                effect: {
+                    type: addBurdens
+                }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br><b>Maneuver:</b> If you cannot spot 2 burdens, spot another Easterling and discard a card from hand to add a burden.
 		lore: ...and so have many also in the East.'
 		promotext: ""
@@ -747,17 +914,22 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Exert this minion to make him <b>damage +1</b>.
 		lore: ...forces ten times, and more than ten times....
 		promotext: ""
@@ -798,17 +970,22 @@
 			Easterling
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: {
+		                type: forEachBurden
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>. <b>Fierce</b>.<br>Each time Easterling Regiment wins a skirmish, you may add (1) for each burden.
 		lore: ...there marched up an army of Easterlings....
 		promotext: ""
@@ -846,17 +1023,32 @@
 		vitality: 2
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: [
+                    {
+                        type: not
+                        requires: {
+                            type: canSpotBurdens
+                            amount: 1
+                        }
+                    }
+                    {
+                        type: canSpot
+                        filter: another,easterling
+                    }
+                ]
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                effect: {
+                    type: addBurdens
+                }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br><b>Maneuver:</b> If you cannot spot a burden, spot another Easterling and exert this minion to add a burden.
 		lore: ...Easterlings with axes....
 		promotext: ""
@@ -894,17 +1086,20 @@
 		vitality: 3
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeBurdens
+		            amount: 2
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(another,easterling)
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Remove 2 burdens to heal another Easterling.
 		lore: ...enclosed in a ring of foes.
 		promotext: ""
@@ -938,20 +1133,20 @@
 		twilight: 7
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
+			requires: {
+				type: canSpot
+				filter: culture(raider),man
+				count: 2
 			},
 			effect: [
 				{
-					
+					type: discard
+					filter: choose(companion,not(ringBearer))
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 [raider] Men to discard a companion (except the Ring-bearer).
 		lore: ...displaying his standard, black serpent upon scarlet....
 		promotext: ""
@@ -985,17 +1180,36 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		            count: 3
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 9
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+		                type: modifyMoveLimit
+		                amount: -1
+		            }
+		            until: endOfTurn
+		        }
+		    }
+		]
 		gametext: To play, spot a [raider] Man.<br><b>Regroup:</b> Remove (9) and spot 3 [raider] Men to make the move limit -1.
 		lore: ...like moving houses in the red and fitful light....
 		promotext: ""
@@ -1029,17 +1243,44 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: raider
+		            filter: self
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: shadowHasInitiative
+                    requires: {
+                        type: canSpotCultureTokens
+                        culture: raider
+                        filter: self
+                        amount: 3
+                    }
+		        }
+		    }
+		]
 		gametext: To play, spot a [raider] Man.<br><b>Regroup:</b> Remove (3) and spot a [raider] Man to place a [raider] token here.<br>While there are 3 [raider] tokens here, the Shadow has initiative regardless of the Free Peoples player's hand.
 		lore: ""
 		promotext: ""
@@ -1073,20 +1314,44 @@
 		twilight: 0
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
+			requires: {
+				type: canSpot
+				filter: culture(raider),man
+				count: 2
 			},
 			effect: [
 				{
-					
+					type: discardFromHand
+					forced: false
+					count: any
+					memorize: shadowDiscardedCards
+				}
+				{
+				    type: discardFromHand
+				    forced: false
+				    hand: fp
+				    player: fp
+				    count: any
+				    memorize: freeDiscardedCards
+				}
+				{
+				    type: addTwilight
+				    amount: {
+				        type: subtract
+				        firstNumber: {
+				            type: forEachInMemory
+				            memory: shadowDiscardedCards
+				        }
+				        secondNumber: {
+				            type: forEachInMemory
+				            memory: freeDiscardedCards
+				        }
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: To play, spot 2 [raider] Men.<br>Discard any number of cards from hand. The Free Peoples player then discards any number of cards from hand. For each card you discarded more than the Free Peoples player, add (1).
 		lore: ""
 		promotext: ""
@@ -1124,17 +1389,30 @@
 		vitality: 4
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: trigger
+		        requires: {
+		            type: canSpotThreats
+		            amount: 6
+		        }
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: kill
+		            filter: choose(companion,inSkirmishAgainst(self))
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>To play, spot a [raider] Man.<br>While you can spot 6 threats, each time this minion wins a skirmish, the companion he was skirmishing is killed.
 		lore: Great was the clash of their meeting.
 		promotext: ""
@@ -1168,20 +1446,22 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
+			requires: {
+				type: canSpot
+				filter: culture(raider),minion
 			},
 			effect: [
 				{
-					
+					type: addTwilight
+					amount: {
+					    type: forEachThreat
+					    multiplier: 2
+					}
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [raider] minion to add (2) for each threat.
 		lore: ...dragging through the lanes amid the fires....
 		promotext: ""
@@ -1215,20 +1495,24 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(culture(raider),man)
+					amount: {
+					    type: condition
+					    condition: {
+					        type: haveInitiative
+					        side: shadow
+					    }
+					    true: 6
+					    false: 3
+					}
 				}
 			]
-		}*/
+		}
 		gametext: Make a [raider] Man strength +3 (or +6 if you have initiative).
 		lore: ...Southrons in scarlet....
 		promotext: ""
@@ -1262,18 +1546,26 @@
 		twilight: 2
 		type: Possession
 		itemclass: Ranged weapon
-		#target: a [raider] Man
-		/*requires: {
-			
-		}
+		target: culture(raider),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: archer
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: ambush
+		            amount: 5
+		        }
+		    }
+		]
 		gametext: Bearer must be a [raider] Man.<br>Bearer is an <b>archer</b> and <b>ambush</b> (5).
 		lore: Neither Hirluin the fair would return to Pinnath Gelin, nor Grimbold to Grimslade....
 		promotext: ""
@@ -1308,18 +1600,21 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [raider] Man
-		/*requires: {
-			
-		}
+		target: culture(raider),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: Bearer must be a [raider] Man.<br><b>Skirmish:</b> Exert bearer to add (2).
 		lore: ...the drawing of the scimitars of the Southrons was like a glitter of stars.
 		promotext: ""
@@ -1353,20 +1648,21 @@
 		twilight: 5
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(culture(raider),man)
+				memorize: exertedMan
 			},
 			effect: [
 				{
-					
+					type: wound
+					filter: choose(companion,inSkirmishAgainst(memory(exertedMan)))
+					times: 2
 				}
 			]
-		}*/
+		}
 		gametext: Exert a [raider] Man to wound a companion he is skirmishing twice.
 		lore: ...he came against the white horse and the green with great press of men....
 		promotext: ""
@@ -1400,17 +1696,31 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        requires: {
+		            type: haveInitiative
+		            side: shadow
+		        }
+		        effect: {
+		            type: exert
+		            player: fp
+		            filter: choose(companion)
+		            count: 2
+		        }
+		    }
+		]
 		gametext: To play, spot a [raider] Man.<br>Each time the fellowship moves, the Free Peoples player must exert 2 companions, if you have initiative.
 		lore: Already men were breaking away, flying wild and witless here and there....
 		promotext: ""
@@ -1444,17 +1754,39 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: not
+		            requires: {
+		                type: canSpotBurdens
+		                amount: 2
+		            }
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(easterling)
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(easterling)
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: <b>Maneuver:</b> If you cannot spot 2 burdens, exert an Easterling to add a burden.<br><b>Skirmish:</b> Discard this condition to make an Easterling strength +2.
 		lore: ...had any now that Faramir could hold the fords for longs.
 		promotext: ""
@@ -1492,17 +1824,28 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: preventable
+		            text: Would you like to add a threat to prevent adding (5) twilight?
+		            player: fp
+		            cost: {
+		                type: addThreats
+		            }
+		            effect: {
+		                type: addTwilight
+		                amount: 5
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br><b>Maneuver:</b> Exert this minion to add (5). The Free Peoples player may add a threat to prevent this.
 		lore: ...wild Southron men....
 		promotext: ""
@@ -1540,17 +1883,28 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		            count: 3
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(culture(raider),man)
+		            keyword: damage
+		            amount: 1
+		            until: regroup
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br><b>Shadow:</b> Remove (3) and spot 3 [raider] Men to make one of those Men <b>damage +1</b> until the regroup phase.
 		lore: ...gathered about the standard of their chieftain.
 		promotext: ""
@@ -1588,17 +1942,21 @@
 		vitality: 3
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotThreats
+		                amount: 4
+		            }
+		            filter: self
+		            keyword: damage
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>While you can spot 4 threats, this minion is <b>damage +2</b>.
 		lore: ...a mounted champion of Harad....
 		promotext: ""
@@ -1636,17 +1994,30 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: assignedToSkirmish
+		            filter: self
+		            side: free people
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+		                type: shadowHasInitiative
+		            }
+		            until: endOfTurn
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. To play, spot a [raider] Man.<br>Each time the Free Peoples player assigns this minion to a character, the Shadow has initiative until the end of the turn.
 		lore: ...regiments from the South....
 		promotext: ""
@@ -1687,17 +2058,34 @@
 			Southron
 			Archer
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotTwilight
+		                amount: 6
+		            }
+		            filter: other,culture(raider),man
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotTwilight
+		                amount: 9
+		            }
+		            filter: other,culture(raider),man
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you can spot 6 twilight tokens, other [raider] Men are <b>damage +1</b>.<br>While you can spot 9 twilight tokens, other [raider] Men are <b>damage +1</b>.
 		lore: ...company upon company of the enemy pressed to the walls.
 		promotext: ""
@@ -1738,17 +2126,44 @@
 			Southron
 			Archer
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpotTwilight
+		                amount: 3
+		            }
+		            filter: culture(raider),man
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpotTwilight
+		                amount: 6
+		            }
+		            filter: culture(raider),man
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpotTwilight
+		                amount: 9
+		            }
+		            filter: culture(raider),man
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you can spot 3 twilight tokens, all [raider] Men are strength +1.<br>While you can spot 6 twilight tokens, all [raider] Men are strength +1.<br>While you can spot 9 twilight tokens, all [raider] Men are strength +1.
 		lore: ""
 		promotext: ""
@@ -1786,17 +2201,36 @@
 		vitality: 3
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        requires: {
+		            type: canSpotFPCultures
+		            amount: 4
+		        }
+		        cost: {
+		            type: choice
+		            texts: [
+		                Exert this minion
+		                Remove a threat
+		            ]
+		            effects: [
+		                {
+		                    type: exert
+		                    filter: self
+		                }
+		                {
+		                    type: removeThreats
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(companion,not(ringBearer))
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br><b>Archery:</b> Spot 4 Free Peoples cultures and either exert this minion or remove a threat to wound a companion (except the Ring-bearer).
 		lore: ...Haradrim, cruel and tall.
 		promotext: ""
@@ -1838,17 +2272,33 @@
 			Archer
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: archery
+		        cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: removeThreats
+                    }
+                ]
+                effect: {
+                    type: modifyArcheryTotal
+                    side: shadow
+                    amount: 1
+                }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Archer</b>. <b>Fierce</b>. To play, spot a [raider] Man.<br><b>Archery:</b> Exert this minion and remove a threat to make the minion archery total +1.
 		lore: Southward beyond the road lay the main force of the Haradrim....
 		promotext: ""
@@ -1886,17 +2336,30 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        requires: [
+		            {
+		                type: canSpot
+		                filter: culture(raider),man
+		            }
+		            {
+		                type: canSpot
+		                filter: companion
+		                count: 6
+		            }
+		        ]
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(companion)
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br><b>Archery:</b> Spot another [raider] Man, spot 6 companions, and remove a threat to exert a companion.
 		lore: ...the red southland swords that would have hewed him as he lay.
 		promotext: ""
@@ -1930,17 +2393,51 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+		            {
+		                type: exert
+		                filter: choose(easterling)
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		        effect: {
+		            type: preventable
+		            player: fp
+		            text: Would you like to add 2 burdens to prevent reducing the move limit for this turn by 1?
+		            cost: {
+		                type: addBurdens
+		                amount: 2
+		            }
+		            effect: {
+		                type: addModifier
+		                modifier: {
+		                    type: modifyMoveLimit
+		                    amount: -1
+		                }
+		                until: endOfTurn
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(easterling)
+		        }
+		    }
+		]
 		gametext: <b>Regroup:</b> Exert an Easterling and discard this condition to make the move limit -1 for this turn. The Free Peoples player may add 2 burdens to prevent this.<br><b>Skirmish:</b> Discard this condition to heal an Easterling.
 		lore: ""
 		promotext: ""
@@ -1981,17 +2478,38 @@
 			Southron
 			Archer
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantTakeWounds
+                    requires: [
+                        {
+                            type: haveInitiative
+                            side: shadow
+                        }
+                        {
+                            type: phase
+                            phase: archery
+                        }
+                    ]
+    		        filter: ringBearer
+		        }
+            }
+            {
+                type: modifier
+                modifier: {
+                    type: addKeyword
+                    requires: {
+                        type: haveInitiative
+                        side: shadow
+                    }
+                    filter: self
+                    keyword: ambush
+                    amount: 8
+                }
+            }
+		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you have initiative, the Ring-bearer cannot take wounds during the archery phase and this minion is <b>ambush</b> (8).
 		lore: ...there came flying a deadly dart....
 		promotext: ""
@@ -2025,20 +2543,30 @@
 		twilight: 3
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
+			requires: {
+				type: canSpotThreats
+			}
 			cost: {
-				
-			},
+			    type: chooseHowManyToSpot
+			    filter: culture(raider),man
+			    text: How many {raider} Men would you like to spot?
+			    memorize: spotCount
+			}
 			effect: [
 				{
-					
+					type: exert
+					player: fp
+					filter: choose(companion)
+					count: {
+					    type: fromMemory
+					    memory: spotCount
+					    limit: 3
+					}
 				}
 			]
-		}*/
+		}
 		gametext: Spot a threat and X [raider] Men to make the Free Peoples player exert X companions (limit 3).
 		lore: Southward beyond the road lay the main force of the Haradrim....
 		promotext: ""
@@ -2076,17 +2604,45 @@
 		vitality: 3
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotThreats
+		                amount: 2
+		            }
+		            filter: self
+		            keyword: archer
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotThreats
+		                amount: 3
+		            }
+		            filter: self
+		            keyword: fierce
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotThreats
+		                amount: 4
+		            }
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>While you can spot 2 threats, this minion is an <b>archer</b>.<br>While you can spot 3 threats, this minion is <b>fierce</b>.<br>While you can spot 4 threats, this minion is <b>damage +1</b>.
 		lore: ""
 		promotext: ""
@@ -2120,20 +2676,26 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
+			requires: {
+				type: canSpot
+				filter: culture(raider),minion
 			},
 			effect: [
 				{
-					
+					type: addThreats
+				}
+				{
+				    type: addThreats
+				    amount: {
+				        type: forEachYouCanSpot
+				        filter: companion
+				        over: 4
+				    }
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [raider] minion to add a threat. Add an additional threat for each companion over 4.
 		lore: ...behind them rose the huge backs of the mûmakil....
 		promotext: ""

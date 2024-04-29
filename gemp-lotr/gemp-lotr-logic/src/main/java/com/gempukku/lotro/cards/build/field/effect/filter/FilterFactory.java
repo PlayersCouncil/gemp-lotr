@@ -33,6 +33,7 @@ public class FilterFactory {
 
         simpleFilters.put("allyincurrentregion", (actionContext) -> Filters.isAllyInCurrentRegion());
         simpleFilters.put("another", (actionContext) -> Filters.not(actionContext.getSource()));
+        simpleFilters.put("other", (actionContext) -> Filters.not(actionContext.getSource()));
         simpleFilters.put("any", (actionContext) -> Filters.any);
         simpleFilters.put("attachedtoinsameregion",
                 actionContext -> {
