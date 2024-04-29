@@ -157,17 +157,73 @@
 		race: Man
 		strength: 5
 		vitality: 3
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: culture(gondor),companion
+					amount: {
+						type: requires
+						requires: {
+							type: IsGreaterThanOrEqual
+							firstNumber: {
+								type: ForEachThreat
+							}
+							secondNumber: {
+								type: ForEachYouCanSpot
+								filter: companion
+							}
+						}
+						true: -2
+						false: 0
+					}
+				}
 			}
 			{
-				
+				type: trigger
+				optional: true
+				text: Would you like to add 2 threats to choose a Gondor companion to become strength +2 and Defender +1 until the regroup phase (1 threat if target is Boromir)?
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				cost: [
+					{
+						type: spot
+						filter: choose(culture(gondor),companion)
+						memorize: chosenGondorian
+					}
+					{
+						type: addThreats
+						amount: {
+							type: requires
+							requires: {
+								type: memoryMatches
+								memory: chosenGondorian
+								filter: name(Boromir)
+							}
+							true: 1
+							false: 2
+						}
+					}
+				]
+				effect: [
+					{
+						type: modifyStrength
+						filter: memory(chosenGondorian)
+						amount: 2
+						until: start(regroup)
+					}
+					{
+						type: addKeyword
+						filter: memory(chosenGondorian)
+						keyword: defender+1
+						until: start(regroup)
+					}
+				]
 			}
-		]*/
+		]
 		gametext: While you can spot the same number of threats as companions, each [gondor] companion is strength -2.<br>At the start of the maneuver phase, you may add 2 threats to make a [gondor] companion defender +1 and strength +2 until the regroup phase (or add 1 threat if that companion is Boromir).
 		lore: ""
 		promotext: ""

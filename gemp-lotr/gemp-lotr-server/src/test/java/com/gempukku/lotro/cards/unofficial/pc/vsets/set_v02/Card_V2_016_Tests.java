@@ -5,8 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.FPCulturesSideSpotCountModifier;
-import com.gempukku.lotro.logic.modifiers.FPCulturesSpotCountModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
