@@ -177,6 +177,11 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public boolean isAssignmentCostPaid(LotroGame game, PhysicalCard card) {
+        return false;
+    }
+
+    @Override
     public boolean isAllyPreventedFromParticipatingInArcheryFire(LotroGame game, PhysicalCard card) {
         return false;
     }

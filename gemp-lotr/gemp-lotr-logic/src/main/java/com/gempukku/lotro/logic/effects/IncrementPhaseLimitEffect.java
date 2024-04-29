@@ -23,7 +23,7 @@ public class IncrementPhaseLimitEffect extends UnrespondableEffect {
         this(card, null, prefix, limit);
     }
 
-    private IncrementPhaseLimitEffect(PhysicalCard card, Phase phase, String prefix, int limit) {
+    public IncrementPhaseLimitEffect(PhysicalCard card, Phase phase, String prefix, int limit) {
         this.card = card;
         this.phase = phase;
         this.prefix = prefix;

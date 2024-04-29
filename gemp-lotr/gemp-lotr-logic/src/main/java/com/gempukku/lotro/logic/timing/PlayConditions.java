@@ -489,14 +489,19 @@ public class PlayConditions {
     }
 
     public static boolean checkPhaseLimit(LotroGame game, PhysicalCard card, int max) {
-        return game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(card, game.getGameState().getCurrentPhase()).getUsedLimit() < max;
+        return checkPhaseLimit(game, card, null, "", max);
     }
 
     public static boolean checkPhaseLimit(LotroGame game, PhysicalCard card, Phase phase, int max) {
-        return game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(card, phase).getUsedLimit() < max;
+        return checkPhaseLimit(game, card, phase, "", max);
     }
 
     public static boolean checkPhaseLimit(LotroGame game, PhysicalCard card, String prefix, int max) {
-        return game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(card, prefix, game.getGameState().getCurrentPhase()).getUsedLimit() < max;
+        return checkPhaseLimit(game, card, null, prefix, max);
+    }
+
+    public static boolean checkPhaseLimit(LotroGame game, PhysicalCard card, Phase phase, String prefix, int max) {
+        Phase usePhase = (phase != null) ? phase : game.getGameState().getCurrentPhase();
+        return game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(card, prefix, usePhase).getUsedLimit() < max;
     }
 }

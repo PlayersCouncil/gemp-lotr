@@ -73,6 +73,8 @@ public interface Modifier {
 
     boolean isUnhastyCompanionAllowedToParticipateInSkirmishes(LotroGame game, PhysicalCard card);
 
+    boolean isAssignmentCostPaid(LotroGame game, PhysicalCard card);
+
     boolean isAllyPreventedFromParticipatingInArcheryFire(LotroGame game, PhysicalCard card);
 
     boolean isAllyPreventedFromParticipatingInSkirmishes(LotroGame game, Side sidePlayer, PhysicalCard card);

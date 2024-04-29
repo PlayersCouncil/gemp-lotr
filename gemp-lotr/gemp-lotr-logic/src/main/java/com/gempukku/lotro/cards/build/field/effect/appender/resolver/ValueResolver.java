@@ -41,8 +41,12 @@ public class ValueResolver {
                 String memory = stringValue.substring("memory(".length(), stringValue.length() - 1);
                 return actionContext -> new ConstantEvaluator(Integer.parseInt(actionContext.getValueFromMemory(memory)));
             } else {
-                int v = Integer.parseInt(stringValue);
-                return new ConstantEvaluator(v);
+                try {
+                    int v = Integer.parseInt(stringValue);
+                    return new ConstantEvaluator(v);
+                } catch (NumberFormatException exp) {
+                    throw new InvalidCardDefinitionException("Can't parse value as number: " + stringValue);
+                }
             }
         }
         if (value instanceof JSONObject object) {
@@ -66,6 +70,16 @@ public class ValueResolver {
                     public int getMaximum(ActionContext actionContext) {
                         return toValue.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
                     }
+                };
+            } else if (type.equalsIgnoreCase("turnNumber")) {
+                return (actionContext) -> (Evaluator) (game, cardAffected) ->
+                        actionContext.getGame().getGameState().getTurnNumber();
+            } else if (type.equalsIgnoreCase("whileInZone")) {
+                return (actionContext) -> (Evaluator) (game, cardAffected) -> {
+                    Object whileInZoneData = actionContext.getSource().getWhileInZoneData();
+                    if (whileInZoneData instanceof String)
+                        return Integer.parseInt((String) whileInZoneData);
+                    return -1;
                 };
             } else if (type.equalsIgnoreCase("requires")) {
                 FieldUtils.validateAllowedFields(object, "requires", "true", "false");

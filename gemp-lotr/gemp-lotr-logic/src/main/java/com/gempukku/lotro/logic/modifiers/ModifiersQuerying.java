@@ -155,6 +155,8 @@ public interface ModifiersQuerying {
 
     public boolean canPlaySite(LotroGame game, String playerId);
 
+    boolean assignmentCostWasPaid(LotroGame game, PhysicalCard card);
+
     int getSanctuaryHealModifier(LotroGame game);
 
     int getPotentialDiscount(LotroGame game, PhysicalCard playedCard);

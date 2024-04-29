@@ -9,6 +9,7 @@ import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.GameStats;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -40,6 +41,7 @@ public class GameState {
     private int _twilightPool;
 
     private int _moveCount;
+    private int turnNumber;
     private boolean _moving;
     private boolean _fierceSkirmishes;
     private boolean _extraSkirmishes;
@@ -792,14 +794,21 @@ public class GameState {
         return _twilightPool;
     }
 
-    public void startPlayerTurn(String playerId) {
+    public void startPlayerTurn(String playerId, boolean realTurn) {
         _currentPlayerId = playerId;
+        if (realTurn) {
+            turnNumber++;
+        }
         setTwilight(0);
         _moveCount = 0;
         _fierceSkirmishes = false;
 
         for (GameStateListener listener : getAllGameStateListeners())
             listener.setCurrentPlayerId(_currentPlayerId);
+    }
+
+    public int getTurnNumber() {
+        return turnNumber;
     }
 
     public boolean isExtraSkirmishes() {
