@@ -262,17 +262,37 @@
 		signet: Frodo
 		resistance: 6
 		keywords: Ranger
-		/*requires: {
-			
+		requires: {
+			type: canSpot
+			filter: ranger
 		}
 		effects: [
 			{
-				
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					count: 1
+					filter: choose(culture(gondor))
+					forced: false
+				}
+				effect: {
+					type: wound
+					filter: choose(minion,inSkirmishAgainst(self),roaming)
+					memorize: chosenMinion
+					times: {
+						type: requires
+						requires: {
+							type: memoryMatches
+							memory: chosenMinion
+							filter: man
+						}
+						true: 2
+						false: 1
+					}
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Ranger. To play, spot a ranger.<br>Skirmish: Discard a [Gondor] card from hand to wound a roaming minion skirmishing this companion. If that minion is a Man, wound it again.
 		lore: "All had swords at their sides, and were clad in green and brown of varied hues, as if the better to walk unseen in the glades of Ithilien."
 		promotext: ""

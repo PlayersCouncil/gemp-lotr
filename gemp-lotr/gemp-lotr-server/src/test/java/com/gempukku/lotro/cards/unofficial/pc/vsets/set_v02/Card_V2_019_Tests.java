@@ -19,6 +19,11 @@ public class Card_V2_019_Tests
 				new HashMap<>()
 				{{
 					put("card", "102_19");
+					put("rangerComp", "1_96");
+					put("gondorCardToChuck", "1_113");
+					put("threeVitMan", "4_154");
+					put("threeVitNonMan", "3_62");
+					put("nonRoamingMinion", "1_233");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -64,18 +69,163 @@ public class Card_V2_019_Tests
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DunadanofIthilienTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+	@Test
+	public void dumpsAGondorCardToWoundRoamingNonManMinionSkirmishingHimOnce() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		PhysicalCardImpl card = scn.GetFreepsCard("card");
+		PhysicalCardImpl rangerComp = scn.GetFreepsCard("rangerComp");
+		PhysicalCardImpl gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
+		PhysicalCardImpl threeVitNonMan = scn.GetShadowCard("threeVitNonMan");
+
+		scn.FreepsMoveCardToHand(card, rangerComp, gondorCardToChuck);
+		scn.ShadowMoveCardToHand(threeVitNonMan);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(rangerComp);
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(6, scn.GetTwilight());
+
+		scn.SkipToPhase(Phase.SHADOW);
+
+		scn.ShadowPlayCard(threeVitNonMan);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(card, threeVitNonMan);
+		scn.FreepsResolveSkirmish(card);
+
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals(0, scn.GetWoundsOn(threeVitNonMan));
+		assertEquals(1, scn.GetFreepsHandCount());
+
+		scn.FreepsUseCardAction(card);
+
+		assertEquals(1, scn.GetWoundsOn(threeVitNonMan));
+		assertEquals(0, scn.GetFreepsHandCount());
+	}
+
+
+	@Test
+	public void dumpsAGondorCardToWoundRoamingManMinionSkirmishingHimTwice() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		PhysicalCardImpl card = scn.GetFreepsCard("card");
+		PhysicalCardImpl rangerComp = scn.GetFreepsCard("rangerComp");
+		PhysicalCardImpl gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
+		PhysicalCardImpl threeVitMan = scn.GetShadowCard("threeVitMan");
+
+		scn.FreepsMoveCardToHand(card, rangerComp, gondorCardToChuck);
+		scn.ShadowMoveCardToHand(threeVitMan);
+
+		scn.StartGame();
+		scn.FreepsPlayCard(rangerComp);
+		scn.FreepsPlayCard(card);
+
+		assertEquals(6, scn.GetTwilight());
+
+		scn.SkipToPhase(Phase.SHADOW);
+
+		scn.ShadowPlayCard(threeVitMan);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(card, threeVitMan);
+		scn.FreepsResolveSkirmish(card);
+
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals(0, scn.GetWoundsOn(threeVitMan));
+		assertEquals(1, scn.GetFreepsHandCount());
+
+		scn.FreepsUseCardAction(card);
+
+		assertEquals(2, scn.GetWoundsOn(threeVitMan));
+		assertEquals(0, scn.GetFreepsHandCount());
+	}
+
+
+	@Test
+	public void dumpsAGondorCardForNoEffectAgainstNonRoamingMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		PhysicalCardImpl card = scn.GetFreepsCard("card");
+		PhysicalCardImpl rangerComp = scn.GetFreepsCard("rangerComp");
+		PhysicalCardImpl gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
+		PhysicalCardImpl nonRoamingMinion = scn.GetShadowCard("nonRoamingMinion");
+
+		scn.FreepsMoveCardToHand(card, rangerComp, gondorCardToChuck);
+		scn.ShadowMoveCardToHand(nonRoamingMinion);
+
+		scn.StartGame();
+		scn.FreepsPlayCard(rangerComp);
+		scn.FreepsPlayCard(card);
+
+		assertEquals(6, scn.GetTwilight());
+
+		scn.SkipToPhase(Phase.SHADOW);
+
+		scn.ShadowPlayCard(nonRoamingMinion);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(card, nonRoamingMinion);
+		scn.FreepsResolveSkirmish(card);
+
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals(0, scn.GetWoundsOn(nonRoamingMinion));
+		assertEquals(1, scn.GetFreepsHandCount());
+
+		scn.FreepsUseCardAction(card);
+
+		assertEquals(0, scn.GetWoundsOn(nonRoamingMinion));
+		assertEquals(0, scn.GetFreepsHandCount());
+	}
+
+
+
+	@Test
+	public void dumpsAGondorCardForNoEffectWhenRoamingMinionIsSkirmishingOtherCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		PhysicalCardImpl card = scn.GetFreepsCard("card");
+		PhysicalCardImpl rangerComp = scn.GetFreepsCard("rangerComp");
+		PhysicalCardImpl gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
+		PhysicalCardImpl threeVitMan = scn.GetShadowCard("threeVitMan");
+
+		scn.FreepsMoveCardToHand(card, rangerComp, gondorCardToChuck);
+		scn.ShadowMoveCardToHand(threeVitMan);
+
+		scn.StartGame();
+		scn.FreepsPlayCard(rangerComp);
+		scn.FreepsPlayCard(card);
+
+		assertEquals(6, scn.GetTwilight());
+
+		scn.SkipToPhase(Phase.SHADOW);
+
+		scn.ShadowPlayCard(threeVitMan);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(rangerComp, threeVitMan);
+		scn.FreepsResolveSkirmish(rangerComp);
+
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals(0, scn.GetWoundsOn(threeVitMan));
+		assertEquals(1, scn.GetFreepsHandCount());
+
+		scn.FreepsUseCardAction(card);
+
+		assertEquals(0, scn.GetFreepsHandCount());
 	}
 }
