@@ -103,20 +103,34 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+				type: exert
+				filter: choose(name(Aragorn))
+				memorize: exertedCompanion
+				times: 3
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: modifyStrength
+					filter: all(valiant,companion)
+					until: start(regroup)
+					amount: 2
+				}
+				{
+					type: addTrigger
+					until: endOfTurn
+					trigger: {
+						type: killed
+						filter: name(Aragorn)
+					}
+					effect: {
+						type: modifyStrength
+						filter: all(valiant,companion)
+						until: endOfTurn
+						amount: 1
+					}
 				}
 			]
 		}
