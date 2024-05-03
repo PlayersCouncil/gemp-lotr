@@ -27,11 +27,13 @@ public class Card_V2_017_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_17");
+					put("iwilldie", "102_17");
 					put("aragorn", "101_19");
 					put("veowyn", "4_270");
 					put("vgamling", "5_82");
+
 					put("twk", "1_237");
+					put("charge", "1_223");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -41,7 +43,7 @@ public class Card_V2_017_Tests
 	}
 
 	@Test
-	public void IWillDieAsOneofThemStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IWillDieStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
@@ -53,12 +55,12 @@ public class Card_V2_017_Tests
 		 * Type: Event
 		 * Subtype: Maneuver
 		 * Game Text: Exert Aragorn three times to make each valiant companion strength +2 until the regroup phase. 
-		* 	If Aragorn dies during this turn, make each valiant companion strength +1 for the rest of the turn. 
+		* 	If Aragorn dies during this turn, make each valiant companion strength +1 for the rest of the turn.
 		*/
 
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("iwilldie");
 
 		assertEquals("I Will Die as One of Them", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -71,150 +73,224 @@ public class Card_V2_017_Tests
 	}
 
 	@Test
-	public void IWillDieAsOneofThemBoostsValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IWillDieExertsAragornThrice() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		PhysicalCardImpl veowyn = scn.GetFreepsCard("veowyn");
-		PhysicalCardImpl vgamling = scn.GetFreepsCard("vgamling");
-		scn.FreepsMoveCardToHand(card, aragorn, veowyn, vgamling);
+		var iwilldie = scn.GetFreepsCard("iwilldie");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCardToHand(iwilldie);
+		scn.FreepsMoveCharToTable(aragorn);
 
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
-		scn.ShadowMoveCardToHand(twk);
+		var twk = scn.GetShadowCard("twk");
+		//A Maneuver event to reset the game state
+		var charge = scn.GetShadowCard("charge");
+		scn.ShadowMoveCharToTable(twk);
+		scn.ShadowMoveCardToHand(charge);
 
 		scn.StartGame();
 
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsPlayCard(veowyn);
-		scn.FreepsPlayCard(vgamling);
-
-
-		assertEquals(6, scn.GetStrength(veowyn));
-		assertEquals(6, scn.GetStrength(vgamling));
-
-		scn.SkipToPhase(Phase.SHADOW);
-
-		scn.ShadowPlayCard(twk);
+		scn.AddWoundsToChar(aragorn, 1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 
+		//Need 4 vitality to exert 3 times.  Testing when only 1 off ensures
+		// we don't have a typo of "exert twice" or "exert once" (which is the
+		// default number of times for the exert action).
+		assertEquals(3, scn.GetVitality(aragorn));
+		assertFalse(scn.FreepsPlayAvailable(iwilldie));
 
-		var twilightInPoolBeforeCardPlay = scn.GetTwilight();
+		scn.RemoveWoundsFromChar(aragorn, 1);
+		//Although the game state immediately changes, the server has
+		// already told the client what actions the player has available, so
+		// we need to play until it has a chance to re-evaluate.
 
-		assertTrue(scn.FreepsPlayAvailable(card));
-		scn.FreepsPlayCard(card);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(charge); //Do-nothing maneuver event so they don't both pass
 
+		//Now it's back to Freep's maneuver turn
+		assertEquals(4, scn.GetVitality(aragorn));
+		assertTrue(scn.FreepsPlayAvailable(iwilldie));
+		scn.FreepsPlayCard(iwilldie);
 
-		assertEquals(twilightInPoolBeforeCardPlay + 1, scn.GetTwilight());
+		assertEquals(1, scn.GetVitality(aragorn));
+		//Now that we have ensured that the costs of the card work as they should,
+		// further tests can just worry about the effects without re-checking.
 
-		// Valiant companion's strengths are boosted after card is played
-		assertEquals(8, scn.GetStrength(veowyn));
-		assertEquals(8, scn.GetStrength(vgamling));
-
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		assertEquals(8, scn.GetStrength(veowyn));
-		assertEquals(8, scn.GetStrength(vgamling));
-
-		scn.PassCurrentPhaseActions();
-		scn.FreepsAssignToMinions(veowyn, twk);
-		scn.FreepsResolveSkirmish(veowyn);
-
-
-		// Valiant companions continue to have boosted strength during the skirmish phase
-		scn.SkipToPhase(Phase.SKIRMISH);
-		assertEquals(8, scn.GetStrength(veowyn));
-		assertEquals(8, scn.GetStrength(vgamling));
-
-
-
-		// Valiant companions have had their strength reduced to normal after the beginning of the regroup phase
-		scn.SkipToPhase(Phase.REGROUP);
-		assertEquals(6, scn.GetStrength(veowyn));
-		assertEquals(6, scn.GetStrength(vgamling));
+		//Typically we can skip testing for twilight going out unless it's variable
+		// or has some other sort of snag.  The twilight-cost-of-a-card-is-paid part of
+		// the system could stand to be tested explicitly elsewhere, but it's so robust
+		// that at this point we can trust it and just ensure the twilight cost stat is
+		// set properly (as is done in the first test above), and then worry about things
+		// specific to this card.
 	}
 
 	@Test
-	public void IWillDieAsOneofThemBoostsValiantCompanionsOnDeath() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IWillDiePumpsValiantCompanionsUntilRegroup() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		PhysicalCardImpl veowyn = scn.GetFreepsCard("veowyn");
-		PhysicalCardImpl vgamling = scn.GetFreepsCard("vgamling");
-		scn.FreepsMoveCardToHand(card, aragorn, veowyn, vgamling);
+		var iwilldie = scn.GetFreepsCard("iwilldie");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var veowyn = scn.GetFreepsCard("veowyn");
+		var vgamling = scn.GetFreepsCard("vgamling");
+		//Don't forget to test for negatives as well as positives
+		var frodo = scn.GetRingBearer();
+		scn.FreepsMoveCardToHand(iwilldie);
+		//Don't be afraid to cheat and stack the table when we're not explicitly
+		// testing for things that need to be played properly.
+		scn.FreepsMoveCharToTable(aragorn, veowyn, vgamling);
 
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
-		scn.ShadowMoveCardToHand(twk);
+		var twk = scn.GetShadowCard("twk");
+		//That goes for minions too.
+		scn.ShadowMoveCharToTable(twk);
 
 		scn.StartGame();
 
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsPlayCard(veowyn);
-		scn.FreepsPlayCard(vgamling);
-
-
-		assertEquals(6, scn.GetStrength(veowyn));
-		assertEquals(6, scn.GetStrength(vgamling));
-
-		scn.SkipToPhase(Phase.SHADOW);
-
-		scn.ShadowPlayCard(twk);
-
 		scn.SkipToPhase(Phase.MANEUVER);
 
+		assertTrue(scn.FreepsPlayAvailable(iwilldie));
 
-		var twilightInPoolBeforeCardPlay = scn.GetTwilight();
+		//When testing for strength changes, it's usually a good idea to check as
+		// closely to the occurrence as possible to eliminate the chance of false
+		// positives (site effects, character triggers, etc).
+		assertEquals(6, scn.GetStrength(veowyn));
+		assertEquals(6, scn.GetStrength(vgamling));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(4, scn.GetStrength(frodo));
 
-		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertTrue(scn.FreepsPlayAvailable(card));
-		scn.FreepsPlayCard(card);
-		assertEquals(3, scn.GetWoundsOn(aragorn));
-
-
-		assertEquals(twilightInPoolBeforeCardPlay + 1, scn.GetTwilight());
+		scn.FreepsPlayCard(iwilldie);
 
 		// Valiant companion's strengths are boosted after card is played
 		assertEquals(8, scn.GetStrength(veowyn));
 		assertEquals(8, scn.GetStrength(vgamling));
+		// Aragorn's and Frodo's is not
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(4, scn.GetStrength(frodo));
 
+		// Ensures it didn't last just the one phase
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		assertEquals(8, scn.GetStrength(veowyn));
 		assertEquals(8, scn.GetStrength(vgamling));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(4, scn.GetStrength(frodo));
 
-		scn.PassCurrentPhaseActions();
-		scn.FreepsAssignToMinions(veowyn, twk);
-		scn.FreepsResolveSkirmish(veowyn);
+		//This will bulldoze through the assignments, skipping skirmishes
+		scn.SkipToPhase(Phase.REGROUP);
 
-		scn.ApplyAdHocAction(new AbstractActionProxy() {
-					@Override
-					public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-						ActivateCardAction action = new ActivateCardAction(twk);
-						action.appendEffect(new KillEffect(aragorn, (PhysicalCard) null, KillEffect.Cause.WOUNDS));
-						return Collections.singletonList(action);
-					}
-				});
+		// Valiant companions have had their strength reduced to normal after the
+		// beginning of the regroup phase
+		assertEquals(6, scn.GetStrength(veowyn));
+		assertEquals(6, scn.GetStrength(vgamling));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(4, scn.GetStrength(frodo));
+	}
+
+	@Test
+	public void IWillDiePumpsValiantCompanionsOnDeath() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var iwilldie = scn.GetFreepsCard("iwilldie");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var veowyn = scn.GetFreepsCard("veowyn");
+		var vgamling = scn.GetFreepsCard("vgamling");
+		var frodo = scn.GetRingBearer();
+		scn.FreepsMoveCardToHand(iwilldie);
+		scn.FreepsMoveCharToTable(aragorn, veowyn, vgamling);
+
+		var twk = scn.GetShadowCard("twk");
+		scn.ShadowMoveCharToTable(twk);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsPlayAvailable(iwilldie));
+		scn.FreepsPlayCard(iwilldie);
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+
+		// Valiant companion's strengths are boosted after card is played
+		assertEquals(8, scn.GetStrength(veowyn));
+		assertEquals(8, scn.GetStrength(vgamling));
+		assertEquals(4, scn.GetStrength(frodo));
 
 		assertEquals(Zone.FREE_CHARACTERS, aragorn.getZone());
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowUseCardAction(twk);
+		scn.AddWoundsToChar(aragorn, 1);
+		//Dislodging the decision system so the server re-evaluates the game state
+		scn.ShadowPassCurrentPhaseAction();
+
+		scn.FreepsResolveRuleFirst();
 		assertEquals(Zone.DEAD, aragorn.getZone());
 
+		//Valiant comps boosted by +1 more due to the death
 		assertEquals(9, scn.GetStrength(veowyn));
 		assertEquals(9, scn.GetStrength(vgamling));
+		assertEquals(4, scn.GetStrength(frodo));
 
-		// Valiant companions continue to have boosted strength during the skirmish phase
-		scn.SkipToPhase(Phase.SKIRMISH);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		// Valiant companions continue to have boosted strength outside of Maneuver
 		assertEquals(9, scn.GetStrength(veowyn));
 		assertEquals(9, scn.GetStrength(vgamling));
+		assertEquals(4, scn.GetStrength(frodo));
 
-
-
-		// Valiant companions have had their strength reduced to normal after the beginning of the regroup phase
+		// Regroup makes the +2 go away, but the +1 from Aragorn's death should remain
 		scn.SkipToPhase(Phase.REGROUP);
 		assertEquals(7, scn.GetStrength(veowyn));
 		assertEquals(7, scn.GetStrength(vgamling));
+		assertEquals(4, scn.GetStrength(frodo));
+
+		//Jumps through the Shadow player's freeps turn, and gets us to right after
+		// the freeps move to site 3
+		scn.SkipToSite(3);
+
+		//All effects have worn off
+		assertEquals(6, scn.GetStrength(veowyn));
+		assertEquals(6, scn.GetStrength(vgamling));
+		assertEquals(4, scn.GetStrength(frodo));
+	}
+
+	@Test
+	public void IWillDieDoesNotTriggerOnAragornsDeathNextTurn() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var iwilldie = scn.GetFreepsCard("iwilldie");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var veowyn = scn.GetFreepsCard("veowyn");
+		var vgamling = scn.GetFreepsCard("vgamling");
+		var frodo = scn.GetRingBearer();
+		scn.FreepsMoveCardToHand(iwilldie);
+		scn.FreepsMoveCharToTable(aragorn, veowyn, vgamling);
+
+		var twk = scn.GetShadowCard("twk");
+		scn.ShadowMoveCharToTable(twk);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		scn.FreepsPlayCard(iwilldie);
+
+		scn.SkipToPhase(Phase.REGROUP);
+		//Jumps through the Shadow player's freeps turn, and gets us to right after
+		// the freeps move to site 3
+		scn.SkipToSite(3);
+
+		assertEquals(6, scn.GetStrength(veowyn));
+		assertEquals(6, scn.GetStrength(vgamling));
+		assertEquals(4, scn.GetStrength(frodo));
+
+		//put him back so we have a maneuver phase
+		scn.ShadowMoveCharToTable(twk);
+		scn.AddWoundsToChar(aragorn, 4);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		//Nothing to see here
+		assertEquals(Zone.DEAD, aragorn.getZone());
+		assertEquals(6, scn.GetStrength(veowyn));
+		assertEquals(6, scn.GetStrength(vgamling));
+		assertEquals(4, scn.GetStrength(frodo));
 	}
 }

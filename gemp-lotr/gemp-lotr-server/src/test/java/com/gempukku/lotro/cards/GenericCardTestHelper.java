@@ -967,7 +967,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public void ChooseAction(String playerID, String paramName, String option) throws DecisionResultInvalidException {
         List<String> choices = GetADParamAsList(playerID, paramName);
         for(String choice : choices){
-            if(choice.toLowerCase().contains(option.toLowerCase())) {
+            if(option == null && choice == null // This only happens when a rule is the source of an action
+                    || choice.toLowerCase().contains(option.toLowerCase())) {
                 playerDecided(playerID, String.valueOf(choices.indexOf(choice)));
                 return;
             }
@@ -976,6 +977,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         playerDecided(playerID, option);
     }
 
+    public void FreepsResolveRuleFirst() throws DecisionResultInvalidException { FreepsResolveActionOrder(null); }
     public void FreepsResolveActionOrder(String option) throws DecisionResultInvalidException { ChooseAction(P1, "actionText", option); }
 
     public Filterable GenerateFreepsFilter(String filter) throws InvalidCardDefinitionException {
