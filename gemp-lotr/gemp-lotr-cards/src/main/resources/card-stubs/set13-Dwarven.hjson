@@ -72,17 +72,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Dwarf strength +3 (or +4 and <b>damage +1</b> if you can spot a [dwarven] token).
 		lore: It's a long way.
 		promotext: ""
@@ -163,17 +166,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: You may remove from the game 4 other [dwarven] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make your Dwarf bearing a hand weapon strength +3.
 		lore: ...Seven for the Dwarf-lords in their halls of stone....
 		promotext: ""
@@ -259,20 +265,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a Dwarf wins a fierce skirmish, play a [dwarven] possession from your discard pile and you may reinforce a [dwarven] token.
 		lore: ...but Gimli had to be dragged away by Legolas....
 		promotext: ""
@@ -309,17 +318,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Remove a [dwarven] token to heal a Dwarf.
 		lore: Gimli was saddened by Éowyn's despair.
 		promotext: ""

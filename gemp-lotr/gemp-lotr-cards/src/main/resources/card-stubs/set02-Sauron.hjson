@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Exert a [sauron] Orc and spot X burdens to draw X cards (limit 5).
 		lore: ...he has indeed arisen again and left his hold in Mirkwood and returned to his ancient fastness in the Dark Tower of Mordor.'
 		promotext: ""
@@ -72,17 +75,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a [sauron] Orc to discard an ally (or 2 [elven] allies).
 		lore: But my memory reaches back even to the Elder Days.... I have seen three ages in the West of the world, and many defeats, and many fruitless victories.'
 		promotext: ""
@@ -214,17 +220,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If the Ring-bearer puts on The One Ring, spot a [sauron] minion to make the Free Peoples player discard his or her hand.
 		lore: They will know all the news now, for they have visited Bill Ferny; and probably that Southerner was a spy as well.'
 		promotext: ""
@@ -351,6 +360,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Condition
+		#target: the Ring-bearer
 		/*requires: {
 			
 		}

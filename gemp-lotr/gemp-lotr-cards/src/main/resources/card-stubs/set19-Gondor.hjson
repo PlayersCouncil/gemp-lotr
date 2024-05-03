@@ -126,6 +126,7 @@
 		twilight: 2
 		type: Condition
 		strength: 1
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -170,6 +171,7 @@
 		twilight: 1
 		type: Condition
 		strength: 1
+		#target: a fellowship companion
 		/*requires: {
 			
 		}

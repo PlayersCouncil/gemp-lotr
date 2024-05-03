@@ -165,17 +165,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If the Ring-bearer is about to heal, remove a burden instead.
 		lore: Don't despair!' said Strider. 'You must trust me now. Your Frodo is made of sterner stuff than I had guessed....'
 		promotext: ""
@@ -261,7 +264,7 @@
 		strength: 3
 		vitality: 4
 		signet: Gandalf
-		resistance: 6
+		resistance: 10
 		/*requires: {
 			
 		}
@@ -310,7 +313,7 @@
 		strength: 3
 		vitality: 4
 		signet: Frodo
-		resistance: 6
+		resistance: 10
 		/*requires: {
 			
 		}
@@ -451,17 +454,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Exert a Hobbit to make him strength +3.
 		lore: ...though they are inclined to be fat and do not hurry unnecessarily, they are nonetheless nimble and deft in their movements.
 		promotext: ""
@@ -498,17 +504,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Add (X) to heal a Hobbit companion X times.
 		lore: What about Elevenses, Luncheon, Afternoon Tea and Supper – he knows about them, doesn't he?'
 		promotext: ""
@@ -595,17 +604,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Stealth</b>.<br><b>Skirmish:</b> At sites 1 to 4, cancel a skirmish involving a Hobbit. At any other site, make a Hobbit strength +3.
 		lore: What? That were just a little detour, that's all... a shortcut.'
 		promotext: ""
@@ -692,17 +704,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Stealth</b>.<br><b>Skirmish:</b> At sites 1 to 5, cancel a skirmish involving a Hobbit. At any other site, make a Hobbit strength +2.
 		lore: They possessed from the first the art of disappearing swiftly and silently, when large folk whom they do not wish to meet come blundering by....
 		promotext: ""
@@ -781,6 +796,7 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: [
 			Pipeweed
 			Support Area
@@ -978,17 +994,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Exert a companion (except a Hobbit) to make a Hobbit strength +3.
 		lore: You carry the fate of us all, little one.... If this is indeed the will of the Council, then Gondor will see it done.'
 		promotext: ""
@@ -1021,6 +1040,7 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: [
 			Pipeweed
 			Support Area
@@ -1170,17 +1190,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Add a burden to wound each minion skirmishing the Ring-bearer.
 		lore: The ring had given him power according to his stature.'
 		promotext: ""
@@ -1266,7 +1289,7 @@
 		strength: 3
 		vitality: 4
 		signet: Frodo
-		resistance: 6
+		resistance: 5
 		/*requires: {
 			
 		}
@@ -1315,7 +1338,7 @@
 		strength: 3
 		vitality: 4
 		signet: Aragorn
-		resistance: 6
+		resistance: 5
 		/*requires: {
 			
 		}
@@ -1363,17 +1386,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Exert a Hobbit companion to remove a burden.
 		lore: I am sorry that I brought this upon you... sorry you must carry this burden.'
 		promotext: ""
@@ -1452,6 +1478,7 @@
 		culture: Shire
 		twilight: 2
 		type: Condition
+		#target: title(any character)
 		keywords: Tale
 		/*requires: {
 			
@@ -1500,17 +1527,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver</b> <i>or</i> <b>Skirmish:</b> Heal a Hobbit.
 		lore: You have a stout heart, little hobbit, but your courage alone will not save you.'
 		promotext: ""
@@ -1590,6 +1620,7 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
+		#target: a Hobbit companion
 		keywords: Tale
 		/*requires: {
 			
@@ -1634,6 +1665,7 @@
 		culture: Shire
 		twilight: 0
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			

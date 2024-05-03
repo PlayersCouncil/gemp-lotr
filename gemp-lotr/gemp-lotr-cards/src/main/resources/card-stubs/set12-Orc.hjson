@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot X burdens to make a character skirmishing an [orc] Orc strength -X.
 		lore: The Dark Tower was broken, but its foundations were not removed; for they were made with the power of the Ring, and while it remains they will endure.'
 		promotext: ""
@@ -75,17 +78,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 2</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -2.)</helper><br>Make each of your [orc] minions strength +2 until the regroup phase.
 		lore: Fires now raged unchecked in the first circle of the City....
 		promotext: ""
@@ -166,17 +172,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an [orc] lurker to wound an Elf.
 		lore: Orcs will eagerly spill any blood, but Elven is the sweetest of all.
 		promotext: ""
@@ -1064,17 +1073,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 2</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot an [orc] minion to make the Free Peoples player discard one of his or her conditions from play.
 		lore: The defenses of Minas Tirith were daunting, but the siegecraft of the Orcs was equal to the challenge.
 		promotext: ""
@@ -1111,17 +1123,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Reveal the top 5 cards of your draw deck (or, if the fellowship is at a battleground site, the top 7 cards) to make an [orc] minion strength +1 for each [orc] card revealed.
 		lore: Go on. Call for help. Squeal! No one's gonna save you now.'
 		promotext: ""

@@ -21,6 +21,7 @@
 		culture: Elven
 		twilight: 2
 		type: Condition
+		#target: title(an [elven] companion)
 		/*requires: {
 			
 		}
@@ -211,17 +212,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an Elf and discard 3 cards from hand to reconcile your hand.
 		lore: If thou art in haste, remember the Paths of the Dead.'
 		promotext: ""
@@ -258,17 +262,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an Elf strength +2 (or +4 if skirmishing a Nazgûl).
 		lore: ""
 		promotext: ""
@@ -585,17 +592,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert 2 [elven] companions to discard the top 3 cards of your draw deck. Make the fellowship archery total +1 for each [elven] card discarded.
 		lore: Thus we passed over Gilrain, driving the allies of Mordor in rout before us....'
 		promotext: ""
@@ -676,17 +686,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an Elf strength +2. You may place this event on top of your draw deck.
 		lore: You must not go to the Havens Legolas. There will always be some folk... who need you.'
 		promotext: ""
@@ -723,17 +736,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an Elf strength +2 and you may shuffle your draw deck.
 		lore: But defenders and foes alike gave up the battle....'
 		promotext: ""

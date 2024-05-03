@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert an enduring [wraith] minion twice to assign that minion to an unbound companion.
 		lore: ...the Nazgûl Lord like a shadow of despair.
 		promotext: ""
@@ -72,17 +75,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a Nazgûl to make him strength +2 and <b>damage +1</b>. If the character he is skirmishing is killed, the Free Peoples player must place his or her hand beneath his or her draw deck.
 		lore: ...where thy flesh shall be devoured....'
 		promotext: ""
@@ -301,17 +307,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Nazgûl strength +2. If that Nazgûl wins this skirmish, you may discard a Free Peoples mount.
 		lore: ...then Windfola had thrown them in his terror, and now ran wild upon the plain.
 		promotext: ""
@@ -733,17 +742,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Nazgûl strength +2. If that Nazgûl wins this skirmish, the Shadow has initiative until the end of the turn, regardless of the Free Peoples player's hand.
 		lore: No living man may hinder me!'
 		promotext: ""

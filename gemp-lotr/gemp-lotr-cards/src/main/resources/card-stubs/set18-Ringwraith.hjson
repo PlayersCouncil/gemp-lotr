@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: To play, spot a Nazgûl.<br>Remove (X) to choose one: discard a follower from play that has a twilight cost of X; or play from deck a [wraith] minion that has a twilight cost of X.
 		lore: A sudden unreasoning fear of discovery laid hold of Frodo, and he thought of his Ring.
 		promotext: ""
@@ -72,17 +75,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Remove a burden to choose one: assign a [wraith] minion to a companion who has resistance 0; or have a [wraith] minion lose <b>fierce</b> and gain <b>hunter 2</b> until the regroup phase.
 		lore: I'm naked in the dark. There's nothing, no veil between me and the Wheel of Fire. I can see him with my waking eyes!
 		promotext: ""

@@ -404,17 +404,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Until the end of the assignment phase, each time a Southron is about to take a wound, prevent that.
 		lore: Southrons rain arrows down upon their enemies from their defended perch atop their great beasts of war.
 		promotext: ""
@@ -499,17 +502,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a [raider] Man to discard a Free Peoples condition. If you spot a [rohan] Man, discard an additional Free Peoples condition.
 		lore: Against the great mounts of the Southron army, Rohirrim steeds could not easily prevail.
 		promotext: ""
@@ -587,6 +593,7 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
+		#target: a Southron
 		/*requires: {
 			
 		}
@@ -730,20 +737,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a Free Peoples possession is played, spot a [raider] card to discard that possession. If that possession was a [gondor] or [rohan] possession, wound an unbound Man.
 		lore: ...the Mûmak of Harad was indeed a beast of vast bulk, and the like of him does not walk now in Middle-earth....
 		promotext: ""

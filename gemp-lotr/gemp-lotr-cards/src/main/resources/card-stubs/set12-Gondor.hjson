@@ -121,17 +121,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [gondor] Man strength +1. If he or she is skirmishing a roaming minion, your opponents cannot use special abilities.
 		lore: ...your refuge is so hidden that perhaps he does not know that Men are concealed here.'
 		promotext: ""
@@ -212,17 +215,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [gondor] companion <b>defender +1</b> until the regroup phase.
 		lore: In panoply of ancient kings, / in chainéd rings he armoured him; / his shining shield was scored with runes / to ward all wounds and harm from him....'
 		promotext: ""
@@ -532,6 +538,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
+		#target: a [gondor] companion
 		/*requires: {
 			
 		}

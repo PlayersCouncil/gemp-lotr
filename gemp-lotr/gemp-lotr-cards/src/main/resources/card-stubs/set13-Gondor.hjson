@@ -117,17 +117,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: You may remove from the game 4 other [gondor] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make your [gondor] Man strength +3.
 		lore: <span style="word-spacing:-0.01em;font-size:97%">"And so... with less than six thousands... the Captains of the West came at last to challenge the Black Gate...."</span>
 		promotext: ""
@@ -451,17 +454,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [gondor] companion to reinforce a [gondor] token for each possession borne by that companion.
 		lore: ...so strong and old that it seemed to have been not builded but carven by giants out of the bones of the earth.
 		promotext: ""
@@ -542,17 +548,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard a [gondor] possession from play to discard a possession from play and you may reinforce a [gondor] token.
 		lore: ...Frodo saw the old king's head: it was lying rolled away by the roadside... 'Look! The king has got a crown again!'
 		promotext: ""
@@ -726,17 +735,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [gondor] companion strength +2 (or +4 if that companion has resistance 6 or more).
 		lore: Aragorn was able to keep the way open for escape from the Chamber of Mazarbul.
 		promotext: ""

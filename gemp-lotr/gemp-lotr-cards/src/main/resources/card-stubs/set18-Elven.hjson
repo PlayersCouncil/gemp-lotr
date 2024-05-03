@@ -117,17 +117,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: To play, exert an [elven] companion or spot Arwen. Examine the top 5 cards of your draw deck and place any number of them aside. Shuffle the remaining cards into your draw deck and place those cards set aside on top of your draw deck in any order.
 		lore: ""
 		promotext: ""
@@ -343,6 +346,7 @@
 		culture: Elven
 		twilight: 2
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -580,17 +584,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Add 2 threats to heal an [elven] companion.
 		lore: The long years have passed like swift draughts of sweet mead in lofty halls beyond the West....
 		promotext: ""

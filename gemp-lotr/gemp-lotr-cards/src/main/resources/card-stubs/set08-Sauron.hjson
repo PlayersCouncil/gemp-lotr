@@ -504,6 +504,7 @@
 		culture: Sauron
 		twilight: 3
 		type: Possession
+		#target: 
 		keywords: [
 			Engine
 			Support Area

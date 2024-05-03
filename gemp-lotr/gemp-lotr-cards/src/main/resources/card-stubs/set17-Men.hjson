@@ -67,6 +67,7 @@
 		culture: Men
 		twilight: 2
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -255,17 +256,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [men] possession in your support area and a [men] minion. Make that minion strength +1 for each minion stacked on that possession. You may discard that possession to make that minion <b>damage</b> <b>+1</b>.
 		lore: Too long have these peasants stood against you.
 		promotext: ""
@@ -302,17 +306,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Play a [men] minion stacked on a [men] possession as if from hand.
 		lore: Few could escape the oncoming pillage of the Dunlending's savage stampede.
 		promotext: ""
@@ -1243,6 +1250,7 @@
 		culture: Men
 		twilight: 2
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			

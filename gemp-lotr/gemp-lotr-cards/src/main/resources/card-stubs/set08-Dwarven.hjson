@@ -69,17 +69,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a Dwarf who is damage +X to place X wounds on minions.
 		lore: ...they laughed when they looked on us, for they were a great army still.'
 		promotext: ""
@@ -116,17 +119,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent discard X Shadow cards.
 		lore: ...the Dark Door gaped before them like the mouth of night.
 		promotext: ""
@@ -163,17 +169,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If Gimli is not assigned to a skirmish, add a threat to have him replace an unbound companion in a skirmish.
 		lore: ...no matter how big.'
 		promotext: ""
@@ -260,17 +269,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a Dwarf who is damage +X to make him strength +X.
 		lore: What are we waiting for?'
 		promotext: ""
@@ -307,20 +319,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a Dwarf who is damage +X wins a skirmish, wound a minion not assigned to a skirmish X times.
 		lore: ...an Elf will go underground and a Dwarf dare not.'
 		promotext: ""

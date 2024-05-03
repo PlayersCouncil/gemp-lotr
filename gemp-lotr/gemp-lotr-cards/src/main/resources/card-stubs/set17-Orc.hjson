@@ -157,17 +157,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [orc] minion strength +2 (or +4 if it is mounted).
 		lore: It was hard at times to tell who was truly the master, the warg or the Orc.
 		promotext: ""

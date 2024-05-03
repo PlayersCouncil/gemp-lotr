@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Spot a ranger to remove (4).
 		lore: ...though I cannot disappear, I have hunted many wild and wary things and I can usually avoid being seen, if I wish.'
 		promotext: ""
@@ -257,17 +260,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Exert Aragorn to make Arwen strength +3, or exert Arwen to make Aragorn strength +3.
 		lore: For the love of a mortal Man, Arwen, daughter of Elrond, must forsake her Elven heritage, and give up forever her journey to the Undying Lands.
 		promotext: ""
@@ -538,17 +544,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Exert a ranger to make an opponent shuffle his hand into his draw deck and draw 8 cards.
 		lore: Then let me help you. There are other ways, Frodo – other paths that we might take.'
 		promotext: ""
@@ -677,17 +686,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a [gondor] or [shire] companion bearing a hand weapon strength +2 and <b>damage +1</b>.
 		lore: Every warrior needs a sword, bow, or axe – but sometimes, a dagger is enough.
 		promotext: ""
@@ -724,17 +736,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Make a [gondor] companion <b>defender +1</b> until the regroup phase.
 		lore: In panoply of ancient kings, / in chainéd rings he armoured him; / his shining shield was scored with runes / to ward all wounds and harm from him....'
 		promotext: ""
@@ -771,17 +786,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a ranger to make each roaming minion strength -3 until the regroup phase.
 		lore: Guided by Aragorn they struck a good path. It looked to Frodo like the remains of an ancient road, that had once been broad and well planned....
 		promotext: ""
@@ -862,17 +880,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Exert a ranger companion to discard a minion.
 		lore: A Ranger in the wild is a deadly foe for the forces of the Shadow.
 		promotext: ""
@@ -950,6 +971,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
+		#target: a ranger
 		/*requires: {
 			
 		}
@@ -997,17 +1019,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert Aragorn to spot an ally. Until the regroup phase, that ally is strength +2 and participates in archery fire and skirmishes.
 		lore: The skill of the elves can reforge the Sword of Elendil – but only you have the power to wield it.'
 		promotext: ""
@@ -1044,17 +1069,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship</b> <i>or</i> <b>Regroup:</b> Spot a ranger to play the fellowship's next site (replacing opponent's site if necessary).
 		lore: Strider can take you by paths that are seldom trodden. Will you have him?'
 		promotext: ""
@@ -1091,17 +1119,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Exert a ranger companion to wound every minion.
 		lore: We must do something to delay the enemy first. We will make them fear the Chamber of Mazarbul!'
 		promotext: ""
@@ -1184,17 +1215,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a ranger at a river or forest to exhaust a minion.
 		lore: If you bring a Ranger with you, it is well to pay attention to him, especially if the Ranger is Aragorn.'
 		promotext: ""
@@ -1228,6 +1262,7 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
+		#target: a [gondor] companion
 		keywords: Tale
 		/*requires: {
 			
@@ -1276,17 +1311,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If a skirmish event is played during a skirmish involving a [gondor] Man, cancel that event.
 		lore: Believe not that in the land of Gondor the blood of Númenor is spent, nor all its pride and dignity forgotten.'
 		promotext: ""
@@ -1323,17 +1361,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a [gondor] companion strength +2 (or +4 if he or she is <b>defender +1</b>).
 		lore: By our valour the wild folk of the East are still restrained, and the terror of Morgul kept at bay; and thus alone are peace and freedom maintained in the lands behind us, bulwark of the West.'
 		promotext: ""
@@ -1370,17 +1411,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a ranger strength +2 (or +4 when skirmishing a roaming minion).
 		lore: This is no mere Ranger. He is Aragorn, son of Arathorn... and you owe him your allegiance.'
 		promotext: ""
@@ -1417,17 +1461,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Make Aragorn <b>defender +1</b> and he takes no more than 1 wound during each skirmish phase until the regroup phase.
 		lore: ...I swore to protect you.'
 		promotext: ""
@@ -1464,17 +1511,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Spot a ranger to discard a roaming minion.
 		lore: They were men... once.'
 		promotext: ""

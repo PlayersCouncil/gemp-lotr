@@ -19,7 +19,7 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
 		/*requires: {
@@ -63,7 +63,7 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
 		/*requires: {
@@ -107,7 +107,7 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
 		/*requires: {
@@ -151,7 +151,7 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
 		/*requires: {
@@ -195,7 +195,7 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
 		/*requires: {
@@ -239,7 +239,7 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
 		/*requires: {
@@ -283,7 +283,7 @@
 		unique: false
 		twilight: 1
 		type: Site
-		site: 2K
+		site: 2
 		block: King
 		direction: Left
 		/*requires: {
@@ -327,7 +327,7 @@
 		unique: false
 		twilight: 2
 		type: Site
-		site: 2K
+		site: 2
 		block: King
 		direction: Left
 		keywords: Plains
@@ -372,7 +372,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 2K
+		site: 2
 		block: King
 		direction: Left
 		keywords: Plains
@@ -417,7 +417,7 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 3K
+		site: 3
 		block: King
 		direction: Right
 		keywords: Sanctuary
@@ -462,7 +462,7 @@
 		unique: false
 		twilight: 1
 		type: Site
-		site: 3K
+		site: 3
 		block: King
 		direction: Right
 		keywords: Sanctuary
@@ -507,7 +507,7 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 3K
+		site: 3
 		block: King
 		direction: Right
 		keywords: Sanctuary
@@ -552,7 +552,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 4K
+		site: 4
 		block: King
 		direction: Right
 		keywords: River
@@ -597,7 +597,7 @@
 		unique: false
 		twilight: 2
 		type: Site
-		site: 4K
+		site: 4
 		block: King
 		direction: Right
 		/*requires: {
@@ -641,7 +641,7 @@
 		unique: false
 		twilight: 4
 		type: Site
-		site: 4K
+		site: 4
 		block: King
 		direction: Right
 		keywords: Plains
@@ -686,7 +686,7 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 5K
+		site: 5
 		block: King
 		direction: Left
 		/*requires: {
@@ -730,7 +730,7 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 5K
+		site: 5
 		block: King
 		direction: Left
 		keywords: Plains
@@ -775,7 +775,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
@@ -820,7 +820,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
@@ -865,7 +865,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
@@ -910,7 +910,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
@@ -955,7 +955,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
@@ -1000,7 +1000,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
@@ -1045,7 +1045,7 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
@@ -1090,7 +1090,7 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 7K
+		site: 7
 		block: King
 		direction: Right
 		keywords: River
@@ -1135,7 +1135,7 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 7K
+		site: 7
 		block: King
 		direction: Right
 		keywords: Plains
@@ -1180,7 +1180,7 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 7K
+		site: 7
 		block: King
 		direction: Right
 		keywords: River
@@ -1225,7 +1225,7 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8K
+		site: 8
 		block: King
 		direction: Right
 		/*requires: {
@@ -1269,7 +1269,7 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8K
+		site: 8
 		block: King
 		direction: Right
 		/*requires: {
@@ -1313,7 +1313,7 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8K
+		site: 8
 		block: King
 		direction: Right
 		/*requires: {
@@ -1357,7 +1357,7 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8K
+		site: 8
 		block: King
 		direction: Right
 		/*requires: {
@@ -1401,7 +1401,7 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9K
+		site: 9
 		block: King
 		direction: Left
 		keywords: Plains
@@ -1446,7 +1446,7 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9K
+		site: 9
 		block: King
 		direction: Left
 		/*requires: {
@@ -1490,7 +1490,7 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9K
+		site: 9
 		block: King
 		direction: Left
 		/*requires: {
@@ -1534,7 +1534,7 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9K
+		site: 9
 		block: King
 		direction: Left
 		/*requires: {

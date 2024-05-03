@@ -21,6 +21,7 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -70,7 +71,7 @@
 		strength: 3
 		vitality: 4
 		signet: Gandalf
-		resistance: 6
+		resistance: 10
 		/*requires: {
 			
 		}

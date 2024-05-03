@@ -164,17 +164,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br>Spot 3 [gandalf] companions to make a minion skirmishing a companion strength -3.
 		lore: The power of the flame is like that of the Sun – beautiful yet blinding.
 		promotext: ""
@@ -214,17 +217,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br>Make a [gandalf] companion strength +2 (or +4 if that companion bears a follower).
 		lore: The Nazgûl gave a long wailing cry and swerved away; and with that the four others waivered....
 		promotext: ""
@@ -310,17 +316,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: You may remove from the game 4 other [gandalf] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Spot Gandalf to make your [gandalf] companion strength +3.
 		lore: ...at dawn on the fifth day.'
 		promotext: ""
@@ -357,17 +366,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard your [gandalf] condition from play to discard a condition from play and draw a card.
 		lore: He raised his hand, and spoke slowly in a clear cold voice. 'Saruman, your staff is broken.'
 		promotext: ""
@@ -540,17 +552,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard 2 Shadow cards from hand to take a [gandalf] event into hand from your discard pile.
 		lore: Yes, that was the name. I was Gandalf.'
 		promotext: ""

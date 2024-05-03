@@ -26,7 +26,7 @@
 		strength: 3
 		vitality: 4
 		signet: Aragorn
-		resistance: 6
+		resistance: 10
 		keywords: Ring-bound
 		/*requires: {
 			
@@ -76,7 +76,7 @@
 		strength: 3
 		vitality: 4
 		signet: Gandalf
-		resistance: 6
+		resistance: 10
 		keywords: Ring-bound
 		/*requires: {
 			
@@ -269,17 +269,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a companion (except a Hobbit) to make a Hobbit strength +3.
 		lore: ""
 		promotext: ""
@@ -459,7 +462,7 @@
 		strength: 3
 		vitality: 4
 		signet: Aragorn
-		resistance: 6
+		resistance: 5
 		keywords: Ring-bound
 		/*requires: {
 			
@@ -509,7 +512,7 @@
 		strength: 3
 		vitality: 4
 		signet: Frodo
-		resistance: 6
+		resistance: 5
 		keywords: Ring-bound
 		/*requires: {
 			
@@ -554,6 +557,7 @@
 		culture: Shire
 		twilight: 2
 		type: Condition
+		#target: title(Merry or Pippin)
 		/*requires: {
 			
 		}

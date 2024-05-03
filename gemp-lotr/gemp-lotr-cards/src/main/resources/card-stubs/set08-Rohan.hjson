@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If you have initiative, discard a [rohan] possession to play a [rohan] possession from your discard pile.
 		lore: ...and the black serpent foundered.
 		promotext: ""
@@ -211,17 +214,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a minion skirmishing a mounted [rohan] Man.
 		lore: Death! Ride, ride to ruin and the world's ending!'
 		promotext: ""
@@ -258,17 +264,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Théoden to exert a minion for each Théoden signet you spot.
 		lore: Begone, foul dwimmerlaik, lord of carrion!'
 		promotext: ""

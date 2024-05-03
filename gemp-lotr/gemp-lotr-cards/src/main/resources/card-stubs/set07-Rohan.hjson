@@ -73,17 +73,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a mounted [rohan] Man to exert a minion. That minion's owner may exert a companion and if he or she does so, you may exert a minion; repeat this until a player does not exert a character.
 		lore: But the Rohirrim sang no more. Death they cried with one voice....
 		promotext: ""
@@ -459,17 +462,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [rohan] Man strength +2 (or +3 and <b>damage +1</b> if skirmishing a wounded minion).
 		lore: ...the battle-fury of his fathers ran like new fire in his veins....
 		promotext: ""
@@ -601,17 +607,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If you have initiative, discard 2 cards from hand to heal all [rohan] allies.
 		lore: ...for I will not leave my strongholds all unguarded.'
 		promotext: ""
@@ -744,17 +753,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 3 [rohan] Men to make an opponent remove (1) or place a random card from hand beneath his or her draw deck. Do this once for each card in that player's hand when you play this event.
 		lore: ...even as Oromë the Great in the battle of the Valar when the world was young.
 		promotext: ""
@@ -791,17 +803,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Choose an opponent. For each mounted companion you spot, that opponent must remove (1) or place a random card from hand beneath his or her draw deck.
 		lore: Éomer rode there, and the white horsetail on his helm floating in his speed....
 		promotext: ""
@@ -1025,17 +1040,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [rohan] Man strength +4. Any Shadow player may place a random card from hand beneath his or her draw deck to make that Man strength +2 instead.
 		lore: ...morning and a wind from the sea; and darkness was removed, and the hosts of Mordor wailed....
 		promotext: ""
@@ -1431,6 +1449,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Condition
+		#target: site
 		/*requires: {
 			
 		}
@@ -1622,17 +1641,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert X mounted companions to wound X minions.
 		lore: ...for the joy of battle was on them, and the sound of their singing that was fair and terrible came even to the City.
 		promotext: ""
@@ -1716,17 +1738,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a mounted [rohan] Man strength +1 for each mounted companion. If that Man is skirmishing a [raider] minion, also make him or her strength +2 and <b>damage +2</b>.
 		lore: Fewer were they but they clove through the Southrons like a fire-bolt in a forest.
 		promotext: ""
@@ -1763,17 +1788,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [rohan] Man strength +2. If that Man is mounted, choose an opponent who must place a random card from hand beneath his or her draw deck.
 		lore: Far, far away, in the South the clouds could be dimly seen as remote grey shapes, rolling up, drifting: morning lay beyond them.
 		promotext: ""

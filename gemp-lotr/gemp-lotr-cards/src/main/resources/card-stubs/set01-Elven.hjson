@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make an Elf strength +1. If a minion loses this skirmish to that Elf, that minion's owner discards 2 cards at random from hand.
 		lore: Hard and bitter is the Elven hatred of Orcs, for they have lost many kinsmen to Orc savagery.
 		promotext: ""
@@ -168,17 +171,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make an Elf strength +2 (or +4 if skirmishing an archer).
 		lore: None of the Orcs will ever return out of Lórien. And there will be many Elves hidden on the northern border before another night falls.'
 		promotext: ""
@@ -309,17 +315,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Spot an Elf to play a tale from your draw deck.
 		lore: You will hear today all that you need in order to understand the purposes of the Enemy.... What shall we do with the Ring, the least of rings, the trifle that Sauron fancies? That is the doom that we must deem.'
 		promotext: ""
@@ -356,17 +365,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Exert an Elf to reveal an opponent's hand. That player discards a card from hand for each Orc revealed.
 		lore: A strong company of Orcs has passed. They crossed the Nimrodel – curse their foul feet in its clean water!'
 		promotext: ""
@@ -403,17 +415,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make an Elf strength +2 (or +4 if skirmishing a Nazgûl).
 		lore: If you want him, come and claim him!'
 		promotext: ""
@@ -450,17 +465,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Archery:</b> Spot an Elf archer companion to make the fellowship archery total +1.
 		lore: The affray was sharp, but the orcs were dismayed by the fierceness of the defence. Legolas shot two through the throat.
 		promotext: ""
@@ -497,17 +515,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Spot an Elf to remove a burden.
 		lore: ...the beauty of the melodies and of the interwoven words in elven-tongues, even though he understood them little, held him in a spell, as soon as he began to attend to them.
 		promotext: ""
@@ -726,17 +747,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Exert an Elf to reveal an opponent's hand. You may discard an [isengard] minion revealed to draw 2 cards.
 		lore: Saruman's Uruk-hai mirrored the singular focus of their master, viewing with contempt and disgust all they encountered.
 		promotext: ""
@@ -955,6 +979,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
+		#target: a [gondor] Man
 		keywords: Tale
 		/*requires: {
 			
@@ -1103,17 +1128,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Archery:</b> Spot an Elf companion to make the minion archery total -1.
 		lore: ...let a ploughman plough, but choose an otter for swimming, and for running light over grass and leaf, or over snow – an Elf.'
 		promotext: ""
@@ -1237,6 +1265,7 @@
 		culture: Elven
 		twilight: 2
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -1383,17 +1412,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Exert 2 Elves to discard a condition.
 		lore: You have entered the realm of the Lady of the Wood – you cannot go back.'
 		promotext: ""
@@ -1562,6 +1594,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
+		#target: title(an Elf companion)
 		keywords: Tale
 		/*requires: {
 			
@@ -1610,17 +1643,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert an Elf to discard a [sauron] minion, a [sauron] condition, or a [sauron] possession.
 		lore: What power still remains lies with us, here in Imladris, or with Círdan at the Havens, or in Lórien. But have they the strength, have we here the strength to withstand the Enemy...?'
 		promotext: ""
@@ -1657,17 +1693,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert an Elf ally whose home is site 3. Until the regroup phase, that ally is strength +3 and participates in archery fire and skirmishes.
 		lore: Merely to be there was a cure for weariness, fear, and sadness.
 		promotext: ""
@@ -1704,17 +1743,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert an Elf ally whose home is site 6. Until the regroup phase, that ally is strength +3 and participates in archery fire and skirmishes.
 		lore: ...and suddenly they perceived that it was a ship, wrought and carved with elven-skill in the likeness of a bird.
 		promotext: ""
@@ -1748,6 +1790,7 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
+		#target: title(an Elf)
 		keywords: Tale
 		/*requires: {
 			
@@ -1840,6 +1883,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
+		#target: title(an Elf companion)
 		keywords: Tale
 		/*requires: {
 			

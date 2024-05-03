@@ -255,6 +255,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -490,17 +491,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [rohan] companion to make Frodo strength +5. If Frodo loses the skirmish, discard that [rohan] companion.
 		lore: They have passed like rain in the mountains, like the wind in the meadow.'
 		promotext: ""

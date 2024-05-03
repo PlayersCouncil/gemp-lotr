@@ -257,17 +257,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Heal an enduring [wraith] minion to add a burden or 2 threats.
 		lore: ...how can he win to the Gate, if these foul hell-hawks have other weapons than fear?'
 		promotext: ""
@@ -398,17 +401,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [wraith] minion strength +2 (or +4 if skirmishing a companion of the same culture as a card in the dead pile).
 		lore: ...thy shrivelled mind be left naked to the Lidless Eye.'
 		promotext: ""
@@ -627,17 +633,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [wraith] Orc strength +2 for each wound on the Ring-bearer.
 		lore: The passage of Anduin was won by the Enemy.
 		promotext: ""

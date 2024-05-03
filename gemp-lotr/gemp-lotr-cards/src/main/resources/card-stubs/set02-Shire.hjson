@@ -69,6 +69,7 @@
 		culture: Shire
 		twilight: 0
 		type: Condition
+		#target: title(Bilbo)
 		keywords: Tale
 		/*requires: {
 			
@@ -117,17 +118,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Exert a companion to place a Free Peoples card from your discard pile beneath your draw deck (or 2 Free Peoples cards if that companion has the Frodo signet).
 		lore: He pressed him for news of himself and of the wide world... and they stayed up far into the night.
 		promotext: ""
@@ -167,17 +171,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Stealth</b>.<br><b>Regroup:</b> Spot 2 Hobbits to make each site's Shadow number -2 until the end of the turn.
 		lore: They possessed from the first the art of disappearing swiftly and silently, when large folk who they do not wish to meet come blundering by.
 		promotext: ""
@@ -310,7 +317,7 @@
 		strength: 3
 		vitality: 4
 		signet: Aragorn
-		resistance: 6
+		resistance: 10
 		/*requires: {
 			
 		}
@@ -358,17 +365,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a Hobbit bearing a weapon to wound a minion. That minion's owner may remove (3) to prevent this.
 		lore: Boromir sensed that a blade in a Halfling's hand would surprise a larger foe.
 		promotext: ""
@@ -587,6 +597,7 @@
 		twilight: 1
 		type: Condition
 		strength: 1
+		#target: the Ring-bearer
 		keywords: Tale
 		/*requires: {
 			
@@ -635,17 +646,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Spot Sting or Glamdring and exert its bearer X times to wound X Orcs or X Uruk-hai.
 		lore: Glamdring shone with a pale light, and Sting glinted at the edges.
 		promotext: ""
@@ -731,17 +745,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Exert Bilbo to play a Hobbit from your draw deck.
 		lore: Thank you, I shall certainly come.
 		promotext: ""
@@ -818,6 +835,7 @@
 		culture: Shire
 		twilight: 2
 		type: Possession
+		#target: 
 		keywords: [
 			Tale
 			Support Area
@@ -870,7 +888,7 @@
 		strength: 3
 		vitality: 4
 		signet: Gandalf
-		resistance: 6
+		resistance: 5
 		/*requires: {
 			
 		}

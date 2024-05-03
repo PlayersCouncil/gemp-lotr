@@ -315,17 +315,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a minion skirmishing an Elf strength -2. Spot a site in a support area to place this event on top of your draw deck.
 		lore: Not all Elven weapons are carried in sheath or quiver.
 		promotext: ""

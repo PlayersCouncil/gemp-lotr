@@ -69,17 +69,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: You may remove from the game 4 [gollum] cards in your discard pile instead of paying the twilight cost for this card.<br>Spot Gollum to make a minion strength +2.
 		lore: No one ever found out what had become of Déagol....'
 		promotext: ""
@@ -161,17 +164,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Sméagol to choose a Shadow player who must discard a Shadow card from hand or remove (2).
 		lore: Gollum had two loyalties: The Ring and The Ring.
 		promotext: ""
@@ -345,17 +351,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make Gollum strength +2 (or +4 if you can spot Sméagol or Déagol).
 		lore: Give us that, Déagol, my love....'
 		promotext: ""
@@ -392,17 +401,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If the fellowship is in region 1, spot Gollum to wound a companion.<br>If the fellowship is in region 2, spot Gollum to exert a companion.<br>If the fellowship is in region 3, play a [gollum] minion from your discard pile.
 		lore: ""
 		promotext: ""
@@ -439,17 +451,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: You may remove from the game 4 other [gollum] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Spot Sméagol to make a Ring-bound companion strength +3.
 		lore: Nothing can hide from them. Curse the White Face!'
 		promotext: ""
@@ -486,17 +501,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Sméagol or exert Gollum to make Sméagol strength +2 and you may reinforce a [gollum] token.
 		lore: And he thought suddenly: It would be cool and shady under those mountains. The Sun could not watch me there."'"
 		promotext: ""
@@ -582,17 +600,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Sméagol and discard 2 [gollum] cards from hand to return a minion with strength 6 or less to its owner's hand.<br>While this is in your discard pile, Sméagol gains <b>muster</b>.
 		lore: The Ring went into the shadows with him, and even the maker... could learn nothing of it.'
 		promotext: ""
@@ -629,17 +650,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: To play, discard Gollum from play.<br>Heal the Ring-bearer to add a burden. If the fellowship is not in region 1, you may repeat this for each other wound on the Ring-bearer.
 		lore: Crumbs on his jacket. He took it. He took it!'
 		promotext: ""
@@ -676,17 +700,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gollum to make the Free Peoples player choose to either add a burden or exert a companion.
 		lore: ...for at that moment many things happened.
 		promotext: ""

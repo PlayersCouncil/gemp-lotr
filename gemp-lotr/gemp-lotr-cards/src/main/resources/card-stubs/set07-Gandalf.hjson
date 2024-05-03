@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make Gandalf strength +2 (or +4 and <b>damage +1</b> if you have initiative).
 		lore: You cannot enter here....'
 		promotext: ""
@@ -75,20 +78,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: <b>Spell</b>.<br>If an event is played, exert Gandalf to make that opponent remove (2) or cancel that event.
 		lore: We come to it at last... the greatest battle of our time.'
 		promotext: ""
@@ -125,17 +131,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Gandalf twice to remove all threats and to heal all companions of one culture (except [gandalf]).
 		lore: Wherever he came men's hearts would lift again, and the winged shadows pass from memory.
 		promotext: ""
@@ -216,17 +225,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gandalf and discard 2 cards from hand to make an opponent discard all but 2 Shadow conditions.
 		lore: There never was much hope....'
 		promotext: ""
@@ -455,17 +467,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gandalf to heal an unbound companion twice.
 		lore: ""
 		promotext: ""
@@ -505,20 +520,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: <b>Spell</b>.<br>If a companion is about to take a wound, spot Gandalf to prevent that wound.
 		lore: ""
 		promotext: ""
@@ -555,17 +573,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Gandalf twice to make an opponent exert a minion for each [rohan] companion you spot.
 		lore: Will they answer the summons, think you?'
 		promotext: ""
@@ -602,17 +623,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Gandalf three times (or twice if you have initiative) to make all unbound companions of one culture (except [gandalf]) strength +3 until the regroup phase.
 		lore: Théoden will honour your old alliance and come with a mighty army.'
 		promotext: ""
@@ -737,17 +761,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gandalf to heal an unbound Hobbit 3 times.
 		lore: All Wizards should have a Hobbit or two in their care... to teach them the meaning of humility!'
 		promotext: ""
@@ -784,17 +811,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gandalf to make a [gondor] companion strength +1 for each [gondor] companion you spot (limit +4).
 		lore: Courage will now be your best defence against the storm that is at hand....'
 		promotext: ""
@@ -871,6 +901,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -921,17 +952,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br>Exert Gandalf X times to wound a minion X times. If that minion is a Nazgûl, wound it again.
 		lore: Minas Morgul is their lair.'
 		promotext: ""
@@ -968,17 +1002,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Gandalf to make him strength +1 for each twilight token you spot (limit +8).
 		lore: ...here the hammerstroke will fall hardest....'
 		promotext: ""

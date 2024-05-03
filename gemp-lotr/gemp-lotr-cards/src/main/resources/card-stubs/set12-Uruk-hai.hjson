@@ -224,17 +224,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 2</b>. <helper>(For each [uruk-hai] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot an [uruk-hai] minion to discard a possession borne by a companion who has resistance 4 or less.
 		lore: ...he blew the horn. But no help came. Only more orcs.'
 		promotext: ""
@@ -271,17 +274,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [uruk-hai] minion strength +2. Then you may spot 6 companions to return this event to your hand.
 		lore: The world of Men will fall and all will come to darkness, and my city to ruin.'
 		promotext: ""
@@ -458,17 +464,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [uruk-hai] minion strength +1 for each other [uruk-hai] minion you can spot.
 		lore: They gained the gates. The trees, swung by strong arms, smote the timbers with a rending boom.
 		promotext: ""
@@ -598,17 +607,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an [uruk-hai] minion to draw 3 cards. Then discard 2 cards from hand or discard an [uruk-hai] minion from hand.
 		lore: ...a small white hand in the centre of a black field.
 		promotext: ""

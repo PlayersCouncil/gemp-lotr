@@ -21,6 +21,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -69,17 +70,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a [gandalf] Wizard to remove a burden (or 2 burdens if the fellowship is at a dwelling site).
 		lore: Bilbo was meant to find the Ring. In which case, you also were meant to have it. And that is an encouraging thought.'
 		promotext: ""
@@ -164,17 +168,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: To play, exert a [gandalf] Wizard.<br>Discard 2 cards from hand to take a Free Peoples card and a Shadow card from your discard pile into hand.
 		lore: Gandalf lifted it carefully, but the leaves crackled and broke as he laid it on the slab.
 		promotext: ""
@@ -397,17 +404,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [gandalf] Wizard to reveal your hand and make a minion strength -3 for each companion in your hand (or -4 for each if the fellowship is at a battleground site).
 		lore: Through his own strength, Gandalf spurred all the Free Peoples of Middle-earth to stand against the coming darkness.
 		promotext: ""
@@ -492,17 +502,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>. <b>Toil 2</b>. <helper>(For each [gandalf] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a [gandalf] Wizard to discard 2 conditions from play.
 		lore: Too long have you sat in shadows and trusted to twisted tales and crooked promptings.'
 		promotext: ""
@@ -539,17 +552,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a [gandalf] Wizard and spot 2 companions who each have resistance 7 or more to wound a minion that Wizard is skirmishing twice.
 		lore: We fought far under the living earth, where time is not counted.'
 		promotext: ""

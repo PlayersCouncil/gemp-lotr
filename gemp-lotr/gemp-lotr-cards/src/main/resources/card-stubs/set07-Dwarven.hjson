@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Dwarf strength +2 (+4 if you spot a card stacked on a [dwarven] condition).
 		lore: We're going to follow you, lad – even on the dark Road....'
 		promotext: ""
@@ -72,17 +75,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a Dwarf and add a threat to draw 3 cards.
 		lore: Beyond the eyes of Dwarves are such fortellings....'
 		promotext: ""
@@ -399,17 +405,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Dwarf strength +2. You may also exert that Dwarf to draw 2 cards.
 		lore: Had I known what was before me, I think that not for any friendship would I have taken the Paths of the Dead.'
 		promotext: ""
@@ -486,6 +495,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
+		#target: a [dwarven] companion
 		/*requires: {
 			
 		}
@@ -533,17 +543,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Choose one: Spot a Dwarf to draw a card; or, if this card is stacked on a [dwarven] condition, spot a Dwarf companion and discard this event to exert a minion twice.
 		lore: Food and drink would pay off some of my score against you.'
 		promotext: ""

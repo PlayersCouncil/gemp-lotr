@@ -267,17 +267,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 [gondor] companions and add a threat to discard a Shadow possession.
 		lore: We shall be pursued as soon as news of our deed reaches the Enemy....'
 		promotext: ""
@@ -361,6 +364,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
+		#target: a [gondor] companion
 		/*requires: {
 			
 		}
@@ -452,6 +456,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			

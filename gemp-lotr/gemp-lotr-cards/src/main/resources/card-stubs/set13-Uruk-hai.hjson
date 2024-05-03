@@ -400,17 +400,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: You may remove from the game 4 [uruk-hai] cards in your discard pile instead of paying the twilight cost for this card.<br>Make your [uruk-hai] minion skirmishing a companion with resistance 4 or less strength +2.
 		lore: ...goblin-soldiers of greater stature.
 		promotext: ""
@@ -876,17 +879,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert your [uruk-hai] lurker minion to play an [uruk-hai] hand weapon from your discard pile on your [uruk-hai] minion.
 		lore: ...on the front of their iron helms was set an S-rune, wrought of some white metal.
 		promotext: ""

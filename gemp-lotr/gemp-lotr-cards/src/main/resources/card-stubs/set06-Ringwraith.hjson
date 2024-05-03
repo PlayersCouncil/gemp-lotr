@@ -1,0 +1,376 @@
+{
+
+	6_83: {
+		cardInfo: {
+			imagePath: decipher/LOTR06083.jpg
+			javaClass: true
+			//parentId: 6_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U83
+			rarity: U
+			setNum: "6"
+			cardNum: 83
+			style: Standard
+		}
+		title: Fell Beast
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Possession
+		strength: 2
+		itemclass: Mount
+		#target: a Nazgûl
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, discard 2 cards from hand. Bearer must be a Nazgûl.<br>Bearer is <b>fierce</b>.
+		lore: And these winged creatures that they ride on now, they can probably see more than any other creature. They are like great carrion birds.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_84: {
+		cardInfo: {
+			imagePath: decipher/LOTR06084.jpg
+			javaClass: true
+			//parentId: 6_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U84
+			rarity: U
+			setNum: "6"
+			cardNum: 84
+			style: Standard
+		}
+		title: Spied From Above
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Regroup:</b> Exert a Nazgûl twice to play a [wraith] or [sauron] minion. That minion's twilight cost is -8 and it comes into play exhausted.
+		lore: It leaped into all of their minds that the Black Wings had spied them and had sent armed soldiers to seize them....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_85: {
+		cardInfo: {
+			imagePath: decipher/LOTR06085.jpg
+			javaClass: true
+			//parentId: 6_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R85
+			rarity: R
+			setNum: "6"
+			cardNum: 85
+			style: Standard
+		}
+		title: Sword of Dol Guldur
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: a Nazgûl
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Nazgûl.<br>While bearer is Úlairë Toldëa, each time he wins a skirmish the Free Peoples player must discard a Free Peoples possession or a Free Peoples condition.
+		lore: The weapons of the Nine are wrought with sorcery.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_86: {
+		cardInfo: {
+			imagePath: decipher/LOTR06086.jpg
+			javaClass: true
+			//parentId: 6_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U86
+			rarity: U
+			setNum: "6"
+			cardNum: 86
+			style: Standard
+		}
+		title: Úlairë Lemenya
+		subtitle: Winged Hunter
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 2
+		site: 3
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Regroup:</b> Exert Úlairë Lemenya and discard 3 cards from hand to return a companion (except the Ring-bearer) to owner's hand.
+		lore: ...the helpless horror that had come with the cry in the wind and the shadow on the moon....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_87: {
+		cardInfo: {
+			imagePath: decipher/LOTR06087.jpg
+			javaClass: true
+			//parentId: 6_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U87
+			rarity: U
+			setNum: "6"
+			cardNum: 87
+			style: Standard
+		}
+		title: Úlairë Nertëa
+		subtitle: Winged Hunter
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgûl
+		strength: 9
+		vitality: 2
+		site: 3
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play Úlairë Nertëa, spot another Nazgûl to make the Free Peoples player exert a Ring-bound companion for each Free Peoples culture you can spot over 2.
+		lore: A vast winged shape passed over the moon like a black cloud... The stars fainted before it....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_88: {
+		cardInfo: {
+			imagePath: decipher/LOTR06088.jpg
+			javaClass: true
+			//parentId: 6_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R88
+			rarity: R
+			setNum: "6"
+			cardNum: 88
+			style: Standard
+		}
+		title: Úlairë Toldëa
+		subtitle: Winged Sentry
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgûl
+		strength: 12
+		vitality: 3
+		site: 3
+		keywords: Fierce
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Each time Úlairë Toldëa wins a skirmish, the Free Peoples player must exert a companion or add a burden.
+		lore: They are calling for it. Calling for the precious.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_89: {
+		cardInfo: {
+			imagePath: decipher/LOTR06089.jpg
+			javaClass: true
+			//parentId: 6_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R89
+			rarity: R
+			setNum: "6"
+			cardNum: 89
+			style: Standard
+		}
+		title: Winged and Ominous
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Regroup:</b> Exert a Nazgûl to place a [wraith] token on this card.<br><b>Shadow:</b> Remove 3 [wraith] tokens from here to add (2).
+		lore: It scudded across the moon... outrunning the wind in its fell speed.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_122: {
+		cardInfo: {
+			imagePath: decipher/LOTR06122.jpg
+			javaClass: true
+			//parentId: 6_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6P122
+			rarity: P
+			setNum: "6"
+			cardNum: 122
+			style: Standard
+		}
+		title: The Witch-king
+		subtitle: Deathless Lord
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 8
+		type: Minion
+		race: Nazgûl
+		strength: 14
+		vitality: 4
+		site: 3
+		keywords: Fierce
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fierce</b>.<br>Each time a companion is killed in a skirmish involving a Nazgûl, wound an ally twice or exert a companion.
+		lore: Dead? No, you cannot kill them.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

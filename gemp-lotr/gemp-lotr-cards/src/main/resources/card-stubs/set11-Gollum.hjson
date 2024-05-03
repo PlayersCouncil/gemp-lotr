@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If a minion is skirmishing a Free Peoples character who has resistance 2 or less, spot Gollum to wound that character twice.
 		lore: He musstn't hurt Preciouss. Give it to Sméagol, yess, give it to us! Give it to uss!'
 		promotext: ""
@@ -121,17 +124,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard Gollum from play to wound an unbound companion who has resistance 6 or less.
 		lore: Gollum hissed and spat, but he did not let go.
 		promotext: ""
@@ -212,17 +218,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gollum to add (3) and exchange one of your sites on the adventure path with another site from your adventure deck.
 		lore: So far Gollum's plot had succeeded.
 		promotext: ""
@@ -259,17 +268,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make Sméagol strength +1 for each companion who has resistance 5 or more.
 		lore: It's not sense to try and get into Mordor at all. But if master says I must go or I will go, then he must try some way.'
 		promotext: ""
@@ -306,17 +318,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Gollum to make another minion strength +2 (or +3 if Gollum is at a mountain site).
 		lore: ...a fear was growing on him, a menace which he could not see....
 		promotext: ""
@@ -393,24 +408,24 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: [
-			Fellowship
-			Regroup
-		]
+		keywords: Fellowship or Regroup
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Sméagol to play the fellowship's next site. Then you may add a burden to take this card back into hand.
 		lore: Nice hobbits! We will come with them. Find them safe paths in the dark, yes we will.'
 		promotext: ""
@@ -540,17 +555,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [gollum] minion at a mountain site to play a minion from your discard pile.
 		lore: Gollum on the edge of the abyss was fighting like a mad thing with an unseen foe.
 		promotext: ""

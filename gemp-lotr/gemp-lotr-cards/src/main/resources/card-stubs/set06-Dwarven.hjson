@@ -1,0 +1,146 @@
+{
+
+	6_9: {
+		cardInfo: {
+			imagePath: decipher/LOTR06009.jpg
+			javaClass: true
+			//parentId: 6_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U9
+			rarity: U
+			setNum: "6"
+			cardNum: 9
+			style: Standard
+		}
+		title: Lend Us Your Aid
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		keywords: Maneuver
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert Gimli twice to make him and each Elf companion strength +3 until the regroup phase.
+		lore: He hewed a two-handed stroke and laid the last Orc before his feet. 'Now my count passes Master Legolas again.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_10: {
+		cardInfo: {
+			imagePath: decipher/LOTR06010.jpg
+			javaClass: true
+			//parentId: 6_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C10
+			rarity: C
+			setNum: "6"
+			cardNum: 10
+			style: Standard
+		}
+		title: Suspended Palaces
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area. When you play this condition, you may spot a Dwarf to place 2 [dwarven] tokens here.<br><b>Fellowship:</b> Discard this condition or remove a [dwarven] token from here to stack the top card of your draw deck on a [dwarven] condition that has a card stacked on it.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_11: {
+		cardInfo: {
+			imagePath: decipher/LOTR06011.jpg
+			javaClass: true
+			//parentId: 6_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R11
+			rarity: R
+			setNum: "6"
+			cardNum: 11
+			style: Standard
+		}
+		title: Toss Me
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		keywords: Fellowship
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: While this card is stacked on a [dwarven] condition, Gimli is strength +1.<br><b>Fellowship:</b> Place this card or another [dwarven] card from hand on top of or beneath your draw deck.
+		lore: Don't tell the Elf.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

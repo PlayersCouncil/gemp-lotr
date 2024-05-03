@@ -71,6 +71,7 @@
 		twilight: 2
 		type: Condition
 		strength: 2
+		#target: a companion
 		/*requires: {
 			
 		}

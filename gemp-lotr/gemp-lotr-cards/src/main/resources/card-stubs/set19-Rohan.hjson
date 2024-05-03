@@ -22,6 +22,7 @@
 		twilight: 2
 		type: Condition
 		strength: 1
+		#target: a [rohan] Man
 		/*requires: {
 			
 		}

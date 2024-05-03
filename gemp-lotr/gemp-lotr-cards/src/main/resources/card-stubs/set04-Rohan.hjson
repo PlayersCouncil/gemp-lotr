@@ -1,0 +1,1753 @@
+{
+
+	4_262: {
+		cardInfo: {
+			imagePath: decipher/LOTR04262.jpg
+			javaClass: true
+			//parentId: 4_262
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R262
+			rarity: R
+			setNum: "4"
+			cardNum: 262
+			style: Standard
+		}
+		title: Aldor
+		subtitle: Soldier of Edoras
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: towers,3,towers,6
+		race: Man
+		strength: 3
+		vitality: 2
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archery:</b> Exert Aldor and spot a villager to make the fellowship archery total +1.
+		lore: Fighting to defend his people, Aldor found courage to replace his youth.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_263: {
+		cardInfo: {
+			imagePath: decipher/LOTR04263.jpg
+			javaClass: true
+			//parentId: 4_263
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U263
+			rarity: U
+			setNum: "4"
+			cardNum: 263
+			style: Standard
+		}
+		title: Brego
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Mount
+		#target: a Man, Elf, or Wizard
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a [rohan] Man. Bearer must be a Man, Elf, or Wizard. When you play Brego, you may heal bearer.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
+		lore: Brego was named for the second King of Rohan.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_264: {
+		cardInfo: {
+			imagePath: decipher/LOTR04264.jpg
+			javaClass: true
+			//parentId: 4_264
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U264
+			rarity: U
+			setNum: "4"
+			cardNum: 264
+			style: Standard
+		}
+		title: Ceorl
+		subtitle: Weary Horseman
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Response:</b> If your opponent is about to take control of a site, exert Ceorl and a villager to prevent this.
+		lore: We were driven back yesterday over the Isen with great loss; many perished at the crossing.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_265: {
+		cardInfo: {
+			imagePath: decipher/LOTR04265.jpg
+			javaClass: true
+			//parentId: 4_265
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C265
+			rarity: C
+			setNum: "4"
+			cardNum: 265
+			style: Standard
+		}
+		title: Elite Rider
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When this companion is in your starting fellowship, his twilight cost is -1.<br>While skirmishing a wounded minion, this companion is strength +2.
+		lore: After him they rode: a long line of mail-clad men, swift, shining, fell and fair to look upon.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_266: {
+		cardInfo: {
+			imagePath: decipher/LOTR04266.jpg
+			javaClass: true
+			//parentId: 4_266
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C266
+			rarity: C
+			setNum: "4"
+			cardNum: 266
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Sister-son of Théoden
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br>At the start of each turn, you may heal a [rohan] ally.
+		lore: Now indeed there is hope of victory!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_267: {
+		cardInfo: {
+			imagePath: decipher/LOTR04267.jpg
+			javaClass: true
+			//parentId: 4_267
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R267
+			rarity: R
+			setNum: "4"
+			cardNum: 267
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Third Marshal of Riddermark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br>Éomer is strength +2 for each wound on each minion he is skirmishing.
+		lore: Then one rode forward, a tall man, taller than the rest; from his helm as a crest a white horsetail flowed.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_268: {
+		cardInfo: {
+			imagePath: decipher/LOTR04268.jpg
+			javaClass: true
+			//parentId: 4_268
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U268
+			rarity: U
+			setNum: "4"
+			cardNum: 268
+			style: Standard
+		}
+		title: Éomer's Spear
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: a [rohan] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>If bearer is Éomer and he is mounted, Éomer is <b>damage +2</b>.
+		lore: He advanced until the point of his spear was within a foot of Aragorn's breast.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_269: {
+		cardInfo: {
+			imagePath: decipher/LOTR04269.jpg
+			javaClass: true
+			//parentId: 4_269
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R269
+			rarity: R
+			setNum: "4"
+			cardNum: 269
+			style: Standard
+		}
+		title: Éothain
+		subtitle: Scout of the Mark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time the fellowship moves to a plains site, each minion must exert.
+		lore: Time is pressing.... We must hasten south, lord.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_270: {
+		cardInfo: {
+			imagePath: decipher/LOTR04270.jpg
+			javaClass: true
+			//parentId: 4_270
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C270
+			rarity: C
+			setNum: "4"
+			cardNum: 270
+			style: Standard
+		}
+		title: Éowyn
+		subtitle: Lady of Rohan
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		keywords: Valiant
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br><b>Response:</b> If an unbound companion is about to take a wound, exert Éowyn and add (1) to prevent that wound.
+		lore: Thus Aragorn... beheld Éowyn... and thought her fair, fair and cold, like a morning of pale spring that is not yet come to womanhood.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_271: {
+		cardInfo: {
+			imagePath: decipher/LOTR04271.jpg
+			javaClass: true
+			//parentId: 4_271
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R271
+			rarity: R
+			setNum: "4"
+			cardNum: 271
+			style: Standard
+		}
+		title: Éowyn
+		subtitle: Sister-daughter of Théoden
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: Valiant
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br><b>Response:</b> If Éowyn is exhausted and about to take a wound in a skirmish, discard 2 cards from hand to prevent that wound.
+		lore: Slender and tall she was... but strong she seemed and stern as steel, a daughter of kings.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_272: {
+		cardInfo: {
+			imagePath: decipher/LOTR04272.jpg
+			javaClass: true
+			//parentId: 4_272
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R272
+			rarity: R
+			setNum: "4"
+			cardNum: 272
+			style: Standard
+		}
+		title: Éowyn's Sword
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		#target: title(Éowyn)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Éowyn.<br>While you can spot a villager, Éowyn is <b>damage +1</b>.
+		lore: ...the sword was set upright before her, and her hands were laid upon the hilt.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_273: {
+		cardInfo: {
+			imagePath: decipher/LOTR04273.jpg
+			javaClass: true
+			//parentId: 4_273
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C273
+			rarity: C
+			setNum: "4"
+			cardNum: 273
+			style: Standard
+		}
+		title: Fight for the Villagers
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a [rohan] Man strength +2 (or +3 if you spot a villager).
+		lore: Bar the gates, set a watch on the surrounds, and get the women and children to the caves.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_274: {
+		cardInfo: {
+			imagePath: decipher/LOTR04274.jpg
+			javaClass: true
+			//parentId: 4_274
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R274
+			rarity: R
+			setNum: "4"
+			cardNum: 274
+			style: Standard
+		}
+		title: Firefoot
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		#target: a [rohan] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>If bearer is Éomer, he is <b>defender +1</b>.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
+		lore: Riders of his éored claimed that Éomer's horse had no equal, save Shadowfax.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_275: {
+		cardInfo: {
+			imagePath: decipher/LOTR04275.jpg
+			javaClass: true
+			//parentId: 4_275
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U275
+			rarity: U
+			setNum: "4"
+			cardNum: 275
+			style: Standard
+		}
+		title: Forth Eorlingas!
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keywords: Maneuver
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert Théoden to make a companion who has the Théoden signet <b>defender +1</b> until the regroup phase.
+		lore: Behind them from the Deep came the stern cries of men issuing from the caves, driving forth the enemy.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_276: {
+		cardInfo: {
+			imagePath: decipher/LOTR04276.jpg
+			javaClass: true
+			//parentId: 4_276
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U276
+			rarity: U
+			setNum: "4"
+			cardNum: 276
+			style: Standard
+		}
+		title: Fortress Never Fallen
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each time a [rohan] Man wins a skirmish, you may place a [rohan] token on this card.<br><b>Regroup:</b> Discard a Shadow condition for each [rohan] token here. Discard this condition.
+		lore: ...it was the spirit of your people that held it strong.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_277: {
+		cardInfo: {
+			imagePath: decipher/LOTR04277.jpg
+			javaClass: true
+			//parentId: 4_277
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C277
+			rarity: C
+			setNum: "4"
+			cardNum: 277
+			style: Standard
+		}
+		title: Guma
+		subtitle: Plains Farmer
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: towers,4
+		race: Man
+		strength: 4
+		vitality: 2
+		keywords: Villager
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Villager</b>.<br>Discard Guma if an opponent controls his home site.<br><b>Fellowship:</b> Exert Guma to heal a [rohan] Man.
+		lore: Foodstores swelled as refugees like Guma brought provisions to the Hornburg.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_278: {
+		cardInfo: {
+			imagePath: decipher/LOTR04278.jpg
+			javaClass: true
+			//parentId: 4_278
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C278
+			rarity: C
+			setNum: "4"
+			cardNum: 278
+			style: Standard
+		}
+		title: Heavy Chain
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Armor
+		#target: a Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Man.<br>Bearer may not be overwhelmed unless his or her strength is tripled.
+		lore: What Man of an earlier age wore this chain? Was his end worth a song?
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_279: {
+		cardInfo: {
+			imagePath: decipher/LOTR04279.jpg
+			javaClass: true
+			//parentId: 4_279
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R279
+			rarity: R
+			setNum: "4"
+			cardNum: 279
+			style: Standard
+		}
+		title: Helm! Helm!
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		keywords: Regroup
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Spot 2 mounted [rohan] Men to liberate a site or draw 3 cards.
+		lore: And with that shout the king came. His horse was white as snow, golden was his shield, and his spear was long.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_280: {
+		cardInfo: {
+			imagePath: decipher/LOTR04280.jpg
+			javaClass: true
+			//parentId: 4_280
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U280
+			rarity: U
+			setNum: "4"
+			cardNum: 280
+			style: Standard
+		}
+		title: Herugrim
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		strength: 2
+		vitality: 1
+		itemclass: Hand weapon
+		#target: title(Théoden)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Théoden.<br>He is <b>damage +1</b>.
+		lore: Here, lord, is Herugrim, your ancient blade....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_281: {
+		cardInfo: {
+			imagePath: decipher/LOTR04281.jpg
+			javaClass: true
+			//parentId: 4_281
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C281
+			rarity: C
+			setNum: "4"
+			cardNum: 281
+			style: Standard
+		}
+		title: Hlafwine
+		subtitle: Village Farmhand
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: towers,4
+		race: Man
+		strength: 4
+		vitality: 2
+		keywords: Villager
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Villager</b>.<br>Discard Hlafwine if an opponent controls his home site.<br><b>Skirmish:</b> Exert Hlafwine to make a [rohan] Man strength +2.
+		lore: Too old to fight, Hlafwine prepared meals for the defenders.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_282: {
+		cardInfo: {
+			imagePath: decipher/LOTR04282.jpg
+			javaClass: true
+			//parentId: 4_282
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U282
+			rarity: U
+			setNum: "4"
+			cardNum: 282
+			style: Standard
+		}
+		title: An Honorable Charge
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make an unbound companion strength +1 for each [rohan] Man you spot (limit +3).
+		lore: A time may come when there will be a need for valour without renown....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_283: {
+		cardInfo: {
+			imagePath: decipher/LOTR04283.jpg
+			javaClass: true
+			//parentId: 4_283
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C283
+			rarity: C
+			setNum: "4"
+			cardNum: 283
+			style: Standard
+		}
+		title: Horse of Rohan
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		#target: a Man, Elf, or Wizard
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a [rohan] Man. Bearer must be a Man, Elf, or Wizard.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
+		lore: Very swift were the horses of Rohan.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_284: {
+		cardInfo: {
+			imagePath: decipher/LOTR04284.jpg
+			javaClass: true
+			//parentId: 4_284
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R284
+			rarity: R
+			setNum: "4"
+			cardNum: 284
+			style: Standard
+		}
+		title: King's Mail
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		itemclass: Armor
+		#target: a [rohan] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>Bearer takes no more than 1 wound during each skirmish phase. If bearer is Théoden, he may not take wounds except during a skirmish involving him.
+		lore: Now men came bearing raiment of war from the king's hoard....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_285: {
+		cardInfo: {
+			imagePath: decipher/LOTR04285.jpg
+			javaClass: true
+			//parentId: 4_285
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U285
+			rarity: U
+			setNum: "4"
+			cardNum: 285
+			style: Standard
+		}
+		title: Léod
+		subtitle: Westfold Herdsman
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: towers,4
+		race: Man
+		strength: 4
+		vitality: 2
+		keywords: Villager
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Villager</b>.<br>Discard Léod if an opponent controls his home site.<br><b>Skirmish:</b> Exert Léod to make a mounted companion strength +2.
+		lore: Humble Léod was a rancher before he became a soldier at Helm's Deep.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_286: {
+		cardInfo: {
+			imagePath: decipher/LOTR04286.jpg
+			javaClass: true
+			//parentId: 4_286
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C286
+			rarity: C
+			setNum: "4"
+			cardNum: 286
+			style: Standard
+		}
+		title: Rider of Rohan
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Skirmish:</b> If this companion is mounted, exert him to exert a minion skirmishing an unbound companion.
+		lore: They are proud and wilful, but they are true-hearted, generous in thought and deed....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_287: {
+		cardInfo: {
+			imagePath: decipher/LOTR04287.jpg
+			javaClass: true
+			//parentId: 4_287
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C287
+			rarity: C
+			setNum: "4"
+			cardNum: 287
+			style: Standard
+		}
+		title: Rider's Mount
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Mount
+		#target: a [rohan] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
+		lore: Their horses were of great stature, strong and clean-limbed; their grey coats glistened, their long tails flowed in the wind....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_288: {
+		cardInfo: {
+			imagePath: decipher/LOTR04288.jpg
+			javaClass: true
+			//parentId: 4_288
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C288
+			rarity: C
+			setNum: "4"
+			cardNum: 288
+			style: Standard
+		}
+		title: Rider's Spear
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: a [rohan] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>If bearer is mounted, bearer is <b>damage +1</b>.
+		lore: Shafts of the sun flared above the eastern hills and glimmered on their spears.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_289: {
+		cardInfo: {
+			imagePath: decipher/LOTR04289.jpg
+			javaClass: true
+			//parentId: 4_289
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R289
+			rarity: R
+			setNum: "4"
+			cardNum: 289
+			style: Standard
+		}
+		title: Simbelmynë
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keywords: Fellowship
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Spot 2 [rohan] Men (or 1 valiant [rohan] Man) to play a [rohan] character or [rohan] possession from your draw deck.
+		lore: How fair are the bright eyes in the grass! Evermind they are called... for they blossom in all seasons of the year, and grow where dead men rest.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_290: {
+		cardInfo: {
+			imagePath: decipher/LOTR04290.jpg
+			javaClass: true
+			//parentId: 4_290
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R290
+			rarity: R
+			setNum: "4"
+			cardNum: 290
+			style: Standard
+		}
+		title: Supplies of the Mark
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Fellowship:</b> Add (2) and place a villager from hand beneath your draw deck to heal a [rohan] ally.
+		lore: This is all we could save, my Lady.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_291: {
+		cardInfo: {
+			imagePath: decipher/LOTR04291.jpg
+			javaClass: true
+			//parentId: 4_291
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C291
+			rarity: C
+			setNum: "4"
+			cardNum: 291
+			style: Standard
+		}
+		title: Sword of Rohan
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: a [rohan] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>While bearer is skirmishing an Uruk-hai, bearer is <b>damage +1</b>.
+		lore: This is a good sword, Haleth, son of Háma... there is always hope.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_292: {
+		cardInfo: {
+			imagePath: decipher/LOTR04292.jpg
+			javaClass: true
+			//parentId: 4_292
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C292
+			rarity: C
+			setNum: "4"
+			cardNum: 292
+			style: Standard
+		}
+		title: Théoden
+		subtitle: Son of Thengel
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 2
+		signet: Aragorn
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Regroup:</b> Spot a [rohan] ally and exert Théoden to liberate a site.
+		lore: I myself will go to war, to fall in the front of the battle, if it must be.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_293: {
+		cardInfo: {
+			imagePath: decipher/LOTR04293.jpg
+			javaClass: true
+			//parentId: 4_293
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R293
+			rarity: R
+			setNum: "4"
+			cardNum: 293
+			style: Standard
+		}
+		title: Valleys of the Mark
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each time your opponent plays a roaming minion, you may spot a villager to exert that minion.
+		lore: Where is the hand on the harpstring, and the red fire glowing? / Where is the spring and the harvest and the tall corn growing?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_294: {
+		cardInfo: {
+			imagePath: decipher/LOTR04294.jpg
+			javaClass: true
+			//parentId: 4_294
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R294
+			rarity: R
+			setNum: "4"
+			cardNum: 294
+			style: Standard
+		}
+		title: Weapon Store
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Fellowship:</b> Exert a [rohan] Man to play a hand weapon from your discard pile.
+		lore: And to you my other guests I will offer such things as may be found in my armoury.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_295: {
+		cardInfo: {
+			imagePath: decipher/LOTR04295.jpg
+			javaClass: true
+			//parentId: 4_295
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U295
+			rarity: U
+			setNum: "4"
+			cardNum: 295
+			style: Standard
+		}
+		title: Weland
+		subtitle: Smith of the Riddermark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: towers,4
+		race: Man
+		strength: 4
+		vitality: 2
+		keywords: Villager
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Villager</b>.<br>Discard Weland if an opponent controls his home site.<br><b>Fellowship:</b> Exert Weland to heal a mounted companion.
+		lore: A tender of horses, Weland found much work at Helm's Deep.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_296: {
+		cardInfo: {
+			imagePath: decipher/LOTR04296.jpg
+			javaClass: true
+			//parentId: 4_296
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U296
+			rarity: U
+			setNum: "4"
+			cardNum: 296
+			style: Standard
+		}
+		title: Well Stored
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>At the start of each fellowship phase, you may heal a villager.
+		lore: Behind us in the caves of the Deep are... old and young, children and women. But great store of food, and many beasts and their fodder, have also been gathered there.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_297: {
+		cardInfo: {
+			imagePath: decipher/LOTR04297.jpg
+			javaClass: true
+			//parentId: 4_297
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C297
+			rarity: C
+			setNum: "4"
+			cardNum: 297
+			style: Standard
+		}
+		title: Work for the Sword
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a [rohan] Man strength +2 (and <b>damage +2</b> if mounted).
+		lore: The Orcs are destroyed. We slaughtered them during the night.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_365: {
+		cardInfo: {
+			imagePath: decipher/LOTR04365.jpg
+			javaClass: true
+			//parentId: 4_365
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4P365
+			rarity: P
+			setNum: "4"
+			cardNum: 365
+			style: Standard
+		}
+		title: Théoden
+		subtitle: Lord of the Mark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 2
+		signet: Theoden
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fellowship:</b> Play a [rohan] possession on a [rohan] companion to heal that companion (limit once per turn).
+		lore: Every man and strong lad able to bear arms, all who have horses, let them be ready in the saddle at the gate ere the second hour from noon!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

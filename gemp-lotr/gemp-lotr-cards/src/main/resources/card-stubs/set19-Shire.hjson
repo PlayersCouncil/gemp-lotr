@@ -173,6 +173,7 @@
 		culture: Shire
 		twilight: 1
 		type: Condition
+		#target: a [shire] companion
 		/*requires: {
 			
 		}

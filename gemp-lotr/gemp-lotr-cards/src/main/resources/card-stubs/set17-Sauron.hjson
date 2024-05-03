@@ -21,6 +21,7 @@
 		culture: Sauron
 		twilight: 2
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			

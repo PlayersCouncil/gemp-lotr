@@ -210,17 +210,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an Elf to heal each companion who has resistance 5 or more.
 		lore: ...the memory of Lothlórien shall remain ever clear and unstained in your heart, and shall neither fade nor grow stale.'
 		promotext: ""
@@ -257,17 +260,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an Elf strength +2 (or +3 at a river site).
 		lore: We have come to bid our last farewell,' she said, 'and to speed you with blessings from our land.'
 		promotext: ""
@@ -445,17 +451,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert an Elf to reveal the top card of your draw deck. If that card's twilight cost is 3 or less, make a minion strength -3.
 		lore: Dimly Frodo saw the river below him rise, and down along its course there came a plumed cavalry of waves.
 		promotext: ""
@@ -492,17 +501,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert an Elf who has resistance 4 or more to wound a minion.
 		lore: Legolas can fit an arrow to his bowstring faster than most can clear a blade from its scabbard.
 		promotext: ""

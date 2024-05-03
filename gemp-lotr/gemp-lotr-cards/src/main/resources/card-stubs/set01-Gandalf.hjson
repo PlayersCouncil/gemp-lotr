@@ -121,17 +121,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Spot Gandalf, a Dwarf, and an Elf to make the move limit for this turn +1.
 		lore: They are wrought of ithildin that mirrors only starlight and moonlight, and sleeps until it is touched by one who speaks words now long forgotten in Middle-earth.'
 		promotext: ""
@@ -213,6 +216,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -355,17 +359,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Response:</b> If a companion is about to take a wound, spot Gandalf to prevent that wound.
 		lore: Go back to the Shadow!'
 		promotext: ""
@@ -402,17 +409,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Exert X companions to remove (X).
 		lore: Well, let folly be our cloak, a veil before the eyes of the Enemy!... Into his heart the thought will not enter that any will refuse it, that having the Ring we may seek to destroy it.'
 		promotext: ""
@@ -452,17 +462,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Skirmish:</b> Make Gandalf strength +2 (or +4 if there are 4 or fewer burdens on the Ring-bearer).
 		lore: ...there are older and fouler things than Orcs in the deep places of the world.'
 		promotext: ""
@@ -594,17 +607,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Fellowship:</b> If the twilight pool has fewer than 3 twilight tokens, spot Gandalf to look at the top 4 cards of your draw deck. Take 2 of those cards into hand and discard the rest.
 		lore: There are some things that I must see to....'
 		promotext: ""
@@ -644,17 +660,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Fellowship:</b> If the twilight pool has fewer than 2 twilight tokens, spot Gandalf to look at the top 2 cards of your draw deck. Take one into hand and discard the other.
 		lore: Let me risk a little more light.'
 		promotext: ""
@@ -694,17 +713,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Skirmish:</b> Spot Gandalf to make a minion strength -3.
 		lore: I am a servant of the Secret Fire, wielder of the flame of Anor. You cannot pass.'
 		promotext: ""
@@ -744,17 +766,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Fellowship:</b> Exert Gandalf to discard every condition.
 		lore: Losto Caradhras, sedho, hodo, nuitho i ruith.'
 		promotext: ""
@@ -794,17 +819,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Response:</b> If a companion is about to exert, spot Gandalf to place no token for that exertion.
 		lore: There are many powers in the world, for good or for evil. Some are greater than I am. Against some I have not yet been measured. But my time is coming.'
 		promotext: ""
@@ -844,17 +872,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Fellowship:</b> Spot Gandalf to reveal an opponent's hand.
 		lore: By foul craft, Saruman has crossed Orcs with Goblin Men – he is breeding an army in the Caverns of Isengard.'
 		promotext: ""
@@ -891,17 +922,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Play a [gandalf] character from your draw deck.
 		lore: A wizard is never late, Frodo Baggins, nor is he early. He arrives precisely when he means to.'
 		promotext: ""

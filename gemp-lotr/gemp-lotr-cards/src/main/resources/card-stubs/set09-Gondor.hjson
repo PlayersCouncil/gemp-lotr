@@ -214,6 +214,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -258,6 +259,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Artifact
+		#target: 
 		keywords: [
 			Tale
 			Support Area
@@ -305,6 +307,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -349,6 +352,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			

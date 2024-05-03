@@ -28,17 +28,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Search</b>.<br><b>Maneuver:</b> Spot a [sauron] Orc and 5 companions to make the Free Peoples player exert a companion for each companion over 4.
 		lore: ...for the Ring yearns, above all else, to return to the hand of its Master: they are one....'
 		promotext: ""
@@ -122,17 +125,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Spot a [sauron] Orc to discard an [elven] condition.
 		lore: The Dark Lord harbors an ancient hatred for descendants of Gil-galad and those that marched with his gleaming host.
 		promotext: ""
@@ -216,17 +222,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> If the total number of burdens and companions in the dead pile is at least 12, spot a [sauron] Orc to corrupt the Ring-bearer.
 		lore: The Nameless Enemy has arisen again. Smoke rises once more from Orodruin that we call Mount Doom.'
 		promotext: ""
@@ -259,6 +268,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
+		#target: a companion
 		/*requires: {
 			
 		}
@@ -306,17 +316,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Spot a [sauron] Orc and remove a burden to make the Free Peoples player discard top 5 cards from his draw deck.
 		lore: Go back, Sam. You can't swim. I'm going to Mordor alone.'
 		promotext: ""
@@ -353,17 +366,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Spot X burdens to make a character skirmishing a [sauron] Orc strength -X.
 		lore: The Dark Tower was broken, but its foundations were not removed; for they were made with the power of the Ring, and while it remains they will endure.'
 		promotext: ""
@@ -400,17 +416,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If a [sauron] Orc wins a skirmish, make that Orc <b>fierce</b> until the regroup phase.
 		lore: Orcs feed on their own success. The greater their exploits in battle, the greater their confidence grows.
 		promotext: ""
@@ -447,17 +466,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Spot X [sauron] minions to add (X).
 		lore: ...the Dark Lord is not without allies. The Easterlings and Haradrim now pay tribute to Mordor.'
 		promotext: ""
@@ -538,17 +560,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a [sauron] Orc to wound a companion (except the Ring-bearer).
 		lore: Orcs are filled with hatred not only for their foes, but for all that lives.
 		promotext: ""
@@ -588,17 +613,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Search</b>.<br><b>Maneuver:</b> Spot a [sauron] Orc and 6 companions to wound a companion (except the Ring-bearer). Do this once for each companion over 5.
 		lore: Had I a host of Elves in armour of the Elder Days, it would avail little....'
 		promotext: ""
@@ -722,6 +750,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Condition
+		#target: a [sauron] minion
 		/*requires: {
 			
 		}
@@ -769,17 +798,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Exert a [sauron] Orc to wound a character he is skirmishing.
 		lore: It should have ended that day, but evil was allowed to endure.'
 		promotext: ""
@@ -1235,17 +1267,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If a companion is killed by a [sauron] Orc, the Free Peoples player must discard 3 cards from the top of his draw deck for each card in the dead pile.
 		lore: For sport, Orcs hew cruelly at the bodies of those they slay.
 		promotext: ""
@@ -1611,17 +1646,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If a [sauron] Orc kills a companion, add 1 burden (or 3 if the Ring-bearer wears The One Ring).
 		lore: The Ring that hung upon its chain about his neck grew heavy, heavier than a great stone, and his head was dragged downwards.
 		promotext: ""
@@ -1793,17 +1831,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Exert a [sauron] Orc to discard a Free Peoples condition.
 		lore: Is it secret? Is it safe?'
 		promotext: ""
@@ -1880,6 +1921,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Condition
+		#target: the Ring-bearer
 		/*requires: {
 			
 		}
@@ -2018,6 +2060,7 @@
 		twilight: 0
 		type: Condition
 		strength: -1
+		#target: title(Aragorn)
 		/*requires: {
 			
 		}
@@ -2061,6 +2104,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Condition
+		#target: a companion (except an Elf)
 		/*requires: {
 			
 		}

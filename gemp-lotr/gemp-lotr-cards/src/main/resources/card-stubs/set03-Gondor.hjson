@@ -122,17 +122,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Tale</b>.<br><b>Maneuver:</b> Exert a [gondor] companion to make that companion strength +3 and <b>defender +1</b> until the regroup phase.
 		lore: Many Elves and many mighty Men, and many of their friends, had perished in the war.'
 		promotext: ""
@@ -307,17 +310,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Tale</b>.<br><b>Maneuver:</b> Spot a [gondor] companion to reveal a card at random from an opponent's hand. Heal X companions, where X is the twilight cost of the card revealed.
 		lore: But the lords of Minas Tirith still fight on....'
 		promotext: ""
@@ -350,6 +356,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -401,17 +408,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Tale</b>.<br><b>Maneuver:</b> Spot a [gondor] companion to make the twilight cost of each maneuver event +2.
 		lore: In the South the realm of Gondor long endured; and for a while its splendour grew....'
 		promotext: ""
@@ -448,17 +458,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Spot The Shards of Narsil to make a [gondor] companion strength +3 and <b>damage +1</b>.
 		lore: The shards of Narsil... the blade that cut the Ring from Sauron's hand.'
 		promotext: ""
@@ -495,17 +508,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert Aragorn to make each companion with the Aragorn signet <b>damage +1</b> until the regroup phase.
 		lore: As he ran the cries came louder, but fainter now and desperately the horn was blowing.
 		promotext: ""
@@ -542,17 +558,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If the fellowship moves in the regroup phase, exert a [gondor] companion twice to make each minion's twilight cost +1 until the next regroup phase.
 		lore: This is the lawn of Parth Galen: a fair place in the summer days of old. Let us hope that no evil has yet come here.'
 		promotext: ""

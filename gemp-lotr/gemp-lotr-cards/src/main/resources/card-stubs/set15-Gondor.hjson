@@ -616,17 +616,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a [gondor] Man to wound a minion (or wound that minion twice if it is a hunter).
 		lore: ...only the servants of the Dark Tower, or of the White.'
 		promotext: ""

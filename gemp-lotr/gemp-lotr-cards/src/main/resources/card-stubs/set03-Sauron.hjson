@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Exert a [sauron] minion to reveal a card at random from the Free Peoples player's hand. That player must discard X cards from hand, where X is the twilight cost of the card revealed.
 		lore: A power was there that we have not felt before.'
 		promotext: ""
@@ -75,17 +78,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Search</b>.<br><b>Shadow:</b> Spot a [sauron] minion and a Nazgûl to make the Free Peoples player discard a card from the top of his or her deck for each burden you can spot.
 		lore: The Morgul-lord and his Black Riders have come forth. War is preparing!'
 		promotext: ""
@@ -122,17 +128,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Exert a [sauron] Orc and spot a [gondor] companion to add a burden.
 		lore: A Ring of Power looks after itself... It may slip off treacherously, but its keeper never abandons it.'
 		promotext: ""
@@ -169,17 +178,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a [sauron] minion to make the Free Peoples player discard a card at random from his or her hand.
 		lore: The power of the Ring could not be undone.'
 		promotext: ""
@@ -260,17 +272,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Exert a [sauron] minion to discard a card from the top of the Free Peoples player's draw deck for each of these races you can spot in the fellowship: Dwarf, Elf, Man, and Wizard.
 		lore: The power of the Black Land grows....'
 		promotext: ""
@@ -774,17 +789,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Spot a [sauron] minion to wound Galadriel 3 times. The Free Peoples player may discard 2 Elves to prevent this.
 		lore: In the place of the Dark Lord, you would have a Queen... All shall love me and despair!'
 		promotext: ""
@@ -865,17 +883,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Spot a [sauron] minion to discard Bilbo. The Free Peoples player may discard 2 Free Peoples conditions to prevent this.
 		lore: No, wait, it's here in my pocket. Isn't that... isn't that odd now?'
 		promotext: ""

@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Play Gollum from your draw deck or discard pile to add a threat.
 		lore: Give us that....'
 		promotext: ""
@@ -72,17 +75,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard any number of [gollum] conditions. For each condition discarded, make Sméagol strength +3 and <b>damage +1</b>.
 		lore: Clever hobbits to climb so high, very clever hobbits!'
 		promotext: ""
@@ -159,6 +165,7 @@
 		culture: Gollum
 		twilight: 3
 		type: Condition
+		#target: title(Sméagol)
 		keywords: Stealth
 		/*requires: {
 			
@@ -391,17 +398,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gollum or Sméagol to make a Nazgûl, [sauron] minion, or [gollum] minion strength +2.<br>If you have initiative, you may play this event from your discard pile; place it under your draw deck instead of discarding it.
 		lore: ""
 		promotext: ""
@@ -478,6 +488,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
+		#target: a minion
 		/*requires: {
 			
 		}
@@ -525,17 +536,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make Sméagol strength +1 for each [gollum] card you spot.
 		lore: He's a fat, horrid Hobbit, who hates Sméagol, who makes up nasty lies.'
 		promotext: ""
@@ -616,17 +630,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Sméagol to reveal an opponent's hand. That opponent must discard a card from hand for each culture revealed.
 		lore: ...they are watching... eyes will see us.'
 		promotext: ""
@@ -795,17 +812,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard Sméagol to play a companion from your discard pile.
 		lore: Sméagol look after Master. Sméagol serve Master well!'
 		promotext: ""
@@ -945,17 +965,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Stealth</b>.<br>Heal Sméagol (or cancel Sméagol's skirmish if he has more vitality than the minion or minions he is skirmishing).
 		lore: What were you doing?'
 		promotext: ""
@@ -992,17 +1015,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Play Gollum from your discard pile to add (1) for each threat you spot.
 		lore: Sméagol shows them secret ways that nobody else could find and they say, 'Sneak!''
 		promotext: ""
@@ -1039,20 +1065,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a minion is about to take a wound, spot Gollum to prevent that wound.
 		lore: It may well be, oh yes, it may very well be, that when She throws away the bones and the empty clothes... we shall find It!'
 		promotext: ""
@@ -1089,17 +1118,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Play Sméagol from your discard pile to play the fellowship's next site (replacing an opponent's site if necessary). If you do not move again this turn, discard your hand.
 		lore: He hurts us... hurts poor Sméagol!'
 		promotext: ""
@@ -1132,6 +1164,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Condition
+		#target: title(Sméagol)
 		/*requires: {
 			
 		}
@@ -1179,17 +1212,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If you have initiative, discard 2 cards from hand to wound a minion Sméagol is skirmishing twice.
 		lore: If you scare him off, we are lost.'
 		promotext: ""

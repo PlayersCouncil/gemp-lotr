@@ -71,17 +71,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a Dwarf. For each wound on that Dwarf, make him strength +2 and <b>damage +1</b>.
 		lore: As had the children of Durin and the followers of Balin before him, Gimli would fight the interlopers in Khazad-dûm with all his strength.
 		promotext: ""
@@ -162,17 +165,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert the Ring-bearer and a Dwarf to make that Dwarf strength +X, where X equals that Dwarf's resistance.
 		lore: He is dead then,' said Frodo. 'I feared it was so.' Gimli cast his hood over his face.
 		promotext: ""
@@ -489,20 +495,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a Dwarf who has resistance 3 or more is about to take a wound, prevent that.
 		lore: Well, here's one Dwarf she won't ensnare so easily.'
 		promotext: ""
@@ -539,17 +548,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard a [dwarven] card from hand to play a [dwarven] possession from your draw deck on a [dwarven] companion who has resistance 5 or more.
 		lore: Stout and unmindful of the most ample load, Dwarven warriors laden themselves with heavy armor and myriad weaponry.
 		promotext: ""

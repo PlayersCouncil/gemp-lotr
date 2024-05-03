@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot your [orc] minion to play an [orc] possession from your discard pile (or, if that minion is at a battleground site, from your draw deck or discard pile).
 		lore: Fashioned by the hands of Orcs, or plundered from the hands of defeated enemies, the weaponry of Mordor is bounteous.
 		promotext: ""
@@ -215,17 +218,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an [orc] minion to reveal the Free Peoples player's hand. The Free Peoples player chooses to either discard a revealed Free Peoples event or add a burden.
 		lore: Now it comes to it, I don't like parting with it at all, I may say.'
 		promotext: ""
@@ -310,17 +316,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [orc] minion strength +1 for each underground site you can spot.
 		lore: They brandished spears and scimitars which shone red as blood in the firelight.
 		promotext: ""
@@ -589,17 +598,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 [orc] minions to discard a condition from play. The Free Peoples player may discard the top 6 cards of his or her draw deck to prevent this.
 		lore: ...yet another weapon, swifter than hunger, the Lord of the Dark Tower had....
 		promotext: ""
@@ -1621,17 +1633,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [orc] minion strength +2 (or +4 if it is a lurker).
 		lore: Weakened by the Sun, Orcs thrive in darkness and shadow.
 		promotext: ""
@@ -1671,17 +1686,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 3</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -3.)</helper><br>Assign an [orc] minion to a companion (except the Ring-bearer).
 		lore: Easily caught by the heat of battle, Orc soldiers often break formation and attack where their bloodlust takes them.
 		promotext: ""

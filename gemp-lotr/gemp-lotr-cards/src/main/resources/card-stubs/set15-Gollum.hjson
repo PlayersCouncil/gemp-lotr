@@ -21,6 +21,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
+		#target: title(Sméagol)
 		/*requires: {
 			
 		}
@@ -108,6 +109,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Condition
+		#target: title(Gollum)
 		/*requires: {
 			
 		}
@@ -155,17 +157,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard a [gollum] minion from play to discard a companion. The Free Peoples player may make the move limit -1 this turn to prevent that.
 		lore: He leaped into the waters, but the Ring slipped from his finger as he swam....'
 		promotext: ""
@@ -293,17 +298,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make Sméagol strength +1 for each Ring- bound Hobbit you can spot.
 		lore: Very lucky we find you.
 		promotext: ""
@@ -428,17 +436,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Sméagol to prevent a Ring-bound Hobbit from being overwhelmed unless his or her strength is tripled.<br>While this card is in your discard pile, Sméagol is resistance +1.
 		lore: If you let them go, your life will be forfeit.
 		promotext: ""
@@ -524,17 +535,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Sméagol to play a condition from your draw deck. If that condition was a [gollum] condition, you may make an opponent place a random card from his or her hand beneath his or her draw deck.
 		lore: What he was chewing, they did not ask or like to think.
 		promotext: ""
@@ -571,17 +585,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gollum or Sméagol to play a minion from your draw deck. If that minion is a [gollum] minion, you may also play a Shadow possession or Shadow condition from your draw deck. Shuffle your draw deck.
 		lore: ...she drove her huge bulk down on him again.
 		promotext: ""
@@ -618,17 +635,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Frodo and Sméagol to discard a minion. That minion's owner may make each minion strength -2 until the end of the turn to prevent that.
 		lore: I will serve the master of the Precious.'
 		promotext: ""
@@ -665,17 +685,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard a [gollum] minion from play to wound each companion with strength 8 or more.
 		lore: ...all the while he hissed, but spoke no words.
 		promotext: ""

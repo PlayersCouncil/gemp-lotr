@@ -217,17 +217,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [gondor] Man strength +2. If that Man is skirmishing a [sauron] minion, discard that minion at the end of the skirmish.
 		lore: I will gladly give my life to defend her beauty, her memory... her wisdom.'
 		promotext: ""
@@ -264,17 +267,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [gondor] or [shire] companion bearing a hand weapon strength +2 and <b>damage +1</b>.
 		lore: ""
 		promotext: ""
@@ -503,17 +509,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Add 3 threats to heal all [gondor] companions.
 		lore: ...for himself, and for the one that will not return.'
 		promotext: ""
@@ -973,17 +982,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [gondor] companion strength +2 and, if you can spot 2 [gondor] fortifications, exert a minion that companion is skirmishing.
 		lore: ...and its iron doors rolled back before them.
 		promotext: ""
@@ -1020,17 +1032,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a [gondor] Man and spot 3 fortifications to make the fellowship archery total +2.
 		lore: ...City of Kings of yore.'
 		promotext: ""
@@ -1199,17 +1214,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [gondor] companion to reveal the top 5 cards of an opponent's draw deck. For each Shadow card revealed, add a threat. For each Free Peoples card revealed, place a [gondor] token on one of your conditions with a [gondor] token on it. Shuffle that draw deck.
 		lore: ""
 		promotext: ""
@@ -1242,6 +1260,7 @@
 		culture: Gondor
 		twilight: 3
 		type: Condition
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}
@@ -1800,17 +1819,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 knights or exert 2 [gondor] Men to liberate a site or discard any number of cards from hand.
 		lore: Do not throw your life away so rashly!'
 		promotext: ""
@@ -1944,17 +1966,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If you have initiative, discard 2 cards from hand to wound a roaming minion skirmishing a [gondor] Man twice.
 		lore: Return to the outer walls!'
 		promotext: ""
@@ -1991,17 +2016,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Add a threat to make a [gondor] Man strength +3.
 		lore: ...the hardiest of the garrison stood at bay.
 		promotext: ""
@@ -2218,6 +2246,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Condition
+		#target: a [gondor] companion
 		/*requires: {
 			
 		}
@@ -2312,17 +2341,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a roaming minion skirmishing a [gondor] Man strength -3.
 		lore: ...not if the Nameless One himself should come, not even he could enter....'
 		promotext: ""

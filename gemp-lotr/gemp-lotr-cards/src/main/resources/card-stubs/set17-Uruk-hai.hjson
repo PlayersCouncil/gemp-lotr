@@ -115,17 +115,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an Uruk-hai strength +2 (or spot a site you control to make that Uruk- hai strength +3 instead). You may then liberate a site to make that Uruk-hai strength +2 and <b>damage +1</b>.
 		lore: The Deeping Wall is taken, lord, and all the defense swept away....'
 		promotext: ""
@@ -301,6 +304,7 @@
 		culture: Uruk-hai
 		twilight: 2
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -1225,17 +1229,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard a condition for each [uruk-hai] minion you can spot.
 		lore: Endangering and entangling all those that stood before them, the Uruk-hai shrunk before none.
 		promotext: ""

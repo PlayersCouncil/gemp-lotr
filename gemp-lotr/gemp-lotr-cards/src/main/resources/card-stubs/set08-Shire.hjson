@@ -113,17 +113,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If the Shadow has initiative, add a threat to make an unbound Hobbit strength +1 for each [shire] card you spot.
 		lore: She should not die.... At least she should not die alone, unaided.
 		promotext: ""
@@ -251,17 +254,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Frodo to remove (1) for each Frodo signet you spot.
 		lore: ...blind almost to all else that is moving. So we must keep it. Therein lies all our hope.'
 		promotext: ""
@@ -298,20 +304,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a minion exerts, exert an unbound Hobbit to wound that minion.
 		lore: ...and passing up beneath the hauberk had pierced the sinew behind his mighty knee.
 		promotext: ""
@@ -348,20 +357,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If the fellowship moves during the regroup phase, exert an unbound Hobbit to place a Shadow card from your discard pile on top of your draw deck.
 		lore: He said: Who are you?" I still did not answer, but it hurt me horribly; and he pressed me, so I said: "A hobbit."'"
 		promotext: ""

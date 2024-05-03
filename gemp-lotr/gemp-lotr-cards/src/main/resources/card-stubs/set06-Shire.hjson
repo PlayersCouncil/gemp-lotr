@@ -1,0 +1,288 @@
+{
+
+	6_109: {
+		cardInfo: {
+			imagePath: decipher/LOTR06109.jpg
+			javaClass: true
+			//parentId: 6_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R109
+			rarity: R
+			setNum: "6"
+			cardNum: 109
+			style: Standard
+		}
+		title: Held
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		#target: title(Frodo)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Frodo.<br>Each time Frodo is about to be killed by a wound, add a burden instead.<br>When the fellowship moves to site 9, Frodo is corrupted.<br><b>Regroup:</b> If you can spot no minions, discard this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_110: {
+		cardInfo: {
+			imagePath: decipher/LOTR06110.jpg
+			javaClass: true
+			//parentId: 6_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U110
+			rarity: U
+			setNum: "6"
+			cardNum: 110
+			style: Standard
+		}
+		title: It Burns Us
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		keywords: Regroup
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Spot Sam and Sméagol (or Gollum) to choose an opponent who must reveal his or her hand. Wound a minion X times, where X is the number of different cultures revealed.
+		lore: No more than you deserve.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_111: {
+		cardInfo: {
+			imagePath: decipher/LOTR06111.jpg
+			javaClass: true
+			//parentId: 6_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C111
+			rarity: C
+			setNum: "6"
+			cardNum: 111
+			style: Standard
+		}
+		title: Kept Safe
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area. When you play this condition, place 2 [shire] tokens here.<br><b>Response:</b> If an unbound Hobbit is about to take a wound, discard this condition or remove a [shire] token from here to prevent that wound.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_112: {
+		cardInfo: {
+			imagePath: decipher/LOTR06112.jpg
+			javaClass: true
+			//parentId: 6_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C112
+			rarity: C
+			setNum: "6"
+			cardNum: 112
+			style: Standard
+		}
+		title: Long Slow Wrath
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Exert an unbound Hobbit to make him strength +1 and <b>damage +1</b> for each [gandalf] companion you can spot.
+		lore: The coming of the hobbits and the tidings that they brought have spilled it: it will soon be running like a flood....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_113: {
+		cardInfo: {
+			imagePath: decipher/LOTR06113.jpg
+			javaClass: true
+			//parentId: 6_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R113
+			rarity: R
+			setNum: "6"
+			cardNum: 113
+			style: Standard
+		}
+		title: Merry
+		subtitle: Impatient Hobbit
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Regroup:</b> Discard Merry to heal a [gandalf] companion.
+		lore: Don't talk to it Merry. Don't encourage it.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_114: {
+		cardInfo: {
+			imagePath: decipher/LOTR06114.jpg
+			javaClass: true
+			//parentId: 6_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R114
+			rarity: R
+			setNum: "6"
+			cardNum: 114
+			style: Standard
+		}
+		title: Pippin
+		subtitle: Hastiest of All
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Regroup:</b> Discard Pippin to choose a Shadow player who must wound one of his or her minions.
+		lore: By root and twig, but this is a strange business: up sprout a little folk that are not in the old lists....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

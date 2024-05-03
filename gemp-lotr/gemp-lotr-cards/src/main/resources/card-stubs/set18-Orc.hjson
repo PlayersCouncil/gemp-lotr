@@ -69,17 +69,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an [orc] archer minion to add 2 to the minion archery total. If you do, you may add an additional 2 to the minion archery total for each follower you can spot.
 		lore: The black fletched arrows of Sauron's armies found many targets.
 		promotext: ""
@@ -209,6 +212,7 @@
 		culture: Orc
 		twilight: 3
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -257,17 +261,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a companion skirmishing an [orc] minion strength -2 (or -3 if he or she is an archer).
 		lore: They dined on the flesh of all that lived and breathed in Middle-earth.
 		promotext: ""
@@ -681,17 +688,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Remove a threat to reinforce an [orc] token.
 		lore: The old world will burn in the fires of industry. The forests will fall. A new order will rise. We will drive the machine of war with the sword and the spear and the iron fists of the Orc. We have only to remove those who oppose us.
 		promotext: ""

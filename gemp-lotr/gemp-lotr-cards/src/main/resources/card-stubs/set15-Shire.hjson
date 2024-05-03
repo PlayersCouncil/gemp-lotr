@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a Hobbit to play a [shire] follower from your draw deck.
 		lore: ...ease and peace had left this people still curiously tough.
 		promotext: ""
@@ -354,17 +357,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Transfer a follower from a Hobbit to your support area to cancel a skirmish involving that Hobbit.
 		lore: No thank you!
 		promotext: ""
@@ -542,17 +548,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Add a threat and exert your Ring-bearer to wound each non-hunter minion skirmishing your [shire] Ring-bearer.
 		lore: Don't think he knows about second breakfast, Pip.
 		promotext: ""

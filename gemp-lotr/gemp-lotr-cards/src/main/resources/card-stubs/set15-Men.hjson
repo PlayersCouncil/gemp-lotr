@@ -443,6 +443,7 @@
 		twilight: 1
 		type: Condition
 		resistance: -1
+		#target: a companion (except the Ring-bearer)
 		/*requires: {
 			
 		}
@@ -585,17 +586,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Wound 3 [men] archers to exhaust a companion.
 		lore: Southron archers know that they must press through their exhaustion to win the battle.
 		promotext: ""
@@ -632,17 +636,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert your [men] Man and spot an unbound companion bearing 3 or more cards to return each Free Peoples card that companion bears to its owner's hand. The Free Peoples player may add a burden to discard those cards instead.
 		lore: Let your counsellor Gríma keep all things....'
 		promotext: ""
@@ -771,6 +778,7 @@
 		twilight: 0
 		type: Condition
 		resistance: -1
+		#target: a companion (except the Ring-bearer)
 		/*requires: {
 			
 		}
