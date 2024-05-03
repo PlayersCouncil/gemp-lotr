@@ -109,11 +109,11 @@ public class Card_V2_017_Tests
 		scn.ShadowPlayCard(charge); //Do-nothing maneuver event so they don't both pass
 
 		//Now it's back to Freep's maneuver turn
-		assertEquals(4, scn.GetVitality(aragorn));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsPlayAvailable(iwilldie));
 		scn.FreepsPlayCard(iwilldie);
 
-		assertEquals(1, scn.GetVitality(aragorn));
+		assertEquals(3, scn.GetWoundsOn(aragorn));
 		//Now that we have ensured that the costs of the card work as they should,
 		// further tests can just worry about the effects without re-checking.
 
