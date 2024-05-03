@@ -41,6 +41,7 @@ public class Card_09_025_Tests
 		 * Subtype: Tree
 		 * Strength: 6
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: <b>Damage +1</b>.<br>This companion is strength +1 for each Ent you can spot.<br><b>Response:</b> If this companion is about to take a wound, exert an Ent to prevent that.
 		*/
 
@@ -60,6 +61,7 @@ public class Card_09_025_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

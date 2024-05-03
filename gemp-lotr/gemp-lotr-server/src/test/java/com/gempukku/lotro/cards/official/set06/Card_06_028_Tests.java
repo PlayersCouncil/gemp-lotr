@@ -41,6 +41,7 @@ public class Card_06_028_Tests
 		 * Subtype: Ent
 		 * Strength: 10
 		 * Vitality: 5
+		 * Resistance: 6
 		 * Game Text: To play, spot 2 Ent companions.<br>Ent Horde's twilight cost is -2 for each Ent or unbound Hobbit you can spot.<br>While you can spot more minions than companions, Ent Horde is <b>defender +1</b>.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_06_028_Tests
 		assertEquals(15, card.getBlueprint().getTwilightCost());
 		assertEquals(10, card.getBlueprint().getStrength());
 		assertEquals(5, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

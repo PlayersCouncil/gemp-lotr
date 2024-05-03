@@ -41,6 +41,7 @@ public class Card_06_023_Tests
 		 * Subtype: Elf
 		 * Strength: 9
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: To play, spot 3 Elf companions.<br>While Naith Warband bears a ranged weapon, it takes no more than 1 wound during each skirmish phase and does not add to the fellowship archery total.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_06_023_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

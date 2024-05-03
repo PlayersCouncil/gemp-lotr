@@ -41,6 +41,7 @@ public class Card_04_071_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: While no opponent controls a site, Haldir is strength +2.<br><b>Regroup:</b> Exert Haldir at a battleground and exert another Elf to liberate a site.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_04_071_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

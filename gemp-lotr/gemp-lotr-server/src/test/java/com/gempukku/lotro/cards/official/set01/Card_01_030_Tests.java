@@ -41,6 +41,7 @@ public class Card_01_030_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Ranger</b>.<br>While skirmishing a Nazgûl, Arwen is strength +3.
 		*/
@@ -60,6 +61,7 @@ public class Card_01_030_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

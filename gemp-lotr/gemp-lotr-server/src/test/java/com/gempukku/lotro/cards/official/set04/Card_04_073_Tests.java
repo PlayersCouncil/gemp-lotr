@@ -41,6 +41,7 @@ public class Card_04_073_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Archer</b>.<br>The twilight cost of each Shadow event and Shadow condition is +1 for each unbound Hobbit you can spot.
 		*/
@@ -60,6 +61,7 @@ public class Card_04_073_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

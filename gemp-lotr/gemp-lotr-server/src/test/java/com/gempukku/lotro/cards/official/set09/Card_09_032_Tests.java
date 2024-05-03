@@ -41,6 +41,7 @@ public class Card_09_032_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 5
+		 * Resistance: 6
 		 * Game Text: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> Play an artifact on Elendil to make the move limit +1 for this turn.<br><b>Regroup:</b> Discard a [gondor] artifact to liberate a site.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_09_032_Tests
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(5, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

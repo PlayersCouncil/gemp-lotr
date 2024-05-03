@@ -41,6 +41,7 @@ public class Card_01_306_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: Your opponent may not discard your [shire] tales from play.
 		*/
@@ -59,6 +60,7 @@ public class Card_01_306_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

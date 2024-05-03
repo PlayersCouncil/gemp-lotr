@@ -41,6 +41,7 @@ public class Card_05_115_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 5
 		 * Signet: Aragorn
 		 * Game Text: <b>Ring-bound</b>.<br>While you can spot Frodo and Sméagol, Sam may not be overwhelmed unless his strength is tripled.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
@@ -60,6 +61,7 @@ public class Card_05_115_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(5, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

@@ -41,6 +41,7 @@ public class Card_07_229_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Skirmish:</b> Discard a possession borne by Éowyn to make her strength +2.
 		*/
@@ -59,6 +60,7 @@ public class Card_07_229_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

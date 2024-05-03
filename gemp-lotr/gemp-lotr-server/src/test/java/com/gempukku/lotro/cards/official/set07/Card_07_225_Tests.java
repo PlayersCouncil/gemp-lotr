@@ -41,6 +41,7 @@ public class Card_07_225_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: When this companion is in your starting fellowship, his twilight cost is -1.<br>While skirmishing a wounded minion, this companion is strength +2.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_07_225_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

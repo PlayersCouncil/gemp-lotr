@@ -41,6 +41,7 @@ public class Card_04_302_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 10
 		 * Signet: Gandalf
 		 * Game Text: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br><b>Fellowship:</b> Play a Ring-bound companion to remove a burden.
 		*/
@@ -60,6 +61,7 @@ public class Card_04_302_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(10, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

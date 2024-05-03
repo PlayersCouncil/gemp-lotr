@@ -41,6 +41,7 @@ public class Card_10_027_Tests
 		 * Subtype: Wraith
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Enduring</b>. To play, add a threat.<br>When you play this companion, exert him twice.
 		*/
 
@@ -59,6 +60,7 @@ public class Card_10_027_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

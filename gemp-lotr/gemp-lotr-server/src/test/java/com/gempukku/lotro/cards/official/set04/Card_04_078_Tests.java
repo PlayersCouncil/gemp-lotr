@@ -41,6 +41,7 @@ public class Card_04_078_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: Each minion skirmishing this companion is strength -2 for each wound on that minion.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_04_078_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

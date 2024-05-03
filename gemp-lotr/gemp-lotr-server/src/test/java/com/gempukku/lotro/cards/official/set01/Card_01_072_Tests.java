@@ -41,6 +41,7 @@ public class Card_01_072_Tests
 		 * Subtype: Wizard
 		 * Strength: 6
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: Gandalf is strength +1 for each of these races you can spot in the fellowship: Hobbit, Dwarf, Elf, and Man.
 		*/
@@ -59,6 +60,7 @@ public class Card_01_072_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

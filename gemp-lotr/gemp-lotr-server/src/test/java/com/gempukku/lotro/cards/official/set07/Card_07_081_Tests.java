@@ -41,6 +41,7 @@ public class Card_07_081_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Knight</b>.<br>At the start of each fellowship phase, you may add (2) to heal another [gondor] companion.
 		*/
@@ -60,6 +61,7 @@ public class Card_07_081_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

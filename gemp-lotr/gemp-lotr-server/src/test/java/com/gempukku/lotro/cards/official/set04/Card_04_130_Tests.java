@@ -41,6 +41,7 @@ public class Card_04_130_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Ring-bound</b>. <b>Ranger</b>.<br>When this companion is in your starting fellowship, his twilight cost is -1.<br>While skirmishing a roaming minion, this companion is strength +2.
 		*/
 
@@ -60,6 +61,7 @@ public class Card_04_130_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

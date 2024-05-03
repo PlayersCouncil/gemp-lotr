@@ -41,6 +41,7 @@ public class Card_06_030_Tests
 		 * Subtype: Wizard
 		 * Strength: 10
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Damage +1</b>.<br>Each time the fellowship moves, wound Gandalf.
 		*/
@@ -61,6 +62,7 @@ public class Card_06_030_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(10, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

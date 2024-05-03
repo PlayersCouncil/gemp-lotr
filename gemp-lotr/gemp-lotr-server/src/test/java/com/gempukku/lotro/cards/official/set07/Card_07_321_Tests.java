@@ -41,6 +41,7 @@ public class Card_07_321_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: <b>Skirmish:</b> If Merry is not assigned to a skirmish, return him to your hand to play up to 2 [rohan] possessions from your discard pile.
 		*/
@@ -59,6 +60,7 @@ public class Card_07_321_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 

@@ -41,6 +41,7 @@ public class Card_05_015_Tests
 		 * Subtype: Ent
 		 * Strength: 8
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow Birchseed to skirmish.<br><b>Fellowship:</b> Exert Birchseed to heal an unbound Hobbit.
 		*/
 
@@ -59,6 +60,7 @@ public class Card_05_015_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

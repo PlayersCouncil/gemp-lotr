@@ -41,6 +41,7 @@ public class Card_06_037_Tests
 		 * Subtype: Ent
 		 * Strength: 12
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit to allow Treebeard to skirmish.<br><b>Skirmish:</b> Exert Treebeard to make an Ent <b>damage +1</b>.
 		*/
 
@@ -59,6 +60,7 @@ public class Card_06_037_Tests
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(12, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -41,6 +41,7 @@ public class Card_04_081_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: To play, spot an Elf.<br>While Pengedhel bears a ranged weapon, he is strength +2 and he does not add to the fellowship archery total.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_04_081_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

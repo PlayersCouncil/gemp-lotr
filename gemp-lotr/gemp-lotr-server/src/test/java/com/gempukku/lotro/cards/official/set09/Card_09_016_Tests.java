@@ -41,6 +41,7 @@ public class Card_09_016_Tests
 		 * Subtype: Elf
 		 * Strength: 9
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: When Glorfindel is in your starting fellowship, his twilight cost is -2.<br><b>Skirmish:</b> Reveal the top card of your draw deck. You may exert Glorfindel to make a Nazgûl he is skirmishing strength -X, where X is the twilight cost of the card revealed.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_09_016_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

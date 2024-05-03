@@ -41,6 +41,7 @@ public class Card_05_111_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 10
 		 * Signet: Aragorn
 		 * Game Text: <b>Ring-bearer (resistance 10).</b><br><b>Fellowship:</b> Add a burden to play Sméagol from your discard pile.
 		*/
@@ -59,6 +60,7 @@ public class Card_05_111_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(10, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

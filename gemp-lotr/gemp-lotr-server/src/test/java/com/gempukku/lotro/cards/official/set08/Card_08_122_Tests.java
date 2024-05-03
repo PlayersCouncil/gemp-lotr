@@ -41,6 +41,7 @@ public class Card_08_122_Tests
 		 * Subtype: Hobbit
 		 * Strength: 5
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: To play, spot a [gondor] Man.<br><b>Skirmish:</b> Discard 4 cards from hand to wound a minion Pippin is skirmishing twice if that minion bears a fortification.
 		*/
@@ -59,6 +60,7 @@ public class Card_08_122_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

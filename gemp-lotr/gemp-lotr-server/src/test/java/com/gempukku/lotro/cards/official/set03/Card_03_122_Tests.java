@@ -41,6 +41,7 @@ public class Card_03_122_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: <b>Ranger</b>.<br><b>Fellowship:</b> Add (2) to heal Boromir.
 		*/
@@ -60,6 +61,7 @@ public class Card_03_122_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

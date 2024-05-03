@@ -41,6 +41,7 @@ public class Card_01_289_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 10
 		 * Signet: Gandalf
 		 * Game Text: <b>Ring-bearer (resistance 10).</b><br>At the start of each of your turns, you may heal a Hobbit ally.
 		*/
@@ -59,6 +60,7 @@ public class Card_01_289_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(10, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

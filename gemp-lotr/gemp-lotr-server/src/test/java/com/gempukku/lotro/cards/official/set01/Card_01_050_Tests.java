@@ -41,6 +41,7 @@ public class Card_01_050_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: <b>Archer</b>.<br><b>Archery:</b> Exert Legolas to wound a minion; Legolas does not add to the fellowship archery total.
 		*/
@@ -60,6 +61,7 @@ public class Card_01_050_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

@@ -41,6 +41,7 @@ public class Card_04_364_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Ranger</b>.<br>Each time the fellowship moves, you may wound a minion for each unbound Hobbit you spot.
 		*/
@@ -60,6 +61,7 @@ public class Card_04_364_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

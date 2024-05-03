@@ -41,6 +41,7 @@ public class Card_00_063_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Ranger</b>.<br><b>Skirmish:</b> Exert Arwen to make a minion skirmishing an Elf strength -2.
 		*/
 
@@ -59,6 +60,7 @@ public class Card_00_063_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

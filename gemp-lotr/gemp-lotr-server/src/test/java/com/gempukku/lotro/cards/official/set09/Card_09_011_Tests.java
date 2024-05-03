@@ -41,6 +41,7 @@ public class Card_09_011_Tests
 		 * Subtype: Dwarf
 		 * Strength: 5
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: <b>Skirmish:</b> If Úri is damage +X, exert him to make him strength +X.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_09_011_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

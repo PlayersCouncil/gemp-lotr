@@ -41,6 +41,7 @@ public class Card_05_019_Tests
 		 * Subtype: Ent
 		 * Strength: 10
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow Lindenroot to skirmish.<br><b>Skirmish:</b> Exert Lindenroot to wound an [isengard] minion he is skirmishing.
 		*/
 
@@ -59,6 +60,7 @@ public class Card_05_019_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(10, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

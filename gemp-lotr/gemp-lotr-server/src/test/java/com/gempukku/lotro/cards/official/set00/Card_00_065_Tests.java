@@ -41,6 +41,7 @@ public class Card_00_065_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Ring-bound</b>. <b>Knight</b>. <b>Ranger</b>.
 		*/
 
@@ -61,6 +62,7 @@ public class Card_00_065_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -41,6 +41,7 @@ public class Card_04_286_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Skirmish:</b> If this companion is mounted, exert him to exert a minion skirmishing an unbound companion.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_04_286_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

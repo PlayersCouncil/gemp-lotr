@@ -41,6 +41,7 @@ public class Card_08_027_Tests
 		 * Subtype: 
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> Add threats equal to the total vitality of the minions Sméagol is skirmishing to discard Sméagol.<br><b>Regroup:</b> Discard Sméagol to take a [gollum] minion from your discard pile into hand.
 		*/
@@ -59,6 +60,7 @@ public class Card_08_027_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

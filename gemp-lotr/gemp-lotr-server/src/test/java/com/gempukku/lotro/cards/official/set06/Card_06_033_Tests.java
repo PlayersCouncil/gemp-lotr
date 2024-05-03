@@ -41,6 +41,7 @@ public class Card_06_033_Tests
 		 * Subtype: Ent
 		 * Strength: 8
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: Quickbeam's twilight cost is -1 for each Ent or unbound Hobbit you can spot.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_06_033_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

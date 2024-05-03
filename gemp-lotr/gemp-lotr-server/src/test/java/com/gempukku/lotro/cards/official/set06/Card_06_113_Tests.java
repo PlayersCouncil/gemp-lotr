@@ -41,6 +41,7 @@ public class Card_06_113_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Regroup:</b> Discard Merry to heal a [gandalf] companion.
 		*/
@@ -59,6 +60,7 @@ public class Card_06_113_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

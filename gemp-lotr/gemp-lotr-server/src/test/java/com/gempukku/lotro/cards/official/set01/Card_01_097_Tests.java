@@ -41,6 +41,7 @@ public class Card_01_097_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: <b>Skirmish:</b> Exert Boromir to make a Hobbit strength +3.
 		*/
@@ -59,6 +60,7 @@ public class Card_01_097_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

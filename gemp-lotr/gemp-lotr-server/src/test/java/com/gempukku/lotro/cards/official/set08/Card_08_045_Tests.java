@@ -41,6 +41,7 @@ public class Card_08_045_Tests
 		 * Subtype: Wraith
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Enduring</b>. To play, add a threat.<br>Each time this companion wins a skirmish, you may exert him to discard a minion he is skirmishing.
 		*/
@@ -60,6 +61,7 @@ public class Card_08_045_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

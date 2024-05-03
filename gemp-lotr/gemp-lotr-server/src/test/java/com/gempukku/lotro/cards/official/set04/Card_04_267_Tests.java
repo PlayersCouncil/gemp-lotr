@@ -41,6 +41,7 @@ public class Card_04_267_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br>Éomer is strength +2 for each wound on each minion he is skirmishing.
 		*/
@@ -59,6 +60,7 @@ public class Card_04_267_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 

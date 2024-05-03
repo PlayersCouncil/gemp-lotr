@@ -41,6 +41,7 @@ public class Card_07_107_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Response:</b> If a possession or engine is played by your opponent, remove a [gondor] token from your condition to make that opponent remove (1). If he or she cannot, discard that possession or engine.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_07_107_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -41,6 +41,7 @@ public class Card_01_096_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Ranger</b>.<br>Boromir is not overwhelmed unless his strength is tripled.
 		*/
@@ -60,6 +61,7 @@ public class Card_01_096_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

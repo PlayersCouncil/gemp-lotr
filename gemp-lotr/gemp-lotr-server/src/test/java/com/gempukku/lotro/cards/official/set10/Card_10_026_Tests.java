@@ -41,6 +41,7 @@ public class Card_10_026_Tests
 		 * Subtype: Wraith
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Enduring</b>. To play, add a threat.<br>When you play Cursed of Erech, exert him twice.<br>At the start of the maneuver phase, you may exert another [gondor] Wraith to make Cursed of Erech <b>defender +1</b> until the regroup phase.
 		*/
 
@@ -59,6 +60,7 @@ public class Card_10_026_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

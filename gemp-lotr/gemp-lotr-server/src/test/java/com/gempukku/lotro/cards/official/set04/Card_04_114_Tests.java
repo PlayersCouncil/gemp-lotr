@@ -41,6 +41,7 @@ public class Card_04_114_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Ring-bound</b>. <b>Ranger</b>. To play, spot a Ring-bound Man.<br><b>Skirmish:</b> Exert Damrod to exhaust a Man he is skirmishing.
 		*/
 
@@ -60,6 +61,7 @@ public class Card_04_114_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

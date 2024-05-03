@@ -41,6 +41,7 @@ public class Card_04_049_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert Gimli to make an unbound companion strength +1 (or +2 if that companion is Legolas).
 		*/
@@ -61,6 +62,7 @@ public class Card_04_049_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

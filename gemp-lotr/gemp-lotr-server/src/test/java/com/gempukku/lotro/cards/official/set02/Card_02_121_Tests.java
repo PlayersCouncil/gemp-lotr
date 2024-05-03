@@ -41,6 +41,7 @@ public class Card_02_121_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: <b>Damage +1</b>.<br>Each underground site's Shadow number is -2.
 		*/
@@ -61,6 +62,7 @@ public class Card_02_121_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

@@ -41,6 +41,7 @@ public class Card_04_076_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Regroup:</b> Exert this companion to make a Shadow player wound a minion.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_04_076_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -41,6 +41,7 @@ public class Card_00_062_Tests
 		 * Subtype: Dwarf
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Damage +1</b>.
 		*/
 
@@ -60,6 +61,7 @@ public class Card_00_062_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

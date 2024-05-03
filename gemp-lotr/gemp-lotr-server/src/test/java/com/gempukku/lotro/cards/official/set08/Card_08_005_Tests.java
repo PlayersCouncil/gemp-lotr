@@ -41,6 +41,7 @@ public class Card_08_005_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: <b>Damage +1</b>.<br>For each wound on Gimli, he is strength +1 and <b>damage +1</b>.
 		*/
@@ -61,6 +62,7 @@ public class Card_08_005_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

@@ -41,6 +41,7 @@ public class Card_07_007_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Damage +1</b>.<br><b>Response:</b> If a [dwarven] condition is about to be discarded by an opponent, exert a Dwarf or discard a [dwarven] card from hand to prevent that.
 		*/
@@ -61,6 +62,7 @@ public class Card_07_007_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

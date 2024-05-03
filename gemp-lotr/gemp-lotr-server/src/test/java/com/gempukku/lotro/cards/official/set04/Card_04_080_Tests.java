@@ -41,6 +41,7 @@ public class Card_04_080_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 2
+		 * Resistance: 6
 		 * Game Text: To play, spot an Elf.<br>The twilight cost of each ranged weapon played on Ordulus is -1.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_04_080_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
