@@ -645,10 +645,6 @@
 						]
 					}
 				]
-				cost: {
-					type: discard
-					filter: self
-				}
 				effect: [
 					{
 						type: choice

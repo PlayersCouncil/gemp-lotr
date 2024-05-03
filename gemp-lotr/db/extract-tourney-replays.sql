@@ -55,12 +55,12 @@ ORDER BY gh.id;
 
 
 
--- 
--- SELECT *
--- 	,CONCAT('https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=',REPLACE(winner, '_', '%5F'), '$', win_recording_id) AS winner_replay
--- 	,CONCAT('https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=',REPLACE(loser, '_', '%5F'), '$', lose_recording_id) AS loser_replay
--- FROM game_history gh 
--- WHERE tournament = '2023 PC-Expanded Championship'
+
+SELECT winner, loser, win_reason, lose_reason, start_date, end_date
+	,CONCAT('https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=',REPLACE(winner, '_', '%5F'), '$', win_recording_id) AS winner_replay
+	,CONCAT('https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=',REPLACE(loser, '_', '%5F'), '$', lose_recording_id) AS loser_replay
+FROM game_history gh 
+WHERE tournament = '2023 WC Group Stage'
 
 
 

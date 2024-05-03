@@ -1,7 +1,11 @@
 
+-- 
+-- SELECT *
+-- FROM league l
+-- ORDER BY id DESC;
 
 
-SET @player = 'sempolPL', @rank=0;
+SET @player = 'Chadwick537', @rank=0;
 
 SELECT 
 	 @player AS player
@@ -15,16 +19,28 @@ SELECT
 		CASE 
 			WHEN winner = @player THEN CONCAT(REPLACE(winner, '_', '%5F'), '$', win_recording_id)  
 			ELSE CONCAT(REPLACE(loser, '_', '%5F'), '$', lose_recording_id) 
-		END, ']',  @rank:=@rank+1,'[/url] • ') AS URL
+		END, ']',  @rank:=@rank+1,'[/url] â€¢ ') AS URL
 FROM game_history gh 
 INNER JOIN player p 
 	ON p.name = @player
-INNER JOIN deck d 
+LEFT JOIN deck d 
 	ON d.player_id = p.id 
 	AND (d.name = winner_deck_name OR d.name = loser_deck_name OR d.name = 'denethor / tentacle V2') 
-WHERE tournament = 'Constructed - Weekend Qualifier PC-Expanded - Serie 1'
-	AND start_date > '2023-07-20'
+WHERE tournament = 'PC Weekend Qualifier League - PC-FOTR - Serie 1'
+	AND start_date > '2024-04-20'
 	AND (winner = @player OR loser = @player)
 ORDER BY gh.id;
 
+
+-- SELECT *
+-- FROM game_history gh 
+-- WHERE winner = @player OR loser = @player
+-- ORDER BY id DESC
+-- 
+-- 
+-- SELECT *
+-- FROM deck d 
+-- INNER JOIN player p
+-- 	ON d.player_id  = p.id 
+-- WHERE p.name = @player
 

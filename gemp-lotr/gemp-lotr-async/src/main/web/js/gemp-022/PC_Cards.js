@@ -621,6 +621,12 @@ var PCCards = {
 	//Maps
 	'100_2' : 'https://i.lotrtcgpc.net/sets/vset0/LOTR-ENV0S002.0_card.jpg',
 	'100_3' : 'https://i.lotrtcgpc.net/sets/vset0/LOTR-ENV0S003.0_card.jpg',
-	'100_4' : 'https://i.lotrtcgpc.net/sets/vset0/LOTR-ENV0S004.0_card.jpg'
+	'100_4' : 'https://i.lotrtcgpc.net/sets/vset0/LOTR-ENV0S004.0_card.jpg',
+	
+	//April 2024 Weekend League
+	//Troop of Uruk-hai FA
+	'1_389': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U143.0_card.jpg',
+	//Gandalf's Staff MW
+	'2_127': 'https://i.lotrtcgpc.net/promos/LOTR-EN02O022.0_card.jpg'
 }
 

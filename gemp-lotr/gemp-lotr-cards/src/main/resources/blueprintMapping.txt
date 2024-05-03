@@ -376,3 +376,7 @@ gl_theOneRing,1_2
 1_387,1_307
 #Merry, Holiday Promo
 1_388,1_302
+#Troop of Uruk-hai FA
+1_389,1_143
+#Gandalf's Staff MW
+2_127,2_22
