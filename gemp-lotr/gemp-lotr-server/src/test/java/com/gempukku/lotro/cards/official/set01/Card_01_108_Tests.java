@@ -35,7 +35,7 @@ public class Card_01_108_Tests
         /**
          * Set: 1
          * Name: No Stranger to the Shadows
-         * Unique: True
+		 * Unique: False
          * Side: Free Peoples
          * Culture: Gondor
          * Twilight Cost: 0
@@ -50,9 +50,9 @@ public class Card_01_108_Tests
         assertEquals("No Stranger to the Shadows", card.getBlueprint().getTitle());
         assertNull(card.getBlueprint().getSubtitle());
         assertFalse(card.getBlueprint().isUnique());
-        assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
         assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
         assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
         assertEquals(0, card.getBlueprint().getTwilightCost());
     }
 

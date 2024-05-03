@@ -80,6 +80,9 @@ public class Card_01_295_Tests
 		 * Race: Hobbit
 		 * Game Text: While you can spot your site 1, this ally has the game text of that site.
 		 *  Fellowship: Exert this ally and spot your opponent's site 1 to replace it with your site 1.
+		 * Strength: 2
+		 * Vitality: 2
+		 * Site Number: 1
 		 */
 
 		var scn = GetScenario();

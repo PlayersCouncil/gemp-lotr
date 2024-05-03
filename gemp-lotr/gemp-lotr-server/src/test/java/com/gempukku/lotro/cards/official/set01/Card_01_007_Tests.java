@@ -41,6 +41,7 @@ public class Card_01_007_Tests
 		 * Subtype: Dwarf
 		 * Strength: 4
 		 * Vitality: 2
+		 * Resistance: 6
 		 * Game Text: To play, spot a Dwarf.
 		 */
 
@@ -58,6 +59,7 @@ public class Card_01_007_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	@Test

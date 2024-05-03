@@ -33,6 +33,7 @@ public class Card_01_053_Tests
 		/**
 		 * Set: 1
 		 * Name: Lórien Elf
+		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Elven
 		 * Twilight Cost: 1
@@ -40,6 +41,7 @@ public class Card_01_053_Tests
 		 * Subtype: Elf
 		 * Strength: 4
 		 * Vitality: 2
+		 * Resistance: 6
 		 * Game Text: To play, spot an Elf.
 		 */
 
@@ -57,6 +59,7 @@ public class Card_01_053_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	@Test

@@ -43,13 +43,13 @@ public class Card_17_140_Tests
 
 		/**
 		 * Set: 17
-		 * Title: Ulaire Enquea
-		 * Subtitle: Duplicitous Lieutenant
+		 * Name: Úlairë Enquëa, Duplicitous Lieutenant
+		 * Unique: True
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 6
 		 * Type: Minion
-		 * Race: Nazgul
+		 * Subtype: Nazgûl
 		 * Strength: 11
 		 * Vitality: 4
 		 * Site: 3
