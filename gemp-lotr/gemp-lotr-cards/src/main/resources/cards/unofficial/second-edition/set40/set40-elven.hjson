@@ -1085,7 +1085,7 @@
             }
             {
               type: spot
-              filter: choose(name(Galadriel))
+              filter: name(Galadriel)
             }
           ]
         }

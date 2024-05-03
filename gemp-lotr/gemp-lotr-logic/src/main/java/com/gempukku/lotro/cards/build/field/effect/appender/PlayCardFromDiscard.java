@@ -27,7 +27,7 @@ import java.util.Collection;
 public class PlayCardFromDiscard implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "removedTwilight", "optional", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "removedTwilight", "optional", "extraEffects", "memorize");
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
@@ -35,6 +35,9 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
         final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("cost"), 0, environment);
         final boolean optional = FieldUtils.getBoolean(effectObject.get("optional"), "optional", false);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
+
+        final JSONObject[] extraEffectsArray = FieldUtils.getObjectArray(effectObject.get("extraEffects"), "extraEffects");
+        final EffectAppender[] extraEffectsAppenders = environment.getEffectAppenderFactory().getEffectAppenders(extraEffectsArray, environment);
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
@@ -77,6 +80,10 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                             Filterable onFilterable = (onFilterableSource != null) ? onFilterableSource.getFilterable(actionContext) : Filters.any;
 
                             final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, cardsToPlay.iterator().next(), costModifier, onFilterable, false);
+                            for (EffectAppender extraEffectsAppender : extraEffectsAppenders) {
+                                extraEffectsAppender.appendEffect(false, playCardAction, actionContext);
+                            }
+
                             return new StackActionEffect(playCardAction);
                         } else {
                             return new FailedEffect();

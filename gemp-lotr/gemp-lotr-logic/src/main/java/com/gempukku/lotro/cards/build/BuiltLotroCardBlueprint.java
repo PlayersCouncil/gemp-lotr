@@ -1034,8 +1034,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("All cards except The One Ring, Sites, and Maps have a culture defined");
         if (siteNumber != 0
                 && cardType != CardType.SITE
-                && cardType != CardType.MINION)
-            throw new InvalidCardDefinitionException("Only minions and sites have a site number, use siteHome for allies");
+                && cardType != CardType.MINION
+                && cardType != CardType.CONDITION)
+            throw new InvalidCardDefinitionException("Only minions, sites, and conditions have a site number, use siteHome for allies");
         if (cardType == CardType.EVENT) {
             List<Keyword> requiredKeywords = Arrays.asList(
                     Keyword.RESPONSE, Keyword.FELLOWSHIP, Keyword.SHADOW, Keyword.MANEUVER, Keyword.ARCHERY, Keyword.ASSIGNMENT,

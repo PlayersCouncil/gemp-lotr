@@ -113,7 +113,7 @@
 		                }
 		                {
 		                    type: spot
-		                    filter: choose(knight)
+		                    filter: knight
 		                    count: 3
 		                }
 		            ]
@@ -183,7 +183,7 @@
 		                }
 		                {
 		                    type: spot
-		                    filter: choose(knight)
+		                    filter: knight
 		                    count: 3
 		                }
 		            ]

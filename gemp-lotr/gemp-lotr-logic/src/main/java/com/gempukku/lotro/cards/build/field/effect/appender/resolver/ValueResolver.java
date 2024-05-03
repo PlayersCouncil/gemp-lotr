@@ -210,16 +210,17 @@ public class ValueResolver {
                         actionContext.getGame().getGameState().getCurrentPhase(), limitSource.getEvaluator(actionContext),
                         valueSource.getEvaluator(actionContext));
             } else if (type.equalsIgnoreCase("countStacked")) {
-                FieldUtils.validateAllowedFields(object, "on", "filter");
+                FieldUtils.validateAllowedFields(object, "on", "filter", "multiplier");
                 final String on = FieldUtils.getString(object.get("on"), "on");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
                 final FilterableSource onFilter = environment.getFilterFactory().generateFilter(on, environment);
+                final ValueSource multiplier = resolveEvaluator(object.get("multiplier"), 1, environment);
 
                 return (actionContext) -> {
                     final Filterable on1 = onFilter.getFilterable(actionContext);
-                    return new CountStackedEvaluator(on1, filterableSource.getFilterable(actionContext));
+                    return new MultiplyEvaluator(multiplier.getEvaluator(actionContext), new CountStackedEvaluator(on1, filterableSource.getFilterable(actionContext)));
                 };
             } else if (type.equalsIgnoreCase("forEachYouCanSpot")) {
                 FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
@@ -338,7 +339,7 @@ public class ValueResolver {
                 final int over = FieldUtils.getInteger(object.get("over"), "over", 0);
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
-                final FilterableSource vitalitySource = environment.getFilterFactory().generateFilter(filter, environment);
+                final FilterableSource strengthSource = environment.getFilterFactory().generateFilter(filter, environment);
 
                 return (actionContext) -> {
                     if (filter.equals("any")) {
@@ -347,7 +348,7 @@ public class ValueResolver {
                     } else {
                         return new MultiplyEvaluator(multiplier,
                                 (game, cardAffected) -> {
-                                    final Filterable filterable = vitalitySource.getFilterable(actionContext);
+                                    final Filterable filterable = strengthSource.getFilterable(actionContext);
                                     int strength = 0;
                                     for (PhysicalCard physicalCard : Filters.filterActive(game, filterable)) {
                                         strength += game.getModifiersQuerying().getStrength(game, physicalCard);
@@ -479,12 +480,13 @@ public class ValueResolver {
                                 second.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)
                         );
             } else if (type.equalsIgnoreCase("forEachToken")) {
-                FieldUtils.validateAllowedFields(object, "filter", "culture", "limit");
+                FieldUtils.validateAllowedFields(object, "filter", "culture", "limit", "multiplier");
 
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
                 final Culture culture = FieldUtils.getEnum(Culture.class, object.get("culture"), "culture");
                 final Token tokenForCulture = Token.findTokenForCulture(culture);
                 final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
+                final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
 
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
@@ -495,7 +497,7 @@ public class ValueResolver {
                         result += game.getGameState().getTokenCount(physicalCard, tokenForCulture);
                     }
 
-                    return Math.min(limit, result);
+                    return multiplier * Math.min(limit, result);
                 };
             }
             throw new InvalidCardDefinitionException("Unrecognized type of an evaluator " + type);

@@ -777,11 +777,7 @@
 				}
 				{
 					type: putCardsFromHandOnTopOfDeck
-					optional: true
-				}
-				{
-					type: putCardsFromHandOnTopOfDeck
-					optional: true
+					count: 0-2
 				}
 				{
 					type: discard
