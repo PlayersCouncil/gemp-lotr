@@ -119,23 +119,51 @@
 		vitality: 4
 		signet: Theoden
 		resistance: 6
-		/*requires: {
-			
-		}
-		effects: [
+		effects: {
 			{
-				
+				type: modifier
+				modifier: {
+					type: modifystrength
+					filter: name(Theoden)
+					amount: 1
+				}
 			}
 			{
-				
+				type: modifier
+				modifier: {
+					type: AddKeyword
+				    filter: mounted
+					keyword: valiant
+
+				}
 			}
-		]*/
-		gametext: Theoden is strength +1.<br>Each mounted companion gains <b>valiant</b>.<br>Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and exert Gandalf to prevent that and wound that minion. 
+			{
+				type: activatedTrigger
+				trigger: {
+					type: UsesSpecialAbility
+					memorize: actingminion
+					filter: not(skirmish)
+					conditional: CanSpot
+					   count: 3
+					   filter: mounted
+				}
+					cost: {
+						type: exert
+						filter: self
+						times: 1
+					}
+				effect: {
+					type: cancelEvent
+					type: wound
+					filter: actingminion
+				}
+				
+				gametext: Theoden is strength +1.<br>Each mounted companion gains <b>valiant</b>.<br>Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and exert Gandalf to prevent that and wound that minion. 
 		lore: "'No counsel have I to give to those that despair. Yet counsel I could give, and words I could speak to you.'"
 		promotext: ""
 		alts: {
 			promos: {
-			}
+			
 			errata: {
 			}
 		}
@@ -168,15 +196,27 @@
 		}
 		*/
 		effects: {
-			type: event
+			type: activated
+			phase: Maneuver
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
-			effect: [
-				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				type: exert
+				filter: self
+			}
+			effect: {
+				type: modifyStrength
+				filter: name(Theoden)
+				filter: valiant
+				amount: 2
+			}
+			conditional {
+				filter: not(valiant)
+				amount: isgreaterthan 0
+				effect: modifyStrength
+				filter: valiant
+				amount: -1
+			}
+
+	
 				}
 			]
 		}
