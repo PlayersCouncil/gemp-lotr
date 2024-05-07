@@ -49,9 +49,9 @@ public class Card_V2_018_Tests
 		* 	At the start of the maneuver phase, you may add 2 threats to make a [gondor] companion defender +1 and strength +2 until the regroup phase (or add 1 threat if that companion is Boromir).
 		*/
 
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Denethor", card.getBlueprint().getTitle());
 		assertEquals("Formidable Father", card.getBlueprint().getSubtitle());
@@ -70,11 +70,11 @@ public class Card_V2_018_Tests
 	@Test
 	public void gondorCompanionsAreDiminishedWhenThreatsAreFull() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
-		PhysicalCardImpl faramir = scn.GetFreepsCard("faramir");
+		var card = scn.GetFreepsCard("card");
+		var boromir = scn.GetFreepsCard("boromir");
+		var faramir = scn.GetFreepsCard("faramir");
 
 		scn.FreepsMoveCardToHand(card, boromir, faramir);
 
@@ -114,12 +114,12 @@ public class Card_V2_018_Tests
 	@Test
 	public void startOfManeuverTriggerCostTwoThreatsToBoostFaramir() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
-		PhysicalCardImpl faramir = scn.GetFreepsCard("faramir");
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
+		var card = scn.GetFreepsCard("card");
+		var boromir = scn.GetFreepsCard("boromir");
+		var faramir = scn.GetFreepsCard("faramir");
+		var twk = scn.GetShadowCard("twk");
 
 		scn.FreepsMoveCardToHand(card, boromir, faramir, twk);
 
@@ -157,12 +157,12 @@ public class Card_V2_018_Tests
 	@Test
 	public void startOfManeuverTriggerCostOneThreatToBoostBoromir() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
-		PhysicalCardImpl faramir = scn.GetFreepsCard("faramir");
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
+		var card = scn.GetFreepsCard("card");
+		var boromir = scn.GetFreepsCard("boromir");
+		var faramir = scn.GetFreepsCard("faramir");
+		var twk = scn.GetShadowCard("twk");
 
 		scn.FreepsMoveCardToHand(card, boromir, faramir, twk);
 

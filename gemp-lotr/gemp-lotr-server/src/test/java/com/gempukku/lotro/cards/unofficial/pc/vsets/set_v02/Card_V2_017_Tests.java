@@ -55,7 +55,7 @@ public class Card_V2_017_Tests
 		 * Type: Event
 		 * Subtype: Maneuver
 		 * Game Text: Exert Aragorn three times to make each valiant companion strength +2 until the regroup phase. 
-		* 	If Aragorn dies during this turn, make each valiant companion strength +1 for the rest of the turn.
+		* If Aragorn dies during this turn, make each valiant companion strength +1 for the rest of the turn.
 		*/
 
 		var scn = GetScenario();
@@ -94,9 +94,7 @@ public class Card_V2_017_Tests
 
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		//Need 4 vitality to exert 3 times.  Testing when only 1 off ensures
-		// we don't have a typo of "exert twice" or "exert once" (which is the
-		// default number of times for the exert action).
+		//Need 4 vitality to exert 3 times.  
 		assertEquals(3, scn.GetVitality(aragorn));
 		assertFalse(scn.FreepsPlayAvailable(iwilldie));
 
@@ -116,13 +114,6 @@ public class Card_V2_017_Tests
 		assertEquals(3, scn.GetWoundsOn(aragorn));
 		//Now that we have ensured that the costs of the card work as they should,
 		// further tests can just worry about the effects without re-checking.
-
-		//Typically we can skip testing for twilight going out unless it's variable
-		// or has some other sort of snag.  The twilight-cost-of-a-card-is-paid part of
-		// the system could stand to be tested explicitly elsewhere, but it's so robust
-		// that at this point we can trust it and just ensure the twilight cost stat is
-		// set properly (as is done in the first test above), and then worry about things
-		// specific to this card.
 	}
 
 	@Test
@@ -151,9 +142,7 @@ public class Card_V2_017_Tests
 
 		assertTrue(scn.FreepsPlayAvailable(iwilldie));
 
-		//When testing for strength changes, it's usually a good idea to check as
-		// closely to the occurrence as possible to eliminate the chance of false
-		// positives (site effects, character triggers, etc).
+		// Companion's all have expected strengths before iwilldie is played
 		assertEquals(6, scn.GetStrength(veowyn));
 		assertEquals(6, scn.GetStrength(vgamling));
 		assertEquals(8, scn.GetStrength(aragorn));
@@ -206,10 +195,8 @@ public class Card_V2_017_Tests
 
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsPlayAvailable(iwilldie));
 		scn.FreepsPlayCard(iwilldie);
-		assertEquals(3, scn.GetWoundsOn(aragorn));
 
 		// Valiant companion's strengths are boosted after card is played
 		assertEquals(8, scn.GetStrength(veowyn));

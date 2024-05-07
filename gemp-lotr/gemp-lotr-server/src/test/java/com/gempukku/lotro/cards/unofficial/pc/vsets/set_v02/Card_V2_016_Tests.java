@@ -3,7 +3,7 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.game.var;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -75,13 +75,13 @@ public class Card_V2_016_Tests
 	// @Test
 	public void ReducesFPsCulturesSpottedWhenThreeValiantCompanionsArePresent() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl veowyn = scn.GetFreepsCard("veowyn");
-		PhysicalCardImpl vgamling = scn.GetFreepsCard("vgamling");
-		PhysicalCardImpl vrscout = scn.GetFreepsCard("vrscout");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
+		var card = scn.GetFreepsCard("card");
+		var veowyn = scn.GetFreepsCard("veowyn");
+		var vgamling = scn.GetFreepsCard("vgamling");
+		var vrscout = scn.GetFreepsCard("vrscout");
+		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.FreepsMoveCardToHand(card, veowyn, gandalf, vgamling, vrscout);
 
 		scn.StartGame();
@@ -109,13 +109,13 @@ public class Card_V2_016_Tests
 	@Test
 	public void ExertsToBoostValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl veowyn = scn.GetFreepsCard("veowyn");
+		var card = scn.GetFreepsCard("card");
+		var veowyn = scn.GetFreepsCard("veowyn");
 		scn.FreepsMoveCardToHand(card, veowyn);
 
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
+		var twk = scn.GetShadowCard("twk");
 		scn.ShadowMoveCardToHand(twk);
 
 		scn.StartGame();
@@ -168,13 +168,13 @@ public class Card_V2_016_Tests
 	@Test
 	public void CantExertToBoostNonValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
+		var card = scn.GetFreepsCard("card");
+		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.FreepsMoveCardToHand(card, gandalf);
 
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
+		var twk = scn.GetShadowCard("twk");
 		scn.ShadowMoveCardToHand(twk);
 
 		scn.StartGame();

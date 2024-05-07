@@ -73,12 +73,12 @@ public class Card_V2_019_Tests
 	@Test
 	public void dumpsAGondorCardToWoundRoamingNonManMinionSkirmishingHimOnce() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl rangerComp = scn.GetFreepsCard("rangerComp");
-		PhysicalCardImpl gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
-		PhysicalCardImpl threeVitNonMan = scn.GetShadowCard("threeVitNonMan");
+		var card = scn.GetFreepsCard("card");
+		var rangerComp = scn.GetFreepsCard("rangerComp");
+		var gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
+		var threeVitNonMan = scn.GetShadowCard("threeVitNonMan");
 
 		scn.FreepsMoveCardToHand(card, rangerComp, gondorCardToChuck);
 		scn.ShadowMoveCardToHand(threeVitNonMan);
@@ -113,12 +113,12 @@ public class Card_V2_019_Tests
 	@Test
 	public void dumpsAGondorCardToWoundRoamingManMinionSkirmishingHimTwice() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl rangerComp = scn.GetFreepsCard("rangerComp");
-		PhysicalCardImpl gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
-		PhysicalCardImpl threeVitMan = scn.GetShadowCard("threeVitMan");
+		var card = scn.GetFreepsCard("card");
+		var rangerComp = scn.GetFreepsCard("rangerComp");
+		var gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
+		var threeVitMan = scn.GetShadowCard("threeVitMan");
 
 		scn.FreepsMoveCardToHand(card, rangerComp, gondorCardToChuck);
 		scn.ShadowMoveCardToHand(threeVitMan);
@@ -153,12 +153,12 @@ public class Card_V2_019_Tests
 	@Test
 	public void dumpsAGondorCardForNoEffectAgainstNonRoamingMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl rangerComp = scn.GetFreepsCard("rangerComp");
-		PhysicalCardImpl gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
-		PhysicalCardImpl nonRoamingMinion = scn.GetShadowCard("nonRoamingMinion");
+		var card = scn.GetFreepsCard("card");
+		var rangerComp = scn.GetFreepsCard("rangerComp");
+		var gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
+		var nonRoamingMinion = scn.GetShadowCard("nonRoamingMinion");
 
 		scn.FreepsMoveCardToHand(card, rangerComp, gondorCardToChuck);
 		scn.ShadowMoveCardToHand(nonRoamingMinion);
@@ -194,12 +194,12 @@ public class Card_V2_019_Tests
 	@Test
 	public void dumpsAGondorCardForNoEffectWhenRoamingMinionIsSkirmishingOtherCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		PhysicalCardImpl rangerComp = scn.GetFreepsCard("rangerComp");
-		PhysicalCardImpl gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
-		PhysicalCardImpl threeVitMan = scn.GetShadowCard("threeVitMan");
+		var card = scn.GetFreepsCard("card");
+		var rangerComp = scn.GetFreepsCard("rangerComp");
+		var gondorCardToChuck = scn.GetFreepsCard("gondorCardToChuck");
+		var threeVitMan = scn.GetShadowCard("threeVitMan");
 
 		scn.FreepsMoveCardToHand(card, rangerComp, gondorCardToChuck);
 		scn.ShadowMoveCardToHand(threeVitMan);
