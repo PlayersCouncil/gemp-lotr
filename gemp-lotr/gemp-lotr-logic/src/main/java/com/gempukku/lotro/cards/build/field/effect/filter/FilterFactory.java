@@ -124,6 +124,8 @@ public class FilterFactory {
                 });
         simpleFilters.put("unbound",
                 (actionContext) -> Filters.unboundCompanion);
+        simpleFilters.put("uncontrolled",
+                (actionContext) -> Filters.uncontrolledSite);
         simpleFilters.put("unique", (actionContext) -> Filters.unique);
         simpleFilters.put("unwounded", (actionContext) -> Filters.unwounded);
         simpleFilters.put("weapon", (actionContext) -> Filters.weapon);

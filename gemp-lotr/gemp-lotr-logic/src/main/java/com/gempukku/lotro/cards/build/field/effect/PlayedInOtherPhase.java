@@ -9,12 +9,15 @@ import org.json.simple.JSONObject;
 public class PlayedInOtherPhase implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "phase", "requires");
+        FieldUtils.validateAllowedFields(value, "phase", "requires", "cost");
 
         final Phase phase = FieldUtils.getEnum(Phase.class, value.get("phase"), "phase");
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(value.get("requires"), "requires");
 
+        final JSONObject[] costArray = FieldUtils.getObjectArray(value.get("cost"), "cost");
+
         final Requirement[] conditions = environment.getRequirementFactory().getRequirements(conditionArray, environment);
+        EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
 
         blueprint.appendPlayInOtherPhaseCondition(
                 new Requirement() {
@@ -30,7 +33,7 @@ public class PlayedInOtherPhase implements EffectProcessor {
 
                         return true;
                     }
-                }
-        );
+                },
+                costAppenders);
     }
 }

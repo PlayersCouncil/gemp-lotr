@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.ExtraPlayCost;
@@ -76,7 +77,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private List<ExtraPlayCostSource> extraPlayCosts;
     private List<DiscountSource> discountSources;
 
-    private List<Requirement> playInOtherPhaseConditions;
+    private Map<Requirement, EffectAppender[]> playInOtherPhaseConditions;
     private List<FilterableSource> copiedFilters;
 
     private ActionSource playEventAction;
@@ -110,10 +111,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         copiedFilters.add(filterableSource);
     }
 
-    public void appendPlayInOtherPhaseCondition(Requirement requirement) {
+    public void appendPlayInOtherPhaseCondition(Requirement requirement, EffectAppender[] costAppenders) {
         if (playInOtherPhaseConditions == null)
-            playInOtherPhaseConditions = new LinkedList<>();
-        playInOtherPhaseConditions.add(requirement);
+            playInOtherPhaseConditions = new LinkedHashMap<>();
+        playInOtherPhaseConditions.put(requirement, costAppenders);
     }
 
     public void appendDiscountSource(DiscountSource discountSource) {
@@ -363,7 +364,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public void setId(String id) {
-        if(this.id != null)
+        if (this.id != null)
             throw new UnsupportedOperationException("Id for this blueprint has already been set");
 
         this.id = id;
@@ -851,11 +852,26 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             return null;
 
         List<Action> playCardActions = new LinkedList<>();
-        for (Requirement playInOtherPhaseCondition : playInOtherPhaseConditions) {
+        for (Map.Entry<Requirement, EffectAppender[]> playInOtherPhaseCondition : playInOtherPhaseConditions.entrySet()) {
+            Requirement condition = playInOtherPhaseCondition.getKey();
+            EffectAppender[] additionalCosts = playInOtherPhaseCondition.getValue();
+
             DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, null);
-            if (playInOtherPhaseCondition.accepts(actionContext)
-                    && PlayUtils.checkPlayRequirements(game, self, Filters.any, 0, 0, false, false, false))
-                playCardActions.add(PlayUtils.getPlayCardAction(game, self, 0, Filters.any, false));
+            if (condition.accepts(actionContext)
+                    && PlayUtils.checkPlayRequirements(game, self, Filters.any, 0, 0, false, false, false)) {
+                boolean canPayExtraCosts = true;
+                for (EffectAppender additionalCost : additionalCosts) {
+                    canPayExtraCosts &= additionalCost.isPlayableInFull(actionContext);
+                }
+
+                if (canPayExtraCosts) {
+                    CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, self, 0, Filters.any, false);
+                    for (EffectAppender additionalCost : additionalCosts) {
+                        additionalCost.appendEffect(true, playCardAction, actionContext);
+                    }
+                    playCardActions.add(playCardAction);
+                }
+            }
         }
 
         return playCardActions;

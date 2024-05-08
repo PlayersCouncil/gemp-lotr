@@ -126,6 +126,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("putplayedeventintohand", new PutPlayedEventIntoHand());
         effectAppenderProducers.put("putplayedeventonbottomofdrawdeck", new PutPlayedEventOnBottomOfDrawDeck());
         effectAppenderProducers.put("putplayedeventontopofdrawdeck", new PutPlayedEventOnTopOfDrawDeck());
+        effectAppenderProducers.put("putrandomcardfromhandbeneathdrawdeck", new PutRandomCardFromHandBeneathDrawDeck());
         effectAppenderProducers.put("putstackedcardsintohand", new PutStackedCardsIntoHand());
         effectAppenderProducers.put("reconcilehand", new ReconcileHand());
         effectAppenderProducers.put("reducearcherytotal", new ReduceArcheryTotal());

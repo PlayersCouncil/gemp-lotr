@@ -81,6 +81,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("shadowhasinitiative", new ShadowHasInitiative());
         modifierProducers.put("shadowusesvitinsteadofstr", new ShadowUsesVitInsteadOfStr());
         modifierProducers.put("skipphase", new SkipPhase());
+        modifierProducers.put("skirmishesresolvedinorderbyfirstshadowplayer", new AddModifierFlag(ModifierFlag.SKIRMISH_ORDER_BY_FIRST_SHADOW_PLAYER));
         modifierProducers.put("unhastycompanioncanparticipateinskirmishes", new UnhastyCompanionCanParticipateInSkirmishes());
         modifierProducers.put("winsafterreconcile", new AddModifierFlag(ModifierFlag.WIN_CHECK_AFTER_SHADOW_RECONCILE));
     }
