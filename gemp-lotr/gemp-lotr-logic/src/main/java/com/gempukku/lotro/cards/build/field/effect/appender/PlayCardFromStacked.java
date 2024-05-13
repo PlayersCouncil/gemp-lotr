@@ -22,13 +22,14 @@ import java.util.Collection;
 public class PlayCardFromStacked implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "removedTwilight", "assumePlayable");
+        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "removedTwilight", "assumePlayable", "memorize");
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
         final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("cost"), 0, environment);
         final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final boolean assumePlayable = FieldUtils.getBoolean(effectObject.get("assumePlayable"), "assumePlayable", false);
+        final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
@@ -47,12 +48,12 @@ public class PlayCardFromStacked implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             return Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, false, true);
                         },
-                        new ConstantEvaluator(1), onFilterableSource, "_temp", "you", "Choose card to play", environment));
+                        new ConstantEvaluator(1), onFilterableSource, memory, "you", "Choose card to play", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                        final Collection<? extends PhysicalCard> cardsToPlay = actionContext.getCardsFromMemory("_temp");
+                        final Collection<? extends PhysicalCard> cardsToPlay = actionContext.getCardsFromMemory(memory);
                         if (cardsToPlay.size() == 1) {
                             LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());

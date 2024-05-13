@@ -23,7 +23,7 @@ import java.util.List;
 public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "against", "memorizeMinion", "memorizeFPCharacter");
+        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "against", "memorizeMinion", "memorizeFPCharacter", "ignoreUnassigned");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String fpCharacter = FieldUtils.getString(effectObject.get("fpCharacter"), "fpCharacter");
@@ -31,6 +31,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
 
         final String minionMemory = FieldUtils.getString(effectObject.get("memorizeMinion"), "memorizeMinion", "_tempMinion");
         final String fpCharacterMemory = FieldUtils.getString(effectObject.get("memorizeFPCharacter"), "memorizeFPCharacter", "_tempFpCharacter");
+        final boolean ignoreUnassigned = FieldUtils.getBoolean(effectObject.get("ignoreUnassigned"), "ignoreUnassigned", false);
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
 
@@ -44,7 +45,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Filterable filter = minionFilter.getFilterable(actionContext);
-                            return Filters.assignableToSkirmishAgainst(assigningSide, filter);
+                            return Filters.assignableToSkirmishAgainst(assigningSide, filter, ignoreUnassigned, false);
                         }, fpCharacterMemory, player, "Choose character to assign to skirmish", environment));
         result.addEffectAppender(
                 CardResolver.resolveCard(against,
@@ -52,7 +53,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory("_tempFpCharacter");
-                            return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar));
+                            return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar), ignoreUnassigned, false);
                         }, minionMemory, player, "Choose minion to assign to character", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
@@ -62,8 +63,9 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                         final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
                         final Collection<? extends PhysicalCard> minion = actionContext.getCardsFromMemory(minionMemory);
                         if (fpChar.size() == 1 && minion.size() == 1) {
-                            return Collections.singletonList(
-                                    new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next()));
+                            AssignmentEffect effect = new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next());
+                            effect.setIgnoreSingleMinionRestriction(ignoreUnassigned);
+                            return Collections.singletonList(effect);
                         }
                         return null;
                     }

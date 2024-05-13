@@ -160,13 +160,9 @@
 		effects: [
 		    {
 		        type: stackedOnModifier
+		        on: culture(dwarven),condition
 		        modifier: {
 		            type: modifyStrength
-		            requires: {
-		                type: hasCardStacked
-		                filter: self
-		                on: culture(dwarven),condition
-		            }
 		            filter: name(Gimli)
 		            amount: 1
 		        }

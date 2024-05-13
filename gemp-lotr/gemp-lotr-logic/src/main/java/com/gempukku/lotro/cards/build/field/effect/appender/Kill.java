@@ -21,10 +21,11 @@ import java.util.Collections;
 public class Kill implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter");
+        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "player");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
 
         if (filter == null)
             throw new InvalidCardDefinitionException("Selector is required for a Kill effect.");
@@ -32,7 +33,7 @@ public class Kill implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, valueSource, "_temp", "you", "Choose cards to kill", environment));
+                CardResolver.resolveCards(filter, valueSource, "_temp", player, "Choose cards to kill", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

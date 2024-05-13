@@ -22,20 +22,32 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: choice
+				texts: [
+				    Play a besieger stacked on a site you control
+				    Remove a burden
+				]
+				effects: [
+				    {
+				        type: playCardFromStacked
+				        filter: choose(besieger)
+				        on: controlledSite
+				    }
+				    {
+				        type: removeBurdens
+				    }
+				]
 			},
 			effect: [
 				{
-					
+					type: playCardFromDiscard
+					filter: choose(culture(sauron),orc)
 				}
 			]
-		}*/
+		}
 		gametext: Play a besieger stacked on a site you control or remove a burden to play a [sauron] Orc from your discard pile.
 		lore: ...they began to throw missiles marvellously high....
 		promotext: ""
@@ -69,20 +81,20 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: removeThreats
+				amount: 3
 			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(character,inSkirmishAgainst(culture(moria),orc))
+					amount: -3
 				}
 			]
-		}*/
+		}
 		gametext: Remove 3 threats to make a character skirmishing a [sauron] Orc strength -3.
 		lore: ...the Rammas is breached far and wide....'
 		promotext: ""
@@ -119,17 +131,54 @@
 		strength: 19
 		vitality: 5
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: discard
+		            filter: choose(culture(sauron),orc)
+		        }
+		        effect: {
+		            type: addThreats
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+                    {
+                        type: discard
+                        filter: self
+                    }
+                    {
+                        type: discard
+                        filter: choose(other,culture(sauron),orc)
+                        count: any
+                        memorize: discardedOrcs
+                    }
+                    {
+                        type: addThreats
+                        amount: {
+                            type: forEachInMemory
+                            memory: discardedOrcs
+                        }
+                    }
+		        ]
+		    }
+		]
 		gametext: <b>Shadow:</b> Discard a [sauron] Orc to add a threat.<br><b>Skirmish:</b> Remove a threat to make Army of Udûn strength +1.<br><b>Regroup:</b> Discard Army of Udûn and X other [sauron] Orcs to add X threats.
 		lore: ""
 		promotext: ""
@@ -164,18 +213,21 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [sauron] Orc
-		/*requires: {
-			
-		}
+		target: culture(sauron),orc
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            filter: self
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: Bearer must be a [sauron] Orc.<br>If you have initiative, bearer is strength +3.
 		lore: ...all day more force and gear of war had poured across.
 		promotext: ""
@@ -209,20 +261,25 @@
 		twilight: 1
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
-			},
+				type: removeThreats
+				amount: 4
+			}
+			requires: {
+			    type: canSpot
+			    filter: culture(sauron),orc
+			    count: 2
+			}
 			effect: [
 				{
-					
+					type: kill
+					player: free people
+                    filter: choose(companion)
 				}
 			]
-		}*/
+		}
 		gametext: Remove 4 threats and spot 2 [sauron] Orcs to make the Free Peoples player spot a companion and place that companion in the dead pile.
 		lore: Yet now under the Lord of Barad-dûr the most fell of all his captains is already master of your outer walls....'
 		promotext: ""
@@ -256,20 +313,49 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: discardTopCardsFromDeck
+					forced: true
+					deck: free people
+					memorize: discardedCard
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: memoryMatches
+				        memory: discardedCard
+				        filter: any
+				    }
+				    effect: [
+                        {
+                            type: chooseHowManyToSpot
+                            filter: besieger
+                            memorize: spotCount
+                        }
+                        {
+                            type: if
+                            condition: {
+                                type: memoryMatches
+                                memory: discardedCard
+                                filter: minTwilight(memory(spotCount))
+                            }
+                            false: {
+                                type: takeControlOfSite
+                            }
+                            true: {
+                                type: modifyStrength
+                                until: regroup
+                                filter: all(besieger)
+                                amount: 3
+                            }
+                        }
+				    ]
 				}
 			]
-		}*/
+		}
 		gametext: Choose an opponent to discard the top card of his or her draw deck. If the twilight cost of that card is less than the number of besiegers you spot, take control of a site and all besiegers are strength +3 until the regroup phase.
 		lore: ""
 		promotext: ""
@@ -303,17 +389,49 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyCost
+		            filter: your,culture(sauron)
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: controlledSite
+		                divider: 2
+		                multiplier: -1
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: spot
+		            filter: choose(culture(sauron),minion)
+		            memorize: spottedMinion
+		        }
+		        effect: [
+		            {
+		                type: drawCards
+		                count: {
+		                    type: condition
+		                    condition: {
+		                        type: memoryMatches
+		                        memory: spottedMinion
+		                        filter: besieger
+		                    }
+		                    true: 2
+		                    false: 1
+		                }
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: For each 2 sites you control, the twilight cost of each of your [sauron] cards is -1.<br><b>Regroup:</b> Spot a [sauron] minion to draw a card (or draw 2 cards instead if that minion is a besieger). Discard this condition.
 		lore: ""
 		promotext: ""
@@ -347,17 +465,31 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: culture(sauron),orc
+		            amount: {
+		                type: forEachThreat
+		                multiplier: -1
+		            }
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpotThreats
+		                amount: 3
+		            }
+		            filter: culture(sauron),orc
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: The site number of each [sauron] Orc is -1 for each threat.<br>While you can spot 3 threats, each [sauron] Orc that is not roaming is strength +1.
 		lore: And so slowly they passed out of a dim day of fears into the darkness of a desperate night.
 		promotext: ""
@@ -395,17 +527,23 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: playedFromStacked
+		            filter: self
+		            from: controlledSite
+		        }
+		        effect: {
+		            type: addBurdens
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: controlledSite
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br>When you play this minion from a site you control, add a burden for each site you control.
 		lore: ...the weakest point in all that high and impenetrable wall.
 		promotext: ""
@@ -443,17 +581,33 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(sauron),minion)
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: controlledSite
+		                multiplier: {
+		                    type: condition
+		                    condition: {
+		                        type: haveInitiative
+		                        side: shadow
+		                    }
+		                    true: 2
+		                    false: 1
+		                }
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Skirmish:</b> Discard this minion to make a [sauron] minion strength +1 for each site you control (or +2 if you have initiative).
 		lore: Down from the hills... poured Orcs innumerable.
 		promotext: ""
@@ -491,17 +645,20 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: playedFromStacked
+		            filter: self
+		            from: controlledSite
+		        }
+		        effect: {
+		            type: addThreats
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br>When you play this minion from a site you control, add 2 threats.
 		lore: From behind the battle the River had been swiftly bridged....
 		promotext: ""
@@ -539,17 +696,38 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        text: Stack a besieger
+		        phase: regroup
+		        cost: {
+                    type: discardFromHand
+                    forced: false
+                    count: 1
+                }
+		        effect: {
+		            type: stackCards
+		            filter: choose(culture(sauron),orc,besieger)
+		            where: choose(controlledSite)
+		        }
+		    }
+		    {
+		        type: activated
+		        text: Stack a non-besieger
+		        phase: regroup
+		        cost: {
+                    type: discardFromHand
+                    forced: false
+                    count: 2
+                }
+		        effect: {
+		            type: stackCards
+		            filter: choose(culture(sauron),orc,not(besieger))
+		            where: choose(controlledSite)
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Regroup:</b> Discard 2 cards from hand to stack a [sauron] Orc on a site you control (or discard 1 card from hand if that Orc is a besieger).
 		lore: ...their purpose was only to test the strength of the defence....
 		promotext: ""
@@ -587,17 +765,37 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		        effect: [
+                    {
+                        type: playCardFromStacked
+                        filter: choose(culture(sauron),orc)
+                        on: controlledSite
+                        memorize: playedOrc
+                    }
+                    {
+                        type: modifyStrength
+                        filter: memory(playedOrc)
+                        amount: 6
+                        until: regroup
+                    }
+                    {
+                        type: addKeyword
+                        filter: memory(playedOrc)
+                        keyword: fierce
+                        until: regroup
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Skirmish:</b> Discard 2 cards from hand to play a [sauron] Orc stacked on a site you control. That Orc is <b>fierce</b> and strength +6 until the regroup phase.
 		lore: The drums rolled louder. Fires leaped up.
 		promotext: ""
@@ -635,17 +833,17 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: stackedOnModifier
+                on: controlledSite
+                modifier: {
+                    type: addKeyword
+                    filter: besieger
+                    keyword: fierce
+                }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br>While this minion is stacked on a site you control, besiegers are <b>fierce</b>.
 		lore: Great engines crawled across the field....
 		promotext: ""
@@ -683,17 +881,30 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardStackedCards
+		            filter: self
+		            on: controlledSite
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(sauron),orc)
+		            amount: {
+		                type: condition
+		                condition: {
+		                    type: haveInitiative
+		                    side: shadow
+		                }
+		                true: 10
+		                false: 5
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Skirmish:</b> If this minion is stacked on a site you control, discard him to make a [sauron] Orc strength +5 (or +10 if you have initiative).
 		lore: ...company upon company of the enemy pressed to the walls.
 		promotext: ""
@@ -731,17 +942,38 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        text: Play a besieger
+		        phase: shadow
+		        cost: {
+                    type: discardFromHand
+                    forced: false
+                    count: 1
+                }
+		        effect: {
+		            type: playCardFromStacked
+		            filter: choose(culture(sauron),orc,besieger)
+		            on: controlledSite
+		        }
+		    }
+		    {
+		        type: activated
+		        text: Play a non-besieger
+		        phase: shadow
+		        cost: {
+                    type: discardFromHand
+                    forced: false
+                    count: 2
+                }
+		        effect: {
+		            type: playCardFromStacked
+		            filter: choose(culture(sauron),orc,not(besieger))
+		            on: controlledSite
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Shadow:</b> Discard 2 cards from hand to play a [sauron] Orc stacked on a site you control (discard 1 card from hand instead if that Orc is a besieger).
 		lore: It was against the Gate that he would throw his heaviest weight.
 		promotext: ""
@@ -779,17 +1011,24 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: besieger
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(besieger)
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Response:</b> If a besieger is about to take a wound, discard 2 cards from hand to prevent it.
 		lore: Ever since the middle night the great assault had gone on.
 		promotext: ""
@@ -827,17 +1066,22 @@
 		vitality: 4
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: stackCards
+		            filter: choose(besieger)
+		            where: choose(controlledSite)
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Skirmish:</b> Stack your besieger on a site you control to make Gorgoroth Troop strength +2.
 		lore: They are strong: battalions of Orcs of the Eye....'
 		promotext: ""
@@ -871,17 +1115,27 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: or(besieger,controlledSite)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: discard
+		            filter: choose(engine)
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(condition,side(free people),zone(support))
+		        }
+		    }
+		]
 		gametext: To play, spot a besieger or a site you control.<br><b>Maneuver:</b> Discard an engine to discard a condition from the Free Peoples support area.
 		lore: ...all who could be spared were busy quelling the flames that sprang up in many places.
 		promotext: ""
@@ -918,17 +1172,36 @@
 			Engine
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: play
+		            filter: choose(besieger)
+		        }
+		        effect: {
+		            type: addTokens
+		            filter: self
+		            culture: sauron
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTokens
+		            filter: choose(condition)
+		            culture: sauron
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(sauron),orc)
+		            amount: 1
+		            limitPerCardThisPhase: 2
+		        }
+		    }
+		]
 		gametext: <b>Engine</b>.<br><b>Shadow:</b> Play a besieger to place a [sauron] token here.<br><b>Skirmish:</b> Remove a [sauron] token from a condition to make a [sauron] Orc strength +1 (limit +2).
 		lore: ""
 		promotext: ""
@@ -965,17 +1238,14 @@
 		strength: 21
 		vitality: 5
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: discount
+		        discount: {
+		            type: perThreatRemoved
+		        }
+		    }
+		]
 		gametext: When you play Host of Udûn, you may remove X threats to make its twilight cost -X.
 		lore: The great doors of the Black Gate swung back wide. Out of it streamed a great host as swiftly as swirling waters when a sluice is lifted.
 		promotext: ""
@@ -1009,17 +1279,83 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		            count: 2
+		        }
+		    }
+		    {
+		        type: extraCost
+		        skipValidate: true
+		        cost: [
+                    {
+                        type: chooseANumber
+                        text: Choose how many threats to add
+                        from: 0
+                        to: {
+                            type: min
+                            first: {
+                                type: subtract
+                                firstNumber: {
+                                    type: forEachYouCanSpot
+                                    filter: companion
+                                }
+                                secondNumber: {
+                                    type: forEachThreat
+                                }
+                            }
+                            second: 3
+                        }
+                        memorize: threatCount
+                    }
+                    {
+                        type: addThreats
+                        amount: {
+                            type: fromMemory
+                            memory: threatCount
+                        }
+                    }
+                ]
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: aboutToBeKilled
+		            filter: companion
+		        }
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: all(minion)
+		            keyword: fierce
+		            until: regroup
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfPhase
+		            phase: regroup
+		        }
+		        effect: [
+		            {
+		                type: discard
+		                filter: self
+		            }
+		            {
+		                type: removeThreats
+		                amount: 3
+		            }
+		        ]
+		    }
+		]
 		gametext: To play, spot 2 [sauron] Orcs and add up to 3 threats.<br>Each time a companion is about to be killed, you may remove a threat to make all minions <b>fierce</b> until the regroup phase.<br>Discard this condition and remove 3 threats at the start of the regroup phase.
 		lore: ""
 		promotext: ""
@@ -1056,17 +1392,36 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: beforeThreatWounds
+		            killedFilter: companion
+		            deathCause: overwhelm
+		        }
+		        requires: [
+                    {
+                        type: canSpot
+                        filter: culture(sauron),orc,inSkirmish
+                    }
+                    // TODO: Not sure why this is here, it was in the source code... maybe not needed
+                    {
+                        type: canSpot
+                        filter: ringBearer
+                    }
+                ]
+                cost: {
+                    type: removeThreats
+                }
+                effect: {
+                    type: assignFpCharacterToSkirmish
+                    fpCharacter: choose(ringBearer)
+                    against: self
+                    ignoreUnassigned: true
+                }
+		    }
+		]
 		gametext: <b>Response:</b> If a companion is overwhelmed during a skirmish involving a [sauron] Orc and threat wounds are about to be placed, remove a threat to assign this minion to the Ring-bearer (even if the Ring-bearer is already assigned).
 		lore: Drums rolled and fires leaped up.
 		promotext: ""
@@ -1103,17 +1458,23 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,culture(sauron),minion
+		        }
+		        effect: {
+		            type: addThreats
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Exert this minion and spot another [sauron] minion to add a threat.
 		lore: ...towards Mordor where the first bitter assault would come....
 		promotext: ""
@@ -1150,17 +1511,23 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: shadowHasInitiative
+		            requires: [
+                        {
+                            type: canSpotThreats
+                        }
+                        {
+                            type: canSpot
+                            filter: another,culture(sauron),orc
+                        }
+                    ]
+		        }
+		    }
+		]
 		gametext: While you can spot a threat and another [sauron] Orc, the Shadow has initiative, regardless of the Free People player's hand.
 		lore: The men of the West were trapped....
 		promotext: ""
@@ -1197,17 +1564,29 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: choose(culture(sauron),orc)
+		            count: 3
+		        }
+		        effect: {
+		            type: addThreats
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: discardedFromPlayTrigger
+		        optional: false
+		        effect: {
+		            type: removeThreats
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Exert 3 [sauron] Orcs to add 3 threats.<br>When this minion is discarded, remove 3 threats.
 		lore: ...from the host of Mordor there went up a jeering yell.
 		promotext: ""
@@ -1244,17 +1623,23 @@
 		strength: 8
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,culture(sauron),minion
+		        }
+		        effect: {
+		            type: addThreats
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Exert this minion and spot another [sauron] minion to add a threat.
 		lore: ...but the sun now climbing towards the South was veiled in the reeks of Mordor....
 		promotext: ""
@@ -1291,17 +1676,23 @@
 		strength: 10
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,culture(sauron),minion
+		        }
+		        effect: {
+		            type: addThreats
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Exert this minion and spot another [sauron] minion to add a threat.
 		lore: ...he watched the enemy come charging to the assault.
 		promotext: ""
@@ -1338,17 +1729,20 @@
 		strength: 3
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: 4
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Remove a threat to make this minion strength +4.
 		lore: ...or the end maybe of all the world of light.
 		promotext: ""
@@ -1385,17 +1779,21 @@
 		strength: 6
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeThreats
+		            amount: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(sauron),orc)
+		            amount: 6
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Remove 2 threats to make a [sauron] Orc strength +6.
 		lore: ...and then all hope was quenched.
 		promotext: ""
@@ -1432,17 +1830,21 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeThreats
+		            amount: 3
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(sauron),minion)
+		            amount: 8
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Remove 3 threats to make a [sauron] minion strength +8.
 		lore: ...the first assault crashed into them.
 		promotext: ""
@@ -1479,17 +1881,22 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(companion,inSkirmishAgainst(self))
+		            amount: -1
+		            limitPerCardThisPhase: 3
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Discard a card from your hand to make a companion skirmishing this minion strength -1 for each other [sauron] Orc you spot (limit -3).
 		lore: Sauron had taken the proffered bait in jaws of steel.
 		promotext: ""
@@ -1527,17 +1934,32 @@
 		vitality: 4
 		site: 6
 		keywords: Archer
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyArcheryTotal
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            side: shadow
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            filter: self
+		            keyword: fierce
+		        }
+		    }
+		]
 		gametext: <b>Archer</b>.<br>If you have initiative, the minion archery total is +1 and Orc Archer Troop is <b>fierce</b>.
 		lore: The wind blew, and the trumpets sang, and arrows whined....
 		promotext: ""
@@ -1574,17 +1996,26 @@
 		strength: 10
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: companion
+		            count: 6
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(another,culture(sauron),orc)
+		            amount: 6
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Spot 6 companions and exert this minion to make another [sauron] Orc strength +6.
 		lore: The plain was dark with their marching companies....
 		promotext: ""
@@ -1621,17 +2052,22 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 3
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Discard 3 cards from hand to make this minion strength +3.
 		lore: ...the vomit of the maggot-folk of Mordor.
 		promotext: ""
@@ -1668,17 +2104,19 @@
 		strength: 6
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: culture(sauron),condition
+		            }
+		        }
+		    }
+		]
 		gametext: For each [sauron] condition you can spot, this minion is strength +1.
 		lore: ""
 		promotext: ""
@@ -1716,17 +2154,28 @@
 		vitality: 2
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: culture(sauron),orc
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            filter: self
+		            amount: 6
+		        }
+		    }
+		]
 		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>While you have initiative, this minion is strength +6.
 		lore: But still the Enemy made no sign.
 		promotext: ""
@@ -1763,17 +2212,24 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		            count: 3
+		        }
+		        effect: {
+		            type: drawCards
+		        }
+		    }
+		]
 		gametext: <b>Shadow:</b> Remove (3) and spot 3 [sauron] Orcs to draw a card.
 		lore: ...all the hills and rocks about the Morannon were filled with hidden foes....
 		promotext: ""
@@ -1810,17 +2266,21 @@
 		strength: 7
 		vitality: 2
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(another,culture(sauron),orc)
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Discard this minion to make another [sauron] Orc strength +3.
 		lore: ...far away he saw fires spring up....
 		promotext: ""
@@ -1857,17 +2317,21 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: another,culture(sauron),orc
+		                count: 3
+		            }
+		            filter: self
+		            amount: 5
+		        }
+		    }
+		]
 		gametext: While you can spot 3 other [sauron] Orcs, this minion is strength +5.
 		lore: ...their bodies were cast aside... and others took their place.
 		promotext: ""
@@ -1904,17 +2368,21 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: losesSkirmish
+		            overwhelm: true
+		            filter: companion
+		            against: culture(sauron),orc
+		        }
+		        effect: {
+		            type: addBurdens
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: Each time a companion is overwhelmed in a skirmish that involves a [sauron] Orc, add 3 burdens.
 		lore: ...and the shadowy defile beyond was bored and tunnelled by teeming broods of evil things.
 		promotext: ""
@@ -1941,7 +2409,7 @@
 			cardNum: 303
 			style: Standard
 		}
-		title: Orc Pursuer
+		title: Orc Pursuer(2)
 		unique: false
 		side: Shadow
 		culture: Sauron
@@ -1952,17 +2420,28 @@
 		vitality: 2
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: culture(sauron),orc
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            filter: self
+		            amount: 5
+		        }
+		    }
+		]
 		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>While you have initiative, this minion is strength +5.
 		lore: ...and they knew that they were watched.
 		promotext: ""
@@ -1999,17 +2478,21 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(another,culture(sauron),orc)
+		            amount: 4
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Discard this minion to make another [sauron] Orc strength +4.
 		lore: The drums rolled and rattled.
 		promotext: ""
@@ -2046,17 +2529,46 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: [
+		                {
+		                    type: canSpot
+		                    filter: companion
+		                    count: 6
+		                }
+		                {
+		                    type: canSpot
+		                    filter: another,culture(sauron),orc
+		                }
+		            ]
+		            filter: self
+		            amount: 9
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: [
+		                {
+		                    type: canSpot
+		                    filter: companion
+		                    count: 6
+		                }
+		                {
+		                    type: canSpot
+		                    filter: another,culture(sauron),orc
+		                }
+		            ]
+		            filter: self
+		            keyword: fierce
+		        }
+		    }
+		]
 		gametext: While you can spot 6 companions and another [sauron] Orc, this minion is strength +9 and <b>fierce</b>.
 		lore: North amid the noisome pits lay the first of the great heaps and hills of slag....
 		promotext: ""
@@ -2094,17 +2606,38 @@
 		vitality: 3
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: culture(sauron),orc
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: [
+                    {
+                        type: haveInitiative
+                        side: shadow
+                    }
+                    {
+                        type: canSpot
+                        filter: another,culture(sauron),orc
+                    }
+                ]
+                effect: {
+                    type: drawCards
+                    count: 2
+                }
+		    }
+		]
 		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>If you have initiative when you play this minion, you may spot another [sauron] Orc to draw 2 cards.
 		lore: ...even before they came to the gate Sauron sprang his trap.
 		promotext: ""
@@ -2142,17 +2675,28 @@
 		vitality: 2
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: culture(sauron),orc
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            filter: self
+		            amount: 8
+		        }
+		    }
+		]
 		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>While you have initiative, this minion is strength +8.
 		lore: ...his soldiers blew their horns in a signal long arranged....
 		promotext: ""
@@ -2186,17 +2730,33 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		            count: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+		            {
+		                type: exert
+		                filter: choose(culture(sauron),orc)
+		            }
+		            {
+		                type: removeThreats
+		            }
+		        ]
+		        effect: {
+		            type: shuffleCardsFromPlayIntoDrawDeck
+		            filter: choose(culture(sauron),orc)
+		        }
+		    }
+		]
 		gametext: To play, spot 2 [sauron] Orcs.<br><b>Regroup:</b> Exert a [sauron] Orc and remove a threat to shuffle a [sauron] Orc from play into your draw deck.
 		lore: And now the fighting waxed furious on the fields of the Pelennor....
 		promotext: ""
@@ -2230,20 +2790,49 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
-			cost: {
-				
-			},
+			requires: {
+                type: canSpot
+                filter: culture(sauron),orc
+                count: 2
+            }
 			effect: [
 				{
-					
+					type: discardFromHand
+					forced: false
+					count: any
+					memorize: shadowDiscardedCards
+				}
+				{
+				    type: discardFromHand
+				    forced: false
+				    hand: fp
+				    player: fp
+				    count: any
+				    memorize: freeDiscardedCards
+				}
+				{
+				    type: repeat
+				    times: {
+                        type: subtract
+                        firstNumber: {
+                            type: forEachInMemory
+                            memory: shadowDiscardedCards
+                        }
+                        secondNumber: {
+                            type: forEachInMemory
+                            memory: freeDiscardedCards
+                        }
+                    }
+                    effect: {
+                        type: modifyStrength
+                        filter: choose(culture(sauron),orc)
+                        amount: 2
+                    }
 				}
 			]
-		}*/
+		}
 		gametext: To play, spot 2 [sauron] Orcs.<br>Discard any number of cards from hand. The Free Peoples player then discards any number of cards from hand. For each card you discarded more than the Free Peoples player, make a [sauron] Orc strength +2.
 		lore: ""
 		promotext: ""
@@ -2277,17 +2866,42 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: play
+		            filter: choose(culture(sauron),orc)
+		            ignoreRoamingPenalty: true
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 4
+		        }
+		        effect: {
+		            type: addThreats
+		        }
+		    }
+		]
 		gametext: To play, spot a [sauron] Orc.<br><b>Shadow:</b> Remove a threat to play a [sauron] Orc without paying any roaming penalty.<br><b>Regroup:</b> Spot a [sauron] Orc and remove (4) to add a threat.
 		lore: ""
 		promotext: ""
@@ -2325,17 +2939,23 @@
 		vitality: 3
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(besieger)
+		            keyword: fierce
+		            until: regroup
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Skirmish:</b> Discard 2 cards from hand to make a besieger <b>fierce</b> until the regroup phase.
 		lore: They have taken the wall!'
 		promotext: ""
@@ -2369,23 +2989,21 @@
 		twilight: 4
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
 		effects: {
 			type: responseEvent
 			trigger: {
-				
-			}
-			cost: {
-				
+				type: winsSkirmish
+				filter: your,culture(sauron),orc
 			}
 			effect: [
 				{
-					
+					type: addKeyword
+					filter: all(your,culture(sauron),orc)
+					keyword: fierce
+					until: regroup
 				}
 			]
-		]*/
+		}
 		gametext: If your [sauron] Orc wins a skirmish, make all your [sauron] Orcs <b>fierce</b> until the regroup phase.
 		lore: They are blasting breaches in it.'
 		promotext: ""
@@ -2419,17 +3037,40 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: play
+		            filter: choose(culture(sauron),condition)
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: sauron
+		            filter: self
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: shadowHasInitiative
+		            requires: {
+		                type: canSpotCultureTokens
+		                culture: sauron
+		                filter: self
+		                amount: 3
+		            }
+		        }
+		    }
+		]
 		gametext: To play, spot a [sauron] Orc.<br><b>Regroup:</b> Play a [sauron] condition to place a [sauron] token on this card.<br>While there are 3 tokens on this card, the Shadow has initiative, regardless of the Free Peoples player's hand.
 		lore: ""
 		promotext: ""
@@ -2463,17 +3104,41 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: winsSkirmish
+		            filter: your,culture(sauron),minion
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: sauron
+		            filter: self
+		        }
+		        limitPerPhase: 1
+		        phase: regroup
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        effect: [
+		            {
+		                type: addTwilight
+		                amount: {
+		                    type: forEachToken
+		                    culture: sauron
+		                    filter: self
+		                    multiplier: 2
+		                }
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Response:</b> If your [sauron] minion wins a skirmish, place a [sauron] token here (limit 1 per site).<br><b>Regroup:</b> Add (2) for each token here. Discard this condition.
 		lore: In the Land of Mordor where the Shadows lie.
 		promotext: ""
@@ -2510,17 +3175,44 @@
 			Engine
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: besieger
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: controlledSite
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: choose(culture(sauron),orc)
+		            count: 3
+		        }
+		        effect: [
+		            {
+		                type: takeControlOfSite
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Engine</b>. To play, spot a [sauron] Orc.<br>Each besieger is strength +1 for each site you control.<br><b>Regroup:</b> Discard 3 [sauron] Orcs to take control of a site. Discard this condition.
 		lore: ...the hidden Captain put forth his strength.
 		promotext: ""
@@ -2557,17 +3249,44 @@
 			Engine
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: culture(sauron),orc
+		            amount: {
+		                type: countStacked
+		                filter: besieger
+		                on: site
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: choose(besieger)
+		        }
+		        effect: [
+		            {
+		                type: takeControlOfSite
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Engine</b>. To play, spot a [sauron] Orc.<br>All [sauron] Orcs are strength +1 for each besieger stacked on a site.<br><b>Regroup:</b> Discard a besieger to take control of a site. Discard this condition.
 		lore: Slowly the great siege-towers built in Osgiliath rolled forward through the dark.
 		promotext: ""

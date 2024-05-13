@@ -24,12 +24,13 @@ import java.util.Collection;
 public class PlayCardFromHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "ignoreInDeadPile", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "ignoreInDeadPile", "ignoreRoamingPenalty", "memorize");
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
         final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("cost"), 0, environment);
         final boolean ignoreInDeadPile = FieldUtils.getBoolean(effectObject.get("ignoreInDeadPile"), "ignoreInDeadPile", false);
+        final boolean ignoreRoamingPenalty = FieldUtils.getBoolean(effectObject.get("ignoreRoamingPenalty"), "ignoreRoamingPenalty", false);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
@@ -44,9 +45,9 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, costModifier, false, ignoreInDeadPile), ExtraFilters.attachableTo(game, onFilterable));
+                                return Filters.and(Filters.playable(game, costModifier, ignoreRoamingPenalty, ignoreInDeadPile), ExtraFilters.attachableTo(game, onFilterable));
                             }
-                            return Filters.playable(game, costModifier, false, ignoreInDeadPile);
+                            return Filters.playable(game, costModifier, ignoreRoamingPenalty, ignoreInDeadPile);
                         },
                         new ConstantEvaluator(1), memorize, "you", "you", "Choose card to play from hand", false, environment));
         result.addEffectAppender(
@@ -60,7 +61,7 @@ public class PlayCardFromHand implements EffectAppenderProducer {
 
                             Filterable onFilterable = (onFilterableSource != null) ? onFilterableSource.getFilterable(actionContext) : Filters.any;
 
-                            final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, cardsToPlay.iterator().next(), costModifier, onFilterable, false);
+                            final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, cardsToPlay.iterator().next(), costModifier, onFilterable, ignoreRoamingPenalty);
                             return new StackActionEffect(playCardAction);
                         } else {
                             return new FailedEffect();
