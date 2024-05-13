@@ -19,20 +19,24 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        requires: {
+		            type: canSpot
+		            filter: dwarf
+		        }
+                effect: {
+                    type: playCardFromDrawDeck
+                    filter: choose(culture(dwarven),condition)
+                }
+                limitPerTurn: 1
+		    }
+		]
 		gametext: <b>Fellowship:</b> Spot a Dwarf to play a [dwarven] condition from your draw deck (limit once per turn).
 		lore: ""
 		promotext: ""
@@ -63,20 +67,19 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyCost
+		            filter: culture(rohan),possession
+		            amount: -1
+		        }
+		    }
+		]
 		gametext: The twilight cost of each [rohan] possession is -1.
 		lore: ""
 		promotext: ""
@@ -107,20 +110,33 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        requires: {
+		            type: canSpot
+		            filter: name(Gandalf)
+		        }
+		        cost: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: forEachPlayer
+		            effect: {
+		                type: optional
+		                text: Would you like to draw a card?
+		                effect: {
+		                    type: drawCards
+		                }
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Fellowship:</b> Spot Gandalf to add (2). Each player may draw a card.
 		lore: ""
 		promotext: ""
@@ -151,20 +167,28 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: exert
+		            filter: choose(elf)
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+		                type: modifyCost
+		                filter: or(condition,possession)
+		                amount: 2
+		            }
+		            until: endOfTurn
+		        }
+		    }
+		]
 		gametext: <b>Fellowship:</b> Exert an Elf to make the twilight cost of each condition and possession +2 until the end of the turn.
 		lore: ""
 		promotext: ""
@@ -195,20 +219,29 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: movesFrom
+		            filter: self
+		        }
+		        player: free people
+		        requires: {
+		            type: canSpot
+		            filter: hobbit
+		            count: 3
+		        }
+		        effect: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: When the fellowship moves from this site, the Free Peoples player may spot 3 Hobbits to remove (2).
 		lore: ""
 		promotext: ""
@@ -239,20 +272,27 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 1K
+		site: 1
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: constantlyCheck
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+		                type: addKeyword
+		                filter: culture(gondor),companion
+		                keyword: defender
+		                amount: 1
+		            }
+		        }
+		        limitPerTurn: 1
+		    }
+		]
 		gametext: Each [gondor] companion is <b>defender +1</b> until the end of the turn.
 		lore: ""
 		promotext: ""
@@ -283,20 +323,33 @@
 		unique: false
 		twilight: 1
 		type: Site
-		site: 2K
+		site: 2
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: [
+                    {
+                        type: haveInitiative
+                        side: shadow
+                    }
+                    {
+                        type: canSpot
+                        filter: your,minion
+                    }
+                ]
+                effect: {
+                    type: addModifier
+                    modifier: {
+                        type: modifyMoveLimit
+                        amount: -1
+                    }
+                    until: endOfTurn
+                }
+		    }
+		]
 		gametext: <b>Shadow:</b> If the Shadow has initiative, spot your minion to make the move limit for this turn -1.
 		lore: ""
 		promotext: ""
@@ -327,21 +380,24 @@
 		unique: false
 		twilight: 2
 		type: Site
-		site: 2K
+		site: 2
 		block: King
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: removeKeyword
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            filter: minion
+		            keyword: roaming
+		        }
+		    }
+		]
 		gametext: <b>Plains</b>. If the Shadow has initiative, minions are not roaming.
 		lore: ""
 		promotext: ""
@@ -372,21 +428,24 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 2K
+		site: 2
 		block: King
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyCost
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            filter: self
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: <b>Plains</b>. If the Shadow has initiative, the Shadow number of this site is +3.
 		lore: ""
 		promotext: ""
@@ -417,21 +476,27 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 3K
+		site: 3
 		block: King
 		direction: Right
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        requires: {
+		            type: cantSpotThreats
+		            amount: 3
+		        }
+		        cost: {
+		            type: addThreats
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(companion)
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 3 threats, add a threat to heal a companion.
 		lore: ""
 		promotext: ""
@@ -462,21 +527,26 @@
 		unique: false
 		twilight: 1
 		type: Site
-		site: 3K
+		site: 3
 		block: King
 		direction: Right
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        requires: {
+		            type: cantSpotThreats
+		            amount: 3
+		        }
+		        cost: {
+		            type: addThreats
+		        }
+		        effect: {
+		            type: drawCards
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 3 threats, add a threat to draw a card.
 		lore: ""
 		promotext: ""
@@ -507,21 +577,32 @@
 		unique: false
 		twilight: 0
 		type: Site
-		site: 3K
+		site: 3
 		block: King
 		direction: Right
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        requires: {
+		            type: cantSpotThreats
+		            amount: 3
+		        }
+		        cost: {
+		            type: addThreats
+		            amount: 3
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+		                type: modifyMoveLimit
+		                amount: 1
+		            }
+		            until: endOfTurn
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 3 threats, add 3 threats to make the move limit for this turn +1.
 		lore: ""
 		promotext: ""
@@ -552,21 +633,28 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 4K
+		site: 4
 		block: King
 		direction: Right
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: your,minion
+		        }
+		        cost: {
+		            type: removeBurdens
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(your,minion)
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: <b>River</b>. <b>Skirmish:</b> Spot your minion and remove a burden to make that minion strength +2.
 		lore: ""
 		promotext: ""
@@ -597,20 +685,29 @@
 		unique: false
 		twilight: 2
 		type: Site
-		site: 4K
+		site: 4
 		block: King
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: your,minion
+		        }
+		        cost: {
+		            type: removeBurdens
+		            amount: 2
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(your,minion)
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Spot your minion and remove 2 burdens to make that minion <b>damage +1</b>.
 		lore: ""
 		promotext: ""
@@ -641,21 +738,29 @@
 		unique: false
 		twilight: 4
 		type: Site
-		site: 4K
+		site: 4
 		block: King
 		direction: Right
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        requires: {
+		            type: canSpot
+		            filter: your,minion
+		        }
+		        cost: {
+		            type: removeBurdens
+		            amount: 3
+		        }
+		        effect: {
+		            type: modifyArcheryTotal
+		            side: shadow
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: <b>Plains</b>. <b>Archery:</b> Spot your minion and remove 3 burdens to make the minion archery total +3.
 		lore: ""
 		promotext: ""
@@ -686,20 +791,33 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 5K
+		site: 5
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        effect: {
+		            type: addThreats
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: self
+		        }
+		        effect: {
+		            type: removeThreats
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: When the fellowship moves to this site, add 3 threats. When the fellowship moves from this site, remove 3 threats.
 		lore: ""
 		promotext: ""
@@ -730,21 +848,38 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 5K
+		site: 5
 		block: King
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        player: free people
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Discard your hand
+		                Add 2 burdens
+		            ]
+		            effects: [
+		                {
+		                    type: discardFromHand
+		                    forced: false
+		                    count: 1000
+		                }
+		                {
+		                    type: addBurdens
+		                    amount: 2
+		                }
+		            ]
+		        }
+		    }
+		]
 		gametext: <b>Plains</b>. At the start of the maneuver phase, the Free Peoples player must discard his or her hand or add 2 burdens.
 		lore: ""
 		promotext: ""
@@ -775,21 +910,29 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        player: free people
+		        trigger: {
+		            type: movesFrom
+		            filter: self
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(name(Gandalf))
+		            times: 3
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal Gandalf three times.
 		lore: ""
 		promotext: ""
@@ -820,21 +963,27 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: self
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: wound
+		            filter: all(companion)
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, wound each companion.
 		lore: ""
 		promotext: ""
@@ -865,21 +1014,27 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: self
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: heal
+		            filter: all(culture(rohan),companion)
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each [rohan] companion.
 		lore: ""
 		promotext: ""
@@ -910,21 +1065,27 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: self
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: heal
+		            filter: all(culture(dwarven),companion)
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each [dwarven] companion.
 		lore: ""
 		promotext: ""
@@ -955,21 +1116,27 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: self
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: heal
+		            filter: all(culture(elven),companion)
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each [elven] companion.
 		lore: ""
 		promotext: ""
@@ -1000,21 +1167,27 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: self
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: heal
+		            filter: all(culture(gondor),companion)
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each [gondor] companion.
 		lore: ""
 		promotext: ""
@@ -1045,21 +1218,27 @@
 		unique: false
 		twilight: 3
 		type: Site
-		site: 6K
+		site: 6
 		block: King
 		direction: Left
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: self
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: heal
+		            filter: all(hobbit,companion)
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each Hobbit companion.
 		lore: ""
 		promotext: ""
@@ -1090,21 +1269,30 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 7K
+		site: 7
 		block: King
 		direction: Right
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+		            filter: choose(minion)
+		            count: 2
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: companion
+		            count: 6
+		        }
+		        effect: {
+		            type: drawCards
+		            count: 2
+		        }
+		    }
+		]
 		gametext: <b>River</b>. <b>Shadow:</b> Exert 2 minions and spot 6 companions to draw 2 cards.
 		lore: ""
 		promotext: ""
@@ -1135,21 +1323,29 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 7K
+		site: 7
 		block: King
 		direction: Right
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+            {
+                type: activated
+                phase: shadow
+                cost: {
+                    type: exert
+                    filter: choose(minion)
+                }
+                requires: {
+                    type: canSpot
+                    filter: companion
+                    count: 6
+                }
+                effect: {
+                    type: addTwilight
+                    amount: 1
+                }
+            }
+		]
 		gametext: <b>Plains</b>. <b>Shadow:</b> Exert a minion and spot 6 companions to add (1).
 		lore: ""
 		promotext: ""
@@ -1180,21 +1376,35 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 7K
+		site: 7
 		block: King
 		direction: Right
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: [
+		            {
+		                type: canSpot
+		                filter: your,minion
+		            }
+		            {
+		                type: canSpot
+		                filter: companion
+		                count: 6
+		            }
+		        ]
+		        effect: {
+		            type: addModifier
+		            modifier: {
+		                type: modifyMoveLimit
+		                amount: -1
+		            }
+		            until: endOfTurn
+		        }
+		    }
+		]
 		gametext: <b>River</b>. <b>Shadow:</b> Spot your minion and 6 companions to make the move limit for this turn -1.
 		lore: ""
 		promotext: ""
@@ -1225,20 +1435,27 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8K
+		site: 8
 		block: King
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		            count: 2
+		        }
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: <b>Shadow:</b> Spot 2 [raider] Men and remove a threat to add (2).
 		lore: ""
 		promotext: ""
@@ -1269,20 +1486,28 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8K
+		site: 8
 		block: King
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: your,culture(sauron),minion
+		        }
+		        cost: {
+		            type: removeThreats
+		            amount: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(your,culture(sauron),minion)
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Spot your [sauron] minion and remove 2 threats to make your [sauron] minion strength +3.
 		lore: ""
 		promotext: ""
@@ -1313,20 +1538,24 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8K
+		site: 8
 		block: King
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: removeThreats
+		            amount: 2
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            filter: choose(nazgul)
+		            cost: -2
+		        }
+		    }
+		]
 		gametext: <b>Shadow:</b> Remove 2 threats to play a Nazgûl from your discard pile. His twilight cost is -2.
 		lore: ""
 		promotext: ""
@@ -1357,20 +1586,29 @@
 		unique: false
 		twilight: 8
 		type: Site
-		site: 8K
+		site: 8
 		block: King
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: [
+                    {
+                        type: removeThreats
+                        amount: 2
+                    }
+                    {
+                        type: playCardFromDiscard
+                        filter: choose(name(Gollum))
+                    }
+                ]
+                effect: {
+                    type: addBurdens
+                    amount: 2
+                }
+		    }
+		]
 		gametext: <b>Shadow:</b> Remove 2 threats and play Gollum from your discard pile to add 2 burdens.
 		lore: ""
 		promotext: ""
@@ -1401,21 +1639,23 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9K
+		site: 9
 		block: King
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        effect: {
+		            type: addThreats
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: <b>Plains</b>. When the fellowship moves to this site, add 3 threats.
 		lore: ""
 		promotext: ""
@@ -1446,20 +1686,25 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9K
+		site: 9
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: removeThreats
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: your,minion
+		        }
+		        effect: {
+		            type: drawCards
+		        }
+		    }
+		]
 		gametext: <b>Shadow:</b> Remove a threat and spot your minion to draw a card.
 		lore: ""
 		promotext: ""
@@ -1490,20 +1735,22 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9K
+		site: 9
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: {
+		            type: canSpotBurdens
+		            amount: 8
+		        }
+		        effect: {
+		            type: putOnRing
+		        }
+		    }
+		]
 		gametext: <b>Shadow:</b> Spot 8 burdens to make the Ring-bearer wear The One Ring until the regroup phase.
 		lore: ""
 		promotext: ""
@@ -1534,20 +1781,21 @@
 		unique: false
 		twilight: 9
 		type: Site
-		site: 9K
+		site: 9
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: killed
+		            filter: companion
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
+		]
 		gametext: Each time a companion is killed, add a burden.
 		lore: ""
 		promotext: ""
