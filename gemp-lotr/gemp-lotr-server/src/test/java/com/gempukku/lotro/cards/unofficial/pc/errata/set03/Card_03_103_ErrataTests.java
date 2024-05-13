@@ -106,6 +106,7 @@ public class Card_03_103_ErrataTests
 		scn.ShadowMoveCharToTable(troll);
 
 		scn.ShadowPlayCard(din); // we only do this to perform a maneuver action and refresh what actions are available
+		scn.ShadowChoose("0");
 		scn.FreepsPassCurrentPhaseAction();
 		assertEquals(Zone.FREE_CHARACTERS, galadriel.getZone());
 		assertTrue(scn.ShadowPlayAvailable(terrible));
