@@ -41,6 +41,7 @@ public class Card_04_292_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Regroup:</b> Spot a [rohan] ally and exert Théoden to liberate a site.
 		*/
@@ -59,6 +60,7 @@ public class Card_04_292_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

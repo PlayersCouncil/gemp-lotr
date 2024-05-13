@@ -41,6 +41,7 @@ public class Card_07_116_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Ranger</b>.<br><b>Regroup:</b> Discard 2 cards from hand to exhaust a minion.
 		*/
 
@@ -59,6 +60,7 @@ public class Card_07_116_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

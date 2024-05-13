@@ -41,6 +41,7 @@ public class Card_05_090_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Valiant</b>.<br><b>Regroup:</b> Exert this companion and spot a [rohan] possession to return that possession to hand.
 		*/
 
@@ -59,6 +60,7 @@ public class Card_05_090_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

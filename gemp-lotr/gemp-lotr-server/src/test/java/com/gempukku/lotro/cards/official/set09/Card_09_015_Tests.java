@@ -41,6 +41,7 @@ public class Card_09_015_Tests
 		 * Subtype: Elf
 		 * Strength: 9
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: To play, spot 2 [elven] companions.<br><b>Regroup:</b> Exert Gil-galad to wound each wounded minion.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_09_015_Tests
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

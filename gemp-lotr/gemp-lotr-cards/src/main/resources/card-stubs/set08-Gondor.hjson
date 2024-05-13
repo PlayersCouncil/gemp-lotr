@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert Aragorn to make an unbound companion with the Aragorn signet strength +1 for each threat you spot.
 		lore: Even the shades of Men are obedient to his will....'
 		promotext: ""
@@ -68,6 +71,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -116,20 +120,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a [gondor] Wraith is about to be killed, discard him and either exhaust another [gondor] Wraith or spot another exhausted [gondor] Wraith to prevent that.
 		lore: Yes, the Dead ride behind. They have been summoned....'
 		promotext: ""

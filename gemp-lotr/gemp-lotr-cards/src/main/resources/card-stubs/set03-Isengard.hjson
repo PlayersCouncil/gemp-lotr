@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Spot an [isengard] minion to discard up to 3 cards from hand and draw an equal number of cards.
 		lore: And why not, Gandalf?... Why not? The Ruling Ring? If we could command that, then the power would pass to us.'
 		promotext: ""
@@ -72,17 +75,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Spot an [isengard] minion to exhaust Aragorn. The Free Peoples player may add 2 burdens to prevent this.
 		lore: Where is the Ring?'
 		promotext: ""
@@ -119,17 +125,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Reveal a card at random from the Free Peoples player's hand. Heal X [isengard] minions, where X is the twilight cost of the card revealed.
 		lore: This evil cannot be concealed by the power of the Elves....'
 		promotext: ""
@@ -210,17 +219,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Spot an Uruk-hai and a [moria] minion to draw 3 cards.
 		lore: The frenzy of Uruks is born of the fear of the very Goblins that work the pits.
 		promotext: ""
@@ -676,17 +688,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert an [isengard] minion to make the Free Peoples player exert X companions, where X is the number of these races you can spot in the fellowship: Dwarf, Elf, Man, and Wizard.
 		lore: And if we fail, what then? What happens when Sauron takes back what is his?'
 		promotext: ""
@@ -861,6 +876,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -1005,17 +1021,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make an [isengard] Orc strength +2 (or +3 if you have fewer than 3 cards in hand).
 		lore: This is grievous news concerning Saruman... for we trusted him and he is deep in all our counsels.'
 		promotext: ""
@@ -1140,17 +1159,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Discard X [isengard] Orcs to make the Free Peoples player wound X companions.
 		lore: Their roots go deep.'
 		promotext: ""

@@ -41,6 +41,7 @@ public class Card_02_006_Tests
 		 * Subtype: Dwarf
 		 * Strength: 5
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: To play, spot a Dwarf.<br>While skirmishing an Uruk-hai, Frór is strength +3.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_02_006_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

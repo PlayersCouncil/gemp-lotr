@@ -41,6 +41,7 @@ public class Card_07_091_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: <b>Ranger</b>.<br><b>Fellowship:</b> Play a [rohan] Man to heal Faramir.<br><b>Skirmish:</b> Exert Faramir to make an unbound Hobbit strength +2.<br><b>Skirmish:</b> Exert Gandalf to prevent all wounds to Faramir.
 		*/
@@ -60,6 +61,7 @@ public class Card_07_091_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

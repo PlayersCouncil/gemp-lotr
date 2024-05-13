@@ -72,17 +72,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Archery:</b> Spot a [moria] archer to wound an Elf.
 		lore: Bitter and long is the hatred of the Orcs for the Elves, and thus they prefer Elves as targets.
 		promotext: ""
@@ -217,17 +220,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a [moria] Orc strength +1 for each other [moria] Orc you spot (limit +4).
 		lore: ...there came a great noise: a rolling Boom that seemed to come from depths far below, and to tremble in the stone at their feet.
 		promotext: ""
@@ -264,17 +270,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a [moria] Orc strength +2 (or +4 if skirmishing a Dwarf).
 		lore: The drum-beats broke out wildly: doom-boom, doom-boom, and then stopped... Doom, doom went the drum-beats again....
 		promotext: ""
@@ -311,17 +320,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Assignment:</b> Spot 5 [moria] minions to make the Free Peoples player assign the Ring-bearer to a skirmish.
 		lore: They have taken the Bridge and the second hall; we have barred the gates – but cannot hold them for long....'
 		promotext: ""
@@ -358,17 +370,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Spot a Hobbit (except the Ring-bearer) to reveal cards from the top of your draw deck until you reveal one that is not a [moria] minion. Take the revealed cards into hand.
 		lore: Fool of a Took! Throw yourself in next time and rid us of your stupidity!'
 		promotext: ""
@@ -405,17 +420,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Assignment:</b> Assign an exhausted companion (except the Ring-bearer) to skirmish a [moria] Orc.
 		lore: The Goblins of the Misty Mountains, like all of their race, use their teeming numbers to slaughter their foes.
 		promotext: ""
@@ -1151,17 +1169,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Play a [moria] Orc from your discard pile.
 		lore: Killing one is no victory, since a dozen from the warrens below will take his place.
 		promotext: ""
@@ -1242,17 +1263,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If the Ring-bearer exerts or takes a wound, discard a card from the top of your draw deck for each [moria] minion you spot. For each Shadow card discarded in this way, add a burden (limit 3 burdens).
 		lore: Dwarven graves stood open in plundered disarray.
 		promotext: ""
@@ -1473,17 +1497,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Search</b>.<br><b>Response:</b> If a stealth event is played, spot 3 [moria] minions to cancel that event.
 		lore: Then dig a hole in the ground,' said Legolas, 'if that is more after the fashion of your kind. But you must dig swift and deep, if you wish to hide from Orcs.'
 		promotext: ""
@@ -1608,17 +1635,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Exert your [moria] Orc to draw 2 cards.
 		lore: The danger of what lay hidden in the dark was more terrifying than the known perils of Moria.
 		promotext: ""
@@ -1793,17 +1823,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a [moria] Orc strength +2 (or +4 if skirmishing an archer).
 		lore: Knowing the dark terrain of Moria gives Orcs a strategic advantage when attacking their foes.
 		promotext: ""

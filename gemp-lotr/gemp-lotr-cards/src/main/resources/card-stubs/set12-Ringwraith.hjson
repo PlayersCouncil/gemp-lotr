@@ -73,17 +73,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Play a Nazgûl. His twilight cost is -1 for each forest site you can spot (limit -4).
 		lore: Frodo hesitated for a second: curiosity or some other feeling was struggling with his desire to hide.
 		promotext: ""
@@ -167,17 +170,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot your Nazgûl at a battleground or forest site to play a mount on him from your draw deck.
 		lore: ...the black horses leaped down the hill in pursuit, and from the Riders came a terrible cry....
 		promotext: ""
@@ -214,20 +220,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a Nazgûl wins a skirmish, the Free Peoples player chooses to either exert the Ring-bearer or add a burden.
 		lore: He is fading.... We must get him to my father.'
 		promotext: ""
@@ -311,17 +320,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a Nazgûl to discard a Free Peoples condition from play.
 		lore: There was a flare of livid lightnings: forks of blue flame springing up from the tower and from the encircling hills into the sullen clouds.
 		promotext: ""
@@ -444,6 +456,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Condition
+		#target: title(an unbound companion)
 		/*requires: {
 			
 		}

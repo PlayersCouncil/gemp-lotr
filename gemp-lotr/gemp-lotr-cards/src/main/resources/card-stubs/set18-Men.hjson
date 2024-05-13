@@ -254,20 +254,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If the Free Peoples player plays a companion, discard a [men] card from hand to return that companion to its owner's hand.
 		lore: During the War of the Ring, the streets of Bree were filled mainly with Southern ruffians and thieves, and Bree-folk were afraid to leave their homes.
 		promotext: ""
@@ -300,6 +303,7 @@
 		culture: Men
 		twilight: 3
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -489,17 +493,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a [men] minion to discard a follower from play (if you can spot Gríma, also draw a card).
 		lore: Late is the hour in which this conjurer chooses to appear.
 		promotext: ""
@@ -773,17 +780,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gríma to exert an unbound companion. That companion cannot use his or her game text until the regroup phase.
 		lore: This order does not come from me. It comes from the king. He signed it this morning.
 		promotext: ""
@@ -816,6 +826,7 @@
 		culture: Men
 		twilight: 0
 		type: Condition
+		#target: a follower
 		/*requires: {
 			
 		}

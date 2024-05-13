@@ -39,7 +39,7 @@ public class Card_11_066_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Fellowship or regroup
-		 * Game Text: To play, exert a  ranger.<br>If the fellowship is in region 1, play the fellowship's next 2 sites.<br>Otherwise, play the fellowship's next site.
+		 * Game Text: To play, exert a ranger.<br>If the fellowship is in region 1, play the fellowship's next 2 sites.<br>Otherwise, play the fellowship's next site.
 		*/
 
 		var scn = GetScenario();

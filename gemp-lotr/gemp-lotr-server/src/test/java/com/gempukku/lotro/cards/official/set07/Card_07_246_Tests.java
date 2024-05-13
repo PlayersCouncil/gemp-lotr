@@ -41,6 +41,7 @@ public class Card_07_246_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Skirmish:</b> Discard a card from hand to exert a minion skirmishing this companion.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_07_246_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

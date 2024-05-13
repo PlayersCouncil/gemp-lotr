@@ -220,17 +220,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Spot an Elf to make each opponent discard a card from his or her hand. Draw a card for each card discarded in this way.
 		lore: It should have been cast then into Orodruin's fire nigh at hand where it was made.'
 		promotext: ""
@@ -456,17 +459,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Reveal a card at random from an opponent's hand. Heal X [elven] allies, where X is the twilight cost of the card revealed.
 		lore: You have been summoned here to answer the threat of Mordor.'
 		promotext: ""
@@ -542,7 +548,7 @@
 			style: Standard
 		}
 		title: Galdor
-		subtitle: Councilor From The West
+		subtitle: Councilor From the West
 		unique: true
 		side: Free Peoples
 		culture: Elven
@@ -595,6 +601,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
+		#target: title(Aragorn)
 		/*requires: {
 			
 		}
@@ -736,17 +743,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship</b> <i>or</i> <b>Regroup:</b> Spot Elrond (or 2 [elven] allies) to heal a companion or ally.
 		lore: Elrond has cured you: he has tended you for days, ever since you were brought in.'
 		promotext: ""
@@ -921,17 +931,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship</b> <i>or</i> <b>Maneuver:</b> Exert an Elf to discard an [isengard] possession or [isengard] artifact.
 		lore: We have hunted and slain many Orcs in the woods....'
 		promotext: ""
@@ -1017,17 +1030,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Tale</b>.<br><b>Skirmish:</b> Exert an Elf at a river or forest to cancel a skirmish involving that Elf.
 		lore: Beside the falls of Nimrodel, / By water clear and cool, / Her voice as falling silver fell / Into the shining pool.'
 		promotext: ""

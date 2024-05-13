@@ -73,17 +73,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>. <b>Toil 3</b>. <helper>(For each [gandalf] character you exert when playing this, its twilight cost is -3.)</helper><br>Spot a [gandalf] Wizard and X other companions to examine the top X cards of your draw deck. Replace those cards in any order.
 		lore: I have come back from dark journeys and long search....'
 		promotext: ""
@@ -215,17 +218,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>. Choose one: Spot a [gandalf] Wizard to choose an opponent who must discard one of his or her conditions from play; or spot a [gandalf] Wizard at a battleground site to discard a condition from play.
 		lore: ...I do not know the word – yet. But we shall soon see.'
 		promotext: ""
@@ -313,17 +319,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>. Make Gandalf strength +2 (or +4 if you cannot spot 5 burdens).
 		lore: ...there are older and fouler things than Orcs in the deep places of the world.'
 		promotext: ""
@@ -356,6 +365,7 @@
 		culture: Gandalf
 		twilight: 0
 		type: Condition
+		#target: a companion
 		keywords: Spell
 		/*requires: {
 			
@@ -404,17 +414,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [gandalf] companion strength +2. Then, if that companion is at a battleground or dwelling site, you may take a [gandalf] condition from your discard pile into hand.
 		lore: The Orcs reeled and screamed and cast aside both sword and spear.
 		promotext: ""
@@ -451,17 +464,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [gandalf] Wizard to replace a site in the fellowship's current region with a site from your adventure deck.
 		lore: ...the question is: who will follow me, if I lead you there?'
 		promotext: ""
@@ -494,6 +510,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
+		#target: a companion (except the Ring-bearer)
 		/*requires: {
 			
 		}

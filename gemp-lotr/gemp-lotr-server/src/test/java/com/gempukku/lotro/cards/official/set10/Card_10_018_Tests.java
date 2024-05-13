@@ -41,6 +41,7 @@ public class Card_10_018_Tests
 		 * Subtype: Ent
 		 * Strength: 12
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: To play, spot 3 [gandalf] companions.<br><b>Regroup:</b> Exert Treebeard twice to play a [gandalf] condition from your discard pile and make an opponent discard one of his or her conditions.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_10_018_Tests
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(12, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

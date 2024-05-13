@@ -73,17 +73,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an [elven] hunter and choose one: draw a card for each hunter you can spot or reinforce an [elven] token for each hunter you can spot.
 		lore: Until at last our toil be past / our journey done, our errand sped.
 		promotext: ""
@@ -120,17 +123,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 Elves (or an Elf and an [elven] follower) to discard a condition (or discard two conditions if you can spot 4 or more Shadow conditions).
 		lore: The road is very dangerous.
 		promotext: ""
@@ -353,17 +359,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an [elven] archer and add a threat to wound a minion (or add three threats to exert three minions).
 		lore: Leithio i philinn!
 		promotext: ""

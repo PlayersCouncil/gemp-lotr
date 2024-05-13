@@ -57,7 +57,7 @@ public class ReplayMetadata {
                 TargetFormat = deck.getTargetFormat();
                 DeckName = deck.getDeckName();
                 AdventureDeck = deck.getSites();
-                DrawDeck = deck.getAdventureCards();
+                DrawDeck = deck.getDrawDeckCards();
                 RingBearer = deck.getRingBearer();
                 Ring = deck.getRing();
             }};

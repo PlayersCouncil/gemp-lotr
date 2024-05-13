@@ -41,6 +41,7 @@ public class Card_06_035_Tests
 		 * Subtype: Ent
 		 * Strength: 8
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: Skinbark's twilight cost is -1 for each Ent or unbound Hobbit you can spot.<br><b>Response:</b> If an unbound Hobbit is about to take a wound, exert Skinbark to prevent that wound.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_06_035_Tests
 		assertEquals(7, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

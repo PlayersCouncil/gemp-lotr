@@ -44,6 +44,7 @@ public class Card_01_012_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Damage +1</b>
 		 * 	 <b>Fellowship: </b> If the twilight pool has fewer than 2 twilight tokens, add (2) and place a card from hand beneath your draw deck.

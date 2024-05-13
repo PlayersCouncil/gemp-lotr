@@ -1,0 +1,251 @@
+{
+
+	6_78: {
+		cardInfo: {
+			imagePath: decipher/LOTR06078.jpg
+			javaClass: true
+			//parentId: 6_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R78
+			rarity: R
+			setNum: "6"
+			cardNum: 78
+			style: Standard
+		}
+		title: Easterling Army
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 13
+		vitality: 3
+		site: 4
+		keywords: [
+			Easterling
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Easterling</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Spot 2 burdens and exert this minion to make an Easterling strength +1.<br><b>Skirmish:</b> Spot 4 burdens and exert this minion to make an Easterling strength +2.<br><b>Skirmish:</b> Spot 6 burdens and exert this minion to make an Easterling strength +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_79: {
+		cardInfo: {
+			imagePath: decipher/LOTR06079.jpg
+			javaClass: true
+			//parentId: 6_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U79
+			rarity: U
+			setNum: "6"
+			cardNum: 79
+			style: Standard
+		}
+		title: Easterling Polearm
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: title(an Easterling)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Easterling.<br>While you can spot 2 burdens, bearer cannot take wounds.<br>While you can spot 5 burdens, bearer is <b>damage +1</b>.
+		lore: ...and the tips of their spears....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_80: {
+		cardInfo: {
+			imagePath: decipher/LOTR06080.jpg
+			javaClass: true
+			//parentId: 6_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R80
+			rarity: R
+			setNum: "6"
+			cardNum: 80
+			style: Standard
+		}
+		title: Southron Archer Legion
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 8
+		type: Minion
+		race: Man
+		strength: 13
+		vitality: 4
+		site: 4
+		keywords: [
+			Southron
+			Archer
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Remove (3) to add 1 to the minion archery total for each companion over 4 (limit +4).
+		lore: But I've heard tales of the big folk down away in the Sunlands.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_81: {
+		cardInfo: {
+			imagePath: decipher/LOTR06081.jpg
+			javaClass: true
+			//parentId: 6_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C81
+			rarity: C
+			setNum: "6"
+			cardNum: 81
+			style: Standard
+		}
+		title: Southron Invaders
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 4
+		keywords: [
+			Southron
+			Ambush 1
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When you play this minion, you may spot another Southron to play a minion with ambush from your discard pile.
+		lore: So when you said Men out of the South, all in red and gold," I said "were there any oliphaunts?" For if there was, I was going to take a look....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_82: {
+		cardInfo: {
+			imagePath: decipher/LOTR06082.jpg
+			javaClass: true
+			//parentId: 6_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R82
+			rarity: R
+			setNum: "6"
+			cardNum: 82
+			style: Standard
+		}
+		title: Trample
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Event
+		keywords: Maneuver
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Spot a mounted [raider] Man to discard a companion (except the Ring-bearer). The Free Peoples player may add (4) to prevent this.
+		lore: ...I stomp round and round, / Never lie on the ground, / Not even to die. / Oliphaunt am I....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

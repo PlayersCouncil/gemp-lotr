@@ -41,6 +41,7 @@ public class Card_06_095_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: To play, spot a [rohan] Man.<br><b>Skirmish:</b> Heal a minion skirmishing Hrethel to make Hrethel strength +3 (limit +3).
 		*/
 
@@ -58,6 +59,7 @@ public class Card_06_095_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

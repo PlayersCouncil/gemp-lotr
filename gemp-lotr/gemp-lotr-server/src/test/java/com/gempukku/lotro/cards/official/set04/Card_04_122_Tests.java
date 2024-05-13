@@ -41,6 +41,7 @@ public class Card_04_122_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Ring-bound</b>. <b>Ranger</b>.<br>The site number of each minion assigned to skirmish a Ring-bound Man is +2.
 		*/
 
@@ -60,6 +61,7 @@ public class Card_04_122_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

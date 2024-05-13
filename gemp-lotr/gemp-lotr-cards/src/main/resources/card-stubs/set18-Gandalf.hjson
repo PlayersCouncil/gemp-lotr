@@ -75,17 +75,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br>Spot a [gandalf] Wizard to make a minion lose all strength bonuses from possessions.
 		lore: I am not trying to rob you. I'm trying to help you.
 		promotext: ""
@@ -122,17 +125,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If the fellowship is in region 1 or region 2, exert 2 Ents to make an Ent <b>defender</b> <b>+1</b> until the regroup phase.<br>If the fellowship is in region 3, spot a [gandalf] companion to draw a card.
 		lore: The old that is strong does not wither; Deep roots are not reached by the frost.
 		promotext: ""
@@ -264,17 +270,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br>Spot 2 pipeweed cards to remove a burden for each [gandalf] Wizard you can spot.
 		lore: Gandalf regarded the smoke ring for a moment, sucked his cheeks in, and blew out a majestic, full-rigged ship that sailed right through the ring.
 		promotext: ""

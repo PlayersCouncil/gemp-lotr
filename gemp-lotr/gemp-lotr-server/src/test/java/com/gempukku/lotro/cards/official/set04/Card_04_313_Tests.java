@@ -41,6 +41,7 @@ public class Card_04_313_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: <b>Skirmish:</b> If Pippin is not assigned to a skirmish, discard him to remove an Uruk-hai from a skirmish involving an unbound companion.
 		*/
@@ -59,6 +60,7 @@ public class Card_04_313_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

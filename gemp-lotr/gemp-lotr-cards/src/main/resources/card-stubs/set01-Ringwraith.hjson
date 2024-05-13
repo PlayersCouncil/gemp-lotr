@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If a Nazgûl is about to take a wound, prevent that wound.
 		lore: ...all blades perish that pierce that dreadful King. More deadly to him was the name of Elbereth.'
 		promotext: ""
@@ -72,17 +75,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a Nazgûl strength +2 (or +5 if the Ring-bearer wears The One Ring).
 		lore: Give up the Halfling...!'
 		promotext: ""
@@ -115,23 +121,24 @@
 		culture: Wraith
 		twilight: 5
 		type: Event
-		keywords: [
-			Maneuver
-		]
+		keywords: Maneuver
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a Nazgûl to discard a Free Peoples possession or Free Peoples condition. If you can spot no such card, discard an ally or companion (except the Ring-bearer) instead.
 		lore: ...the Three will fail, and many fair things will fade and be forgotten.'
 		promotext: ""
@@ -349,17 +356,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Spot 3 burdens to make a Nazgûl strength +1 and <b>damage +1</b>, or spot 6 burdens to make a Nazgûl strength +3 and <b>damage +2</b>.
 		lore: The Ring... The Ring... The Ring....'
 		promotext: ""
@@ -443,17 +453,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Search</b>.<br><b>Maneuver:</b> Exert your Nazgûl to discard an ally.
 		lore: Never has such a thing happened in my time!... Guests unable to sleep in their beds, and good bolsters ruined and all! What are we coming to?'
 		promotext: ""
@@ -490,17 +503,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a Nazgûl strength +2 (or +3 if the Ring-bearer is assigned to a skirmish that has not resolved).
 		lore: ...he was quaking as if he was bitter cold, but his terror was swallowed up in a sudden temptation to put on the Ring.
 		promotext: ""
@@ -537,17 +553,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If a Nazgûl wins a skirmish, the Free Peoples player chooses to either exert the Ring-bearer or add a burden.
 		lore: He is fading.... We must get him to my father.'
 		promotext: ""
@@ -587,17 +606,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Search</b>.<br><b>Shadow:</b> Spot X Nazgûl to reveal the top X cards of your draw deck. Take into your hand all [wraith] cards revealed and discard the rest.
 		lore: ...something seemed to be compelling him to disregard all warnings, and he longed to yield.
 		promotext: ""
@@ -680,17 +702,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Play a Nazgûl. His twilight cost is -2.
 		lore: The gates of Minas Morgul issued Nine Riders into the free lands, a blasphemy to ancient kings.
 		promotext: ""
@@ -957,17 +982,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a Nazgûl to wound every archer companion.
 		lore: Even the fastest arrows are of no avail against the Black Steeds of the Nine Riders.
 		promotext: ""
@@ -1004,17 +1032,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If the Ring-bearer wears The One Ring at the end of a skirmish phase, cancel all remaining assignments and assign a Nazgûl to skirmish the Ring-bearer; The One Ring's game text does not apply during this skirmish.
 		lore: The Riders made straight for you....'
 		promotext: ""
@@ -1097,17 +1128,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a Nazgûl to wound every ally.
 		lore: In dark and loneliness they are strongest... and already some in Bree are in their clutch.'
 		promotext: ""
@@ -1144,17 +1178,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a Nazgûl strength +2 (or +4 if you spot 5 burdens).
 		lore: They did not need the guidance of their horses any longer: you had become visible to them....'
 		promotext: ""
@@ -1191,17 +1228,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If the Ring-bearer puts on The One Ring, exert a Nazgûl to add 2 burdens.
 		lore: Immediately, though everything else remained as before, dim and dark, the shapes became terribly clear. He was able to see beneath their black wrappings.
 		promotext: ""

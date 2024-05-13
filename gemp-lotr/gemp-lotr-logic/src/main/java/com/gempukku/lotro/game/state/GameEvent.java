@@ -25,7 +25,8 @@ public class GameEvent {
         GAME_STATS("GS"),
         CHAT_MESSAGE("CM"),
         GAME_ENDED("EG"),
-        CARD_AFFECTED_BY_CARD("CAC"), SHOW_CARD_ON_SCREEN("EP"), FLASH_CARD_IN_PLAY("CA"), DECISION("D");
+        CARD_AFFECTED_BY_CARD("CAC"), SHOW_CARD_ON_SCREEN("EP"), FLASH_CARD_IN_PLAY("CA"), DECISION("D"),
+        PRE_GAME_SETUP("PGS");
 
         private final String code;
 
@@ -39,6 +40,7 @@ public class GameEvent {
     }
 
     private String _message;
+    private PreGameInfo _preGameInfo;
     private String _side;
     private final Type _type;
     private Zone _zone;
@@ -127,6 +129,15 @@ public class GameEvent {
 
     public GameEvent message(String message) {
         _message = message;
+        return this;
+    }
+
+    public PreGameInfo getPreGameInfo() {
+        return _preGameInfo;
+    }
+
+    public GameEvent preGameInfo(PreGameInfo preGameInfo) {
+        _preGameInfo = preGameInfo;
         return this;
     }
 

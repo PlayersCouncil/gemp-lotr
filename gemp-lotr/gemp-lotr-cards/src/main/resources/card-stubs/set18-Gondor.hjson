@@ -165,6 +165,7 @@
 		culture: Gondor
 		twilight: 4
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -307,17 +308,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a ranger strength +2 and you may reinforce a [gondor] token.
 		lore: Let the armies of Mordor know this: Never again will the land of my people fall into enemy hands!
 		promotext: ""
@@ -631,17 +635,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a knight to make him or her strength +3.
 		lore: This city was once the jewel of our kingdom. A place of light and beauty and music. And so it shall be once more!
 		promotext: ""
@@ -814,6 +821,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
+		#target: a [gondor] Man
 		/*requires: {
 			
 		}

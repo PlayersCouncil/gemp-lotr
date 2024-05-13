@@ -69,6 +69,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Condition
+		#target: title(Sam)
 		/*requires: {
 			
 		}
@@ -160,17 +161,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Spot a twilight Nazgûl to add a burden.
 		lore: ...perhaps it had tried to reveal itself in response to some wish or command that was felt in the room.
 		promotext: ""
@@ -207,17 +211,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a twilight Nazgûl to exert the Ring-bearer. If the Ring-bearer is then exhausted, he puts on The One Ring until the regroup phase.
 		lore: Not with the hope of escape, or of doing anything, either good or bad: he simply felt that he must take the Ring and put it on his finger.
 		promotext: ""
@@ -254,17 +261,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert The Witch-king to discard a tale or weapon.
 		lore: He felt his tongue cleave to his mouth and his heart labouring. His sword broke and fell out of his shaking hand.
 		promotext: ""
@@ -301,17 +311,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert 2 Nazgûl and spot X burdens to exert X companions.
 		lore: ...to the dismay of Frodo and his friends out from the trees and rocks away on the left four other Riders came flying.
 		promotext: ""
@@ -544,17 +557,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Spot a twilight Nazgûl and the Ring-bearer wearing The One Ring to add 3 burdens.
 		lore: He is passing into the shadow world, he will soon become a wraith like them.'
 		promotext: ""

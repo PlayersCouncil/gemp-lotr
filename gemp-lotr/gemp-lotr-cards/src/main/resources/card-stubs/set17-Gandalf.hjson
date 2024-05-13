@@ -28,17 +28,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>. Spot a [gandalf] Wizard to search a Shadow player's discard pile and choose a minion, then return that minion to its owner's hand. If you do, you may reveal that Shadow player's hand and discard a minion found there.
 		lore: I once knew every spell in all the tongues of Elves or Men or Orcs....'
 		promotext: ""
@@ -218,17 +221,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [gandalf] companion strength +1 for each [gandalf] Man you can spot.
 		lore: Hold them back. Do not give in to fear! Stand your posts! Fight!
 		promotext: ""
@@ -498,17 +504,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard a companion from hand to make a [gandalf] companion strength +3 (or +4 if you can spot 3 Ents).
 		lore: Together we will take the road that leads into the west / and far away, we'll find a land where both our hearts may rest.'
 		promotext: ""

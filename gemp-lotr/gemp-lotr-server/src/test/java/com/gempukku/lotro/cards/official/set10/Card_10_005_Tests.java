@@ -41,6 +41,7 @@ public class Card_10_005_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Skirmish:</b> Discard a card from hand to discard the bottom card of your draw deck. If the bottom card was an [elven] card, each minion skirmishing Arwen is strength -3.
 		*/
@@ -59,6 +60,7 @@ public class Card_10_005_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

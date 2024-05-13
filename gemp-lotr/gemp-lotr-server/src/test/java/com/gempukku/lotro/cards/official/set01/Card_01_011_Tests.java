@@ -35,7 +35,7 @@ public class Card_01_011_Tests
 
 		/**
 		 * Set: 1
-		 * Title: Farin, Dwarven Emissary
+		 * Name: Farin, Dwarven Emissary
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Dwarven
@@ -46,6 +46,7 @@ public class Card_01_011_Tests
 		 * Vitality: 3
 		 * Game Text: To play, spot a Dwarf.
 		 * 	While skirmishing an Orc, Farin is strength +2.
+		 * Resistance: 6
 		 */
 
 		var scn = GetScenario();
@@ -62,6 +63,7 @@ public class Card_01_011_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	@Test

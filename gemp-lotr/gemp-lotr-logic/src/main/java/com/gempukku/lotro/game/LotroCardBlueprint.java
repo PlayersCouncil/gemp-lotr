@@ -138,4 +138,9 @@ public interface LotroCardBlueprint {
     void appendAidCosts(LotroGame game, CostToEffectAction action, PhysicalCard self);
 
     boolean skipUniquenessCheck();
+
+    default Result validatePreGameDeckCheck(List<PhysicalCardImpl> freeps, List<PhysicalCardImpl> shadow,
+            List<PhysicalCardImpl> sites, PhysicalCardImpl rb, PhysicalCardImpl ring, PhysicalCardImpl map) {
+        return new Result(true, null);
+    }
 }

@@ -19,7 +19,7 @@
 		unique: false
 		twilight: 1
 		type: Site
-		site: 3K
+		site: 3
 		block: King
 		direction: Right
 		keywords: [
@@ -67,7 +67,7 @@
 		unique: false
 		twilight: 4
 		type: Site
-		site: 4K
+		site: 4
 		block: King
 		direction: Right
 		keywords: Underground
@@ -112,7 +112,7 @@
 		unique: false
 		twilight: 7
 		type: Site
-		site: 5K
+		site: 5
 		block: King
 		direction: Left
 		/*requires: {
@@ -156,7 +156,7 @@
 		unique: false
 		twilight: 6
 		type: Site
-		site: 7K
+		site: 7
 		block: King
 		direction: Right
 		keywords: River

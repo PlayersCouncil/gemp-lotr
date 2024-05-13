@@ -1,49 +1,24 @@
-
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_029_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<>() {{
-					put("murder", "101_29");
-					put("murder2", "101_29");
-					put("murder3", "101_29");
-					put("murder4", "101_29");
-					put("murder5", "101_29");
-					put("murder6", "101_29");
-
-					put("cond1", "1_120");
-					put("cond2", "1_120");
-					put("cond3", "1_120");
-
-					put("saruman", "3_69");
-
-					//Since we will go multiple rounds and need to manipulate the draw deck,
-					// these are here to ensure reconciliation doesn't screw us over.
-					put("fcond1", "1_21");
-					put("fcond2", "1_21");
-					put("fcond3", "1_21");
-					put("fcond4", "1_21");
-					put("fcond5", "1_21");
-					put("fcond6", "1_21");
-					put("fcond7", "1_21");
-					put("fcond8", "1_95");
+				new HashMap<>()
+				{{
+					put("card", "101_29");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -55,227 +30,50 @@ public class Card_V1_029_Tests
 	public void MurderofCrowsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V1
-		* Title: *Murder of Crows
-		* Side: Free Peoples
-		* Culture: isengard
-		* Twilight Cost: 4
-		* Type: minion
-		* Subtype: Crow
-		* Strength: 4
-		* Vitality: 3
-		* Site Number: 4
-		* Game Text: While you can spot 3 Free Peoples conditions, this minion is twilight cost -3. 
-		* 	Maneuver: Spot 3 Free Peoples conditions (or spot Saruman) and discard this minion to place an [isengard] condition from your draw deck or discard pile on top of your draw deck.
+		 * Set: V1
+		 * Name: Murder of Crows
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 4
+		 * Type: Minion
+		 * Subtype: Crow
+		 * Strength: 4
+		 * Vitality: 3
+		 * Site Number: 4
+		 * Game Text: While you can spot 3 Free Peoples conditions, this minion is twilight cost -3. 
+		* 	Shadow: Spot 3 Free Peoples conditions (or spot Saruman) to take an [isengard] condition into hand from your draw deck or discard pile (limit once per phase).
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl murder = scn.GetFreepsCard("murder");
+		var card = scn.GetFreepsCard("card");
 
-		assertTrue(murder.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, murder.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, murder.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, murder.getBlueprint().getCardType());
-		assertEquals(Race.CROW, murder.getBlueprint().getRace());
-		//assertTrue(scn.HasKeyword(murder, Keyword.SUPPORT_AREA)); // test for keywords as needed
-		assertEquals(4, murder.getBlueprint().getTwilightCost());
-		assertEquals(4, murder.getBlueprint().getStrength());
-		assertEquals(3, murder.getBlueprint().getVitality());
-		//assertEquals(, murder.getBlueprint().getResistance());
-		//assertEquals(Signet., murder.getBlueprint().getSignet());
-		assertEquals(4, murder.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals("Murder of Crows", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.CROW, card.getBlueprint().getRace());
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	@Test
-	public void MurderTwilightDiscountFrom3FreepsConditions() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void MurderofCrowsTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl murder = scn.GetShadowCard("murder");
-		PhysicalCardImpl murder2 = scn.GetShadowCard("murder2");
-		PhysicalCardImpl murder3 = scn.GetShadowCard("murder3");
-		PhysicalCardImpl murder4 = scn.GetShadowCard("murder4");
-		PhysicalCardImpl murder5 = scn.GetShadowCard("murder5");
-		PhysicalCardImpl murder6 = scn.GetShadowCard("murder6");
-		scn.ShadowMoveCardToHand(murder, murder2, murder3, murder4, murder5, murder6);
-
-		//Causes each copy of the unique Murder to auto-self-discard, which allows us to get around the uniqueness issue.
-		scn.ApplyAdHocShadowAutoDiscard("crow");
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		scn.SetTwilight(27);
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(30, scn.GetTwilight()); //base after moving
-		scn.ShadowPlayCard(murder);
-		assertEquals(24, scn.GetTwilight()); //-4 cost, -2 roaming
-		scn.FreepsMoveCardToSupportArea("fcond1");
-		scn.ShadowPlayCard(murder2);
-		assertEquals(18, scn.GetTwilight()); //-4 cost, -2 roaming
-		scn.FreepsMoveCardToSupportArea("fcond2");
-		scn.ShadowPlayCard(murder3);
-		assertEquals(12, scn.GetTwilight()); //-4 cost, -2 roaming
-		scn.FreepsMoveCardToSupportArea("fcond3");
-		scn.ShadowPlayCard(murder3);
-		assertEquals(9, scn.GetTwilight()); //-1 cost, -2 roaming
-		scn.FreepsMoveCardToSupportArea("fcond4");
-		scn.ShadowPlayCard(murder3);
-		assertEquals(6, scn.GetTwilight()); //-1 cost, -2 roaming
-
-	}
-
-	@Test
-	public void ManeuverActionRequires3FreepsConditionsOrSaruman() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl murder = scn.GetShadowCard("murder");
-		PhysicalCardImpl cond1 = scn.GetShadowCard("cond1");
-		PhysicalCardImpl cond2 = scn.GetShadowCard("cond2");
-		PhysicalCardImpl cond3 = scn.GetShadowCard("cond3");
-		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
-
-		scn.ShadowMoveCardToHand(saruman);
-		scn.ShadowMoveCharToTable(murder);
-		scn.ShadowMoveCardsToBottomOfDeck(cond1);
-		scn.ShadowMoveCardToDiscard(cond2);
-		scn.ShadowMoveCardToDiscard(cond3);
-
-		//Max out the move limit so we don't have to juggle play back and forth
-		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
-
-		scn.StartGame();
-		scn.FreepsMoveCardToSupportArea("fcond1");
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-		// 1 freeps condition, no saruman
-		assertFalse(scn.ShadowActionAvailable(murder));
-		scn.ShadowPassCurrentPhaseAction();
-
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-
-		scn.FreepsMoveCardToSupportArea("fcond2", "fcond3");
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-		// 3 freeps conditions, no saruman
-		assertTrue(scn.ShadowActionAvailable(murder));
-		scn.ShadowPassCurrentPhaseAction();
-
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-
-		scn.FreepsMoveCardToDiscard("fcond1", "fcond2", "fcond3");
-		scn.ShadowMoveCharToTable(saruman);
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-		// 0 freeps conditions, yes saruman
-		assertTrue(scn.ShadowActionAvailable(murder));
-
-	}
-
-	@Test
-	public void ManeuverActionSelfDiscardsToTopDecksConditionFromDeckOrDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-
-		PhysicalCardImpl murder = scn.GetShadowCard("murder");
-		PhysicalCardImpl murder2 = scn.GetShadowCard("murder2");
-		PhysicalCardImpl murder3 = scn.GetShadowCard("murder3");
-
-		PhysicalCardImpl cond1 = scn.GetShadowCard("cond1");
-		PhysicalCardImpl cond2 = scn.GetShadowCard("cond2");
-		PhysicalCardImpl cond3 = scn.GetShadowCard("cond3");
-		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
-
-		scn.ShadowMoveCharToTable(murder, murder2, murder3, saruman);
-		scn.ShadowMoveCardsToBottomOfDeck(cond1);
-		scn.ShadowMoveCardToDiscard(cond2);
-		scn.ShadowMoveCardToDiscard(cond3);
-
-		//Max out the move limit so we don't have to juggle play back and forth
-		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.ShadowActionAvailable(murder));
-		assertEquals(Zone.DECK, cond1.getZone());
-		assertEquals(cond1, scn.GetShadowBottomOfDeck());
-		assertEquals(Zone.DISCARD, cond2.getZone());
-		assertEquals(Zone.DISCARD, cond3.getZone());
-
-		// When the ability is invoked and there are isengard conditions in both draw deck and discard, the player
-		// must first decide between deck and discard, and then choose among the revealed copies.
-		scn.ShadowUseCardAction(murder);
-		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
-		assertEquals(2, scn.GetShadowCardChoiceCount());
-		scn.ShadowChooseCardBPFromSelection(cond2);
-		assertEquals(Zone.DISCARD, murder.getZone());
-		assertEquals(Zone.DECK, cond2.getZone());
-		assertEquals(cond2, scn.GetShadowTopOfDeck());
-
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		//scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.ShadowActionAvailable(murder2));
-		assertEquals(Zone.DECK, cond1.getZone());
-		assertEquals(cond1, scn.GetShadowBottomOfDeck());
-		assertEquals(Zone.HAND, cond2.getZone()); // it was drawn during regroup
-		assertEquals(Zone.DISCARD, cond3.getZone());
-
-		// When the ability is invoked and there is a single condition in both draw deck and discard, the player
-		// chooses between deck/discard, but then does not have to choose among copies (as there is only 1)
-		scn.ShadowUseCardAction(murder2);
-		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
-//		assertEquals(1, scn.GetShadowCardChoiceCount());
-//		scn.ShadowChooseCardBPFromSelection(weather1);
-		assertEquals(Zone.DISCARD, murder2.getZone());
-		assertEquals(Zone.DECK, cond3.getZone());
-		assertEquals(cond3, scn.GetShadowTopOfDeck());
-
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowChooseCard("fcond5"); // reconciling a card away so we draw the item from the top
-		scn.FreepsChooseToMove();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.ShadowActionAvailable(murder3));
-		assertEquals(Zone.DECK, cond1.getZone());
-		assertEquals(cond1, scn.GetShadowBottomOfDeck());
-		assertEquals(Zone.HAND, cond2.getZone());
-		assertEquals(Zone.HAND, cond3.getZone()); // it was drawn during regroup
-
-		// When the ability is invoked and there is a single weather between both draw deck and discard, the player
-		// does not need to choose either pile source nor which copy
-		scn.ShadowUseCardAction(murder3);
-		assertFalse(scn.ShadowDecisionAvailable("Choose action to perform"));
-//		scn.ShadowChooseMultipleChoiceOption("draw deck");
-//		assertEquals(1, scn.GetShadowCardChoiceCount());
-//		scn.ShadowChooseCardBPFromSelection(weather1);
-		assertEquals(Zone.DISCARD, murder3.getZone());
-		assertEquals(Zone.DECK, cond1.getZone());
-		assertEquals(cond1, scn.GetShadowTopOfDeck());
+		assertEquals(4, scn.GetTwilight());
 	}
 }

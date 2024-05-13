@@ -1,5 +1,9 @@
 var GempLotrGameUI = Class.extend({
     padding: 5,
+    
+    initialized: false,
+    
+    pregamePanel: null,
 
     bottomPlayerId: null,
     replayMode: null,
@@ -158,6 +162,9 @@ var GempLotrGameUI = Class.extend({
         this.removedPileGroups = {};
         this.miscPileDialogs = {};
         this.miscPileGroups = {};
+        
+        this.pregamePanel = $("#pregame-info");
+        this.pregamePanel.hide();
 
         this.skirmishShadowGroup = new NormalCardGroup($("#main"), function (card) {
             return card.zone == "SHADOW_CHARACTERS" && card.skirmish == true;
@@ -466,6 +473,8 @@ var GempLotrGameUI = Class.extend({
                 $("body").unbind("mousemove", dragFunc);
                 return that.dragStopCardFunction(event);
             });
+        
+        this.initialized = true;
     },
     
     
@@ -1309,6 +1318,8 @@ var GempLotrGameUI = Class.extend({
             this.animations.processDecision(gameEvent, animate);
         } else if (eventType == "EG") {
             this.processGameEnd();
+        } else if (eventType == "PGS") {
+            this.preGameSetup(gameEvent);
         }
     },
 
@@ -1441,6 +1452,8 @@ var GempLotrGameUI = Class.extend({
     },
 
     participant: function (element) {
+        this.pregamePanel.hide();
+        
         var participantId = element.getAttribute("participantId");
         this.allPlayerIds = element.getAttribute("allParticipantIds").split(",");
         var discardPublic = element.getAttribute("discardPublic") === 'true';
@@ -1478,6 +1491,79 @@ var GempLotrGameUI = Class.extend({
 
         this.initializeGameUI(discardPublic);
         this.layoutUI(true);
+    },
+    
+    preGameSetup: function (element) {
+        if(this.initialized) {
+            this.pregamePanel.hide();
+            
+            return;
+        }
+        
+        var summary = element.getAttribute("summary");
+        var allPlayerIds = element.getAttribute("allParticipantIds").split(",");
+        var participantId = element.getAttribute("participantId");
+        var notes = element.getAttribute("notes");
+        var maps = element.getAttribute("maps");
+
+        var leftPlayer;
+        var rightPlayer;
+        
+        var summaryContent = $("#pregame-general");
+        var leftContent = $("#left-pregame-content");
+        var rightContent = $("#right-pregame-content");
+        var leftTitle = $("#left-pregame-header");
+        var rightTitle = $("#right-pregame-header");
+        
+        summary += "<br><br>Please be courteous to your fellow players; we are all here to have fun. :)"
+        summary += "<br><br>If you need to leave for any reason, please remember to concede ('Options' tab → 'Concede game' button)."
+        
+        if(allPlayerIds.includes(participantId)) {
+            leftPlayer = participantId;
+            allPlayerIds.forEach((x) => {
+                if(x !== participantId) {
+                    rightPlayer = x;
+                }
+            }); 
+        }
+        else { //spectator
+            leftPlayer = allPlayerIds[0];
+            rightPlayer = allPlayerIds[1];
+        }
+        
+        summaryContent.html(summary);
+        leftTitle.html(leftPlayer);
+        
+        rightTitle.html(rightPlayer);
+        rightContent.html("");
+
+        if(maps != null && maps !== "") {
+            maps = maps.split(",");
+            mapA = maps[0].split(":");
+            mapB = maps[1].split(":");
+            
+            var cardA = new Card(mapA[1], "SPECIAL", -1, null);
+            var cardB = new Card(mapB[1], "SPECIAL", -2, null);
+            var mapADiv = this.createCardDiv(cardA);
+            var mapBDiv = this.createCardDiv(cardB);
+            
+            if(mapA[0] === leftPlayer) {
+                leftContent.append(mapADiv);
+                rightContent.append(mapBDiv);
+            }
+            else {
+                leftContent.append(mapBDiv);
+                rightContent.append(mapADiv);
+            }
+            
+            $(".borderOverlay").remove(); //It's super long for some reason.
+        }
+        
+        if(notes != null && notes !== "") {
+            leftContent.append("<div>" + notes + "</div>");
+        }
+        
+        this.pregamePanel.show();
     },
     
     createPile: function(playerId, name, dialogsName, groupsName) {

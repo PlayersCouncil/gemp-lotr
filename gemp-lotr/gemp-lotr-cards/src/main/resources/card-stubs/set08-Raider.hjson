@@ -72,6 +72,7 @@
 		culture: Raider
 		twilight: 2
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -502,6 +503,7 @@
 		culture: Raider
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -779,6 +781,7 @@
 		culture: Raider
 		twilight: 2
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -827,17 +830,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a corsair strength +1 for each [raider] token you spot (limit +6). If you have initiative, you may place this event on top of your draw deck.
 		lore: ...black against the glittering stream... a fleet borne up on the wind....
 		promotext: ""

@@ -168,17 +168,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a ranger strength +2 (or +3 if he or she is skirmishing a minion who has a damage bonus).
 		lore: ...men were yelling and screaming, and one clear loud voice was calling 'Gondor! Gondor!'
 		promotext: ""
@@ -356,17 +359,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert any number of [gondor] companions who have total resistance 12 or more to make a minion skirmishing a [gondor] companion strength -3 for each companion exerted this way.
 		lore: Captain Faramir, you have shown your quality, sir. The very highest.'
 		promotext: ""
@@ -496,17 +502,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Heal each [gondor] companion who has resistance 5 or more.
 		lore: A guest-house shall be made ready: there you shall sleep, when you have eaten.'
 		promotext: ""
@@ -543,17 +552,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [gondor] companion strength +2 (or +3 if he or she has resistance 4 or more).
 		lore: I ask leave once again to be your companion, Frodo.'
 		promotext: ""
@@ -635,23 +647,26 @@
 		twilight: 0
 		type: Event
 		keywords: [
-			Fellowship
-			Regroup
+			ranger
+			Fellowship or Regroup
 		]
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: To play, exert a  ranger.<br>If the fellowship is in region 1, play the fellowship's next 2 sites.<br>Otherwise, play the fellowship's next site.
 		lore: With a great many years' experience in the wilds of Middle-earth, Aragorn's skills as guide and tracker were unmatched.
 		promotext: ""

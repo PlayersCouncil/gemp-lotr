@@ -73,6 +73,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
+		#target: a [dwarven] companion
 		/*requires: {
 			
 		}
@@ -120,17 +121,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gimli and exert a fellowship companion to have each Shadow player discard one of his or her Shadow cards from play.
 		lore: Legolas, two already!
 		promotext: ""

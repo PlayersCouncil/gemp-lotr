@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Remove 2 threats to play a Nazgûl. That Nazgûl is twilight cost -2 and gains <b>hunter 2</b> <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper> until the start of the regroup phase.
 		lore: The Nine have left Minas Morgul.
 		promotext: ""

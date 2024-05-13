@@ -32,7 +32,7 @@ public class Card_03_018_Tests
 
 		/**
 		 * Set: 3
-		 * Name: Galdor, Councilor From The West
+		 * Name: Galdor, Councilor From the West
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Elven

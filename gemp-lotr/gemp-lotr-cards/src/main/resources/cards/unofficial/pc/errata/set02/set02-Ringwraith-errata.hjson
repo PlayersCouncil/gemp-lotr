@@ -2,20 +2,10 @@
 
 	52_75: {
 		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/52_75.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
 			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
 			parent: 2_75
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
 			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
 			version: 1?
 			collInfo: 2R75
 			rarity: R
@@ -75,10 +65,105 @@
 		lore: "'...as for Ferny, he would sell anything to anybody; or make mischief for amusement.'"
 		promotext: ""
 		alts: {
-			//These are just CardInfo objects
 			promos: {
 			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+	
+	52_76: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN02E076.1_card.jpg
+			javaClass: false
+			parent: 2_76
+			parentPath: errata/pc
+			version: 1
+			collInfo: 2U76
+			rarity: U
+			setNum: "2"
+			cardNum: 76
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Helpless
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keyword: support area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantUseSpecialAbilities
+					filter: bearer
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					filter: choose(Nazgul,not(enduring))
+				}
+				effect: {
+					type: Transfer
+					filter: self
+					where: choose(companion,ring-bound)
+				}
+			}
+			{
+				type: ActivatedTrigger
+				trigger: {
+					type: RemovesBurden
+				}
+				requires: {
+					type: Or
+					requires: [
+						{ 
+							type: CanSpot
+							filter: Nazgul
+						}
+						{
+							type: HasCardInHand
+							filter: Nazgul
+						}
+					]
+				}
+				effect: [
+					{
+						# Since we are checking for both in-play and in-hand
+						# Nazgul, we will only prompt to reveal if there are
+						# no Nazgul on the table.
+						# Doing this as an effect and not a cost as I'm not
+						# sure whether violating the condition would count
+						# as "not paying" the cost.
+						type: Conditional
+						requires: {
+							type: CantSpot
+							filter: Nazgul
+						}
+						effect: {
+							type: RevealCardsFromHand
+							filter: choose(Nazgul)
+						}
+					}
+					{
+						type: Transfer
+						filter: self
+						where: choose(companion,ring-bound)
+					}
+				]
+			}
+		]
+		gametext: Bearer's game text does not apply (except keywords).<br>Maneuver: Exert a non-enduring Nazgul to transfer this to a Ring-bound companion.<br>Response: If a burden is removed, spot or reveal a Nazgul from hand to transfer this to a Ring-bound companion.
+		lore: “He heard Frodo's voice...crying out strange words.”
+		promotext: ""
+		alts: {
+			promos: {
+			}
 			errata: {
 			}
 		}

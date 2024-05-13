@@ -1,0 +1,905 @@
+{
+
+	5_79: {
+		cardInfo: {
+			imagePath: decipher/LOTR05079.jpg
+			javaClass: true
+			//parentId: 5_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5U79
+			rarity: U
+			setNum: "5"
+			cardNum: 79
+			style: Standard
+		}
+		title: Armory
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: [
+			Fortification
+			Support Area
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fortification</b>. Plays to your support area.<br><b>Maneuver:</b> Spot 2 [rohan] Men to remove 2 tokens from a machine or to take a [rohan] possession into hand from your discard pile. Discard this condition.
+		lore: Choose from these ere we go, and may they serve you well!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_80: {
+		cardInfo: {
+			imagePath: decipher/LOTR05080.jpg
+			javaClass: true
+			//parentId: 5_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5U80
+			rarity: U
+			setNum: "5"
+			cardNum: 80
+			style: Standard
+		}
+		title: Arrow-slits
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: [
+			Fortification
+			Support Area
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fortification</b>. Plays to your support area.<br><b>Maneuver:</b> Spot 2 [rohan] Men to discard a possession or a machine. Discard this condition.
+		lore: Here and there were clefts in the stone through which men could shoot.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_81: {
+		cardInfo: {
+			imagePath: decipher/LOTR05081.jpg
+			javaClass: true
+			//parentId: 5_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5C81
+			rarity: C
+			setNum: "5"
+			cardNum: 81
+			style: Standard
+		}
+		title: Ecglaf
+		subtitle: Courageous Farmer
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: towers,4
+		race: Man
+		strength: 4
+		vitality: 2
+		keywords: Villager
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Villager</b>.<br><b>Fellowship:</b> Exert Ecglaf and spot 2 valiant Men to play a [rohan] possession from your discard pile.
+		lore: Like many of the Rohirrim, Ecglaf no longer had a home awaiting his return.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_82: {
+		cardInfo: {
+			imagePath: decipher/LOTR05082.jpg
+			javaClass: true
+			//parentId: 5_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5R82
+			rarity: R
+			setNum: "5"
+			cardNum: 82
+			style: Standard
+		}
+		title: Gamling
+		subtitle: Warrior of Rohan
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>. To play, spot a [rohan] Man.<br><b>Skirmish:</b> Play a [rohan] possession on Gamling to make him strength +2 and <b>damage +1</b>.
+		lore: He was one of Théoden's most trusted lieutenants.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_83: {
+		cardInfo: {
+			imagePath: decipher/LOTR05083.jpg
+			javaClass: true
+			//parentId: 5_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5C83
+			rarity: C
+			setNum: "5"
+			cardNum: 83
+			style: Standard
+		}
+		title: Household Guard
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.
+		lore: The king and the men of his household were in the Hornburg....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_84: {
+		cardInfo: {
+			imagePath: decipher/LOTR05084.jpg
+			javaClass: true
+			//parentId: 5_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5R84
+			rarity: R
+			setNum: "5"
+			cardNum: 84
+			style: Standard
+		}
+		title: I Am Here
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Event
+		keywords: Fellowship
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Exert Théoden twice to heal every other companion with the Théoden signet twice.
+		lore: The last host of the Eorlingas has ridden forth. It will not return without battle.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_85: {
+		cardInfo: {
+			imagePath: decipher/LOTR05085.jpg
+			javaClass: true
+			//parentId: 5_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5C85
+			rarity: C
+			setNum: "5"
+			cardNum: 85
+			style: Standard
+		}
+		title: Let Us Be Swift
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keywords: Regroup
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Spot 3 valiant Men to discard up to 2 conditions and liberate a site.
+		lore: Let us drive through such foes as are already between us and the fastness.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_86: {
+		cardInfo: {
+			imagePath: decipher/LOTR05086.jpg
+			javaClass: true
+			//parentId: 5_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5R86
+			rarity: R
+			setNum: "5"
+			cardNum: 86
+			style: Standard
+		}
+		title: No Rest for the Weary
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		keywords: Maneuver
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Spot 3 valiant Men to make one of those Men <b>defender +1</b> until the regroup phase.
+		lore: We must draw all our forces now behind the walls.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_87: {
+		cardInfo: {
+			imagePath: decipher/LOTR05087.jpg
+			javaClass: true
+			//parentId: 5_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5U87
+			rarity: U
+			setNum: "5"
+			cardNum: 87
+			style: Standard
+		}
+		title: Parapet
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: [
+			Fortification
+			Support Area
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Fortification</b>. Plays to your support area.<br><b>Archery:</b> Spot 2 [rohan] Men to remove 2 tokens from a machine or to make the minion archery total -3. Discard this condition.
+		lore: Upon the spur of rock from the cliff stood high walls of ancient stone.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_88: {
+		cardInfo: {
+			imagePath: decipher/LOTR05088.jpg
+			javaClass: true
+			//parentId: 5_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5C88
+			rarity: C
+			setNum: "5"
+			cardNum: 88
+			style: Standard
+		}
+		title: Rohirrim Bow
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Ranged weapon
+		#target: a [rohan] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br><b>Archery:</b> Exert bearer and discard this possession to wound a minion.
+		lore: The Rohirrim have good bowmen after their fashion, but there are too few here, too few.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_89: {
+		cardInfo: {
+			imagePath: decipher/LOTR05089.jpg
+			javaClass: true
+			//parentId: 5_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5R89
+			rarity: R
+			setNum: "5"
+			cardNum: 89
+			style: Standard
+		}
+		title: Rohirrim Helm
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Helm
+		#target: a [rohan] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br><b>Skirmish:</b> Discard this possession to cancel a skirmish involving bearer. A minion in this skirmish may exert to prevent this.
+		lore: The armory of Helm's Deep provided raiment of war for her defenders.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_90: {
+		cardInfo: {
+			imagePath: decipher/LOTR05090.jpg
+			javaClass: true
+			//parentId: 5_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5C90
+			rarity: C
+			setNum: "5"
+			cardNum: 90
+			style: Standard
+		}
+		title: Rohirrim Scout
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br><b>Regroup:</b> Exert this companion and spot a [rohan] possession to return that possession to hand.
+		lore: ...scouts rode out far ahead, passing like shadows in the folds of the land.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_91: {
+		cardInfo: {
+			imagePath: decipher/LOTR05091.jpg
+			javaClass: true
+			//parentId: 5_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5C91
+			rarity: C
+			setNum: "5"
+			cardNum: 91
+			style: Standard
+		}
+		title: Rohirrim Shield
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Shield
+		#target: a [rohan] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br>The minion archery total is -1.<br><b>Regroup:</b> Discard this possession to heal bearer.
+		lore: The Rohirrim carried round wooden shields, usable on foot and on horseback.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_92: {
+		cardInfo: {
+			imagePath: decipher/LOTR05092.jpg
+			javaClass: true
+			//parentId: 5_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5U92
+			rarity: U
+			setNum: "5"
+			cardNum: 92
+			style: Standard
+		}
+		title: Sigewulf
+		subtitle: Brave Volunteer
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: towers,4
+		race: Man
+		strength: 4
+		vitality: 2
+		keywords: Villager
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Villager</b>.<br><b>Regroup:</b> Exert Sigewulf and spot 5 valiant Men to discard a minion.
+		lore: The courage of Sigewulf and other Rohirrim like him will not be forgotten.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_93: {
+		cardInfo: {
+			imagePath: decipher/LOTR05093.jpg
+			javaClass: true
+			//parentId: 5_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5C93
+			rarity: C
+			setNum: "5"
+			cardNum: 93
+			style: Standard
+		}
+		title: Théoden
+		subtitle: King of the Golden Hall
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 2
+		signet: Gandalf
+		resistance: 6
+		keywords: Valiant
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br><b>Maneuver:</b> Play a [rohan] possession on Théoden to heal a [rohan] ally.
+		lore: You thought I remained in Meduseld bent like an old tree under winter snow.... But a west wind has shaken the boughs.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_94: {
+		cardInfo: {
+			imagePath: decipher/LOTR05094.jpg
+			javaClass: true
+			//parentId: 5_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5R94
+			rarity: R
+			setNum: "5"
+			cardNum: 94
+			style: Standard
+		}
+		title: Thundering Host
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Discard this condition to make a mounted [rohan] Man strength +3 (and heal that Man if at a plains).
+		lore: ...with a rush like the sudden onset of a great wind the last host of Rohan rode thundering into the West.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_122: {
+		cardInfo: {
+			imagePath: decipher/LOTR05122.jpg
+			javaClass: true
+			//parentId: 5_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5P122
+			rarity: P
+			setNum: "5"
+			cardNum: 122
+			style: Standard
+		}
+		title: Éowyn
+		subtitle: Daughter of Éomund
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		keywords: Valiant
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Valiant</b>.<br><b>Maneuver:</b> Play a [rohan] possession on Éowyn to heal her.
+		lore: Let the heralds announce to the folk that Lady Éowyn will lead them!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_127: {
+		cardInfo: {
+			imagePath: decipher/LOTR05127.jpg
+			javaClass: true
+			//parentId: 5_127
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5R127
+			rarity: R
+			setNum: "5"
+			cardNum: 127
+			style: Standard
+		}
+		title: Rohirrim Helm
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Helm
+		#target: a [rohan] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] Man.<br><b>Skirmish:</b> Discard this possession to cancel a skirmish involving bearer. A minion in this skirmish may exert to prevent this.
+		lore: A helm split by an Uruk blade often still saves the rider who wears it.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_128: {
+		cardInfo: {
+			imagePath: decipher/LOTR05128.jpg
+			javaClass: true
+			//parentId: 5_128
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 5R128
+			rarity: R
+			setNum: "5"
+			cardNum: 128
+			style: Standard
+		}
+		title: Thundering Host
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Discard this condition to make a mounted [rohan] Man strength +3 (and heal that Man if at a plains).
+		lore: The roar of hooves was enough to rout the Uruk-hai without sword or spear.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

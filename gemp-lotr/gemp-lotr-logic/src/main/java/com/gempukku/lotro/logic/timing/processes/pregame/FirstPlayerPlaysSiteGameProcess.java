@@ -1,5 +1,7 @@
 package com.gempukku.lotro.logic.timing.processes.pregame;
 
+import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.effects.PlaySiteEffect;
@@ -19,6 +21,15 @@ public class FirstPlayerPlaysSiteGameProcess implements GameProcess {
 
     @Override
     public void process(LotroGame game) {
+        var gameState = game.getGameState();
+        var format = game.getFormat();
+        if(format.usesMaps()) {
+            for (String playerId : gameState.getPlayerOrder().getAllPlayers()) {
+                var map = game.getGameState().getMap(playerId);
+                gameState.addCardToZone(game, map, Zone.SUPPORT);
+            }
+        }
+
         SystemQueueAction action = new SystemQueueAction();
         action.appendEffect(
                 new PlaySiteEffect(action, _firstPlayer, null, 1));

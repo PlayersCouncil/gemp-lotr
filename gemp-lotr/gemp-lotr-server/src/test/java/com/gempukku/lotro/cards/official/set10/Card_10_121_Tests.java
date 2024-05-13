@@ -41,6 +41,7 @@ public class Card_10_121_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 12
 		 * Signet: Frodo
 		 * Game Text: <b>Ring-bearer (resistance 12).</b>
 		*/
@@ -59,6 +60,7 @@ public class Card_10_121_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(12, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

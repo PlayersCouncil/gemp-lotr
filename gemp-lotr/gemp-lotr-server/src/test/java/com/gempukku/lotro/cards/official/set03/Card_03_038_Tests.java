@@ -41,6 +41,7 @@ public class Card_03_038_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: <b>Ranger</b>.<br>Each time the fellowship moves during the fellowship phase, remove (2).
 		*/
@@ -60,6 +61,7 @@ public class Card_03_038_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

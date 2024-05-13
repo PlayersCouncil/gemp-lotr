@@ -1,11 +1,89 @@
 {
 
+	# 101_25: {
+	# 	title: Crebain Flock
+	# 	culture: isengard
+	# 	twilight: 2
+	# 	type: minion
+	# 	race: crow
+	# 	strength: 2
+	# 	vitality: 3
+	# 	site: 4
+	# 	effects: [
+	# 		{
+	# 			type: modifyowncost
+	# 			amount: {
+	# 				type: ForEachYouCanSpot
+	# 				filter: companion
+	# 				over: 3
+	# 				multiplier: -1
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: maneuver
+	# 			requires: {
+	# 				type: or
+	# 				requires: [
+	# 					{
+	# 						type: canSpot
+	# 						filter: companion,wounded
+	# 						count: 2
+	# 					}
+	# 					{
+	# 						type: canSpot
+	# 						filter: title(Saruman)
+	# 					}
+	# 				]
+	# 			}
+	# 			cost: {
+	# 				type: discard
+	# 				filter: self
+	# 			}
+	# 			effect: {
+	# 				type: choice
+	# 				texts: [
+	# 					Choose an {isengard} weather card from your draw deck
+	# 					Choose an {isengard} weather card from your discard pile
+	# 				]
+	# 				effects: [
+	# 					{
+	# 						type: putCardsFromDeckOnTopOfDeck
+	# 						filter: choose(culture(isengard),weather)
+	# 						count: 1
+	# 					}
+	# 					{
+	# 						type: putCardsFromDiscardOnTopOfDeck
+	# 						filter: choose(culture(isengard),weather)
+	# 						count: 1
+	# 					}
+	# 				]
+	# 			}
+	# 		}
+	# 	]
+	# }
+	
 	101_25: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S025.1_card.jpg
+			javaClass: false
+			parent: 101_25
+			parentPath: errata/pc
+			version: 1
+			collInfo: V1C25
+			rarity: C
+			setNum: "V1"
+			cardNum: 25
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
 		title: Crebain Flock
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 2
-		type: minion
-		race: crow
+		type: Minion
+		race: Crow
 		strength: 2
 		vitality: 3
 		site: 4
@@ -21,54 +99,171 @@
 			}
 			{
 				type: activated
-				phase: maneuver
-				requires: {
-					type: or
-					requires: [
-						{
-							type: canSpot
-							filter: companion,wounded
-							count: 2
-						}
-						{
-							type: canSpot
-							filter: title(Saruman)
-						}
-					]
-				}
-				cost: {
-					type: discard
-					filter: self
-				}
-				effect: {
-					type: choice
-					texts: [
-						Choose an {isengard} weather card from your draw deck
-						Choose an {isengard} weather card from your discard pile
-					]
-					effects: [
-						{
-							type: putCardsFromDeckOnTopOfDeck
-							filter: choose(culture(isengard),weather)
-							count: 1
-						}
-						{
-							type: putCardsFromDiscardOnTopOfDeck
-							filter: choose(culture(isengard),weather)
-							count: 1
-						}
-					]
-				}
+				phase: shadow
+				requires: [
+					{
+						type: perPhaseLimit
+						limit: 1
+					}
+					{
+						type: or
+						requires: [
+							{
+								type: canSpot
+								filter: companion,wounded
+								count: 2
+							}
+							{
+								type: canSpot
+								filter: title(Saruman)
+							}
+						]
+					}
+				]
+				effect: [
+					{
+						type: choice
+						texts: [
+							Take an {isengard} weather card from your draw deck
+							Take an {isengard} weather card from your discard pile
+						]
+						effects: [
+							{
+								type: PutCardsFromDeckIntoHand
+								filter: choose(culture(isengard),weather)
+								count: 1
+							}
+							{
+								type: PutCardsFromDiscardIntoHand
+								filter: choose(culture(isengard),weather)
+								count: 1
+							}
+						]
+					}
+					{
+						type: incrementPerPhaseLimit
+						limit: 1
+					}	
+				]
 			}
 		]
+		gametext: This minion is twilight cost -1 for each companion you can spot over 3.<br>Shadow: Spot 2 wounded companions (or spot Saruman) to take an [isengard] weather into hand from your draw deck or discard pile (limit once per phase).
+		lore: "'...one harsh croak was heard.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
+
+	# 101_26: {
+	# 	title: Crows of Isengard
+	# 	culture: isengard
+	# 	twilight: 3
+	# 	type: minion
+	# 	race: crow
+	# 	strength: 3
+	# 	vitality: 3
+	# 	site: 4
+	# 	effects: [
+	# 		{
+	# 			type: trigger
+	# 			trigger: {
+	# 				type: played
+	# 				filter: self
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: spot
+	# 					filter: choose(companion)
+	# 					memorize: spottedComp
+	# 				}
+	# 				{
+	# 					type: memorizeNumber
+	# 					memory: attachedItems
+	# 					amount: {
+	# 						type: forEachYouCanSpot
+	# 						filter: side(free people),attachedTo(memory(spottedComp))
+	# 					}
+	# 				}
+	# 				{
+	# 					type: addTwilight
+	# 					amount: {
+	# 						type: fromMemory
+	# 						memory: attachedItems
+	# 						limit: 3
+	# 					}
+	# 				}
+	# 			]
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: maneuver
+	# 			requires: {
+	# 				type: or
+	# 				requires: [
+	# 					{
+	# 						type: canSpot
+	# 						filter: item,side(free people)
+	# 						count: 2
+	# 					}
+	# 					{
+	# 						type: canSpot
+	# 						filter: title(Saruman)
+	# 					}
+	# 				]
+	# 			}
+	# 			cost: {
+	# 				type: discard
+	# 				filter: self
+	# 			}
+	# 			effect: {
+	# 				type: choice
+	# 				texts: [
+	# 					Choose an {isengard} item card from your draw deck
+	# 					Choose an {isengard} item card from your discard pile
+	# 				]
+	# 				effects: [
+	# 					{
+	# 						type: putCardsFromDeckOnTopOfDeck
+	# 						filter: choose(culture(isengard),item)
+	# 						count: 1
+	# 					}
+	# 					{
+	# 						type: putCardsFromDiscardOnTopOfDeck
+	# 						filter: choose(culture(isengard),item)
+	# 						count: 1
+	# 					}
+	# 				]
+	# 			}
+	# 		}
+	# 	]
+	# }
+	
 	101_26: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S026.1_card.jpg
+			javaClass: false
+			parent: 101_26
+			parentPath: errata/pc
+			version: 1
+			collInfo: V1C26
+			rarity: C
+			setNum: "V1"
+			cardNum: 26
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
 		title: Crows of Isengard
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 3
-		type: minion
-		race: crow
+		type: Minion
+		race: Crow
 		strength: 3
 		vitality: 3
 		site: 4
@@ -98,54 +293,69 @@
 						amount: {
 							type: fromMemory
 							memory: attachedItems
-							limit: 3
 						}
 					}
 				]
 			}
 			{
 				type: activated
-				phase: maneuver
-				requires: {
-					type: or
-					requires: [
-						{
-							type: canSpot
-							filter: item,side(free people)
-							count: 2
-						}
-						{
-							type: canSpot
-							filter: title(Saruman)
-						}
-					]
-				}
-				cost: {
-					type: discard
-					filter: self
-				}
-				effect: {
-					type: choice
-					texts: [
-						Choose an {isengard} item card from your draw deck
-						Choose an {isengard} item card from your discard pile
-					]
-					effects: [
-						{
-							type: putCardsFromDeckOnTopOfDeck
-							filter: choose(culture(isengard),item)
-							count: 1
-						}
-						{
-							type: putCardsFromDiscardOnTopOfDeck
-							filter: choose(culture(isengard),item)
-							count: 1
-						}
-					]
-				}
+				phase: shadow
+				requires: [
+					{
+						type: perPhaseLimit
+						limit: 1
+					}
+					{
+						type: or
+						requires: [
+							{
+								type: canSpot
+								filter: item,side(free people)
+								count: 2
+							}
+							{
+								type: canSpot
+								filter: title(Saruman)
+							}
+						]
+					}
+				]
+				effect: [
+					{
+						type: choice
+						texts: [
+							Take an {isengard} item (artifact or possession) card from your draw deck
+							Take an {isengard} item (artifact or possession) card from your discard pile
+						]
+						effects: [
+							{
+								type: PutCardsFromDeckIntoHand
+								filter: choose(culture(isengard),item)
+								count: 1
+							}
+							{
+								type: PutCardsFromDiscardIntoHand
+								filter: choose(culture(isengard),item)
+								count: 1
+							}
+						]
+					}
+					{
+						type: incrementPerPhaseLimit
+						limit: 1
+					}	
+				]
 			}
-
 		]
+		gametext: When you play this minion, spot a companion to add (1) for each Free Peoples card borne by that companion.<br>Shadow: Spot 2 Free Peoples items (or spot Saruman) to take an [isengard] item into hand from your draw deck or discard pile (limit once per phase).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 
@@ -190,64 +400,215 @@
 	}
 
 
+	# 101_28: {
+	# 	title: Just A Wisp Of Cloud
+	# 	culture: isengard
+	# 	twilight: 1
+	# 	type: event
+	# 	keyword: [
+	# 		maneuver
+	# 		spell
+	# 		weather
+	# 	]
+	# 	effects: {
+	# 		type: event
+			
+	# 		effect: [
+	# 			{
+	# 				type: choice
+	# 				texts: [
+	# 					Choose Saruman from your draw deck
+	# 					Choose Saruman from your discard pile
+	# 				]
+	# 				effects: [
+	# 					{
+	# 						type: putCardsFromDeckOnTopOfDeck
+	# 						filter: choose(title(Saruman))
+	# 						count: 1
+	# 					}
+	# 					{
+	# 						type: putCardsFromDiscardOnTopOfDeck
+	# 						filter: choose(title(Saruman))
+	# 						count: 1
+	# 					}
+	# 				]
+	# 			}
+	# 			{
+	# 				type: DiscardFromHand
+	# 				forced: false
+	# 				filter: choose(any)
+	# 				count: {
+	# 					type: range
+	# 					from: 0
+	# 					to: {
+	# 						type: forEachYouCanSpot
+	# 						filter: crow
+	# 					}
+	# 				}
+	# 			}
+	# 		]
+	# 	}
+	# }
+
 	101_28: {
-		title: Just A Wisp Of Cloud
-		culture: isengard
-		twilight: 1
-		type: event
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S028.1_card.jpg
+			javaClass: false
+			parent: 101_28
+			parentPath: errata/pc
+			version: 1
+			collInfo: V1C28
+			rarity: C
+			setNum: "V1"
+			cardNum: 28
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Just a Wisp of Cloud
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
 		keyword: [
-			maneuver
+			shadow
 			spell
 			weather
 		]
 		effects: {
 			type: event
-			
+			cost: {
+				type: DiscardFromHand
+				forced: false
+				filter: choose(side(freeps))
+				count: 1
+			}
 			effect: [
 				{
 					type: choice
 					texts: [
-						Choose Saruman from your draw deck
-						Choose Saruman from your discard pile
+						Play Saruman from your draw deck
+						Play Saruman from your discard pile
 					]
 					effects: [
 						{
-							type: putCardsFromDeckOnTopOfDeck
+							type: PlayCardFromDrawDeck
 							filter: choose(title(Saruman))
-							count: 1
+							cost: {
+								type: ForEachYouCanSpot
+								filter: Crow
+								multiplier: -1
+							}
 						}
 						{
-							type: putCardsFromDiscardOnTopOfDeck
+							type: PlayCardFromDiscard
 							filter: choose(title(Saruman))
-							count: 1
+							cost: {
+								type: ForEachYouCanSpot
+								filter: Crow
+								multiplier: -1
+							}
 						}
 					]
 				}
-				{
-					type: DiscardFromHand
-					forced: false
-					filter: choose(any)
-					count: {
-						type: range
-						from: 0
-						to: {
-							type: forEachYouCanSpot
-							filter: crow
-						}
-					}
-				}
 			]
+		}
+		gametext: Spell. Weather. <br>Discard a Free Peoples card from hand to play Saruman from your draw deck or discard pile; his twilight cost is -1 for each Crow you can spot.
+		lore: "'It is moving fast...and against the wind.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
 	}
 
-
+	# 101_29: {
+	# 	title: Murder Of Crows
+	# 	unique: true
+	# 	culture: isengard
+	# 	twilight: 4
+	# 	type: minion
+	# 	race: crow
+	# 	strength: 4
+	# 	vitality: 3
+	# 	site: 4
+	# 	effects: [
+	# 		{
+	# 			type: modifyowncost
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: side(free people),condition
+	# 				count: 3
+	# 			}
+	# 			amount: -3
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: maneuver
+	# 			requires: {
+	# 				type: or
+	# 				requires: [
+	# 					{
+	# 						type: canSpot
+	# 						filter: condition,side(free people)
+	# 						count: 3
+	# 					}
+	# 					{
+	# 						type: canSpot
+	# 						filter: title(Saruman)
+	# 					}
+	# 				]
+	# 			}
+	# 			cost: {
+	# 				type: discard
+	# 				filter: self
+	# 			}
+	# 			effect: {
+	# 				type: choice
+	# 				texts: [
+	# 					Choose an {isengard} condition from your draw deck
+	# 					Choose an {isengard} condition from your discard pile
+	# 				]
+	# 				effects: [
+	# 					{
+	# 						type: putCardsFromDeckOnTopOfDeck
+	# 						filter: choose(culture(isengard),condition)
+	# 						count: 1
+	# 					}
+	# 					{
+	# 						type: putCardsFromDiscardOnTopOfDeck
+	# 						filter: choose(culture(isengard),condition)
+	# 						count: 1
+	# 					}
+	# 				]
+	# 			}
+	# 		}
+	# 	]
+	# }
+	
 	101_29: {
-		title: Murder Of Crows
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S029.1_card.jpg
+			javaClass: false
+			parent: 101_29
+			parentPath: errata/pc
+			version: 1
+			collInfo: V1R29
+			rarity: R
+			setNum: "V1"
+			cardNum: 29
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Murder of Crows
 		unique: true
-		culture: isengard
+		side: Shadow
+		culture: Isengard
 		twilight: 4
-		type: minion
-		race: crow
+		type: Minion
+		race: Crow
 		strength: 4
 		vitality: 3
 		site: 4
@@ -263,47 +624,63 @@
 			}
 			{
 				type: activated
-				phase: maneuver
-				requires: {
-					type: or
-					requires: [
-						{
-							type: canSpot
-							filter: condition,side(free people)
-							count: 3
-						}
-						{
-							type: canSpot
-							filter: title(Saruman)
-						}
-					]
-				}
-				cost: {
-					type: discard
-					filter: self
-				}
-				effect: {
-					type: choice
-					texts: [
-						Choose an {isengard} condition from your draw deck
-						Choose an {isengard} condition from your discard pile
-					]
-					effects: [
-						{
-							type: putCardsFromDeckOnTopOfDeck
-							filter: choose(culture(isengard),condition)
-							count: 1
-						}
-						{
-							type: putCardsFromDiscardOnTopOfDeck
-							filter: choose(culture(isengard),condition)
-							count: 1
-						}
-					]
-				}
+				phase: shadow
+				requires: [
+					{
+						type: perPhaseLimit
+						limit: 1
+					}
+					{
+						type: or
+						requires: [
+							{
+								type: canSpot
+								filter: condition,side(free people)
+								count: 3
+							}
+							{
+								type: canSpot
+								filter: title(Saruman)
+							}
+						]
+					}
+				]
+				effect: [
+					{
+						type: choice
+						texts: [
+							Take an {isengard} condition from your draw deck
+							Take an {isengard} condition from your discard pile
+						]
+						effects: [
+							{
+								type: PutCardsFromDeckIntoHand
+								filter: choose(culture(isengard),condition)
+								count: 1
+							}
+							{
+								type: PutCardsFromDiscardIntoHand
+								filter: choose(culture(isengard),condition)
+								count: 1
+							}
+						]
+					}
+					{
+						type: incrementPerPhaseLimit
+						limit: 1
+					}	
+				]
 			}
-			
 		]
+		gametext: While you can spot 3 Free Peoples conditions, this minion is twilight cost -3. <br>Shadow: Spot 3 Free Peoples conditions (or spot Saruman) to take an [isengard] condition into hand from your draw deck or discard pile (limit once per phase).
+		lore: "...a whole regiment of birds had broken away..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 	101_30: {

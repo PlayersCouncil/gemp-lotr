@@ -41,6 +41,7 @@ public class Card_10_011_Tests
 		 * Subtype: Elf
 		 * Strength: 3
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: When Galadriel is in your starting fellowship, her twilight cost is -3.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Discard an [elven] event from hand to discard a Shadow condition or Shadow possession.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_10_011_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

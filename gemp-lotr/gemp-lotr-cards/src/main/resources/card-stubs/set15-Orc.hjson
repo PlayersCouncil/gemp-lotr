@@ -953,6 +953,7 @@
 		culture: Orc
 		twilight: 0
 		type: Condition
+		#target: the fellowship's current site
 		/*requires: {
 			
 		}
@@ -1138,17 +1139,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 [orc] minions to discard a Free Peoples condition. The Free Peoples player may add (2) for each Free Peoples condition you can spot to prevent that.
 		lore: An attacking swarm of Orcs leaves few desirable options.
 		promotext: ""

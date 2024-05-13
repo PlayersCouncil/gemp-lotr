@@ -41,6 +41,7 @@ public class Card_10_006_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: Each minion skirmishing Arwen is strength -2 for each wounded minion you can spot.
 		*/
@@ -59,6 +60,7 @@ public class Card_10_006_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

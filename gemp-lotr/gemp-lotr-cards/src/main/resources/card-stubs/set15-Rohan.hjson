@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [rohan] companion strength +2 (or strength +3 and <b>damage +1</b> if he or she is a hunter companion).
 		lore: The Orcs reeled and screamed and cast aside both sword and spear.
 		promotext: ""
@@ -72,17 +75,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [rohan] companion <b>defender +1</b> and minions skirmishing that companion cannot take wounds during a skirmish involving that companion until the regroup phase.
 		lore: Their hearts were heavy, remembering the many men that had fallen in battle in this place.
 		promotext: ""
@@ -319,17 +325,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [rohan] Man strength +1 for each hunter you can spot (or if you can spot more valiant Men than hunters, make a [rohan] Man strength +1 for each valiant Man you can spot).
 		lore: At least they will not love the Orcs.'
 		promotext: ""
@@ -506,17 +515,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [rohan] Man to play a possession from your discard pile for each hunter character you can spot.
 		lore: Decorative armor adorned the hallways and armories of Helm's Deep.
 		promotext: ""
@@ -553,17 +565,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 [rohan] Men (or 1 hunter [rohan] Man) to play a [rohan] companion or a [rohan] follower from your draw deck.
 		lore: No parent should have to bury their child.
 		promotext: ""
@@ -1009,17 +1024,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot your [rohan] Man bearing a possession to discard all possessions from one character.
 		lore: ...she drove her sword between crown and mantle, as the great shoulders bowed before her.
 		promotext: ""

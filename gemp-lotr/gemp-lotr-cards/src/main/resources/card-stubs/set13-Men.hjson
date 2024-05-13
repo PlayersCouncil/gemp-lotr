@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a companion to make a [men] minion strength +1 for each wound on that companion.
 		lore: Helm's Deep has one weakness. Its outer wall is solid rock but for a small culvert at its base, which is little more than a drain.'
 		promotext: ""
@@ -443,17 +446,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: You may remove from the game 4 [men] cards in your discard pile instead of paying the twilight cost for this card.<br>Make your [men] minion strength +2.
 		lore: The torches of hate carried by the Dunlendings were kindled by the voice of Saruman.
 		promotext: ""

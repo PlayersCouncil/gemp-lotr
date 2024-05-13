@@ -41,6 +41,7 @@ public class Card_09_005_Tests
 		 * Subtype: Dwarf
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: Each time a Dwarf wins a fierce skirmish, you may heal that Dwarf.<br><b>Skirmish:</b> Discard a [dwarven] card from hand to make a Dwarf <b>damage +1</b>.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_09_005_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

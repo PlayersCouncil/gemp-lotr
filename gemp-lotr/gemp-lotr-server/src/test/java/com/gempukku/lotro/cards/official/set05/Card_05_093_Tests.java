@@ -41,6 +41,7 @@ public class Card_05_093_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
+		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: <b>Valiant</b>.<br><b>Maneuver:</b> Play a [rohan] possession on Théoden to heal a [rohan] ally.
 		*/
@@ -60,6 +61,7 @@ public class Card_05_093_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

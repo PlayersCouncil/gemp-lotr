@@ -41,6 +41,7 @@ public class Card_04_301_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 10
 		 * Signet: Frodo
 		 * Game Text: <b>Ring-bearer (resistance 10).</b><br>While you can spot 3 unbound companions, Shadow cards may not discard cards from your hand or from the top of your draw deck.
 		*/
@@ -59,6 +60,7 @@ public class Card_04_301_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(10, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

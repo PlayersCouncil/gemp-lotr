@@ -41,6 +41,7 @@ public class Card_07_082_Tests
 		 * Subtype: Man
 		 * Strength: 5
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: While you have only 4 or 5 cards in hand, Cirion is strength +2.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_07_082_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

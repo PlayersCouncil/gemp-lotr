@@ -41,6 +41,7 @@ public class Card_08_015_Tests
 		 * Subtype: Wizard
 		 * Strength: 7
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: When Gandalf is in your starting fellowship, his twilight cost is -2.
 		*/
@@ -59,6 +60,7 @@ public class Card_08_015_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

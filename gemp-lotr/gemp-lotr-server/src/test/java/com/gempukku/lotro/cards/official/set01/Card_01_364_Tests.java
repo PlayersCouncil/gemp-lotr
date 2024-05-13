@@ -41,6 +41,7 @@ public class Card_01_364_Tests
 		 * Subtype: Wizard
 		 * Strength: 7
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: <b>Fellowship:</b> Exert Gandalf to play a companion who has the Gandalf signet. The twilight cost of that companion is -2.
 		*/
@@ -59,6 +60,7 @@ public class Card_01_364_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

@@ -41,6 +41,7 @@ public class Card_09_010_Tests
 		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: You may play [dwarven] skirmish events stacked on [dwarven] conditions as if from hand.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_09_010_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

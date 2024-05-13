@@ -169,17 +169,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [uruk-hai] minion strength +1 for each battleground site you can spot.
 		lore: Uruks are drawn to the sounds of battle.
 		promotext: ""
@@ -263,20 +266,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If your [uruk-hai] minion wins a skirmish, discard a condition from play.
 		lore: The villages hold nothing of value to the Uruk-hai; they are simply things to be destroyed.
 		promotext: ""
@@ -500,17 +506,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [uruk-hai] minion strength +2 (or +3 if you can spot an exhausted companion).
 		lore: Uruk soldiers have learned to save their rage for the field of battle.
 		promotext: ""
@@ -932,6 +941,7 @@
 		type: Condition
 		strength: -1
 		resistance: -3
+		#target: title(an unbound companion)
 		/*requires: {
 			
 		}

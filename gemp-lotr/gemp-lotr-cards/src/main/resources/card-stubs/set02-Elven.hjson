@@ -69,17 +69,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If an Elf archer wins a skirmish, make an opponent choose a minion to discard. That opponent may remove (3) to prevent this.
 		lore: Reeling from the bite of an arrow, the Cave Troll became enraged trying to strike the nimble Elf.
 		promotext: ""
@@ -163,17 +166,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert an Elf to wound each Nazgûl once (or twice if at a river).
 		lore: The three Riders that were still in the midst of the Ford were overwhelmed.... Their piercing cries were drowned in the roaring of the river as it carried them away.
 		promotext: ""
@@ -210,17 +216,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert an Elf ally to discard a condition (or 2 conditions if you spot an Orc).
 		lore: Yet so little faith and trust do we find now in the world beyond Lothlórien... that we dare not by our own trust endanger our land.'
 		promotext: ""

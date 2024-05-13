@@ -41,6 +41,7 @@ public class Card_09_003_Tests
 		 * Subtype: Dwarf
 		 * Strength: 7
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: <b>Damage +1</b>.<br>While you can spot 2 Dwarves, Durin III is twilight cost -2.<br>Durin III is strength +1 for each artifact and each possession he bears.
 		*/
 
@@ -60,6 +61,7 @@ public class Card_09_003_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

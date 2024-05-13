@@ -21,6 +21,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -69,20 +70,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If an [isengard] minion wins a skirmish, until the regroup phase, make that minion strength +1 for each site you control and <b>fierce</b>.
 		lore: There's some devilry at work in the Shire....'
 		promotext: ""

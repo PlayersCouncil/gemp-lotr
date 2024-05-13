@@ -1,0 +1,1346 @@
+{
+
+	4_109: {
+		cardInfo: {
+			imagePath: decipher/LOTR04109.jpg
+			javaClass: true
+			//parentId: 4_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C109
+			rarity: C
+			setNum: "4"
+			cardNum: 109
+			style: Standard
+		}
+		title: Aragorn
+		subtitle: Heir of Elendil
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		keywords: Defender+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Defender +1</b>.
+		lore: Sauron fears you, Aragorn, he fears what you may become.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_110: {
+		cardInfo: {
+			imagePath: decipher/LOTR04110.jpg
+			javaClass: true
+			//parentId: 4_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U110
+			rarity: U
+			setNum: "4"
+			cardNum: 110
+			style: Standard
+		}
+		title: Arrows Thick in the Air
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Archery</b> <i>or</i> <b>Skirmish:</b> Exert 2 Ring-bound Men to wound each roaming minion.
+		lore: He came to rest in the fern a few feet away, face downward, green arrow-feathers sticking from his neck below a golden collar.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_111: {
+		cardInfo: {
+			imagePath: decipher/LOTR04111.jpg
+			javaClass: true
+			//parentId: 4_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R111
+			rarity: R
+			setNum: "4"
+			cardNum: 111
+			style: Standard
+		}
+		title: Boromir, My Brother
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		vitality: 1
+		#target: title(Faramir)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Faramir.<br><b>Skirmish:</b> Discard a [gondor] card from hand to make a Ring-bound Man strength +1.
+		lore: Where is thy horn? Whither goest thou? O Boromir! But he was gone.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_112: {
+		cardInfo: {
+			imagePath: decipher/LOTR04112.jpg
+			javaClass: true
+			//parentId: 4_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C112
+			rarity: C
+			setNum: "4"
+			cardNum: 112
+			style: Standard
+		}
+		title: Boromir's Gauntlets
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Gauntlets
+		#target: a [gondor] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [gondor] Man.<br><b>Skirmish:</b> Exert bearer to cancel a skirmish involving bearer. Any Shadow player may remove (1) to prevent this.
+		lore: ...now Boromir has taken his road, and we must make haste to choose our own.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_113: {
+		cardInfo: {
+			imagePath: decipher/LOTR04113.jpg
+			javaClass: true
+			//parentId: 4_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C113
+			rarity: C
+			setNum: "4"
+			cardNum: 113
+			style: Standard
+		}
+		title: Curse Them
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Exert a Ring-bound Man to cancel a skirmish involving a roaming minion.
+		lore: It is close on ten leagues hence to the east-shore of Anduin... and we seldom come so far afield.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_114: {
+		cardInfo: {
+			imagePath: decipher/LOTR04114.jpg
+			javaClass: true
+			//parentId: 4_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U114
+			rarity: U
+			setNum: "4"
+			cardNum: 114
+			style: Standard
+		}
+		title: Damrod
+		subtitle: Ranger of Ithilien
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: [
+			Ring-bound
+			Ranger
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>. <b>Ranger</b>. To play, spot a Ring-bound Man.<br><b>Skirmish:</b> Exert Damrod to exhaust a Man he is skirmishing.
+		lore: I doubt not that the days of Gondor are numbered, and the walls of Minas Tirith are doomed, so great is His strength and malice.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_115: {
+		cardInfo: {
+			imagePath: decipher/LOTR04115.jpg
+			javaClass: true
+			//parentId: 4_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C115
+			rarity: C
+			setNum: "4"
+			cardNum: 115
+			style: Standard
+		}
+		title: Defend It and Hope
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		keywords: Maneuver
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert a [gondor] Man to wound a minion once (or twice if that minion is an Uruk-hai).
+		lore: Is it not said that no foe has ever taken the Hornburg, if men defended it?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_116: {
+		cardInfo: {
+			imagePath: decipher/LOTR04116.jpg
+			javaClass: true
+			//parentId: 4_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R116
+			rarity: R
+			setNum: "4"
+			cardNum: 116
+			style: Standard
+		}
+		title: Faramir
+		subtitle: Captain of Gondor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: [
+			Ring-bound
+			Ranger
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>. <b>Ranger</b>.<br>The twilight cost of each other [gondor] Man in your starting fellowship is -1.<br>While skirmishing a roaming minion, Faramir is strength +2.
+		lore: He leads us now in all perilous ventures.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_117: {
+		cardInfo: {
+			imagePath: decipher/LOTR04117.jpg
+			javaClass: true
+			//parentId: 4_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C117
+			rarity: C
+			setNum: "4"
+			cardNum: 117
+			style: Standard
+		}
+		title: Faramir
+		subtitle: Son of Denethor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Frodo
+		resistance: 6
+		keywords: [
+			Ring-bound
+			Ranger
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>. <b>Ranger</b>.<br>An opponent may not play skirmish events or use skirmish special abilities during skirmishes involving Faramir.
+		lore: He could see Faramir's face, which was now unmasked; it was stern and commanding, and a keen wit lay behind his searching glance.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR04118.jpg
+			javaClass: true
+			//parentId: 4_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R118
+			rarity: R
+			setNum: "4"
+			cardNum: 118
+			style: Standard
+		}
+		title: Faramir's Bow
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Ranged weapon
+		#target: title(Faramir)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Faramir.<br>He is an <b>archer</b>.<br><b>Skirmish:</b> If Faramir is skirmishing a Man or a roaming minion, exert Faramir to wound that minion.
+		lore: Were I as hasty as you, I might have slain you long ago.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_119: {
+		cardInfo: {
+			imagePath: decipher/LOTR04119.jpg
+			javaClass: true
+			//parentId: 4_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R119
+			rarity: R
+			setNum: "4"
+			cardNum: 119
+			style: Standard
+		}
+		title: Faramir's Cloak
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Possession
+		itemclass: Cloak
+		#target: title(Faramir)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Faramir.<br>Each roaming minion skirmishing a Ring-bound Man is strength -1.
+		lore: Captain Faramir and his rangers were clad in green and brown of varied hues, better to walk unseen in the glades of Ithilien.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR04120.jpg
+			javaClass: true
+			//parentId: 4_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R120
+			rarity: R
+			setNum: "4"
+			cardNum: 120
+			style: Standard
+		}
+		title: Forbidden Pool
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>While the fellowship is at site 6[T], each Ring-bound Man takes no more than 1 wound during each skirmish phase.<br><b>Fellowship:</b> Add (2) and discard this condition to heal a Ring-bound Man.
+		lore: ...tonight you have come where it is death to come.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_121: {
+		cardInfo: {
+			imagePath: decipher/LOTR04121.jpg
+			javaClass: true
+			//parentId: 4_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R121
+			rarity: R
+			setNum: "4"
+			cardNum: 121
+			style: Standard
+		}
+		title: Forests of Ithilien
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>While the fellowship is at site 5[T], the site number of each Man in a skirmish is +2.<br><b>Regroup:</b> Discard this condition and exert a Ring-bound Man to liberate a site.
+		lore: ...a fair country of climbing woods and swift-falling streams.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_122: {
+		cardInfo: {
+			imagePath: decipher/LOTR04122.jpg
+			javaClass: true
+			//parentId: 4_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C122
+			rarity: C
+			setNum: "4"
+			cardNum: 122
+			style: Standard
+		}
+		title: Gondorian Ranger
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		keywords: [
+			Ring-bound
+			Ranger
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>. <b>Ranger</b>.<br>The site number of each minion assigned to skirmish a Ring-bound Man is +2.
+		lore: Green gauntlets covered their hands, and their faces were hooded and masked with green, except for their eyes, which were very keen and bright.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_123: {
+		cardInfo: {
+			imagePath: decipher/LOTR04123.jpg
+			javaClass: true
+			//parentId: 4_123
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U123
+			rarity: U
+			setNum: "4"
+			cardNum: 123
+			style: Standard
+		}
+		title: Hard Choice
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		keywords: Fellowship
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Spot Aragorn to heal a companion who has the Aragorn signet twice.
+		lore: Shall we rest by night, or shall we go on while our will and strength hold?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_124: {
+		cardInfo: {
+			imagePath: decipher/LOTR04124.jpg
+			javaClass: true
+			//parentId: 4_124
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R124
+			rarity: R
+			setNum: "4"
+			cardNum: 124
+			style: Standard
+		}
+		title: Help in Doubt and Need
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Exert an unbound [gondor] Man to make a [rohan] companion strength +2, or exert a [rohan] companion to make an unbound [gondor] Man strength +2.
+		lore: The Heir of Elendil would be a strength indeed to the Sons of Eorl in this evil tide.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_125: {
+		cardInfo: {
+			imagePath: decipher/LOTR04125.jpg
+			javaClass: true
+			//parentId: 4_125
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R125
+			rarity: R
+			setNum: "4"
+			cardNum: 125
+			style: Standard
+		}
+		title: Henneth Annûn
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>While the fellowship is at site 6[T], each roaming minion skirmishing a Ring-bound companion is strength -2.<br><b>Skirmish:</b> Spot a [gondor] Man and discard this condition to wound a roaming minion.
+		lore: This is the Window of the Sunset....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_126: {
+		cardInfo: {
+			imagePath: decipher/LOTR04126.jpg
+			javaClass: true
+			//parentId: 4_126
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U126
+			rarity: U
+			setNum: "4"
+			cardNum: 126
+			style: Standard
+		}
+		title: Ithilien Trap
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each time a [gondor] Man wins a skirmish, you may place a [gondor] token here.<br><b>Maneuver:</b> Exert a minion for each [gondor] token here (limit 3). Discard this condition.
+		lore: He was glad he could not see the dead face.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_127: {
+		cardInfo: {
+			imagePath: decipher/LOTR04127.jpg
+			javaClass: true
+			//parentId: 4_127
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U127
+			rarity: U
+			setNum: "4"
+			cardNum: 127
+			style: Standard
+		}
+		title: Mablung
+		subtitle: Soldier of Gondor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: [
+			Ring-bound
+			Ranger
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>. <b>Ranger</b>. To play, spot a Ring-bound Man.<br><b>Skirmish:</b> Exert Mablung to exhaust a roaming minion he is skirmishing.
+		lore: ...we have a new errand on this journey....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_128: {
+		cardInfo: {
+			imagePath: decipher/LOTR04128.jpg
+			javaClass: true
+			//parentId: 4_128
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C128
+			rarity: C
+			setNum: "4"
+			cardNum: 128
+			style: Standard
+		}
+		title: New Errand
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Spot a Ring-bound Man to make a minion's site number +2. If that minion loses this skirmish, you may wound a minion.
+		lore: ...we come to ambush the Men of Harad.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_129: {
+		cardInfo: {
+			imagePath: decipher/LOTR04129.jpg
+			javaClass: true
+			//parentId: 4_129
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C129
+			rarity: C
+			setNum: "4"
+			cardNum: 129
+			style: Standard
+		}
+		title: Pathfinder
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		keywords: Regroup
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Fellowship</b> <i>or</i> <b>Regroup:</b> Spot a ranger to play the fellowship's next site (replacing opponent's site if necessary).
+		lore: If you take my counsel, you will not turn eastward yet. Go straight on, for thus you will have the cover of the woodland for many miles.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_130: {
+		cardInfo: {
+			imagePath: decipher/LOTR04130.jpg
+			javaClass: true
+			//parentId: 4_130
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C130
+			rarity: C
+			setNum: "4"
+			cardNum: 130
+			style: Standard
+		}
+		title: Ranger of Ithilien
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: [
+			Ring-bound
+			Ranger
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ring-bound</b>. <b>Ranger</b>.<br>When this companion is in your starting fellowship, his twilight cost is -1.<br>While skirmishing a roaming minion, this companion is strength +2.
+		lore: ...they were goodly men, pale-skinned, dark of hair, with grey eyes and faces sad and proud.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_131: {
+		cardInfo: {
+			imagePath: decipher/LOTR04131.jpg
+			javaClass: true
+			//parentId: 4_131
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C131
+			rarity: C
+			setNum: "4"
+			cardNum: 131
+			style: Standard
+		}
+		title: Ranger's Bow
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Ranged weapon
+		#target: title(Ring-bound Man)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Ring-bound Man.<br><b>Skirmish:</b> If bearer is skirmishing a Man or a roaming minion, exert bearer to wound that minion.
+		lore: Two had great bows, almost of their own height, and great quivers of long green-feathered arrows.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_132: {
+		cardInfo: {
+			imagePath: decipher/LOTR04132.jpg
+			javaClass: true
+			//parentId: 4_132
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U132
+			rarity: U
+			setNum: "4"
+			cardNum: 132
+			style: Standard
+		}
+		title: Ranger's Sword
+		subtitle: Blade of Aragorn
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: title(Aragorn)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be Aragorn.<br>While skirmishing an Uruk-hai, Aragorn is strength +2.
+		lore: I am not weaponless.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_133: {
+		cardInfo: {
+			imagePath: decipher/LOTR04133.jpg
+			javaClass: true
+			//parentId: 4_133
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R133
+			rarity: R
+			setNum: "4"
+			cardNum: 133
+			style: Standard
+		}
+		title: Ruins of Osgiliath
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>While the fellowship is at site 7[T], each Ring-bound Man is <b>defender +1</b>.<br><b>Skirmish:</b> Spot a Ring-bound Man and discard this condition to wound an opponent's Man.
+		lore: The Citadel of the Stars had fallen into ruin.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_134: {
+		cardInfo: {
+			imagePath: decipher/LOTR04134.jpg
+			javaClass: true
+			//parentId: 4_134
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C134
+			rarity: C
+			setNum: "4"
+			cardNum: 134
+			style: Standard
+		}
+		title: Sword of Gondor
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: a [gondor] Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [gondor] Man.<br>While skirmishing a Man or a roaming minion, bearer is <b>damage +1</b>.
+		lore: Four tall Men stood there.... All had swords at their sides....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_135: {
+		cardInfo: {
+			imagePath: decipher/LOTR04135.jpg
+			javaClass: true
+			//parentId: 4_135
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C135
+			rarity: C
+			setNum: "4"
+			cardNum: 135
+			style: Standard
+		}
+		title: War and Valor
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a [gondor] Man strength +2 (or +3 and <b>damage +1</b> if skirmishing a roaming minion).
+		lore: So even was my brother, Boromir: a man of prowess, and for that he was accounted the best man in Gondor.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_364: {
+		cardInfo: {
+			imagePath: decipher/LOTR04364.jpg
+			javaClass: true
+			//parentId: 4_364
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4P364
+			rarity: P
+			setNum: "4"
+			cardNum: 364
+			style: Standard
+		}
+		title: Aragorn
+		subtitle: Wingfoot
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		keywords: Ranger
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Ranger</b>.<br>Each time the fellowship moves, you may wound a minion for each unbound Hobbit you spot.
+		lore: Forty leagues and five you have measured ere the fourth day is ended! Hardy is the race of Elendil!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

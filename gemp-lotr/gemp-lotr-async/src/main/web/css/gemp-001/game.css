@@ -2,6 +2,17 @@ body {
     font-size: 12px;
 }
 
+
+.ui-widget-content a,
+.msg-content p a {
+    color: #BF6B04;
+}
+
+.ui-widget-content a:visited,
+.msg-content p a:visited {
+    color: #A63F03;
+}
+
 .deckSize {
     display: table-cell;
     text-align: center;
@@ -384,4 +395,47 @@ body {
     display: flex;
     gap: 4px;
     margin: 1px;
+}
+
+
+#pregame-info {
+    display: flex; 
+    flex-direction: column; 
+    width: 70%; 
+    transform: translate(20%, 5vh);
+    font-size: 1rem;
+}
+
+#pregame-general {
+    display: inline-block; 
+    padding: 1rem;
+}
+
+#left-pregame-info,
+#right-pregame-info {
+    height: auto; 
+    flex-basis: 100%; 
+    border-radius: 7px; 
+    max-height:70vh; 
+    display:flex; 
+    flex-direction: column; 
+    padding:1rem;
+}
+
+#left-pregame-header,
+#right-pregame-header {
+    text-align: center; 
+    font-size:2rem;
+}
+
+#left-pregame-content,
+#right-pregame-content {
+    overflow: auto;
+    flex-basis: 100%;
+}
+
+#vs-overlay {
+    flex-basis: 10px; 
+    font-size: 3rem; 
+    transform:translateY(30%);
 }

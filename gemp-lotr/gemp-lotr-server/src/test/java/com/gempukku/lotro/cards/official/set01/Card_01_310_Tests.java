@@ -41,6 +41,7 @@ public class Card_01_310_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 5
 		 * Signet: Frodo
 		 * Game Text: <b>Fellowship:</b> Play Bill the Pony from your draw deck.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
@@ -59,6 +60,7 @@ public class Card_01_310_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(5, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 

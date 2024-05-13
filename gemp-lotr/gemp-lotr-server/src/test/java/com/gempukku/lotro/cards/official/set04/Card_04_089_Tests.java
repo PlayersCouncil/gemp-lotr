@@ -41,6 +41,7 @@ public class Card_04_089_Tests
 		 * Subtype: Wizard
 		 * Strength: 7
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: <b>Fellowship:</b> If the twilight pool has fewer than 2 twilight tokens, add (2) to play a character from your discard pile.
 		*/
@@ -59,6 +60,7 @@ public class Card_04_089_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 

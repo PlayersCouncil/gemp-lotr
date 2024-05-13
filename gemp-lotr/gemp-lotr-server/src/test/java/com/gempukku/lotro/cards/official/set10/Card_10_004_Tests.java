@@ -41,6 +41,7 @@ public class Card_10_004_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Skirmish:</b> Exert Aegnor to make a minion skirmishing an unbound [elven] companion strength -1 for each archer you spot.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_10_004_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

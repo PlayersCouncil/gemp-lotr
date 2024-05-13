@@ -41,6 +41,7 @@ public class Card_07_254_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: <b>Valiant</b>. While you can spot a [rohan] Man, Théoden's twilight cost is -1.<br>Each time the fellowship moves, you may exert a [rohan] companion to exert a minion.
 		*/
@@ -60,6 +61,7 @@ public class Card_07_254_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 

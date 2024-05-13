@@ -41,6 +41,7 @@ public class Card_10_007_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: At the start of each skirmish involving Celeborn, you may reveal the top card of your draw deck. If it is an [elven] card, you may discard it to wound each minion in that skirmish.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_10_007_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

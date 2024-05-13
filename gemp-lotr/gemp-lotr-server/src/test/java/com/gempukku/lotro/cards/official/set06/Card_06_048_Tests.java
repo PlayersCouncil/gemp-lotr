@@ -41,6 +41,7 @@ public class Card_06_048_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Ring-bound</b>. <b>Ranger</b>.<br>Each time Anborn wins a skirmish, you may make a minion's site number +3 until the regroup phase.
 		*/
 
@@ -60,6 +61,7 @@ public class Card_06_048_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

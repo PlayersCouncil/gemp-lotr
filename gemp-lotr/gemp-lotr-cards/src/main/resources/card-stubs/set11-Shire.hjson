@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: For each dwelling and forest site on the adventure path, make a Hobbit strength +1.
 		lore: ...they love peace and quiet and good tilled earth; a well-ordered and well-farmed countryside was their favorite haunt.
 		promotext: ""
@@ -75,17 +78,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Stealth</b>.<br>Cancel a skirmish involving a Hobbit and a minion whose strength is lower than that Hobbit's resistance.
 		lore: Frodo felt a sudden chill running through him and clutching at his heart....
 		promotext: ""
@@ -219,6 +225,7 @@
 		culture: Shire
 		twilight: 4
 		type: Condition
+		#target: a Hobbit
 		keywords: Toil 2
 		/*requires: {
 			
@@ -316,17 +323,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Stealth</b>.<br>If the fellowship is at a dwelling site, exert 2 Hobbits to cancel a skirmish involving a Hobbit.<br>At any other site, exert 2 Hobbits to make a Hobbit strength +3.
 		lore: I am Mr. Underhill, if any name must be given.'
 		promotext: ""
@@ -414,17 +424,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 2</b>. <helper>(For each [shire] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot 2 [shire] companions to remove 2 burdens.
 		lore: This, my friend, is a pint!'
 		promotext: ""
@@ -651,17 +664,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Hobbit strength +1 for each companion who has resistance 7 or more.
 		lore: It's just something Gandalf said. ... Don't you lose him, Samwise Gamgee." And I don't mean to.'"
 		promotext: ""
@@ -698,17 +714,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot X Hobbits to make an unbound Hobbit resistance +X.
 		lore: Another opportunity for one of the shire-folk to prove their great worth. You must not fail me.
 		promotext: ""
@@ -745,17 +764,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Heal a Hobbit for each minion you spot.
 		lore: So far so good; but how are we to avoid being spitted?'
 		promotext: ""

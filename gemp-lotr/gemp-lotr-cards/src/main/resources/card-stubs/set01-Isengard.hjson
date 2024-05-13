@@ -69,17 +69,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Exert an Uruk-hai to make it strength +3.
 		lore: You are the Uruk-hai of Isengard!... you do not know pain, you do not know fear.'
 		promotext: ""
@@ -116,17 +119,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If you play an Uruk-hai, take all copies of that card in your discard pile and place them beneath your draw deck.
 		lore: He is breeding an army in the Caverns of Isengard. An army that can move in sunlight and cover great distance at speed.'
 		promotext: ""
@@ -167,17 +173,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>. <b>Weather</b>.<br><b>Maneuver:</b> Exert an [isengard] minion and spot 5 companions to discard an exhausted companion (except the Ring-bearer).
 		lore: It was no ordinary storm. It is the ill will of Caradhras.'
 		promotext: ""
@@ -218,17 +227,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>. <b>Weather</b>.<br><b>Maneuver:</b> Exert an [isengard] minion to make the opponent choose to either exert the Ring-bearer or add a burden.
 		lore: Yonder stands Barazinbar, the Redhorn, cruel Caradhras....'
 		promotext: ""
@@ -309,17 +321,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Make an Uruk-hai <b>fierce</b> until the regroup phase.
 		lore: Do not stop until they are found!'
 		promotext: ""
@@ -408,17 +423,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make an Uruk-hai strength -1 and <b>damage +1</b>.
 		lore: Find the Halflings!'
 		promotext: ""
@@ -594,17 +612,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Spot an Uruk-hai to cancel the strength bonus from a possession until the regroup phase.
 		lore: Even the sword of a powerful warrior can be parried by the strength of an Uruk-hai.
 		promotext: ""
@@ -681,6 +702,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
+		#target: site
 		keywords: [
 			Spell
 			Weather
@@ -728,6 +750,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Condition
+		#target: site
 		keywords: [
 			Spell
 			Weather
@@ -782,17 +805,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Spell</b>.<br><b>Shadow:</b> Exert an [isengard] minion to discard all conditions.
 		lore: The Uruks of Saruman are bred to be the instruments of his will, destroying his enemies with foul cruelty.
 		promotext: ""
@@ -832,17 +858,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Search</b>.<br><b>Maneuver:</b> Exert an Uruk-hai to make the opponent choose to either exert 2 companions or make the Ring-bearer put on The One Ring until the regroup phase.
 		lore: Saruman used both magic and minions to impose his will.
 		promotext: ""
@@ -875,6 +904,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Condition
+		#target: site
 		keywords: [
 			Spell
 			Weather
@@ -926,17 +956,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2, or spot 5 companions to make an Uruk-hai strength +4 and <b>fierce</b> until the regroup phase.
 		lore: Uruk-hai match their enemies' strength with their own feral rage.
 		promotext: ""
@@ -969,6 +1002,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Condition
+		#target: site
 		/*requires: {
 			
 		}
@@ -1959,17 +1993,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Search</b>.<br><b>Response:</b> If a stealth event is played, exert or discard your Uruk-hai to cancel that event.
 		lore: Even Hobbits have trouble evading the Uruk-hai.
 		promotext: ""

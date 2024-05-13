@@ -41,6 +41,7 @@ public class Card_10_009_Tests
 		 * Subtype: Elf
 		 * Strength: 8
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: To play, spot an Elf.<br>At the start of each skirmish involving Elrond, you may reveal the top card of your draw deck. If it is an [elven] card, you may heal another Elf.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_10_009_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

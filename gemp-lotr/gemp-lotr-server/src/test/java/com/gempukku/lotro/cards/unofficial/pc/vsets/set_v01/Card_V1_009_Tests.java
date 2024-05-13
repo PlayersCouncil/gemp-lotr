@@ -1,4 +1,3 @@
-
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
@@ -10,100 +9,102 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_009_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-                new HashMap<>() {{
-                    put("legolas", "101_9");
-                    put("lorien", "51_53");
-                    put("bow", "1_41");
-                    put("aragorn", "1_89");
-                    put("gornbow", "1_90");
+				new HashMap<>() {{
+					put("legolas", "101_9");
+					put("lorien", "51_53");
+					put("bow", "1_41");
+					put("aragorn", "1_89");
+					put("gornbow", "1_90");
 
-                    put("runner", "1_178");
-                }},
+					put("shelob", "10_23");
+				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
 		);
 	}
 
-
 	@Test
 	public void LegolasStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V1
-		* Title: *Legolas, Swift and Deadly
-		* Side: Free Peoples
-		* Culture: elven
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Elf
-		* Strength: 6
-		* Vitality: 3
-		* Signet: Aragorn
-		* Game Text: Archer.
-		* 	Archery: Make the fellowship archery total -X (to a minimum of 0) to make Legolas strength +X until the regroup phase.  You cannot use archery special abilities.
+		 * Set: V1
+		 * Name: Legolas, Keen-eyed
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Elf
+		 * Strength: 6
+		 * Vitality: 3
+		 * Signet: Gandalf
+		 * Game Text: Archer.
+		 * 	Each time a minion takes a wound during the archery phase, make Legolas strength +1 until the regroup phase.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
+		var card = scn.GetFreepsCard("legolas");
 
-		assertTrue(legolas.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(legolas, Keyword.ARCHER)); // test for keywords as needed
-		assertEquals(2, legolas.getBlueprint().getTwilightCost());
-		assertEquals(6, legolas.getBlueprint().getStrength());
-		assertEquals(3, legolas.getBlueprint().getVitality());
-		//assertEquals(, legolas.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, legolas.getBlueprint().getSignet()); 
-		//assertEquals(, legolas.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-		assertEquals(CardType.COMPANION, legolas.getBlueprint().getCardType());
-		assertEquals(Culture.ELVEN, legolas.getBlueprint().getCulture());
-		assertEquals(Side.FREE_PEOPLE, legolas.getBlueprint().getSide());
+		assertEquals("Legolas", card.getBlueprint().getTitle());
+		assertEquals("Keen-eyed", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
 	@Test
-	public void ArcheryLosesFireToPumpLegolas() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EachArcheryPhaseWoundPumpsLegolasUntilRegroup() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
-		PhysicalCardImpl lorien = scn.GetFreepsCard("lorien");
-		PhysicalCardImpl bow = scn.GetFreepsCard("bow");
-		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		PhysicalCardImpl gornbow = scn.GetFreepsCard("gornbow");
+		var legolas = scn.GetFreepsCard("legolas");
+		var lorien = scn.GetFreepsCard("lorien");
+		var bow = scn.GetFreepsCard("bow");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gornbow = scn.GetFreepsCard("gornbow");
 
 		scn.FreepsMoveCharToTable(legolas, lorien, aragorn);
 		scn.FreepsAttachCardsTo(aragorn, "gornbow");
 		scn.FreepsAttachCardsTo(lorien, "bow");
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.ShadowMoveCharToTable("shelob");
 
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.ARCHERY);
-		assertTrue(scn.FreepsActionAvailable(legolas));
 		assertEquals(3, scn.GetFreepsArcheryTotal());
 		assertEquals(6, scn.GetStrength(legolas));
 
-		scn.FreepsUseCardAction(legolas);
-		assertTrue(scn.FreepsDecisionAvailable("Choose number to reduce archery by"));
-		scn.FreepsChoose("2");
+		scn.FreepsUseCardAction(gornbow);
 
-		assertEquals(1, scn.GetFreepsArcheryTotal());
-		assertEquals(8, scn.GetStrength(legolas));
+		assertEquals(2, scn.GetFreepsArcheryTotal());
+		assertEquals(7, scn.GetStrength(legolas));
 
 		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertFalse(scn.FreepsAnyActionsAvailable()); // No gorn bow
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+
+		//+2 from the two regular archery wounds put on Shelob
+		assertEquals(9, scn.GetStrength(legolas));
+
+		scn.SkipToPhase(Phase.REGROUP);
+		assertEquals(6, scn.GetStrength(legolas));
 	}
 }

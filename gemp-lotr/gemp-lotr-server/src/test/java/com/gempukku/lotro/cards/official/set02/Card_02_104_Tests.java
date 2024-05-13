@@ -41,6 +41,7 @@ public class Card_02_104_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: <b>Fellowship:</b> Exert Merry to play Farmer Maggot from your draw deck.
 		*/
@@ -59,6 +60,7 @@ public class Card_02_104_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

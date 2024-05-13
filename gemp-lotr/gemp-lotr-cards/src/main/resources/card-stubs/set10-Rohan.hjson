@@ -118,20 +118,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If your [rohan] Man wins a skirmish, discard a [rohan] possession to wound a minion or to liberate a site.
 		lore: ...they gathered and rallied and fought until the day wore away.
 		promotext: ""

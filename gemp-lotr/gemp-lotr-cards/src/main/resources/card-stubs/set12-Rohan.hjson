@@ -120,17 +120,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [rohan] companion strength +2 (or +1 for each minion you can spot if that companion has resistance 5 or more).
 		lore: ...we overtook the Orcs at nightfall two days ago, near to the borders of the Entwood. There we surrounded them, and gave battle....'
 		promotext: ""
@@ -352,17 +355,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [rohan] Man to discard a possession from play.<br>You may exert a [rohan] Man who has resistance 3 or more to play this event during the maneuver phase.
 		lore: South strode Éomer and men fled before his face, and they were caught between the hammer and the anvil.
 		promotext: ""

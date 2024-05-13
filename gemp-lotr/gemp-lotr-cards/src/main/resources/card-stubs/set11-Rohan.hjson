@@ -257,6 +257,7 @@
 		culture: Rohan
 		twilight: 4
 		type: Condition
+		#target: a [rohan] Man
 		keywords: Toil 2
 		/*requires: {
 			
@@ -305,17 +306,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [rohan] Man who has resistance 4 or more strength +2 for each wound on each minion he or she is skirmishing.
 		lore: ...a sword-day, a red day, ere the sun rises!'
 		promotext: ""
@@ -763,17 +767,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a [rohan] companion to make him or her strength +3 (and <b>damage +1</b> if he or she has resistance 5 or more).
 		lore: Mourn not overmuch! Mighty was the fallen, / meet was his ending. When his mound is raised, / women then shall weep.'
 		promotext: ""

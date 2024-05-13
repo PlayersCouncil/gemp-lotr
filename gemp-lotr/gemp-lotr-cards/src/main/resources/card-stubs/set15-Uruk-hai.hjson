@@ -1186,17 +1186,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [uruk-hai] minion strength +2 (and <b>damage +1</b> if that minion is a hunter).
 		lore: Uruk-hai weaponry was built to be used offensively and defensively, depending on the situation.
 		promotext: ""

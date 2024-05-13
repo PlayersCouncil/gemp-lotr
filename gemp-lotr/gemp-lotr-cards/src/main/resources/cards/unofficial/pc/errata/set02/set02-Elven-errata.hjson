@@ -1,0 +1,79 @@
+{
+	52_20: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN02E020.1_card.jpg
+			javaClass: false
+			parent: 2_20
+			parentPath: errata/pc
+			version: 1
+			collInfo: 2R20
+			rarity: R
+			setNum: "2"
+			cardNum: 20
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Secret Sentinels
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		keyword: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				filter: choose(Elf,ally)
+				memorize: firstAlly
+			}
+			effect: [
+				{
+					type: Discard
+					count: 1
+					filter: choose(condition)
+				}
+				{
+					type: conditional
+					requires: [
+						{
+							type: CanSpot
+							filter: Orc
+							count: 1
+						}
+						{
+							type: CanSpot
+							filter: Elf,ally,not(exhausted),not(memory(firstAlly))
+						}
+					]
+					effect: {
+						type: Optional
+						player: you
+						text: Would you like to exert another Elf ally to discard another condition?
+						effect: {
+							type: CostToEffect
+							cost: {
+								type: exert
+								filter: choose(Elf,ally,not(memory(firstAlly)))
+							}
+							effect: {
+								type: Discard
+								count: 1
+								filter: choose(condition)
+							}
+						}
+					}
+				}
+			]
+		}
+		gametext: Exert an Elf ally to discard a condition.  If you can spot an Orc, you may exert another Elf ally to discard another condition.
+		lore: “‘Yet so little faith and trust do we find now in the world beyond Lothlórien... that we dare not by our own trust endanger our land.'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

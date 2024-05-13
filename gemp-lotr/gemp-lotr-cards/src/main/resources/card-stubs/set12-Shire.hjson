@@ -74,17 +74,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard a Hobbit not assigned to a skirmish from play to discard a minion from play.<br>If the fellowship is at a battleground site, you may add 2 burdens to play this event during a skirmish involving a Hobbit.
 		lore: Each member of the fellowship was willing to make any sacrifice to safeguard the Quest.
 		promotext: ""
@@ -121,20 +124,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a companion (except a Hobbit) wins a skirmish, heal a Hobbit.
 		lore: Welcome, my lords, to Isengard!' he said. 'We are the doorwardens.'
 		promotext: ""
@@ -215,17 +221,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Hobbit strength +2. If that Hobbit wins this skirmish, you may remove a burden.
 		lore: Soft as butter they can be, and yet sometimes as tough as old tree-roots.'
 		promotext: ""
@@ -350,17 +359,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Prevent a Hobbit from being overwhelmed unless his or her strength is tripled. Then, if the fellowship is at a dwelling site, you may discard 2 cards from hand to return this event to your hand.
 		lore: That was good.' "'Let's get another one!'"
 		promotext: ""

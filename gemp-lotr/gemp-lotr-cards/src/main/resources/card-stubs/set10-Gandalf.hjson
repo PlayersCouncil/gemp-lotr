@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot your Wizard to exchange a companion in hand with a companion in your dead pile or discard pile.
 		lore: ...the wanderers were lifted up and borne far away out of the darkness and the fire.
 		promotext: ""
@@ -116,17 +119,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert your Wizard to choose a number. Make each minion with that twilight cost strength -2 until the regroup phase.
 		lore: ...the rush of their wide wings as they passed over was like a gale.
 		promotext: ""
@@ -163,20 +169,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If the fellowship moves during the regroup phase, exert your Wizard to discard each minion.
 		lore: ...the Nazgûl turned and fled, and vanished into Mordor's shadows....
 		promotext: ""

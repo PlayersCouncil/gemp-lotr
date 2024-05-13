@@ -116,6 +116,7 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -164,17 +165,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Remove 2 [shire] tokens to cancel a skirmish involving an unbound Hobbit.
 		lore: As soon as he saw the dark shapes creep from the garden he knew that he must run for it, or perish. And run he did, out of the back door, through the garden, and over the fields.
 		promotext: ""

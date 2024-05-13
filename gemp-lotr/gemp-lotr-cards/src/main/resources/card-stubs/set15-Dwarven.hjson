@@ -69,17 +69,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a Dwarf to shuffle a [dwarven] condition with one or more [dwarven] tokens on it into your draw deck. Wound a minion for each [dwarven] token that was on that condition.
 		lore: It is grim reading....'
 		promotext: ""
@@ -262,17 +265,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Dwarf strength +2 (or if you can spot a hunter minion, strength +1 and <b>damage +1</b> for each hunter minion you can spot).
 		lore: Dwarves have a knack for surviving misfortune.
 		promotext: ""

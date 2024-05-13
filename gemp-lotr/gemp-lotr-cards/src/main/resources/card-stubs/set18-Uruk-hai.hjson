@@ -70,17 +70,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot your Uruk-hai skirmishing a companion to use vitality to resolve that skirmish instead of strength.
 		lore: Now left alone, it stopped before its foe. With a snarl it pulled back the bow, ready to deliver the last blow.
 		promotext: ""
@@ -114,6 +117,7 @@
 		twilight: 0
 		type: Condition
 		strength: 1
+		#target: title(an [uruk-hai] minion)
 		/*requires: {
 			
 		}
@@ -161,17 +165,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [uruk-hai] minion strength +2 and <b>damage +1</b>.
 		lore: That force of ten-thousand Uruk-hai was designed for the downfall of Man – and all those that allied with them.
 		promotext: ""
@@ -308,17 +315,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert an [uruk-hai] minion to reinforce an [uruk-hai] token.
 		lore: I looked on it and saw that, whereas it had once been green and fair, it was now filled with pits and forges.'
 		promotext: ""

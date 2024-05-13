@@ -42,13 +42,13 @@ public class Card_01_234_Tests
 
 		/**
 		 * Set: 1
-		 * Title: Ulaire Nertea, Messenger of Dol Guldur
+		 * Name: Úlairë Nertëa, Messenger of Dol Guldur
 		 * Unique: True
 		 * Side: Shadow
 		 * Culture: Ringwraith
 		 * Twilight Cost: 4
 		 * Type: Minion
-		 * Subtype: Nazgul
+		 * Subtype: Nazgûl
 		 * Strength: 9
 		 * Vitality: 2
 		 * Site Number: 3

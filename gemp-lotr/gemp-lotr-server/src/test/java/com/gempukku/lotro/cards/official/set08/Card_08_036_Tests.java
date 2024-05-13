@@ -41,6 +41,7 @@ public class Card_08_036_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Knight</b>. <b>Archer</b>.<br>To play, spot 3 [gondor] companions.<br>While you can spot a fortification, Garrison of Gondor is <b>defender +1</b>.
 		*/
 
@@ -60,6 +61,7 @@ public class Card_08_036_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -265,6 +265,7 @@
 		twilight: 1
 		type: Condition
 		strength: -2
+		#target: title(Gandalf)
 		/*requires: {
 			
 		}
@@ -400,17 +401,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Response:</b> If a skirmish that involved The Balrog bearing Whip of Many Thongs is about to end, wound a companion in that skirmish twice.
 		lore: ...it swung its whip, and the thongs lashed and curled about the wizard's knees, dragging him to the brink.
 		promotext: ""
@@ -495,17 +499,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Play a [moria] minion from your discard pile.
 		lore: Something has crept, or has been driven out of dark waters under the mountains.'
 		promotext: ""
@@ -924,17 +931,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert The Balrog to add a burden.
 		lore: His enemy halted again, facing him, and the shadow about it reached out like two vast wings.
 		promotext: ""
@@ -971,17 +981,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make an Elf or Dwarf skirmishing a [moria] Orc strength -1 (or -3 if you spot an Elf and a Dwarf).
 		lore: I'll be dead before I see the Ring in the hands of an Elf!'
 		promotext: ""
@@ -1018,17 +1031,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Reveal any number of [moria] Orcs from your hand to play The Balrog. Its twilight cost is -2 for each Orc revealed.
 		lore: The ranks of the orcs had opened, and they crowded away, as if they themselves were afraid.
 		promotext: ""
@@ -1061,6 +1077,7 @@
 		culture: Moria
 		twilight: 0
 		type: Condition
+		#target: a Hobbit companion
 		/*requires: {
 			
 		}
@@ -1108,17 +1125,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Shadow:</b> Exert a [moria] minion and spot X burdens to add (X) (limit (5)).
 		lore: The Dimrill Dale is full of vapour and clouds of smoke.... There are noises in the deeps of the earth.'
 		promotext: ""

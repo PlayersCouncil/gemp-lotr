@@ -34,7 +34,7 @@ services:
          target: /logs
        - type: bind
          source: ../../replay
-         target: /replay
+         target: /etc/gemp-lotr/replay
        - type: bind
          source: ../../logs/nohup.out
          target: /etc/gemp-lotr/nohup.out

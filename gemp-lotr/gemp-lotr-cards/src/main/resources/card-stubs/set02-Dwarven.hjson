@@ -72,17 +72,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Maneuver:</b> Exert a Dwarf to make that Dwarf <b>defender +1</b> (or <b>defender +2</b> if you spot an Orc) until the regroup phase.
 		lore: Ah, alas!... When will the day come of our revenge?'
 		promotext: ""
@@ -162,6 +165,7 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
+		#target: a Dwarf
 		/*requires: {
 			
 		}
@@ -209,17 +213,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Skirmish:</b> Make a Dwarf strength +2 (or +4 and <b>damage +1</b> if bearing 2 hand weapons).
 		lore: With a second axe, a warrior of Erebor can parry on either flank and counter quickly.
 		promotext: ""
@@ -577,17 +584,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Regroup:</b> Spot a Dwarf to draw 3 cards. Any Shadow player may remove (3) to prevent this.
 		lore: ...we have so far been fortunate, though we do not escape the shadow of these times.'
 		promotext: ""
@@ -671,17 +681,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Fellowship:</b> Exert a Dwarf to make an opponent draw 2 cards. That player then chooses to either discard 2 Shadow cards from hand or skip his or her next Shadow phase.
 		lore: It is not despair, for despair is only for those who see the end beyond all doubt.'
 		promotext: ""

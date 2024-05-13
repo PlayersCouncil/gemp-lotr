@@ -25,20 +25,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If Théoden is about to take a wound in a skirmish, you may discard from play Éomer or Théodred to prevent that.<br>If Théodred is about to take a wound in a skirmish, you may discard from play Éomer or Éowyn to prevent that.
 		lore: Théodred my son is slain.'
 		promotext: ""
@@ -171,17 +174,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: To play, spot 2 [rohan] Men.<br>Unless you can spot a companion who has resistance 3 or less, discard a possession from play.
 		lore: Receive now this cup and drink in happy hour.'
 		promotext: ""
@@ -357,17 +363,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [rohan] companion strength +2 (or +5 if the fellowship has moved twice this turn).
 		lore: Spears and arrows from Rohan brought down the mighty Mûmakil.
 		promotext: ""
@@ -404,17 +413,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: You may remove from the game 4 other [rohan] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make your mounted [rohan] companion strength +3.
 		lore: The fallen sleep with honor.
 		promotext: ""
@@ -589,17 +601,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make your [rohan] companion strength +2 (or exert Théoden to make that companion strength +5 and <b>damage +1</b> instead).
 		lore: Maybe we shall cleave a road, or make such an end as will be worth a song – if any be left to sing of us hereafter.'
 		promotext: ""

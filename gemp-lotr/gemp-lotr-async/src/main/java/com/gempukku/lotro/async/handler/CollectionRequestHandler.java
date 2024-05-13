@@ -279,6 +279,8 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
             group = "ring";
         else if (blueprint.getCardType() == CardType.SITE)
             group = "site";
+        else if (blueprint.getCardType() == CardType.MAP)
+            group = "map";
         else if (blueprint.hasKeyword(Keyword.CAN_START_WITH_RING))
             group = "ringBearer";
         else if (blueprint.getSide() == Side.FREE_PEOPLE)

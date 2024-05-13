@@ -41,6 +41,7 @@ public class Card_10_008_Tests
 		 * Subtype: Elf
 		 * Strength: 7
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: To play, spot 2 Elves.<br><b>Skirmish:</b> Exert Círdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_10_008_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -41,6 +41,7 @@ public class Card_07_021_Tests
 		 * Subtype: Elf
 		 * Strength: 8
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: To play, spot Aragorn or an Elf.<br>At the start of each turn, you may exert Elrond to heal a character bearing an artifact.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_07_021_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

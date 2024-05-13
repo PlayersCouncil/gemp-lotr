@@ -41,6 +41,7 @@ public class Card_04_271_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: <b>Valiant</b>.<br><b>Response:</b> If Éowyn is exhausted and about to take a wound in a skirmish, discard 2 cards from hand to prevent that wound.
 		*/
@@ -60,6 +61,7 @@ public class Card_04_271_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

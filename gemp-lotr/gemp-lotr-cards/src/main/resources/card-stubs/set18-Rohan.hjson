@@ -203,17 +203,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If the fellowship is at a plains site, exert a [rohan] companion to return a minion to its owner's hand.
 		lore: This is not a defeat. We will return.
 		promotext: ""
@@ -343,17 +346,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard a [rohan] possession from play to choose one: wound an unwounded minion; exert a minion; or discard a Shadow card the Ring-bearer is bearing.
 		lore: Éomer's spear, now thrown, brought down the Haradrim leader.
 		promotext: ""

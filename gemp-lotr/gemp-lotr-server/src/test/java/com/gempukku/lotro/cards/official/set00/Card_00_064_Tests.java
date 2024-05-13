@@ -41,6 +41,7 @@ public class Card_00_064_Tests
 		 * Subtype: Wizard
 		 * Strength: 8
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: 
 		*/
 
@@ -58,6 +59,7 @@ public class Card_00_064_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

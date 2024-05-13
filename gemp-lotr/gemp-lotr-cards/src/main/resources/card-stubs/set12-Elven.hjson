@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an Elf to reveal cards from the top of your draw deck until you reveal a Shadow card. Make an Elf strength +2 for each card revealed. Place the revealed cards in any order on the bottom of your draw deck.
 		lore: With deep focus and heightened senses, Elven archers are able to make seemingly impossible shots.
 		promotext: ""
@@ -355,17 +358,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 2</b>. <helper>(For each [elven] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot an Elf companion to discard a condition from play.
 		lore: We allow no strangers to spy out the secrets of the Naith. Few indeed are permitted even to set foot there.'
 		promotext: ""

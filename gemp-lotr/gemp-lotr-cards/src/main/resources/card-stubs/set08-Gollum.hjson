@@ -65,6 +65,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -304,6 +305,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -348,24 +350,24 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: [
-			Fellowship
-			Regroup
-		]
+		keywords: Fellowship or Regroup
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Sméagol to play the fellowship's next site (replacing opponent's site if necessary). The Shadow number of the fellowship's next site is -1 until the end of the turn.
 		lore: ...the very crown of this bitter road.
 		promotext: ""
@@ -398,6 +400,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			

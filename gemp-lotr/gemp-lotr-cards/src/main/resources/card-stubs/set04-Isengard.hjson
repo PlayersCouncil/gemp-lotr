@@ -1,0 +1,3855 @@
+{
+
+	4_136: {
+		cardInfo: {
+			imagePath: decipher/LOTR04136.jpg
+			javaClass: true
+			//parentId: 4_136
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U136
+			rarity: U
+			setNum: "4"
+			cardNum: 136
+			style: Standard
+		}
+		title: Advance Uruk Patrol
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 10
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While at a battleground, this minion is <b>fierce</b>.<br>While you control a battleground, this minion is strength +4.
+		lore: This is no rabble of mindless Orcs.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_137: {
+		cardInfo: {
+			imagePath: decipher/LOTR04137.jpg
+			javaClass: true
+			//parentId: 4_137
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C137
+			rarity: C
+			setNum: "4"
+			cardNum: 137
+			style: Standard
+		}
+		title: Attack on Helm's Deep
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Shadow:</b> Play an Uruk-hai to place an [isengard] token on this card.<br><b>Regroup:</b> Remove 3 [isengard] tokens from this card and discard an Uruk-hai to take control of a site.
+		lore: Ten thousand strong at least....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_138: {
+		cardInfo: {
+			imagePath: decipher/LOTR04138.jpg
+			javaClass: true
+			//parentId: 4_138
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U138
+			rarity: U
+			setNum: "4"
+			cardNum: 138
+			style: Standard
+		}
+		title: Band of Uruk Bowmen
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 3
+		site: 5
+		keywords: [
+			Archer
+			Damage+1
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>. <b>Damage +1</b>.<br>While you control a site, the minion archery total is +1.
+		lore: Taking the high ground provides a better field of fire.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_139: {
+		cardInfo: {
+			imagePath: decipher/LOTR04139.jpg
+			javaClass: true
+			//parentId: 4_139
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R139
+			rarity: R
+			setNum: "4"
+			cardNum: 139
+			style: Standard
+		}
+		title: Banished
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		#target: a Free Peoples Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, exert Saruman or an [isengard] Man. Plays on a Free Peoples Man.<br>Each time another ally or companion loses a skirmish, bearer must exert.
+		lore: Oh, but this is not from me – it comes from the King. He signed it this morning.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_140: {
+		cardInfo: {
+			imagePath: decipher/LOTR04140.jpg
+			javaClass: true
+			//parentId: 4_140
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R140
+			rarity: R
+			setNum: "4"
+			cardNum: 140
+			style: Standard
+		}
+		title: Beyond All Hope
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Event
+		keywords: Maneuver
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert 2 Uruk-hai to add a burden for each card in the dead pile.
+		lore: How shall any tower withstand such numbers and such reckless hate?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_141: {
+		cardInfo: {
+			imagePath: decipher/LOTR04141.jpg
+			javaClass: true
+			//parentId: 4_141
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C141
+			rarity: C
+			setNum: "4"
+			cardNum: 141
+			style: Standard
+		}
+		title: Beyond Dark Mountains
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keywords: Response
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Response:</b> If a companion or ally is killed, exert an [isengard] minion to add a burden (or 2 burdens if Aragorn, Gandalf, or Théoden is killed).
+		lore: Where now was the Ring-bearer? How thin indeed was the thread upon which doom still hung!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_142: {
+		cardInfo: {
+			imagePath: decipher/LOTR04142.jpg
+			javaClass: true
+			//parentId: 4_142
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C142
+			rarity: C
+			setNum: "4"
+			cardNum: 142
+			style: Standard
+		}
+		title: Broad-bladed Sword
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: title(an Uruk-hai)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Uruk-hai.<br>Bearer may not take wounds (except during skirmish phases).
+		lore: They were armed with short broad-bladed swords, not with the curved scimitars usual with Orcs....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_143: {
+		cardInfo: {
+			imagePath: decipher/LOTR04143.jpg
+			javaClass: true
+			//parentId: 4_143
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U143
+			rarity: U
+			setNum: "4"
+			cardNum: 143
+			style: Standard
+		}
+		title: Brought Back Alive
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keywords: [
+			Search
+			Assignment
+		]
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Search</b>.<br><b>Assignment:</b> Exert an [isengard] tracker to assign it to an unbound companion. That companion may exert to prevent this (unless that companion is a Hobbit).
+		lore: What are they wanted for?... Why alive? Do they give good sport?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_144: {
+		cardInfo: {
+			imagePath: decipher/LOTR04144.jpg
+			javaClass: true
+			//parentId: 4_144
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R144
+			rarity: R
+			setNum: "4"
+			cardNum: 144
+			style: Standard
+		}
+		title: Burning of Westfold
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Shadow:</b> If you control a site, play an Uruk-hai to discard a Free Peoples condition.
+		lore: We have found many of our folk lying slain as they fled....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_145: {
+		cardInfo: {
+			imagePath: decipher/LOTR04145.jpg
+			javaClass: true
+			//parentId: 4_145
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C145
+			rarity: C
+			setNum: "4"
+			cardNum: 145
+			style: Standard
+		}
+		title: Cloud of Arrows
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keywords: Archery
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Archery:</b> Exert an [isengard] archer to make the minion archery total +1 and the fellowship archery total -1.
+		lore: Behind them orc-archers crowded, sending a hail of darts against the bowmen on the walls.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_146: {
+		cardInfo: {
+			imagePath: decipher/LOTR04146.jpg
+			javaClass: true
+			//parentId: 4_146
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R146
+			rarity: R
+			setNum: "4"
+			cardNum: 146
+			style: Standard
+		}
+		title: Come Down
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Archery:</b> Spot 2 [isengard] archers to make allies take wounds from archery fire instead of companions.
+		lore: We are the fighting Uruk-hai.... Bring out your skulking king!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_147: {
+		cardInfo: {
+			imagePath: decipher/LOTR04147.jpg
+			javaClass: true
+			//parentId: 4_147
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U147
+			rarity: U
+			setNum: "4"
+			cardNum: 147
+			style: Standard
+		}
+		title: Covering Fire
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot 2 [isengard] archers. Plays to your support area.<br>The Free Peoples player may not play archery events or use archery special abilities. Discard this condition during the regroup phase.
+		lore: Archers cowered on the walls, unable to reply.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_148: {
+		cardInfo: {
+			imagePath: decipher/LOTR04148.jpg
+			javaClass: true
+			//parentId: 4_148
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U148
+			rarity: U
+			setNum: "4"
+			cardNum: 148
+			style: Standard
+		}
+		title: Down to the Last Child
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving an Uruk-hai, place an [isengard] token on this card.<br><b>Shadow:</b> Remove 2 [isengard] tokens from this card to take control of a site.
+		lore: The Uruks brought death to the villages of Rohan.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_149: {
+		cardInfo: {
+			imagePath: decipher/LOTR04149.jpg
+			javaClass: true
+			//parentId: 4_149
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R149
+			rarity: R
+			setNum: "4"
+			cardNum: 149
+			style: Standard
+		}
+		title: Driven Back
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Event
+		keywords: Archery
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Archery:</b> Spot 2 [isengard] archers to make the minion archery total +1 for each card in the dead pile.
+		lore: With each fallen defender, the morale of the attacking army rose.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_150: {
+		cardInfo: {
+			imagePath: decipher/LOTR04150.jpg
+			javaClass: true
+			//parentId: 4_150
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R150
+			rarity: R
+			setNum: "4"
+			cardNum: 150
+			style: Standard
+		}
+		title: Elite Crossbowmen
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 7
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 3
+		site: 5
+		keywords: [
+			Archer
+			Damage+1
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>. <b>Damage +1</b>.<br><b>Archery:</b> Exert Elite Crossbowmen to make the Free Peoples player wound an unbound companion; this minion does not add to the minion archery total.
+		lore: The best archers were held in reserve, awaiting the final assault.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_151: {
+		cardInfo: {
+			imagePath: decipher/LOTR04151.jpg
+			javaClass: true
+			//parentId: 4_151
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C151
+			rarity: C
+			setNum: "4"
+			cardNum: 151
+			style: Standard
+		}
+		title: Ferocity
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2 (or +3 if at a battleground).
+		lore: Uruk savagery remained despite their battle training.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_152: {
+		cardInfo: {
+			imagePath: decipher/LOTR04152.jpg
+			javaClass: true
+			//parentId: 4_152
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U152
+			rarity: U
+			setNum: "4"
+			cardNum: 152
+			style: Standard
+		}
+		title: Get Back
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keywords: Assignment
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Assignment:</b> Prevent an [isengard] tracker from being assigned to a skirmish by any player.
+		lore: We do not answer to Mordor scum!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_153: {
+		cardInfo: {
+			imagePath: decipher/LOTR04153.jpg
+			javaClass: true
+			//parentId: 4_153
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C153
+			rarity: C
+			setNum: "4"
+			cardNum: 153
+			style: Standard
+		}
+		title: Gríma
+		subtitle: Son of Galmód
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 4
+		vitality: 3
+		site: 3
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each unbound companion (or ally) bearing a Shadow condition is strength -1.
+		lore: Did I not counsel you, lord, to forbid his staff?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_154: {
+		cardInfo: {
+			imagePath: decipher/LOTR04154.jpg
+			javaClass: true
+			//parentId: 4_154
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R154
+			rarity: R
+			setNum: "4"
+			cardNum: 154
+			style: Standard
+		}
+		title: Gríma
+		subtitle: Wormtongue
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 4
+		vitality: 3
+		site: 3
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Maneuver:</b> Exert Gríma and spot an unbound companion bearing 3 or more cards to return each Free Peoples card that companion bears to its owner's hand.
+		lore: I care for you and yours as best I may. But do not weary yourself, or tax too heavily your strength.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_155: {
+		cardInfo: {
+			imagePath: decipher/LOTR04155.jpg
+			javaClass: true
+			//parentId: 4_155
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U155
+			rarity: U
+			setNum: "4"
+			cardNum: 155
+			style: Standard
+		}
+		title: Haunting Her Steps
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keywords: Response
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Response:</b> If a special ability of an ally or unbound companion is used, exert Gríma to cancel that action.
+		lore: What was the promised price? When all the men were dead, you were to pick your share of the treasure and take the woman you desire?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_156: {
+		cardInfo: {
+			imagePath: decipher/LOTR04156.jpg
+			javaClass: true
+			//parentId: 4_156
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C156
+			rarity: C
+			setNum: "4"
+			cardNum: 156
+			style: Standard
+		}
+		title: Kill Them Now
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make an [isengard] tracker strength +2 (or +4 if skirmishing a character bearing a search card).
+		lore: They're a cursed nuisance, and we're in a hurry.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_157: {
+		cardInfo: {
+			imagePath: decipher/LOTR04157.jpg
+			javaClass: true
+			//parentId: 4_157
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R157
+			rarity: R
+			setNum: "4"
+			cardNum: 157
+			style: Standard
+		}
+		title: Leechcraft
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		strength: -1
+		#target: a Free Peoples Man
+		keywords: Spell
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Spell</b>. To play, exert Saruman or an [isengard] Man. Plays on a Free Peoples Man.<br>Special abilities in bearer's game text may not be used.
+		lore: Your leechcraft ere long would have had me walking on all fours like a beast.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_158: {
+		cardInfo: {
+			imagePath: decipher/LOTR04158.jpg
+			javaClass: true
+			//parentId: 4_158
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R158
+			rarity: R
+			setNum: "4"
+			cardNum: 158
+			style: Standard
+		}
+		title: Lieutenant of Orthanc
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 7
+		type: Minion
+		race: Uruk-hai
+		strength: 12
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Exert Lieutenant of Orthanc to make another Uruk-hai <b>fierce</b> until the regroup phase.
+		lore: Do you wish to see the greatness of our army? We are the fighting Uruk-hai.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_159: {
+		cardInfo: {
+			imagePath: decipher/LOTR04159.jpg
+			javaClass: true
+			//parentId: 4_159
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U159
+			rarity: U
+			setNum: "4"
+			cardNum: 159
+			style: Standard
+		}
+		title: Many Riddles
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		strength: -1
+		#target: a companion (except the Ring- bearer)
+		keywords: Search
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Search</b>. To play, exert an [isengard] tracker. Plays on a companion (except the Ring- bearer).<br><b>Assignment:</b> Exert an [isengard] tracker and remove (2) to assign that tracker to bearer. Bearer may exert to prevent this.
+		lore: It will be hard news for Frodo....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_160: {
+		cardInfo: {
+			imagePath: decipher/LOTR04160.jpg
+			javaClass: true
+			//parentId: 4_160
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R160
+			rarity: R
+			setNum: "4"
+			cardNum: 160
+			style: Standard
+		}
+		title: Mauhúr
+		subtitle: Patrol Leader
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Remove (2) to prevent an [isengard] tracker from taking wounds.
+		lore: Mauhúr and his lads are in the forest, and they should turn up any time now.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_161: {
+		cardInfo: {
+			imagePath: decipher/LOTR04161.jpg
+			javaClass: true
+			//parentId: 4_161
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U161
+			rarity: U
+			setNum: "4"
+			cardNum: 161
+			style: Standard
+		}
+		title: Men Will Fall
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Spot Saruman or an [isengard] Man to make an unbound companion strength -2.
+		lore: The Ring of Barahir. So, Gandalf Greyhame thinks he has found Isildur's heir, the Lost King of Gondor... Fool! That line was broken years ago.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_162: {
+		cardInfo: {
+			imagePath: decipher/LOTR04162.jpg
+			javaClass: true
+			//parentId: 4_162
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R162
+			rarity: R
+			setNum: "4"
+			cardNum: 162
+			style: Standard
+		}
+		title: New Power Rising
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		keywords: Regroup
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Spot Saruman or an [isengard] Man, reveal your hand, and discard all Free Peoples cards revealed to take an [isengard] card into hand from your discard pile.
+		lore: For those who aid the Great Eye there will be rich reward.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_163: {
+		cardInfo: {
+			imagePath: decipher/LOTR04163.jpg
+			javaClass: true
+			//parentId: 4_163
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R163
+			rarity: R
+			setNum: "4"
+			cardNum: 163
+			style: Standard
+		}
+		title: No Dawn for Men
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		keywords: Maneuver
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert an Uruk-hai to exert X unbound companions, where X is the number of sites you control.
+		lore: This night, the land will be stained with the blood of Rohan....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_164: {
+		cardInfo: {
+			imagePath: decipher/LOTR04164.jpg
+			javaClass: true
+			//parentId: 4_164
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R164
+			rarity: R
+			setNum: "4"
+			cardNum: 164
+			style: Standard
+		}
+		title: Orthanc Champion
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 12
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Assignment:</b> Exert Orthanc Champion to assign it to an unbound companion. That companion may exert to prevent this.
+		lore: A warrior trained in single combat, he tore a swath through the defenders.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_165: {
+		cardInfo: {
+			imagePath: decipher/LOTR04165.jpg
+			javaClass: true
+			//parentId: 4_165
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C165
+			rarity: C
+			setNum: "4"
+			cardNum: 165
+			style: Standard
+		}
+		title: Orthanc Warrior
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.
+		lore: The Uruk-hai bred by Saruman are stronger and more fell than Orcs of Mordor.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_166: {
+		cardInfo: {
+			imagePath: decipher/LOTR04166.jpg
+			javaClass: true
+			//parentId: 4_166
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R166
+			rarity: R
+			setNum: "4"
+			cardNum: 166
+			style: Standard
+		}
+		title: The Palantír of Orthanc
+		subtitle: Seventh Seeing-stone
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot an [isengard] minion. Plays to your support area.<br><b>Shadow:</b> Spot an [isengard] minion and remove (2) to reveal the top card of any draw deck. You may place that card beneath that draw deck.
+		lore: The name meant that which looks far away.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_167: {
+		cardInfo: {
+			imagePath: decipher/LOTR04167.jpg
+			javaClass: true
+			//parentId: 4_167
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R167
+			rarity: R
+			setNum: "4"
+			cardNum: 167
+			style: Standard
+		}
+		title: Pillage of Rohan
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		#target: ControlledSite
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays on a site you control.<br>While an Uruk-hai is stacked on this site, the Free Peoples player may not play skirmish events or use skirmish special abilities.
+		lore: Rumor of plunder swelled the ranks of the Isengarders.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_168: {
+		cardInfo: {
+			imagePath: decipher/LOTR04168.jpg
+			javaClass: true
+			//parentId: 4_168
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R168
+			rarity: R
+			setNum: "4"
+			cardNum: 168
+			style: Standard
+		}
+		title: Race Across the Mark
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Spot a site you control and remove (2) to cancel a skirmish involving an Uruk-hai.
+		lore: But in the meantime, the Uruk-hai of Isengard can do the dirty work as usual.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_169: {
+		cardInfo: {
+			imagePath: decipher/LOTR04169.jpg
+			javaClass: true
+			//parentId: 4_169
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R169
+			rarity: R
+			setNum: "4"
+			cardNum: 169
+			style: Standard
+		}
+		title: Ranged Commander
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: Archer
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>.<br>The twilight cost of each [isengard] archer is -1.<br><b>Archery:</b> Exert Ranged Commander to make the Free Peoples player wound an unbound companion; this minion does not add to the minion archery total.
+		lore: Hand-picked Uruks led Saruman's crossbowmen.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_170: {
+		cardInfo: {
+			imagePath: decipher/LOTR04170.jpg
+			javaClass: true
+			//parentId: 4_170
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U170
+			rarity: U
+			setNum: "4"
+			cardNum: 170
+			style: Standard
+		}
+		title: Ranks Without Number
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays to your support area.<br>Each time the Free Peoples player assigns an ally to a skirmish, you may play an [isengard] minion from your discard pile. That minion's twilight cost is -2.
+		lore: All Isengard must be emptied....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_171: {
+		cardInfo: {
+			imagePath: decipher/LOTR04171.jpg
+			javaClass: true
+			//parentId: 4_171
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R171
+			rarity: R
+			setNum: "4"
+			cardNum: 171
+			style: Standard
+		}
+		title: Rest While You Can
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#target: a companion
+		keywords: Search
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Search</b>. To play, spot an [isengard] tracker. Plays on a companion. Limit 1 per companion.<br>If bearer is killed, reveal the top 10 cards of opponent's draw deck and discard 1 Shadow card and 1 Free Peoples card. Your opponent reshuffles that deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_172: {
+		cardInfo: {
+			imagePath: decipher/LOTR04172.jpg
+			javaClass: true
+			//parentId: 4_172
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R172
+			rarity: R
+			setNum: "4"
+			cardNum: 172
+			style: Standard
+		}
+		title: Rohan Is Mine
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		#target: a Free Peoples Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot Saruman or an [isengard] Man. Plays on a Free Peoples Man.<br>Each time the Free Peoples player assigns bearer to a skirmish, exert each ally.
+		lore: You have no power here, Gandalf the Grey.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_173: {
+		cardInfo: {
+			imagePath: decipher/LOTR04173.jpg
+			javaClass: true
+			//parentId: 4_173
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R173
+			rarity: R
+			setNum: "4"
+			cardNum: 173
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Black Traitor
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		site: 4
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.<br>When you play Saruman, you may discard a condition.<br><b>Shadow:</b> Exert Saruman to play Saruman's Staff from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_174: {
+		cardInfo: {
+			imagePath: decipher/LOTR04174.jpg
+			javaClass: true
+			//parentId: 4_174
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R174
+			rarity: R
+			setNum: "4"
+			cardNum: 174
+			style: Standard
+		}
+		title: Saruman's Staff
+		subtitle: Wizard's Device
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Artifact
+		strength: 2
+		itemclass: Staff
+		#target: title(Saruman)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plays on Saruman.<br>He is <b>fierce</b> and <b>damage +1</b>.<br><b>Maneuver:</b> Make the first sentence of Saruman's game text not apply until the regroup phase.
+		lore: His hand clutched his heavy black staff like a claw.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_175: {
+		cardInfo: {
+			imagePath: decipher/LOTR04175.jpg
+			javaClass: true
+			//parentId: 4_175
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C175
+			rarity: C
+			setNum: "4"
+			cardNum: 175
+			style: Standard
+		}
+		title: Still They Came
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Exert an Uruk-hai who is not assigned to a skirmish to make another Uruk-hai strength +3.
+		lore: Before the wall's foot the dead and broken were piled like shingle in a storm; ever higher rose the hideous mounds....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_176: {
+		cardInfo: {
+			imagePath: decipher/LOTR04176.jpg
+			javaClass: true
+			//parentId: 4_176
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R176
+			rarity: R
+			setNum: "4"
+			cardNum: 176
+			style: Standard
+		}
+		title: Uglúk
+		subtitle: Servant of Saruman
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 3
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>The roaming penalty for each [isengard] tracker you play is -2.<br>While you can spot 2 [isengard] trackers, Uglúk is strength +3.<br>While you can spot 3 [isengard] trackers, Uglúk is <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_177: {
+		cardInfo: {
+			imagePath: decipher/LOTR04177.jpg
+			javaClass: true
+			//parentId: 4_177
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R177
+			rarity: R
+			setNum: "4"
+			cardNum: 177
+			style: Standard
+		}
+		title: Uglúk's Sword
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		#target: title(an Uruk-hai)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Uruk-hai.<br><b>Shadow:</b> If bearer is Uglúk, exert it and discard a minion from hand to play a minion. Its twilight cost is -3.
+		lore: I am Uglúk. I command.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_178: {
+		cardInfo: {
+			imagePath: decipher/LOTR04178.jpg
+			javaClass: true
+			//parentId: 4_178
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C178
+			rarity: C
+			setNum: "4"
+			cardNum: 178
+			style: Standard
+		}
+		title: Unferth
+		subtitle: Gríma's Bodyguard
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 3
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time the Free Peoples player assigns a companion or ally to an [isengard] Man, that companion or ally must exert.
+		lore: Gríma promised him riches when Rohan fell to Saruman.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_179: {
+		cardInfo: {
+			imagePath: decipher/LOTR04179.jpg
+			javaClass: true
+			//parentId: 4_179
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R179
+			rarity: R
+			setNum: "4"
+			cardNum: 179
+			style: Standard
+		}
+		title: Uruk Assault Band
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 7
+		type: Minion
+		race: Uruk-hai
+		strength: 14
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. To play, spot an Uruk-hai.<br>While at a battleground, this minion is <b>fierce</b>.<br>While you control a battleground, this minion is strength +6.<br>While you control 2 battlegrounds, this minion may not take wounds.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_180: {
+		cardInfo: {
+			imagePath: decipher/LOTR04180.jpg
+			javaClass: true
+			//parentId: 4_180
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C180
+			rarity: C
+			setNum: "4"
+			cardNum: 180
+			style: Standard
+		}
+		title: Uruk Besieger
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 6
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
+		lore: Fresh troops awaited to attack any weakness.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_181: {
+		cardInfo: {
+			imagePath: decipher/LOTR04181.jpg
+			javaClass: true
+			//parentId: 4_181
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C181
+			rarity: C
+			setNum: "4"
+			cardNum: 181
+			style: Standard
+		}
+		title: Uruk Chaser
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it is strength +2.
+		lore: Now we'll have to leg it double quick.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_182: {
+		cardInfo: {
+			imagePath: decipher/LOTR04182.jpg
+			javaClass: true
+			//parentId: 4_182
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U182
+			rarity: U
+			setNum: "4"
+			cardNum: 182
+			style: Standard
+		}
+		title: Uruk Crossbow Troop
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: Archer
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>.<br>When you play this minion, you may place an [isengard] token on a machine.
+		lore: Bolts from the Uruk crossbows shattered the shields of the defenders.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_183: {
+		cardInfo: {
+			imagePath: decipher/LOTR04183.jpg
+			javaClass: true
+			//parentId: 4_183
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C183
+			rarity: C
+			setNum: "4"
+			cardNum: 183
+			style: Standard
+		}
+		title: Uruk Crossbowman
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 6
+		vitality: 2
+		site: 5
+		keywords: Archer
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Archer</b>.<br><b>Archery:</b> Exert this minion to make the Free Peoples player wound an unbound companion; this minion does not add to the minion archery total.
+		lore: Both the weapon and its wielder were foul creations of Saruman.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_184: {
+		cardInfo: {
+			imagePath: decipher/LOTR04184.jpg
+			javaClass: true
+			//parentId: 4_184
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C184
+			rarity: C
+			setNum: "4"
+			cardNum: 184
+			style: Standard
+		}
+		title: Uruk Defender
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert this minion at a battleground to make another Uruk-hai strength +2.
+		lore: Saruman's Uruk army trained in formation tactics.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_185: {
+		cardInfo: {
+			imagePath: decipher/LOTR04185.jpg
+			javaClass: true
+			//parentId: 4_185
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C185
+			rarity: C
+			setNum: "4"
+			cardNum: 185
+			style: Standard
+		}
+		title: Uruk Fanatic
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>If there are at least 3 cards in the dead pile, this minion is <b>fierce</b>.
+		lore: Despite intensive training, the smell of blood still enraged the Uruk warriors.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_186: {
+		cardInfo: {
+			imagePath: decipher/LOTR04186.jpg
+			javaClass: true
+			//parentId: 4_186
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R186
+			rarity: R
+			setNum: "4"
+			cardNum: 186
+			style: Standard
+		}
+		title: Uruk Follower
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 10
+		vitality: 3
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>Unbound Hobbits may not be discarded.<br><b>Response:</b> If an unbound Hobbit is killed, exert this minion to add a burden.
+		lore: But at the moment Uglúk was not engaged in sport. He needed speed and had to humour unwilling followers.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_187: {
+		cardInfo: {
+			imagePath: decipher/LOTR04187.jpg
+			javaClass: true
+			//parentId: 4_187
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C187
+			rarity: C
+			setNum: "4"
+			cardNum: 187
+			style: Standard
+		}
+		title: Uruk Foot Soldier
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Minion
+		race: Uruk-hai
+		strength: 5
+		vitality: 1
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it is strength +3 and <b>damage +1</b>.
+		lore: Evening's coming on, and we ought to get a move on.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_188: {
+		cardInfo: {
+			imagePath: decipher/LOTR04188.jpg
+			javaClass: true
+			//parentId: 4_188
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U188
+			rarity: U
+			setNum: "4"
+			cardNum: 188
+			style: Standard
+		}
+		title: Uruk Hunter
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 6
+		type: Minion
+		race: Uruk-hai
+		strength: 12
+		vitality: 3
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>Unbound Hobbits may not be discarded.<br><b>Response:</b> If an unbound Hobbit is killed, exert this minion twice to exhaust a companion.
+		lore: We came out of Isengard, and led you here, and we shall lead you back the way we choose.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_189: {
+		cardInfo: {
+			imagePath: decipher/LOTR04189.jpg
+			javaClass: true
+			//parentId: 4_189
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C189
+			rarity: C
+			setNum: "4"
+			cardNum: 189
+			style: Standard
+		}
+		title: Uruk Plains Runner
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 1
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it is strength +3 and <b>damage +1</b>.
+		lore: Run! Or you'll never see your beloved holes again!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_190: {
+		cardInfo: {
+			imagePath: decipher/LOTR04190.jpg
+			javaClass: true
+			//parentId: 4_190
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C190
+			rarity: C
+			setNum: "4"
+			cardNum: 190
+			style: Standard
+		}
+		title: Uruk Pursuer
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 5
+		vitality: 3
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>Unbound Hobbits may not be discarded.<br><b>Response:</b> If an unbound Hobbit is killed, exert this minion to make the Free Peoples player wound an unbound companion.
+		lore: None of that! Hold your tongues.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_191: {
+		cardInfo: {
+			imagePath: decipher/LOTR04191.jpg
+			javaClass: true
+			//parentId: 4_191
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C191
+			rarity: C
+			setNum: "4"
+			cardNum: 191
+			style: Standard
+		}
+		title: Uruk Rear Guard
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 6
+		type: Minion
+		race: Uruk-hai
+		strength: 12
+		vitality: 4
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert this minion at a battleground to make another Uruk-hai strength +1.
+		lore: Promised a fair share of plunder, they defended against possible reinforcements.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_192: {
+		cardInfo: {
+			imagePath: decipher/LOTR04192.jpg
+			javaClass: true
+			//parentId: 4_192
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C192
+			rarity: C
+			setNum: "4"
+			cardNum: 192
+			style: Standard
+		}
+		title: Uruk Regular
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Exert this minion to play an Uruk-hai; its twilight cost is -1 for each other Uruk-hai you can spot.
+		lore: We are the Uruk-hai; we do not stop the fight for night or day, for fair weather or for storm.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_193: {
+		cardInfo: {
+			imagePath: decipher/LOTR04193.jpg
+			javaClass: true
+			//parentId: 4_193
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C193
+			rarity: C
+			setNum: "4"
+			cardNum: 193
+			style: Standard
+		}
+		title: Uruk Runner
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it is strength +2.
+		lore: Run, curse you! Run while night lasts!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_194: {
+		cardInfo: {
+			imagePath: decipher/LOTR04194.jpg
+			javaClass: true
+			//parentId: 4_194
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U194
+			rarity: U
+			setNum: "4"
+			cardNum: 194
+			style: Standard
+		}
+		title: Uruk Searcher
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>While skirmishing a character bearing a search card, this minion is strength +2 and <b>damage +1</b>.
+		lore: Why don't we search them and find out?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_195: {
+		cardInfo: {
+			imagePath: decipher/LOTR04195.jpg
+			javaClass: true
+			//parentId: 4_195
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C195
+			rarity: C
+			setNum: "4"
+			cardNum: 195
+			style: Standard
+		}
+		title: Uruk Seeker
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 6
+		vitality: 2
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>While skirmishing a character bearing a search card, this minion is strength +2 and <b>damage +1</b>.
+		lore: No crying out, no trying to escape.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_196: {
+		cardInfo: {
+			imagePath: decipher/LOTR04196.jpg
+			javaClass: true
+			//parentId: 4_196
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C196
+			rarity: C
+			setNum: "4"
+			cardNum: 196
+			style: Standard
+		}
+		title: Uruk Spear
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		#target: title(an Uruk-hai)
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be an Uruk-hai.<br><b>Maneuver:</b> Exert bearer to discard a Free Peoples mount.
+		lore: The Uruk-hai braced their long pikes to challenge the oncoming Riders.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_197: {
+		cardInfo: {
+			imagePath: decipher/LOTR04197.jpg
+			javaClass: true
+			//parentId: 4_197
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C197
+			rarity: C
+			setNum: "4"
+			cardNum: 197
+			style: Standard
+		}
+		title: Uruk Stalker
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.
+		lore: A moment they hesitated, and then on they came.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_198: {
+		cardInfo: {
+			imagePath: decipher/LOTR04198.jpg
+			javaClass: true
+			//parentId: 4_198
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C198
+			rarity: C
+			setNum: "4"
+			cardNum: 198
+			style: Standard
+		}
+		title: Uruk Stormer
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>Each time a companion or ally is killed during a skirmish involving an Uruk-hai, you may take control of a site.
+		lore: They wavered, broke, and fled back; and then charged again, broke and charged again; and each time, like the incoming sea, they halted at a higher point.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_199: {
+		cardInfo: {
+			imagePath: decipher/LOTR04199.jpg
+			javaClass: true
+			//parentId: 4_199
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R199
+			rarity: R
+			setNum: "4"
+			cardNum: 199
+			style: Standard
+		}
+		title: Uruk Trooper
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
+		lore: Thousands of Uruk-hai came to take the Hornburg.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_200: {
+		cardInfo: {
+			imagePath: decipher/LOTR04200.jpg
+			javaClass: true
+			//parentId: 4_200
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R200
+			rarity: R
+			setNum: "4"
+			cardNum: 200
+			style: Standard
+		}
+		title: Uruk Vanguard
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 10
+		type: Minion
+		race: Uruk-hai
+		strength: 17
+		vitality: 4
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>. To play, spot an Uruk-hai.<br>While at a battleground, this minion is <b>fierce</b> and <b>damage +1</b>.
+		lore: These are Uruk-hai – their armour is thick, their shields broad.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_201: {
+		cardInfo: {
+			imagePath: decipher/LOTR04201.jpg
+			javaClass: true
+			//parentId: 4_201
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U201
+			rarity: U
+			setNum: "4"
+			cardNum: 201
+			style: Standard
+		}
+		title: Uruk Veteran
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
+		lore: We come to kill, by sun or moon.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_202: {
+		cardInfo: {
+			imagePath: decipher/LOTR04202.jpg
+			javaClass: true
+			//parentId: 4_202
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U202
+			rarity: U
+			setNum: "4"
+			cardNum: 202
+			style: Standard
+		}
+		title: Uruk-hai Band
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 10
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>This minion is strength +2 for each site you control.
+		lore: There were four... of greater stature, swart, slant-eyed, with thick legs and broad hands.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_203: {
+		cardInfo: {
+			imagePath: decipher/LOTR04203.jpg
+			javaClass: true
+			//parentId: 4_203
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R203
+			rarity: R
+			setNum: "4"
+			cardNum: 203
+			style: Standard
+		}
+		title: Uruk-hai Horde
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 6
+		type: Minion
+		race: Uruk-hai
+		strength: 12
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>The twilight cost of this minion is -1 for each site you control.
+		lore: The rumour of war grew behind them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_204: {
+		cardInfo: {
+			imagePath: decipher/LOTR04204.jpg
+			javaClass: true
+			//parentId: 4_204
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C204
+			rarity: C
+			setNum: "4"
+			cardNum: 204
+			style: Standard
+		}
+		title: Uruk-hai Marauder
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>The twilight cost of this minion is -1 for each site you control.
+		lore: We shall have some fun later.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_205: {
+		cardInfo: {
+			imagePath: decipher/LOTR04205.jpg
+			javaClass: true
+			//parentId: 4_205
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U205
+			rarity: U
+			setNum: "4"
+			cardNum: 205
+			style: Standard
+		}
+		title: Uruk-hai Mob
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 10
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>The twilight cost of this minion is -1 for each site you control.
+		lore: Let the fighting Uruk-hai do the work, as usual.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_206: {
+		cardInfo: {
+			imagePath: decipher/LOTR04206.jpg
+			javaClass: true
+			//parentId: 4_206
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C206
+			rarity: C
+			setNum: "4"
+			cardNum: 206
+			style: Standard
+		}
+		title: Uruk-hai Patrol
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.<br>While you control a site, this minion is <b>damage +1</b>.
+		lore: We are the servants of Saruman the Wise....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_207: {
+		cardInfo: {
+			imagePath: decipher/LOTR04207.jpg
+			javaClass: true
+			//parentId: 4_207
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C207
+			rarity: C
+			setNum: "4"
+			cardNum: 207
+			style: Standard
+		}
+		title: Uruk-hai Raiding Party
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Damage +1</b>.
+		lore: Bands of Uruks crossed the plains of Rohan.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_208: {
+		cardInfo: {
+			imagePath: decipher/LOTR04208.jpg
+			javaClass: true
+			//parentId: 4_208
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U208
+			rarity: U
+			setNum: "4"
+			cardNum: 208
+			style: Standard
+		}
+		title: Vengeance
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make an [isengard] tracker strength +2 for each card borne by the character it is skirmishing.
+		lore: Saruman instilled a spirit for revenge in his fighting brood.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_209: {
+		cardInfo: {
+			imagePath: decipher/LOTR04209.jpg
+			javaClass: true
+			//parentId: 4_209
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R209
+			rarity: R
+			setNum: "4"
+			cardNum: 209
+			style: Standard
+		}
+		title: Volley Fire
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Event
+		keywords: Archery
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Archery:</b> Discard 2 [isengard] archers to exhaust an unbound companion.
+		lore: Defenders on the walls made perfect targets for the Isengard crossbowmen.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_210: {
+		cardInfo: {
+			imagePath: decipher/LOTR04210.jpg
+			javaClass: true
+			//parentId: 4_210
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C210
+			rarity: C
+			setNum: "4"
+			cardNum: 210
+			style: Standard
+		}
+		title: We Are the Fighting Uruk-hai
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2 (and <b>damage +1</b> if you control a site).
+		lore: But for us you'd all have run away.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_211: {
+		cardInfo: {
+			imagePath: decipher/LOTR04211.jpg
+			javaClass: true
+			//parentId: 4_211
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R211
+			rarity: R
+			setNum: "4"
+			cardNum: 211
+			style: Standard
+		}
+		title: Weapons of Isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		keywords: [
+			Machine
+			Support Area
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Play an [isengard] archer to place an [isengard] token on this card.<br><b>Archery:</b> Remove 2 [isengard] tokens from this card to make the minion archery total +2. Discard this condition.
+		lore: Crossbowmen arrived with munitions from Isengard.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_212: {
+		cardInfo: {
+			imagePath: decipher/LOTR04212.jpg
+			javaClass: true
+			//parentId: 4_212
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C212
+			rarity: C
+			setNum: "4"
+			cardNum: 212
+			style: Standard
+		}
+		title: Weary
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		#target: a companion or ally
+		keywords: Search
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Search</b>. Plays on a companion or ally. Limit 1 per character.<br>Each time the Free Peoples player assigns bearer to skirmish an [isengard] tracker, bearer must exert.
+		lore: We shall not turn back here.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_213: {
+		cardInfo: {
+			imagePath: decipher/LOTR04213.jpg
+			javaClass: true
+			//parentId: 4_213
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R213
+			rarity: R
+			setNum: "4"
+			cardNum: 213
+			style: Standard
+		}
+		title: What Did You Discover?
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: <b>Search</b>. Plays to your support area.<br>Each time the fellowship moves during the regroup phase, you may discard 2 cards from hand to take an [isengard] tracker from your discard pile into hand.
+		lore: The scouts have come back at last.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_214: {
+		cardInfo: {
+			imagePath: decipher/LOTR04214.jpg
+			javaClass: true
+			//parentId: 4_214
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R214
+			rarity: R
+			setNum: "4"
+			cardNum: 214
+			style: Standard
+		}
+		title: Where Has Gríma Stowed It?
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		keywords: Maneuver
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Spot Gríma to discard a possession borne by an ally or unbound companion.
+		lore: Loth was he to render up the keys. Many other things are there which men have missed.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_215: {
+		cardInfo: {
+			imagePath: decipher/LOTR04215.jpg
+			javaClass: true
+			//parentId: 4_215
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R215
+			rarity: R
+			setNum: "4"
+			cardNum: 215
+			style: Standard
+		}
+		title: Wounded
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		#target: a Free Peoples Man
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, exert an [isengard] Man. Plays on a Free Peoples Man. When you play this condition, exert bearer.<br>Wounds may not be removed from bearer.
+		lore: He's alive!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

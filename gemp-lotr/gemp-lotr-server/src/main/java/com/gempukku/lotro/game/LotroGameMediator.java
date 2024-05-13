@@ -46,7 +46,8 @@ public class LotroGameMediator {
     private volatile boolean _destroyed;
 
     public LotroGameMediator(String gameId, LotroFormat lotroFormat, LotroGameParticipant[] participants, LotroCardBlueprintLibrary library,
-                             GameTimer gameTimer, boolean allowSpectators, boolean cancellable, boolean showInGameHall) {
+                             GameTimer gameTimer, boolean allowSpectators, boolean cancellable, boolean showInGameHall,
+                             String tournamentName) {
         _gameId = gameId;
         _timeSettings = gameTimer;
         _allowSpectators = allowSpectators;
@@ -63,7 +64,8 @@ public class LotroGameMediator {
         }
 
         _userFeedback = new DefaultUserFeedback();
-        _lotroGame = new DefaultLotroGame(lotroFormat, _playerDecks, _userFeedback, library);
+        _lotroGame = new DefaultLotroGame(lotroFormat, _playerDecks, _userFeedback, library, _timeSettings.toString(), _allowSpectators,
+                tournamentName);
         _userFeedback.setGame(_lotroGame);
     }
 

@@ -6,6 +6,7 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.ExtraPlayCost;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.PlayUtils;
 import com.gempukku.lotro.logic.actions.*;
@@ -90,10 +91,16 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     private ExtraPossessionClassTest extraPossessionClassTest;
 
+    private PreGameDeckValidation deckValidation;
+
     // Building methods
 
     public void setBlueprintId(String id) {
         this.id = id;
+    }
+
+    public void setDeckValidation(PreGameDeckValidation validation) {
+        this.deckValidation = validation;
     }
 
     public void setAllyHomeSites(SitesBlock block, int[] numbers) {
@@ -368,6 +375,15 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new UnsupportedOperationException("Id for this blueprint has already been set");
 
         this.id = id;
+    }
+
+    @Override
+    public Result validatePreGameDeckCheck(List<PhysicalCardImpl> freeps, List<PhysicalCardImpl> shadow,
+            List<PhysicalCardImpl> sites, PhysicalCardImpl rb, PhysicalCardImpl ring, PhysicalCardImpl map) {
+        if(deckValidation != null)
+            return deckValidation.validatePreGameDeckCheck(freeps, shadow, sites, rb, ring, map);
+
+        return new Result(true, null);
     }
 
     @Override
@@ -1028,10 +1044,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("Card has to have a title");
         if (cardType == null)
             throw new InvalidCardDefinitionException("Card has to have a type");
-        if (cardType != CardType.THE_ONE_RING && cardType != CardType.SITE && side == null)
-            throw new InvalidCardDefinitionException("Only The One Ring does not have a side defined");
-        if (cardType != CardType.THE_ONE_RING && cardType != CardType.SITE && culture == null)
-            throw new InvalidCardDefinitionException("Only The One Ring does not have a culture defined");
+        if (cardType != CardType.THE_ONE_RING && cardType != CardType.SITE && cardType != CardType.MAP && side == null)
+            throw new InvalidCardDefinitionException("All cards except The One Ring, Sites, and Maps must have a side defined");
+        if (cardType != CardType.THE_ONE_RING && cardType != CardType.SITE && cardType != CardType.MAP && culture == null)
+            throw new InvalidCardDefinitionException("All cards except The One Ring, Sites, and Maps have a culture defined");
         if (siteNumber != 0
                 && cardType != CardType.SITE
                 && cardType != CardType.MINION

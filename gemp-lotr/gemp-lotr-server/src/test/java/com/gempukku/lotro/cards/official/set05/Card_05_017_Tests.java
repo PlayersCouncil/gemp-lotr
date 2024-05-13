@@ -41,6 +41,7 @@ public class Card_05_017_Tests
 		 * Subtype: Ent
 		 * Strength: 8
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow this companion to skirmish.
 		*/
 
@@ -59,6 +60,7 @@ public class Card_05_017_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

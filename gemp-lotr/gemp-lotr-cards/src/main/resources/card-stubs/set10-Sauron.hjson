@@ -257,17 +257,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [sauron] minion strength +2 for each site you control. If you have initiative, that minion is <b>fierce</b> until the regroup phase.
 		lore: The Rammas was broken, and all the Pelennor abandoned to the Enemy.
 		promotext: ""
@@ -1063,20 +1066,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a burden is added, spot a [sauron] minion to add an additional burden.
 		lore: ...I do not choose now to do what I came to do. I will not do this deed.'
 		promotext: ""
@@ -1113,20 +1119,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If the Free Peoples player plays a possession, discard a [sauron] minion from hand to prevent him or her from playing any more cards until the end of this phase.
 		lore: ...they began to throw missiles marvelously high, so that they passed right above the battlement and fell thudding within the first circle of the City....
 		promotext: ""
@@ -1212,17 +1221,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a [sauron] minion to return a Free Peoples condition to its owner's hand (or 2 if both are [shire] conditions).
 		lore: Go slow! Bring no fire to this place while Faramir lives! Do nothing until Gandalf comes!'
 		promotext: ""

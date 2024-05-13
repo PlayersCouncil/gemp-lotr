@@ -69,17 +69,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If a Hobbit companion is not assigned to a skirmish, exert that Hobbit to have him or her replace a companion (except the Ring-bearer) in a skirmish.
 		lore: Now come, you filth!' he cried. 'You've hurt my master, you brute, and you'll pay for it.'
 		promotext: ""
@@ -116,17 +119,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If there are 4 or more [shire] cards in your discard pile, make a Hobbit strength +1 for each Hobbit you can spot.
 		lore: ...he thought he saw something shining in the river-bed; and holding his breath he grabbed at it.'
 		promotext: ""
@@ -160,6 +166,7 @@
 		twilight: 1
 		type: Condition
 		vitality: -1
+		#target: a Hobbit
 		/*requires: {
 			
 		}
@@ -254,17 +261,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Stealth</b>. Spot a [shire] companion and return him or her to your hand to make a Shadow player choose to remove (2) or discard a minion.
 		lore: There's something still alive in that place, something with eyes, or a seeing mind, if you take me; and the longer we stay in one spot, the sooner it will get on to us.'
 		promotext: ""
@@ -301,17 +311,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert a Hobbit to make another Hobbit strength +3.
 		lore: Howling with pain and fear but desperate the orc charged head-down at him.
 		promotext: ""
@@ -348,17 +361,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 Hobbit companions to make a Shadow player discard a minion (or spot 4 Hobbit companions to make that player discard 2 minions).
 		lore: If those two had seen us, they would have dropped all their quarrel until we were dead.'
 		promotext: ""
@@ -398,17 +414,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Tale</b>. Exert a [shire] character to remove a burden or 2 threats.
 		lore: What a tale we have been in, Mr. Frodo, haven't we?'
 		promotext: ""
@@ -537,17 +556,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Stealth</b>. If there are 6 or more [shire] cards in your discard pile, cancel a skirmish involving your Hobbit and a minion who is not fierce. Each minion in that skirmish is <b>fierce</b> until the regroup phase.
 		lore: ...harsh and loud they heard orc-voices.
 		promotext: ""
@@ -632,7 +654,7 @@
 		strength: 3
 		vitality: 4
 		signet: Frodo
-		resistance: 6
+		resistance: 12
 		/*requires: {
 			
 		}
@@ -681,7 +703,7 @@
 		strength: 3
 		vitality: 4
 		signet: Gandalf
-		resistance: 6
+		resistance: 5
 		keywords: Ring-bound
 		/*requires: {
 			

@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Shelob to make a minion strength +1 for each threat you can spot.
 		lore: But don't go on, master! Don't go down to that den! Now's our only chance. Now let's get out of this foul hole!'
 		promotext: ""
@@ -116,17 +119,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Heal a Ring-bound companion to reinforce a [gollum] token.
 		lore: Earning pity and trust was the first step of Gollum's plan to reclaim his precious.
 		promotext: ""
@@ -163,17 +169,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [gollum] card to play a minion. Its twilight cost -1 (or -3 if it is roaming).
 		lore: He will never be rid of his need for it. He hates and loves the Ring, as he hates and loves himself.
 		promotext: ""
@@ -254,17 +263,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot Gollum or Sméagol to return a follower to its owner's hand.
 		lore: He took it!! I've seen him. He is always stuffing his face when Master is not looking.
 		promotext: ""
@@ -350,17 +362,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: To play, spot Shelob.<br>The Free Peoples player must choose two companions in play (except the Ring- bearer). He or she then chooses to place one of those companions in the dead pile and return the other to his or her hand.
 		lore: Poison frothed and bubbled....
 		promotext: ""
@@ -397,20 +412,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a skirmish event is played, spot Sméagol to cancel that event.
 		lore: Oh yes we could! Spoil nice fish. Give it to usss rrraw... and wrrriggling! You keep nasty chips.
 		promotext: ""
@@ -447,17 +465,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Reinforce a [gollum] token. Each Shadow player may draw a card.
 		lore: We swears to serve the master of the preciousss. We will swear on... on the precious.
 		promotext: ""

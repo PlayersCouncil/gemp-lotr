@@ -64,7 +64,7 @@ public class Card_07_359_ErrataTests
 		//assertEquals(, card.getBlueprint().getResistance());
 		//assertEquals(Signet., card.getBlueprint().getSignet()); 
 		assertEquals(8, card.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-		Assert.assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 
 	}
 

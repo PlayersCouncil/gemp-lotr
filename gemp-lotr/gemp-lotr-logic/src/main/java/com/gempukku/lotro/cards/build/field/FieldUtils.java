@@ -20,7 +20,7 @@ public class FieldUtils {
         if (value == null)
             return defaultValue;
         if (!(value instanceof Number))
-            throw new InvalidCardDefinitionException("Unknown type in " + key + " field");
+            throw new InvalidCardDefinitionException("Value in " + key + " field must be an integer, not an evaluated value.");
         return ((Number) value).intValue();
     }
 

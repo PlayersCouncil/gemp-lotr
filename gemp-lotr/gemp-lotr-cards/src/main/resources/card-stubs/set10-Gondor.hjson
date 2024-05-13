@@ -219,17 +219,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: For each [gondor] companion you spot, reveal 1 card at random from a Shadow player's hand. Choose a revealed Shadow card to be discarded, then its owner draws a card.
 		lore: We cannot achieve victory by arms, but by arms we can give the Ring-bearer his only chance, frail though it be.'
 		promotext: ""
@@ -266,17 +269,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an exhausted [gondor] companion strength +2. If that companion wins this skirmish, heal that companion or make him or her <b>damage +1</b>.
 		lore: ...he drew Andúril and held it up glittering in the sun. 'You shall not be sheathed again until the last battle is fought,' he said.
 		promotext: ""
@@ -313,17 +319,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [gondor] Man to discard a stacked Shadow card or to wound a minion bearing a fortification.
 		lore: And so the companies came and were hailed and cheered and passed through the Gate, men of the Outlands marching to defend the City of Gondor in a dark hour....
 		promotext: ""
@@ -451,17 +460,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If no opponent controls a site, spot 2 [gondor] Men to make the move limit +1 for this turn.
 		lore: We must push Sauron... We must march out to meet him at once.'
 		promotext: ""

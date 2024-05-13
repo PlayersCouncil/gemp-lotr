@@ -116,17 +116,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: You may remove from the game 4 [orc] cards in your discard pile instead of paying the twilight cost for this card.<br>Make your [orc] lurker minion strength +2.
 		lore: ...transmogrified to trophies by the advancing hordes.
 		promotext: ""
@@ -207,17 +210,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: If you can spot more [orc] conditions than [orc] minions, you may discard your [orc] condition from play to play an [orc] minion from your discard pile.
 		lore: Sauron's minions were loyal to his rule. Their loyalty was repaid in blood: the enemy's or their own.
 		promotext: ""
@@ -393,17 +399,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Discard any number of your [orc] minions from play to make an [orc] minion strength +3 for each one discarded.
 		lore: ...the Dark Power, moving its armies like pieces on the board, was gathering them together.
 		promotext: ""
@@ -865,17 +874,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [orc] Orc strength +2 (or +6 if you remove 2 burdens).
 		lore: The besiegers believed not that the flames would burn the city walls, but the souls of those behind them.
 		promotext: ""

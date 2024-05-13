@@ -41,6 +41,7 @@ public class Card_08_091_Tests
 		 * Subtype: Man
 		 * Strength: 9
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: To play, spot 3 [rohan] companions.<br>You may play Rohirrim Army any time you could play a regroup event.<br>When you play Rohirrim Army, you may discard a minion.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_08_091_Tests
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

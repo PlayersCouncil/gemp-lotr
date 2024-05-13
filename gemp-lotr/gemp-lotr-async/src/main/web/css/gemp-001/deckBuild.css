@@ -141,3 +141,21 @@ button.navigation-butt {
 .notesDialog {
     display: flex;
 }
+
+
+.card-group {
+    width: 100%;   
+    height: 100%;
+    border-radius: 7px;
+    text-align: center;
+}
+
+.helper-text {
+    font-size: calc(0.3rem + 0.75vh);
+    position: relative;
+    top: 40%;
+    padding:10px;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}

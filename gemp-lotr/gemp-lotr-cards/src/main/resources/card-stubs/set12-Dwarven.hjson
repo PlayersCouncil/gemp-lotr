@@ -25,17 +25,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a Dwarf to choose a Shadow player who must spot a race. Discard from play all minions of all other races.
 		lore: And you, Master Dwarf, pray take your hand from your axe-haft, till I am up! You will not need such arguments.'
 		promotext: ""
@@ -161,17 +164,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Dwarf strength +2. Then, if that Dwarf is at a battleground or mountain site, draw a card.
 		lore: Gimli unexpectedly faced another test of Dwarven endurance.
 		promotext: ""
@@ -439,17 +445,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 2</b>. <helper>(For each [dwarven] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot 2 Dwarves to draw up to 4 cards.
 		lore: And no regurgitation!
 		promotext: ""
@@ -486,20 +495,23 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		]*/
+		]
 		gametext: If a Dwarf wins a skirmish, make an opponent discard 3 cards from the top of his or her draw deck.
 		lore: My folk have never had dealings with any of the servants of the Enemy.'
 		promotext: ""
@@ -580,17 +592,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Dwarf strength +2 (or +2 for each possession he bears if he has resistance 4 or more).
 		lore: Gimli hewed the legs from under another that had sprung up on Balin's Tomb.
 		promotext: ""

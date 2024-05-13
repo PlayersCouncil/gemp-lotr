@@ -256,17 +256,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an [elven] companion strength +2 (or +5 if the fellowship has moved more than once this turn).
 		lore: Redoubling their efforts, the Company at last felled the Cave Troll.
 		promotext: ""
@@ -351,17 +354,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Exert an Elf to take an [elven] skirmish event into hand from your discard pile and you may reinforce an [elven] token.
 		lore: I thought that Elves were all for moon and stars; but this is more elvish than anything I ever heard tell of.'
 		promotext: ""
@@ -398,17 +404,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: You may remove from the game 4 other [elven] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make a minion skirmishing your Elf at a forest or river site strength -3.
 		lore: Men multiply and the Firstborn decrease....'
 		promotext: ""
@@ -494,17 +503,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 3 Elves, spot a Shadow race, and choose a Shadow player to wound each of that player's minions which is not of that race.
 		lore: Yet I make my tale twenty at the least. But that is only a few leaves in a forest.'
 		promotext: ""
@@ -588,17 +600,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 Elf archers to make the fellowship archery total +1 (or +2 if a Shadow player has replaced the fellowship's current site this turn).
 		lore: I can see a darkness. There are shapes moving in it, great shapes far away upon the bank of the river; but what they are I cannot tell.'
 		promotext: ""
@@ -726,17 +741,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an Elf strength +1 for each card that has an [elven] token on it.
 		lore: ...the Elf had no boots, but wore only light shoes, as he always did....
 		promotext: ""

@@ -41,6 +41,7 @@ public class Card_10_122_Tests
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
+		 * Resistance: 5
 		 * Signet: Gandalf
 		 * Game Text: <b>Ring-bound</b>.<br>Sam is strength +1 for each [shire] companion you can spot.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
@@ -60,6 +61,7 @@ public class Card_10_122_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(5, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

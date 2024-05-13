@@ -41,6 +41,7 @@ public class Card_01_089_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: <b>Ranger</b>.<br><b>Maneuver:</b> Exert Aragorn to make him <b>defender +1</b> until the regroup phase.
 		*/
@@ -60,6 +61,7 @@ public class Card_01_089_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

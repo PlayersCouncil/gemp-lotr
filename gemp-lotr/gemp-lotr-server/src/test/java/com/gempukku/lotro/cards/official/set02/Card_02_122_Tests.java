@@ -41,6 +41,7 @@ public class Card_02_122_Tests
 		 * Subtype: Wizard
 		 * Strength: 7
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: At the start of each of your turns, you may draw a card.
 		*/
@@ -59,6 +60,7 @@ public class Card_02_122_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 

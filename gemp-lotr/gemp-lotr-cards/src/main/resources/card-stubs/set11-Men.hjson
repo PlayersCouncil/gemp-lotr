@@ -167,17 +167,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot 2 [men] minions to wound an unbound companion.
 		lore: The ferocity of the Dunlendings is not easily slaked.
 		promotext: ""
@@ -217,17 +220,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 2</b>. <helper>(For each [men] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a [men] minion to discard a possession from play.
 		lore: Even now he plays a game with peril and wins a throw.'
 		promotext: ""
@@ -552,17 +558,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: <b>Toil 2</b>. <helper>(For each [men] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a [men] minion to make the minion archery total +3.
 		lore: The war towers of the mûmakil provide a great advantage for archers.
 		promotext: ""
@@ -973,6 +982,7 @@
 		culture: Men
 		twilight: 3
 		type: Condition
+		#target: a companion
 		/*requires: {
 			
 		}
@@ -1205,17 +1215,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a [men] minion strength +2 (or +4 if that minion is at a battleground or plains site).
 		lore: An Easterling column strikes with terrific force.
 		promotext: ""
@@ -1391,17 +1404,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a [men] minion to make the minion archery total +1 and to make the Free Peoples player choose 3 companions. Other companions cannot take archery wounds.
 		lore: Arrows fired in volleys will never be as effective as one loosed by a skilled archer.
 		promotext: ""
@@ -1769,17 +1785,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Wound a character skirmishing a [men] minion. If the fellowship is at a battleground site, you may remove (3) to wound that character again.
 		lore: As deadly as the Southron arrows, their polearms cut a whirling swath through their enemies.
 		promotext: ""
@@ -1813,6 +1832,7 @@
 		twilight: 1
 		type: Condition
 		resistance: -2
+		#target: a companion (except the Ring-bearer)
 		/*requires: {
 			
 		}

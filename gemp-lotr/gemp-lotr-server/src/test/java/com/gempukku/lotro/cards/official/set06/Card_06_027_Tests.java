@@ -41,6 +41,7 @@ public class Card_06_027_Tests
 		 * Subtype: Ent
 		 * Strength: 6
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Game Text: While you can spot 3 Ents, this companion is strength +2.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_06_027_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

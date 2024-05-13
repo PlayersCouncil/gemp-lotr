@@ -41,6 +41,7 @@ public class Card_04_067_Tests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: To play, spot an Elf.<br><b>Skirmish:</b> Exert Fereveldir and remove an [elven] token from your condition to wound a minion Fereveldir is skirmishing.
 		*/
 
@@ -58,6 +59,7 @@ public class Card_04_067_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

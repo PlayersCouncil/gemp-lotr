@@ -114,17 +114,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot a Dwarf hunter and choose one: exert a minion for each hunter you can spot or reinforce a [dwarven] token for each hunter you can spot.
 		lore: Always well armed, a Dwarf has many options in battle.
 		promotext: ""
@@ -206,17 +209,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make a Dwarf strength +2 (or if you cannot spot a threat, make that Dwarf strength +1 for each Dwarf you can spot).
 		lore: Brave in battle, Dwarven pride and will cannot be broken.
 		promotext: ""

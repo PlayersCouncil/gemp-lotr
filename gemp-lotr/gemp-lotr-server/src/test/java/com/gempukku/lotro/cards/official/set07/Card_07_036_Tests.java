@@ -41,6 +41,7 @@ public class Card_07_036_Tests
 		 * Subtype: Wizard
 		 * Strength: 9
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: While you cannot spot 3 companions of the same culture, Gandalf is strength -2.
 		*/
@@ -59,6 +60,7 @@ public class Card_07_036_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

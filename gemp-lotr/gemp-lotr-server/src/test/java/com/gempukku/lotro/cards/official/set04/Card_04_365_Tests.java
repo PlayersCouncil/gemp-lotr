@@ -41,6 +41,7 @@ public class Card_04_365_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 2
+		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: <b>Fellowship:</b> Play a [rohan] possession on a [rohan] companion to heal that companion (limit once per turn).
 		*/
@@ -59,6 +60,7 @@ public class Card_04_365_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 

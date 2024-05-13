@@ -8,61 +8,70 @@ import java.util.List;
 import java.util.Map;
 
 public interface LotroFormat {
-    public boolean isOrderedSites();
+    String PCSummary = """
+        As a reminder, PC formats incorporate the following changes:
+         <br/>- <a href="https://wiki.lotrtcgpc.net/wiki/PC_Errata" target="_blank">PC Errata are in effect</a>
+         <br/>- Set V1 is legal
+         <br/>- Discard piles are public information for both sides
+         <br/>- The game ends after Regroup actions are made (instead of at the start of Regroup)
+        """;
 
-    public boolean canCancelRingBearerSkirmish();
+    boolean isOrderedSites();
 
-    public boolean hasRuleOfFour();
+    boolean canCancelRingBearerSkirmish();
 
-    public boolean hasMulliganRule();
+    boolean hasRuleOfFour();
+    boolean usesMaps();
 
-    public boolean winWhenShadowReconciles();
+    boolean hasMulliganRule();
 
-    public boolean discardPileIsPublic();
+    boolean winWhenShadowReconciles();
 
-    public boolean winOnControlling5Sites();
+    boolean discardPileIsPublic();
 
-    public boolean isPlaytest();
-    public boolean hallVisible();
+    boolean winOnControlling5Sites();
 
-    public String getName();
+    boolean isPlaytest();
+    boolean hallVisible();
 
-    public String getCode();
-    public int getOrder();
+    String getName();
 
-    public String validateCard(String cardId);
+    String getCode();
+    int getOrder();
 
-    public List<String> validateDeck(LotroDeck deck);
-    public String validateDeckForHall(LotroDeck deck);
+    String validateCard(String cardId);
 
-    public LotroDeck applyErrata(LotroDeck deck);
+    List<String> validateDeck(LotroDeck deck);
+    String validateDeckForHall(LotroDeck deck);
 
-    public List<Integer> getValidSets();
+    LotroDeck applyErrata(LotroDeck deck);
 
-    public List<String> getBannedCards();
+    List<Integer> getValidSets();
 
-    public List<String> getRestrictedCards();
+    List<String> getBannedCards();
 
-    public List<String> getValidCards();
+    List<String> getRestrictedCards();
 
-    public List<String> getLimit2Cards();
+    List<String> getValidCards();
 
-    public List<String> getLimit3Cards();
+    List<String> getLimit2Cards();
 
-    public List<String> getRestrictedCardNames();
+    List<String> getLimit3Cards();
 
-    public Map<String,String> getErrataCardMap();
+    List<String> getRestrictedCardNames();
 
-    public String applyErrata(String bpID);
+    Map<String,String> getErrataCardMap();
 
-    public List<String> findBaseCards(String bpID);
+    String applyErrata(String bpID);
 
-    public SitesBlock getSiteBlock();
+    List<String> findBaseCards(String bpID);
 
-    public String getSurveyUrl();
+    SitesBlock getSiteBlock();
 
-    public int getHandSize();
+    String getSurveyUrl();
 
-    public Adventure getAdventure();
-    public JSONDefs.Format Serialize();
+    int getHandSize();
+
+    Adventure getAdventure();
+    JSONDefs.Format Serialize();
 }

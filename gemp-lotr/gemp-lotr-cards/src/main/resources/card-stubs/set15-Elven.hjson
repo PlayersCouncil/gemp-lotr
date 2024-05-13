@@ -250,6 +250,7 @@
 		culture: Elven
 		twilight: 2
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -447,17 +448,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an [elven] follower to make the minion archery total -3.
 		lore: We have drunk the cup of parting...and the shadows fall between us.'
 		promotext: ""
@@ -494,17 +498,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Spot an Elf to make the fellowship archery total +1 for each minion with a twilight cost of 2 or less that you can spot.
 		lore: But who can say what it hit?'
 		promotext: ""
@@ -538,6 +545,7 @@
 		culture: Elven
 		twilight: 2
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -586,17 +594,20 @@
 		/*requires: {
 			
 		}
+		*/
 		effects: {
 			type: event
 			cost: {
-				
+				type: SendMessage
+				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					
+					type: SendMessage
+					text: Placeholder effect for development.
 				}
 			]
-		}*/
+		}
 		gametext: Make an Elf strength +2 (or +4 if you can spot 3 archers).
 		lore: How many there were the company could not count.
 		promotext: ""

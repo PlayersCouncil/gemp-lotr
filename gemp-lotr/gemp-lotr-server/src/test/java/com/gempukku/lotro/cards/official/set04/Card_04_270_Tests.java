@@ -41,6 +41,7 @@ public class Card_04_270_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: <b>Valiant</b>.<br><b>Response:</b> If an unbound companion is about to take a wound, exert Éowyn and add (1) to prevent that wound.
 		*/
@@ -60,6 +61,7 @@ public class Card_04_270_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 

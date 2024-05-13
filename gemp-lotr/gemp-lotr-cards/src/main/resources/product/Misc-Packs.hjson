@@ -376,6 +376,10 @@
 			1x10_127
 			#Arwen, Queen of Elves and Men FA
 			1x10_128
+			#Troop of Uruk-hai FA
+			1x1_389
+			#Gandalf's Staff MW
+			1x2_127
 		]
 	}
 	
@@ -461,6 +465,9 @@
 			1x10_127
 			#Arwen, Queen of Elves and Men FA
 			1x10_128
+			#Troop of Uruk-hai FA
+			1x1_389
+			
 		]
 	}
 	
@@ -584,6 +591,8 @@
 			1x8_125
 			#Sapling of the White Tree MW
 			1x9_58
+			#Gandalf's Staff MW
+			1x2_127
 		]
 	}
 	
@@ -707,6 +716,8 @@
 			1x8_125
 			#Sapling of the White Tree MW
 			1x9_58
+			#Gandalf's Staff MW
+			1x2_127
 		]
 	}
 ]
