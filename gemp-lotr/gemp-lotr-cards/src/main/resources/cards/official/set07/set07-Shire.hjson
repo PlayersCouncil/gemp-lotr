@@ -26,19 +26,24 @@
 		strength: 3
 		vitality: 4
 		signet: Aragorn
-		resistance: 6
+		resistance: 10
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: moves
+		        }
+		        cost: {
+		            type: addTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: removeThreats
+		        }
+		    }
+		]
 		gametext: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br>Each time the fellowship moves, you may add (3) to remove a threat.
 		lore: Aiya Eärendil Elenion Ancalima!'
 		promotext: ""
@@ -76,19 +81,26 @@
 		strength: 3
 		vitality: 4
 		signet: Gandalf
-		resistance: 6
+		resistance: 10
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: location
+		            filter: siteBlock(king),siteNumber(6-8)
+		        }
+		        cost: {
+		            type: addBurdens
+		            amount: 4
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,inSkirmishAgainst(self))
+		        }
+		    }
+		]
 		gametext: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br><b>Skirmish:</b> At sites 6[K] to 8[K], add 4 burdens to wound a minion skirmishing Frodo.
 		lore: Wicked masster cheats us; cheats Sméagol, gollum.'
 		promotext: ""
@@ -123,18 +135,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a Hobbit
-		/*requires: {
-			
-		}
-		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		target: hobbit
 		gametext: Bearer must be a Hobbit.
 		lore: ""
 		promotext: ""
@@ -173,17 +174,24 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: cantSpotThreats
+		            amount: 3
+		        }
+		        cost: {
+		            type: addThreats
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> If you cannot spot 3 threats, add a threat to make Merry strength +2.
 		lore: I will be ready... even if you bid me ride with you on the Paths of the Dead.'
 		promotext: ""
@@ -222,17 +230,32 @@
 		vitality: 4
 		signet: Theoden
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: cantSpot
+		            filter: self,assignedToSkirmish(any)
+		        }
+		        cost: {
+		            type: returnToHand
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: playCardFromDiscard
+                        filter: choose(culture(rohan),possession)
+                        optional: true
+                    }
+                    {
+                        type: playCardFromDiscard
+                        filter: choose(culture(rohan),possession)
+                        optional: true
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Skirmish:</b> If Merry is not assigned to a skirmish, return him to your hand to play up to 2 [rohan] possessions from your discard pile.
 		lore: And I would not have it said of me in song only that I was always left behind!'
 		promotext: ""
@@ -266,20 +289,20 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
 		effects: {
 			type: event
 			cost: {
-				
+				type: exert
+				filter: choose(companion,not(hobbit))
 			},
 			effect: [
 				{
-					
+					type: modifyStrength
+					filter: choose(hobbit)
+					amount: 3
 				}
 			]
-		}*/
+		}
 		gametext: Exert a companion (except a Hobbit) to make a Hobbit strength +3.
 		lore: ""
 		promotext: ""
@@ -318,17 +341,22 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: cantSpotThreats
+		                amount: 4
+		            }
+		            filter: self
+		            amount: {
+		                type: forEachThreat
+		            }
+		        }
+		    }
+		]
 		gametext: While you cannot spot 4 threats, Pippin is strength +1 for each threat you can spot.
 		lore: I do not know what put it into your head, or your heart, to do that. But it was well done.'
 		promotext: ""
@@ -367,17 +395,25 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: cantSpot
+		            filter: self,assignedToSkirmish(any)
+		        }
+		        cost: {
+		            type: returnToHand
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(roaming,minion)
+		            times: 2
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> If Pippin is not assigned to a skirmish, return him to your hand to wound a roaming minion twice.
 		lore: And as for orders, I think you have a madman to deal with, not a lord.'
 		promotext: ""
@@ -411,17 +447,49 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: hobbit
+		            count: 2
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Add a threat
+		                Discard this condition
+		            ]
+		            effects: [
+		                {
+		                    type: addThreats
+		                }
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: playNextSite
+		        }
+		    }
+		]
 		gametext: To play, spot 2 Hobbits.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition and exert a Hobbit companion to play the fellowship's next site (replacing opponent's site if necessary).
 		lore: ""
 		promotext: ""
@@ -459,19 +527,32 @@
 		strength: 3
 		vitality: 4
 		signet: Aragorn
-		resistance: 6
+		resistance: 5
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: play
+		            filter: choose(hobbit,companion)
+		        }
+		        effect: {
+		            type: removeBurdens
+		        }
+		    }
 			{
-				
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bound</b>.<br><b>Fellowship:</b> Play a Hobbit companion to remove a burden.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		lore: ...but where there's life there's hope, as my Gaffer used to say....'
 		promotext: ""
@@ -509,19 +590,37 @@
 		strength: 3
 		vitality: 4
 		signet: Frodo
-		resistance: 6
+		resistance: 5
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
+		    {
+		        type: activated
+		        phase: fellowship
+		        requires: {
+		            type: haveInitiative
+		            side: free people
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		        }
+		        effect: {
+		            type: heal
+		            filter: self
+		        }
+		    }
 			{
-				
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bound</b>.<br><b>Fellowship:</b> If you have initiative, discard a card from hand to heal Sam.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		lore: The news that his master was still alive roused him....
 		promotext: ""
@@ -554,17 +653,41 @@
 		culture: Shire
 		twilight: 2
 		type: Condition
-		/*requires: {
-			
-		}
+		target: or(title(Merry),title(Pippin))
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addActivated
+		            filter: minion
+		            phase: assignment
+		            text: Assign this minion to bearer of Reckless Pride.
+		            effect: {
+		                type: assignFpCharacterToSkirmish
+		                fpCharacter: choose(hasAttached(name(Slow-kindled Courage)))
+		                against: self
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: discard
+		                filter: choose(minion)
+		            }
+                    {
+                        type: removeBurdens
+                        amount: 2
+                    }
+                ]
+		    }
+		]
 		gametext: Bearer must be Merry or Pippin.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Slow-kindled Courage."<br><b>Regroup:</b> Discard this condition to discard a minion and remove 2 burdens.
 		lore: ""
 		promotext: ""
