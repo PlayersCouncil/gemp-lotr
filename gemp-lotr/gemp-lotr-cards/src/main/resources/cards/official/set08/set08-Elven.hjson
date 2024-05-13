@@ -22,20 +22,49 @@
 		twilight: 2
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: {
+			    type: canSpot
+			    filter: elf,companion
+			}
+			cost: [
+                {
+                    type: chooseANumber
+                    text: Choose X (reduce fellowship archery total)
+                    from: 0
+                    to: {
+                        type: archeryTotal
+                        side: free people
+                    }
+                    memorize: x
+                }
+                {
+                    type: modifyArcheryTotal
+                    side: free people
+                    amount: {
+                        type: fromMemory
+                        memory: x
+                        multiplier: -1
+                    }
+                }
+            ]
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: heal
+				    filter: choose(unbound,companion)
+				    count: {
+				        type: fromMemory
+				        memory: x
+				    }
+				}
+				{
+				    type: addModifier
+				    modifier: {
+				        type: cantPlayPhaseSpecialAbilities
+				        player: you
+				        phase: archery
+				    }
 				}
 			]
 		}
@@ -78,17 +107,21 @@
 		signet: Aragorn
 		resistance: 6
 		keywords: Archer
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: wounded,minion
+		                count: 3
+		            }
+		            filter: minion,inSkirmishAgainst(self)
+		            amount: -3
+		        }
+		    }
+		]
 		gametext: <b>Archer</b>.<br>While you can spot 3 wounded minions, each minion skirmishing Legolas is strength -3.
 		lore: ...Legolas of the Elves, for whom the ghosts of Men have no terror.
 		promotext: ""
@@ -122,20 +155,21 @@
 		twilight: 0
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
+			requires: {
+			    type: canSpot
+			    filter: elf
+			    count: 2
+			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+				type: discard
+				filter: choose(elf)
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: drawCards
+				    count: 3
 				}
 			]
 		}
@@ -172,20 +206,49 @@
 		twilight: 2
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			cost: [
+			    {
+			        type: exert
+			        filter: choose(elf,companion)
+			    }
+                {
+                    type: chooseANumber
+                    text: Choose X (reduce fellowship archery total)
+                    from: 0
+                    to: {
+                        type: archeryTotal
+                        side: free people
+                    }
+                    memorize: x
+                }
+                {
+                    type: modifyArcheryTotal
+                    side: free people
+                    amount: {
+                        type: fromMemory
+                        memory: x
+                        multiplier: -1
+                    }
+                }
+			],
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: wound
+				    filter: choose(minion)
+				    times: {
+				        type: fromMemory
+				        memory: x
+				    }
+				}
+				{
+				    type: addModifier
+				    modifier: {
+				        type: cantPlayPhaseSpecialAbilities
+				        player: you
+				        phase: archery
+				    }
 				}
 			]
 		}
@@ -222,17 +285,42 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: [
+                    {
+                        type: exert
+                        filter: choose(elf,companion)
+                    }
+                    {
+                        type: exert
+                        filter: choose(or(culture(gandalf),culture(dwarven)),companion)
+                    }
+		        ]
+		        effect: {
+		            type: addTokens
+		            culture: elven
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: archery
+		        cost: {
+		            type: removeTokens
+		            culture: elven
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyArcheryTotal
+		            side: free people
+		            amount: 1
+		        }
+		        limitPerPhase: 2
+		    }
+		]
 		gametext: <b>Fellowship:</b> Exert an Elf companion and either a [gandalf] companion or a [dwarven] companion to add an [elven] token here.<br><b>Archery:</b> Remove an [elven] token here to make the fellowship archery total +1 (limit +2).
 		lore: Speak and be comforted....'
 		promotext: ""

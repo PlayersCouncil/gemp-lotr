@@ -8,6 +8,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.evaluator.*;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -71,6 +72,11 @@ public class ValueResolver {
                         return toValue.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
                     }
                 };
+            } else if (type.equalsIgnoreCase("archeryTotal")) {
+                FieldUtils.validateAllowedFields(object, "side");
+                final Side side = FieldUtils.getSide(object.get("side"), "side");
+
+                return (actionContext) -> (Evaluator) (game, cardAffected) -> RuleUtils.calculateArcheryTotal(game, side);
             } else if (type.equalsIgnoreCase("turnNumber")) {
                 return (actionContext) -> (Evaluator) (game, cardAffected) ->
                         actionContext.getGame().getGameState().getTurnNumber();
