@@ -29,17 +29,25 @@
 			Corsair
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: haveInitiative
+		            side: shadow
+		        }
+		        cost: {
+		            type: removeTokens
+		            culture: raider
+		            filter: choose(any)
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(possession,attachedTo(character,inSkirmishAgainst(self)))
+		        }
+		    }
+		]
 		gametext: <b>Corsair</b>. <b>Fierce</b>.<br><b>Skirmish:</b> If you have initiative, remove a [raider] token to discard a possession borne by a character skirmishing this minion.
 		lore: ...corrupted by Sauron, and who hated above all the followers of Elendil.
 		promotext: ""
@@ -72,19 +80,68 @@
 		culture: Raider
 		twilight: 2
 		type: Possession
-		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: raider
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: {
+		            type: canPlayFromDiscard
+		            filter: corsair
+		            cost: {
+                        type: forEachToken
+                        culture: raider
+                        filter: self
+                        multiplier: -1
+		            }
+		        }
+		        cost: [
+                    {
+                        type: chooseANumber
+                        text: Choose how many {raider} tokens to remove
+                        from: 0
+                        to: {
+                            type: forEachToken
+                            culture: raider
+                            filter: self
+                        }
+                        memorize: tokenCount
+                    }
+                    {
+                        type: removeTokens
+                        culture: raider
+                        filter: self
+                        count: {
+                            type: fromMemory
+                            memory: tokenCount
+                        }
+                    }
+                ]
+                effect: {
+                    type: playCardFromDiscard
+                    filter: choose(corsair)
+		            cost: {
+                        type: forEachToken
+                        culture: raider
+                        filter: self
+                        multiplier: -1
+		            }
+                }
+		    }
+		]
 		gametext: When you play this possession, you may add a [raider] token here.<br><b>Shadow:</b> Remove X [raider] tokens here to play a corsair from your discard pile; its twilight cost is -X. Discard this possession.
 		lore: ""
 		promotext: ""
@@ -126,17 +183,28 @@
 			Enduring
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: play
+                        filter: choose(corsair)
+                    }
+                ]
+                effect: {
+                    type: addTokens
+                    culture: raider
+                    filter: choose(hasToken(raider))
+                    count: 2
+                }
+		    }
+		]
 		gametext: <b>Corsair</b>. <b>Enduring</b>. <b>Fierce</b>.<br><b>Shadow:</b> Exert Castamir of Umbar and play a corsair to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		lore: They have long ceased to fear the might of Gondor.'
 		promotext: ""
@@ -171,18 +239,33 @@
 		type: Possession
 		strength: 2
 		itemclass: Ranged weapon
-		#target: a corsair
-		/*requires: {
-			
-		}
+		target: corsair
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            filter: bearer
+		            keyword: archer
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            filter: bearer
+		            keyword: fierce
+		        }
+		    }
+		]
 		gametext: Bearer must be a corsair.<br>While you have initiative, bearer is an <b>archer</b> and <b>fierce</b>.
 		lore: Ranged weapons bristled from the warships and aided the Corsairs' plunder of coastal cities.
 		promotext: ""
@@ -220,17 +303,25 @@
 		vitality: 2
 		site: 4
 		keywords: Corsair
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        cost: {
+		            type: removeThreats
+		        }
+                effect: {
+                    type: addTokens
+                    culture: raider
+                    filter: choose(hasToken(raider))
+                    count: 2
+                }
+		    }
+		]
 		gametext: <b>Corsair</b>.<br>When you play this minion, you may remove a threat to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		lore: ...a great fleet drawing near to the mouths of Anduin....'
 		promotext: ""
@@ -268,17 +359,26 @@
 		vitality: 2
 		site: 4
 		keywords: Corsair
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        cost: {
+		            type: removeTokens
+		            count: 2
+		        }
+                effect: {
+                    type: addTokens
+                    culture: raider
+                    filter: choose(hasToken(raider))
+                    count: 2
+                }
+		    }
+		]
 		gametext: <b>Corsair</b>.<br>When you play this minion, you may remove 2 culture tokens to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		lore: ...the strength of the rebels in Umbar was a great peril to Gondor....
 		promotext: ""
@@ -316,17 +416,26 @@
 		vitality: 3
 		site: 4
 		keywords: Corsair
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: haveInitiative
+		            side: shadow
+		        }
+		        cost: {
+		            type: removeTokens
+		            culture: raider
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(corsair)
+		            keyword: fierce
+		            until: regroup
+		        }
+		    }
+		]
 		gametext: <b>Corsair</b>.<br><b>Skirmish:</b> If you have initiative, remove a [raider] token to make a corsair <b>fierce</b> until the regroup phase.
 		lore: The Corsairs are upon us!'
 		promotext: ""
@@ -364,17 +473,30 @@
 		vitality: 1
 		site: 4
 		keywords: Corsair
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: haveInitiative
+		            side: shadow
+		        }
+		        cost: {
+		            type: discard
+		            filter: choose(ally)
+		        }
+                effect: {
+                    type: addTokens
+                    culture: raider
+                    filter: choose(hasToken(raider))
+                    count: 2
+                }
+		    }
+		]
 		gametext: <b>Corsair</b>.<br>When you play this minion, if you have initiative, you may discard an ally to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		lore: ...watchmen on the walls saw afar a new sight of fear, and their last hope left them.
 		promotext: ""
@@ -412,17 +534,28 @@
 		vitality: 2
 		site: 4
 		keywords: Corsair
-		/*requires: {
-			
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			requires: {
+				type: canSpot
+				filter: another,corsair
+			}
+			cost: {
+				type: discard
+				filter: choose(possession)
+			}
+            effect: {
+                type: addTokens
+                culture: raider
+                filter: choose(hasToken(raider))
+                count: 2
+            }
 		}
-		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
 		gametext: <b>Corsair</b>.<br>When you play this minion, if you can spot another corsair, you may discard a possession to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		lore: Umbar remained at war with Gondor for many lives of men....
 		promotext: ""
@@ -460,17 +593,27 @@
 		vitality: 2
 		site: 4
 		keywords: Corsair
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+                effect: {
+                    type: addTokens
+                    culture: raider
+                    filter: choose(hasToken(raider))
+                    count: 2
+                }
+		    }
+		]
 		gametext: <b>Corsair</b>.<br>When you play this minion, you may discard 2 cards from hand to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		lore: ...Umbar... fell into the hands of the Men of Harad.
 		promotext: ""
@@ -505,17 +648,55 @@
 		type: Possession
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: raider
+		            filter: self
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: shadowHasInitiative
+		            requires: [
+		                {
+		                    type: canSpotCultureTokens
+		                    culture: raider
+		                    amount: 6
+		                }
+		                {
+		                    type: canSpot
+		                    filter: culture(raider),man
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        effect: [
+		            {
+		                type: addTwilight
+		                amount: {
+		                    type: forEachToken
+		                    culture: raider
+		                }
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: When you play this possession, you may add a [raider] token here.<br>While you can spot 6 [raider] tokens and a [raider] Man, the Shadow has initiative, regardless of the Free Peoples player's hand.<br><b>Regroup:</b> Add (1) for each [raider] token you can spot. Discard this possession.
 		lore: ""
 		promotext: ""
@@ -556,17 +737,19 @@
 			Southron
 			Archer
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantTakeArcheryWounds
+		            requires: {
+		                type: canSpot
+		                filter: another,culture(raider),man
+		            }
+		            filter: ringBound,companion
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you can spot another [raider] Man, Ring-bound companions cannot take archery wounds.
 		lore: Archers from Harad rode atop the great war-beasts on the Fields of Pelennor.
 		promotext: ""
@@ -600,17 +783,46 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+    		{
+    		    type: modifier
+                modifier: {
+                    type: shadowHasInitiative
+                    requires: [
+                        {
+                            type: canSpot
+                            filter: culture(raider),minion
+                        }
+                        {
+                            type: location
+                            filter: siteBlock(king),siteNumber(4)
+                        }
+                    ]
+                }
+    		}
+    		{
+    		    type: activatedTrigger
+    		    trigger: {
+    		        type: played
+    		        filter: companion
+    		    }
+    		    cost: {
+    		        type: discardFromHand
+    		        forced: false
+    		        filter: choose(culture(raider))
+    		    }
+    		    effect: [
+    		        {
+    		            type: addTwilight
+    		            amount: 5
+    		        }
+    		        {
+    		            type: discard
+    		            filter: self
+    		        }
+    		    ]
+    		}
+		]
 		gametext: While you can spot a [raider] minion at site 4[K], the Shadow has initiative, regardless of the Free Peoples player's hand.<br><b>Response:</b> If a companion is played, discard a [raider] card from hand to add (5). Discard this condition.
 		lore: ""
 		promotext: ""
@@ -648,17 +860,32 @@
 		vitality: 3
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpotBurdens
+		                amount: 4
+		            }
+		            filter: self
+		            amount: 4
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotBurdens
+		                amount: 4
+		            }
+		            filter: self
+		            keyword: fierce
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>.<br>While you can spot 4 burdens, Heavy Axeman is strength +4 and <b>fierce</b>.
 		lore: ...the Easterlings were strong and war-hardened and asked for no quarter.
 		promotext: ""
@@ -692,17 +919,28 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantTakeWounds
+		            requires: [
+                        {
+                            type: canSpot
+                            filter: mounted,culture(raider),man
+                        }
+                        {
+                            type: not
+                            requires: {
+                                type: phase
+                                phase: skirmish
+                            }
+                        }
+                    ]
+		            filter: culture(raider),man
+		        }
+		    }
+		]
 		gametext: While you can spot a mounted [raider] Man, [raider] Men cannot take wounds (except during skirmishes).
 		lore: ...and stood like towers of defence....
 		promotext: ""
@@ -737,18 +975,39 @@
 		type: Possession
 		strength: 3
 		itemclass: Mount
-		#target: a Southron
-		/*requires: {
-			
-		}
+		target: southron
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: fierce
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: or
+		                requires: [
+		                    {
+		                        type: haveInitiative
+		                        side: shadow
+		                    }
+		                    {
+		                        type: canSpotThreats
+		                        amount: 4
+		                    }
+		                ]
+		            }
+		            filter: bearer
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: Bearer must be a Southron.<br>Bearer is <b>fierce</b>.<br>While you have initiative or can spot 4 threats, bearer is <b>damage +1</b>.
 		lore: But wherever the mûmakil came there the horses would not go, but blenched and swerved away....
 		promotext: ""
@@ -781,19 +1040,49 @@
 		culture: Raider
 		twilight: 2
 		type: Possession
-		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: choice
+		            texts: [
+		                Remove a threat
+		                Discard a {raider} card from hand
+		            ]
+		            effects: [
+		                {
+		                    type: removeThreats
+		                }
+		                {
+		                    type: discardFromHand
+		                    forced: false
+		                    filter: choose(culture(raider))
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: raider
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: removeTokens
+		            culture: raider
+		            filter: self
+		            count: 2
+		        }
+		        effect: {
+		            type: putCardsFromDiscardOnTopOfDeck
+		            filter: choose(culture(raider))
+		        }
+		    }
+		]
 		gametext: <b>Shadow:</b> Remove a threat or discard a [raider] card from hand to add a [raider] token here.<br><b>Regroup:</b> Remove 2 [raider] tokens here to place a [raider] card from your discard pile on top of your draw deck.
 		lore: ""
 		promotext: ""
@@ -827,20 +1116,41 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: chooseANumber
+				    text: Choose how many {raider} tokens to spot
+				    from: 0
+				    to: {
+				        type: forEachToken
+				        culture: raider
+				    }
+				    memorize: spotCount
+				}
+				{
+				    type: modifyStrength
+				    filter: choose(corsair)
+				    amount: {
+				        type: fromMemory
+				        memory: spotCount
+				        limit: 6
+				    }
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: haveInitiative
+				        side: shadow
+				    }
+				    effect: {
+                        type: optional
+                        text: Would you like to place {self} on top of your draw deck?
+                        effect: {
+                            type: putPlayedEventOnTopOfDrawDeck
+                        }
+                    }
 				}
 			]
 		}
