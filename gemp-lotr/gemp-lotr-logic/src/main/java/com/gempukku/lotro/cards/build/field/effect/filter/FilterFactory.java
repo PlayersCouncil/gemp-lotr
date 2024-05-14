@@ -274,11 +274,10 @@ public class FilterFactory {
                     if (parameter.startsWith("memory(") && parameter.endsWith(")")) {
                         String memory = parameter.substring(parameter.indexOf("(") + 1, parameter.lastIndexOf(")"));
                         return actionContext -> {
-                            try{
+                            try {
                                 final int value = Integer.parseInt(actionContext.getValueFromMemory(memory));
                                 return Filters.maxPrintedTwilightCost(value);
-                            }
-                            catch(IllegalArgumentException ex) {
+                            } catch (IllegalArgumentException ex) {
                                 return Filters.maxPrintedTwilightCost(100);
                             }
                         };
@@ -300,8 +299,7 @@ public class FilterFactory {
                             try {
                                 final int value = Integer.parseInt(actionContext.getValueFromMemory(memory));
                                 return Filters.minPrintedTwilightCost(value);
-                            }
-                            catch(IllegalArgumentException ex) {
+                            } catch (IllegalArgumentException ex) {
                                 return Filters.minPrintedTwilightCost(0);
                             }
                         };
@@ -396,7 +394,7 @@ public class FilterFactory {
                         min = max = Integer.parseInt(parameter);
                     }
 
-                    if(min < 0 || max > 3 || max < min)
+                    if (min < 0 || max > 3 || max < min)
                         throw new InvalidCardDefinitionException("Region number definition is invalid: " + parameter);
 
                     return (actionContext) -> Filters.regionNumberBetweenInclusive(min, max);
@@ -480,7 +478,7 @@ public class FilterFactory {
                         return Filters.moreStrengthThan(amount);
                     };
                 });
-        parameterFilters.put("title",parameterFilters.get("name"));
+        parameterFilters.put("title", parameterFilters.get("name"));
         parameterFilters.put("vitalitylessthan",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
@@ -586,7 +584,6 @@ public class FilterFactory {
     }
 
 
-
     private FilterableSource lookupFilter(String name, String parameter, CardGenerationEnvironment environment) throws
             InvalidCardDefinitionException {
         if (parameter == null) {
@@ -602,8 +599,7 @@ public class FilterFactory {
         return filterableSourceProducer.createFilterableSource(parameter, environment);
     }
 
-    public static String Sanitize(String input)
-    {
+    public static String Sanitize(String input) {
         return input
                 .toLowerCase()
                 .replace(" ", "")

@@ -122,6 +122,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("putcardsfromhandonbottomofdeck", new PutCardsFromHandOnBottomOfDeck());
         effectAppenderProducers.put("putcardsfromhandontopofdeck", new PutCardsFromHandOnTopOfDeck());
         effectAppenderProducers.put("putcardsfromplayonbottomofdeck", new PutCardsFromPlayOnBottomOfDeck());
+        effectAppenderProducers.put("putcardsfromplayontopofdeck", new PutCardsFromPlayOnBottomOfDeck());
         effectAppenderProducers.put("putonring", new PutOnRing());
         effectAppenderProducers.put("putplayedeventintohand", new PutPlayedEventIntoHand());
         effectAppenderProducers.put("putplayedeventonbottomofdrawdeck", new PutPlayedEventOnBottomOfDrawDeck());
