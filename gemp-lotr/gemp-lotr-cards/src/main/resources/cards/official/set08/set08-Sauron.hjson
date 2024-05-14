@@ -22,17 +22,34 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+                    {
+                        type: discard
+                        filter: choose(culture(sauron),minion)
+                    }
+                    {
+                        type: spot
+                        filter: choose(companion,not(ringBearer),vitalityLessThanOrEqual(burdenCount))
+                        memorize: chosenCompanion
+                    }
+                    {
+                        type: removeBurdens
+                        amount: {
+                            type: fromMemory
+                            memory: chosenCompanion
+                        }
+                    }
+                ]
+                effect: {
+                    type: returnToHand
+                    filter: memory(chosenCompanion)
+                }
+		    }
+		]
 		gametext: <b>Regroup:</b> Discard a [sauron] minion, spot a companion (except the Ring-bearer), and remove X burdens, where X is that companion's vitality, to return that companion to its owner's hand.
 		lore: Thus the will of Sauron has entered into Minas Tirith; and thus I have been delayed here.'
 		promotext: ""
@@ -70,17 +87,46 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,besieger
+		        }
+		        effect: {
+		            type: addThreats
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: companion
+		                over: 4
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            filter: choose(culture(sauron),engine)
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>. To play, spot a [sauron] Orc.<br>When you play this minion, if you can spot another besieger, you may add a threat for each companion over 4.<br><b>Shadow:</b> Remove a threat to play a [sauron] engine from your discard pile.
 		lore: ""
 		promotext: ""
@@ -118,17 +164,21 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: assignment
+		        requires: {
+		            type: canSpot
+		            filter: or(and(culture(sauron),engine),controlledSite)
+		        }
+		        effect: {
+		            type: assignFpCharacterToSkirmish
+		            fpCharacter: choose(unbound,companion)
+		            against: self
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Assignment:</b> Spot a [sauron] engine or a site you control to assign this minion to an unbound companion.
 		lore: ...filled with malice, hating even their own kind....
 		promotext: ""
@@ -169,17 +219,50 @@
 			Besieger
 			Enduring
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		        }
+		    }
+		    {
+		        type: activated
+		        text: Exert this minion twice to take control of a site
+		        phase: maneuver
+		        requires: {
+		            type: haveInitiative
+		            side: shadow
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
+		    {
+		        type: activated
+		        text: Remove a threat and exert this minion twice to take control of a site
+		        phase: maneuver
+		        cost: [
+		            {
+		                type: removeThreats
+		            }
+                    {
+                        type: exert
+                        filter: self
+                        times: 2
+                    }
+                ]
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>. <b>Enduring</b>. To play, spot a [sauron] Orc.<br><b>Maneuver:</b> If you have initiative, exert this minion twice to take control of a site.<br><b>Maneuver:</b> Remove a threat and exert this minion twice to take control of a site.
 		lore: ""
 		promotext: ""
@@ -217,17 +300,35 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        cost: {
+		            type: choice
+		            texts: [
+		                Exert this minion
+		                Stack this minion on a site you control
+		            ]
+		            effects: [
+		                {
+		                    type: exert
+		                    filter: self
+		                }
+		                {
+		                    type: stackCards
+		                    filter: self
+		                    where: choose(controlledSite)
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: modifyArcheryTotal
+		            side: free people
+		            amount: -2
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Archery:</b> Exert this minion or stack it on a site you control to make the fellowship archery total -2.
 		lore: The City is all set about with flame, and the field is full of foes.'
 		promotext: ""
@@ -265,17 +366,24 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        cost: {
+		            type: removeBurdens
+		        }
+		        effect: {
+		            type: playCardFromStacked
+		            filter: choose(besieger)
+		            on: controlledSite
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br>When you play this minion, you may remove a burden to play a besieger stacked on a site you control.
 		lore: ...the hosts of Mordor were enheartened, and filled with a new lust and fury they came yelling....
 		promotext: ""
@@ -313,17 +421,25 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedFromStacked
+		        phase: regroup
+		        stackedOn: controlledSite
+		        cost: {
+		            type: discardStackedCards
+		            filter: self
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+		                type: modifyMoveLimit
+		                amount: -1
+		            }
+		            until: endOfTurn
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Regroup:</b> If this minion is stacked on a site you control, discard this minion to make the move limit for this turn -1.
 		lore: ...new strength came now streaming to the field out of Osgiliath.
 		promotext: ""
@@ -361,17 +477,31 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: archery
+		        cost: {
+		            type: returnToHand
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: modifyArcheryTotal
+                        side: free people
+                        amount: -2
+                    }
+                    {
+                        type: addModifier
+                        modifier: {
+                            type: cantPlayPhaseSpecialAbilities
+                            player: free people
+                            phase: archery
+                        }
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Archery:</b> Return this minion to your hand to make the fellowship archery total -2 and prevent the Free Peoples player from using archery special abilities.
 		lore: ...hurrying orcs were digging... just out of bowshot from the walls....
 		promotext: ""
@@ -409,17 +539,29 @@
 		vitality: 2
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: {
+		            type: haveInitiative
+		            side: shadow
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: addBurdens
+		            }
+		            {
+		                type: drawCards
+		                player: free people
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Shadow:</b> If you have initiative, exert this minion to add a burden and make the Free Peoples player draw a card.
 		lore: ...they found the enemy already on the out-wall, or assailing it....'
 		promotext: ""
@@ -460,17 +602,32 @@
 			Besieger
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifyOwnCost
+		        amount: {
+		            type: forEachYouCanSpot
+		            filter: culture(sauron),engine
+		            multiplier: -1
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: location
+		            filter: siteBlock(king),siteNumber(5-9)
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(side(free people),condition)
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>. <b>Fierce</b>.<br>The twilight cost of this minion is -1 for each [sauron] engine you spot.<br>When you play this minion at sites 5[K] to 9[K], you may discard a Free Peoples condition.
 		lore: ...and wielded heavy hammers in their knotted hands.
 		promotext: ""
@@ -509,17 +666,54 @@
 			Engine
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: play
+		            filter: choose(culture(sauron),minion)
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: sauron
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+                    {
+                        type: chooseANumber
+                        text: Choose X
+                        from: 0
+                        to: {
+                            type: forEachToken
+                            culture: sauron
+                            filter: self
+                        }
+                        memorize: tokenCount
+                    }
+                    {
+                        type: removeTokens
+                        culture: sauron
+                        count: memory(tokenCount)
+                        filter: self
+                    }
+                ]
+                effect: [
+                    {
+                        type: discard
+                        filter: choose(side(free people),not(companion),printedTwilightCostFromMemory(tokenCount))
+                    }
+                    {
+                        type: discard
+                        filter: choose(or(and(culture(sauron),minion),self))
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Engine</b>.<br><b>Shadow:</b> Play a [sauron] minion to add a [sauron] token here.<br><b>Regroup:</b> Remove X [sauron] tokens here to discard a Free Peoples card (except a companion) with a twilight cost of X. Discard a [sauron] minion or this possession.
 		lore: ""
 		promotext: ""
@@ -553,17 +747,45 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: shadowHasInitiative
+		            requires: [
+                        {
+                            type: canSpot
+                            filter: culture(sauron),minion
+                        }
+                        {
+                            type: location
+                            filter: siteBlock(king),siteNumber(5)
+                        }
+                    ]
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: played
+		            filter: companion
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            filter: choose(culture(sauron))
+		        }
+		        effect: [
+		            {
+		                type: takeControlOfSite
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: While you can spot a [sauron] minion at site 5[K], the Shadow has initiative, regardless of the Free Peoples player's hand.<br><b>Response:</b> If a companion is played, discard a [sauron] card from hand to take control of a site. Discard this condition.
 		lore: ""
 		promotext: ""
@@ -604,17 +826,46 @@
 			Besieger
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifyOwnCost
+		        amount: {
+		            type: countStacked
+		            filter: culture(sauron),minion
+		            on: site
+		            multiplier: -2
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: playCardFromStacked
+                        filter: choose(besieger)
+                        on: controlledSite
+                        memorize: playedBesieger
+                    }
+                    {
+                        type: addKeyword
+                        filter: memory(playedBesieger)
+                        keyword: fierce
+                        until: regroup
+                    }
+                    {
+                        type: addKeyword
+                        filter: memory(playedBesieger)
+                        keyword: damage
+                        amount: 1
+                        until: regroup
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Besieger</b>. <b>Fierce</b>.<br>The twilight cost of this minion is -2 for each [sauron] minion stacked on a site.<br>Each time this minion wins a skirmish, you may play a besieger stacked on a site you control. That besieger is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
 		lore: ""
 		promotext: ""
@@ -652,17 +903,20 @@
 		vitality: 4
 		site: 5
 		keywords: Besieger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>.<br><b>Regroup:</b> Exert this minion twice to take control of a site.
 		lore: ...yet still driven as if by a madness....
 		promotext: ""
@@ -699,17 +953,39 @@
 			Engine
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),minion
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: stackCards
+		            filter: choose(your,culture(sauron),minion)
+		            where: choose(controlledSite)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: playCardFromStacked
+		            filter: choose(culture(sauron),minion)
+		            on: controlledSite
+		        }
+		    }
+		]
 		gametext: <b>Engine</b>. To play, spot a [sauron] minion.<br><b>Regroup:</b> Remove a threat to stack your [sauron] minion on a site you control.<br><b>Shadow:</b> Remove a threat to play a [sauron] minion stacked on a site you control.
 		lore: ...and soon yet more companies of the enemy were swiftly setting up....
 		promotext: ""
@@ -751,17 +1027,36 @@
 			Besieger
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(sauron),orc
+		        }
+		    }
+		    {
+		        type: modifyOwnCost
+		        amount: {
+		            type: forEachYouCanSpot
+		            filter: culture(sauron),engine
+		            multiplier: -2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+                    type: exert
+                    filter: self
+		        }
+		        effect: {
+		            type: stackCards
+		            filter: choose(your,besieger)
+		            where: choose(controlledSite)
+		        }
+		    }
+		]
 		gametext: <b>Besieger</b>. <b>Fierce</b>. To play, spot a [sauron] Orc.<br>The twilight cost of Troll of Gorgoroth is -2 for each [sauron] engine you spot.<br><b>Regroup:</b> Exert Troll of Gorgoroth to stack your besieger on a site you control.
 		lore: ...they could endure the Sun, so long as the will of Sauron held sway over them.
 		promotext: ""

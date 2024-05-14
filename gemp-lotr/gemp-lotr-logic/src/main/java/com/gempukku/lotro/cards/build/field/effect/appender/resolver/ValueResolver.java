@@ -29,7 +29,9 @@ public class ValueResolver {
         if (value instanceof Number)
             return new ConstantEvaluator(((Number) value).intValue());
         if (value instanceof String stringValue) {
-            if (stringValue.contains("-")) {
+            if (stringValue.equals("burdencount")) {
+                return actionContext -> (Evaluator) (game, cardAffected) -> actionContext.getGame().getGameState().getBurdens();
+            } else if (stringValue.contains("-")) {
                 final String[] split = stringValue.split("-", 2);
                 final int min = Integer.parseInt(split[0]);
                 final int max = Integer.parseInt(split[1]);

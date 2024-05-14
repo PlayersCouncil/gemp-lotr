@@ -496,6 +496,14 @@ public class FilterFactory {
                         return Filters.lessVitalityThan(amount);
                     };
                 });
+        parameterFilters.put("vitalitylessthanorequal",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.lessVitalityThan(amount + 1);
+                    };
+                });
         parameterFilters.put("vitalitymorethan",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
