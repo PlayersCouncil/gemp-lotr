@@ -64,6 +64,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("itemclassspot", new ItemClassSpot());
         modifierProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
         modifierProducers.put("modifycost", new ModifyCost());
+        modifierProducers.put("modifyinitiativehandsize", new ModifyInitiativeHandSize());
         modifierProducers.put("modifymovelimit", new ModifyMoveLimit());
         modifierProducers.put("modifyplayoncost", new ModifyPlayOnCost());
         modifierProducers.put("modifyresistance", new ModifyResistance());
