@@ -26,17 +26,20 @@
 			Underground
 			Sanctuary
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: addThreats
+		            amount: 3
+		        }
+		        effect: {
+		            type: playCardFromDrawDeck
+		            filter: choose(enduring,companion)
+		        }
+		    }
+		]
 		gametext: <b>Underground</b>. <b>Sanctuary</b>. <b>Fellowship:</b> Add 3 threats to play an enduring companion from your draw deck.
 		lore: ""
 		promotext: ""
@@ -71,17 +74,33 @@
 		block: King
 		direction: Right
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: removeBurdens
+		            amount: 2
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Play enduring minion from draw deck
+		                Play enduring minion from discard pile
+		            ]
+		            effects: [
+		                {
+		                    type: playCardFromDrawDeck
+		                    filter: choose(enduring,minion)
+		                }
+		                {
+		                    type: playCardFromDiscard
+		                    filter: choose(enduring,minion)
+		                }
+		            ]
+		        }
+		    }
+		]
 		gametext: <b>Underground</b>. <b>Shadow:</b> Remove 2 burdens to play an enduring minion from your draw deck or discard pile.
 		lore: ""
 		promotext: ""
@@ -115,17 +134,33 @@
 		site: 5
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfPhase
+		            phase: regroup
+		        }
+		        player: free people
+		        effect: {
+		            type: choice
+		            texts: [
+		                Add 3 threats
+		                Opponent takes control of site
+		            ]
+		            effects: [
+		                {
+		                    type: addThreats
+                            amount: 3
+		                }
+		                {
+		                    type: takeControlOfSite
+		                    player: shadow
+		                }
+		            ]
+		        }
+		    }
+		]
 		gametext: At the start of the regroup phase, the Free Peoples player must add 3 threats or choose an opponent who may take control of a site.
 		lore: ""
 		promotext: ""
@@ -160,17 +195,29 @@
 		block: King
 		direction: Right
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: [
+                    {
+                        type: canSpot
+                        filter: your,minion
+                    }
+                    {
+                        type: canSpot
+                        filter: companion
+                        count: 6
+                    }
+                ]
+                effect: {
+                    type: addModifier
+                    modifier: {
+                        type: hasToMoveIfAble
+                    }
+                }
+		    }
+		]
 		gametext: <b>River</b>. <b>Regroup:</b> Spot your minion and 6 companions to make the Free Peoples player choose to move again this turn.
 		lore: ""
 		promotext: ""
