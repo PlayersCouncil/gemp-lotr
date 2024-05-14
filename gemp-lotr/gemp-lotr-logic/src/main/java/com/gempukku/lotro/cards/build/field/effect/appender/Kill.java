@@ -21,11 +21,12 @@ import java.util.Collections;
 public class Kill implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "player");
+        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "player", "memorize");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
+        final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         if (filter == null)
             throw new InvalidCardDefinitionException("Selector is required for a Kill effect.");
@@ -33,12 +34,12 @@ public class Kill implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, valueSource, "_temp", player, "Choose cards to kill", environment));
+                CardResolver.resolveCards(filter, valueSource, memory, player, "Choose cards to kill", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                        final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory("_temp");
+                        final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
                         return new KillEffect(cardsFromMemory, Collections.singleton(action.getActionSource()), KillEffect.Cause.CARD_EFFECT);
                     }
                 });

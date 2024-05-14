@@ -22,20 +22,24 @@
 		twilight: 3
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: if
+					condition: {
+					    type: location
+					    filter: siteBlock(king),siteNumber(1-5)
+					}
+					true: {
+					    type: heal
+					    filter: choose(name(Gandalf))
+					}
+					false: {
+    					type: alterOverwhelmMultiplier
+    					filter: choose(hobbit)
+    					multiplier: 3
+					}
 				}
 			]
 		}
@@ -77,17 +81,16 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: phase
+		            phase: play starting fellowship
+		        }
+		        amount: -2
+		    }
+		]
 		gametext: When Gandalf is in your starting fellowship, his twilight cost is -2.
 		lore: ...the rule of no realm is mine, neither of Gondor nor any other, great or small.'
 		promotext: ""
@@ -121,20 +124,26 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(name(Gandalf))
 			},
 			effect: [
+			    {
+			        type: chooseHowManyToSpot
+			        filter: signet(gandalf)
+			        memorize: spotCount
+			    }
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: modifyStrength
+					filter: choose(minion,inSkirmishAgainst(unbound,companion))
+					amount: {
+					    type: fromMemory
+					    memory: spotCount
+					    multiplier: -1
+					}
 				}
 			]
 		}
@@ -171,20 +180,34 @@
 		twilight: 3
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
+			requires: {
+                type: canSpot
+                filter: name(Gandalf),notAssignedToSkirmish
+            }
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: choice
+			    texts: [
+			        Spot Shadowfax
+			        Exert Gandalf
+			    ]
+			    effects: [
+			        {
+			            type: spot
+			            filter: name(Shadowfax)
+			        }
+			        {
+			            type: exert
+			            filter: choose(name(Gandalf))
+			        }
+			    ]
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: replaceInSkirmish
+				    filter: unbound,companion,not(name(Gandalf))
+				    with: choose(name(Gandalf))
 				}
 			]
 		}
@@ -221,17 +244,41 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: [
+		            {
+		                type: exert
+		                filter: choose(name(Gandalf))
+		            }
+		            {
+		                type: exert
+		                filter: choose(or(culture(elven),culture(shire)),companion)
+		            }
+		        ]
+		        effect: {
+		            type: addTokens
+		            culture: gandalf
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTokens
+		            culture: gandalf
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(minion,inSkirmishAgainst(unbound,companion))
+		            amount: -2
+		        }
+		    }
+		]
 		gametext: <b>Fellowship:</b> Exert Gandalf and either an [elven] companion or a [shire] companion to add a [gandalf] token here.<br><b>Skirmish:</b> Remove a [gandalf] token here to make a minion skirmishing an unbound companion strength -2.
 		lore: ""
 		promotext: ""
@@ -265,20 +312,21 @@
 		twilight: 1
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
+			requires: {
+			    type: canSpot
+			    filter: name(Gandalf)
+			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+				type: exert
+				filter: choose(companion)
+				memorize: exertedCompanion
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: putCardsFromDiscardOnTopOfDeck
+					filter: choose(cultureFromMemory(exertedCompanion))
 				}
 			]
 		}
@@ -315,20 +363,25 @@
 		twilight: 3
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
+			requires: {
+			    type: canSpot
+			    filter: name(Gandalf)
+			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: kill
+				filter: choose(companion,not(ringBearer))
+				memorize: killedCompanion
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: putCardsFromDeckIntoHand
+				    filter: choose(cultureFromMemory(killedCompanion))
+				    count: 0-3
+				}
+				{
+				    type: shuffleDeck
 				}
 			]
 		}
@@ -366,18 +419,36 @@
 		twilight: 2
 		type: Possession
 		itemclass: Mount
-		#target: title(Gandalf)
-		/*requires: {
-			
-		}
+		target: title(Gandalf)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: bearer,inSkirmish
+		        }
+		        effect: {
+		            type: exert
+		            filter: all(minion,inSkirmishAgainst(bearer))
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: addThreats
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: bearer
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: Bearer must be Gandalf.<br>At the start of each skirmish involving Gandalf, each minion skirmishing Gandalf must exert.<br><b>Skirmish:</b> Add a threat to make Gandalf strength +1.
 		lore: ""
 		promotext: ""

@@ -15,6 +15,7 @@ import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.google.common.collect.Sets;
 
 import java.util.*;
 
@@ -1039,6 +1040,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         return result;
     }
 
+    private static Set<String> frodosWithNon10Resistance = Sets.newHashSet("Resolute Hobbit");
+    private static Set<String> samsWithNon5Resistance = Sets.newHashSet("Loyal Friend", "Dropper of Eaves", "Humble Halfling");
+
     public void validateConsistency() throws InvalidCardDefinitionException {
         if (title == null)
             throw new InvalidCardDefinitionException("Card has to have a title");
@@ -1091,5 +1095,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("Possession, condition or artifact without a filter needs a SUPPORT_AREA keyword");
         if (cardType == CardType.FOLLOWER && aidCostSource == null)
             throw new InvalidCardDefinitionException("Follower requires an aid cost");
+        if (title.equals("Frodo") && resistance != 10 && !frodosWithNon10Resistance.contains(subtitle)) {
+            throw new InvalidCardDefinitionException("Frodo (except some permitted) needs to have resistance of 10");
+        }
+        if (title.equals("Sam") && resistance != 5 && !samsWithNon5Resistance.contains(subtitle)) {
+            throw new InvalidCardDefinitionException("Sam (except some permitted) needs to have resistance of 5");
+        }
     }
 }
