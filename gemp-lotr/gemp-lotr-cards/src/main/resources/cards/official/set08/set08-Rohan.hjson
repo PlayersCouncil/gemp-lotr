@@ -22,20 +22,20 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
+			requires: {
+			    type: haveInitiative
+			    side: free people
+			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: discard
+				filter: choose(culture(rohan),possession)
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: playCardFromDiscard
+				    filter: choose(culture(rohan),possession)
 				}
 			]
 		}
@@ -72,17 +72,40 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: [
+		            {
+		                type: exert
+		                filter: choose(culture(rohan),companion)
+		            }
+		            {
+		                type: exert
+		                filter: choose(or(and(culture(gondor),man),and(culture(shire),companion)))
+		            }
+		        ]
+		        effect: {
+		            type: addTokens
+		            culture: rohan
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTokens
+		            culture: rohan
+		            filter: self
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(minion,inSkirmishAgainst(companion))
+		        }
+		    }
+		]
 		gametext: <b>Fellowship:</b> Exert a [rohan] companion and either a [gondor] Man or a [shire] companion to add a [rohan] token here.<br><b>Skirmish:</b> Remove a [rohan] token here to exert a minion skirmishing a companion.
 		lore: Sea-kings' city in the South-kingdom / foe- beleaguered, fire-encircled.
 		promotext: ""
@@ -122,17 +145,37 @@
 		signet: Gandalf
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: not
+		            requires: {
+		                type: phase
+		                phase: play starting fellowship
+		            }
+		        }
+		        effect: [
+                    {
+                        type: revealTopCardsOfDrawDeck
+                        count: 10
+                        memorize: revealedCards
+                    }
+                    {
+                        type: playCardFromDrawDeck
+                        filter: choose(memory(revealedCards),culture(rohan),possession)
+                    }
+                    {
+                        type: shuffleDeck
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Valiant</b>.<br>When you play Éomer (except in your starting fellowship), you may reveal the top 10 cards of your draw deck. You may play each [rohan] possession revealed. Shuffle your draw deck.
 		lore: Need brooks no delay, yet late is better than never....'
 		promotext: ""
@@ -166,18 +209,38 @@
 		twilight: 1
 		type: Possession
 		itemclass: Shield
-		#target: a [rohan] Man
-		/*requires: {
-			
-		}
+		target: culture(rohan),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyArcheryTotal
+		            side: shadow
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: bearer,name(Éowyn)
+		        }
+		        cost: [
+		            {
+		                type: addThreats
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		        effect: {
+		            type: discard
+		            filter: choose(hand weapon,attachedTo(minion,inSkirmishAgainst(name(Éowyn))))
+		        }
+		    }
+		]
 		gametext: Bearer must be a [rohan] Man.<br>The minion archery total is -1.<br><b>Skirmish:</b> If bearer is Éowyn, add a threat and discard Éowyn's Shield to discard a hand weapon borne by a minion she is skirmishing.
 		lore: ...spear shall be shaken, shield shall be splintered....'
 		promotext: ""
@@ -211,21 +274,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
-				{
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+			    {
+			        type: exert
+			        filter: choose(minion,inSkirmishAgainst(mounted,culture(rohan),man))
+			    }
 			]
 		}
 		gametext: Exert a minion skirmishing a mounted [rohan] Man.
@@ -261,21 +316,25 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(name(Théoden))
 			},
 			effect: [
-				{
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+			    {
+			        type: repeat
+			        times: {
+			            type: forEachYouCanSpot
+			            filter: signet(Théoden)
+			        }
+			        effect: {
+			            type: exert
+			            filter: choose(minion)
+			            count: 0-1
+			        }
+			    }
 			]
 		}
 		gametext: Exert Théoden to exert a minion for each Théoden signet you spot.
@@ -314,17 +373,32 @@
 		strength: 9
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),companion
+		            count: 3
+		        }
+		    }
+		    {
+		        type: playedInOtherPhase
+		        phase: regroup
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(minion)
+		        }
+		    }
+		]
 		gametext: To play, spot 3 [rohan] companions.<br>You may play Rohirrim Army any time you could play a regroup event.<br>When you play Rohirrim Army, you may discard a minion.
 		lore: ...like a storm upon the plain and a thunder in the mountains.
 		promotext: ""
@@ -364,17 +438,37 @@
 		signet: Aragorn
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		        }
+		        amount: -1
+		    }
+		    {
+		        type: killedTrigger
+		        optional: true
+		        effect: {
+		            type: choice
+		            texts: [
+		                Play a {rohan} companion from discard pile
+		                Play a {rohan} companion from draw deck
+		            ]
+		            effects: [
+		                {
+		                    type: playCardFromDiscard
+		                    filter: choose(culture(rohan),companion)
+		                }
+		                {
+		                    type: playCardFromDrawDeck
+		                    filter: choose(culture(rohan),companion)
+		                }
+		            ]
+		        }
+		    }
+		]
 		gametext: <b>Valiant</b>.<br>While you can spot a [rohan] Man, Théoden's twilight cost is -1.<br>When Théoden is killed, you may play a [rohan] companion from your discard pile or draw deck.
 		lore: Up Eorlingas! Fear no darkness!'
 		promotext: ""
