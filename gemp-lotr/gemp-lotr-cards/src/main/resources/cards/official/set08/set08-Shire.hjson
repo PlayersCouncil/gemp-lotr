@@ -22,17 +22,31 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+		            {
+		                type: exert
+		                filter: choose(unbound,hobbit)
+		            }
+		            {
+		                type: addBurdens
+		            }
+		        ]
+		        effect: [
+		            {
+		                type: revealHand
+		                hand: free people
+		            }
+		            {
+		                type: putCardsFromHandOnBottomOfDeck
+		                filter: all(side(free people))
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Regroup:</b> Exert an unbound Hobbit and add a burden to reveal your hand. Place each Free Peoples card revealed this way beneath your draw deck.
 		lore: Pippin sat with his knees drawn up and the ball between them. He bent low over it, looking like a greedy child stooping over a bowl of food.
 		promotext: ""
@@ -66,17 +80,52 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: siteBlock(king),siteNumber(4)
+		        }
+		        effect: [
+		            {
+		                type: chooseHowManyToSpot
+		                filter: ringBound,companion
+		                memorize: spotCount
+		            }
+		            {
+		                type: removeTwilight
+		                amount: {
+		                    type: fromMemory
+		                    memory: spotCount
+		                }
+		            }
+		        ]
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        effect: [
+                    {
+                        type: discardFromHand
+                        forced: false
+                        filter: self
+                        count: {
+                            type: range
+                            from: 0
+                            to: {
+                                type: forEachYouCanSpot
+                                filter: ringBound,companion
+                            }
+                        }
+                    }
+                    {
+                        type: discard
+                        filter: self
+                    }
+                ]
+		    }
+		]
 		gametext: When the fellowship moves from site 4[K], remove (1) for each Ring-bound companion you spot.<br><b>Regroup:</b> Discard a card from hand for each Ring-bound companion you spot. Discard this condition.
 		lore: ""
 		promotext: ""
@@ -110,20 +159,28 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
+			requires: {
+			    type: haveInitiative
+			    side: shadow
+			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			    type: addThreats
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: chooseHowManyToSpot
+				    filter: culture(shire)
+				    memorize: spotCount
+				}
+				{
+				    type: modifyStrength
+				    filter: choose(unbound,hobbit)
+				    amount: {
+				        type: fromMemory
+				        memory: spotCount
+				    }
 				}
 			]
 		}
@@ -160,17 +217,41 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: [
+		            {
+		                type: exert
+		                filter: choose(culture(shire),companion)
+		            }
+		            {
+		                type: exert
+		                filter: choose(or(culture(rohan),culture(gandalf)),companion)
+		            }
+		        ]
+		        effect: {
+		            type: addTokens
+		            culture: shire
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+                    type: removeTokens
+                    culture: shire
+                    filter: self
+		        }
+		        effect: {
+		            type: alterOverwhelmMultiplier
+		            filter: choose(unbound,companion)
+		            multiplier: 3
+		        }
+		    }
+		]
 		gametext: <b>Fellowship:</b> Exert a [shire] companion and either a [rohan] companion or a [gandalf] companion to add a [shire] token here.<br><b>Skirmish:</b> Remove a [shire] token here to prevent an unbound companion from being overwhelmed unless his or her strength is tripled.
 		lore: ""
 		promotext: ""
@@ -206,18 +287,26 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: title(Frodo or Sam)
-		/*requires: {
-			
-		}
+		target: or(title(Frodo),title(Sam))
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: skirmishAboutToEnd
+		            involving: bearer
+		        }
+		        requires: {
+		            type: fierceSkirmish
+		        }
+		        cost: {
+		            type: addThreats
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(minion,inSkirmish)
+		        }
+		    }
+		]
 		gametext: Bearer must be Frodo or Sam.<br><b>Response:</b> If a fierce skirmish involving bearer is about to end, add a threat to discard a minion involved in that skirmish.
 		lore: No such anguish had Shelob ever known, or dreamed of knowing....
 		promotext: ""
@@ -251,20 +340,24 @@
 		twilight: 0
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: exert
+				filter: choose(name(Frodo))
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: chooseHowManyToSpot
+				    filter: signet(Frodo)
+					memorize: spotCount
+				}
+				{
+				    type: removeTwilight
+				    amount: {
+				        type: fromMemory
+				        memory: spotCount
+				    }
 				}
 			]
 		}
@@ -301,26 +394,25 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: exerts
+				filter: minion
+				memorize: exertedMinion
 			}
+			text: Wound {exertedMinion}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: exert
+				filter: choose(unbound,hobbit)
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: wound
+				    filter: memory(exertedMinion)
 				}
 			]
-		]
+		}
 		gametext: If a minion exerts, exert an unbound Hobbit to wound that minion.
 		lore: ...and passing up beneath the hauberk had pierced the sinew behind his mighty knee.
 		promotext: ""
@@ -354,26 +446,26 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: moves
+			}
+			requires: {
+			    type: phase
+			    phase: regroup
 			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(unbound,hobbit)
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: putCardsFromDiscardOnTopOfDeck
+				    filter: choose(side(shadow))
 				}
 			]
-		]
+		}
 		gametext: If the fellowship moves during the regroup phase, exert an unbound Hobbit to place a Shadow card from your discard pile on top of your draw deck.
 		lore: He said: Who are you?" I still did not answer, but it hurt me horribly; and he pressed me, so I said: "A hobbit."'"
 		promotext: ""
@@ -412,17 +504,40 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),companion
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 4
+		        }
+		        effect: [
+                    {
+                        type: chooseHowManyToSpot
+                        filter: culture(rohan),companion
+                        memorize: spotCount
+                    }
+                    {
+                        type: modifyStrength
+                        filter: self
+                        amount: {
+                            type: fromMemory
+                            memory: spotCount
+                            multiplier: 2
+                        }
+                    }
+                ]
+		    }
+		]
 		gametext: To play, spot a [rohan] companion.<br><b>Skirmish:</b> Discard 4 cards from hand to make Merry strength +2 for each [rohan] companion you spot.
 		lore: King's man! King's man!' his heart cried within him.
 		promotext: ""
@@ -461,17 +576,29 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(gondor),man
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+                    type: discardFromHand
+                    forced: false
+                    count: 4
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,inSkirmishAgainst(self),hasAttached(fortification))
+		            times: 2
+		        }
+		    }
+		]
 		gametext: To play, spot a [gondor] Man.<br><b>Skirmish:</b> Discard 4 cards from hand to wound a minion Pippin is skirmishing twice if that minion bears a fortification.
 		lore: You're in the service of the Steward of Gondor now. You'll do as you're told.'
 		promotext: ""
