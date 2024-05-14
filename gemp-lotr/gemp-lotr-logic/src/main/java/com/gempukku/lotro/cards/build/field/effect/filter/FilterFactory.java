@@ -362,6 +362,15 @@ public class FilterFactory {
                         return Filters.or(filters1);
                     };
                 });
+        parameterFilters.put("printedtwilightcostfrommemory",
+                (parameter, environment) -> actionContext -> {
+                    PhysicalCard card = actionContext.getCardFromMemory(parameter);
+                    if (card == null)
+                        return Filters.none;
+
+                    int memoryPrintedTwilightCost = card.getBlueprint().getTwilightCost();
+                    return Filters.printedTwilightCost(memoryPrintedTwilightCost);
+                });
         parameterFilters.put("race",
                 (parameter, environment) -> {
                     if (parameter.equals("stored")) {

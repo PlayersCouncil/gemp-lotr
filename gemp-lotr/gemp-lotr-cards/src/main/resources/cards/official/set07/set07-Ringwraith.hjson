@@ -206,14 +206,11 @@
 		    {
 		        type: activated
 		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,zone(support)
-		        }
 		        effect: [
 		            {
 		                type: transfer
 		                filter: self
+		                fromSupport: true
 		                where: choose(character,inSkirmishAgainst(nazgul))
 		            }
 		            {
@@ -2166,13 +2163,10 @@
 		    {
 		        type: activated
 		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,zone(support)
-		        }
 		        effect: {
 		            type: transfer
 		            filter: self
+                    fromSupport: true
 		            where: choose(character,inSkirmishAgainst(nazgul))
 		        }
 		    }

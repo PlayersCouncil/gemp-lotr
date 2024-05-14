@@ -296,18 +296,33 @@ public class GenericCardTestHelper extends AbstractAtTest {
     //public boolean HasItemIn
 
     public void FreepsUseCardAction(String name) throws DecisionResultInvalidException { playerDecided(P1, getCardActionId(P1, name)); }
-    public void FreepsUseCardAction(PhysicalCardImpl card) throws DecisionResultInvalidException { playerDecided(P1, getCardActionId(P1, "Use " + GameUtils.getFullName(card))); }
+
+    public void FreepsUseCardAction(PhysicalCardImpl card) throws DecisionResultInvalidException {
+        playerDecided(P1, getCardActionId(P1, card.getCardId()));
+    }
     public void FreepsTransferCard(String name) throws DecisionResultInvalidException { FreepsTransferCard(GetFreepsCard(name)); }
-    public void FreepsTransferCard(PhysicalCardImpl card) throws DecisionResultInvalidException { playerDecided(P1, getCardActionId(P1, "Transfer " + GameUtils.getFullName(card))); }
+
+    public void FreepsTransferCard(PhysicalCardImpl card) throws DecisionResultInvalidException {
+        playerDecided(P1, getCardActionId(P1, card.getCardId()));
+    }
     public void ShadowUseCardAction(String name) throws DecisionResultInvalidException { playerDecided(P2, getCardActionId(P2, name)); }
-    public void ShadowUseCardAction(PhysicalCardImpl card) throws DecisionResultInvalidException { playerDecided(P2, getCardActionId(P2, "Use " + GameUtils.getFullName(card))); }
+
+    public void ShadowUseCardAction(PhysicalCardImpl card) throws DecisionResultInvalidException {
+        playerDecided(P2, getCardActionId(P2, card.getCardId()));
+    }
     public void ShadowTransferCard(String name) throws DecisionResultInvalidException { ShadowTransferCard(GetShadowCard(name)); }
     public void ShadowTransferCard(PhysicalCardImpl card) throws DecisionResultInvalidException { playerDecided(P2, getCardActionId(P2, "Transfer " + GameUtils.getFullName(card))); }
 
     public void FreepsPlayCard(String name) throws DecisionResultInvalidException { FreepsPlayCard(GetFreepsCard(name)); }
-    public void FreepsPlayCard(PhysicalCardImpl card) throws DecisionResultInvalidException { playerDecided(P1, getCardActionId(P1, "Play " + GameUtils.getFullName(card))); }
+
+    public void FreepsPlayCard(PhysicalCardImpl card) throws DecisionResultInvalidException {
+        playerDecided(P1, getCardActionId(P1, card.getCardId()));
+    }
     public void ShadowPlayCard(String name) throws DecisionResultInvalidException { ShadowPlayCard(GetShadowCard(name)); }
-    public void ShadowPlayCard(PhysicalCardImpl card) throws DecisionResultInvalidException { playerDecided(P2, getCardActionId(P2, "Play " + GameUtils.getFullName(card))); }
+
+    public void ShadowPlayCard(PhysicalCardImpl card) throws DecisionResultInvalidException {
+        playerDecided(P2, getCardActionId(P2, card.getCardId()));
+    }
 
     public int FreepsGetWoundsOn(String cardName) { return GetWoundsOn(GetFreepsCard(cardName)); }
     public int ShadowGetWoundsOn(String cardName) { return GetWoundsOn(GetShadowCard(cardName)); }

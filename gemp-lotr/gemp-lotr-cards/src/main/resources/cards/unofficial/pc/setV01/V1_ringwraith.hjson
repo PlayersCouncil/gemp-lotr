@@ -109,13 +109,10 @@
 					type: removeTwilight
 					amount: 1
 				}
-				requires: {
-					type: canSpot
-					filter: self,zone(support)
-				}
 				effect: {
 					type: transfer
-					filter: choose(self,zone(support))
+					filter: self
+					fromSupport: true
 					where: choose(nazgul,not(hasAttached(helm)))
 				}
 			}

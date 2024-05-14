@@ -22,20 +22,24 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(name(Aragorn))
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: chooseHowManyThreatsToSpot
+				    memorize: spotCount
+				}
+				{
+				    type: modifyStrength
+				    filter: choose(unbound,companion,signet(aragorn))
+				    amount: {
+				        type: fromMemory
+				        memory: spotCount
+				    }
 				}
 			]
 		}
@@ -71,19 +75,40 @@
 		culture: Gondor
 		twilight: 1
 		type: Possession
-		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(gondor),knight
+		            count: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		        effect: [
+		            {
+		                type: revealTopCardsOfDrawDeck
+		                deck: shadow
+		                memorize: revealedCard
+		            }
+		            {
+		                type: discardFromHand
+		                hand: shadow
+		                player: shadow
+		                forced: true
+		                filter: choose(side(shadow),printedTwilightCostFromMemory(revealedCard))
+		            }
+		        ]
+		    }
+		]
 		gametext: To play, spot 2 [gondor] knights.<br><b>Maneuver:</b> Discard 2 cards from hand to reveal the top card of an opponent's draw deck. Choose an opponent who must discard a Shadow card that has a twilight cost that is the same as the twilight cost of the revealed card.
 		lore: ""
 		promotext: ""
@@ -117,26 +142,42 @@
 		twilight: 1
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: aboutToBeKilled
+				filter: culture(gondor),wraith
+				memorize: killedCharacters
 			}
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			requires: {
+			    type: canSpot
+			    filter: culture(gondor),wraith
+			    count: 2
 			}
-			effect: [
-				{
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+			cost: [
+                {
+                    type: discard
+                    filter: choose(memory(killedCharacters),culture(gondor),wraith)
+                }
+                {
+                    type: choice
+                    texts: [
+                        Exhaust another {gondor} wraith
+                        Spot another exhausted {gondor} wraith
+                    ]
+                    effects: [
+                        {
+                            type: exhaust
+                            filter: choose(culture(gondor),wraith)
+                        }
+                        {
+                            type: spot
+                            filter: culture(gondor),wraith
+                        }
+                    ]
+                }
 			]
-		]
+		}
 		gametext: If a [gondor] Wraith is about to be killed, discard him and either exhaust another [gondor] Wraith or spot another exhausted [gondor] Wraith to prevent that.
 		lore: Yes, the Dead ride behind. They have been summoned....'
 		promotext: ""
@@ -176,17 +217,37 @@
 		signet: Gandalf
 		resistance: 6
 		keywords: Knight
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: not
+		            requires: {
+		                type: phase
+		                phase: play starting fellowship
+		            }
+		        }
+		        effect: [
+                    {
+                        type: revealTopCardsOfDrawDeck
+                        count: 10
+                        memorize: revealedCards
+                    }
+                    {
+                        type: playCardFromDrawDeck
+                        filter: choose(memory(revealedCards),knight)
+                    }
+                    {
+                        type: shuffleDeck
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Knight</b>.<br>When you play Faramir (except in your starting fellowship), you may reveal the top 10 cards of your draw deck. You may play a knight revealed. Shuffle your draw deck.
 		lore: ...I will go and do what I can in his stead – if you command it.'
 		promotext: ""
@@ -224,17 +285,44 @@
 			Fortification
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: choice
+		            texts: [
+		                Exert 2 {gondor} Men
+		                Spot 3 knights
+		            ]
+		            effects: [
+		                {
+		                    type: exert
+		                    filter: choose(culture(gondor),man)
+		                    count: 2
+		                }
+		                {
+		                    type: spot
+		                    filter: knight
+		                    count: 3
+		                }
+		            ]
+		        }
+		        effect: [
+                    {
+                        type: transfer
+                        filter: self
+                        fromSupport: true
+                        where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+                        memorizeTarget: chosenMinion
+                    }
+                    {
+                        type: exhaust
+                        filter: memory(chosenMinion)
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Fortification</b>.<br><b>Skirmish:</b> Exert 2 [gondor] Men or spot 3 knights to transfer this condition from your support area to a minion skirmishing a [gondor] Man. Exhaust that minion.
 		lore: ...about each was set a wall....
 		promotext: ""
@@ -275,17 +363,29 @@
 			Knight
 			Archer
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(gondor),companion
+		            count: 3
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: fortification
+		            }
+		            filter: self
+		            keyword: defender
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Knight</b>. <b>Archer</b>.<br>To play, spot 3 [gondor] companions.<br>While you can spot a fortification, Garrison of Gondor is <b>defender +1</b>.
 		lore: But about the Gate resistance still was stout....
 		promotext: ""
@@ -324,17 +424,28 @@
 		vitality: 3
 		resistance: 6
 		keywords: Knight
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: knight
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(minion)
+		            count: 2
+		        }
+		    }
+		]
 		gametext: <b>Knight</b>. To play, spot a knight.<br>Each time Imrahil wins a skirmish, you may exert 2 minions.
 		lore: ...he was of high blood, and his folk also, tall men and proud with sea-grey eyes.
 		promotext: ""
@@ -374,17 +485,41 @@
 		signet: Aragorn
 		resistance: 6
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(gondor),wraith
+		        }
+		    }
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addThreats
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: name(Aragorn)
+		        }
+		        requires: {
+		            type: phase
+		            phase: skirmish
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(name(Aragorn))
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>. To play, spot a [gondor] Wraith and add 2 threats.<br><b>Response:</b> If Aragorn is about to take a wound in a skirmish, exert King of the Dead to prevent that wound.
 		lore: ...crying out that the King of the Dead was upon them.'
 		promotext: ""
@@ -422,17 +557,20 @@
 		vitality: 3
 		resistance: 6
 		keywords: Knight
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,inSkirmishAgainst(self))
+		        }
+		    }
+		]
 		gametext: <b>Knight</b>.<br>Each time this companion wins a skirmish, you may wound a minion he is skirmishing.
 		lore: Amroth for Gondor!' they cried.
 		promotext: ""
@@ -467,18 +605,21 @@
 		type: Possession
 		strength: 1
 		itemclass: Mount
-		#target: a knight
-		/*requires: {
-			
-		}
+		target: knight
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,notAssignedToSkirmish)
+		        }
+		    }
+		]
 		gametext: Bearer must be a knight.<br>Each time bearer wins a skirmish, you may wound a minion who is not assigned to a skirmish.
 		lore: Like thunder they broke upon the enemy....
 		promotext: ""
@@ -517,17 +658,27 @@
 		signet: Aragorn
 		resistance: 6
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addThreats
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 3
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>. To play, add a threat.<br><b>Skirmish:</b> Discard 3 cards from hand to discard a possession borne by a minion skirmishing this companion.
 		lore: at the Stone of Erech they shall stand again / and hear there a horn in the hills ringing.
 		promotext: ""
@@ -561,17 +712,40 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: [
+                    {
+                        type: exert
+                        filter: choose(culture(gondor),man)
+                    }
+                    {
+                        type: exert
+                        filter: choose(or(culture(dwarven),culture(rohan)),companion)
+                    }
+                ]
+                effect: {
+                    type: addTokens
+                    culture: gondor
+                    filter: self
+                }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: removeTokens
+		            culture: gondor
+		            filter: self
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(minion)
+		        }
+		    }
+		]
 		gametext: <b>Fellowship:</b> Exert a [gondor] Man and either a [dwarven] companion or a [rohan] companion to add a [gondor] token here.<br><b>Regroup:</b> Remove a [gondor] token here to discard a minion.
 		lore: ...those who follow me do so of their free will....'
 		promotext: ""
@@ -610,17 +784,32 @@
 		signet: Aragorn
 		resistance: 6
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: exhausted,culture(gondor),wraith
+		            count: 2
+		        }
+		    }
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addThreats
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: self,exhausted
+		            keyword: defender
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>. To play, spot 2 exhausted [gondor] Wraiths and add 2 threats.<br>While Shadow Host is exhausted, it is <b>defender +1</b>.
 		lore: ...fear went on before them, until they came to Calembel upon Ciril, and the sun went down like blood behind Pinnath Gelin....
 		promotext: ""
@@ -657,17 +846,21 @@
 			Fortification
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(culture(gondor),man)
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            filter: choose(culture(gondor),fortification)
+		        }
+		        limitPerPhase: 1
+		    }
+		]
 		gametext: <b>Fortification</b>.<br><b>Regroup:</b> Exert a [gondor] Man to play a [gondor] fortification from your discard pile (limit 1).
 		lore: ...and in each wall was a gate.
 		promotext: ""
@@ -706,17 +899,30 @@
 		signet: Aragorn
 		resistance: 6
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addThreats
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(minion,inSkirmishAgainst(self))
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>. To play, add a threat.<br>Each time this companion wins a skirmish, you may exert him to discard a minion he is skirmishing.
 		lore: ...for the Dead needed no longer any weapon but fear. None would withstand them.'
 		promotext: ""
@@ -751,18 +957,22 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: a [gondor] Wraith
-		/*requires: {
-			
-		}
+		target: culture(gondor),wraith
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+                    type: discardFromHand
+                    forced: false
+                    count: 3
+		        }
+		        effect: {
+		            type: heal
+		            filter: bearer
+		        }
+		    }
+		]
 		gametext: Bearer must be a [gondor] Wraith.<br><b>Skirmish:</b> Discard 3 cards from hand to heal bearer.
 		lore: ...pale banners like shreds of cloud, and spears like winter-thickets on a misty night.'
 		promotext: ""
@@ -796,17 +1006,25 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addThreats
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: your,culture(gondor),wraith
+		        }
+		        effect: {
+		            type: removeThreats
+		        }
+		    }
+		]
 		gametext: To play, add a threat.<br>Each time your [gondor] Wraith wins a skirmish, you may remove a threat.
 		lore: And lo! in the darkness of Mordor my hope rose....'
 		promotext: ""
@@ -840,17 +1058,41 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Add a threat
+		                Discard this condition
+		            ]
+		            effects: [
+		                {
+		                    type: addThreats
+		                }
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantTakeWounds
+		            requires: {
+		                type: haveInitiative
+		                side: free people
+		            }
+		            filter: exhausted,culture(gondor),wraith
+		        }
+		    }
+		]
 		gametext: Each time the fellowship moves, add a threat or discard this condition.<br>While you have initiative, exhausted [gondor] Wraiths cannot take wounds.
 		lore: And suddenly the Shadow Host that had hung back at the last came up like a grey tide, sweeping all away before it.'
 		promotext: ""

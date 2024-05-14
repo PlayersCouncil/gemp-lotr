@@ -10,9 +10,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_039_Tests
 {
@@ -203,6 +201,7 @@ public class Card_V1_039_Tests
 		scn.ShadowPlayCard(crown);
 		assertEquals(Zone.SUPPORT, crown.getZone());
 		scn.ShadowPlayCard(crown2);
+		assertEquals(Zone.SUPPORT, crown2.getZone());
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
@@ -231,6 +230,7 @@ public class Card_V1_039_Tests
 		assertTrue(scn.ShadowActionAvailable(crown2));
 		scn.ShadowUseCardAction(crown2);
 		assertEquals(9, scn.GetTwilight());
+		assertEquals(Zone.ATTACHED, crown2.getZone());
 		assertEquals(4, scn.GetVitality(twigul1));
 
 	}

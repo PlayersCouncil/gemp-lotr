@@ -11,7 +11,8 @@
 				phase: skirmish
 				effect: {
 					type: transfer
-					filter: choose(self,zone(support))
+					filter: self
+					fromSupport: true
 					where: choose(character,inSkirmishAgainst(nazgul))
 				}
 			}
@@ -69,7 +70,8 @@
 				}
 				effect: {
 					type: transfer
-					filter: choose(self,zone(support))
+					filter: self
+					fromSupport: true
 					where: choose(character,inSkirmishAgainst(memory(winner)),not(hasAttached(name(Blade Tip))))
 				}
 			}
@@ -233,7 +235,8 @@
 				phase: skirmish
 				effect: {
 					type: transfer
-					filter: choose(self,zone(support))
+					filter: self
+					fromSupport: true
 					where: choose(companion,inSkirmishAgainst(Nazgul),not(hasAttached(name(Lost in the Woods))))
 				}
 			}

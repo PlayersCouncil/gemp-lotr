@@ -8,6 +8,7 @@ import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -24,13 +25,14 @@ import java.util.List;
 public class Transfer implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "where", "checkTarget", "memorizeTransferred", "memorizeTarget");
+        FieldUtils.validateAllowedFields(effectObject, "filter", "where", "checkTarget", "fromSupport", "memorizeTransferred", "memorizeTarget");
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
         final String where = FieldUtils.getString(effectObject.get("where"), "where");
         final boolean checkTarget = FieldUtils.getBoolean(effectObject.get("checkTarget"), "checkTarget", false);
         final String memorizeTransferred = FieldUtils.getString(effectObject.get("memorizeTransferred"), "memorizeTransferred", "_temp1");
         final String memorizeTarget = FieldUtils.getString(effectObject.get("memorizeTarget"), "memorizeTarget", "_temp2");
+        final boolean fromSupport = FieldUtils.getBoolean(effectObject.get("fromSupport"), "fromSupport", false);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
@@ -61,11 +63,15 @@ public class Transfer implements EffectAppenderProducer {
                         if (transferCard.isEmpty())
                             return null;
 
+                        PhysicalCard transferredCard = transferCard.iterator().next();
+                        if (fromSupport && transferredCard.getZone() != Zone.SUPPORT)
+                            return null;
+
                         final Collection<? extends PhysicalCard> transferredToCard = actionContext.getCardsFromMemory(memorizeTarget);
                         if (transferredToCard.isEmpty())
                             return null;
 
-                        return Collections.singletonList(new TransferPermanentEffect(transferCard.iterator().next(), transferredToCard.iterator().next()));
+                        return Collections.singletonList(new TransferPermanentEffect(transferredCard, transferredToCard.iterator().next()));
                     }
                 });
 

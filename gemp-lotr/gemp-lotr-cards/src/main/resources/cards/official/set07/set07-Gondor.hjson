@@ -836,10 +836,6 @@
 		    {
 		        type: activated
 		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: self,zone(support)
-		        }
 		        cost: {
 		            type: choice
 		            texts: [
@@ -860,6 +856,7 @@
 		        effect: {
 		            type: transfer
 		            filter: self
+		            fromSupport: true
 		            where: choose(minion)
 		        }
 		    }
@@ -2415,10 +2412,6 @@
 		    {
 		        type: activated
 		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: self,zone(support)
-		        }
 		        cost: {
 		            type: choice
 		            texts: [
@@ -2439,6 +2432,7 @@
 		        effect: {
 		            type: transfer
 		            filter: self
+                    fromSupport: true
 		            where: choose(minion)
 		        }
 		    }
@@ -2485,10 +2479,6 @@
 		    {
 		        type: activated
 		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,zone(support)
-		        }
 		        cost: {
 		            type: exert
 		            filter: choose(culture(gondor),man)
@@ -2497,6 +2487,7 @@
 		        effect: {
 		            type: transfer
 		            filter: self
+                    fromSupport: true
 		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
 		        }
 		    }
@@ -2831,10 +2822,6 @@
 		    {
 		        type: activated
 		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,zone(support)
-		        }
 		        cost: {
 		            type: choice
 		            texts: [
@@ -2856,6 +2843,7 @@
 		        effect: {
 		            type: transfer
 		            filter: self
+                    fromSupport: true
 		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
 		        }
 		    }
