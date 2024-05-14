@@ -230,6 +230,8 @@ public class GameUtils {
                 }
                 else if(memory.equals("shadow")) {
                     found = getFirstShadowPlayer(context.getGame());
+                } else if (memory.equals("self")) {
+                    found = GameUtils.getAppendedNames(Collections.singleton(context.getSource()));
                 }
                 else {
                     found = GameUtils.getAppendedNames(context.getCardsFromMemory(memory));
