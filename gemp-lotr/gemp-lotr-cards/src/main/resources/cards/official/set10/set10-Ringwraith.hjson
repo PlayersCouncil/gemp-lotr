@@ -22,17 +22,34 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: [
+                    {
+                        type: exert
+                        filter: choose(nazgul)
+                    }
+                    {
+                        type: play
+                        filter: choose(culture(wraith),minion)
+                    }
+                ]
+                effect: {
+                    type: addTwilight
+                    amount: {
+                        type: condition
+                        condition: {
+                            type: haveInitiative
+                            side: shadow
+                        }
+                        true: 2
+                        false: 1
+                    }
+                }
+		    }
+		]
 		gametext: <b>Shadow:</b> Exert a Nazgûl and play a [wraith] minion to add (1) (or (2) if you have initiative).
 		lore: ...at their head was one greater than all the rest: a Rider, all black....
 		promotext: ""
@@ -69,17 +86,24 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(possession,attachedTo(character,inSkirmishAgainst(self)))
+		        }
+		    }
+		]
 		gametext: Each time this minion wins a skirmish, you may exert it to discard a possession borne by a character this minion is skirmishing.
 		lore: A noise of tramping feet and harsh shouts: Orcs were coming up to the Cleft from the far side....
 		promotext: ""
@@ -116,17 +140,22 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: {
+		            type: canSpot
+		            filter: possession
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: fierce
+		            until: regroup
+		        }
+		    }
+		]
 		gametext: <b>Shadow:</b> Spot a possession to make this minion <b>fierce</b> until the regroup phase.
 		lore: ...not even the black shadows, lying deep where the red glow could not reach, would shield him long from the night-eyed orcs.
 		promotext: ""
@@ -163,17 +192,22 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: {
+		            type: canSpot
+		            filter: possession
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: fierce
+		            until: regroup
+		        }
+		    }
+		]
 		gametext: <b>Shadow:</b> Spot a possession to make this minion <b>fierce</b> until the regroup phase.
 		lore: ...deafening, roaring in his ears, the crash of the feet and the rending clamour of the Orcs before him.
 		promotext: ""
@@ -210,17 +244,24 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cancelStrengthBonusTo
+		            filter: companion,inSkirmishAgainst(self)
+		            from: possession
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cancelKeywordBonusFrom
+		            filter: companion,inSkirmishAgainst(self)
+		            from: possession
+		        }
+		    }
+		]
 		gametext: Each companion skirmishing this minion loses all <b>damage</b> and strength bonuses from possessions.
 		lore: Sam looked up towards the orc-tower, and suddenly from its narrow windows lights stared out like small red eyes.
 		promotext: ""
@@ -254,20 +295,28 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: heal
+			    filter: choose(enduring,culture(wraith),minion)
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: choice
+				    texts: [
+				        Add a burden
+				        Add 2 threats
+				    ]
+				    effects: [
+				        {
+				            type: addBurdens
+				        }
+				        {
+				            type: addThreats
+				            amount: 2
+				        }
+				    ]
 				}
 			]
 		}
@@ -308,17 +357,19 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+                    type: modifyStrength
+                    filter: culture(wraith),orc
+                    amount: {
+                        type: forEachWound
+                        filter: ringBearer
+                    }
+		        }
+		    }
+		]
 		gametext: For each wound on the Ring-bearer, each [wraith] Orc is strength +1.
 		lore: I tell you, it's no game serving down in the city.'
 		promotext: ""
@@ -353,18 +404,52 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [wraith] Orc
-		/*requires: {
-			
-		}
+		target: culture(wraith),orc
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: chooseActiveCards
+                        text: Choose card to discard
+                        filter: choose(possession,canBeDiscarded)
+                        memorize: chosenPossession
+                    }
+                    {
+                        type: choice
+                        player: ownerFromMemory(chosenPossession)
+                        texts: [
+                            Discard {chosenPossession}
+                            Put {chosenPossession} on top of deck
+                        ]
+                        effects: [
+                            {
+                                type: discard
+                                player: shadow
+                                filter: memory(chosenPossession)
+                            }
+                            {
+                                type: putCardsFromPlayOnTopOfDeck
+                                filter: memory(chosenPossession)
+                            }
+                        ]
+                    }
+                ]
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer,name(Gorbag)
+		            keyword: fierce
+		        }
+		    }
+		]
 		gametext: Bearer must be a [wraith] Orc.<br>When you play this possession, you may discard a possession. Its owner may place it on top of his or her draw deck instead.<br>If bearer is Gorbag, he is <b>fierce</b>.
 		lore: You touch it and I'll stick this blade in your gut.'
 		promotext: ""
@@ -398,20 +483,23 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: modifyStrength
+					filter: choose(culture(wraith),minion)
+					memorize: chosenMinion
+					amount: {
+					    type: condition
+					    condition: {
+					        type: memoryMatches
+					        memory: chosenMinion
+					        filter: inSkirmishAgainst(cultureInDeadPile)
+					    }
+					    true: 4
+					    false: 2
+					}
 				}
 			]
 		}
@@ -451,17 +539,52 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: isLessThanOrEqual
+		                firstNumber: {
+		                    type: sum
+		                    source: [
+		                        {
+		                            type: forEachYouCanSpot
+		                            filter: other,minion
+		                        }
+		                        twilightCount
+		                    ]
+		                }
+		                secondNumber: 3
+		            }
+                    filter: self
+                    amount: 3
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: isLessThanOrEqual
+		                firstNumber: {
+		                    type: sum
+		                    source: [
+		                        {
+		                            type: forEachYouCanSpot
+		                            filter: other,minion
+		                        }
+		                        twilightCount
+		                    ]
+		                }
+		                secondNumber: 3
+		            }
+                    filter: self
+                    keyword: archer
+		        }
+		    }
+		]
 		gametext: While the total number of other minions and twilight tokens is 3 or fewer, this minion is strength +3 and an <b>archer</b>.
 		lore: So great an army had never issued from that vale since the days of Isildur's might....
 		promotext: ""
@@ -498,17 +621,17 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: assignment
+		        effect: {
+		            type: assignFpCharacterToSkirmish
+		            fpCharacter: choose(unbound,companion,hasAttached(hand weapon))
+		            against: self
+		        }
+		    }
+		]
 		gametext: <b>Assignment:</b> Assign this minion to an unbound companion bearing a hand weapon.
 		lore: ...soon the host of Morgul will enter in at many points.'
 		promotext: ""
@@ -542,17 +665,34 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: haveInitiative
+		                side: shadow
+		            }
+		            filter: your,culture(wraith),minion
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(wraith),minion)
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: While you have initiative, each of your [wraith] minions is <b>damage +1</b>.<br><b>Skirmish:</b> Discard this condition to make a [wraith] minion strength +2.
 		lore: And with a piercing cry out of the dim sky fell the winged shadows....
 		promotext: ""
@@ -586,17 +726,23 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: canSpot
+		            filter: culture(wraith),orc
+		        }
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(unwounded,companion)
+		        }
+		    }
+		]
 		gametext: <b>Maneuver:</b> Spot a [wraith] Orc and remove a threat to wound an unwounded companion.
 		lore: ...in secret they have long been building floats and barges in great number in East Osgiliath.'
 		promotext: ""
@@ -630,20 +776,17 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: modifyStrength
+					filter: choose(culture(wraith),orc)
+					amount: {
+					    type: forEachWound
+					    filter: ringBearer
+					    multiplier: 2
+					}
 				}
 			]
 		}
@@ -680,7 +823,7 @@
 		culture: Wraith
 		twilight: 5
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 10
 		vitality: 3
 		site: 3
@@ -688,17 +831,32 @@
 			Enduring
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeExerted
+		            requires: {
+		                type: phase
+		                phase: skirmish
+		            }
+		            filter: self
+		            by: side(shadow)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: heal
+		            filter: self
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(possession,attachedTo(character,inSkirmishAgainst(self)))
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>. <b>Fierce</b>.<br>Shadow cards cannot exert Úlairë Cantëa during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Cantëa to discard a possession borne by a character he is skirmishing.
 		lore: ...the shadows of death fell dark upon the earth.
 		promotext: ""
@@ -732,22 +890,40 @@
 		culture: Wraith
 		twilight: 6
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 11
 		vitality: 4
 		site: 3
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeExerted
+		            requires: {
+		                type: phase
+		                phase: skirmish
+		            }
+		            filter: self
+		            by: side(shadow)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        cost: {
+                    type: heal
+                    filter: self
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>.<br>Shadow cards cannot exert Úlairë Enquëa during a skirmish phase.<br><b>Skirmish:</b> If Úlairë Enqueä is skirmishing, heal him to add a burden.
 		lore: Ever they circled above the City, like vultures that expect their fill of doomed men's flesh.
 		promotext: ""
@@ -781,7 +957,7 @@
 		culture: Wraith
 		twilight: 4
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
@@ -789,17 +965,33 @@
 			Enduring
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeExerted
+		            requires: {
+		                type: phase
+		                phase: skirmish
+		            }
+		            filter: self
+		            by: side(shadow)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: heal
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(culture(wraith),minion)
+		            count: 0-3
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>. <b>Fierce</b>.<br>Shadow cards cannot exert Úlairë Lemenya during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Lemenya to wound up to 3 other [wraith] minions.
 		lore: It was no brigand or orc-chieftain that ordered the assault upon the Lord of Mordor's greatest foe.
 		promotext: ""
@@ -833,7 +1025,7 @@
 		culture: Wraith
 		twilight: 5
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 10
 		vitality: 3
 		site: 2
@@ -841,17 +1033,34 @@
 			Enduring
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeExerted
+		            requires: {
+		                type: phase
+		                phase: skirmish
+		            }
+		            filter: self
+		            by: side(shadow)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: heal
+		            filter: self
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: {
+		                type: forEachBurden
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>. <b>Fierce</b>.<br>Shadow cards cannot exert Úlairë Nelya during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Nelya to add (1) for each burden.
 		lore: Perching now on the wall beside the ruined gate the Nazgûl sent out its deadly cries. All the cliffs echoed.
 		promotext: ""
@@ -885,22 +1094,39 @@
 		culture: Wraith
 		twilight: 6
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 12
 		vitality: 3
 		site: 3
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeExerted
+		            requires: {
+		                type: phase
+		                phase: skirmish
+		            }
+		            filter: self
+		            by: side(shadow)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: heal
+		            filter: self
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>.<br>Shadow cards cannot exert Úlairë Toldëa during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Toldëa to make him <b>damage +1</b>.
 		lore: ...like shadows of untimely night, he saw in the middle airs below him five birdlike forms....
 		promotext: ""
