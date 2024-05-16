@@ -340,11 +340,14 @@
 					}
 					{
 						type: chooseAndHeal
-						optional: true
 						filter: companion
 						count: {
-							type: fromMemory
-							memory: stackedCultures
+						    type: range
+						    from: 0
+						    to: {
+                                type: fromMemory
+                                memory: stackedCultures
+                            }
 						}
 					}
 					{

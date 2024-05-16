@@ -22,20 +22,31 @@
 		twilight: 1
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: {
+			    type: canSpot
+			    filter: your,wizard
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: choice
+					texts: [
+                        Exchange with card in dead pile
+                        Exchange with card in discard
+					]
+					effects: [
+					    {
+					        type: exchangeCardsInHandWithCardsInDeadPile
+					        filterInHand: choose(companion)
+					        filterInDeadPile: choose(companion)
+					    }
+					    {
+					        type: exchangeCardsInHandWithCardsInDiscard
+					        filterInHand: choose(companion)
+					        filterInDiscard: choose(companion)
+					    }
+					]
 				}
 			]
 		}
@@ -72,17 +83,25 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesInitiative
+		            side: free people
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(gandalf),companion
+		        }
+		        effect: {
+		            type: discard
+		            player: shadow
+		            filter: choose(side(shadow),condition)
+		        }
+		    }
+		]
 		gametext: Each time you lose initiative (except during the fellowship phase), you may spot a [gandalf] companion to choose an opponent who must discard one of his or her conditions.
 		lore: ...tomorrow will be certain to bring worse than today, for many days to come.'
 		promotext: ""
@@ -116,20 +135,25 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: exert
+				filter: choose(your,wizard)
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: chooseANumber
+				    text: Choose a minion cost
+				    from: 0
+				    to: 100
+					memorize: chosenNumber
+				}
+				{
+				    type: modifyStrength
+				    filter: all(minion,printedTwilightCostFromMemory(chosenNumber))
+				    amount: -2
+				    until: regroup
 				}
 			]
 		}
@@ -166,26 +190,26 @@
 		twilight: 3
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: moves
+			}
+			requires: {
+			    type: phase
+			    phase: regroup
 			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: exert
+				filter: choose(your,wizard)
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: discard
+					filter: all(minion)
 				}
 			]
-		]
+		}
 		gametext: If the fellowship moves during the regroup phase, exert your Wizard to discard each minion.
 		lore: ...the Nazgûl turned and fled, and vanished into Mordor's shadows....
 		promotext: ""
@@ -223,17 +247,36 @@
 		strength: 12
 		vitality: 4
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(gandalf),companion
+		            count: 3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        effect: [
+		            {
+		                type: playCardFromDiscard
+		                filter: choose(culture(gandalf),condition)
+		            }
+		            {
+		                type: discard
+		                player: shadow
+		                filter: choose(side(shadow),condition)
+		            }
+		        ]
+		    }
+		]
 		gametext: To play, spot 3 [gandalf] companions.<br><b>Regroup:</b> Exert Treebeard twice to play a [gandalf] condition from your discard pile and make an opponent discard one of his or her conditions.
 		lore: Leave it to the Ents!... Trees are coming back to live here, old trees, wild trees.'
 		promotext: ""
