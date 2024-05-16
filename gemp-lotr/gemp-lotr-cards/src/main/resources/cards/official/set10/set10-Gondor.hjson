@@ -27,17 +27,37 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(another,companion)
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: fellowship
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(companion)
+		            memorize: exertedCompanion
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(companion,not(cultureFromMemory(exertedCompanion)))
+		        }
+		    }
+		]
 		gametext: When you play Aragorn, you may heal another companion.<br>At the start of each fellowship phase, you may exert a companion of one culture to heal a companion of another culture.
 		lore: Now come the days of the King, and may they be blessed while the thrones of the Valar endure!'
 		promotext: ""
@@ -75,17 +95,45 @@
 		vitality: 3
 		resistance: 6
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addThreats
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(another,culture(gondor),wraith)
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: defender
+		            amount: 1
+		            until: regroup
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>. To play, add a threat.<br>When you play Cursed of Erech, exert him twice.<br>At the start of the maneuver phase, you may exert another [gondor] Wraith to make Cursed of Erech <b>defender +1</b> until the regroup phase.
 		lore: ...a black dread fell on them....
 		promotext: ""
@@ -123,17 +171,26 @@
 		vitality: 3
 		resistance: 6
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addThreats
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		    }
+		]
 		gametext: <b>Enduring</b>. To play, add a threat.<br>When you play this companion, exert him twice.
 		lore: ...the Shadow Host pressed behind and fear went on before them....
 		promotext: ""
@@ -172,17 +229,47 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+                    type: canSpot
+                    filter: culture(gondor),man
+                    count: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: fellowship
+		        requires: {
+		            type: location
+		            filter: sanctuary
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: putCardsFromDeckIntoHand
+		                filter: choose(culture(gondor))
+		            }
+		            {
+		                type: shuffleDeck
+		            }
+		            {
+		                type: optional
+		                player: shadow
+		                text: Would you like to draw 2 cards?
+		                effect: {
+                            type: drawCards
+                            player: shadow
+                            count: 2
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] card into hand from your draw deck, then reshuffle. Choose an opponent who may draw 2 cards.
 		lore: There Denethor sat in a grey gloom, like an old patient spider....
 		promotext: ""
@@ -216,20 +303,33 @@
 		twilight: 2
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: chooseHowManyToSpot
+				    filter: culture(gondor),companion
+				    memorize: spotCount
+				}
+				{
+				    type: revealCardsFromHand
+				    hand: shadow
+				    count: {
+				        type: fromMemory
+				        memory: spotCount
+				    }
+				    memorize: revealedCards
+				}
+				{
+				    type: discardFromHand
+				    forced: true
+				    hand: shadow
+				    player: you
+				    filter: memory(revealedCards)
+				}
+				{
+				    type: drawCards
+				    player: shadow
 				}
 			]
 		}
@@ -266,20 +366,40 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+                    type: modifyStrength
+                    filter: choose(exhausted,culture(gondor),companion)
+                    amount: 2
+                    memorize: exhaustedMan
+				}
+				{
+					type: addtrigger
+					optional: false
+					trigger: {
+						type: winsSkirmish
+						filter: memory(exhaustedMan)
+					}
+					effect: {
+						type: choice
+						texts: [
+							Heal this companion
+							Make this companion damage +1
+						]
+						effects: [
+							{
+								type: heal
+								filter: memory(exhaustedMan)
+							}
+							{
+								type: addKeyword
+								filter: memory(exhaustedMan)
+								keyword: damage+1
+							}
+						]
+					}
 				}
 			]
 		}
@@ -316,20 +436,29 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: {
+                type: canSpot
+                filter: culture(gondor),man
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: choice
+				    texts: [
+				        Discard a stacked Shadow card
+				        Wound a minion bearing fortification
+				    ]
+				    effects: [
+				        {
+				            type: discardStackedCards
+				            filter: choose(side(shadow))
+				        }
+				        {
+				            type: wound
+				            filter: choose(minion,hasAttached(fortification))
+				        }
+				    ]
 				}
 			]
 		}
@@ -369,17 +498,48 @@
 			Fortification
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: bearer
+		            amount: {
+                        type: forEachYouCanSpot
+                        filter: fortification
+                        multiplier: -1
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: choice
+		            texts: [
+		                Exert 2 {gondor} Men
+		                Spot 3 knights
+		            ]
+		            effects: [
+		                {
+		                    type: exert
+		                    filter: choose(culture(gondor),man)
+		                    count: 2
+		                }
+		                {
+		                    type: spot
+		                    filter: knight
+		                    count: 3
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: transfer
+		            filter: self
+		            where: choose(minion)
+		        }
+		    }
+		]
 		gametext: <b>Fortification</b>. Bearer is strength -1 for each fortification you can spot.<br><b>Maneuver:</b> Exert 2 [gondor] Men or spot 3 knights to transfer this condition to a minion.
 		lore: A strong citadel it was indeed....
 		promotext: ""
@@ -413,17 +573,28 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+                    type: canSpot
+                    filter: culture(gondor),man
+                    count: 2
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesInitiative
+		            side: free people
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion)
+		        }
+		    }
+		]
 		gametext: To play, spot 2 [gondor] Men.<br>Each time you lose initiative, you may wound a minion.
 		lore: All before the walls on either side of the Gate the ground was choked with wreck and with bodies of the slain....
 		promotext: ""
@@ -457,20 +628,27 @@
 		twilight: 5
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: [
+                {
+                    type: controlsSite
+                    player: shadow
+                }
+                {
+                    type: canSpot
+                    filter: culture(gondor),man
+                    count: 2
+                }
+            ]
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: addModifier
+				    modifier: {
+				        type: modifyMoveLimit
+				        amount: 1
+				    }
+				    until: endOfTurn
 				}
 			]
 		}
