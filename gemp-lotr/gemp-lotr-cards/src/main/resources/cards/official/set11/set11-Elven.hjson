@@ -26,17 +26,20 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: minion,inSkirmishAgainst(self)
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: forest,site,zone(adventure path)
+		                multiplier: -1
+		            }
+		        }
+		    }
+		]
 		gametext: Each minion skirmishing Arwen is strength -1 for each forest site on the adventure path.
 		lore: What grace is given me, let it pass to him. Let him be spared. Save him.'
 		promotext: ""
@@ -71,18 +74,21 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: title(an Elf)
-		/*requires: {
-			
-		}
+		target: elf
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: location
+		                filter: or(forest,river)
+		            }
+		            filter: minion,inSkirmishAgainst(bearer)
+		            amount: -1
+		        }
+		    }
+		]
 		gametext: Bearer must be an Elf.<br>While bearer is at a forest or river site, each minion he or she is skirmishing is strength -1.
 		lore: To this day, many Elven weapons are forged in the fashion of those wielded by Gil-galad's forces.
 		promotext: ""
@@ -115,18 +121,32 @@
 		culture: Elven
 		twilight: 6
 		type: Condition
-		keywords: Support Area
-		/*requires: {
-			
-		}
+		keywords: [
+		    Support Area
+		    Toil 2
+		]
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: archery
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyArcheryTotal
+		            side: free people
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: To play, spot an Elf.<br><b>Toil 2</b>. <helper>(For each [elven] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Archery:</b> Discard this condition to make the fellowship archery total +2.
 		lore: Sighted by keen vision and loosed with blinding swiftness, Elven arrows rarely miss their targets.
 		promotext: ""
@@ -163,17 +183,20 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: another,elf
+		            }
+		            filter: self
+		            keyword: muster
+		        }
+		    }
+		]
 		gametext: While you can spot another Elf, this companion has <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
 		lore: None who draw within a league of the Celebrant escape unnoticed the patrols from Caras Galadhon.
 		promotext: ""
@@ -207,20 +230,16 @@
 		twilight: 3
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: {
+			    type: canSpot
+			    filter: elf
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: heal
+				    filter: all(companion,resistanceMoreThan(4))
 				}
 			]
 		}
@@ -257,20 +276,21 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: choose(elf)
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: location
+				            filter: river
+				        }
+				        true: 3
+				        false: 2
+				    }
 				}
 			]
 		}
@@ -311,17 +331,32 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: location
+		                filter: or(battleground,forest)
+		            }
+		            filter: self
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyResistance
+		            requires: {
+		                type: location
+		                filter: or(battleground,forest)
+		            }
+		            filter: self
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: While Legolas is at a battleground or forest site, he is strength +2 and resistance +2.
 		lore: I am one of the Nine Companions who set out with Mithrandir from Imladris... and with this Dwarf, my friend, I came with the Lord Aragorn.'
 		promotext: ""
@@ -359,17 +394,24 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: archery
+		        }
+		        requires: {
+		           type: canSpot
+		           filter: another,elf
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(minion)
+		        }
+		    }
+		]
 		gametext: At the start of the archery phase, you may spot another Elf to exert a minion.
 		lore: Travelling to the council at Imladris was only the beginning of a much greater journey for the Elven Prince. "'Few can foresee whither their road will lead them, till they come to its end.'"
 		promotext: ""
@@ -403,18 +445,31 @@
 		twilight: 2
 		type: Possession
 		itemclass: Ranged weapon
-		#target: title(an Elf)
-		/*requires: {
-			
-		}
+		target: elf
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: archer
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: exertsToPlay
+		            filter: bearer,name(Legolas)
+		            toPlay: culture(elven),or(condition,event)
+		        }
+		        effect: {
+		            type: heal
+		            filter: bearer
+		        }
+		        limitPerPhase: 1
+		    }
+		]
 		gametext: Bearer must be an Elf.<br>Bearer is an <b>archer</b>.<br>If bearer is Legolas, each time you exert him to play an [elven] condition or [elven] event, you may heal him (limit once per phase).
 		lore: Though not as sturdy as the bows of the Galadhrim, a Mirkwood bow is no less dangerous in skilled hands.
 		promotext: ""
@@ -448,20 +503,29 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(elf)
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: revealTopCardsOfDrawDeck
+				    memorize: revealedCard
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: memoryMatches
+				        memory: revealedCard
+				        filter: maxTwilight(3)
+				    }
+				    effect: {
+				        type: modifyStrength
+				        filter: choose(minion)
+				        amount: -3
+				    }
 				}
 			]
 		}
@@ -498,20 +562,16 @@
 		twilight: 2
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(elf,resistanceMoreThan(3))
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: wound
+				    filter: choose(minion)
 				}
 			]
 		}
@@ -548,17 +608,61 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: cantSpot
+		            filter: elf
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: elven
+		            filter: self
+		            count: 3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: choice
+		            texts: [
+		                Discard this condition
+		                Remove an {elven} token
+		            ]
+		            effects: [
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		                {
+		                    type: removeTokens
+		                    culture: elven
+		                    filter: self
+		                }
+		            ]
+		        }
+		        effect: [
+		            {
+		                type: revealTopCardsOfDrawDeck
+		                memorize: revealedCard
+		            }
+		            {
+		                type: optional
+		                text: Would you like to place {revealedCard} beneath your draw deck?
+		                effect: {
+		                    type: putCardsFromDeckOnBottomOfDeck
+		                    filter: memory(revealedCard)
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: When you play this condition, spot an Elf to add 3 [elven] tokens here.<br><b>Maneuver:</b> Discard this condition or remove an [elven] token from here to reveal the top card of your draw deck. You may place that card beneath your draw deck.
 		lore: What did you see?'
 		promotext: ""
@@ -595,17 +699,20 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: location
+		                filter: forest
+		            }
+		            filter: self
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: While this companion is at a forest site, he is strength +2.
 		lore: We drove them off after some time; they were many and fierce, but they came from over the mountains, and were unused to the woods.'
 		promotext: ""

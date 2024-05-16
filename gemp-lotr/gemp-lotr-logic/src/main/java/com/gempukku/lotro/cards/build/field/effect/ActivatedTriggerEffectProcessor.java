@@ -27,7 +27,6 @@ public class ActivatedTriggerEffectProcessor implements EffectProcessor {
         final Phase phase = FieldUtils.getEnum(Phase.class, value.get("phase"), "phase");
         final int limitPerPhase = FieldUtils.getInteger(value.get("limitPerPhase"), "limitPerPhase", 0);
 
-
         for (JSONObject trigger : triggerArray) {
             final TriggerChecker triggerChecker = environment.getTriggerCheckerFactory().getTriggerChecker(trigger, environment);
             final boolean before = triggerChecker.isBefore();
