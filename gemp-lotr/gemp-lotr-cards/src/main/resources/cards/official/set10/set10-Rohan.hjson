@@ -27,17 +27,28 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: repeat
+		            times: {
+		                type: forEachWound
+		                filter: minion,inSkirmishAgainst(self)
+		            }
+		            effect: {
+		                type: wound
+		                player: shadow
+		                filter: choose(minion)
+		            }
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Exert Éowyn to choose an opponent. That opponent must wound a minion for each wound on each minion skirmishing Éowyn.
 		lore: Yet now that I have leave to depart, I would remain. For this House has become to me of all dwellings the most blessed.'
 		promotext: ""
@@ -71,17 +82,26 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesInitiative
+		            side: free people
+		        }
+		        effect: {
+		            type: liberateSite
+		        }
+		    }
+		]
 		gametext: To play, spot a [rohan] Man.<br>Each time you lose initiative, you may liberate a site.
 		lore: ...he seized a great horn from Guthláf his banner-bearer, and he blew such a blast upon it that it burst asunder.
 		promotext: ""
@@ -115,26 +135,35 @@
 		twilight: 1
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: winsSkirmish
+				filter: culture(rohan),man
 			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: discard
+			    filter: choose(culture(rohan),possession)
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: choice
+				    texts: [
+				        Wound a minion
+				        Liberate a site
+				    ]
+				    effects: [
+				        {
+				            type: wound
+				            filter: choose(minion)
+				        }
+				        {
+				            type: liberateSite
+				        }
+				    ]
 				}
 			]
-		]
+		}
 		gametext: If your [rohan] Man wins a skirmish, discard a [rohan] possession to wound a minion or to liberate a site.
 		lore: ...they gathered and rallied and fought until the day wore away.
 		promotext: ""
