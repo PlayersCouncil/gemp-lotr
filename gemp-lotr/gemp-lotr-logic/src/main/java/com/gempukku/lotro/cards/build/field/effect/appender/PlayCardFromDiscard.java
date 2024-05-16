@@ -31,8 +31,8 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
-        final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("cost"), 0, environment);
+        final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final boolean optional = FieldUtils.getBoolean(effectObject.get("optional"), "optional", false);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
@@ -53,7 +53,7 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, costModifier), ExtraFilters.attachableTo(game, onFilterable));
+                                return Filters.and(Filters.playable(game, costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));
                             }
 
                             return Filters.playable(game, costModifier);
@@ -63,7 +63,7 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), onFilterable));
+                                return Filters.and(Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), costModifier, onFilterable));
                             }
 
                             return Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, false, true);

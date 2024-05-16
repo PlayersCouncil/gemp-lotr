@@ -44,7 +44,7 @@ public class PlayCardFromDeadPile implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, costModifier), ExtraFilters.attachableTo(game, onFilterable));
+                                return Filters.and(Filters.playable(game, costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));
                             }
 
                             return Filters.playable(game, costModifier, false, true, true);
@@ -54,7 +54,7 @@ public class PlayCardFromDeadPile implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, true, true), ExtraFilters.attachableTo(actionContext.getGame(), onFilterable));
+                                return Filters.and(Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, true, true), ExtraFilters.attachableTo(actionContext.getGame(), costModifier, onFilterable));
                             }
 
                             return Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, true, true);

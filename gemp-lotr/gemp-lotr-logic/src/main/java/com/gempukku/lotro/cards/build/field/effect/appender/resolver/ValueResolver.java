@@ -29,7 +29,9 @@ public class ValueResolver {
         if (value instanceof Number)
             return new ConstantEvaluator(((Number) value).intValue());
         if (value instanceof String stringValue) {
-            if (stringValue.equals("burdencount")) {
+            if (stringValue.equalsIgnoreCase("twilightCount")) {
+                return actionContext -> (Evaluator) (game, cardAffected) -> actionContext.getGame().getGameState().getTwilightPool();
+            } else if (stringValue.equalsIgnoreCase("burdenCount")) {
                 return actionContext -> (Evaluator) (game, cardAffected) -> actionContext.getGame().getGameState().getBurdens();
             } else if (stringValue.contains("-")) {
                 final String[] split = stringValue.split("-", 2);
@@ -333,13 +335,14 @@ public class ValueResolver {
                         (Evaluator) (game, cardAffected) -> multiplier * Filters.filter(game.getGameState().getDeadPile(game.getGameState().getCurrentPlayerId()),
                                 game, filterableSource.getFilterable(actionContext)).size();
             } else if (type.equalsIgnoreCase("fromMemory")) {
-                FieldUtils.validateAllowedFields(object, "memory", "multiplier", "limit");
+                FieldUtils.validateAllowedFields(object, "memory", "multiplier", "limit", "over");
                 String memory = FieldUtils.getString(object.get("memory"), "memory");
                 final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
                 final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
+                final int over = FieldUtils.getInteger(object.get("over"), "over", 0);
                 return (actionContext) -> {
-                    int value1 = Integer.parseInt(actionContext.getValueFromMemory(memory));
-                    return new ConstantEvaluator(Math.min(limit, multiplier * value1));
+                    int result = Math.max(0, Integer.parseInt(actionContext.getValueFromMemory(memory)) - over);
+                    return new ConstantEvaluator(Math.min(limit, multiplier * result));
                 };
             } else if (type.equalsIgnoreCase("multiply")) {
                 FieldUtils.validateAllowedFields(object, "multiplier", "source");

@@ -49,6 +49,22 @@ public class FilterFactory {
                 (actionContext -> Filters.siteControlledByOtherPlayer(actionContext.getPerformingPlayer())));
         simpleFilters.put("controlledsite",
                 (actionContext -> Filters.siteControlled(actionContext.getPerformingPlayer())));
+        simpleFilters.put("cultureindeadpile",
+                new FilterableSource() {
+                    @Override
+                    public Filterable getFilterable(ActionContext actionContext) {
+                        LotroGame game = actionContext.getGame();
+                        List<? extends PhysicalCard> deadPile = game.getGameState().getDeadPile(game.getGameState().getCurrentPlayerId());
+                        return new Filter() {
+                            @Override
+                            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
+                                Culture culture = physicalCard.getBlueprint().getCulture();
+                                return Filters.filter(deadPile, game, culture).size() > 0;
+                            }
+                        };
+                    }
+                }
+        );
         simpleFilters.put("culturewithtokens",
                 (actionContext -> {
                     final Set<Culture> cultureTokens = new HashSet<>();

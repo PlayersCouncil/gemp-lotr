@@ -48,6 +48,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantplayphasespecialabilities", new CantPlayPhaseSpecialAbilities());
         modifierProducers.put("cantpreventwounds", new AddModifierFlag(ModifierFlag.CANT_PREVENT_WOUNDS));
         modifierProducers.put("cantremoveburdens", new CantRemoveBurdens());
+        modifierProducers.put("cantremovethreats", new CantRemoveThreats());
         modifierProducers.put("cantreplacesite", new CantReplaceSite());
         modifierProducers.put("canttakearcherywounds", new CantTakeArcheryWounds());
         modifierProducers.put("canttakemorewoundsthan", new CantTakeMoreWoundsThan());

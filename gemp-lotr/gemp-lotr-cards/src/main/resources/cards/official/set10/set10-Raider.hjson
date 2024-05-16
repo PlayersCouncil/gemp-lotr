@@ -22,17 +22,29 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: southron
+		        }
+		        cost: [
+		            {
+		                type: removeThreats
+		            }
+		            {
+		                type: removeTwilight
+		                amount: 3
+		            }
+		        ]
+		        effect: {
+		            type: wound
+		            filter: choose(unbound,companion)
+		        }
+		    }
+		]
 		gametext: <b>Regroup:</b> Spot a Southron, remove a threat, and remove (3) to wound an unbound companion.
 		lore: With horns in my mouth / I walk in the South....'
 		promotext: ""
@@ -70,17 +82,27 @@
 		vitality: 2
 		site: 4
 		keywords: Corsair
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: playCardFromDrawDeck
+		            filter: choose(support area,possession)
+		        }
+		    }
+		]
 		gametext: <b>Corsair</b>. To play, spot a [raider] Man.<br><b>Shadow:</b> Exert this minion to play a [raider] support area possession from your draw deck.
 		lore: Promise of plunder and of the whip keep in line a lustful Corsair crew.
 		promotext: ""
@@ -118,17 +140,28 @@
 		vitality: 3
 		site: 4
 		keywords: Corsair
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        cost: {
+		            type: removeTokens
+		            culture: raider
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(companion,inSkirmishAgainst(self))
+		        }
+		    }
+		]
 		gametext: <b>Corsair</b>.<br>At the start of each skirmish involving this minion, you may remove a [raider] token to wound a companion he is skirmishing.
 		lore: ...the region of South Gondor became a debatable land between the Corsairs and the Kings.
 		promotext: ""
@@ -166,17 +199,31 @@
 		vitality: 2
 		site: 4
 		keywords: Corsair
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,corsair
+		        }
+		        cost: {
+		            type: discardTopCardsFromDeck
+		            deck: free people
+		            forced: true
+		        }
+                effect: {
+                    type: addTokens
+                    culture: raider
+                    filter: choose(hasToken(raider))
+                    count: 2
+                }
+		    }
+		]
 		gametext: <b>Corsair</b>.<br>When you play this minion, you may spot another corsair and discard the top card of the Free Peoples player's draw deck to add 2 [raider] tokens to a card that already has a [raider] token on it.
 		lore: An incarnation of savagery was Ghynóh the Cruel.
 		promotext: ""
@@ -214,17 +261,41 @@
 		vitality: 3
 		site: 4
 		keywords: Easterling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: easterling
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: self,unwounded
+		            }
+		            filter: self
+		            keyword: damage
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: wound
+		            filter: choose(other,culture(raider),man)
+		            count: 2
+		        }
+		        effect: {
+		            type: heal
+		            filter: self
+		        }
+		    }
+		]
 		gametext: <b>Easterling</b>. To play, spot an Easterling.<br>While this minion is unwounded, he is <b>damage +2</b>.<br><b>Skirmish:</b> Wound 2 other [raider] Men to heal this minion.
 		lore: ...from nearby there marched up an army of Easterlings that had waited for the signal....
 		promotext: ""
@@ -265,17 +336,35 @@
 			Easterling
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,easterling
+		        }
+		        effect: [
+                    {
+                        type: chooseHowManyToSpot
+                        filter: companion
+                        memorize: spotCount
+                    }
+                    {
+                        type: addBurdens
+                        amount: {
+                            type: fromMemory
+                            memory: spotCount
+                            over: 5
+                        }
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Easterling</b>. <b>Fierce</b>.<br>When you play this minion, you may spot another Easterling to add a burden for each companion over 5.
 		lore: ...for the sack of the City and the rape of Gondor....
 		promotext: ""
@@ -313,17 +402,35 @@
 		vitality: 3
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+		        requires: [
+                    {
+                        type: canSpot
+                        filter: self,inSkirmish
+                    }
+                    {
+                        type: canSpot
+                        filter: companion
+                        count: 6
+                    }
+                    {
+                        type: canSpot
+                        filter: another,culture(raider),man
+                    }
+                ]
+                effect: {
+                    type: discard
+                    filter: choose(unbound,companion,inSkirmishAgainst(self))
+                }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may spot 6 companions and another [raider] Man to discard an unbound companion this minion is skirmishing.
 		lore: ...men like half-trolls, with white eyes and red tongues.
 		promotext: ""
@@ -357,17 +464,37 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+                    type: canSpot
+                    filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: companion,cultureInDeadPile
+                    amount: -1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: choose(your,southron)
+		            memorize: exertedSouthron
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: memory(exertedSouthron)
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: To play, spot a [raider] Man.<br>While there is a character in the dead pile, each companion of the same culture as that character is strength -1.<br><b>Skirmish:</b> Exert your Southron to make him strength +1.
 		lore: ""
 		promotext: ""
@@ -401,20 +528,20 @@
 		twilight: 1
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: addTrigger
+				    trigger: {
+				        type: aboutToTakeWound
+				        filter: southron
+				    }
+				    effect: {
+				        type: preventWound
+				        filter: all(southron)
+				    }
+				    until: end(assignment)
 				}
 			]
 		}
@@ -455,17 +582,22 @@
 		vitality: 3
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            filter: choose(mount)
+		            on: self
+		            cost: -2
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>When you play this minion, you may play a mount on him from your discard pile. Its twilight cost is -2.
 		lore: The commander of a mûmak never imagines he is in complete control of the beast.
 		promotext: ""
@@ -499,20 +631,25 @@
 		twilight: 1
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(culture(raider),man)
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: discard
+				    filter: choose(side(free people),condition)
+				    count: {
+				        type: condition
+				        condition: {
+				            type: canSpot
+				            filter: culture(rohan),man
+				        }
+				        true: 1-2
+				        false: 1
+				    }
 				}
 			]
 		}
@@ -549,17 +686,39 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(raider),man
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+                    type: cantRemoveThreats
+                    filter: side(free people)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: [
+                    {
+                        type: removeTwilight
+                    }
+                    {
+                        type: play
+                        filter: choose(southron)
+                        removedTwilight: 1
+                    }
+                ]
+                effect: {
+                    type: addThreats
+                }
+		    }
+		]
 		gametext: To play, spot a [raider] Man.<br>Threats cannot be removed by Free Peoples cards.<br><b>Shadow:</b> Remove (1) and play a Southron to add a threat.
 		lore: Horns were blown and trumpets were braying....
 		promotext: ""
@@ -593,18 +752,28 @@
 		twilight: 1
 		type: Condition
 		vitality: 1
-		#target: a Southron
-		/*requires: {
-			
-		}
+		target: southron
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: enduring
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeThreats
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            filter: choose(culture(raider),condition)
+		        }
+		    }
+		]
 		gametext: Bearer must be a Southron.<br>Bearer is <b>enduring</b>.<br><b>Skirmish:</b> Remove a threat to play a [raider] condition from your discard pile.
 		lore: Only by many conquests and hardships does one rise to prominence in the army of the Haradrim.
 		promotext: ""
@@ -642,17 +811,21 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: assignedAgainst
+		            filter: man
+		            against: self
+		            memorizeAssigned: assignedMan
+		        }
+		        effect: {
+		            type: wound
+		            filter: memory(assignedMan)
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>Each time a Man is assigned to skirmish this minion, wound that Man.
 		lore: Stirred by the Dark Lord, the fullness of Southron cruelty was leveled at the people of Gondor.
 		promotext: ""
@@ -690,17 +863,52 @@
 		vitality: 2
 		site: 4
 		keywords: Southron
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: isLessThanOrEqual
+		                firstNumber: {
+		                    type: sum
+		                    source: [
+		                        {
+		                            type: forEachYouCanSpot
+		                            filter: other,minion
+		                        }
+		                        twilightCount
+		                    ]
+		                }
+		                secondNumber: 3
+		            }
+                    filter: self
+                    amount: 3
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: isLessThanOrEqual
+		                firstNumber: {
+		                    type: sum
+		                    source: [
+		                        {
+		                            type: forEachYouCanSpot
+		                            filter: other,minion
+		                        }
+		                        twilightCount
+		                    ]
+		                }
+		                secondNumber: 3
+		            }
+                    filter: self
+                    keyword: fierce
+		        }
+		    }
+		]
 		gametext: <b>Southron</b>.<br>While the total number of other minions and twilight tokens is 3 or fewer, this minion is strength +3 and <b>fierce</b>.
 		lore: The merciless deserts of Haradwaith breed equally merciless fighters.
 		promotext: ""
@@ -734,26 +942,36 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: played
+				filter: side(free people),possession
+				memorize: playedPossession
 			}
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			requires: {
+			    type: canSpot
+			    filter: culture(raider)
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: discard
+				    filter: memory(playedPossession)
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: memoryMatches
+				        memory: playedPossession
+				        filter: or(culture(gondor),culture(rohan)),possession
+				    }
+				    effect: {
+				        type: wound
+				        filter: choose(unbound,man)
+				    }
 				}
 			]
-		]
+		}
 		gametext: If a Free Peoples possession is played, spot a [raider] card to discard that possession. If that possession was a [gondor] or [rohan] possession, wound an unbound Man.
 		lore: ...the Mûmak of Harad was indeed a beast of vast bulk, and the like of him does not walk now in Middle-earth....
 		promotext: ""
@@ -787,17 +1005,42 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: [
+                    {
+                        type: haveInitiative
+                        side: shadow
+                    }
+                    {
+                        type: canSpot
+                        filter: culture(raider),man
+                    }
+		        ]
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: reconcileHand
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(raider),man)
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: <b>Shadow:</b> If you have initiative, spot a [raider] Man and discard this condition to reconcile your hand.<br><b>Skirmish:</b> Discard this condition to make a [raider] Man strength +2.
 		lore: I make the earth shake, / As I tramp through the grass; / Trees crack as I pass.'
 		promotext: ""
