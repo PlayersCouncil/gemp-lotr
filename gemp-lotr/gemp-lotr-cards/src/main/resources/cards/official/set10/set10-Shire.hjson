@@ -22,17 +22,41 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: addBurdens
+		        }
+		        effect: [
+		            {
+		                type: memorizeDiscard
+		                filter: culture(shire),event
+		                uniqueTitles: true
+		                memory: shireEvents
+		            }
+		            {
+		                type: chooseArbitraryCards
+		                text: Choose cards to give to opponent to choose
+		                fromMemory: shireEvents
+		                count: 2
+		                memorize: chosenCards
+		            }
+		            {
+		                type: chooseArbitraryCards
+		                text: Choose card to return to opponent's hand
+		                player: shadow
+		                fromMemory: chosenCards
+		                memorize: cardToReturn
+		            }
+		            {
+		                type: putCardsFromDiscardIntoHand
+		                filter: memory(cardToReturn)
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Fellowship:</b> Add a burden to choose 2 [shire] events with different card titles from your discard pile. Choose an opponent and make him or her choose 1 of those cards for you to take into hand.
 		lore: ...he caught Déagol by the throat and strangled him, because the gold looked so bright and beautiful.'
 		promotext: ""
@@ -66,20 +90,18 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(hobbit,companion,notAssignedToSkirmish)
+			    memorize: exertedHobbit
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: replaceInSkirmish
+				    filter: companion,not(ringBearer)
+				    with: memory(exertedHobbit)
 				}
 			]
 		}
@@ -116,20 +138,21 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			requires: {
+			    type: hasCardInDiscard
+                filter: your,culture(shire)
+                count: 4
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: choose(hobbit)
+				    amount: {
+				        type: forEachYouCanSpot
+				        filter: hobbit
+				    }
 				}
 			]
 		}
@@ -166,18 +189,31 @@
 		twilight: 1
 		type: Condition
 		vitality: -1
-		#target: a Hobbit
-		/*requires: {
-			
-		}
+		target: hobbit
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: phase
+		            phase: skirmish
+		        }
+		    }
+		    {
+		        type: playedInOtherPhase
+		        phase: skirmish
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,inSkirmishAgainst(bearer))
+		        }
+		    }
+		]
 		gametext: Play this condition only during a skirmish. Bearer must be a Hobbit.<br>When this condition is played, wound a minion skirmishing bearer.
 		lore: And there stood Meriadoc the hobbit in the midst of the slain, blinking like an owl in the daylight, for tears blinded him....
 		promotext: ""
@@ -211,17 +247,24 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesInitiative
+		            side: free people
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(shire),companion
+		            count: 2
+		        }
+		        effect: {
+		            type: removeBurdens
+		        }
+		    }
+		]
 		gametext: Each time you lose initiative, you may spot 2 [shire] companions to remove a burden.
 		lore: Far off, as in a little picture drawn by elven-fingers, he saw the Lady Galadriel standing on the grass in Lórien, and gifts were in her hands.
 		promotext: ""
@@ -258,20 +301,30 @@
 			Stealth
 			Maneuver
 		]
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: returnToHand
+			    filter: choose(culture(shire),companion)
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: choice
+				    player: shadow
+				    texts: [
+				        Remove 2 twilight
+				        Discard a minion
+				    ]
+				    effects: [
+				        {
+				            type: removeTwilight
+				            amount: 2
+				        }
+				        {
+				            type: discard
+				            filter: choose(minion)
+				        }
+				    ]
 				}
 			]
 		}
@@ -308,20 +361,18 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(hobbit)
+			    memorize: exertedHobbit
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: choose(hobbit,not(memory(exertedHobbit)))
+				    amount: 3
 				}
 			]
 		}
@@ -358,20 +409,28 @@
 		twilight: 0
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			requires: {
+			    type: canSpot
+			    filter: hobbit,companion
+			    count: 2
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: discard
+				    player: shadow
+				    filter: choose(minion)
+				    count: {
+				        type: condition
+				        condition: {
+				            type: canSpot
+				            filter: hobbit,companion
+				            count: 4
+				        }
+				        true: 2
+				        false: 1
+				    }
 				}
 			]
 		}
@@ -411,20 +470,28 @@
 			Tale
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			    type: exert
+			    filter: choose(culture(shire),character)
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: choice
+				    texts: [
+				        Remove a burden
+				        Remove 2 threats
+				    ]
+				    effects: [
+				        {
+				            type: removeBurdens
+				        }
+				        {
+				            type: removeThreats
+				            amount: 2
+				        }
+				    ]
 				}
 			]
 		}
@@ -461,18 +528,17 @@
 		twilight: 1
 		type: Possession
 		itemclass: Armor
-		#target: a Hobbit
-		/*requires: {
-			
-		}
+		target: hobbit
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+                    type: modifyStrength
+                    filter: or(orc,urukHai),inSkirmishAgainst(bearer)
+                    amount: -1
+		        }
+		    }
+		]
 		gametext: Bearer must be a Hobbit.<br>Each Orc and each Uruk-hai skirmishing bearer is strength -1.
 		lore: Well, there you are, Mr. Frodo. A perfect little orc, if I may make so bold....'
 		promotext: ""
@@ -506,17 +572,34 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(shire),companion
+		            count: 2
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: minion
+		            memorize: playedMinion
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(hobbit,companion)
+		        }
+		        effect: {
+		            type: exert
+		            filter: memory(playedMinion)
+		        }
+		        limitPerTurn: 1
+		    }
+		]
 		gametext: To play, spot 2 [shire] companions.<br>Each time a minion is played, you may exert a Hobbit companion to exert that minion (limit once per turn).
 		lore: ...it saw a great silent shape, cloaked in a grey shadow, looming against the wavering light behind....
 		promotext: ""
@@ -553,20 +636,42 @@
 			Stealth
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			requires: {
+			    type: hasCardInDiscard
+			    filter: culture(shire)
+			    count: 6
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: conditional
+				    requires: [
+                        {
+                            type: canSpot
+                            filter: minion,not(fierce),inSkirmish
+                        }
+                        {
+                            type: canSpot
+                            filter: your,hobbit,inSkirmish
+                        }
+                    ]
+				    effect: [
+				        {
+				            type: memorizeActive
+				            filter: minion,inSkirmish
+				            memory: minionsInSkirmish
+				        }
+                        {
+                            type: cancelSkirmish
+                        }
+                        {
+                            type: addKeyword
+                            filter: memory(minionsInSkirmish)
+                            keyword: fierce
+                            until: regroup
+                        }
+                    ]
 				}
 			]
 		}
@@ -606,17 +711,38 @@
 			Tale
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        effect: [
+		            {
+		                type: chooseActiveCards
+		                filter: choose(hobbit)
+		                text: Choose a Hobbit
+		                memorize: chosenHobbit
+		            }
+                    {
+                        type: addModifier
+                        modifier: {
+                            type: cantBeOverwhelmed
+                            requires: {
+                                type: not
+                                requires: {
+                                    type: playedCardThisPhase
+                                    filter: side(shadow),event
+                                }
+                            }
+                            filter: memory(chosenHobbit)
+                        }
+                    }
+                    {
+                        type: discard
+                        filter: self
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Tale</b>.<br><b>Skirmish:</b> Prevent a Hobbit from being overwhelmed unless a Shadow event is (or was) played during this skirmish. Discard this condition.
 		lore: I have quite finished, Sam,' said Frodo. 'The last pages are for you.'
 		promotext: ""
@@ -646,7 +772,6 @@
 		title: Frodo
 		subtitle: Resolute Hobbit
 		unique: true
-		side: Free Peoples
 		culture: Shire
 		twilight: 0
 		type: Companion
@@ -655,17 +780,6 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 12
-		/*requires: {
-			
-		}
-		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
 		gametext: <b>Ring-bearer (resistance 12).</b>
 		lore: ...if it's the only way, we must take it.'
 		promotext: ""
@@ -705,17 +819,30 @@
 		signet: Gandalf
 		resistance: 5
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: culture(shire),companion
+		            }
+		        }
+		    }
 			{
-				
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bound</b>.<br>Sam is strength +1 for each [shire] companion you can spot.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		lore: ...I'd say there's a large warrior on the loose, Elf most likely, with an elf-sword anyway....'
 		promotext: ""

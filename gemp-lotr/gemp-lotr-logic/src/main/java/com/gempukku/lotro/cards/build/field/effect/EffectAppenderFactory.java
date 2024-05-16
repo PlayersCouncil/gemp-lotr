@@ -88,6 +88,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("makeselfringbearer", new MakeSelfRingBearer());
         effectAppenderProducers.put("memorize", new MemorizeActive());
         effectAppenderProducers.put("memorizeactive", new MemorizeActive());
+        effectAppenderProducers.put("memorizediscard", new MemorizeDiscard());
         effectAppenderProducers.put("memorizenumber", new MemorizeNumber());
         effectAppenderProducers.put("memorizestacked", new MemorizeStacked());
         effectAppenderProducers.put("memorizevalue", new MemorizeValue());

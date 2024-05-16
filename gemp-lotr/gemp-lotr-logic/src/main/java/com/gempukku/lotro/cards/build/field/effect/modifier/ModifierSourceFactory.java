@@ -33,6 +33,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantbeassignedtoskirmishagainst", new CantBeAssignedToSkirmishAgainst());
         modifierProducers.put("cantbediscarded", new CantBeDiscarded());
         modifierProducers.put("cantbeexerted", new CantBeExerted());
+        modifierProducers.put("cantbeoverwhelmed", new CantBeOverwhelmed());
         modifierProducers.put("cantbeoverwhelmedmultiplier", new CantBeOverwhelmedMultiplier());
         modifierProducers.put("cantbetransferred", new CantBeTransferred());
         modifierProducers.put("cantcancelskirmish", new CantCancelSkirmish());

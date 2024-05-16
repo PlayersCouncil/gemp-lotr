@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -20,20 +21,23 @@ import java.util.Collection;
 public class ChooseArbitraryCards implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "fromMemory", "count", "filter", "memorize", "text");
+        FieldUtils.validateAllowedFields(effectObject, "fromMemory", "count", "filter", "memorize", "text", "player");
 
         final String fromMemory = FieldUtils.getString(effectObject.get("fromMemory"), "fromMemory");
         if (fromMemory == null)
             throw new InvalidCardDefinitionException("You need to define fromMemory to display arbitrary cards");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "any");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
         if (memorize == null)
             throw new InvalidCardDefinitionException("You need to define what memory to use to store chosen cards");
         final String text = FieldUtils.getString(effectObject.get("text"), "text");
         if (text == null)
             throw new InvalidCardDefinitionException("You need to define text to show");
+        final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
+
         FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
 
         return new DelayedAppender() {
             @Override
@@ -44,7 +48,9 @@ public class ChooseArbitraryCards implements EffectAppenderProducer {
                 int minimum = Math.min(selectableCards.size(), valueSource.getMinimum(actionContext));
                 int maximum = Math.min(selectableCards.size(), valueSource.getMaximum(actionContext));
 
-                return new PlayoutDecisionEffect(actionContext.getPerformingPlayer(),
+                String choosingPlayer = playerSource.getPlayer(actionContext);
+
+                return new PlayoutDecisionEffect(choosingPlayer,
                         new ArbitraryCardsSelectionDecision(1, GameUtils.SubstituteText(text, actionContext),
                                 cards, selectableCards, minimum, maximum) {
                             @Override
