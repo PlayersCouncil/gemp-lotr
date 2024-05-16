@@ -23,17 +23,23 @@
 		block: King
 		direction: Right
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        requires: {
+		            type: cantSpotThreats
+		            amount: 2
+		        }
+		        cost: {
+		            type: addThreats
+		        }
+		        effect: {
+		            type: playCardFromDrawDeck
+		            filter: choose(fortification)
+		        }
+		    }
+		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 2 threats, add a threat to play a fortification from your draw deck.
 		lore: ""
 		promotext: ""
@@ -68,17 +74,26 @@
 		block: King
 		direction: Right
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: [
+                    {
+                        type: exert
+                        filter: choose(minion)
+                    }
+                    {
+                        type: removeBurdens
+                    }
+                ]
+                effect: {
+                    type: discard
+                    player: free people
+                    filter: choose(side(free people),condition)
+                }
+		    }
+		]
 		gametext: <b>Plains</b>. <b>Shadow:</b> Exert a minion and remove a burden to make the Free Peoples player discard one of his or her conditions.
 		lore: ""
 		promotext: ""
@@ -112,17 +127,26 @@
 		site: 5
 		block: King
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantHeal
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantPreventWounds
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantRemoveBurdens
+		        }
+		    }
+		]
 		gametext: Wounds cannot be prevented or healed. Burdens cannot be removed.
 		lore: ""
 		promotext: ""
@@ -156,17 +180,25 @@
 		site: 8
 		block: King
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: your,culture(wraith),orc
+		        }
+		        cost: {
+		            type: removeThreats
+		            amount: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(your,culture(wraith),orc)
+		            amount: 3
+		        }
+		    }
+		]
 		gametext: <b>Skirmish:</b> Spot your [wraith] Orc and remove 2 threats to make that [wraith] Orc strength +3.
 		lore: ""
 		promotext: ""
