@@ -26,17 +26,32 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: chooseHowManyToSpot
+                        filter: archer
+                        memorize: spotCount
+                    }
+                    {
+                        type: modifyStrength
+                        filter: choose(minion,inSkirmishAgainst(culture(elven),companion))
+                        amount: {
+                            type: fromMemory
+                            memory: spotCount
+                            multiplier: -1
+                        }
+                    }
+                ]
+		    }
+		]
 		gametext: <b>Skirmish:</b> Exert Aegnor to make a minion skirmishing an unbound [elven] companion strength -1 for each archer you spot.
 		lore: Affectionately referred to as 'Figwit' by his contemporaries in Rivendell.
 		promotext: ""
@@ -75,17 +90,36 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		        }
+		        effect: [
+		            {
+		                type: discardBottomCardsFromDeck
+		                memorize: discardedCard
+		                forced: false
+		            }
+		            {
+		                type: conditional
+		                requires: {
+		                    type: memoryMatches
+		                    memory: discardedCard
+		                    filter: culture(elven)
+		                }
+		                effect: {
+		                    type: modifyStrength
+		                    filter: all(minion,inSkirmishAgainst(self))
+		                    amount: -3
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: <b>Skirmish:</b> Discard a card from hand to discard the bottom card of your draw deck. If the bottom card was an [elven] card, each minion skirmishing Arwen is strength -3.
 		lore: ...mine is the choice of Lúthien, and as she so have I chosen, both the sweet and the bitter.'
 		promotext: ""
@@ -124,17 +158,20 @@
 		vitality: 3
 		signet: Frodo
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: minion,inSkirmishAgainst(self)
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: wounded,minion
+		                multiplier: -2
+		            }
+		        }
+		    }
+		]
 		gametext: Each minion skirmishing Arwen is strength -2 for each wounded minion you can spot.
 		lore: Often is it seen," said Aragorn, "that in dangerous days men hide their chief treasure."'"
 		promotext: ""
@@ -172,17 +209,49 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        effect: [
+		            {
+		                type: revealTopCardsOfDrawDeck
+		                memorize: revealedCard
+		            }
+		            {
+		                type: conditional
+		                requires: {
+		                    type: memoryMatches
+		                    memory: revealedCard
+		                    filter: culture(elven)
+		                }
+		                effect: {
+		                    type: optional
+		                    text: Discard the card?
+		                    effect: {
+		                        type: costToEffect
+		                        cost: {
+		                            type: discardCardsFromDrawDeck
+		                            filter: memory(revealedCard)
+		                        }
+		                        effect: {
+		                            type: wound
+		                            filter: all(minion,inSkirmish)
+		                        }
+		                    }
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: At the start of each skirmish involving Celeborn, you may reveal the top card of your draw deck. If it is an [elven] card, you may discard it to wound each minion in that skirmish.
 		lore: ...with him went the last living memory of the Elder Days in Middle-earth.
 		promotext: ""
@@ -220,17 +289,33 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		            count: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(minion,inSkirmishAgainst(self))
+		            amount: {
+		                type: forEachInDiscard
+		                filter: your,culture(elven),event
+		                multiplier: -1
+		            }
+		        }
+		    }
+		]
 		gametext: To play, spot 2 Elves.<br><b>Skirmish:</b> Exert Círdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile.
 		lore: ...he was grey and old, save that his eyes were keen as stars....
 		promotext: ""
@@ -268,17 +353,46 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        effect: [
+		            {
+		                type: revealTopCardsOfDrawDeck
+		                memorize: revealedCard
+		            }
+		            {
+		                type: conditional
+		                requires: {
+		                    type: memoryMatches
+		                    memory: revealedCard
+		                    filter: culture(elven)
+		                }
+		                effect: {
+		                    type: heal
+		                    filter: choose(another,elf)
+		                    count: 0-1
+		                }
+		            }
+		        ]
+		    }
+		]
 		gametext: To play, spot an Elf.<br>At the start of each skirmish involving Elrond, you may reveal the top card of your draw deck. If it is an [elven] card, you may heal another Elf.
 		lore: To me then even our victory can bring only sorrow and parting – but to you hope of joy for a while.'
 		promotext: ""
@@ -312,20 +426,23 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: choose(minion,inSkirmishAgainst(elf))
+				    amount: -2
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: canSpot
+				        filter: site,zone(support)
+				    }
+				    effect: {
+				        type: putPlayedEventOnTopOfDrawDeck
+				    }
 				}
 			]
 		}
@@ -366,17 +483,32 @@
 		strength: 3
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: phase
+		            phase: play starting fellowship
+		        }
+		        amount: -3
+		    }
+		    {
+		        type: activated
+		        phase: [
+		            fellowship
+		            regroup
+		        ]
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            filter: choose(culture(elven),event)
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(side(shadow),or(condition,possession))
+		        }
+		    }
+		]
 		gametext: When Galadriel is in your starting fellowship, her twilight cost is -3.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Discard an [elven] event from hand to discard a Shadow condition or Shadow possession.
 		lore: I pass the test,' she said. 'I will diminish, and go into the West, and remain Galadriel.'
 		promotext: ""
@@ -410,17 +542,29 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		            count: 2
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: losesInitiative
+		            side: free people
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(minion)
+		            amount: -4
+		            until: regroup
+		        }
+		    }
+		]
 		gametext: To play, spot 2 Elves.<br>Each time you lose initiative, make a minion strength -4 until the regroup phase.
 		lore: The uttermost choice is before you: to repent and go to the Havens... or else to abide the Doom of Men.'
 		promotext: ""
@@ -454,18 +598,24 @@
 		culture: Elven
 		twilight: 0
 		type: Artifact
-		#target: a Hobbit
-		/*requires: {
-			
-		}
+		target: hobbit
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        effect: [
+		            {
+		                type: removeText
+		                filter: choose(minion,inSkirmishAgainst(bearer))
+		                until: regroup
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		    }
+		]
 		gametext: Bearer must be a Hobbit.<br><b>Skirmish:</b> Until the regroup phase, remove the game text (except card type and race) from a minion skirmishing bearer and make it unable to gain game text. Discard this artifact.
 		lore: ...the hand that held it sparkled with white fire.
 		promotext: ""

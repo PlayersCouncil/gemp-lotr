@@ -57,7 +57,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("disablewoundsover", new DisableWoundsOver());
         effectAppenderProducers.put("disablewounds", new DisableWounds());
         effectAppenderProducers.put("discard", new DiscardFromPlay());
-        effectAppenderProducers.put("discardbottomcardsfromdeck", new DiscardBottomCardFromDeck());
+        effectAppenderProducers.put("discardbottomcardsfromdeck", new DiscardBottomCardsFromDeck());
         effectAppenderProducers.put("discardcardatrandomfromhand", new DiscardCardAtRandomFromHand());
         effectAppenderProducers.put("discardcardsfromdrawdeck", new DiscardCardsFromDrawDeck());
         effectAppenderProducers.put("discardfromhand", new DiscardFromHand());

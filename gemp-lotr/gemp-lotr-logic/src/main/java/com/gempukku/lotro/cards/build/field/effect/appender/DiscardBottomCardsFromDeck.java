@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
 
 import java.util.Collection;
 
-public class DiscardBottomCardFromDeck implements EffectAppenderProducer {
+public class DiscardBottomCardsFromDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "deck", "count", "forced", "memorize");
