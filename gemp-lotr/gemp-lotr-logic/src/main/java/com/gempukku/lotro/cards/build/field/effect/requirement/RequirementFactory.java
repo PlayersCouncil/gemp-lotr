@@ -50,6 +50,7 @@ public class RequirementFactory {
         requirementProducers.put("isnotequal", new IsNotEqual());
         requirementProducers.put("isowner", new IsOwnerRequirementProducer());
         requirementProducers.put("isside", new IsSideRequirementProducer());
+        requirementProducers.put("killedwithsurplusdamage", new KilledWithSurplusDamage());
         requirementProducers.put("location", new Location());
         requirementProducers.put("lostskirmishthisturn", new LostSkirmishThisTurn());
         requirementProducers.put("memoryis", new MemoryIs());

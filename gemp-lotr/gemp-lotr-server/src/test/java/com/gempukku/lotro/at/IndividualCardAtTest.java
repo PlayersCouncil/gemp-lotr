@@ -14,10 +14,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class IndividualCardAtTest extends AbstractAtTest {
 
@@ -656,7 +653,7 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(Zone.DISCARD, goblinRunner.getZone());
         AwaitingDecision playMoreYetToCome = _userFeedback.getAwaitingDecision(P1);
-        playerDecided(P1, getCardActionId(playMoreYetToCome, "Play More"));
+        playerDecided(P1, getCardActionId(playMoreYetToCome, moreYetToCome));
 
         assertEquals(Zone.DISCARD, goblinRunner2.getZone());
     }

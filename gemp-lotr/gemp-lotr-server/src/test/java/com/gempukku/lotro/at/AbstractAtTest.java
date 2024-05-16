@@ -110,6 +110,14 @@ public abstract class AbstractAtTest {
         return null;
     }
 
+    public String getCardActionId(AwaitingDecision awaitingDecision, PhysicalCard card) {
+        String[] cardIds = (String[]) awaitingDecision.getDecisionParameters().get("cardId");
+        for (int i = 0; i < cardIds.length; i++)
+            if (cardIds[i].equals(String.valueOf(card.getCardId())))
+                return ((String[]) awaitingDecision.getDecisionParameters().get("actionId"))[i];
+        return null;
+    }
+
     public String getCardActionId(String playerId, int cardId) {
         AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(playerId);
         String[] cardIds = (String[]) awaitingDecision.getDecisionParameters().get("cardId");
