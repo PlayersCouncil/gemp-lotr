@@ -173,6 +173,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("stackcardsfromhand", new StackCardsFromHand());
         effectAppenderProducers.put("stackplayedevent", new StackPlayedEvent());
         effectAppenderProducers.put("stacktopcardsofdrawdeck", new StackTopCardsOfDrawDeck());
+        effectAppenderProducers.put("startskirmish", new StartSkirmish());
         effectAppenderProducers.put("storewhileinzone", new StoreWhileInZone());
         effectAppenderProducers.put("takecontrolofsite", new TakeControlOfSite());
         effectAppenderProducers.put("takeoffring", new TakeOffRing());
