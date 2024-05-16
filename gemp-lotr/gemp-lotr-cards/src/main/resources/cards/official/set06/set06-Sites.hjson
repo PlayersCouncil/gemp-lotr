@@ -177,7 +177,7 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            count: 1000
+		            filter: all(any)
 		        }
 		        effect: {
 		            type: drawCards

@@ -383,6 +383,31 @@ public class ValueResolver {
                                 });
                     }
                 };
+            } else if (type.equalsIgnoreCase("forEachResistance")) {
+                FieldUtils.validateAllowedFields(object, "multiplier", "over", "filter");
+                final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
+                final int over = FieldUtils.getInteger(object.get("over"), "over", 0);
+                final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
+
+                final FilterableSource resistanceSource = environment.getFilterFactory().generateFilter(filter, environment);
+
+                return (actionContext) -> {
+                    if (filter.equals("any")) {
+                        return new MultiplyEvaluator(multiplier,
+                                (game, cardAffected) -> Math.max(0, game.getModifiersQuerying().getResistance(game, cardAffected) - over));
+                    } else {
+                        return new MultiplyEvaluator(multiplier,
+                                (game, cardAffected) -> {
+                                    final Filterable filterable = resistanceSource.getFilterable(actionContext);
+                                    int resistance = 0;
+                                    for (PhysicalCard physicalCard : Filters.filterActive(game, filterable)) {
+                                        resistance += game.getModifiersQuerying().getResistance(game, physicalCard);
+                                    }
+
+                                    return Math.max(0, resistance - over);
+                                });
+                    }
+                };
             } else if (type.equalsIgnoreCase("forEachVitality")) {
                 FieldUtils.validateAllowedFields(object, "multiplier", "over", "filter");
                 final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);

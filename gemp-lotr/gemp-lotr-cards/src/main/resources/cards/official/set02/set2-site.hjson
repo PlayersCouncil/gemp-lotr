@@ -121,7 +121,7 @@
             effect: {
                 type: heal
                 filter: choose(hobbit,companion)
-                count: 1000
+                count: any
             }
             player: fp
         }

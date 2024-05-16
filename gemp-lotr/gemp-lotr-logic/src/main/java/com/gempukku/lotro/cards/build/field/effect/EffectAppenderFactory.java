@@ -69,6 +69,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("endphase", new EndPhase());
         effectAppenderProducers.put("exchangecardsinhandwithcardsindeadpile", new ExchangeCardsInHandWithCardsInDeadPile());
         effectAppenderProducers.put("exchangecardsinhandwithcardsindiscard", new ExchangeCardsInHandWithCardsInDiscard());
+        effectAppenderProducers.put("exchangecardsinhandwithcardsstacked", new ExchangeCardsInHandWithCardsStacked());
         effectAppenderProducers.put("exert", new Exert());
         effectAppenderProducers.put("exhaust", new Exhaust());
         effectAppenderProducers.put("filtercardsinmemory", new FilterCardsInMemory());

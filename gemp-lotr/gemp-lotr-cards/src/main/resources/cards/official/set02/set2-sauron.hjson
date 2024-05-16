@@ -157,7 +157,6 @@
             player: you
             forced: true
             filter: all(any)
-            count: 1000
         }
       }
     }

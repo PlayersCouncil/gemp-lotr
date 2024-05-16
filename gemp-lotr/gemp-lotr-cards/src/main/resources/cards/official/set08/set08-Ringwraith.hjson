@@ -104,7 +104,7 @@
 				    effect: {
 				        type: putCardsFromHandOnBottomOfDeck
 				        player: free people
-				        count: 1000
+				        filter: all(any)
 				    }
 				}
 			]

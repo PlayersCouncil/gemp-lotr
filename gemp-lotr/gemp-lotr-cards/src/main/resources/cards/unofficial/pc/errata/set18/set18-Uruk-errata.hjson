@@ -42,9 +42,8 @@
 				{
 					type: addModifier
 					modifier: {
-						type: CantBeOverwhelmedMultiplier
+						type: CantBeOverwhelmed
 						filter: InSkirmish
-						multiplier: 100
 					}
 				}
 			]

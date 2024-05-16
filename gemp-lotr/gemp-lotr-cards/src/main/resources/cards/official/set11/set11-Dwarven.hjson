@@ -23,18 +23,22 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a Dwarf
-		/*requires: {
-			
-		}
+		target: dwarf
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+                    type: addKeyword
+                    requires: {
+                        type: location
+                        filter: mountain
+                    }
+                    filter: bearer
+                    keyword: damage
+                    amount: 1
+		        }
+		    }
+		]
 		gametext: Bearer must be a Dwarf.<br>While bearer is at a mountain site, he is <b>damage +1</b>.
 		lore: The Dwarves led by Balin to the great Dwarf-hall of old, though ill-prepared, were well-armed.
 		promotext: ""
@@ -68,20 +72,27 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: choose(dwarf)
+				    memorize: chosenDwarf
+				    amount: {
+				        type: forEachWound
+				        filter: memory(chosenDwarf)
+				        multiplier: 2
+				    }
+				}
+				{
+				    type: addKeyword
+				    filter: memory(chosenDwarf)
+				    keyword: damage
+				    amount: {
+				        type: forEachWound
+				        filter: memory(chosenDwarf)
+				    }
 				}
 			]
 		}
@@ -118,17 +129,34 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires:{
+		            type: canSpot
+		            filter: dwarf
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+                    type: addKeyword
+                    filter: companion
+                    keyword: damage
+                    amount: 1
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: endOfTurn
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
+		]
 		gametext: To play, spot a Dwarf.<br>Each companion is <b>damage +1</b>.<br>Discard this condition at the end of your turn.
 		lore: Glóin and his countrymen stood as reassurance that the Dwarves would also stand against the will of the Dark Lord.
 		promotext: ""
@@ -162,20 +190,27 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			cost: [
+                {
+                    type: exert
+                    filter: choose(ringBearer)
+                }
+                {
+                    type: exert
+                    filter: choose(dwarf)
+                    memorize: exertedDwarf
+                }
+			]
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: memory(exertedDwarf)
+				    amount: {
+				        type: forEachResistance
+				        filter: memory(exertedDwarf)
+				    }
 				}
 			]
 		}
@@ -216,17 +251,20 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: location
+		                filter: or(battleground,underground)
+		            }
+		            filter: self
+		            keyword: muster
+		        }
+		    }
+		]
 		gametext: While Farin is at a battleground or underground site, he gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
 		lore: If we make no answer, the Enemy may move Men of his rule to assail King Brand, and Dáin also.'
 		promotext: ""
@@ -265,17 +303,19 @@
 		vitality: 3
 		resistance: 7
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+                    type: winsSkirmish
+                    filter: self
+		        }
+		        effect: {
+		            type: drawCards
+		        }
+		    }
+		]
 		gametext: <b>Damage +1</b>.<br>Each time Gimli wins a skirmish, you may draw a card.
 		lore: ...I am content. Till now I have hewn naught but wood since I left Moria.'
 		promotext: ""
@@ -311,18 +351,33 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a Dwarf
-		/*requires: {
-			
-		}
+		target: dwarf
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: muster
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: location
+		            filter: battleground
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(bearer,name(Gimli))
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,inSkirmishAgainst(bearer))
+		        }
+		    }
+		]
 		gametext: Bearer must be a Dwarf.<br>Bearer gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br><b>Skirmish:</b> If bearer is Gimli and he is at a battleground site, exert him to wound a minion he is skirmishing.
 		lore: ""
 		promotext: ""
@@ -360,17 +415,28 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: culture(dwarven),companion
+		        }
+		        requires: {
+		            type: phase
+		            phase: skirmish
+		        }
+		        cost: {
+		            type: discard
+		            filter: choose(culture(dwarven),not(character))
+		            count: 2
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(culture(dwarven),companion)
+		        }
+		    }
+		]
 		gametext: <b>Response:</b> If a [dwarven] companion is about to take a wound in a skirmish, discard 2 [dwarven] cards from play (except characters) to prevent that.
 		lore: ...we crave the advice of Elrond. For the Shadow grows and draws nearer.'
 		promotext: ""
@@ -404,17 +470,37 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: stackTopCardsOfDrawDeck
+		            where: self
+		            count: 8
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: dwarf
+		        }
+		        effect: {
+		            type: exchangeCardsInHandWithCardsStacked
+		            filterInHand: all(any)
+		            filterInStacked: self
+		        }
+		    }
+		]
 		gametext: When you play this condition, stack the top 8 cards of your draw deck here.<br>At the start of your maneuver phase, you may spot a Dwarf to exchange the cards stacked here with your hand.
 		lore: ...at last we had the power and numbers to return.'
 		promotext: ""
@@ -448,17 +534,28 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: dwarf,companion
+		            count: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: location
+		                filter: mountain
+		            }
+		            filter: dwarf
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: To play, spot 2 Dwarf companions.<br>While the fellowship is at a mountain site, each Dwarf is strength +2.
 		lore: The Dwarves are as hard and stalwart as the lands in which they've made their homes.
 		promotext: ""
@@ -492,26 +589,19 @@
 		twilight: 1
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: responseEvent
 			trigger: {
-				
-			}
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: aboutToTakeWound
+				filter: dwarf,resistanceMoreThan(2)
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: preventWound
+				    filter: choose(dwarf,resistanceMoreThan(2))
 				}
 			]
-		]
+		}
 		gametext: If a Dwarf who has resistance 3 or more is about to take a wound, prevent that.
 		lore: Well, here's one Dwarf she won't ensnare so easily.'
 		promotext: ""
@@ -545,20 +635,18 @@
 		twilight: 1
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: discardFromHand
+			    forced: false
+			    filter: choose(culture(dwarven))
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: playCardFromDrawDeck
+				    filter: choose(culture(dwarven),possession)
+				    on: culture(dwarven),companion,resistanceMoreThan(4)
 				}
 			]
 		}

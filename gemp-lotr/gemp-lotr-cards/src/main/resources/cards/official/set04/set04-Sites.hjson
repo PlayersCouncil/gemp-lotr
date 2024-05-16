@@ -748,7 +748,7 @@
 		        effect: [
 		            {
 		                type: putCardsFromHandOnBottomOfDeck
-		                count: 1000
+		                filter: all(any)
 		            }
 		            {
 		                type: drawCards
