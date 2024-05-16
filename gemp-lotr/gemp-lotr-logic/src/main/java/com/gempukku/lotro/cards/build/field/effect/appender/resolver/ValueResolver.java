@@ -151,15 +151,17 @@ public class ValueResolver {
                     return new ConstantEvaluator(Math.min(limit, multiplier * count));
                 };
             } else if (type.equalsIgnoreCase("forEachMatchingInMemory")) {
-                FieldUtils.validateAllowedFields(object, "memory", "filter", "limit");
+                FieldUtils.validateAllowedFields(object, "memory", "filter", "limit", "multiplier");
+                final ValueSource multiplierSource = ValueResolver.resolveEvaluator(object.get("multiplier"), 1, environment);
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
                 final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
                 return (actionContext) -> {
+                    final int multiplier = multiplierSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
                     final int count = Filters.filter(actionContext.getCardsFromMemory(memory), actionContext.getGame(),
                             filterableSource.getFilterable(actionContext)).size();
-                    return new ConstantEvaluator(Math.min(limit, count));
+                    return new ConstantEvaluator(multiplier * Math.min(limit, count));
                 };
             } else if (type.equalsIgnoreCase("forEachThreat")) {
                 FieldUtils.validateAllowedFields(object, "multiplier");

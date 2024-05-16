@@ -23,17 +23,37 @@
 		type: Possession
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(gandalf),wizard
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        effect: {
+		            type: stackCardsFromHand
+		            filter: choose(spell)
+		            where: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            filter: choose(culture(gandalf))
+		        }
+		        effect: {
+		            type: putStackedCardsIntoHand
+		            on: self
+		        }
+		    }
+		]
 		gametext: To play, spot a [gandalf] Wizard.<br><b>Regroup:</b> Stack a spell from hand here.<br><b>Fellowship:</b> Discard a [gandalf] card from hand to take a card stacked here into hand.
 		lore: The fireworks were by Gandalf: they were not only brought by him, but designed and made by him....
 		promotext: ""
@@ -67,21 +87,25 @@
 		twilight: 2
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(culture(gandalf),wizard)
 			},
 			effect: [
-				{
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+			    {
+			        type: removeBurdens
+			        amount: {
+			            type: condition
+			            condition: {
+			                type: location
+			                filter: dwelling
+			            }
+			            true: 2
+			            false: 1
+			        }
+			    }
 			]
 		}
 		gametext: Exert a [gandalf] Wizard to remove a burden (or 2 burdens if the fellowship is at a dwelling site).
@@ -121,17 +145,27 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(gandalf),companion
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+                    type: exert
+                    filter: self
+		        }
+		        effect: {
+		            type: putCardsFromDiscardIntoHand
+		            filter: choose(culture(gandalf),skirmish,event)
+		        }
+		    }
+		]
 		gametext: To play, spot a [gandalf] companion.<br><b>Skirmish:</b> Exert Erland to take a [gandalf] skirmish event from your discard pile into hand.
 		lore: They are valiant men and keep open the High Pass and the Ford of Carrock.'
 		promotext: ""
@@ -165,21 +199,28 @@
 		twilight: 1
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			cost: [
+                {
+                    type: exert
+                    filter: choose(culture(gandalf),wizard)
+                }
+                {
+                    type: discardFromHand
+                    forced: false
+                    count: 2
+                }
+            ]
 			effect: [
-				{
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+			    {
+			        type: putCardsFromDiscardIntoHand
+			        filter: choose(side(free people))
+			    }
+			    {
+			        type: putCardsFromDiscardIntoHand
+			        filter: choose(side(shadow))
+			    }
 			]
 		}
 		gametext: To play, exert a [gandalf] Wizard.<br>Discard 2 cards from hand to take a Free Peoples card and a Shadow card from your discard pile into hand.
@@ -215,17 +256,20 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: culture(gandalf),wizard
+		            }
+		            filter: companion,resistanceMoreThan(5)
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: While you can spot a [gandalf] Wizard, each companion who has resistance 6 or more is strength +1.
 		lore: To them he was just one of the 'attractions' at the party. Hence the excitement of the hobbit-children.
 		promotext: ""
@@ -263,17 +307,44 @@
 		strength: 7
 		vitality: 4
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: location
+		                filter: regionNumber(1)
+		            }
+		            filter: other,companion
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: location
+		                filter: regionNumber(2)
+		            }
+		            filter: companion
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: location
+		                filter: regionNumber(3)
+		            }
+		            filter: self
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: While Gandalf is in region 1, each other companion is strength +2.<br>While Gandalf is in region 2, each companion is strength +1.<br>While Gandalf is in region 3, he is strength +2.
 		lore: I will help you bear this burden, Frodo Baggins....'
 		promotext: ""
@@ -309,18 +380,29 @@
 		type: Artifact
 		vitality: 1
 		itemclass: Staff
-		#target: a Wizard
-		/*requires: {
-			
-		}
+		target: wizard
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer,name(Gandalf)
+		            keyword: muster
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: wound
+		            player: shadow
+		            filter: choose(minion)
+		        }
+		    }
+		]
 		gametext: Bearer must be a Wizard.<br>If bearer is Gandalf, he gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>Each time bearer wins a skirmish, choose a Shadow player who must wound a minion.
 		lore: ""
 		promotext: ""
@@ -356,18 +438,20 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: title(Gandalf)
-		/*requires: {
-			
-		}
+		target: title(Gandalf)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: removeBurdens
+		        }
+		    }
+		]
 		gametext: Bearer must be Gandalf.<br>Each time Gandalf wins a skirmish, you may remove a burden.
 		lore: There was a ringing clash and a stab of white fire.
 		promotext: ""
@@ -401,21 +485,35 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(gandalf),wizard
+			}
 			effect: [
-				{
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+			    {
+			        type: revealHand
+			        memorize: revealedCards
+			    }
+			    {
+			        type: modifyStrength
+			        filter: choose(minion)
+			        amount: {
+			            type: forEachMatchingInMemory
+			            memory: revealedCards
+			            filter: companion
+			            multiplier: {
+			                type: condition
+			                condition: {
+			                    type: location
+			                    filter: battleground
+			                }
+			                true: -4
+			                false: -3
+			            }
+			        }
+			    }
 			]
 		}
 		gametext: Spot a [gandalf] Wizard to reveal your hand and make a minion strength -3 for each companion in your hand (or -4 for each if the fellowship is at a battleground site).
@@ -451,17 +549,41 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(gandalf),wizard
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: addsBurden
+		            filter: side(shadow)
+		        }
+		        effect: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+                    type: usesSpecialAbility
+                    filter: minion
+                }
+                cost: {
+                    type: discard
+                    filter: self
+                }
+                effect: {
+                    type: cancelSpecialAbility
+                }
+		    }
+		]
 		gametext: To play, spot a [gandalf] Wizard.<br>Each time a Shadow card adds a burden, you may remove (3).<br><b>Response:</b> If a minion uses its special ability, discard this condition to cancel the effect of that special ability.
 		lore: Prepare for battle!'
 		promotext: ""
@@ -499,21 +621,18 @@
 			Toil 2
 			Fellowship
 		]
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(gandalf),wizard
+			}
 			effect: [
-				{
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+			    {
+			        type: discard
+			        filter: choose(condition)
+			        count: 2
+			    }
 			]
 		}
 		gametext: <b>Spell</b>. <b>Toil 2</b>. <helper>(For each [gandalf] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a [gandalf] Wizard to discard 2 conditions from play.
@@ -549,21 +668,24 @@
 		twilight: 3
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			    type: exert
+			    filter: choose(culture(gandalf),wizard)
+			    memorize: exertedWizard
+			}
+			requires: {
+			    type: canSpot
+			    filter: companion,resistanceMoreThan(6)
+			    count: 2
+			}
 			effect: [
-				{
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+			    {
+			        type: wound
+			        filter: choose(minion,inSkirmishAgainst(memory(exertedWizard)))
+			        times: 2
+			    }
 			]
 		}
 		gametext: Exert a [gandalf] Wizard and spot 2 companions who each have resistance 7 or more to wound a minion that Wizard is skirmishing twice.
@@ -601,18 +723,24 @@
 		type: Possession
 		resistance: 2
 		itemclass: Mount
-		#target: title(Gandalf)
-		/*requires: {
-			
-		}
+		target: title(Gandalf)
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: name(Gandalf)
+		        }
+		        cost: {
+		            type: addBurdens
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(name(Gandalf))
+		        }
+		    }
+		]
 		gametext: Bearer must be Gandalf.<br>Each time Gandalf is about to take a wound, you may add a burden to prevent that.
 		lore: He has come for me: the horse of the White Rider. We are going to battle together.'
 		promotext: ""
