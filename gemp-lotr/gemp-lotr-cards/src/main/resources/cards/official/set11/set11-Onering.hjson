@@ -22,6 +22,52 @@
 		type: The One Ring
 		resistance: 2
 		effects: [
+			{
+				type: activatedTrigger
+				requires: {
+					type: ringIsActive
+				}
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: putOnRing
+					}
+					{
+						type: negateWound
+						filter: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						filter: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
 		]
 		gametext: <b>Response:</b> If the Ring-bearer is about to take a wound, he or she wears The One Ring until the regroup phase.<br>While the Ring-bearer is wearing The One Ring, each time he or she is about to take a wound, add a burden instead.
 		lore: ...ash nazg thrakatulûk agh burzum-ishi krimpatul.'
@@ -56,6 +102,62 @@
 		type: The One Ring
 		strength: 1
 		effects: [
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						filter: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: activatedTrigger
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				effect: [
+					{
+						type: putOnRing
+					}
+					{
+						type: negateWound
+						filter: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
 		]
 		gametext: <b>Response:</b> If the Ring-bearer is about to take a wound in a skirmish, he or she wears The One Ring until the regroup phase.<br>While the Ring-bearer is wearing The One Ring, each time he or she is about to take a wound in a skirmish, add a burden instead.
 		lore: One Ring to rule them all....
