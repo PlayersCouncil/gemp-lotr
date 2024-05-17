@@ -116,6 +116,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("preventeffect", new PreventEffect());
         effectAppenderProducers.put("preventexert", new PreventExert());
         effectAppenderProducers.put("preventheal", new PreventCardEffectAppender());
+        effectAppenderProducers.put("preventspecialability", new PreventSpecialAbility());
         effectAppenderProducers.put("preventtwilight", new PreventEffect());
         effectAppenderProducers.put("preventwound", new PreventWound());
         effectAppenderProducers.put("putcardsfromdeckintohand", new PutCardsFromDeckIntoHand());

@@ -37,6 +37,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("endofturn", new EndOfTurn());
         triggerCheckers.put("exertedby", new ExertedBy());
         triggerCheckers.put("exerts", new Exerts());
+        triggerCheckers.put("exertsforspecialability", new ExertsForSpecialAbility());
         triggerCheckers.put("exertstoplay", new ExertsToPlay());
         triggerCheckers.put("fpdecidedifmoving", new FPDecidedIfMoving());
         triggerCheckers.put("fpdecidedtomove", new FPDecidedToMove());
