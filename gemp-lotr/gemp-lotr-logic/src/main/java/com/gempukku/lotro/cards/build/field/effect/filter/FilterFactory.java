@@ -270,6 +270,17 @@ public class FilterFactory {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return (actionContext) -> Filters.inSkirmishAgainst(filterableSource.getFilterable(actionContext));
                 });
+        parameterFilters.put("inskirmishagainstatleast",
+                (parameter, environment) -> {
+                    String[] split = parameter.split(",", 2);
+                    int count = Integer.parseInt(split[0]);
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(split[1], environment);
+                    return (actionContext) -> Filters.and(Filters.inSkirmish,
+                            (Filter) (game, physicalCard) -> {
+                                Filterable filterable = filterableSource.getFilterable(actionContext);
+                                return Filters.filter(game.getGameState().getSkirmish().getShadowCharacters(), game, filterable).size() >= count;
+                            });
+                });
         parameterFilters.put("loweststrength",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
