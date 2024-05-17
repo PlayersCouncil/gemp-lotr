@@ -25,13 +25,16 @@
 			Toil 2
 			Shadow
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: nazgul
+			}
 			effect: [
 				{
+				    type: drawCards
+				    count: 3
 				}
 			]
 		}
@@ -69,6 +72,22 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: your,culture(wraith),minion
+		        }
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(side(free people),condition)
+		        }
+		    }
 		]
 		gametext: Each time your [wraith] minion wins a skirmish, you may discard this condition to discard a Free Peoples condition from play.
 		lore: The wicked, flying beasts of the Ringwraiths snatched warriors from the battlefield and flung them like leaves in the wind.
@@ -104,6 +123,20 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+                type: trigger
+                trigger: {
+                    type: killed
+                    filter: companion
+                }
+                requires: {
+                    type: canSpot
+                    filter: nazgul,inSkirmish
+                }
+                effect: {
+                    type: addBurdens
+                }
+		    }
 		]
 		gametext: Each time a companion is killed in a skirmish involving a Nazgûl, add a burden.
 		lore: And also the Ring drew them.'
@@ -139,6 +172,22 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesSkirmish
+		            filter: companion
+		            against: culture(wraith),minion
+		        }
+		        requires: {
+		            type: fierceSkirmish
+		        }
+		        effect: {
+		            type: shuffleCardsFromDiscardIntoDrawDeck
+		            filter: choose(culture(wraith))
+		        }
+		    }
 		]
 		gametext: Each time a companion loses a fierce skirmish involving a [wraith] minion, you may shuffle a [wraith] card from your discard pile into your draw deck.
 		lore: Suddenly the foremost Rider spurred his horse forward.
@@ -176,13 +225,15 @@
 			Toil 2
 			Maneuver
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: nazgul
+			}
 			effect: [
 				{
+				    type: addBurdens
 				}
 			]
 		}
@@ -220,6 +271,27 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        effect: {
+		            type: transfer
+		            filter: self
+		            where: choose(companion,inSkirmishAgainst(your,nazgul),not(hasAttached(name(Lost in the Woods))))
+		            fromSupport: true
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: culture(wraith),minion,inSkirmishAgainst(bearer)
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: forest,site
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Skirmish:</b> Transfer this condition from your support area to a companion your Nazgûl is skirmishing. Limit 1 per companion.<br>Each [wraith] minion skirmishing bearer is strength +1 for each forest site you can spot.
 		lore: ""
@@ -255,6 +327,28 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: shadow
+		        requires: {
+		            type: canSpot
+		            filter: nazgul
+		        }
+		        cost: {
+		            type: revealCardsFromHand
+		            filter: choose(nazgul)
+		            memorize: revealedCard
+		        }
+		        effect: [
+		            {
+		                type: putCardsFromHandOnBottomOfDeck
+		                filter: memory(revealedCard)
+		            }
+		            {
+		                type: drawCards
+		            }
+		        ]
+		    }
 		]
 		gametext: <b>Shadow:</b> Spot a Nazgûl and reveal a Nazgûl from hand to place the revealed card beneath your draw deck and draw a card.
 		lore: I thought there were two or three black shapes.'
@@ -291,8 +385,23 @@
 		type: Possession
 		strength: 3
 		itemclass: Hand weapon
-		#target: a Nazgûl
+		target: nazgul
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer,name(The Witch-king)
+		        }
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
 		]
 		gametext: Bearer must be a Nazgûl.<br>If bearer is The Witch-king, each time he wins a skirmish, you may exert him to add a burden.
 		lore: Die now and curse in vain!' And with that he lifted high his sword and flames ran down the blade.
@@ -327,13 +436,21 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
 			cost: {
+			    type: revealHand
+			    memorize: revealedCards
 			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(culture(wraith),minion)
+				    amount: {
+				        type: forEachMatchingInMemory
+				        memory: revealedCards
+				        filter: culture(wraith),minion
+				    }
 				}
 			]
 		}
@@ -371,6 +488,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: canSpot
+		            filter: self,zone(support)
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 5
+		        }
+		        effect: {
+                    type: turnIntoMinion
+                    filter: self
+                    strength: 10
+                    vitality: 3
+                    keywords: fierce
+                    until: regroup
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfPhase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: removeAllTokens
+		            filter: self
+		        }
+		    }
 		]
 		gametext: <b>Maneuver:</b> Remove (5) to make this condition a <b>fierce</b> [wraith] minion until the start of the regroup phase that has 10 strength and 3 vitality, and cannot bear other cards. This card is still a condition.<br>At the start of the regroup phase, remove all tokens from here.
 		lore: ""
@@ -406,6 +554,44 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: choose(nazgul)
+		        }
+		        effect: {
+		            type: preventable
+		            player: free people
+		            text: Would you like to return a companion to hand to prevent adding token?
+		            cost: {
+		                type: returnToHand
+		                player: free people
+		                filter: choose(companion)
+		            }
+		            effect: {
+		                type: addTokens
+		                culture: wraith
+		                filter: self
+		            }
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger:{
+                    type: constantlyCheck
+		        }
+		        requires: {
+		            type: canSpotCultureTokens
+		            culture: wraith
+		            filter: self
+		            amount: 4
+		        }
+		        effect: {
+		            type: corruptRingBearer
+		        }
+		    }
 		]
 		gametext: <b>Regroup:</b> Discard your Nazgûl from play to add a [wraith] token here. The Free Peoples player may return a companion to hand to prevent the placement of that token.<br>When you can spot 4 [wraith] tokens on this condition, the Ring-bearer is corrupted.
 		lore: ""
@@ -441,6 +627,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: nazgul
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: companion
+		            memorize: playedCompanion
+		        }
+		        effect: {
+		            type: preventable
+		            player: free people
+		            text: Would you like to pay twilight cost again for {playedCompanion} to prevent exhausting it?
+		            cost: {
+		                type: addTwilight
+		                amount: {
+		                    type: forEachTwilightCostToPlay
+		                    filter: memory(playedCompanion)
+		                }
+		            }
+		            effect: {
+		                type: exhaust
+		                filter: memory(playedCompanion)
+		            }
+		        }
+		    }
 		]
 		gametext: To play, spot a Nazgûl.<br>Each time the Free Peoples player plays a companion, that companion is exhausted unless the Free Peoples player pays its twilight cost again.
 		lore: Encircled, with nowhere to retreat, Aragorn could only hope to drive back the Nazgûl.
@@ -475,12 +692,28 @@
 		culture: Wraith
 		twilight: 6
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 12
 		vitality: 3
 		site: 3
 		keywords: Fierce
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: assignedAgainst
+		            filter: self
+		            against: character,maxResistance(4)
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+                    type: addBurdens
+		        }
+		    }
 		]
 		gametext: <b>Fierce</b>.<br>Each time Úlairë Attëa is assigned to a fierce skirmish involving a character who has resistance 4 or less, you may exert Úlairë Attëa to add a burden.
 		lore: Hissed at me, he did. It gave me quite a shudder.'
@@ -515,11 +748,35 @@
 		culture: Wraith
 		twilight: 5
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 10
 		vitality: 3
 		site: 3
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+                    type: modifyStrength
+                    requires: {
+                        type: location
+                        filter: or(forest,dwelling)
+                    }
+                    filter: self
+                    amount: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+                    type: addKeyword
+                    requires: {
+                        type: location
+                        filter: or(forest,dwelling)
+                    }
+                    filter: self
+                    keyword: fierce
+		        }
+		    }
 		]
 		gametext: While Úlairë Cantëa is at a forest or dwelling site, he is strength +2 and <b>fierce</b>.
 		lore: It's from Hobbiton that this here black rider comes, unless there's more than one.'
@@ -554,11 +811,19 @@
 		culture: Wraith
 		twilight: 4
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
 		effects: [
+		    {
+		        type: modifier
+                modifier: {
+                    type: modifyStrength
+                    filter: character,inSkirmishAgainst(self),maxResistance(5)
+                    amount: -3
+                }
+		    }
 		]
 		gametext: Each character skirmishing Úlairë Lemenya who has resistance 5 or less is strength -3.
 		lore: Terror overcame Pippin and Merry, and they threw themselves flat on the ground.
@@ -593,12 +858,26 @@
 		culture: Wraith
 		twilight: 5
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 10
 		vitality: 3
 		site: 2
 		keywords: Fierce
 		effects: [
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+    		        filter: self
+		        }
+		        effect: {
+		            type: playSite
+		            number: {
+		                type: currentSiteNumber
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Fierce</b>.<br><b>Shadow:</b> Exert Úlairë Nelya to replace the fellowship's current site with a site from your adventure deck.
 		lore: There's been a strange customer asking for Mr. Baggins of Bag End, and he's only just gone.'
@@ -633,12 +912,37 @@
 		culture: Wraith
 		twilight: 4
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
 		keywords: Lurker
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: location
+		                filter: forest
+		            }
+		            filter: self
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: companion
+		                count: 6
+		            }
+		            filter: nazgul
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>While Úlairë Nertëa is at a forest site, he is strength +2.<br>While you can spot 6 companions, each Nazgûl is strength +2.
 		lore: Sauron's servants interrogate with terror and torture.
@@ -673,11 +977,38 @@
 		culture: Wraith
 		twilight: 4
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 9
 		vitality: 3
 		site: 3
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+                    type: played
+                    filter: self
+		        }
+		        cost: {
+		            type: spot
+		            filter: choose(companion,wounded)
+		            memorize: spottedCompanion
+		        }
+		        effect: [
+                    {
+                        type: revealTopCardsOfDrawDeck
+                        count: {
+                            type: forEachWound
+                            filter: memory(spottedCompanion)
+                        }
+                        memorize: revealedCards
+                    }
+                    {
+                        type: putCardsFromDeckIntoHand
+                        filter: all(memory(spottedCompanion),culture(wraith))
+                    }
+                ]
+		    }
 		]
 		gametext: When you play Úlairë Otsëa, you may spot a companion who has X wounds to reveal the top X cards of your draw deck. Take each [wraith] card revealed this way into hand.
 		lore: The riding figure sat quite still with its head bowed, as if listening.
@@ -712,12 +1043,23 @@
 		culture: Wraith
 		twilight: 6
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 12
 		vitality: 3
 		site: 3
 		keywords: Fierce
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: playNextSite
+		        }
+		    }
 		]
 		gametext: <b>Fierce</b>.<br>Each time Úlairë Toldëa wins a skirmish, you may play the fellowship's next site.
 		lore: The terrifying pursuit of the Nazgûl on their Black Steeds drives their victims headlong into the wild.
@@ -752,15 +1094,14 @@
 		culture: Wraith
 		twilight: 8
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 14
 		vitality: 4
 		site: 3
 		keywords: [
 			Fierce
 			Toil 2
-		]
-		effects: [
+			Muster
 		]
 		gametext: <b>Fierce</b>. <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper> <b>Muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
 		lore: ...a shape, black-mantled, huge and threatening.

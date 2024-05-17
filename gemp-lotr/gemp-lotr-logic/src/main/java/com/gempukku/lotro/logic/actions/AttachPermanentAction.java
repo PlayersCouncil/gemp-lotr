@@ -102,7 +102,7 @@ public class AttachPermanentAction extends AbstractCostToEffectAction {
             final DiscountEffect discount = getNextPotentialDiscount();
             if (discount != null) {
                 if (_cardToAttach.getBlueprint().getSide() == Side.SHADOW) {
-                    int twilightCost = game.getModifiersQuerying().getTwilightCost(game, _cardToAttach, _target, _twilightModifier, false);
+                    int twilightCost = game.getModifiersQuerying().getTwilightCostToPlay(game, _cardToAttach, _target, _twilightModifier, false);
                     int requiredDiscount = Math.max(0, twilightCost - game.getGameState().getTwilightPool() - getProcessedDiscount() - getPotentialDiscount(game));
                     discount.setMinimalRequiredDiscount(requiredDiscount);
                 }

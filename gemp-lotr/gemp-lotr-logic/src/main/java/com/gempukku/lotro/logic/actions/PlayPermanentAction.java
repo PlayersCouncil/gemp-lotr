@@ -88,7 +88,7 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
             final DiscountEffect discount = getNextPotentialDiscount();
             if (discount != null) {
                 if (_permanentPlayed.getBlueprint().getSide() == Side.SHADOW) {
-                    int twilightCost = game.getModifiersQuerying().getTwilightCost(game, _permanentPlayed, null, _twilightModifier, _ignoreRoamingPenalty);
+                    int twilightCost = game.getModifiersQuerying().getTwilightCostToPlay(game, _permanentPlayed, null, _twilightModifier, _ignoreRoamingPenalty);
                     int requiredDiscount = Math.max(0, twilightCost - game.getGameState().getTwilightPool() - getProcessedDiscount() - getPotentialDiscount(game));
                     discount.setMinimalRequiredDiscount(requiredDiscount);
                 }

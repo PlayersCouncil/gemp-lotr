@@ -486,6 +486,20 @@ public class ValueResolver {
                         return sum;
                     };
                 };
+            } else if (type.equalsIgnoreCase("foreachtwilightcosttoplay")) {
+                FieldUtils.validateAllowedFields(object, "filter");
+                final String filter = FieldUtils.getString(object.get("filter"), "filter");
+
+                final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+
+                return actionContext -> (game, cardAffected) -> {
+                    int result = 0;
+                    final Filterable filterable = filterableSource.getFilterable(actionContext);
+                    for (PhysicalCard physicalCard : Filters.filterActive(game, filterable)) {
+                        result += game.getModifiersQuerying().getTwilightCostToPlay(game, physicalCard, null, 0, false);
+                    }
+                    return result;
+                };
             } else if (type.equalsIgnoreCase("twilightCostInMemory")) {
                 FieldUtils.validateAllowedFields(object, "multiplier", "memory");
                 final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);

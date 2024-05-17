@@ -49,7 +49,7 @@ public class PlayUtils {
                     @Override
                     public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                         if (card.getBlueprint().getSide() == Side.SHADOW) {
-                            final int twilightCostOnTarget = game.getModifiersQuerying().getTwilightCost(game, card, physicalCard, twilightModifier, false);
+                            final int twilightCostOnTarget = game.getModifiersQuerying().getTwilightCostToPlay(game, card, physicalCard, twilightModifier, false);
                             int potentialDiscount = game.getModifiersQuerying().getPotentialDiscount(game, card);
                             return twilightCostOnTarget - potentialDiscount <= game.getGameState().getTwilightPool() - withTwilightRemoved;
                         } else {

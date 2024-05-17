@@ -138,6 +138,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("reducearcherytotal", new ReduceArcheryTotal());
         effectAppenderProducers.put("refreshself", new RefreshSelf());
         effectAppenderProducers.put("reinforcetokens", new ReinforceTokens());
+        effectAppenderProducers.put("removealltokens", new RemoveAllTokens());
         effectAppenderProducers.put("removeburdens", new RemoveBurdens());
         effectAppenderProducers.put("removecardsindiscardfromgame", new RemoveCardsInDiscardFromGame());
         effectAppenderProducers.put("removecharacterfromskirmish", new RemoveCharacterFromSkirmish());
@@ -184,6 +185,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("transfer", new Transfer());
         effectAppenderProducers.put("transferfromdiscard", new TransferFromDiscard());
         effectAppenderProducers.put("transfertosupport", new TransferToSupport());
+        effectAppenderProducers.put("turnintominion", new TurnIntoMinion());
         effectAppenderProducers.put("wound", new Wound());
     }
 

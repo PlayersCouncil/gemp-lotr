@@ -19,11 +19,11 @@ public class PlayConditions {
     public static boolean canPayForShadowCard(LotroGame game, PhysicalCard self, Filterable validTargetFilter, int withTwilightRemoved, int twilightModifier, boolean ignoreRoamingPenalty) {
         int minimumCost;
         if (validTargetFilter == null)
-            minimumCost = game.getModifiersQuerying().getTwilightCost(game, self, null, twilightModifier, ignoreRoamingPenalty);
+            minimumCost = game.getModifiersQuerying().getTwilightCostToPlay(game, self, null, twilightModifier, ignoreRoamingPenalty);
         else {
             minimumCost = 0;
             for (PhysicalCard potentialTarget : Filters.filterActive(game, validTargetFilter)) {
-                minimumCost = Math.min(minimumCost, game.getModifiersQuerying().getTwilightCost(game, self, potentialTarget, twilightModifier, ignoreRoamingPenalty));
+                minimumCost = Math.min(minimumCost, game.getModifiersQuerying().getTwilightCostToPlay(game, self, potentialTarget, twilightModifier, ignoreRoamingPenalty));
             }
         }
 

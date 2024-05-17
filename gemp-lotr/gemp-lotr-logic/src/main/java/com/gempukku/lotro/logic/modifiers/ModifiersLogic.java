@@ -478,7 +478,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
-    public int getTwilightCost(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty) {
+    public int getTwilightCostToPlay(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty) {
         LoggingThreadLocal.logMethodStart(physicalCard, "getTwilightCost");
         try {
             int result = physicalCard.getBlueprint().getTwilightCost() + twilightCostModifier;

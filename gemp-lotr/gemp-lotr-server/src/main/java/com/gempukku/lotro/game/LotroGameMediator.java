@@ -18,6 +18,7 @@ import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -207,7 +208,7 @@ public class LotroGameMediator {
                 sb.append("<br><br><b>Effective stats:</b>");
                 try {
                     PhysicalCard target = card.getAttachedTo();
-                    int twilightCost = _lotroGame.getModifiersQuerying().getTwilightCost(_lotroGame, card, target, 0, false);
+                    int twilightCost = _lotroGame.getModifiersQuerying().getTwilightCostToPlay(_lotroGame, card, target, 0, false);
                     sb.append("<br><b>Twilight cost:</b> ")
                             .append(twilightCost);
                 } catch (UnsupportedOperationException ignored) {
