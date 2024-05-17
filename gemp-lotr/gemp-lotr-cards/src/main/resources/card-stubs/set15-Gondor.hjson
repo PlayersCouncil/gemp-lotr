@@ -30,17 +30,8 @@
 			Ranger
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Skirmish:</b> Exert Aragorn to make a hunter companion strength +1.
 		lore: Ride out with me. Ride out and meet them.
 		promotext: ""
@@ -82,17 +73,8 @@
 			Ranger
 			Hunter 2
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>. <b>Hunter 2</b>. <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper><br><b>Maneuver:</b> Add a threat to exert a non- hunter minion with strength less than Aragorn.
 		lore: I will follow the Orcs....'
 		promotext: ""
@@ -128,17 +110,8 @@
 		type: Possession
 		itemclass: Ranged weapon
 		#target: title(Aragorn)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Aragorn.<br>He is an <b>archer</b>.<br><b>Archery:</b> Add a threat to wound a minion with the lowest strength.
 		lore: The bow can reach what the sword cannot.
 		promotext: ""
@@ -180,17 +153,8 @@
 			Ranger
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>At the start of each fellowship phase, you may add (1) to heal a ranger.
 		lore: Curse the Southrons!'
 		promotext: ""
@@ -229,17 +193,8 @@
 			Fortification
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fortification</b>. This condition is twilight cost -1 for each [gondor] ranger you spot.<br><b>Skirmish:</b> Exert 2 [gondor] Men to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
 		lore: In times of war, the beauty of the walls matters little.
 		promotext: ""
@@ -280,17 +235,8 @@
 			Ranger
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>Each time this companion wins a skirmish, you may make a [gondor] ranger strength +2 until the regroup phase.
 		lore: We come to ambush the Men of Harad.'
 		promotext: ""
@@ -324,17 +270,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Archery:</b> Exert Legolas and exert Aragorn to wound a minion.<br><b>Skirmish:</b> Exert Aragorn and spot Gimli to make a minion strength -1 (or -3 if Aragorn and Gimli are hunters).<br><b>Regroup:</b> Exert Gimli and spot Legolas to draw a card (or 2 cards if Gimli and Legolas are hunters).
 		lore: ""
 		promotext: ""
@@ -375,17 +312,8 @@
 			Ranger
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>.<br>When this companion is in your starting fellowship, he is twilight cost -1.<br><b>Skirmish:</b> Remove a [gondor] token or exert a [gondor] Man to make the site number of a minion +2.
 		lore: Rangers use all five senses to hunt their prey.
 		promotext: ""
@@ -421,17 +349,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a [gondor] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [gondor] Man.<br>While you can spot a roaming minion, bearer is strength +1.<br><b>Maneuver:</b> Exert bearer twice to discard a roaming minion.
 		lore: Most Rangers of Ithilien carried spears, bows, and swords while marching.
 		promotext: ""
@@ -473,17 +392,8 @@
 			Ranger
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Skirmish:</b> Exert Mablung to wound a roaming minion he is skirmishing.
 		lore: We come to teach them another lesson.'
 		promotext: ""
@@ -525,17 +435,8 @@
 			Ranger
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>.<br>While you can spot 2 [gondor] rangers, Madril is twilight cost -2.<br>At the start of the maneuver phase, each minion is site number +1 for each threat you can spot until the start of the regroup phase.
 		lore: For that is the ruin of Osgiliath....'
 		promotext: ""
@@ -569,17 +470,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time Aragorn wins a skirmish, you may make a hunter [dwarven] companion or hunter [elven] companion strength +1 until the regroup phase.<br><b>Skirmish:</b> Discard this condition to make a [gondor] Man strength +2.
 		lore: ...we no longer need any trail to tell us which way....'
 		promotext: ""
@@ -613,20 +505,13 @@
 		twilight: 0
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -668,17 +553,8 @@
 			Fortification
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fortification</b>. The twilight cost of this condition is -1 for each [gondor] ranger you spot.<br><b>Skirmish:</b> Exert a [gondor] Man or spot 2 rangers to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
 		lore: The doors of Minas Tirith were meant to keep out more than Orcs.
 		promotext: ""
@@ -715,17 +591,8 @@
 		resistance: 1
 		itemclass: Cloak
 		#target: a [gondor] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [gondor] Man.<br>While bearer is a ranger or at a forest site, each minion skirmishing bearer is site number +2.<br><b>Skirmish:</b> Add a threat or exert bearer to make a minion skirmishing a [gondor] Man site number +2.
 		lore: ""
 		promotext: ""
@@ -766,17 +633,8 @@
 			Ranger
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>At the start of each skirmish involving this companion and a roaming minion, you may reinforce a [gondor] token.
 		lore: We have not found what we sought....'
 		promotext: ""
@@ -813,17 +671,8 @@
 			Fortification
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fortification</b>. Characters skirmishing bearer cannot take wounds from losing a skirmish involving bearer.<br><b>Skirmish:</b> Exert a [gondor] Man or spot 3 rangers to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
 		lore: ""
 		promotext: ""
@@ -864,17 +713,8 @@
 			Ranger
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>This companion is strength +1 for each roaming minion you can spot.
 		lore: Their faces were hooded and masked with green, except for their eyes....
 		promotext: ""

@@ -23,17 +23,8 @@
 		type: Condition
 		strength: 1
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish you may transfer this condition to a [rohan] Man.<br>At the end of each turn, if bearer did not win a skirmish this turn, return this condition to hand.
 		lore: Bring it down! Bring it down! Bring it down!
 		promotext: ""
@@ -72,17 +63,8 @@
 		vitality: 3
 		resistance: 7
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Valiant</b>.<br>Éomer is strength +2 for each wound on each minion he is skirmishing.
 		lore: Now is the hour, Riders of Rohan, oaths you have taken! Now, fulfill them all! To Lord and Land!
 		promotext: ""
@@ -121,17 +103,8 @@
 		vitality: 3
 		resistance: 7
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Valiant</b>.<br><b>Fellowship:</b> Play a [rohan] companion with a twilight cost of 3 or more; his or her twilight cost is -1.
 		lore: It's tradition for the women of the court to farewell the men.
 		promotext: ""

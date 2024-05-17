@@ -22,20 +22,13 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -72,17 +65,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a Nazgûl wins a skirmish, you may exert 2 Nazgûl (or a Nazgûl twice) to add a threat.<br><b>Assignment:</b> Spot a Nazgûl and remove (4) to play a Nazgûl from your discard pile.
 		lore: ...a blind fear and a deadly cold fell on them. Cowering they looked up.
 		promotext: ""
@@ -116,17 +100,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Response:</b> If a Nazgûl is about to take a wound, remove a threat to prevent that wound.
 		lore: Three times is a threat. They feel us here....'
 		promotext: ""
@@ -165,17 +140,8 @@
 		vitality: 3
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>Úlairë Attëa is strength +1 for every 3 twilight tokens you can spot.
 		lore: The Nazgûl were strongest, and most terrifying, at night.
 		promotext: ""
@@ -214,17 +180,8 @@
 		vitality: 2
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>When you play Úlairë Lemenya, you may remove (1) to add a threat for each Free Peoples culture you can spot.
 		lore: Soon there could be no doubt: three or four tall black figures were standing on the slope, looking down on them.
 		promotext: ""
@@ -263,17 +220,8 @@
 		vitality: 3
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>While you can spot 6 companions, [wraith] minions cannot take wounds (except during skirmish phases).<br><b>Skirmish:</b> If this minion is mounted, exert him twice to wound a companion bearing a [wraith] condition.
 		lore: ""
 		promotext: ""

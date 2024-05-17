@@ -23,17 +23,8 @@
 		type: Condition
 		strength: 2
 		#target: a [wraith] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [wraith] minion.<br>When you play this, you may draw a card.<br>Each time bearer wins a skirmish, you may transfer this condition to another [wraith] minion.
 		lore: The Nazgûl's true forms were revealed to him, shining like ghostly Kings.
 		promotext: ""
@@ -72,17 +63,8 @@
 		vitality: 3
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>While you can spot 5 twilight tokens in the twilight pool and another [wraith] card, Úlairë Attëa is strength +3.
 		lore: Those that knew the most power as kings were placed in particular ways for the will of Sauron.
 		promotext: ""
@@ -121,17 +103,8 @@
 		vitality: 4
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br><b>Maneuver:</b> Spot 6 companions and discard a Nazgûl from hand to wound an unbound companion.
 		lore: The Nine Riders were embodiments of Sauron's will, searching all of Middle-earth for his prize.
 		promotext: ""
@@ -170,17 +143,8 @@
 		vitality: 2
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>Úlairë Lemenya is strength +1 for each [wraith] possession in your discard pile.
 		lore: Do you wish them to find you? They are terrible!'
 		promotext: ""
@@ -219,17 +183,8 @@
 		vitality: 2
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>When you play Úlairë Nertëa, name a race. The Free Peoples player cannot assign Úlairë Nertëa to skirmish a companion of the named race.
 		lore: Some accepted Sauron's gift for glory and a notion of great deeds.
 		promotext: ""
@@ -268,17 +223,8 @@
 		vitality: 3
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>Úlairë Toldëa cannot be assigned to skirmish the same companion in a fierce skirmish that he has already been assigned to this turn.
 		lore: Open, in the name of Mordor!' said a voice thin and menacing.
 		promotext: ""
@@ -317,17 +263,8 @@
 		vitality: 4
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Discard a Nazgûl from hand to make The Witch-king strength +1 (or strength +2 if you can spot that discarded Nazgûl).
 		lore: A great king and sorcerer he was of old, and now he wields a deadly fear.'
 		promotext: ""

@@ -26,17 +26,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot Aragorn, Arwen is strength +1 and resistance +2.<br><b>Skirmish:</b> Remove an [elven] token to make a minion skirmishing Arwen strength -2.
 		lore: I do not fear them.
 		promotext: ""
@@ -70,17 +61,8 @@
 		culture: Elven
 		twilight: 2
 		type: Follower
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (3). <helper>(At the start of the maneuver phase, you may add (3) to transfer this to a companion.)</helper><br>Each time you transfer this to a companion, except an [elven] companion, exert bearer.<br>Bearer is an <b>archer</b>.
 		lore: Elven archers were seldom seen before it was too late.
 		promotext: ""
@@ -115,17 +97,8 @@
 		type: Possession
 		itemclass: Ranged weapon
 		#target: title(an Elf)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an Elf.<br>Bearer is an <b>archer</b>.
 		lore: No finer bows could defend Helm's Deep than those of the Golden Wood.
 		promotext: ""
@@ -162,17 +135,8 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While this companion is bearing a possession, he is strength +2.<br><b>Maneuver:</b> Exert this companion to place an [elven] card from your discard pile on the bottom of your draw deck.
 		lore: Elven warriors used their strength and wisdom equally in battle.
 		promotext: ""
@@ -206,17 +170,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time Legolas wins a skirmish, you may heal a hunter [dwarven] Dwarf or hunter [gondor] Man.<br><b>Skirmish:</b> Discard this condition to make an [elven] Elf strength +2.
 		lore: ...not even my eyes can see him, my good Legolas....'
 		promotext: ""
@@ -252,17 +207,8 @@
 		type: Artifact
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time an Elf wins a skirmish, you may exert that Elf or Aragorn to place an [elven] token here.<br>At the start of each maneuver phase, you may remove an [elven] token here to draw a card.
 		lore: ""
 		promotext: ""
@@ -300,17 +246,8 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an Elf.<br>While the fellowship is at a battleground site, Haldir is strength +2.<br>While the fellowship is at a forest site, Haldir is an <b>archer</b>.
 		lore: ...since you come with an Elf of our kindred, we are willing to befriend you, as Elrond asked....'
 		promotext: ""
@@ -349,17 +286,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Hunter 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Regroup:</b> Exert 2 hunter companions to draw a card.
 		lore: We have already overtaken some of those that we are hunting....'
 		promotext: ""
@@ -401,17 +329,8 @@
 			Archer
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Archer</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Archery:</b> Exert Legolas to make the fellowship archery total +1 for each hunter minion you can spot (limit +3).
 		lore: You would die before your stroke fell!
 		promotext: ""
@@ -445,20 +364,13 @@
 		twilight: 0
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -495,20 +407,13 @@
 		twilight: 2
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -547,17 +452,8 @@
 		type: Artifact
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 3 Elves.<br>Each time you are about to draw a card, you may exert an Elf to look at the top three cards of your draw deck instead. Take a Free Peoples card into your hand and place the other cards on the bottom of your draw deck.
 		lore: ""
 		promotext: ""
@@ -591,20 +487,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -641,17 +530,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 3 Elves.<br>While you can spot an [elven] follower, the twilight cost of each Shadow possession is +1.<br><b>Skirmish:</b> Discard this condition to make an [elven] companion strength +1 for each archer companion you can spot.
 		lore: ""
 		promotext: ""
@@ -687,17 +567,8 @@
 		strength: 1
 		itemclass: Hand weapon
 		#target: title(an Elf)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an Elf.<br>Each minion skirmishing bearer is strength -1 for each wound on that minion.<br><b>Skirmish:</b> Exert bearer to exert a minion skirmishing bearer.
 		lore: Elven weapons remain in use for centuries.
 		promotext: ""
@@ -732,17 +603,8 @@
 		twilight: 2
 		type: Follower
 		resistance: 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, you may add (1) to transfer this to a companion.)</helper><br>Each time you transfer this to a companion, you may exert an Elf to make the fellowship's current site a <b>forest</b> until the end of the turn.
 		lore: ""
 		promotext: ""
@@ -776,17 +638,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Archery:</b> Exert Legolas and exert Aragorn to wound a minion.<br><b>Skirmish:</b> Exert Aragorn and spot Gimli to make a minion strength -1 (or -3 if Aragorn and Gimli are hunters).<br><b>Regroup:</b> Exert Gimli and spot Legolas to draw a card (or 2 cards if Gimli and Legolas are hunters).
 		lore: ""
 		promotext: ""

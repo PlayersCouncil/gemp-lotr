@@ -25,17 +25,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: title(Boromir)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Boromir.<br>He is <b>damage +1</b>.<br><b>Skirmish:</b> If Boromir is not assigned to a skirmish, discard a [gondor] card borne by him to have him replace an unbound Hobbit skirmishing a minion.
 		lore: Its strength pales next to that of the man wielding it.
 		promotext: ""
@@ -74,17 +65,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Ranger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>.<br><b>Fellowship:</b> Add (2) to heal Boromir.
 		lore: ...seated a little apart was a tall man with a fair and noble face... proud and stern of glance.
 		promotext: ""
@@ -118,20 +100,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -168,17 +143,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fellowship:</b> Spot a [gondor] Man and add (2) to make each unbound companion strength +1 until the regroup phase (limit +1).
 		lore: To know that I lived and walked the earth was a blow to his heart, I deem; for he knew it not till now.'
 		promotext: ""
@@ -212,20 +178,13 @@
 		twilight: 0
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -267,17 +226,8 @@
 		vitality: 3
 		resistance: 7
 		keywords: Ranger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>.<br><b>Skirmish:</b> Exert Faramir to make him strength +1 for each wound on the Ring-bearer.
 		lore: We do not want the escapes of Mirkwood in Ithilien.'
 		promotext: ""
@@ -313,17 +263,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: title(Faramir)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Faramir.<br>He is <b>damage +1</b>.<br>Each minion skirmishing Faramir at a battleground or forest site is roaming.
 		lore: There will be hard handstrokes nigh at hand ere the day is full.'
 		promotext: ""
@@ -360,17 +301,8 @@
 		resistance: 1
 		itemclass: Mount
 		#target: a knight
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a knight.<br>Bearer is <b>damage +1</b>.<br>Each time the fellowship moves from a mountain site, add (2).
 		lore: A skilled cavalry augments Minas Tirith's mighty defenses.
 		promotext: ""
@@ -407,17 +339,8 @@
 			Toil 2
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Toil 2</b>. <helper>(For each [gondor] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Skirmish:</b> If a [gondor] companion is not assigned to a skirmish, discard this condition to have him or her replace an unbound companion skirmishing a minion.
 		lore: Boromir wouldn't fail the other Hobbits as he had Frodo.
 		promotext: ""
@@ -451,17 +374,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Discard this condition to heal a [gondor] Man (or to heal 2 [gondor] Men if you can spot a roaming minion).
 		lore: He sprang down the steps and away, leaping down the path.
 		promotext: ""
@@ -495,17 +409,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Discard this condition to make a [gondor] Man strength +1 for each of the following that is true: he or she is at a battleground site; he or she has resistance 4 or more; he or she is bearing a hand weapon; he or she is skirmishing a roaming minion.
 		lore: So long as foes were standing, so too would Aragorn.
 		promotext: ""
@@ -539,17 +444,8 @@
 		twilight: 2
 		type: Condition
 		#target: a [gondor] companion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [gondor] companion. Limit 1 per bearer.<br><b>Skirmish:</b> Discard this condition to discard a possession borne by a minion skirmishing bearer.
 		lore: Before he ever sat the throne, Aragorn had proven himself a great leader to the people of Gondor.
 		promotext: ""

@@ -22,20 +22,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -75,20 +68,13 @@
 			Stealth
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -129,17 +115,8 @@
 		strength: 3
 		vitality: 3
 		resistance: 8
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While Farmer Maggot is at a dwelling or forest site, he is strength +4.
 		lore: I didn't like the looks of him; and when Grip came out, he took one sniff and let out a yelp as if he had been stung....'
 		promotext: ""
@@ -182,17 +159,8 @@
 			Ring-bound
 			CAN_START_WITH_RING
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bearer</b>. <b>Ring-bound</b>.<br>At the start of the regroup phase, you may exert Frodo to make him gain <b>muster</b> until the end of the regroup phase. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
 		lore: I will take the Ring... though I do not know the way.'
 		promotext: ""
@@ -227,17 +195,8 @@
 		type: Condition
 		#target: a Hobbit
 		keywords: Toil 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Toil 2</b>. <helper>(For each [shire] character you exert when playing this, its twilight cost is -2.)</helper><br>Bearer must be a Hobbit. Limit 1 per bearer.<br>Each time the fellowship moves from a dwelling or forest site, remove (1).
 		lore: What about second breakfast?'
 		promotext: ""
@@ -273,17 +232,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a Hobbit
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Hobbit.
 		lore: Strap these on....'
 		promotext: ""
@@ -320,20 +270,13 @@
 			Stealth
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -374,17 +317,8 @@
 		strength: 3
 		vitality: 4
 		resistance: 9
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: For each other unbound companion assigned to a skirmish, Merry is strength +2.
 		lore: We can't leave Frodo! Pippin and I always intended to go wherever he went, and we still do.'
 		promotext: ""
@@ -421,20 +355,13 @@
 			Toil 2
 			Fellowship
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -475,17 +402,8 @@
 		strength: 3
 		vitality: 4
 		resistance: 9
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> If Pippin is not assigned to a skirmish, spot an unbound companion who has less resistance than Pippin to have Pippin replace him or her in a skirmish.
 		lore: Merry and he had drawn their swords, but the Orcs did not wish to fight....
 		promotext: ""
@@ -521,17 +439,8 @@
 		resistance: 2
 		itemclass: Box
 		#target: a Hobbit
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Hobbit.<br><b>Fellowship:</b> Discard this possession to remove a burden.<br><b>Skirmish:</b> If bearer is an unbound Hobbit, discard this possession to prevent him or her from being overwhelmed unless his or her strength is tripled.
 		lore: ""
 		promotext: ""
@@ -570,17 +479,8 @@
 		vitality: 4
 		resistance: 10
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bound</b>.<br>Each other companion is resistance +1.
 		lore: I'm coming too, or neither of us is going. I'll knock holes in all the boats first.'
 		promotext: ""
@@ -617,17 +517,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: title(Bilbo, Frodo, or Sam)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Bilbo, Frodo, or Sam.<br><b>Maneuver:</b> If bearer is Bilbo or Frodo, exert him to make another companion resistance +2 until the regroup phase. If bearer is Sam, each time he wins a skirmish, you may remove a burden.
 		lore: This blade has dealt many wounds, by many hands.
 		promotext: ""
@@ -661,20 +552,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -711,20 +595,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -761,20 +638,13 @@
 		twilight: 0
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}

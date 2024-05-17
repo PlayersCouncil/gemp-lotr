@@ -25,17 +25,8 @@
 			Pipeweed
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Pipeweed</b>. To play, spot a Hobbit.<br><b>Skirmish:</b> Discard a pipeweed from play to cancel a skirmish involving an unbound Hobbit.
 		lore: It feels good, and it smells good.'
 		promotext: ""
@@ -73,17 +64,8 @@
 		strength: 3
 		vitality: 4
 		resistance: 8
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Add 1 to the number of Ents you can spot.<br><b>Regroup:</b> Exert Merry to place a pipeweed from your discard pile beneath your draw deck.
 		lore: I think we may have made a mistake leaving the Shire, Pippin.'
 		promotext: ""
@@ -120,17 +102,8 @@
 			Pipeweed
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Pipeweed</b>. To play, spot an unbound Hobbit.<br><b>Regroup:</b> Discard a pipeweed from play to remove a threat.<br><b>Regroup:</b> Discard a pipeweed from play to discard a minion.
 		lore: These are the Hornblower brandmarks....'
 		promotext: ""
@@ -168,17 +141,8 @@
 		strength: 3
 		vitality: 4
 		resistance: 8
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Add 1 to the number of Ents you can spot.<br><b>Maneuver:</b> Discard 2 pipeweed cards from play to remove a burden.
 		lore: Ents are – well Ents are all different for one thing.
 		promotext: ""
@@ -215,17 +179,8 @@
 			Pipeweed
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Pipeweed</b>. To play, spot an unbound Hobbit.<br><b>Skirmish:</b> Discard a pipeweed from play to make an unbound Hobbit strength +2.<br><b>Regroup:</b> Discard this pipeweed from play to play a pipeweed from your draw deck. Reshuffle your draw deck.
 		lore: ""
 		promotext: ""
@@ -262,17 +217,8 @@
 			Pipeweed
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Pipeweed</b>. To play, spot a Hobbit.<br><b>Skirmish:</b> Discard a pipeweed from play to prevent an unbound Hobbit from being overwhelmed unless that Hobbit's strength is tripled.
 		lore: How it came here, I can't imagine. For Saruman's private use, I fancy.'
 		promotext: ""

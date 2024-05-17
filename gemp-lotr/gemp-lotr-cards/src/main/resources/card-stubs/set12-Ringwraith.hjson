@@ -26,17 +26,8 @@
 		vitality: 3
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>This minion is strength +1 for each companion you can spot.
 		lore: The Nine are abroad again. They have crossed the River secretly and are moving westward. They have taken the guise of riders in black.'
 		promotext: ""
@@ -70,20 +61,13 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -120,17 +104,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time you play a Nazgûl, you may heal the Ring-bearer twice to add a burden.
 		lore: He felt that he had only to slip it on, and then he would be safe.
 		promotext: ""
@@ -167,20 +142,13 @@
 			Toil 2
 			Shadow
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -217,23 +185,16 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		]
@@ -270,17 +231,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Transfer this condition from your support area to a character skirmishing a Nazgûl.<br>Each time a wound is removed from bearer, add a burden.
 		lore: I am wounded... wounded; it will never really heal.'
 		promotext: ""
@@ -317,20 +269,13 @@
 			Toil 2
 			Shadow
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -369,17 +314,8 @@
 		strength: 1
 		itemclass: Hand weapon
 		#target: a Nazgûl
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Nazgûl.<br>While bearer is at a battleground or forest site, he is strength +1.
 		lore: Fear and terror may be the greatest weapons the Nazgûl wield, but their steel is just as perilous.
 		promotext: ""
@@ -413,17 +349,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Transfer this condition from your support area to a character skirmishing a Nazgûl.<br>The Free Peoples player cannot use bearer's special abilities.
 		lore: Then suddenly he seemed to see me, and he laughed at me. It was cruel. It was like being stabbed with knives.'
 		promotext: ""
@@ -457,17 +384,8 @@
 		twilight: 2
 		type: Condition
 		#target: title(an unbound companion)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [wraith] minion. Bearer must be an unbound companion. Limit 1 per bearer.<br>At the end of each assignment phase, if bearer is not assigned to a skirmish and a companion who does not bear a [wraith] condition is, add a burden.
 		lore: ""
 		promotext: ""
@@ -503,17 +421,8 @@
 		vitality: 1
 		itemclass: Mount
 		#target: a Nazgûl
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Nazgûl.<br>While bearer is at a battleground or forest site, he is <b>fierce</b>.<br><b>Assignment:</b> Make the Free Peoples player assign bearer to an unbound companion bearing a [wraith] condition.
 		lore: ...why do these black horses endure such riders?'
 		promotext: ""
@@ -549,17 +458,8 @@
 		strength: 1
 		itemclass: Mount
 		#target: a Nazgûl
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Nazgûl.<br>Bearer gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>Each time bearer wins a skirmish, you may draw 2 cards.
 		lore: ... the Black Riders rode like a gale....
 		promotext: ""
@@ -598,17 +498,8 @@
 		vitality: 3
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Remove (2) and discard a [wraith] card from hand to make Úlairë Attëa strength +3.
 		lore: Frodo thought that he heard a faint hiss as of venomous breath and felt a thin piercing chill.
 		promotext: ""
@@ -647,17 +538,8 @@
 		vitality: 3
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br><b>Assignment:</b> Assign Úlairë Cantëa to a companion who has resistance 0.<br><b>Skirmish:</b> Spot 6 companions and another [wraith] card to kill a companion Úlairë Cantëa is skirmishing.
 		lore: Flee them! Speak no words to them! They are deadly.'
 		promotext: ""
@@ -699,17 +581,8 @@
 			Fierce
 			Toil 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>. <b>Toil 1</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -1.)</helper><br><b>Response:</b> If you are playing a [wraith] event that has toil X, exert Úlairë Enquëa to reduce that event's twilight cost by X.
 		lore: ...the Shire is no longer any protection to you.'
 		promotext: ""
@@ -747,17 +620,8 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play Úlairë Lemenya, you may play a [wraith] mount from your discard pile.
 		lore: Out of the gate in the trees that they had just left rode a Black Rider.
 		promotext: ""
@@ -796,17 +660,8 @@
 		vitality: 3
 		site: 2
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>Each time Úlairë Nelya wins a skirmish, you may draw a card.
 		lore: ...peril is now both before you and behind you, and upon either side.'
 		promotext: ""
@@ -844,17 +699,8 @@
 		strength: 9
 		vitality: 2
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: The twilight cost of each mount is -1.<br>While Úlairë Nertëa is mounted, each Nazgûl is strength +1 and has <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
 		lore: Watch every shadow! ...Black horsemen have passed through Bree.'
 		promotext: ""
@@ -892,17 +738,8 @@
 		strength: 9
 		vitality: 3
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Shadow:</b> Exert Úlairë Otsëa and discard a [wraith] condition from hand to discard a Free Peoples condition from play.
 		lore: We can feel their presence – it troubled our hearts, as soon as we came here, and before we saw them; they feel ours more keenly.'
 		promotext: ""
@@ -941,17 +778,8 @@
 		vitality: 3
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>When you play Úlairë Toldëa, you may exert him to take a [wraith] event from your discard pile into hand.
 		lore: So black were they that they seemed like black holes in the deep shade behind them.
 		promotext: ""
@@ -985,17 +813,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot 6 companions, each Nazgûl is strength +3.<br><b>Skirmish:</b> Discard this condition to heal a Nazgûl.
 		lore: The power of their master is in them, and they stand or fall by him.'
 		promotext: ""
@@ -1029,17 +848,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Discard this condition to make a Nazgûl strength +1 for each of the following that is true: he is at a battleground or forest site; he is skirmishing a companion who has resistance 4 or less; he is bearing a possession; he is in a fierce skirmish.
 		lore: Who goes there?'
 		promotext: ""
@@ -1078,17 +888,8 @@
 		vitality: 4
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>The Witch-king is twilight cost -1 for each wound on the Ring-bearer.<br>Each time a companion is played, you may reveal this card from hand to exert the Ring-bearer.
 		lore: He sprang forward and bore down on Frodo.
 		promotext: ""
@@ -1125,17 +926,8 @@
 		strength: 2
 		itemclass: Mount
 		#target: a Nazgûl
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Nazgûl.<br>If bearer is The Witch-king, after all skirmishes and fierce skirmishes have been resolved, you may exert him twice to make him participate in one additional assignment and skirmish phase.
 		lore: The great shadow descended like a falling cloud.
 		promotext: ""

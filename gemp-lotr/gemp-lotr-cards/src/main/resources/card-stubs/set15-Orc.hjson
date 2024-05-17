@@ -25,17 +25,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Discard this minion to make a minion strength +2.
 		lore: Grond! Grond! Grond!
 		promotext: ""
@@ -72,17 +63,8 @@
 		strength: 11
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Discard this minion to make a minion strength +1.
 		lore: Though he had seen it many times before, Grond's destructive power never ceased to amaze.
 		promotext: ""
@@ -116,17 +98,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [orc] minions.<br>At the start of your Shadow phase, you may discard an [orc] condition from play to play an [orc] minion. It is twilight cost -2 (or -4 if you can spot 6 or more companions).
 		lore: ...some great beast...would go mad and spread stamping ruin....
 		promotext: ""
@@ -163,17 +136,8 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Exert this minion to wound a companion it is skirmishing.
 		lore: Very few tried to sneak into Mordor. Even fewer succeeded.
 		promotext: ""
@@ -210,17 +174,8 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [orc] minion.<br>When you play Black Land Chieftain, you may add a threat for each Free Peoples possession and each Free Peoples artifact you can spot.
 		lore: Orcs frequently used the weapons of their fallen enemies as their own.
 		promotext: ""
@@ -257,17 +212,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a companion of strength 12 or more, this minion is strength +5.<br><b>Skirmish:</b> Remove 2 threats to make a character skirmishing this minion strength -2.
 		lore: ...do they just live on foul air and poison?'
 		promotext: ""
@@ -304,17 +250,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this minion, you may spot an [orc] condition to add a threat.<br>While you can spot a companion of strength 10 or more, this minion is strength +3.
 		lore: Orcs must always watch for attacks from their enemies... and from their own.
 		promotext: ""
@@ -351,17 +288,8 @@
 		strength: 11
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Remove a threat and spot another [orc] minion to exert an unbound companion.
 		lore: Move on! To the Gate!
 		promotext: ""
@@ -398,17 +326,8 @@
 		strength: 9
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [orc] Orc.<br>While you can spot more sites on the adventure path than minions, this minion is strength +5.
 		lore: When commanded to, Orcs could travel great distances with great speed.
 		promotext: ""
@@ -445,17 +364,8 @@
 		strength: 20
 		vitality: 4
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [orc] condition.<br>Black Land Shrieker is twilight cost -1 for each threat you spot.
 		lore: No sound from an Orc was more frightening.
 		promotext: ""
@@ -492,17 +402,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this minion, you may spot an [orc] possession to add a threat.<br>While you can spot a companion of strength 13 or more, this minion is strength +7.
 		lore: Frodo's quest could be undone with one glance.
 		promotext: ""
@@ -536,17 +437,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [orc] minions.<br>Each time the Free Peoples player plays a possession, add (2).
 		lore: Breaking a Gondorian fortification is not easily done.
 		promotext: ""
@@ -583,17 +475,8 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 3 Free Peoples cultures or discard 2 [orc] conditions from play.
 		lore: Neither Man nor beast can withstand the fury of the Orcs.
 		promotext: ""
@@ -630,17 +513,8 @@
 		strength: 14
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play Destructive Orc, you may discard a fortification for each [orc] possession and each [orc] artifact you can spot.
 		lore: At Minas Tirith, some Orcs chose to attack the city before its inhabitants.
 		promotext: ""
@@ -679,17 +553,8 @@
 		vitality: 3
 		site: 4
 		keywords: Hunter 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Hunter 3</b>. <helper>(While skirmishing a non-hunter character, this character is strength +3.)</helper><br>When you play Gorbag, you may discard a card from the top of the Free Peoples player's deck for each hunter character you can spot.
 		lore: I'm gonna bleed you... like a stuck pig!
 		promotext: ""
@@ -726,17 +591,8 @@
 		strength: 12
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, discard 3 cards from your hand.<br>While you can spot 2 other [orc] minions, this minion is <b>fierce</b>.
 		lore: Wargs and riders sent by Saruman disrupted the villagers' retreat to Helm's Deep.
 		promotext: ""
@@ -773,17 +629,8 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Exert this minion to make the Free Peoples player shuffle his or her draw deck and reveal the top card of that draw deck. Make this minion strength +X, where X is the twilight cost of the revealed card.
 		lore: Orcs attacked in sunlight only when absolutely necessary.
 		promotext: ""
@@ -820,17 +667,8 @@
 		strength: 22
 		vitality: 6
 		site: 5
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this minion, you may discard 5 [orc] minions from play to make it twilight cost -10 and <b>fierce</b>.<br><b>Shadow:</b> Remove (3) to play an [orc] Orc from your discard pile. Its twilight cost is -2.
 		lore: Thrice the great ram boomed. And suddenly on the last stroke the Gate of Gondor broke.
 		promotext: ""
@@ -864,17 +702,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot an [orc] Orc, the Free Peoples player cannot replace the fellowship's current site.<br><b>Shadow:</b> Exert an [orc] minion and remove (2) to reveal the bottom card of your draw deck. If it is an [orc] Orc, take it into hand. Otherwise, discard it.
 		lore: ""
 		promotext: ""
@@ -910,17 +739,8 @@
 		strength: 1
 		itemclass: Hand weapon
 		#target: title(an [orc] Orc)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [orc] Orc.<br>Bearer gains <b>hunter X</b> <helper>(While skirmishing a non-hunter character, this character is strength +X.)</helper>, where X is the number of Free Peoples cultures you can spot.
 		lore: Orcs hunt for Men, ponies, and their own kind.
 		promotext: ""
@@ -954,17 +774,8 @@
 		twilight: 0
 		type: Condition
 		#target: the fellowship's current site
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, exert an [orc] minion. Plays on the fellowship's current site.<br>This site cannot be replaced. While the fellowship is at this site, each Troll is strength +1.
 		lore: Where battering rams failed, Trolls did not.
 		promotext: ""
@@ -1001,17 +812,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Exert this minion to wound a companion it is skirmishing.
 		lore: ...it was of a small breed... with wide and snuffling nostrils: evidently a tracker of some kind.
 		promotext: ""
@@ -1048,17 +850,8 @@
 		strength: 15
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: For each companion over 5, this minion is <b>damage +1</b>.<br><b>Assignment:</b> Exert this minion twice to assign it to a companion (except the Ring-bearer). If you cannot spot 6 companions, the Free Peoples player may exert a companion to prevent this.
 		lore: ""
 		promotext: ""
@@ -1092,17 +885,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a threat, the site number of each [orc] Orc is -1.<br><b>Regroup:</b> Remove 3 threats and discard 3 [orc] Orcs from play to make the Free Peoples player spot a companion and place that companion in the dead pile. Discard this condition.
 		lore: ""
 		promotext: ""
@@ -1136,20 +920,13 @@
 		twilight: 1
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -1189,17 +966,8 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Exert this minion to wound a companion it is skirmishing.
 		lore: ...I'll stick you, if you don't shut it down, see?'
 		promotext: ""

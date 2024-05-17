@@ -26,17 +26,8 @@
 		strength: 4
 		vitality: 3
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play Gríma, you may remove (4) to exert an unbound companion. That companion cannot use special abilities until the regroup phase.<br><b>Assignment:</b> Exert Gríma to assign him to an unbound companion. That companion may exert to prevent this.
 		lore: ""
 		promotext: ""
@@ -73,17 +64,8 @@
 			Weather
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Weather</b>.<br>Each time the fellowship moves, add (2) for each Ent you can spot.<br><b>Skirmish:</b> Discard this condition from play to make a non-[wraith] minion strength +1.
 		lore: If the mountain defeats you, will you risk a more dangerous road?
 		promotext: ""

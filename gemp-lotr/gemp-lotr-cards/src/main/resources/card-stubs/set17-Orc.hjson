@@ -22,17 +22,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, exert your mounted [orc] Orc.<br>Each time the Free Peoples player assigns a mounted [orc] Orc to a companion, he or she must choose to either exert that companion or add (2).
 		lore: The wolf snarled and sprang towards them with a great leap.
 		promotext: ""
@@ -66,17 +57,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot no minions.<br>Each time you play a minion, it is twilight cost +1.<br>While you can spot an [orc] minion, each companion is strength -1.
 		lore: An Orc often was spurred into battle as if death was preferable to the torment of its orkish life.
 		promotext: ""
@@ -110,17 +92,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a mounted [orc] Orc wins a skirmish, the Free Peoples player must reveal his or her hand and place two Free Peoples cards revealed on the bottom of his or her draw deck.
 		lore: Wargs! We are under attack!
 		promotext: ""
@@ -154,20 +127,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -209,17 +175,8 @@
 		vitality: 3
 		site: 4
 		keywords: Hunter 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Hunter 2</b>.<br>While you can spot an [uruk-hai] minion, each [orc] Orc gains <b>hunter 1</b> (if that [uruk-hai] minion is Uglúk, each [orc] Orc gains an additional <b>hunter 1</b>).<br><b>Shadow:</b> Exert Grishnákh twice to play an [uruk-hai] hunter minion from your draw deck.
 		lore: ""
 		promotext: ""
@@ -256,17 +213,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a follower attached to a companion, each [orc] minion is strength +2.
 		lore: Vile villain of all that opposed his master.
 		promotext: ""
@@ -303,17 +251,8 @@
 		strength: 17
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When this minion wins a skirmish, discard an [orc] minion from play.
 		lore: These Orcs were fearsome warriors.
 		promotext: ""
@@ -350,17 +289,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time you play an [orc] mount, you may draw a card.<br><b>Assignment:</b> If this minion is mounted, exert it twice to assign it to a companion of strength 9 or more.
 		lore: With speed and numbers, these feared riders were not easily avoided.
 		promotext: ""
@@ -397,17 +327,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time you play this minion, you may spot another [orc] minion to exert a companion for each Free Peoples culture you can spot over 2.
 		lore: Under the cover of darkness the Orcs came.
 		promotext: ""
@@ -444,17 +365,8 @@
 		strength: 18
 		vitality: 4
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [orc] Orc.<br>While at an underground site, this minion is <b>fierce</b> and the Free Peoples player may not replace sites or play a site from his or her adventure deck.
 		lore: Dwellers of foul pits and tunnels.
 		promotext: ""
@@ -491,17 +403,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time this minion wins a skirmish, if it is mounted, exert a companion.<br><b>Shadow:</b> Exert 3 [orc] minions and spot an [orc] mount to discard a condition.
 		lore: Quick to contain their fleeing victims, the Orkish riders were always feared.
 		promotext: ""
@@ -538,17 +441,8 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: This minion is strength +1 for each twilight token you can spot.
 		lore: They feared their master more than any enemy.
 		promotext: ""
@@ -585,17 +479,8 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of each skirmish involving this minion, you may reveal an [orc] condition from hand to wound the companion this minion is skirmishing twice and then discard this minion.
 		lore: Spawned from terrible acts, the Orcs emerged as ruined and terrible forms of life.
 		promotext: ""
@@ -632,17 +517,8 @@
 		strength: 4
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Spot 2 [orc] conditions and discard this minion from play to wound an unbound companion.
 		lore: They came from dark and evil places.
 		promotext: ""
@@ -679,17 +555,8 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: This minion is strength +1 for each [orc] condition in your discard pile.
 		lore: As the Orcs silently approached, the fear they brought multiplied.
 		promotext: ""
@@ -726,17 +593,8 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each mounted [orc] Orc is strength +1.<br><b>Shadow:</b> Discard an [orc] card from your hand to play an [orc] mount from your discard pile.
 		lore: They formed the cavalry of the Orc legions.
 		promotext: ""
@@ -773,17 +631,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Shadow:</b> Exert this minion and spot another [orc] minion to add (X), where X is the number of the current region.
 		lore: Orcs were kept in check by the light of the sun.
 		promotext: ""
@@ -820,17 +669,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Shadow:</b> Exert this minion to add (X), where X is the current site's Shadow number.
 		lore: Bred in dark sorcery.
 		promotext: ""
@@ -867,17 +707,8 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each [orc] mount is twilight cost -1.<br><b>Skirmish:</b> Remove (3) to make a mounted [orc] Orc strength +2.
 		lore: There is not much that is fouler than Orcs.
 		promotext: ""
@@ -914,17 +745,8 @@
 		strength: 7
 		vitality: 4
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time you play an [orc] mount, you may reinforce an [orc] token.<br><b>Regroup:</b> Exert Orkish Veteran to make the Free Peoples player wound a companion.
 		lore: Skin as dark as wood that has been charred by flame.
 		promotext: ""
@@ -961,17 +783,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a mounted [orc] minion wins a skirmish, you may make the Free Peoples player place a card from his or her hand on top of his or her draw deck.<br><b>Shadow:</b> Exert Orkish Warg-master to play an [orc] mount from your discard pile.
 		lore: Argh!!
 		promotext: ""
@@ -1008,17 +821,8 @@
 		strength: 14
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a companion of strength 12 or more, this minion is strength +4. Each time the fellowship moves during the regroup phase, discard this minion.
 		lore: These Orcs were loathsome as Elves were fair.
 		promotext: ""
@@ -1055,17 +859,8 @@
 		vitality: 2
 		itemclass: Mount
 		#target: title(an [orc] Orc with strength 10 or less)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [orc] Orc with strength 10 or less. Bearer is <b>fierce</b>.<br>When you play this possession, spot a race. While bearer is skirmishing a companion of that race, bearer is strength +3 and <b>damage +1</b>.
 		lore: The wolves of Isengard will return.
 		promotext: ""
@@ -1101,17 +896,8 @@
 		strength: 2
 		itemclass: Armor
 		#target: title(an [orc] Orc)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [orc] Orc.<br>While bearer is mounted, it cannot take wounds except during the skirmish phase.
 		lore: Foul of smell but light to bear, a warg would often allow its rider little leeway.
 		promotext: ""
@@ -1148,17 +934,8 @@
 		vitality: 1
 		itemclass: Mount
 		#target: title(an [orc] Orc with strength 10 or less)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [orc] Orc with strength 10 or less. Bearer is <b>fierce</b>.<br>When you play this, you may spot 2 [orc] Orcs that are not bearing mounts to play an [orc] mount from your draw deck.
 		lore: The wolf that one hears is worse than the orc that one fears.'
 		promotext: ""
@@ -1195,17 +972,8 @@
 		vitality: 2
 		itemclass: Mount
 		#target: title(an [orc] Orc with strength 9 or less)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [orc] Orc with strength 9 or less. Bearer is <b>fierce</b>.
 		lore: ...where the warg howls, there also the orc prowls.'
 		promotext: ""

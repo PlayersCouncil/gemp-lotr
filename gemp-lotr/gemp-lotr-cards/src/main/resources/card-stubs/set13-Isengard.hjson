@@ -22,17 +22,8 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a Wizard wins a skirmish, this condition becomes a <b>fierce</b>, <b>damage +1</b> Wizard minion until the start of the regroup phase that has 11 strength and 1 vitality, and cannot take wounds or bear other cards. This card is still a condition.
 		lore: ...the world of Men, which We must rule.'
 		promotext: ""
@@ -66,17 +57,8 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of the maneuver phase, you may exert a Wizard to make this condition a <b>fierce</b> Wizard minion until the start of the regroup phase that has 10 strength and 1 vitality, and cannot take wounds or bear other cards. This card is still a condition.
 		lore: We may join with that Power.'
 		promotext: ""
@@ -110,17 +92,8 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a Wizard heals, this condition becomes a <b>fierce</b> Wizard minion until the start of the regroup phase that has 12 strength and 1 vitality, and cannot take wounds or bear other cards. This card is still a condition.
 		lore: Radagast the Simple! Radagast the Fool!'
 		promotext: ""
@@ -158,17 +131,8 @@
 		vitality: 1
 		itemclass: Staff
 		#target: a Wizard
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Wizard.<br><b>Regroup:</b> If Saruman is the only minion you can spot, discard this artifact from play to return him to your hand.
 		lore: He raised his staff and it engulfed Gandalf in flames.
 		promotext: ""

@@ -22,20 +22,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -72,17 +65,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [men] minion.<br>When you play this, if you spot a plains site on the adventure path, reinforce 3 [men] tokens.<br>Each time the Free Peoples player plays the fellowship's next site, you may discard a possession from play.
 		lore: ""
 		promotext: ""
@@ -119,17 +103,8 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a Free Peoples possession is played, you may spot a [men] card and reveal this minion from hand to make the Free Peoples player exert a companion.<br>While each companion is wounded, this minion is <b>fierce</b>.
 		lore: Rumor of his approach strikes terror.
 		promotext: ""
@@ -166,17 +141,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> If this minion is not assigned to a skirmish, you may exert him to make another [men] minion <b>fierce</b> until the regroup phase.
 		lore: Burning with a rage stoked by Saruman, the Wild Hillmen made the Rohirrim villagers suffer.
 		promotext: ""
@@ -213,17 +179,8 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [men] minion.<br>While you can spot 5 or more culture tokens, the minion archery total is +2.
 		lore: Silent Haradrim assassins strike as if from nowhere.
 		promotext: ""
@@ -257,17 +214,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Discard this condition from play to make a [men] minion <b>damage +1</b> for each of the following that is true: it is at a plains site; it is bearing a possession; it is skirmishing a companion who has resistance 4 or less.
 		lore: The Hillmen sent the villagers before them like lambs to the slaughter.
 		promotext: ""
@@ -304,17 +252,8 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, you may spot another [men] minion to make this minion twilight cost -1 for each wound on the Ring-bearer.<br>While each companion is wounded, this minion is <b>fierce</b>.
 		lore: The wisdom of Dunland is passed from elder to youth.
 		promotext: ""
@@ -352,17 +291,8 @@
 		vitality: 2
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>To play, spot a [men] minion.<br><b>Assignment:</b> Discard a [men] card from your hand to assign this minion to an unbound companion.
 		lore: His traps catch men as well as beasts.
 		promotext: ""
@@ -399,17 +329,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Shadow:</b> Exert this minion, spot another [men] minion, and remove a culture token to reinforce a [men] token.
 		lore: The key to coordinating the columns of the Easterling army is their use of swift couriers.
 		promotext: ""
@@ -443,20 +364,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -498,17 +412,8 @@
 		vitality: 3
 		site: 3
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time a Free Peoples character is killed, you may spot another [men] minion to exert each companion.
 		lore: He was crafty: dulling men's wariness, or working on their fears, as served the occasion.'
 		promotext: ""
@@ -543,17 +448,8 @@
 		type: Condition
 		resistance: -1
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Response:</b> If a companion loses a skirmish involving a [men] minion, transfer this condition from your support area to that companion. Limit 1 per companion.<br>Minions cannot take wounds during skirmishes involving bearer.
 		lore: The Dunlendings prey on weak village folk.
 		promotext: ""
@@ -587,17 +483,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, add a [men] token here for each [men] archer you spot.<br>At the start of the archery phase, you may discard this condition from play or remove 2 tokens from here to make the minion archery total +1.
 		lore: Wooden towers perched on the backs of the Mûmakil.
 		promotext: ""
@@ -631,17 +518,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Transfer this condition from your support area to your [men] minion. Limit 1 per bearer.<br>Bearer is strength +1 for each other [men] minion you can spot.<br>Each time a [men] minion wins a skirmish, make bearer strength +1 until the regroup phase.
 		lore: ""
 		promotext: ""
@@ -678,17 +556,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot another [men] minion, this minion is strength +2 for each companion assigned to a skirmish.
 		lore: Victims of the Dunlendings receive no quarter.
 		promotext: ""
@@ -725,17 +594,8 @@
 		strength: 12
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [men] card in your support area.<br><b>Shadow:</b> Exert this minion and spot a Free Peoples condition to reinforce a [men] token for each card you spot that has the same card title as that condition.
 		lore: Prisoners are never taken by the Corsairs of Umbar.
 		promotext: ""
@@ -773,17 +633,8 @@
 		vitality: 1
 		site: 4
 		keywords: Archer
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Archer</b>.<br>While you can spot 4 or more culture tokens, this minion cannot take wounds except during skirmishes.
 		lore: In Harad, death is often swift, but seldom painless.
 		promotext: ""
@@ -817,17 +668,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, add a [men] token here.<br><b>Skirmish:</b> Discard this from play or remove a token from here to make a [men] minion strength +2 for each [men] minion not assigned to a skirmish.
 		lore: When finished ransacking a homestead, Dunlendings slaughtered fleeing villagers.
 		promotext: ""
@@ -864,17 +706,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> If this minion is not assigned to a skirmish, you may exert him to make another [men] minion <b>damage +1</b>.
 		lore: A swath of terror cut across the fields of Rohan.
 		promotext: ""
@@ -912,17 +745,8 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [men] minion.<br>While the fellowship is in region 1, each [men] minion cannot take wounds.<br>While the fellowship is in region 2, each [men] minion is an <b>archer</b>.<br>While the fellowship is in region 3, each [men] minion is <b>fierce</b>.
 		lore: ""
 		promotext: ""
@@ -958,17 +782,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br>While you can spot a culture token, bearer is strength +1 for each companion assigned to a skirmish.
 		lore: Arms of the Hillmen of Dunland are crude but effective.
 		promotext: ""

@@ -22,17 +22,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Underground</b>. If this site is not in region 1 when the fellowship moves from here during the regroup phase, add a burden.
 		lore: ""
 		promotext: ""
@@ -66,17 +57,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Underground</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may remove 2 burdens.
 		lore: ""
 		promotext: ""
@@ -110,17 +92,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Battleground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may draw a card.
 		lore: ""
 		promotext: ""
@@ -154,17 +127,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Dwelling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Dwelling</b>. When the fellowship moves to this site, the first Shadow player may discard 2 cards from hand to add a burden.
 		lore: ""
 		promotext: ""
@@ -197,17 +161,8 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <span style="word-spacing:-0.02em;font-size:98%"><b>Forest</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may heal a companion of each culture.</span>
 		lore: ""
 		promotext: ""
@@ -241,17 +196,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Marsh
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Marsh</b>. Each companion of each race that has the most companions is strength -1.
 		lore: ""
 		promotext: ""
@@ -285,17 +231,8 @@
 		block: Shadows
 		direction: Left
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>River</b>. Each character is strength +1 for each card borne by that character.
 		lore: ""
 		promotext: ""
@@ -329,17 +266,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Battleground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. While a player can spot more companions than minions, each minion is strength +1.
 		lore: ""
 		promotext: ""
@@ -376,17 +304,8 @@
 			Battleground
 			Plains
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. <b>Plains</b>. At the start of the regroup phase, each Shadow player may exert a minion to exert a companion.
 		lore: ""
 		promotext: ""
@@ -420,17 +339,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Mountain</b>. Culture tokens cannot be added, removed, or reinforced.
 		lore: ""
 		promotext: ""

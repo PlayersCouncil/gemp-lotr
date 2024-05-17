@@ -22,17 +22,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this condition, spot a mounted [rohan] Man to add 3 [rohan] tokens here.<br><b>Response:</b> If a minion is played at a plains site, discard this condition or remove a [rohan] token from here to exert that minion.
 		lore: Who are you, and what are you doing in this land?'
 		promotext: ""
@@ -70,17 +61,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br>Each time the fellowship moves, you may exert Éomer to return a minion to its owner's hand.
 		lore: ...wanderers in the Riddermark would be wise to be less haughty in these days of doubt.'
 		promotext: ""
@@ -118,17 +100,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time Éowyn wins a skirmish, each other [rohan] Man is strength +1 until the regroup phase.
 		lore: The women of this country learned long ago: those without swords can still die upon them.'
 		promotext: ""
@@ -166,17 +139,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of the fellowship phase, you may add (1) to play a possession on Gamling from your draw deck.
 		lore: If they come to bargain for our goods at Helm's Gate, they will pay a high price....'
 		promotext: ""
@@ -214,17 +178,8 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Response:</b> If a [rohan] companion who has resistance 4 or more is about to take a wound, exert Hrothlac to prevent that.
 		lore: ...we desire only to be free, and to live as we have lived, keeping our own, and serving no foreign lord, good or evil.'
 		promotext: ""
@@ -259,17 +214,8 @@
 		type: Condition
 		#target: a [rohan] Man
 		keywords: Toil 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Toil 2</b>. <helper>(For each [rohan] character you exert when playing this, its twilight cost is -2.)</helper><br>Bearer must be a [rohan] Man.<br><b>Assignment:</b> Discard this condition from play to make bearer <b>defender +1</b>.
 		lore: None are welcome here in days of war but our own folk....'
 		promotext: ""
@@ -303,20 +249,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -355,17 +294,8 @@
 		strength: 1
 		itemclass: Ranged weapon
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br><b>Archery:</b> Discard this possession to make the fellowship archery total +1 (or +2 if the fellowship is at a plains site).
 		lore: Short-hafted throwing spears are wielded by the Riders of Rohan in addition to their long lances.
 		promotext: ""
@@ -402,17 +332,8 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this companion, each [rohan] companion is strength +2 until the regroup phase.
 		lore: ...their faces were stern and keen.
 		promotext: ""
@@ -448,17 +369,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is mounted, bearer is <b>damage +1</b>.
 		lore: Shafts of the sun flared above the eastern hills and glimmered on their spears.
 		promotext: ""
@@ -495,17 +407,8 @@
 		strength: 8
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [rohan] companions.<br>You may play Riders of the Mark any time you could play a skirmish event.<br>When you play Riders of the Mark, you may exhaust a minion.
 		lore: With astonishing speed and skill they checked their steeds, wheeled, and came charging round.
 		promotext: ""
@@ -539,17 +442,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, exert a [rohan] Man.<br>While you can spot 2 [rohan] mounts, the move limit is +1.<br>Each of your companions that is not mounted is strength -1.
 		lore: The horsemen, following the trail, had turned from the river and were drawing near the downs.
 		promotext: ""
@@ -584,17 +478,8 @@
 		type: Possession
 		itemclass: Mount
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br>While bearer is at a plains site, he or she is <b>defender +1</b>.
 		lore: The Eorlingas raise horses both peerless and cherished.
 		promotext: ""
@@ -628,17 +513,8 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [rohan] Man.<br>Each time a Shadow condition is played, you may exert a minion.<br><b>Response:</b> If a minion exerts as a cost of its special ability, discard this condition to prevent that and return that minion to its owner's hand.
 		lore: ""
 		promotext: ""
@@ -672,17 +548,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Response:</b> If a [rohan] possession is discarded from play and no more than one possession is stacked here, stack it here.<br><b>Fellowship:</b> Add (1) to play a possession stacked here as if from hand.
 		lore: In Rohan, equal craft is brought to the exhibition of a blade as to the forging.
 		promotext: ""
@@ -720,17 +587,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a [gandalf] companion, Théoden gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>While Théoden is at a battleground or plains site each [rohan] Man is strength +1.
 		lore: Let all my folk get ready!'
 		promotext: ""
@@ -764,20 +622,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}

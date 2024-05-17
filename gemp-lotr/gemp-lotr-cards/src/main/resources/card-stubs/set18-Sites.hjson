@@ -22,17 +22,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Mountain</b>. When the fellowship moves to this site, each player wounds two of his or her characters.
 		lore: ""
 		promotext: ""
@@ -66,17 +57,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Mountain</b>. Each card that is about to be placed into the discard pile is removed from the game instead.
 		lore: ""
 		promotext: ""
@@ -110,17 +92,8 @@
 		block: Shadows
 		direction: Left
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>River</b>. When the fellowship moves to this site, each player heals each of his or her characters.
 		lore: ""
 		promotext: ""
@@ -157,17 +130,8 @@
 			Battleground
 			Plains
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. <b>Plains</b>. When the fellowship moves to this site, each player may reinforce a culture token.
 		lore: ""
 		promotext: ""
@@ -201,17 +165,8 @@
 		block: Shadows
 		direction: Right
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>River</b>.
 		lore: ""
 		promotext: ""
@@ -244,17 +199,8 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Wounds cannot be prevented or healed. Burdens cannot be removed.
 		lore: ""
 		promotext: ""
@@ -288,17 +234,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Dwelling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Dwelling</b>. While the fellowship is at this site, followers cannot be transferred to a character.
 		lore: ""
 		promotext: ""

@@ -22,17 +22,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time you play a [rohan] possession from hand, add a [rohan] token here.<br><b>Skirmish:</b> Remove 3 [rohan] tokens from here to make a [rohan] companion strength +1 and <b>damage +1</b>.
 		lore: Your leechcraft would have had me crawling on all fours like a beast!
 		promotext: ""
@@ -67,17 +58,8 @@
 		type: Possession
 		itemclass: Ranged weapon
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is mounted, he or she is strength +1.<br><b>Archery:</b> If bearer is Éomer, exert him to choose a Shadow player who must exert one of his or her minions.
 		lore: The short bows of Rohan brought down many a foe on the fields of battle.
 		promotext: ""
@@ -111,17 +93,8 @@
 		twilight: 0
 		type: Possession
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br><b>Fellowship:</b> Exert bearer to play a follower from your draw deck. Reshuffle your draw deck.<br><b>Skirmish:</b> Discard a follower from play to make bearer strength +4 (if bearer is Erkenbrand, he is strength +5 instead).
 		lore: ""
 		promotext: ""
@@ -156,17 +129,8 @@
 		type: Possession
 		itemclass: Shield
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>The minion archery total is -1.<br><b>Skirmish:</b> If bearer is Erkenbrand, you may add (2) to cancel a fierce skirmish involving him.<br><b>Response:</b> If a [rohan] Man is about to take a wound, spot Gandalf and exert bearer to prevent that wound.
 		lore: ""
 		promotext: ""
@@ -200,20 +164,13 @@
 		twilight: 3
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -255,17 +212,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Valiant</b>.<br><b>Skirmish:</b> Transfer a [rohan] possession that Gamling can bear to him.
 		lore: Summon every able-bodied man to Dunharrow.
 		promotext: ""
@@ -299,17 +247,8 @@
 		twilight: 0
 		type: Possession
 		#target: a [rohan] Man or Merry
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man or Merry.<br><b>Skirmish:</b> Discard a follower from play to make bearer strength +4. If bearer is Gamling, you may also spot another companion to make him or her strength +4 until the regroup phase.
 		lore: Sound the charge! Take them head-on!
 		promotext: ""
@@ -343,20 +282,13 @@
 		twilight: 0
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -393,17 +325,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot Théoden.<br><b>Skirmish:</b> Spot a [rohan] Man bearing a possession and discard a [rohan] possession from hand to make that Man strength +2.
 		lore: With Gríma's treacherous whispers removed and Saruman's grasp released, none doubted the might and lordship of Théoden, the King of Rohan.
 		promotext: ""
@@ -441,17 +364,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Valiant</b>.<br>While you can spot a [rohan] token, this companion is strength +2.
 		lore: Even the older men of Rohan had talents in the arts of war.
 		promotext: ""
@@ -485,17 +399,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time the fellowship moves, you may spot a [rohan] companion to discard a possession a character is bearing from play.<br><b>Skirmish:</b> Add (1) to transfer a [rohan] possession borne by a companion to another eligible bearer.
 		lore: I cannot allow you before Théoden-King so armed.
 		promotext: ""
@@ -533,17 +438,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot Gandalf, Théoden is resistance +2.<br>While you can spot Éomer, Théoden is <b>damage +1</b>.<br>While you can spot 3 mounted [rohan] companions, Théoden is strength +2.
 		lore: Now for wrath! Now for ruin! And a red dawn!
 		promotext: ""

@@ -25,20 +25,13 @@
 			Spell
 			Maneuver
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -78,17 +71,8 @@
 		strength: 6
 		vitality: 4
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot 3 Ents, this companion is strength +2.
 		lore: As they drew near the flash and flicker of their eyes could be seen.
 		promotext: ""
@@ -126,17 +110,8 @@
 		strength: 8
 		vitality: 4
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 Hobbits.<br>Each time you play a spell, you may add a burden to wound a minion.<br>At the start of each skirmish involving Gandalf, you may draw a card and then discard a card from your hand.
 		lore: Let the Ring-bearer decide.
 		promotext: ""
@@ -174,17 +149,8 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Leaflock's twilight cost is -1 for each Ent you can spot.<br>While you can spot 4 other Ents, Leaflock is strength +4.
 		lore: When roused to action, little could stop the destructive power of the Ents.
 		promotext: ""
@@ -218,17 +184,8 @@
 		twilight: 4
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [gandalf] companions.<br>At the start of the maneuver phase, discard this condition to make each player count the number of cards in his or her hand, discard each of them and draw the same number of cards from the top of his or her draw deck.
 		lore: ""
 		promotext: ""
@@ -262,20 +219,13 @@
 		twilight: 1
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -315,20 +265,13 @@
 			Spell
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -369,17 +312,8 @@
 		strength: 8
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Quickbeam is twilight cost -1 for each Ent you can spot.<br><b>Maneuver:</b> Discard this companion to place another [gandalf] companion from your discard pile on the bottom of your draw deck and reinforce a [gandalf] token.
 		lore: A punch from an Ent-fist crumples up iron....'
 		promotext: ""
@@ -416,17 +350,8 @@
 		strength: 8
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: This companion is twilight cost -1 for each [gandalf] companion you can spot.<br><b>Fellowship:</b> Place this companion in the dead pile to remove (5).
 		lore: Treebeard's call to the Ent Moot could not be refused.
 		promotext: ""
@@ -463,17 +388,8 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot 4 Ents, this companion is strength +3.<br><b>Maneuver:</b> Exert this companion to reveal the bottom card of your draw deck. If it is a [gandalf] character, you may play it.
 		lore: Ents rarely interacted with Men, but Saruman's devilry demanded action.
 		promotext: ""
@@ -511,17 +427,8 @@
 		strength: 8
 		vitality: 4
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Skinbark is twilight cost -1 for each [gandalf] condition you can spot.<br>Each time Skinbark wins a skirmish, you may place a [gandalf] card from your discard pile beneath your draw deck.
 		lore: ...a man that hacks once at an Ent never gets the chance of a second blow.'
 		promotext: ""
@@ -559,17 +466,8 @@
 		strength: 12
 		vitality: 4
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 3 [gandalf] companions.<br>Each time Treebeard wins a skirmish, the first Shadow player must exert X minions, where X is the difference between Treebeard's strength and the losing character's strength.
 		lore: My business is with Isengard tonight.
 		promotext: ""

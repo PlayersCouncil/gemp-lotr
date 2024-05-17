@@ -32,17 +32,8 @@
 			Fellowship
 			CAN_START_WITH_RING
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bearer.</b> <b>Ring-bound</b>. <b>Fellowship</b>.<br>While you cannot spot 4 threats, Shadow cards cannot discard cards from your hand or from the top of your draw deck.
 		lore: We're friends of Gandalf the Grey.
 		promotext: ""
@@ -81,17 +72,8 @@
 		vitality: 4
 		resistance: 8
 		keywords: Fellowship
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fellowship</b>.<br><b>Skirmish:</b> If Merry is not assigned to a skirmish, take 2 [shire] cards from your discard pile and remove them from the game to make a companion strength +2.
 		lore: You can trust us to stick to you through thick and thin – to the bitter end.'
 		promotext: ""
@@ -130,17 +112,8 @@
 		vitality: 4
 		resistance: 8
 		keywords: Fellowship
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fellowship</b>.<br>Pippin is strength +1 for each tale you can spot.
 		lore: You must go – and therefore we must, too. Merry and I are coming with you.'
 		promotext: ""
@@ -174,17 +147,8 @@
 		twilight: 1
 		type: Condition
 		#target: a [shire] companion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [shire] companion.<br>Each time bearer wins a skirmish, you may transfer this condition to a fellowship companion.<br>Each time this condition is transferred to a companion, heal that companion.
 		lore: ""
 		promotext: ""
@@ -226,17 +190,8 @@
 			Ring-bound
 			Fellowship
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bound</b>. <b>Fellowship</b>.<br>While Sam bears The One Ring, he is resistance -4.<br>While you can spot 3 [shire] companions, Sam is strength +2.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer</b>.
 		lore: ""
 		promotext: ""

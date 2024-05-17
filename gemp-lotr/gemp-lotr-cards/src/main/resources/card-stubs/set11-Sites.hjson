@@ -22,17 +22,8 @@
 		block: Shadows
 		direction: Left
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>River</b>. The minion archery total is +2 for each companion in the fellowship over 4.
 		lore: ""
 		promotext: ""
@@ -66,17 +57,8 @@
 		block: Shadows
 		direction: Right
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>River</b>. When the fellowship moves to this site, discard each ally from play.
 		lore: ""
 		promotext: ""
@@ -110,17 +92,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Mountain</b>. At the start of your fellowship phase, you may exert a Dwarf to play a [dwarven] possession from your draw deck.
 		lore: ""
 		promotext: ""
@@ -154,17 +127,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Dwelling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Dwelling</b>. <b>Shadow:</b> Play a Nazgûl to discard a condition from play.
 		lore: ""
 		promotext: ""
@@ -198,17 +162,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Forest
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Forest</b>. No more than 1 minion can be assigned to each skirmish.
 		lore: ""
 		promotext: ""
@@ -242,17 +197,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Underground</b>. Skirmish special abilities cannot be used.
 		lore: ""
 		promotext: ""
@@ -286,17 +232,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Underground</b>. The Free Peoples player may transfer Free Peoples artifacts and possessions at no twilight cost.
 		lore: ""
 		promotext: ""
@@ -330,17 +267,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Mountain</b>. If this site is in region 2 when the fellowship moves from it during the regroup phase, wound each companion.
 		lore: ""
 		promotext: ""
@@ -374,17 +302,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Marsh
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Marsh</b>. At the start of your fellowship phase, you may play a [gollum] Free Peoples card from your draw deck.
 		lore: ""
 		promotext: ""
@@ -418,17 +337,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Forest
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Forest</b>. Each companion is twilight cost +2.
 		lore: ""
 		promotext: ""
@@ -462,17 +372,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Plains</b>. <b>Skirmish:</b> Exert your character (except an enduring character), to make it strength +2.
 		lore: ""
 		promotext: ""
@@ -506,17 +407,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Marsh
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Marsh</b>. <b>Shadow:</b> If the total number of minions and twilight tokens is 3 or fewer, play a minion at twilight cost -3.
 		lore: ""
 		promotext: ""
@@ -550,17 +442,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Forest
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Forest</b>. When the fellowship moves to this site, add (1) for each Free Peoples weapon.
 		lore: ""
 		promotext: ""
@@ -594,17 +477,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Plains</b>. Each unbound companion skirmishing more than 1 minion is strength +3.
 		lore: ""
 		promotext: ""
@@ -638,17 +512,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Battleground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. When the fellowship moves to this site, add (2) for each companion over 5.
 		lore: ""
 		promotext: ""
@@ -682,17 +547,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Dwelling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Dwelling</b>. At the start of your fellowship phase, you may exert 2 Hobbits to play a Hobbit from your draw deck.
 		lore: ""
 		promotext: ""
@@ -726,17 +582,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Plains</b>. Until the regroup phase, each minion skirmishing a [rohan] companion loses <b>fierce</b> and cannot gain fierce.
 		lore: ""
 		promotext: ""
@@ -770,17 +617,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Battleground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. Each time a [gandalf] companion wins a skirmish, the Free Peoples player may discard a condition from play.
 		lore: ""
 		promotext: ""
@@ -814,17 +652,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Battleground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. Each character bearing a hand weapon is strength +2.
 		lore: ""
 		promotext: ""
@@ -858,17 +687,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Marsh
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Marsh</b>. <b>Regroup:</b> Exert your Gollum or your Sméagol to play the fellowship's next site.
 		lore: ""
 		promotext: ""
@@ -902,17 +722,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Underground</b>. When your fellowship moves from this site, you may spot a Dwarf to draw 2 cards.
 		lore: ""
 		promotext: ""
@@ -946,17 +757,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Underground</b>. Each character bearing a hand weapon is <b>damage +1</b>.
 		lore: ""
 		promotext: ""
@@ -990,17 +792,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Marsh
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Marsh</b>. When the fellowship moves to here, heal each character who has resistance 5 or more and exert each other character.
 		lore: ""
 		promotext: ""
@@ -1034,17 +827,8 @@
 		block: Shadows
 		direction: Right
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>River</b>. The minion archery total is -3.
 		lore: ""
 		promotext: ""
@@ -1078,17 +862,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Forest
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Forest</b>. At the start of your fellowship phase, you may heal 2 Elves.
 		lore: ""
 		promotext: ""
@@ -1122,17 +897,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Battleground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. When the fellowship moves from this site, the Free Peoples player may spot 3 burdens to remove a burden.
 		lore: ""
 		promotext: ""
@@ -1166,17 +932,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Plains</b>. Each [men] minion gains <b>ambush</b> (1).
 		lore: ""
 		promotext: ""
@@ -1210,17 +967,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Plains</b>. At the start of the maneuver phase, the Free Peoples player must add a burden or discard 3 cards from hand.
 		lore: ""
 		promotext: ""
@@ -1254,17 +1002,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Mountain</b>. At the start of your fellowship phase, you may exert 3 companions to play a Wizard from your dead pile.
 		lore: ""
 		promotext: ""
@@ -1298,17 +1037,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Dwelling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Dwelling</b>. At the start of your fellowship phase, you may add a burden to play a ranger from your draw deck.
 		lore: ""
 		promotext: ""
@@ -1342,17 +1072,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Plains</b>. During the archery phase, [uruk-hai] minions cannot take wounds.
 		lore: ""
 		promotext: ""
@@ -1386,17 +1107,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Battleground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. Each time a companion is killed, add a burden.
 		lore: ""
 		promotext: ""
@@ -1429,17 +1141,8 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of your fellowship phase, you may exert a [rohan] Man to play a [rohan] mount from your draw deck.
 		lore: ""
 		promotext: ""
@@ -1473,17 +1176,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Forest
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Forest</b>. Each time you play an artifact or possession on your companion, you may draw a card.
 		lore: ""
 		promotext: ""
@@ -1520,17 +1214,8 @@
 			Dwelling
 			River
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Dwelling</b>. <b>River</b>. When your fellowship moves to this site, you may heal each Hobbit companion.
 		lore: ""
 		promotext: ""
@@ -1564,17 +1249,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Mountain</b>. <b>Maneuver:</b> Exert your [orc] minion to discard a card at random from the Free Peoples player's hand.
 		lore: ""
 		promotext: ""
@@ -1608,17 +1284,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Underground</b>. When the fellowship moves from this site, remove (2).
 		lore: ""
 		promotext: ""
@@ -1652,17 +1319,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Dwelling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Dwelling</b>. When the fellowship moves to this site, the Free Peoples player wounds a companion for each ally.
 		lore: ""
 		promotext: ""
@@ -1696,17 +1354,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Underground</b>. Each unwounded [gondor] Man is <b>defender +1</b>.
 		lore: ""
 		promotext: ""
@@ -1740,17 +1389,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Forest
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Forest</b>. <b>Shadow:</b> Remove a burden to play a Nazgûl from your discard pile.
 		lore: ""
 		promotext: ""

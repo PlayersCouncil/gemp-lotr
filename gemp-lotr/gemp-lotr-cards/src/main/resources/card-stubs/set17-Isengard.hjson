@@ -26,17 +26,8 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Saruman cannot be assigned to a skirmish.<br>While you can spot 6 companions, each minion gains <b>hunter 2</b>.<br><b>Response:</b> If a hunter minion is about to take a wound, exert Saruman to prevent that.
 		lore: ""
 		promotext: ""
@@ -71,17 +62,8 @@
 		twilight: 1
 		type: Follower
 		strength: 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, <span style="word-spacing:-0.08em">you may remove (1) to transfer this to a minion.)</span></helper><br>Each time bearer wins a skirmish, you may exert a companion.
 		lore: I gave you the chance of aiding me willingly, but you have elected the way of pain.'
 		promotext: ""
@@ -116,17 +98,8 @@
 		type: Artifact
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time you play Saruman, spot a minion. That minion is <b>fierce</b> until the start of the regroup phase.<br>Each Wizard is strength +3 and <b>damage +1</b>.
 		lore: From the heights of Orthanc, Saruman spied on Middle-earth and plotted his rise to power.
 		promotext: ""

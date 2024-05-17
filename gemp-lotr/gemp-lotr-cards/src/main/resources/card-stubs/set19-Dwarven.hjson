@@ -30,17 +30,8 @@
 			Fellowship
 			Damage+1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fellowship</b>. <b>Damage +1</b>.<br>Each time you play a [dwarven] possession, you may draw a card.
 		lore: If anyone was to ask for my opinion, which I note they're not, I'd say we were taking the long way round.
 		promotext: ""
@@ -74,17 +65,8 @@
 		twilight: 1
 		type: Condition
 		#target: a [dwarven] companion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [dwarven] companion.<br>Bearer gains <b>hunter 2</b>. Each time bearer wins a skirmish, you may transfer this condition to another [dwarven] companion.<br>At the end of each turn, if bearer did not win a skirmish this turn, discard this condition from play.
 		lore: ""
 		promotext: ""
@@ -118,20 +100,13 @@
 		twilight: 2
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}

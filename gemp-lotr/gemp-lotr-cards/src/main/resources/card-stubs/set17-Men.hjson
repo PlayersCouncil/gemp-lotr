@@ -24,17 +24,8 @@
 		strength: 3
 		itemclass: Mount
 		#target: a [men] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] Man.<br>While you can spot a threat, bearer is <b>fierce</b>.<br>While you can spot 3 threats, bearer is <b>damage +1</b>.<br>While you can spot 5 threats, you may play this from your discard pile.
 		lore: ...mûmakil were bellowing as they were goaded to war.
 		promotext: ""
@@ -69,17 +60,8 @@
 		type: Possession
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a [men] minion is discarded during the maneuver phase, you may stack it here.<br><b>Response:</b> Discard a minion stacked here or discard this to prevent a wound to a [men] minion.
 		lore: Scarlet cloaks and bronze armor adorned the marching forces.
 		promotext: ""
@@ -116,17 +98,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this minion, you may spot 2 other [men] Men to add (1) for each possession you spot.
 		lore: The men of Rhûn's preparation for battle was second to none.
 		promotext: ""
@@ -163,17 +136,8 @@
 		strength: 15
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you control 2 sites, Easterling Sneak is <b>fierce</b>.<br>While you control 4 sites, each [men] minion is strength +1 and <b>fierce</b>.
 		lore: The dark is gathering all armies to him.
 		promotext: ""
@@ -209,17 +173,8 @@
 		strength: 1
 		itemclass: Hand weapon
 		#target: a [men] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] Man.<br>If bearer is Gríma, he is strength +1 for each Free Peoples culture you can spot over 2.<br><b>Response:</b> If a skirmish event is played, discard this possession to cancel that event.
 		lore: The blade of a pathetic creature.
 		promotext: ""
@@ -253,20 +208,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -303,20 +251,13 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -355,17 +296,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br>Each time bearer wins a skirmish, you may transfer this possession to another [men] minion. If you do, stack a [men] minion from play on a [men] possession in your support area.
 		lore: The men of Dunland took even the most basic of tools to be weapons against Rohan.
 		promotext: ""
@@ -403,17 +335,8 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each [men] minion bearing a possession is strength +2.<br><b>Skirmish:</b> Exert Saruman to play a [men] possession from your discard pile.
 		lore: Take back the lands they stole from you!
 		promotext: ""
@@ -454,17 +377,8 @@
 			Damage+1
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>.<br>If you play Stampeding Chief from your hand, remove (3) and spot another [men] minion or discard Stampeding Chief.
 		lore: But no more would Rohan stand against his kind.
 		promotext: ""
@@ -501,17 +415,8 @@
 		strength: 7
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Regroup:</b> Spot a [men] minion in your discard pile and discard this minion to place that minion on your [men] support area possession.
 		lore: Argh!!
 		promotext: ""
@@ -548,17 +453,8 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [men] Men.<br>When you play this minion, you may make the Free Peoples player exert a companion for each site you control.
 		lore: Death to the robbers of the North!
 		promotext: ""
@@ -595,17 +491,8 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [men] Men.<br>Each time this minion wins a skirmish and you can spot a site you control, exhaust an unbound companion.
 		lore: Death to the Forgoil!
 		promotext: ""
@@ -642,17 +529,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Discard this minion and X minions stacked on a [men] possession to play a [men] minion from your discard pile. That minion is twilight cost -X.
 		lore: We will fight for you!
 		promotext: ""
@@ -690,17 +568,8 @@
 		vitality: 2
 		site: 4
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br><b>Maneuver:</b> Discard this minion and a [men] minion with a twilight cost 2 or less from play to play Stampeding Chief from your draw deck. It is twilight cost -8.
 		lore: We will die... for Saruman!
 		promotext: ""
@@ -737,17 +606,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Exert this minion to play a [men] minion (or 2 if you spot 6 companions) from a [men] possession as if from hand.
 		lore: They prepare for the last war.
 		promotext: ""
@@ -784,17 +644,8 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: This minion is strength +1 for each [men] possession with a [men] minion stacked on it.<br><b>Maneuver:</b> Spot a [men] possession and discard this minion from play to discard a condition.
 		lore: The Southrons did not march into war blindly.
 		promotext: ""
@@ -831,17 +682,8 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: This minion is strength +1 for each [men] minion stacked on each [men] possession.<br>At the start of your maneuver phase, you may play a minion stacked on a [men] possession as if from hand.
 		lore: Vile servants of Sauron marched to their master.
 		promotext: ""
@@ -878,17 +720,8 @@
 		strength: 14
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: This minion is twilight cost -1 for each [men] minion stacked on a [men] possession.
 		lore: Southron men were always ready for war.
 		promotext: ""
@@ -925,17 +758,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: This minion is strength +2 for each [men] possession with a [men] minion stacked on it.<br><b>Maneuver:</b> Spot X [men] minions stacked on a [men] possession and discard this minion to add (X).
 		lore: ...legions of Haradrim from the South....
 		promotext: ""
@@ -972,17 +796,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Spot a [men] possession and discard this minion from play to make each [men] minion you spot strength +2 until the start of the regroup phase.
 		lore: They were wicked men.
 		promotext: ""
@@ -1019,17 +834,8 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [men] Men.<br>While this minion bears a possession, he is strength +2 for each Free Peoples culture you can spot.
 		lore: War will make corpses of us all.
 		promotext: ""
@@ -1066,17 +872,8 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time this minion wins a skirmish, you may stack a [men] minion from your discard pile on a [men] possession in your support area.
 		lore: We will take their king.
 		promotext: ""
@@ -1113,17 +910,8 @@
 		strength: 6
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of the maneuver phase, spot another [men] Man and exert this minion to add a threat. Then add an additional threat for each companion you spot over 4.
 		lore: The pawns of Saruman are relentless in their tasks.
 		promotext: ""
@@ -1160,17 +948,8 @@
 		strength: 15
 		vitality: 4
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this minion from your draw deck or from your [men] possession, it is <b>fierce</b> until the regroup phase.
 		lore: Murderers!
 		promotext: ""
@@ -1207,17 +986,8 @@
 		strength: 15
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: You may play this minion any time you could play a maneuver event. When you play this minion in the maneuver phase, you may discard X [men] minions from play to add (X).
 		lore: Incited by Saruman, they created pandemonium in the land of Rohan.
 		promotext: ""
@@ -1252,17 +1022,8 @@
 		type: Possession
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a [men] minion is discarded during the maneuver phase, you may stack it here.<br><b>Skirmish:</b> Discard this possession to make a [men] Man strength +2.
 		lore: Take back the lands they stole from you!
 		promotext: ""

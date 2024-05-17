@@ -22,17 +22,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Forest
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Forest</b>. <b>Shadow:</b> Play a Nazgûl (or spot 6 companions and discard 2 cards from hand) to draw a card.
 		lore: ""
 		promotext: ""
@@ -69,17 +60,8 @@
 			Battleground
 			Underground
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. <b>Underground</b>. The Balrog is twilight cost -3.
 		lore: ""
 		promotext: ""
@@ -113,17 +95,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Mountain</b>. <b>Maneuver:</b> Remove (2) and exert your minion that is not fierce to make that minion <b>fierce</b> until the regroup phase.
 		lore: ""
 		promotext: ""
@@ -160,17 +133,8 @@
 			Battleground
 			Forest
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. <b>Forest</b>. While you can spot 3 minions (or 6 companions), each unbound companion is resistance -2.
 		lore: ""
 		promotext: ""
@@ -204,17 +168,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Dwelling
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Dwelling</b>. When the fellowship moves from this site, wound each minion that is not a lurker.
 		lore: ""
 		promotext: ""
@@ -251,17 +206,8 @@
 			Battleground
 			Plains
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. <b>Plains</b>. <b>Shadow:</b> Make your lurker minion lose <b>lurker</b> until the regroup phase.
 		lore: ""
 		promotext: ""
@@ -295,17 +241,8 @@
 		block: Shadows
 		direction: Right
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>River</b>. <b>Shadow:</b> Spot 5 [orc] Orcs to prevent the fellowship from moving again this turn.
 		lore: ""
 		promotext: ""
@@ -339,17 +276,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Mountain</b>. <b>Shadow:</b> Remove (2) and discard 2 Free Peoples cards from hand to draw a card.
 		lore: ""
 		promotext: ""
@@ -383,17 +311,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Mountain</b>. Each time your Dwarf wins a skirmish, you may draw a card.
 		lore: ""
 		promotext: ""
@@ -427,17 +346,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Plains</b>. <b>Skirmish:</b> Exert your Man (except an enduring Man) to make him or her <b>damage +1</b>.
 		lore: ""
 		promotext: ""

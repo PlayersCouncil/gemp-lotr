@@ -22,17 +22,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Gollum is strength +1 for each Ring-bound companion you can spot.
 		lore: ...Gollum, dancing like a mad thing, held aloft the ring... It shown now as if verily it was wrought of living fire.
 		promotext: ""
@@ -66,20 +57,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -117,17 +101,8 @@
 		twilight: 0
 		type: Follower
 		resistance: 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot Sméagol.<br><b>Aid</b> – Add a burden.<br><b>Skirmish:</b> If bearer is not assigned to a skirmish, discard this from play to play an artifact or possession from your draw deck on bearer.
 		lore: ...there in his hand lay a beautiful golden ring.'
 		promotext: ""
@@ -161,20 +136,13 @@
 		twilight: 0
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -212,17 +180,8 @@
 		type: Possession
 		vitality: 1
 		#target: title(Sméagol)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Sméagol.<br>When you play Fishing Boat, you may reinforce a [gollum] token.<br>Each time Sméagol is about to be overwhelmed in a skirmish, you may remove 2 [gollum] tokens to make him strength +2 until the end of that skirmish.
 		lore: ""
 		promotext: ""
@@ -256,17 +215,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot Sméagol.<br>When you play this, add a [gollum] token here for each [gollum] card you can spot.<br><b>Maneuver:</b> Discard this from play or remove 2 tokens from here to spot a Shadow condition and place that condition on top of its owner's draw deck.
 		lore: ""
 		promotext: ""
@@ -304,17 +254,8 @@
 		strength: 5
 		vitality: 4
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While a card titled Déagol is removed from the game, Gollum is strength +2 and <b>fierce</b>.<br><b>Shadow:</b> Remove a card titled Déagol in your discard pile from the game to play this minion from your discard pile.
 		lore: Of that deadly gleam and of the dark eyeholes Frodo and Sam were always conscious.
 		promotext: ""
@@ -348,20 +289,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -398,20 +332,13 @@
 		twilight: 2
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -448,20 +375,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -498,20 +418,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -553,17 +466,8 @@
 		vitality: 4
 		resistance: 5
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br>For each card titled Déagol in your discard pile, Sméagol is strength +2 and resistance -1.<br>Each time Sméagol wins a skirmish, you may take a [gollum] card from your draw deck and place it in your discard pile.
 		lore: ...his head and his eyes were downward.'
 		promotext: ""
@@ -597,20 +501,13 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -647,20 +544,13 @@
 		twilight: 3
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -697,20 +587,13 @@
 		twilight: 1
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}

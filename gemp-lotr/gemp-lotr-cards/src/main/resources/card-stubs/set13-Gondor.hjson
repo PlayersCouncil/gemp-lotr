@@ -26,17 +26,8 @@
 		strength: 8
 		vitality: 4
 		resistance: 8
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Aragorn is strength +1 for each [gondor] card that has a culture token on it.<br>At the start of each assignment phase, you may exert Aragorn to make an unbound companion that has resistance 7 or more <b>defender +1</b> until the regroup phase.
 		lore: Thus came Aragorn, son of Arathorn, Elessar....
 		promotext: ""
@@ -70,17 +61,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Response:</b> If Faramir is about to take a wound, discard this condition from play and place Boromir or Denethor in the dead pile from play to prevent that and heal Faramir twice.
 		lore: ...then I will have naught: neither life diminished, nor love halved, nor honour abated.'
 		promotext: ""
@@ -114,20 +96,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -168,17 +143,8 @@
 		strength: 8
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Boromir is resistance -1 for each lurker minion you can spot.<br><b>Skirmish:</b> Exert Boromir to make him strength +1 for each possession he bears.
 		lore: I shall go to Minas Tirith, alone if need be, for it is my duty.'
 		promotext: ""
@@ -214,17 +180,8 @@
 		type: Possession
 		itemclass: Mount
 		#target: a [gondor] companion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [gondor] companion.<br>When you play Brego, you may reinforce a [gondor] token.<br><b>Maneuver:</b> Exert bearer and remove 2 [gondor] tokens to wound a minion.
 		lore: Turn this fellow free. He has seen enough of war.'
 		promotext: ""
@@ -262,17 +219,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 5
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Denethor is resistance +1 for each [gondor] possession in your discard pile.<br><b>Maneuver:</b> Spot a [gondor] possession borne by a companion and remove that possession from the game to exert a minion twice.
 		lore: ...he took up the staff of his Stewardship that lay at his feet and broke it on his knee.
 		promotext: ""
@@ -311,17 +259,8 @@
 		vitality: 5
 		resistance: 6
 		keywords: Knight
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Knight</b>. To play, spot 2 [gondor] knights or exert 2 [gondor] Men.<br>Each of your [gondor] companions is resistance +1.<br><b>Maneuver:</b> Remove a [gondor] token to make an unbound companion resistance +1 until the regroup phase.
 		lore: <span style="word-spacing:-0.01em;font-size:97%">"'...and Elendil of Westernesse who overthrew Sauron....'"</span>
 		promotext: ""
@@ -359,17 +298,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot Boromir, Faramir is twilight cost -1.<br>While you can spot Denethor, Faramir is twilight cost -1.<br>While Faramir bears a [gondor] possession, he is <b>defender +1</b>.
 		lore: <span style="word-spacing:-0.01em;font-size:97%">"'Do you wish then... that our places had been exchanged?'"</span>
 		promotext: ""
@@ -407,17 +337,8 @@
 		vitality: 3
 		resistance: 5
 		keywords: Knight
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Knight</b>.<br><b>Skirmish:</b> Discard a [gondor] condition from your support area to make this companion strength +2.
 		lore: This was the livery of the heirs of Elendil, and none wore it now in all Gondor, save the Guards of the Citadel....
 		promotext: ""
@@ -451,20 +372,13 @@
 		twilight: 1
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -501,17 +415,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, add a [gondor] token here.<br><b>Skirmish:</b> Discard this from play or remove a token from here to make a [gondor] companion bearing a hand weapon strength +2.
 		lore: And Eldarion our son is a man full-ripe for kingship.'
 		promotext: ""
@@ -545,20 +450,13 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -600,17 +498,8 @@
 		vitality: 3
 		resistance: 1
 		keywords: Knight
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Knight</b>.<br>Isildur is resistance +1 for each card in your hand.<br>At the end of any phase, if Isildur has resistance 0, place him in your dead pile.<br>Each time you reconcile, you may draw a card.
 		lore: ...Elendil's son cut the Ring from Sauron's hand....'
 		promotext: ""
@@ -644,17 +533,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time Elendil wins a skirmish, make a [gondor] or [elven] companion strength +2 until the start of the regroup phase.<br>Each time Isildur wins a skirmish, heal a Man.<br>Each time Aragorn wins a skirmish, make a [gondor] Man <b>damage +1</b> until the start of the regroup phase.
 		lore: ""
 		promotext: ""
@@ -688,17 +568,8 @@
 		twilight: 1
 		type: Possession
 		#target: a [gondor] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [gondor] Man.<br><b>Fellowship:</b> Discard this possession from play to heal a companion and, if that companion is a [shire] companion, you may discard a condition he or she bears.
 		lore: Life to the dying / In the king's hand lying!'
 		promotext: ""
@@ -732,20 +603,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -782,17 +646,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time Denethor exerts, he gains <b>muster</b> until the end of the regroup phase.<br>Each time Boromir exerts, you may exert a minion.<br>Each time Faramir exerts, you may spot a minion to prevent it from using special abilities until the regroup phase.
 		lore: ""
 		promotext: ""
@@ -826,17 +681,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, add a [gondor] token here for each [gondor] companion who has resistance 7 or more.<br><b>Response:</b> If a minion's special ability is used, discard this condition or remove 2 [gondor] tokens from here to cancel its effect.
 		lore: ...a silent company of tall images graven in cold stone.
 		promotext: ""
@@ -873,17 +719,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 5
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of each fellowship phase, you may add (2) to reinforce a [gondor] token.
 		lore: Fearful of the spreading Shadow, many from southern Gondor sought refuge behind the walls of Minas Tirith.
 		promotext: ""

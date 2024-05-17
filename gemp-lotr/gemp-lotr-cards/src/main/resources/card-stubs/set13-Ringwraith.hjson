@@ -22,20 +22,13 @@
 		twilight: 3
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -72,20 +65,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -125,20 +111,13 @@
 			Toil 1
 			Shadow
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -175,17 +154,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, you may add a [wraith] token here for each [wraith] card in your support area.<br><b>Shadow:</b> Discard this from play or remove 2 tokens from here to play a [wraith] mount from your draw deck on your [wraith] minion.
 		lore: That is the worst news that has come to Bree....'
 		promotext: ""
@@ -224,17 +194,8 @@
 		vitality: 4
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>When you play Úlairë Enquëa, if you can spot 2 other Nazgûl, you may exert 2 unbound companions (or exert each companion if you can spot 6 companions).
 		lore: It is many a year since the Nine walked abroad.'
 		promotext: ""
@@ -273,17 +234,8 @@
 		vitality: 2
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br><b>Shadow:</b> Exert Úlairë Lemenya and discard a Nazgûl from your hand to discard a condition from play.
 		lore: As the Shadow grows once more, they too may walk again.'
 		promotext: ""
@@ -322,17 +274,8 @@
 		vitality: 2
 		site: 3
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>While you can spot a companion who has resistance 3 or less, Úlairë Nertëa is twilight cost -2.
 		lore: From inside the hood came a noise as of someone sniffling to catch an elusive scent....
 		promotext: ""

@@ -25,20 +25,13 @@
 			Spell
 			Fellowship
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -79,17 +72,8 @@
 		strength: 4
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Barliman Butterbur is strength +1 for each attached [gandalf] follower.<br><b>Maneuver:</b> Exert Barliman Butterbur to reveal the top 2 cards of your deck. Take any [gandalf] cards into hand and discard the rest.
 		lore: Barliman Butterbur at your service!'
 		promotext: ""
@@ -127,17 +111,8 @@
 		strength: 7
 		vitality: 4
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play Gandalf (except in your starting fellowship), you may play a [gandalf] possession on him from your draw deck or discard pile.<br>Each time Gandalf wins a skirmish, you may reinforce a Free Peoples token.
 		lore: ""
 		promotext: ""
@@ -174,17 +149,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: title(Gandalf)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Gandalf.<br>Bearer is <b>damage +1</b>.<br>Each time a companion is about to take a wound, you may discard a companion from hand to prevent that.
 		lore: ...in his other hand Glamdring gleamed, cold and white.
 		promotext: ""
@@ -218,20 +184,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -270,17 +229,8 @@
 		type: Follower
 		strength: 1
 		resistance: 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – Add a threat. <helper>(At the start of the maneuver phase, you may add a threat to transfer this to a companion.)</helper><br>If bearer is a [gandalf] Wizard, each time bearer wins a skirmish, you may exert a minion (if that minion is a Wizard, wound it instead).
 		lore: ...swiftest of the Great Eagles....'
 		promotext: ""
@@ -317,17 +267,8 @@
 			Pipeweed
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Pipeweed</b>. When you play this, you may search your deck for a [gandalf] card and place it in your discard pile.<br><b>Regroup:</b> Discard another pipeweed from play to discard a condition. Discard this condition.
 		lore: The smoke from his pipe drifted up, obscuring his face.
 		promotext: ""
@@ -361,17 +302,8 @@
 		culture: Gandalf
 		twilight: 3
 		type: Follower
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, you may add (1) to transfer this to a companion.)</helper><br>To play, spot a [gandalf] follower.<br>Bearer is strength +1 for each other [gandalf] follower you can spot.
 		lore: To many he was known as the Swift.
 		promotext: ""
@@ -408,17 +340,8 @@
 			Spell
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Spell</b>.<br><b>Fellowship:</b> Exert your Wizard and choose an opponent to name either Free Peoples or Shadow. Reveal the top three cards of your deck. If you revealed at least two of the chosen card type, take those cards into hand, otherwise, discard those cards.
 		lore: ""
 		promotext: ""
@@ -457,17 +380,8 @@
 		resistance: 1
 		itemclass: Mount
 		#target: a [gandalf] Wizard
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [gandalf] Wizard. Discard all other possessions on bearer and bearer may not bear a hand weapon.<br><b>Fellowship:</b> Add a threat to remove a burden.
 		lore: There are no horses like those that are bred in that great vale between the Misty Mountains and the White.
 		promotext: ""
@@ -501,20 +415,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -554,17 +461,8 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Discard a companion from hand to make an Ent strength +2.
 		lore: Ent the earthborn, old as mountains....'
 		promotext: ""

@@ -25,17 +25,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of each assignment phase, if you can spot more companions than minions, you may remove (2) to play an [orc] Orc from your discard pile.
 		lore: ...bred for battle in the southern reaches of Haradwaith....
 		promotext: ""
@@ -80,17 +71,8 @@
 			Muster
 			Toil 2
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ambush</b> (1). <b>Damage +1</b>. <b>Fierce</b>. <b>Lurker</b>. <b>Muster</b>. <b>Toil 2</b>.
 		lore: The troll-men sprinted on to the Pelennor to bathe their blades in the blood of the enemy.
 		promotext: ""

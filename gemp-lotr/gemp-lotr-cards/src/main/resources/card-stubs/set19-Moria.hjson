@@ -30,17 +30,8 @@
 			Damage+2
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +2</b>. <b>Fierce</b>.<br>While at an underground site, skip the archery phase, the maneuver phase, and The Balrog cannot be assigned to skirmish companions of strength 6 or less.
 		lore: The flames roared up to greet it, and wreathed about it....
 		promotext: ""
@@ -78,17 +69,8 @@
 		vitality: 2
 		site: 4
 		keywords: Tentacle
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Tentacle</b>.<br>This minion cannot bear possessions.<br>Discard this minion from play if not at a marsh.<br>This minion is strength +1 for each tentacle you can spot.
 		lore: Frodo felt something seize him by the ankle....
 		promotext: ""
@@ -126,17 +108,8 @@
 		vitality: 2
 		site: 4
 		keywords: Tentacle
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Tentacle</b>.<br>This minion cannot bear possessions.<br>Discard this minion from play if not at a marsh.<br>This minion is strength +1 for each tentacle you can spot.
 		lore: One came wriggling over the threshold....
 		promotext: ""
@@ -174,17 +147,8 @@
 		strength: 11
 		vitality: 4
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Discard all other minions (except tentacles).<br>Watcher in the Water cannot bear possessions.<br>The fellowship's current site gains <b>marsh</b>.<br><b>Shadow:</b> Play a tentacle from your discard pile.
 		lore: ...as if a host of snakes were swimming up....
 		promotext: ""

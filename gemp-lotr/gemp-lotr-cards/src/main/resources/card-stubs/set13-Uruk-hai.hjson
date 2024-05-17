@@ -26,17 +26,8 @@
 		vitality: 3
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Exert this minion and spot a Free Peoples condition to make an unbound companion resistance -1 for each card that has the same card title as that condition.
 		lore: Fear is a potent weapon in the hands of an Uruk-hai.
 		promotext: ""
@@ -74,17 +65,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>This minion is strength +1 for each Free Peoples culture token you can spot.
 		lore: Theories and tactics of warfare were tested upon the battlefields of Middle-earth.
 		promotext: ""
@@ -122,17 +104,8 @@
 		vitality: 1
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>While you can spot a Free Peoples culture token, this minion cannot take wounds except during skirmishes.
 		lore: Saruman uses the enemy's strength to his own advantage.
 		promotext: ""
@@ -166,17 +139,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Discard this condition to make an [uruk-hai] minion strength +1 for each of the following that is true: it is at a battleground site; it is skirmishing a companion who has resistance 4 or less; it is bearing a possession; you can spot an [uruk-hai] minion not assigned to a skirmish.
 		lore: ""
 		promotext: ""
@@ -210,17 +174,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [uruk-hai] minions.<br><b>Shadow:</b> Discard 2 cards from hand to add (1).<br><b>Regroup:</b> Spot an [uruk-hai] minion and discard this condition from play to add (3).
 		lore: Valour could not prevent the breach of the Deeping Wall.
 		promotext: ""
@@ -261,17 +216,8 @@
 			Damage+1
 			Lurker
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>. <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Possessions borne by this minion cannot be discarded by Free Peoples cards.
 		lore: An Uruk is disarmed only when it hurls its weapon.
 		promotext: ""
@@ -305,17 +251,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [uruk-hai] minion.<br>When you play this, if you spot a battleground site on the adventure path, reinforce 3 [uruk-hai] tokens.<br>Each time the Free Peoples player plays the fellowship's next site, you may discard a condition from play.
 		lore: ""
 		promotext: ""
@@ -353,17 +290,8 @@
 		vitality: 1
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>While the fellowship is at a forest site, the fellowship archery total is -1.<br>Each [elven] companion skirmishing this minion is strength -2.
 		lore: The Uruk-hai trained to engage the enemy in its own territory.
 		promotext: ""
@@ -397,20 +325,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -447,17 +368,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot 3 [uruk-hai] lurker minions, at the start of each skirmish involving an [uruk-hai] lurker minion, each companion skirmishing that minion must exert.
 		lore: Horsemen were galloping on the grass of Rohan; wolves poured from Isengard.
 		promotext: ""
@@ -495,17 +407,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>When you play this, you may spot a companion who has resistance 0 to make this minion twilight cost -2.
 		lore: The defenses of the Hornburg were exploited, exposing their weakest points.
 		promotext: ""
@@ -542,17 +445,8 @@
 		strength: 12
 		vitality: 2
 		site: 5
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [uruk-hai] minion.<br>While the fellowship is in region 1, each Uruk-hai is <b>damage +1</b>.<br>While the fellowship is in region 2, each companion is strength -1.<br>While the fellowship is in region 3, each unbound companion is resistance -2.
 		lore: ""
 		promotext: ""
@@ -590,17 +484,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> If this minion is not assigned to a skirmish, you may exert it to discard a possession borne by a companion skirmishing another [uruk-hai] minion.
 		lore: Wounds do not always remove the Uruk-hai from their assault.
 		promotext: ""
@@ -638,17 +523,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>This minion is twilight cost -1 for each companion who has resistance 2 or less.
 		lore: To sense weakness is to assume victory.
 		promotext: ""
@@ -685,17 +561,8 @@
 		strength: 15
 		vitality: 2
 		site: 5
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: This minion is <b>damage +1</b> for each character in the dead pile.
 		lore: The lesser the enemy, the greater the rage.
 		promotext: ""
@@ -736,17 +603,8 @@
 			Damage+1
 			Lurker
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>. <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time your [uruk-hai] minion is about to be killed in a skirmish, you may place that minion on the bottom of your draw deck instead.
 		lore: ""
 		promotext: ""
@@ -784,17 +642,8 @@
 		vitality: 3
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> If no other minions are assigned to a skirmish, exert this minion twice to make it <b>fierce</b> and strength +4 until the regroup phase.
 		lore: Some minions prefer to fight alone.
 		promotext: ""
@@ -832,17 +681,8 @@
 		vitality: 3
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert this minion to make a companion skirmishing an [uruk-hai] lurker minion strength -2.
 		lore: Select warriors had been tasked with advancing the assault beyond the Deeping Wall.
 		promotext: ""
@@ -876,20 +716,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -926,17 +759,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, add an [uruk-hai] token here for each wounded companion.<br><b>Skirmish:</b> Discard this from play or remove 2 tokens from here to make a companion skirmishing an [uruk-hai] minion strength -1.
 		lore: ""
 		promotext: ""

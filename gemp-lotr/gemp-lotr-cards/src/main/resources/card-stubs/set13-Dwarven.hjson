@@ -25,17 +25,8 @@
 		resistance: 1
 		itemclass: Mount
 		#target: a Dwarf
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Dwarf.<br>When you play Arod, you may reinforce a [dwarven] token.<br><b>Response:</b> If bearer is about to take a wound during a skirmish, remove 2 [dwarven] tokens to prevent that.
 		lore: A smaller and lighter horse, but restive and fiery....
 		promotext: ""
@@ -69,20 +60,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -119,17 +103,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time the fellowship moves, add (2).<br><b>Skirmish:</b> Exert a Dwarf who is not assigned to a skirmish to wound 2 Orcs (or to wound 1 Orc twice).<br>Discard this from play if the fellowship is ahead on the adventure path.
 		lore: ...the War of the Dwarves and the Orcs....
 		promotext: ""
@@ -163,20 +138,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -218,17 +186,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>Gimli is strength +1 for each minion assigned to a skirmish.<br><b>Assignment:</b> Exert Gimli and spot a lurker minion to make that minion lose <b>lurker</b> until the regroup phase.
 		lore: <span style="word-spacing:-0.01em;font-size:97%">"He and his people did great works in Gondor and Rohan."</span>
 		promotext: ""
@@ -262,23 +221,16 @@
 		twilight: 1
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		]
@@ -315,20 +267,13 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -365,17 +310,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, exert 2 Dwarves.<br>When you play this, add a [dwarven] token here for each mountain site and each underground site on the adventure path.<br><b>Skirmish:</b> Discard this from play or remove 2 tokens from here to make a Shadow player discard the top card of his or her draw deck.
 		lore: ""
 		promotext: ""

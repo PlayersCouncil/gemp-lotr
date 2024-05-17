@@ -22,20 +22,13 @@
 		twilight: 0
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -73,17 +66,8 @@
 		type: Possession
 		itemclass: Armor
 		#target: a Dwarf
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Dwarf.<br>Each minion skirmishing bearer loses all <b>damage</b> bonuses.<br><b>Skirmish:</b> Discard this possession to transfer one of bearer's possessions to another eligible bearer.
 		lore: We make good armour and keen swords....'
 		promotext: ""
@@ -117,17 +101,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a Dwarf wins a skirmish in which you played a [dwarven] event, you may draw a card.
 		lore: ...crying strange news in the dawn.
 		promotext: ""
@@ -161,20 +136,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -213,17 +181,8 @@
 		strength: 1
 		itemclass: Bracers
 		#target: a Dwarf
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Dwarf.<br><b>Response:</b> If bearer is about to take a wound, discard this possession to prevent that wound.
 		lore: Dwarven-smiths forge bracers for fit and agility.
 		promotext: ""
@@ -260,17 +219,8 @@
 			Toil 2
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Toil 2</b>. <helper>(For each [dwarven] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Skirmish:</b> Discard this condition to make a Dwarf strength +3 (or +4 if he has resistance 4 or more).
 		lore: Gimli's axe-work on the Amon Hen hewed a mighty path through the Uruk-hai.
 		promotext: ""
@@ -307,17 +257,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this companion during the fellowship phase, choose a Shadow player who must discard the top 2 cards of his or her draw deck.
 		lore: Though Dáin rules Erebor as King Under the Mountain, many of his kindred continue to dwell in the Iron Hills.
 		promotext: ""
@@ -351,17 +292,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Discard this condition to make a Dwarf strength +1 for each of the following that is true: he is at a mountain or underground site; he has resistance 3 or more; he is bearing a possession; he is skirmishing a fierce minion.
 		lore: A sharpened axe does well to protect Dwarven honor.
 		promotext: ""
@@ -395,17 +327,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Discard a [dwarven] card from hand and spot a minion skirmishing a Dwarf to make that minion <b>fierce</b> until the regroup phase.
 		lore: Alas! My axe is notched: the forty-second had an iron collar on his neck.'
 		promotext: ""
@@ -442,20 +365,13 @@
 			Toil 2
 			Fellowship
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -492,23 +408,16 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		]
@@ -545,17 +454,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each Dwarf is <b>damage +1</b> for each possession he bears.<br><b>Fellowship:</b> Discard this condition to play a [dwarven] possession from your discard pile.
 		lore: Dwarves' tongues run on when speaking of their handiwork, they say.'
 		promotext: ""
@@ -589,20 +489,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -639,17 +532,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each Dwarf gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>Each time the fellowship moves from a plains site, discard a card from your hand.
 		lore: ...I am glad to have you standing nigh....'
 		promotext: ""
@@ -687,17 +571,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: For each artifact and possession Thrarin bears, he is <b>damage +1</b>.
 		lore: Like many other representatives who have come to Rivendell, Thrarin the smith brings troubling news from the East.
 		promotext: ""

@@ -26,17 +26,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Elrohir is twilight cost -2.<br>Each time you play an [elven] event during a skirmish involving Elladan or Elrohir, that event is twilight cost -2.
 		lore: The Lady Celebrían bore Elrond two sons, the identical twins Elladan and Elrohir; elder brothers of Arwen, and grandchildren of Galadriel.
 		promotext: ""
@@ -74,17 +65,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Elladan is twilight cost -2.<br>Each time you play an [elven] event during a skirmish involving Elrohir or Elladan, each minion in that skirmish is strength -2.
 		lore: From the North we came with this purpose, and from Elrond our father we brought this very counsel. We will not turn back.'
 		promotext: ""
@@ -122,17 +104,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of each archery phase, if you can spot more minions than companions, each of your companions is an <b>archer</b>.
 		lore: Elves seldom give unguarded advice, for advice is a dangerous gift, even from the wise to the wise, and all courses may run ill.'
 		promotext: ""

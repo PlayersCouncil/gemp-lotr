@@ -22,17 +22,8 @@
 		block: Shadows
 		direction: Left
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>River</b>. The fellowship archery total is -3.
 		lore: ""
 		promotext: ""
@@ -66,17 +57,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Underground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Underground</b>. The twilight cost of the first hunter minion played each Shadow phase is -2.
 		lore: ""
 		promotext: ""
@@ -109,17 +91,8 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When the Fellowship moves to this site, add a threat (or 2 if you can spot a hunter minion) for each companion over 4.
 		lore: ""
 		promotext: ""
@@ -152,17 +125,8 @@
 		type: Site
 		block: Shadows
 		direction: Right
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of the fellowship phase, you may exert two hunter companions to play a hunter companion from your draw deck.
 		lore: ""
 		promotext: ""
@@ -196,17 +160,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Battleground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. Each time the fellowship moves to this site, add (1) for each culture you can spot.
 		lore: ""
 		promotext: ""
@@ -240,17 +195,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Battleground
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. Each time a follower is transferred to a character, the first Shadow player may exert a companion twice.
 		lore: ""
 		promotext: ""
@@ -288,17 +234,8 @@
 			Mountain
 			Underground
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Battleground</b>. <b>Mountain</b>. <b>Underground</b>. Until the end of the game, sites in this region cannot be replaced.
 		lore: ""
 		promotext: ""
@@ -332,17 +269,8 @@
 		block: Shadows
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Plains</b>. Each hunter character is strength +1.
 		lore: ""
 		promotext: ""

@@ -22,17 +22,8 @@
 		culture: Gandalf
 		twilight: 2
 		type: Follower
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, <span style="word-spacing:-0.08em">you may add (2) to transfer this to a companion.)</span></helper><br>Each time you transfer this to a companion, you may reinforce a [gandalf] token.<br>While you can spot a [gandalf] companion, each minion skirmishing bearer is strength -1.
 		lore: Third of the Istari to be named, he was clad in sea-blue.
 		promotext: ""
@@ -70,17 +61,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of the fellowship phase, you may remove 2 Free Peoples culture tokens to take a [gandalf] event into hand from your discard pile.
 		lore: ...its inhabitants, traditional trading partners of Esgaroth and Dale, now look to their northern allies for protection against the wild Easterlings....
 		promotext: ""
@@ -114,17 +96,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, add a [gandalf] token here.<br><b>Maneuver:</b> Discard this from play or remove a token from here to spot a [gandalf] companion. That companion gains <b>muster</b> until end of turn.
 		lore: The Hosts of Isengard roared, swaying this way and that, turning from fear to fear.
 		promotext: ""
@@ -161,20 +134,13 @@
 			Spell
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -214,20 +180,13 @@
 			Spell
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -269,17 +228,8 @@
 		vitality: 4
 		resistance: 5
 		keywords: CAN_START_WITH_RING
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While Gandalf is the Ring-bearer, each time the fellowship moves, add 3 burdens unless you spot 2 other companions and discard 2 [gandalf] cards from hand.
 		lore: But all worthy things that are in peril as the world now stands, those are my care.'
 		promotext: ""
@@ -313,20 +263,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -363,20 +306,13 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -415,17 +351,8 @@
 		type: Artifact
 		resistance: -2
 		#target: title(Gandalf)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Gandalf. To play this, if you can spot The Palantír of Orthanc, discard it.<br>At the start of the fellowship phase, you may add a burden to reveal a Shadow player's hand. He or she must choose a revealed minion and discard it from hand.
 		lore: ...a heavy shining thing came hurtling down from above.
 		promotext: ""
@@ -460,17 +387,8 @@
 		twilight: 2
 		type: Follower
 		strength: 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (2).<br>Each time you transfer this to a companion, except a [gandalf] companion, exert bearer twice.<br>Each time bearer wins a skirmish, you may discard a condition from play.
 		lore: Brought as a companion by Alatar, he traveled the South and East to aid the Free Peoples.
 		promotext: ""
@@ -505,17 +423,8 @@
 		twilight: 2
 		type: Follower
 		resistance: 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, <span style="word-spacing:-0.08em">you may add (2) to transfer this to a companion.)</span></helper><br>While you can spot 2 [gandalf] companions, minions skirmishing bearer do not gain strength bonuses from possessions.
 		lore: It would have been useless in any case to try and win over the honest Radagast to treachery.'
 		promotext: ""
@@ -549,20 +458,13 @@
 		twilight: 1
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -602,17 +504,8 @@
 		strength: 1
 		itemclass: Mount
 		#target: a Wizard
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Wizard.<br>When you play Shadowfax, you may reinforce a [gandalf] token.<br><b>Skirmish:</b> Remove 2 [gandalf] tokens to wound a minion skirmishing bearer.
 		lore: Then Shadowfax gathered himself together and sprang away, and the night flowed over him....
 		promotext: ""
@@ -646,17 +539,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each companion bearing a follower gains <b>muster</b> (and is strength +1 if that companion is a [gandalf] companion).
 		lore: Gandalf obviously expected to find Treebeard here; and Treebeard might almost have been loitering about near the gates on purpose to meet him.'
 		promotext: ""
@@ -690,17 +574,8 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a Wizard.<br>When you play this, add X [gandalf] tokens here, where X is the current region number.<br><b>Maneuver:</b> Discard this from play or remove 2 tokens from here to discard a Shadow condition from play.
 		lore: Of the Wizards, it was Gandalf that chose no home.
 		promotext: ""
@@ -734,17 +609,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Exert your [gandalf] companion and add a burden to make that companion <b>damage +1</b>.
 		lore: There was none to see, or perhaps in after ages songs would still be sung of the Battle of the Peak.'
 		promotext: ""

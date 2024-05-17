@@ -25,17 +25,8 @@
 		vitality: 1
 		itemclass: Hand weapon
 		#target: a [gandalf] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [gandalf] Man.<br>While Grimbeorn is bearing this possession, each time he wins a skirmish, you may take a [gandalf] card from your discard pile into hand.
 		lore: No Orc or wolf dared enter the land of the Beornings.
 		promotext: ""
@@ -72,20 +63,13 @@
 			Spell
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -122,20 +106,13 @@
 		twilight: 3
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -172,17 +149,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fellowship:</b> Exert a [gandalf] Man to add 2 [gandalf] tokens here.<br><b>Skirmish:</b> Remove 3 [gandalf] tokens from here to make a companion strength +3.
 		lore: To give his people time to escape, Brand stood against the Mordor army until he was slain. His friend, the dwarf Dáin Ironfoot, stood over him until he too was slain.
 		promotext: ""
@@ -220,17 +188,8 @@
 		strength: 3
 		vitality: 3
 		resistance: 5
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot 2 [gandalf] tokens, each of your [gandalf] Men is strength +2.<br><b>Regroup:</b> Discard a follower from play to choose one: draw a card; or take a [gandalf] skirmish event from your discard pile into hand.
 		lore: A guide through books and scrolls from floor to ceiling.
 		promotext: ""
@@ -267,20 +226,13 @@
 			Spell
 			Maneuver
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -320,17 +272,8 @@
 			Spell
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Spell</b>. To play, exert Gandalf.<br>When you play this condition, remove (3).<br>At the start of the maneuver phase, add (4) and remove this condition from the game.
 		lore: All we have to decide is what to do with the time that is given to us.
 		promotext: ""
@@ -364,17 +307,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Add 2 threats and spot a Wizard to spot a minion in play. That minion cannot use special abilities until the regroup phase.
 		lore: Hobbits really are amazing creatures! You can learn all that there is to know about their ways in a month, and yet after a hundred years, they can still surprise you.
 		promotext: ""
@@ -410,17 +344,8 @@
 		vitality: 1
 		resistance: 2
 		#target: a [gandalf] Wizard
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [gandalf] Wizard.<br>Each time you play a [gandalf] spell, you may exert bearer to wound a minion.
 		lore: The tools of a master of herb and beast-lore were often confined to the simplest of places.
 		promotext: ""
@@ -457,17 +382,8 @@
 			Pipeweed
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Pipeweed</b>.<br>Each time you play a pipeweed card, you may spot Gandalf to reveal the top 3 cards of your draw deck. Take all Free Peoples cards revealed into hand and discard the remaining cards.
 		lore: Old Toby. The finest weed in the Southfarthing.
 		promotext: ""

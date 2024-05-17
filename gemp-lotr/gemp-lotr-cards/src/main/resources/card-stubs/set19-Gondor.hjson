@@ -30,17 +30,8 @@
 			Fellowship
 			Ranger
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fellowship</b>. <b>Ranger</b>.<br>While the Ring-bearer is the only other companion you can spot, Aragorn is an <b>archer</b>, <b>defender +1</b>, and can take no more than 1 wound each skirmish.
 		lore: The skill of the Elves can reforge the sword of Kings, but only you have the power to wield it.
 		promotext: ""
@@ -82,17 +73,8 @@
 			Fellowship
 			Ranger
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fellowship</b>. <b>Ranger</b>.<br>While you can spot two unbound Hobbits, Boromir's twilight cost is -1.<br>Each time Boromir wins a skirmish, you may exert an unbound Hobbit to discard each minion he is skirmishing from play.
 		lore: In a dream, I saw the eastern sky grow dark.
 		promotext: ""
@@ -127,17 +109,8 @@
 		type: Condition
 		strength: 1
 		#target: a [gondor] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [gondor] Man.<br>Each time bearer wins a skirmish, you may transfer this condition to another [gondor] Man.<br>At the end of each turn, if bearer is not Aragorn, return this condition to hand.
 		lore: Your time will come. You will face the same evil....
 		promotext: ""
@@ -172,17 +145,8 @@
 		type: Condition
 		strength: 1
 		#target: a fellowship companion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a fellowship companion.<br>While bearer is a [gondor] companion, he or she is <b>damage +1</b>.
 		lore: I would have followed you my Brother... my Captain... my King!
 		promotext: ""

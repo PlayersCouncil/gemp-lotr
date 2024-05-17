@@ -22,20 +22,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -72,17 +65,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Response:</b> If a Free Peoples player's card is about to discard your other [gollum] condition, remove (1) to prevent that.
 		lore: Presently they were under the shadow, and there in the midst of it they saw the opening of a cave. 'This is the way in,' said Gollum softly.
 		promotext: ""
@@ -116,20 +100,13 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -166,20 +143,13 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -216,17 +186,8 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Shadow:</b> Remove (3) to take a [gollum] card into hand from your draw deck, then randomly discard a card from your hand.<br><b>Skirmish:</b> Discard a [gollum] card from hand to make a [gollum] minion strength +2.
 		lore: But I still feel that they are looking at me, or thinking about me: making some other plan, perhaps.'
 		promotext: ""
@@ -260,20 +221,13 @@
 		twilight: 2
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -315,17 +269,8 @@
 		vitality: 8
 		site: 8
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>Each time Shelob wins a skirmish, you may add threats up to the number of burdens you can spot.<br>Each time Shelob wins a skirmish, you may play Gollum from your discard pile; he is strength +3 and <b>fierce</b> until the end of turn.
 		lore: ""
 		promotext: ""
@@ -359,20 +304,13 @@
 		twilight: 10
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -409,23 +347,16 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		]
@@ -462,20 +393,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}

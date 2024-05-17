@@ -30,17 +30,8 @@
 			Archer
 			Damage+1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Archer</b>. <b>Damage +1</b>.<br><b>Response:</b> If Lurtz is about to take a wound or be exerted, remove (2) (or exert another Uruk-hai) to prevent that wound or exertion.
 		lore: The Uruk-hai leader walked into view on the misty hilltop beneath the dark trees. Hungry for blood.
 		promotext: ""

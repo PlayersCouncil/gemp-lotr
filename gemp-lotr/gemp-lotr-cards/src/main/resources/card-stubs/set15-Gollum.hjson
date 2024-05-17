@@ -22,17 +22,8 @@
 		twilight: 1
 		type: Condition
 		#target: title(Sméagol)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Sméagol.<br>While you can spot 2 Ring-bound Hobbits, each time an opponent uses a skirmish special ability in a skirmish involving Gollum or Sméagol, you may wound a minion.
 		lore: It won't be long now. He will soon be ready.
 		promotext: ""
@@ -66,17 +57,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot Sméagol.<br>While you can spot 2 Ring-bound Hobbits, each Shadow event is twilight cost +1.<br><b>Skirmish:</b> Discard this condition to make each Ring-bound companion strength +1 until the regroup phase.
 		lore: Thief, thief! Baggins! We hates it for ever!
 		promotext: ""
@@ -110,17 +92,8 @@
 		twilight: 1
 		type: Condition
 		#target: title(Gollum)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Gollum.<br><b>Skirmish:</b> If Gollum is not assigned to a skirmish, discard this condition to have him replace a minion skirmishing a companion.
 		lore: Gollum's appetite for the One Ring could not be quenched.
 		promotext: ""
@@ -154,20 +127,13 @@
 		twilight: 3
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -207,17 +173,8 @@
 		race: 
 		vitality: 4
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of each skirmish involving Gollum, he is strength +X until the end of that skirmish, where X is the Ring-bearer's strength.
 		lore: Give it to us raw and wriggling!
 		promotext: ""
@@ -251,17 +208,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot Frodo, Sméagol is resistance +1.<br>While you can spot Sam, Sméagol is strength +1.<br>While you can spot Bilbo, Sméagol is <b>damage +1</b>.
 		lore: Eat them, Eat them!'
 		promotext: ""
@@ -295,20 +243,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -345,17 +286,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time Sméagol wins a skirmish, place a [gollum] token here.<br><b>Regroup:</b> Heal a Ring-bound companion for each token here. Discard this condition.
 		lore: Bring fish with you. Come!'
 		promotext: ""
@@ -389,17 +321,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Exert Gollum and remove a threat to wound a companion Gollum is skirmishing.
 		lore: Got away, did it, Precious!
 		promotext: ""
@@ -433,20 +356,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -488,17 +404,8 @@
 		vitality: 4
 		resistance: 5
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br>Each Ring-bound companion is resistance +1.<br><b>Skirmish:</b> Exert 2 Ring-bound Hobbits to make Sméagol strength +1 and prevent him from being overwhelmed unless his strength is tripled.
 		lore: <span style="word-spacing:-0.01em;font-size:97%">"'...this creature is in some way bound up with my errand.'"</span>
 		promotext: ""
@@ -532,20 +439,13 @@
 		twilight: 2
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -582,20 +482,13 @@
 		twilight: 2
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -632,20 +525,13 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -682,20 +568,13 @@
 		twilight: 2
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}

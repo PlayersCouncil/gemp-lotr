@@ -27,17 +27,8 @@
 		vitality: 5
 		site: 4
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>While The Balrog is at an underground site, it is <b>fierce</b> and cannot take wounds or be exerted.
 		lore: The fire in it seemed to die, but the darkness grew.
 		promotext: ""
@@ -74,17 +65,8 @@
 		strength: 1
 		itemclass: Hand weapon
 		#target: The Balrog
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be The Balrog.<br>It is <b>fierce</b>.<br>When you play this artifact, the Free Peoples player reveals his or her hand and discards all Free Peoples cards from hand that have a twilight cost of 1 or less.
 		lore: ...it swung its whip, and the thongs lashed....
 		promotext: ""

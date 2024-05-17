@@ -23,17 +23,8 @@
 		type: Condition
 		vitality: -1
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Regroup:</b> Exert an [uruk-hai] hunter twice to transfer this condition from your support area to an unbound companion.<br><b>Archery:</b> Spot an [uruk-hai] minion to transfer this condition from your support area to a Free Peoples archer.
 		lore: ""
 		promotext: ""
@@ -67,20 +58,13 @@
 		twilight: 4
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -118,17 +102,8 @@
 		type: Condition
 		strength: 1
 		#target: title(an [uruk-hai] minion)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [uruk-hai] minion.<br>Each time bearer wins a skirmish, you may choose one: discard a follower from play; heal an [uruk-hai] minion; or control a site.
 		lore: What can men do against such reckless hate?
 		promotext: ""
@@ -162,20 +137,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -220,17 +188,8 @@
 			Archer
 			Damage+1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Archer</b>. <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 6 companions to make Lurtz <b>fierce</b> until the regroup phase.<br><b>Assignment:</b> Exert Lurtz twice to assign it to an unbound companion. The Free Peoples player may exert that companion or add a burden to prevent this.
 		lore: ""
 		promotext: ""
@@ -268,17 +227,8 @@
 		vitality: 1
 		itemclass: Ranged weapon
 		#target: title(an Uruk-hai)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an Uruk-hai.<br>When you play this possession on Lurtz, you may draw a card.<br><b>Archery:</b> If bearer is Lurtz, discard 2 [uruk-hai] cards from hand to exert an unbound companion.
 		lore: The bow of the Uruk captain dealt a powerful blow.
 		promotext: ""
@@ -312,20 +262,13 @@
 		twilight: 0
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -362,17 +305,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each [uruk-hai] minion bearing a hand weapon cannot take wounds during the archery phase.<br><b>Skirmish:</b> Discard this condition from play to make an [uruk-hai] minion bearing a possession strength +2.
 		lore: Many a crude weapon was forged for his forces.
 		promotext: ""
@@ -414,17 +348,8 @@
 			Damage+1
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While you can spot 7 possessions, Shagrat is <b>fierce</b> and cannot take wounds (except during skirmish phases).
 		lore: I don't take orders from stinking Morgul rats!
 		promotext: ""
@@ -458,17 +383,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot 3 [uruk-hai] hunters, at the start of each skirmish involving an [uruk-hai] hunter, each companion skirmishing that minion must exert.
 		lore: Though bred for battle, the Uruks could track prey like the best of hunters.
 		promotext: ""
@@ -506,17 +422,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>While at a battleground, this minion is strength +2.
 		lore: The Uruk-hai army stopped and growled in anticipation of the upcoming battle.
 		promotext: ""
@@ -554,17 +461,8 @@
 		vitality: 1
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>When you play this minion, you may heal an [uruk-hai] minion.
 		lore: March to Helm's Deep! Leave none alive!
 		promotext: ""
@@ -602,17 +500,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>This minion is strength +1 for each other [uruk-hai] minion you can spot.
 		lore: The enormous Uruk-hai armies marched with great speed.
 		promotext: ""
@@ -650,17 +539,8 @@
 		vitality: 3
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>Each time this minion wins a skirmish, you may control a site.
 		lore: The Men and Elves looked out into the darkness, and through the rain they saw, lit by the thousands of torches, the huge advancing Uruk-hai army.
 		promotext: ""
@@ -698,17 +578,8 @@
 		vitality: 3
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br><b>Response:</b> If an [uruk-hai] minion is about to take a wound, exert this minion to prevent that wound.
 		lore: The Uruk-hai... resilient... imposing....
 		promotext: ""
@@ -746,17 +617,8 @@
 		vitality: 1
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>To play, spot an [uruk-hai] minion and you must control a site.
 		lore: The flood of Uruk-hai storming the Deeping Wall seemed to be unstoppable.
 		promotext: ""
@@ -794,17 +656,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Spot 2 other [uruk-hai] minions and remove (2) to make this minion strength +1 and <b>damage +1</b>.
 		lore: The Uruk-hai troop snuck along through the forest following the three boats carrying the Fellowship.
 		promotext: ""
@@ -842,17 +695,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>To play, spot an [uruk-hai] minion.
 		lore: ""
 		promotext: ""

@@ -30,17 +30,8 @@
 			Damage+1
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>Each time Gimli wins a skirmish, you may add a threat to wound a minion (or wound a hunter minion twice).
 		lore: ""
 		promotext: ""
@@ -74,17 +65,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this condition, place a [dwarven] token here.<br><b>Skirmish:</b> Discard this condition from play or remove a [dwarven] token from here to make a [dwarven] companion gain <b>hunter 1</b>.
 		lore: Let us hunt some Orc!
 		promotext: ""
@@ -121,17 +103,8 @@
 			Tale
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Tale</b>.<br><b>Maneuver:</b> Exert a [dwarven] companion to make the fellowship's current site gain <b>mountain</b> until the regroup phase.
 		lore: ""
 		promotext: ""

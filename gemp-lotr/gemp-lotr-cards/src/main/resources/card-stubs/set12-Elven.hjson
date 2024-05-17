@@ -22,20 +22,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -76,17 +69,8 @@
 		strength: 8
 		vitality: 4
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an Elf.<br><b>Skirmish:</b> If Elrond is skirmishing a minion, exert him to place an [elven] card from your discard pile on top of your draw deck.
 		lore: I was there the day the strength of Men failed.'
 		promotext: ""
@@ -122,17 +106,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: title(Arwen or Elrond)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Arwen or Elrond.<br>Each time bearer wins a skirmish, you may exert him or her to discard a condition from play.
 		lore: This blade is called Hadafang, a noble defense against the enemy throng for a noble lady.
 		promotext: ""
@@ -168,17 +143,8 @@
 		strength: 1
 		itemclass: Hand weapon
 		#target: title(Legolas)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Legolas.<br>Each Orc or Uruk-hai skirmishing Legolas is strength -2.
 		lore: Sharp, bone-handled knives defend the Elves of Mirkwood at close quarters.
 		promotext: ""
@@ -216,17 +182,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While Orophin is at a forest site and you can spot another Elf, Orophin is an <b>archer</b>.
 		lore: ...wolves were howling on the wood's borders: but on the land of Lórien no shadow lay.
 		promotext: ""
@@ -260,17 +217,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an Elf.<br><b>Fellowship:</b> Discard a companion from hand to heal a companion.
 		lore: Now you shall rest, and we will not speak of your further road for a while.'
 		promotext: ""
@@ -308,17 +256,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Reveal the top card of your draw deck. If it is an [elven] card, Rúmil is an <b>archer</b> until the regroup phase.
 		lore: ...the Elves feared and distrusted the world outside....
 		promotext: ""
@@ -355,20 +294,13 @@
 			Toil 2
 			Maneuver
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -408,17 +340,8 @@
 			Toil 1
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Toil 1</b>. <helper>(For each [elven] character you exert when playing this, its twilight cost is -1.)</helper><br><b>Archery:</b> Discard an [elven] character from hand to make the fellowship archery total +1.<br>Each time the fellowship moves from an underground site, return your Elf to your hand.
 		lore: ""
 		promotext: ""

@@ -24,17 +24,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br><b>Skirmish:</b> Remove (3) to reinforce a [men] token and make bearer <b>fierce</b> until the regroup phase.
 		lore: Small and light, the boarding axe is ideal for close- quarters fighting aboard ships or in confined spaces.
 		promotext: ""
@@ -70,17 +61,8 @@
 		strength: 1
 		itemclass: Ranged weapon
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br>Bearer is an <b>archer</b>.<br>Each time a companion is killed during the archery phase, you may control a site.
 		lore: Not nearly as ornate or as accurate as the Gondorian bows, the short-bows of the Corsairs killed just as well.
 		promotext: ""
@@ -116,17 +98,8 @@
 		strength: 1
 		itemclass: Hand weapon
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br>When you play this possession you may reinforce a [men] token twice.<br>Each time a companion is killed during a skirmish phase, you may control a site.
 		lore: A tool equally useful in times of peace and in times of war.
 		promotext: ""
@@ -162,17 +135,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br>Bearer is <b>damage +1</b>.<br><b>Shadow:</b> Remove a companion in the dead pile from the game to control a site.
 		lore: Long handled and heavy, a single powerful swing of this weapon could cleave through even some of the thickest armor.
 		promotext: ""
@@ -207,17 +171,8 @@
 		type: Possession
 		itemclass: Hand weapon
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br>Bearer is strength +1 for each [men] token you can spot (limit +5).
 		lore: A largely stylistic weapon, scimitars are favored for their light weight yet powerful strikes.
 		promotext: ""
@@ -251,23 +206,16 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		]
@@ -305,17 +253,8 @@
 		type: Possession
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this possession, you may add a [men] token here.<br><b>Regroup:</b> Remove 4 [men] tokens from here to place a [men] card from your discard pile on the top of your draw deck.
 		lore: They'll be in the city in two days. You're outnumbered, Aragorn.
 		promotext: ""
@@ -353,17 +292,8 @@
 		strength: 4
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Regroup:</b> Exert Gríma to add (2).<br><b>Regroup:</b> Remove a [men] token to add (2).<br><b>Regroup:</b> Remove (4) to exert an unbound companion.
 		lore: You are held wise, my friend Wormtongue, and are doubtless a great support to your master.'
 		promotext: ""
@@ -400,17 +330,8 @@
 		strength: 6
 		vitality: 2
 		site: 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While the fellowship is in region 1, this minion is strength +4.<br>While the fellowship is in region 2, this minion is strength +2.
 		lore: What do you want?
 		promotext: ""
@@ -446,17 +367,8 @@
 		strength: 1
 		itemclass: Hand weapon
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br>Bearer may bear this hand weapon in addition to 1 other hand weapon.
 		lore: Carved from bone or forged from iron, no warrior would enter the fields of battle without a trusty, simple blade.
 		promotext: ""
@@ -490,20 +402,13 @@
 		twilight: 2
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -544,17 +449,8 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While at a battleground, this minion is strength +2.<br>Each mounted Man is strength +1.<br><b>Regroup:</b> Shuffle any number of your [men] mounts in play into your draw deck.
 		lore: With a sound of his horn, a line of Mûmakil appeared and the Pelennor field was filled with chaos.
 		promotext: ""
@@ -591,17 +487,8 @@
 		strength: 8
 		vitality: 1
 		site: 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While the fellowship is in region 1, this minion is strength +4.<br>While the fellowship is in region 2, this minion is strength +2.
 		lore: It works for him!
 		promotext: ""
@@ -638,17 +525,8 @@
 		strength: 10
 		vitality: 3
 		site: 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While the fellowship is in region 1, this minion is strength +4.<br>While the fellowship is in region 2, this minion is strength +2.
 		lore: Making money and making mischief was often inspiration enough for these louts. The taking of Bree and the Shire was easy work.
 		promotext: ""
@@ -685,17 +563,8 @@
 		strength: 9
 		vitality: 2
 		site: 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While the fellowship is in region 1, this minion is strength +4.<br>While the fellowship is in region 2, this minion is strength +2.
 		lore: A man of Dunland, this outlaw was a prized agent of Saruman and a spy for the Witch-king.
 		promotext: ""
@@ -733,17 +602,8 @@
 		strength: 3
 		vitality: 4
 		site: 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Liberate a site you control to make each [men] minion strength +2 until the regroup phase.<br><b>Regroup:</b> Exert Ted Sandyman to stack a [men] Man in play on a possession.
 		lore: You can't touch me. I'm a friend o' Boss's. But he'll touch you all right, if I have any more of your mouth.'
 		promotext: ""
@@ -777,20 +637,13 @@
 		twilight: 3
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -827,17 +680,8 @@
 		twilight: 0
 		type: Condition
 		#target: a follower
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a follower.<br>At the start of the maneuver phase, if you can spot a [men] Man, the Free Peoples player must exert an unbound companion.
 		lore: My lord, Gandalf the Grey is coming. He's a herald of woe.
 		promotext: ""

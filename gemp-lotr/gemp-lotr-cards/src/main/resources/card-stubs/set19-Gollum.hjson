@@ -26,17 +26,8 @@
 		strength: 5
 		vitality: 4
 		site: 3
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Gollum is strength +1 for each threat you can spot.<br>Each time Gollum wins a skirmish, you may add a threat.
 		lore: But if we was master, then we could help ourselfs, yes....'
 		promotext: ""
@@ -75,17 +66,8 @@
 		vitality: 4
 		resistance: 5
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br>Each time Sméagol wins a skirmish, you may shuffle up to 2 [gollum] cards from your discard pile into your draw deck.<br><b>Skirmish:</b> Exert a Ring-bound companion to make Sméagol strength +2.
 		lore: ...now that I see him, I do pity him.
 		promotext: ""

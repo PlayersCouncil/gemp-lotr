@@ -25,17 +25,8 @@
 			Tale
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Tale</b>. To play, spot a Hobbit.<br><b>Maneuver:</b> Discard a tale from play to choose a Shadow player who must exert one of his or her minions.
 		lore: If you're referring to the incident with the dragon, I was barely involved. All I did was give your uncle a little nudge out of the door.
 		promotext: ""
@@ -73,17 +64,8 @@
 		strength: 3
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While the fellowship is in region 1 and you can spot 2 other [shire] companions, Fredegar Bolger is strength +3.
 		lore: You'll wish you were back here with me before this time tomorrow.'
 		promotext: ""
@@ -118,17 +100,8 @@
 		type: Possession
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a [shire] companion wins a skirmish, you may add a [shire] token here.<br><b>Fellowship:</b> Remove a [shire] token here to remove a burden.
 		lore: The best beer in the Eastfarthing, or used to be: it is a long time since I tasted it.'
 		promotext: ""
@@ -162,20 +135,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -212,17 +178,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of each turn, you may add (2) to heal a [shire] companion.<br><b>Maneuver:</b> Add a threat to spot a minion. That minion loses <b>fierce</b> and cannot gain fierce until the regroup phase.
 		lore: We are sitting on the field of victory, enjoying a few well-earned comforts.
 		promotext: ""
@@ -257,17 +214,8 @@
 		twilight: 2
 		type: Follower
 		resistance: 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper><br>Each time you attach this follower to a [shire] companion, you may discard X cards from hand to draw X cards.
 		lore: ""
 		promotext: ""
@@ -304,17 +252,8 @@
 			Tale
 			Support Area
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Tale</b>.<br>When there are 4 [shire] tokens here, discard this condition from play.<br><b>Response:</b> If a [shire] condition or [shire] possession is about to be discarded from play by a Shadow card, add a [shire] token here to prevent that.
 		lore: ""
 		promotext: ""
@@ -353,17 +292,8 @@
 		resistance: 1
 		itemclass: Hand weapon
 		#target: title(Bilbo or Frodo)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Bilbo or Frodo.<br><b>Regroup:</b> Exert bearer to remove a threat.
 		lore: My old sword, Sting! Here! Take it, take it!
 		promotext: ""

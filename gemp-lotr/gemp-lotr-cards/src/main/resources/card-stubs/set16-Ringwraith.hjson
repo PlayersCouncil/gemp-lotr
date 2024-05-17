@@ -26,17 +26,8 @@
 		vitality: 4
 		site: 2
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Enduring</b>. Each [wraith] Wraith cannot take wounds (except during skirmishes).<br><b>Shadow:</b> Remove a burden to play a [wraith] Wraith. That minion's twilight cost is -2.
 		lore: The icy touch froze his bones, and he remembered no more.
 		promotext: ""
@@ -74,17 +65,8 @@
 		vitality: 2
 		site: 3
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Enduring</b>. Each time the Free Peoples player assigns this minion to a companion, you may spot another [wraith] Wraith and remove (2) to wound that companion.
 		lore: ...here and there they twisted like ghostly sheets unfurled by hidden hands.
 		promotext: ""
@@ -122,17 +104,8 @@
 		vitality: 2
 		site: 3
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Enduring</b>. Each time the Free Peoples player assigns Covetous Wisp to a companion, you may spot another [wraith] Wraith and remove (2) to add a burden.
 		lore: Only shapes to see, perhaps, not to touch.'
 		promotext: ""
@@ -170,17 +143,8 @@
 		vitality: 2
 		site: 3
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Enduring</b>. Each time the Free Peoples player assigns this minion to a companion, you may spot another [wraith] Wraith and remove (2) to discard a condition.
 		lore: There are dead things, dead faces in the water!'
 		promotext: ""
@@ -218,17 +182,8 @@
 		vitality: 3
 		site: 2
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Enduring</b>. While you can spot another [wraith] Wraith, wounds cannot be healed and burdens can not be removed (except by Wraiths).<br><b>Skirmish:</b> Exert Spirit of Dread to make another [wraith] Wraith strength +1.
 		lore: ...across their three necks lay one long naked sword.
 		promotext: ""
@@ -266,17 +221,8 @@
 		vitality: 3
 		site: 2
 		keywords: Enduring
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Enduring</b>. While you can spot another [wraith] Wraith, each wounded companion is resistance -2.<br><b>Shadow:</b> Exert Undead of Angmar twice to play a [wraith] Wraith from your draw deck, then reshuffle.
 		lore: In the dark there was a snarling noise.
 		promotext: ""

@@ -22,20 +22,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -75,20 +68,13 @@
 			Toil 2
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -125,17 +111,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, exert an [orc] minion.<br>If you can spot 5 burdens, and the Free Peoples player has no cards in his or her draw deck, the Ring-bearer is corrupted.
 		lore: Once more the desire to slip on the Ring came over Frodo; but this time it was stronger than before.
 		promotext: ""
@@ -169,20 +146,13 @@
 		twilight: 1
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -228,17 +198,8 @@
 			Fierce
 			Toil 2
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>. <b>Toil 2</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -2.)</helper><br>Each time an [orc] lurker wins a skirmish, you may make the Free Peoples player discard the top 2 cards of his or her draw deck.
 		lore: There is no hope of escape that way.'
 		promotext: ""
@@ -275,17 +236,8 @@
 		strength: 3
 		itemclass: Hand weapon
 		#target: title(an [orc] Troll)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [orc] Troll.<br>When you play this possession, the Free Peoples player must exert a companion for each lurker you spot.
 		lore: Its weight is greater than any foe it has felled.
 		promotext: ""
@@ -322,17 +274,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While this minion is bearing a possession, each [orc] minion is strength +1.
 		lore: The road may lead to Moria, but how can we hope that it will lead through Moria....'
 		promotext: ""
@@ -366,17 +309,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of each skirmish involving an [orc] minion, you may spot 6 companions to exert a companion in that skirmish.<br><b>Shadow:</b> Discard this condition and spot an [orc] minion to make the Free Peoples player place a card from his or her hand on top of his or her draw deck.
 		lore: ""
 		promotext: ""
@@ -413,17 +347,8 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While this minion is bearing a possession, each [orc] minion is strength +2.
 		lore: The enemy,' men murmured. 'The dike is down. Here they come pouring through the breaches!'
 		promotext: ""
@@ -460,17 +385,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time the Free Peoples player assigns this minion to skirmish an unwounded companion, he or she must add a burden or discard a card from hand.
 		lore: Some Orcs go beyond savagery, taking pleasure in the suffering of their enemies.
 		promotext: ""
@@ -507,17 +423,8 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time you play an [orc] possession on an [orc] Orc, you may add (1) (or (2) if that Orc is at a battleground or underground site).
 		lore: Much Orc weaponry is scavenged from fallen foes, but they still have ample need for smiths to outfit their troops.
 		promotext: ""
@@ -554,17 +461,8 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time this minion is assigned to a skirmish, if it is not at an underground site, remove (2) or discard this minion.
 		lore: ...their Captain cared not greatly what they did or how many might be slain....
 		promotext: ""
@@ -601,17 +499,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When this minion is discarded from play, you may spot a companion who has resistance 4 or less to shuffle this minion into your draw deck.
 		lore: On they came, reckless of their loss as they approached....
 		promotext: ""
@@ -648,17 +537,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this minion, you may spot a companion who has resistance 4 or less to prevent that companion from being assigned to this minion until the regroup phase.
 		lore: ...their purpose was only to test the strength of the defence and to keep the men of Gondor busy in many places.
 		promotext: ""
@@ -696,17 +576,8 @@
 		vitality: 2
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each skirmish event you play is twilight cost -1.
 		lore: I have never heard before of Orcs upon Amon Hen. Yet who knows what may happen in these evil days....'
 		promotext: ""
@@ -742,17 +613,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: title(an [orc] minion)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [orc] minion.<br>When you play this possession on a minion that has a twilight cost of 4 or more, add (2).
 		lore: The flared backs of Orkish spearheads are crafted to inflict more damage as they are pulled out of a victim.
 		promotext: ""
@@ -790,17 +652,8 @@
 		vitality: 3
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Maneuver:</b> Make an [orc] lurker minion lose <b>lurker</b> until the regroup phase.
 		lore: It takes a strong will indeed to command an unruly band of Orcs.
 		promotext: ""
@@ -837,17 +690,8 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time the Free Peoples player assigns this minion to skirmish an unwounded companion, he or she must add a burden or discard a card from hand.
 		lore: ...orc-speech sounded at all times full of hate and anger....
 		promotext: ""
@@ -884,17 +728,8 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this minion, you may make the Free Peoples player exert a companion for each companion over 4.
 		lore: Curses they heeded not, nor understood the tongues of western men....
 		promotext: ""
@@ -932,17 +767,8 @@
 		vitality: 2
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time you play another [orc] lurker at a battleground or underground site, you may make the Free Peoples player exert a companion.
 		lore: Orcs can spring from the shadows in surprising numbers.
 		promotext: ""
@@ -976,17 +802,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time an [orc] minion bearing a weapon wins a skirmish, add a burden.<br><b>Shadow:</b> Discard this condition to play an [orc] weapon from your discard pile.
 		lore: With his mighty army, the Dark Lord exacted a high price for resisting his will.
 		promotext: ""
@@ -1023,17 +840,8 @@
 		strength: 8
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this minion, you may play an [orc] weapon from your discard pile on your [orc] Orc.
 		lore: The Orcs have often plundered Moria; there is nothing left in the upper halls.'
 		promotext: ""
@@ -1070,20 +878,13 @@
 			Toil 2
 			Maneuver
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -1120,20 +921,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -1175,17 +969,8 @@
 		vitality: 3
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Shadow:</b> Exert Troll's Keyward and reveal your hand to add (1) for each [orc] Troll revealed.
 		lore: Tending the Cave Troll is a task neither envied or respected within the tribes of Moria.
 		promotext: ""
@@ -1222,17 +1007,8 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time this minion is assigned to skirmish a Dwarf, this minion is <b>fierce</b> until the regroup phase.
 		lore: The Orcs infesting Khazad-dûm despoiled and defiled the ancient Dwarven mansion.
 		promotext: ""

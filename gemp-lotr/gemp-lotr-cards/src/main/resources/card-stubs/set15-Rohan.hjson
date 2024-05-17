@@ -22,20 +22,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -72,20 +65,13 @@
 		twilight: 1
 		type: Event
 		keywords: Assignment
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -130,17 +116,8 @@
 			Valiant
 			Hunter 2
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Valiant</b>. <b>Hunter 2</b>. <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper><br>While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br><b>Skirmish:</b> Discard a [rohan] card from hand to make Éomer strength +2.
 		lore: ""
 		promotext: ""
@@ -177,17 +154,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is Éomer and he is unwounded, he is <b>damage +1</b> and resistance +1.<br><b>Skirmish:</b> If bearer is Éomer, discard this possession to wound a minion he is skirmishing.
 		lore: Aim for their heads!
 		promotext: ""
@@ -226,17 +194,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Valiant</b>.<br><b>Response:</b> If a hunter companion or valiant Man is about to take a wound, exert Éowyn to prevent that wound.
 		lore: I can fight!
 		promotext: ""
@@ -278,17 +237,8 @@
 			Valiant
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Valiant</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper> To play, spot a [rohan] Man.<br>While you can spot 3 hunters, Gamling is strength +3.
 		lore: Dawn is not far off... But dawn will not help us, I fear.'
 		promotext: ""
@@ -322,20 +272,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -376,17 +319,8 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot 2 mounts, Haleth is strength +2.<br>While you can spot 3 mounts, Haleth is <b>damage +1</b>.<br>While you can spot 4 Free Peoples mounts, those mounts can not be discarded by a Shadow player.
 		lore: ""
 		promotext: ""
@@ -421,17 +355,8 @@
 		type: Possession
 		itemclass: Mount
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br><b>Skirmish:</b> Exert bearer to make a [rohan] Man strength +1.
 		lore: Aragorn saw a shadow on the distant green, a dark swift-moving blur.
 		promotext: ""
@@ -468,17 +393,8 @@
 		strength: 5
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a valiant Man, this companion's twilight cost is -1.<br>This companion is strength +2 while no opponent controls a site.
 		lore: And they became our allies, and have ever proved true to us....'
 		promotext: ""
@@ -512,20 +428,13 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -562,20 +471,13 @@
 		twilight: 1
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -613,17 +515,8 @@
 		type: Possession
 		itemclass: Mount
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
 		lore: Their horses were of great stature, strong and clean- limbed; their grey coats glistened, their long tails flowed in the wind....
 		promotext: ""
@@ -657,17 +550,8 @@
 		twilight: 2
 		type: Follower
 		strength: 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, you may add (1) to transfer this to a companion.)</helper> To play, spot a [rohan] Man.<br>Bearer is considered to be mounted.
 		lore: Rohirrim warriors were seldom seen without their mount.
 		promotext: ""
@@ -700,17 +584,8 @@
 		culture: Rohan
 		twilight: 1
 		type: Follower
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (1).<br>Each time you transfer this to a companion, except a [rohan] companion, exert bearer twice.<br>Each time bearer wins a skirmish, you may liberate a site.
 		lore: In preparation for the Battle of Helm's Deep, everyone helped fortify the doors and walls.
 		promotext: ""
@@ -746,17 +621,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>While bearer is skirmishing a hunter minion, bearer is <b>damage +1</b>.
 		lore: Rohirrim young and old were given weapons of all kinds to defend Helm's Deep.
 		promotext: ""
@@ -789,17 +655,8 @@
 		culture: Rohan
 		twilight: 2
 		type: Follower
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper> To play, spot a [rohan] Man.<br>Bearer is strength +1 for each possession he or she bears.
 		lore: ...any weapon that you bear, be it only a staff, you must leave it on the threshold.'
 		promotext: ""
@@ -837,17 +694,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Valiant</b>. While you can spot a [rohan] Man, this companion's twilight cost is -1.<br>This companion is strength +1 for each hunter minion you can spot.
 		lore: Let us ride on!'
 		promotext: ""
@@ -885,17 +733,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Valiant</b>.<br>At the start of the maneuver phase, you may spot a hunter minion (or exert 2 valiant Men) to make this companion <b>defender +1</b> until the regroup phase.
 		lore: ...a warrior should have more skills and knowledge than only the craft of weapons and slaying....'
 		promotext: ""
@@ -932,17 +771,8 @@
 		resistance: 1
 		itemclass: Hand weapon
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is mounted, bearer is <b>defender +1</b>.
 		lore: Rohirrim spears are much deadlier when the bearer is on horseback.
 		promotext: ""
@@ -977,17 +807,8 @@
 		type: Possession
 		itemclass: Shield
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>While no opponent controls a site, bearer is strength +1.<br><b>Regroup:</b> Discard this to liberate a site (or two sites if bearer is mounted).
 		lore: Sometimes the best offense is a good defense.
 		promotext: ""
@@ -1021,20 +842,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}

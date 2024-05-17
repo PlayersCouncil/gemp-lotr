@@ -30,17 +30,8 @@
 			Damage+1
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>.<br>When you play Sauron, you may exert any number of minions. For each minion you exert, Sauron is twilight cost -X, where X is the current region number.
 		lore: ...the Shadow grows once more....'
 		promotext: ""
@@ -77,17 +68,8 @@
 		vitality: 1
 		itemclass: Hand weapon
 		#target: title(Sauron)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Sauron.<br>He is <b>damage +1</b>.<br>Each time Sauron wins a skirmish and the companion he is skirmishing is not killed, you may assign X wounds to other companions, where X is the current region number.
 		lore: ""
 		promotext: ""

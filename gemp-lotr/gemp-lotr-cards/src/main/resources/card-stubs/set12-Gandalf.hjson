@@ -22,17 +22,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time an opponent draws a card (or takes a card into hand) during the Shadow phase, you may remove (1).<br><b>Maneuver:</b> Exert Gandalf to wound Saruman twice.
 		lore: There is only one Lord of the Ring.'
 		promotext: ""
@@ -70,20 +61,13 @@
 			Toil 3
 			Fellowship
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -124,17 +108,8 @@
 		strength: 7
 		vitality: 4
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> If Gandalf is not assigned to a skirmish, exert him and another unbound companion skirmishing a minion to make Gandalf strength +3 and have him replace that companion in that skirmish.
 		lore: Look to my coming at first light on the fifth day.'
 		promotext: ""
@@ -168,17 +143,8 @@
 		twilight: 0
 		type: Possession
 		#target: title(Gandalf)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be Gandalf.<br>Each time the fellowship moves from a battleground site, add a burden.<br><b>Regroup:</b> Add 2 burdens to remove all twilight tokens from the twilight pool.
 		lore: He wore a tall pointed blue hat....
 		promotext: ""
@@ -215,20 +181,13 @@
 			Spell
 			Fellowship
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -269,17 +228,8 @@
 		strength: 4
 		vitality: 3
 		resistance: 5
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of each skirmish involving Járnsmid, you may remove a burden (or 2 burdens if you can spot another [gandalf] companion).
 		lore: Sauron's Easterling allies were another trial for the Bardings, still keenly aware of the great efforts to rebuild Dale.
 		promotext: ""
@@ -316,20 +266,13 @@
 			Spell
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -367,17 +310,8 @@
 		type: Condition
 		#target: a companion
 		keywords: Spell
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Spell</b>. To play, spot a [gandalf] Wizard. Bearer must be a companion. Limit 1 per bearer.<br><b>Response:</b> If bearer is about to take a wound that would kill him or her, discard this condition to prevent that wound.
 		lore: ...the whole hall became suddenly dark as night.
 		promotext: ""
@@ -411,20 +345,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -461,20 +388,13 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver or Regroup
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -511,17 +431,8 @@
 		twilight: 2
 		type: Condition
 		#target: a companion (except the Ring-bearer)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [gandalf] companion. Bearer must be a companion (except the Ring-bearer). Limit 1 per bearer.<br>Each time bearer wins a skirmish, you may remove a burden.
 		lore: I could not take it from him without doing greater harm; and I had no right to do so anyway.'
 		promotext: ""
@@ -555,17 +466,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While Gandalf is at an underground site, he gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>While the fellowship is at a battleground site, each [gandalf] character gains <b>muster</b>.
 		lore: We come, we come with roll of drum....'
 		promotext: ""

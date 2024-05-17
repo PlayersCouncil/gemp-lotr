@@ -26,17 +26,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each of your other Dwarves and [gandalf] Men is twilight cost -1.<br>At the start of the regroup phase, you may discard a [dwarven] or [gandalf] condition from play to discard a minion from play.
 		lore: The time of my thought is my own to spend.'
 		promotext: ""

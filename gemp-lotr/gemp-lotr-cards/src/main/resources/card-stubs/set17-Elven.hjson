@@ -26,17 +26,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Hunter 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While this companion is skirmishing a wounded minion, he is strength +2.<br><b>Maneuver:</b> Exert this companion to heal another hunter.
 		lore: We are proud to fight alongside men, once more.
 		promotext: ""
@@ -70,20 +61,13 @@
 		twilight: 3
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -120,20 +104,13 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -170,17 +147,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, add an [elven] token here for each hunter you can spot.<br><b>Maneuver:</b> Discard this or remove a token from here and spot an [elven] hunter to discard a condition.
 		lore: We shall not meet again, Elessar.
 		promotext: ""
@@ -219,17 +187,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Hunter 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While Orophin is skirmishing a wounded minion, he is strength +3.<br><b>Archery:</b> Exert another [elven] hunter and add a threat to wound a minion.
 		lore: Guardian of the Golden Wood.
 		promotext: ""
@@ -268,17 +227,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Hunter 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While you can spot a wounded minion, Rúmil is strength +1 and gains <b>archer</b>.<br><b>Archery:</b> Exert another [elven] hunter and add a threat to wound a minion.
 		lore: Guardian of Nimrodel.
 		promotext: ""
@@ -312,17 +262,8 @@
 		twilight: 5
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an Elf.<br>Each time the fellowship moves to a region one site, add a threat.<br>Each time the fellowship moves to a region two site, heal an Elf.<br>Each time the fellowship moves to a region three site, draw a card.
 		lore: ""
 		promotext: ""
@@ -356,20 +297,13 @@
 		twilight: 1
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}

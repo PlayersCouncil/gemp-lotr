@@ -23,17 +23,8 @@
 		type: Condition
 		strength: 1
 		#target: title(an [elven] companion)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [elven] companion.<br>Each time bearer wins a skirmish, you may transfer this condition to another [elven] companion.<br>At the start of the archery phase, you must exert bearer or return this condition to hand.
 		lore: ""
 		promotext: ""
@@ -72,17 +63,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Ranger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>.<br>While you can spot 2 [elven] followers, each minion skirmishing Arwen is strength -2.<br><b>Maneuver:</b> Add 3 threats to reconcile your hand.
 		lore: I would rather share one lifetime with you than face all the ages of this world alone.
 		promotext: ""
@@ -124,17 +106,8 @@
 			Fellowship
 			Archer
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fellowship</b>. <b>Archer</b>.<br><b>Archery:</b> Add two threats to wound a minion; Legolas does not add to the fellowship archery total.
 		lore: Have you heard nothing Lord Elrond has said? The Ring must be destroyed!
 		promotext: ""

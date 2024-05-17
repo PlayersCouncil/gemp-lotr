@@ -27,17 +27,8 @@
 		vitality: 3
 		resistance: 5
 		keywords: Ranger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>.<br>While the fellowship is at a forest or river site, Duilin is strength +3.
 		lore: To Minas Tirith Duinhir brought both of his sons, Derufin and Duilin, to defend the Free Peoples of Middle-earth.
 		promotext: ""
@@ -75,17 +66,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 5
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a mount, Duinhir is <b>damage +1</b>.<br>Each time Duinhir wins a skirmish, if you can spot more minions than companions, you may exert him to discard a minion that has strength 7 or less.
 		lore: The garrison at Osgiliath fought valiantly.
 		promotext: ""
@@ -124,17 +106,8 @@
 		vitality: 3
 		resistance: 6
 		keywords: Ranger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>.<br>While the Ring-bearer has resistance 9 or more, Halbarad's twilight cost is -1.<br>At the start of the maneuver phase, you may discard a [gondor] card from hand to heal a [gondor] companion.
 		lore: He was tall, a dark standing shadow.
 		promotext: ""

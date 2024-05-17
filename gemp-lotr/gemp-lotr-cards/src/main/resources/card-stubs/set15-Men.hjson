@@ -1,4 +1,4 @@
-{
+
 
 	15_72: {
 		cardInfo: {
@@ -26,17 +26,8 @@
 		strength: 4
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: If Bill Ferny is unwounded, the Free Peoples player cannot assign him to skirmish a companion.<br><b>Shadow:</b> Exert Bill Ferny twice and spot a site you control to add (2).
 		lore: ...he would sell anything to anybody; or make mischief for amusement.'
 		promotext: ""
@@ -73,17 +64,8 @@
 		strength: 8
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> If this minion is skirmishing, discard this minion to play a [men] minion from your discard pile. That minion is <b>fierce</b> until the regroup phase.
 		lore: They hold the northward road; and many have passed on into Anórien.'
 		promotext: ""
@@ -121,17 +103,8 @@
 		vitality: 3
 		site: 4
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Spot a site you control and remove (2) to make a [men] Man strength +2.<br><b>Skirmish:</b> Spot 2 sites you control and remove (2) to make a [men] Man strength +3.<br><b>Skirmish:</b> Spot 3 sites you control and remove (2) to make a [men] Man strength +4.
 		lore: ""
 		promotext: ""
@@ -168,17 +141,8 @@
 		strength: 5
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> If this minion is skirmishing, discard this minion to play a [men] minion from your discard pile. That minion is <b>fierce</b> until the regroup phase.
 		lore: Easterlings came to Mordor to aid Sauron in his final assault.
 		promotext: ""
@@ -212,17 +176,8 @@
 		twilight: 3
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, spot 2 [men] Men to randomly reveal a site from the Free Peoples player's adventure deck. Note its card title. Each site on the adventure path with the same card title as the selected site loses its game text.
 		lore: Destruction sometimes brings new opportunities.
 		promotext: ""
@@ -259,17 +214,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> If this minion is skirmishing, discard this minion to play a [men] minion from your discard pile. That minion is <b>fierce</b> until the regroup phase.
 		lore: In battle, Easterlings surprise their foes with a great number of different techniques.
 		promotext: ""
@@ -306,17 +252,8 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of the maneuver phase, if you can spot another [men] Man and 8 characters (or if you can spot 3 Free Peoples cultures), you may take control of a site.
 		lore: Years of anger have a tendency to bring focus to one's rage.
 		promotext: ""
@@ -353,17 +290,8 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot more companions than minions, each [men] hunter is strength +2 and is an <b>archer</b>.
 		lore: Dunlendings don't mind being outnumbered in battle.
 		promotext: ""
@@ -399,17 +327,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a [men] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] Man.<br>While bearer is skirmishing a hunter companion, bearer is strength +2.
 		lore: To his surprise, Frodo's cloak served as an effective camouflage among the rocks.
 		promotext: ""
@@ -444,17 +363,8 @@
 		type: Condition
 		resistance: -1
 		#target: a companion (except the Ring-bearer)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [men] Man. Bearer must be a companion (except the Ring-bearer).<br>Bearer cannot take wounds during the archery phase. At the start of the regroup phase, discard this condition.
 		lore: Mordor will pay for this!
 		promotext: ""
@@ -491,17 +401,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you control a site, this minion is strength +3 and <b>fierce</b>.
 		lore: Acquiring more territories only increases the rage of the Dunlendings.
 		promotext: ""
@@ -539,17 +440,8 @@
 		vitality: 2
 		site: 4
 		keywords: Hunter 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>This minion is strength +3 for each follower you can spot.
 		lore: Hunters are valuable members of Dunlending tribes.
 		promotext: ""
@@ -583,20 +475,13 @@
 		twilight: 3
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -633,20 +518,13 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -687,17 +565,8 @@
 		strength: 14
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Exert Mûmak Commander twice to exert a companion twice (except the Ring-bearer).
 		lore: ...high upon his neck still desperately clung a tiny figure – the body of a mighty warrior....
 		promotext: ""
@@ -734,17 +603,8 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a companion of strength 12 or more, this minion is strength +5.<br>Each time this minion wins a skirmish, if he bears a hand weapon, you may take control of a site.
 		lore: The only thing scarier than a Wild Man is a Wild Man with an axe.
 		promotext: ""
@@ -779,17 +639,8 @@
 		type: Condition
 		resistance: -1
 		#target: a companion (except the Ring-bearer)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [men] Man. Bearer must be a companion (except the Ring-bearer). Limit 1 per companion.<br>Each time the fellowship moves, add (1).
 		lore: Once the Dunlendings track their enemy they will not lose their trail.
 		promotext: ""
@@ -823,17 +674,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a [men] Man, the Free Peoples player cannot replace a site in the current region.<br><b>Archery:</b> Spot a [men] Man and remove (3) to exert an unbound companion.
 		lore: The Men of Harad kept a large supply of arrows at hand.
 		promotext: ""
@@ -870,17 +712,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of the regroup phase, the Free People's player may liberate a site. You may spot 3 Men to prevent this.<br><b>Maneuver:</b> Spot another [men] Man and exert this minion to take control of a site.
 		lore: Dunlendings take delight in destruction.
 		promotext: ""
@@ -917,17 +750,8 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a hunter, this minion gains <b>hunter 1</b>.<br>Each time this minion wins a skirmish, you may exert 2 [men] Men to discard a follower.
 		lore: No villager is safe when the Wild Men attack.
 		promotext: ""
@@ -964,17 +788,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> If the Free People's player has at least 1 site in his or her adventure deck, exert 2 [men] Men to randomly choose a site from that deck. Replace the fellowship's current site with that site.
 		lore: The Southrons are skilled at fighting in many different kinds of terrain.
 		promotext: ""
@@ -1011,17 +826,8 @@
 		strength: 7
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you control a site, this minion is an <b>archer</b>.
 		lore: The Wild Men will defend their territories at all costs.
 		promotext: ""
@@ -1058,17 +864,8 @@
 		strength: 8
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [men] Man.<br>While you can spot a companion of strength 10 or more, this minion is strength +3.<br><b>Maneuver:</b> Remove 2 burdens or 2 threats to control a site.
 		lore: The Hillmen are always searching for lands to conquer.
 		promotext: ""

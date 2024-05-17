@@ -22,17 +22,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot an [orc] minion and fewer minions than companions, each companion loses all <b>defender</b> bonuses and cannot gain defender bonuses.<br><b>Maneuver:</b> Spot 2 [orc] minions to make the fellowship's current site gain <b>battleground</b> until the regroup phase.
 		lore: They come with fire, they come with axes.
 		promotext: ""
@@ -66,20 +57,13 @@
 		twilight: 2
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -120,17 +104,8 @@
 		strength: 15
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each of the fellowship and minion archery totals is +3.<br><b>Regroup:</b> Remove (2) to play an [orc] minion from your discard pile. That minion comes into play exhausted.
 		lore: Fear. The city is rank with it.
 		promotext: ""
@@ -168,17 +143,8 @@
 		vitality: 1
 		itemclass: Mount
 		#target: title(an [orc] Orc with strength 9 or less (or bearer must be Gothmog))
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [orc] Orc with strength 9 or less (or bearer must be Gothmog).<br>Bearer is <b>fierce</b>.<br>While bearer is Gothmog, he is <b>damage +1</b> in fierce skirmishes.
 		lore: ""
 		promotext: ""
@@ -214,17 +180,8 @@
 		type: Possession
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [orc] minion.<br>Each time the fellowship moves in the regroup phase, you may discard this possession to search the Free Peoples player's draw deck and choose 2 Free Peoples cards found there. Remove those cards from the game.
 		lore: Grond! Grond! Grond! Grond! Grond! Grond!
 		promotext: ""
@@ -258,20 +215,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -310,17 +260,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: title(an [orc] Orc)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [orc] Orc.<br>Each time bearer wins a skirmish, you may add a threat.
 		lore: Crude blood rusted steel axes were dragged by Orcs from battle to battle.
 		promotext: ""
@@ -357,17 +298,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While at a battleground, this minion is strength +2.
 		lore: Enraged by Sauron, the frenzied Orcs streamed to the battlefields.
 		promotext: ""
@@ -404,17 +336,8 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [orc] card.<br>The minion archery total is +1 for each hunter companion you can spot.
 		lore: ...the enemy is moving. Sauron's forces are massing in the east....
 		promotext: ""
@@ -452,17 +375,8 @@
 		vitality: 3
 		site: 4
 		keywords: Hunter 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Shadow:</b> Exert this minion to play an [uruk-hai] hunter at twilight cost -2.
 		lore: Deep in the Isengard pits, Orcs tended the mud from which the Uruk-hai were pulled from.
 		promotext: ""
@@ -499,17 +413,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While the fellowship is at a battleground or underground site, this minion cannot take wounds in the archery phase.
 		lore: Many Elves and many mighty Men, and many of their friends, had perished in the war.'
 		promotext: ""
@@ -547,17 +452,8 @@
 		vitality: 2
 		site: 4
 		keywords: Hunter 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>This minion is strength +3 for each companion in the dead pile (limit +6).
 		lore: As the free people of Middle-earth fell, Mordor's strength grew.
 		promotext: ""
@@ -594,17 +490,8 @@
 		strength: 9
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time this minion wins a skirmish, you may exert him twice to wound a companion.
 		lore: Pain. Pain was part of each Orc's life.
 		promotext: ""
@@ -641,17 +528,8 @@
 		strength: 7
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Assignment:</b> Spot another [orc] Orc to assign this minion to skirmish a non-[shire] Ring-bearer. The Free Peoples player may add a burden or exert the Ring-bearer twice to discard this minion.
 		lore: The Orcs attacked the Alliance, rushing across the field that separated the armies.
 		promotext: ""
@@ -685,20 +563,13 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -738,17 +609,8 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: This minion is strength +1 for each hunter companion you can spot.
 		lore: War is brewing. The mountains are fair teeming with goblins.
 		promotext: ""

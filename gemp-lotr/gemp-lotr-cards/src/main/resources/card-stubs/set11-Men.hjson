@@ -26,17 +26,8 @@
 		vitality: 1
 		site: 4
 		keywords: Archer
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Archer</b>.<br>While you can spot a companion who has resistance 4 or less, the minion archery total is +1.
 		lore: Haradrim bowmen pick off stragglers who rout after losing a battle.
 		promotext: ""
@@ -73,17 +64,8 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Remove (2) to make a lurker strength +1.<br><b>Skirmish:</b> Remove (2) to make a lurker <b>fierce</b> until the regroup phase.<br><b>Skirmish:</b> Remove (2) to make a lurker <b>damage +1</b>.
 		lore: The Men of the East were well-equipped.
 		promotext: ""
@@ -120,17 +102,8 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a companion who has resistance 3 or less, this minion's twilight cost is -2.
 		lore: Tribes of Harad gather when their enemies appear weak.
 		promotext: ""
@@ -164,20 +137,13 @@
 		twilight: 1
 		type: Event
 		keywords: Regroup
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -217,20 +183,13 @@
 			Toil 2
 			Skirmish
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -271,17 +230,8 @@
 		vitality: 2
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Discard this minion to make a [men] minion strength +4.
 		lore: The military training of the Easterlings is evident in their marching formations.
 		promotext: ""
@@ -318,17 +268,8 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While this minion is at a battleground site, it is <b>fierce</b>.
 		lore: When an enemy offers resistance, the Haradrim bloodlust rises to the occasion.
 		promotext: ""
@@ -365,17 +306,8 @@
 		strength: 12
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Exert this minion to add (1) for each companion who has resistance 5 or less.
 		lore: No mere soldiers, all the Men of Harad are skilled assassins and raiders.
 		promotext: ""
@@ -413,17 +345,8 @@
 		vitality: 3
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Exert Easterling Host and make it strength -2 until the regroup phase to make each other [men] minion strength +1 until the regroup phase.
 		lore: Men of the East mass soldiers into huge groups.
 		promotext: ""
@@ -461,17 +384,8 @@
 		vitality: 3
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Response:</b> If a [men] minion is about to take a wound in a skirmish, exert this minion and remove (1) to prevent that.
 		lore: Tight columns allow Easterlings to protect each other.
 		promotext: ""
@@ -508,17 +422,8 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While this minion is at a plains site, it is <b>damage +1</b>.
 		lore: Experienced warriors gather the disparate tribes for massive raids.
 		promotext: ""
@@ -555,20 +460,13 @@
 			Toil 2
 			Archery
 		]
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -609,17 +507,8 @@
 		vitality: 2
 		site: 4
 		keywords: Ambush 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ambush (1)</b>.<br>When you play this minion at a plains site, you may spot an unbound companion to make that companion resistance -1 until the end of the turn.
 		lore: Accustomed as they are to traveling afoot, Dunlending mobs can strike quickly, without warning.
 		promotext: ""
@@ -657,17 +546,8 @@
 		vitality: 3
 		site: 4
 		keywords: Archer
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Archer</b>.<br>Each time a Free Peoples character is killed, each of your [men] minions is strength +3 until the regroup phase.
 		lore: The killing frenzy of the Southrons is in stark contrast to the cool efficiency of Easterling columns.
 		promotext: ""
@@ -704,17 +584,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While this minion is at a plains site, it is an <b>archer</b>.<br>While you can spot 6 companions, each [men] minion is an <b>archer</b>.
 		lore: Makers of bows and arrows have a strong trade for the raiders of Harad.
 		promotext: ""
@@ -751,17 +622,8 @@
 		strength: 7
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: The fellowship's current site gains <b>plains</b>.
 		lore: Their savage war bands move swiftly across flat terrain.
 		promotext: ""
@@ -798,17 +660,8 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you cannot spot another [men] minion, discard this minion.
 		lore: Alliances between Haradrim tribes are fragile things which sometimes break down in battle.
 		promotext: ""
@@ -845,17 +698,8 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Remove (3) to make this minion <b>damage +1</b>.
 		lore: The strange craftsmen of Haradwaith fashion their war banners from woven wood.
 		promotext: ""
@@ -892,17 +736,8 @@
 		strength: 13
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While this minion is at a battleground site, it is <b>fierce</b>.
 		lore: Raiders and brigands they may be, but in force the Southron fighters are terrifying.
 		promotext: ""
@@ -939,17 +774,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time the Free Peoples player assigns this minion to a skirmish, add (1) for each Free Peoples character who has resistance 5 or less.
 		lore: The cruel Men of Harad slaughter the weak and infirm during their raids on Gondor.
 		promotext: ""
@@ -983,17 +809,8 @@
 		twilight: 3
 		type: Condition
 		#target: a companion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [men] minion.<br>Bearer must be a companion.<br>While bearer is skirmishing a [men] minion, bearer loses all strength and <b>damage</b> bonuses from possessions.
 		lore: ...ill news is an ill guest they say.'
 		promotext: ""
@@ -1031,17 +848,8 @@
 		vitality: 3
 		site: 4
 		keywords: Toil 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Toil 2</b>. <helper>(For each [men] character you exert when playing this, its twilight cost is -2.)</helper>
 		lore: The bellicose families of Harad cannot often agree, but when they do, they form a formidable army.
 		promotext: ""
@@ -1077,17 +885,8 @@
 		strength: 1
 		itemclass: Ranged weapon
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br>Bearer is an <b>archer</b>.<br>When you play this possession, you may make the Free Peoples player exert his or her Man.
 		lore: Southron accuracy with bows is legendary.
 		promotext: ""
@@ -1124,17 +923,8 @@
 		strength: 4
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: This minion is strength +1 for each card in the Free Peoples player's hand.
 		lore: One or two gave Frodo a blank look and departed muttering among themselves.
 		promotext: ""
@@ -1168,17 +958,8 @@
 		twilight: 4
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of the maneuver phase, if you have 2 or more cards in hand, you may spot 2 [men] minions and discard your hand to add (8).
 		lore: We will fight for you!'
 		promotext: ""
@@ -1212,20 +993,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -1265,17 +1039,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time this minion is assigned to a character who has resistance 5 or less, you may discard a possession borne by that character.
 		lore: Disarming strikes are common among the tactics of the Men of Harad.
 		promotext: ""
@@ -1311,17 +1076,8 @@
 		vitality: 2
 		itemclass: Shield
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br>The twilight cost of this possession is -1 for each Free Peoples possession you spot.<br>Bearer cannot take wounds except during a skirmish.
 		lore: An Easterling shield covers almost the entire body.
 		promotext: ""
@@ -1357,17 +1113,8 @@
 		strength: 2
 		itemclass: Hand weapon
 		#target: a [men] minion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [men] minion.<br><b>Skirmish:</b> Remove (2) to make a [men] minion <b>fierce</b> until the regroup phase.
 		lore: Many of the Men of the East march into battle carrying heavy bladed polearms.
 		promotext: ""
@@ -1401,20 +1148,13 @@
 		twilight: 1
 		type: Event
 		keywords: Archery
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -1454,17 +1194,8 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this minion, you may exert it to make it <b>fierce</b> until the regroup phase.<br>While you can spot 6 companions, each [men] minion is <b>fierce</b>.
 		lore: Furious hatred over the land they've lost drives the mobs of Dunland.
 		promotext: ""
@@ -1502,17 +1233,8 @@
 		vitality: 1
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time another [men] minion wins a skirmish, make this minion strength +3 until the regroup phase.
 		lore: The fury of the Eastern warriors grows in battle.
 		promotext: ""
@@ -1549,17 +1271,8 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Regroup:</b> Spot another [men] minion and 2 Free Peoples characters who each have resistance 5 or less to make the move limit -1 for this turn.
 		lore: Small, harassing bands of Haradrim skirmishers make moving troops difficult.
 		promotext: ""
@@ -1596,17 +1309,8 @@
 		strength: 10
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Maneuver:</b> Exert this minion to transfer a possession or condition borne by a character to another eligible bearer.
 		lore: The strangers, especially those that had come up the Greenway, stared at them curiously.
 		promotext: ""
@@ -1643,17 +1347,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the start of the maneuver phase, you may remove (2) to transfer a condition borne by a character to another eligible bearer.
 		lore: But there was one... who stood looking at them with a knowing and half-mocking expression that made them feel very uncomfortable.
 		promotext: ""
@@ -1690,17 +1385,8 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time this minion is assigned to skirmish a character who has resistance 5 or less, it is <b>fierce</b> until the regroup phase.
 		lore: Only the strongest fighters can withstand a Southron attack.
 		promotext: ""
@@ -1738,17 +1424,8 @@
 		vitality: 1
 		site: 4
 		keywords: Ambush 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ambush (1)</b>.<br>While this minion is at a plains site, it gains an additional ambush (1).
 		lore: The open plain affords no shelter, no defense against the Dunlendings.
 		promotext: ""
@@ -1782,20 +1459,13 @@
 		twilight: 3
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -1833,17 +1503,8 @@
 		type: Condition
 		resistance: -2
 		#target: a companion (except the Ring-bearer)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot a [men] minion.<br>Bearer must be a companion (except the Ring-bearer).
 		lore: Why should we not think that the Great Ring has come into our hands to serve us in the very hour of need?'
 		promotext: ""

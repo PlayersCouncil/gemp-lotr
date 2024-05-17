@@ -22,17 +22,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, you may add an [orc] token here for each [orc] condition you can spot.<br><b>Skirmish:</b> Discard this from play or remove 2 tokens from here to make a lurker minion strength +2.
 		lore: ""
 		promotext: ""
@@ -69,17 +60,8 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [orc] minion.<br>While the fellowship is in region 1, [orc] Orcs cannot take wounds.<br>While the fellowship is in region 2, the current site gains <b>underground</b>.<br>While the fellowship is in region 3, each [orc] Orc is strength +2.
 		lore: ""
 		promotext: ""
@@ -113,20 +95,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -163,17 +138,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Regroup:</b> Spot an [orc] lurker minion to stack that minion here.<br><b>Shadow:</b> Remove a burden to play a lurker minion stacked here as if from hand. That minion is twilight cost -3.
 		lore: On they came, reckless of their loss as they approached.
 		promotext: ""
@@ -207,20 +173,13 @@
 		twilight: 0
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -257,17 +216,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [orc] minions.<br><b>Regroup:</b> Make the Free Peoples player spot another [orc] condition, discard it from play, and remove (3) to make the Free Peoples player choose to move again this turn (if the move limit allows). Discard this condition.
 		lore: Orcs do not rest.
 		promotext: ""
@@ -305,17 +255,8 @@
 		vitality: 2
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time an [orc] minion is killed in a skirmish, you may make this minion strength +2 until the regroup phase.
 		lore: Losses served only to enrage the besiegers.
 		promotext: ""
@@ -352,17 +293,8 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Regroup:</b> Exert this minion to play an [orc] Troll from your discard pile.
 		lore: Some remained in Isengard to propel the war machine.
 		promotext: ""
@@ -396,20 +328,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -449,17 +374,8 @@
 		strength: 11
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [orc] Orc.<br>This minion is twilight cost -1 for each burden.<br>Each time a Ring-bound companion loses a skirmish involving an [orc] minion, you may reveal this card from hand to add a burden.
 		lore: Hit me now, Sam. Hit me!'
 		promotext: ""
@@ -496,17 +412,8 @@
 		strength: 14
 		vitality: 3
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: At the end of each skirmish involving this minion, if you can spot a Free Peoples culture token, this minion is <b>fierce</b> until the regroup phase.
 		lore: Fell captains moved Sauron's forces from the Gorgoroth plains.
 		promotext: ""
@@ -543,17 +450,8 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Regroup:</b> Discard this minion from play (or exert this minion if the fellowship's next site is an underground site) and spot another [orc] minion to return that minion to your hand.
 		lore: Saruman unleashed the remaining minions to ravage the countryside of Rohan.
 		promotext: ""
@@ -590,17 +488,8 @@
 		strength: 12
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [orc] card in your support area.<br>When you play this, spot a Free Peoples condition to discard from play each other card that has the same card title as that condition.
 		lore: Once inside the walls of the City, the besiegers were ordered to kill on sight.
 		promotext: ""
@@ -637,17 +526,8 @@
 		strength: 8
 		vitality: 2
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a Free Peoples culture token, each minion that has the title Orc Reaper is strength +2.
 		lore: As they overrun the lands of the Free Peoples, the forces of the Shadow destroy all available resources.
 		promotext: ""
@@ -688,17 +568,8 @@
 			Damage+1
 			Fierce
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot an [orc] minion.<br><b>Shadow:</b> Discard an [orc] condition from play to play this minion from your discard pile.
 		lore: Only Trolls had the strength to man the siege catapults.
 		promotext: ""
@@ -736,17 +607,8 @@
 		vitality: 2
 		site: 4
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Response:</b> If another [orc] minion is about to take a wound, exert this minion to prevent that.
 		lore: Frontline minions drew the fire of parapet archers.
 		promotext: ""
@@ -783,17 +645,8 @@
 		strength: 6
 		vitality: 1
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While this minion is at an underground site, it cannot take wounds.
 		lore: There was a crash on the door, followed by crash after crash.... How many there were the Company could not count.
 		promotext: ""
@@ -827,17 +680,8 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot 3 underground sites, each [orc] Orc gains <b>muster</b>.<br><b>Shadow:</b> Discard this condition from play and spot an [orc] minion to replace the fellowship's current site with an underground site from your adventure deck.
 		lore: ""
 		promotext: ""
@@ -871,20 +715,13 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}

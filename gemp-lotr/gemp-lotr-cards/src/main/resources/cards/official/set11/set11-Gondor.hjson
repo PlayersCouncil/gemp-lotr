@@ -27,17 +27,24 @@
 		vitality: 4
 		resistance: 8
 		keywords: Ranger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: side(free people),skirmish,event
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,inSkirmishAgainst(self))
+		        }
+		    }
+		]
 		gametext: <b>Ranger</b>.<br>Each time a Free Peoples skirmish event is played, you may exert Aragorn to wound a minion he is skirmishing.
 		lore: ...I know all the lands between the Shire and the Misty Mountains, for I have wandered over them for many years.'
 		promotext: ""
@@ -76,17 +83,18 @@
 		vitality: 4
 		resistance: 8
 		keywords: Ranger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: <b>Ranger</b>.<br>Each time the fellowship moves, add (1).
 		lore: ...in spite of the heat of the room he wore a hood that overshadowed his face; but the gleam of his eyes could be seen as he watched the hobbits.
 		promotext: ""
@@ -120,18 +128,30 @@
 		twilight: 2
 		type: Possession
 		itemclass: Armor
-		#target: a [gondor] Man
-		/*requires: {
-			
-		}
+		target: culture(gondor),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: removeKeyword
+		            filter: minion,inSkirmishAgainst(bearer)
+		            keyword: damage
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer,unwounded
+                    requires: {
+                        type: location
+                        filter: battleground
+                    }
+                    keyword: defender
+                    amount: 1
+		        }
+		    }
+		]
 		gametext: Bearer must be a [gondor] Man.<br>Each minion skirmishing bearer loses all <b>damage</b> bonuses.<br>While bearer is at a battleground site and unwounded, he or she is <b>defender +1</b>.
 		lore: Upon the black surcoats were embroidered in white a tree blossoming like snow....
 		promotext: ""
@@ -165,20 +185,22 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: choose(ranger)
+				    memorize: chosenRanger
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: canSpot
+				            filter: memory(chosenRanger),inSkirmishAgainst(minion,damage)
+				        }
+				        true: 3
+				        false: 2
+				    }
 				}
 			]
 		}
@@ -220,17 +242,20 @@
 		vitality: 3
 		resistance: 5
 		keywords: Knight
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(culture(gondor),companion)
+		        }
+		    }
+		]
 		gametext: <b>Knight</b>.<br>Each time Boromir wins a skirmish, you may heal a [gondor] companion.
 		lore: Let the armies of Mordor know this: never again will the land of my people fall into enemy hands!'
 		promotext: ""
@@ -265,18 +290,30 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: a [gondor] Man
-		/*requires: {
-			
-		}
+		target: culture(gondor),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: archery
+		        }
+		        requires: {
+		            type: location
+		            filter: battleground
+		        }
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: modifyArcheryTotal
+		            side: free people
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: Bearer must be a [gondor] Man.<br>At the start of the archery phase, if bearer is at a battleground site, you may exert him or her to make the fellowship archery total +1.
 		lore: From the ramparts of the Gondorian fortress, death rained down upon the servants of Sauron.
 		promotext: ""
@@ -311,18 +348,31 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [gondor] Man
-		/*requires: {
-			
-		}
+		target: culture(gondor),man
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: or
+		                requires: [
+		                    {
+		                        type: canSpot
+		                        filter: bearer,ranger
+		                    }
+		                    {
+                                type: location
+                                filter: river
+		                    }
+		                ]
+		            }
+		            filter: bearer
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		]
 		gametext: Bearer must be a [gondor] Man.<br>While bearer is a ranger or at a river site, he or she is <b>damage +1</b>.
 		lore: While many knights of Gondor favor hand-and-a-half swords, lighter weapons are often preferred by the rangers who patrol Ithilien.
 		promotext: ""
@@ -356,20 +406,49 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: {
+			    type: isGreaterThanOrEqual
+			    firstNumber: {
+    			    type: forEachResistance
+    			    filter: culture(gondor),companion,canExert
+			    }
+			    secondNumber: 12
+			}
+			cost: [
+                {
+                    type: doWhile
+                    condition: {
+                        type: isLessThan
+                        firstNumber: {
+                            type: forEachResistance
+                            filter: memory(chosenCompanions)
+                        }
+                        secondNumber: 12
+                    }
+                    effect: {
+                        type: chooseActiveCards
+                        text: Choose companions to exert with total resistance 12 or more
+                        filter: choose(culture(gondor),companion,canExert)
+                        count: any
+                        memorize: chosenCompanions
+                    }
+                }
+                {
+                    type: exert
+                    filter: memory(chosenCompanions)
+                }
+            ]
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: choose(minion,inSkirmishAgainst(culture(gondor),companion))
+				    amount: {
+				        type: forEachInMemory
+				        memory: chosenCompanion
+				        multiplier: -3
+				    }
 				}
 			]
 		}
@@ -406,17 +485,57 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(gondor),man
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: gondor
+		            filter: self
+		            count: 3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: [
+		            {
+		                type: addTwilight
+		                amount: 2
+		            }
+		            {
+		                type: choice
+		                texts: [
+		                    Discard this condition
+		                    Remove a {gondor} token here
+		                ]
+		                effects: [
+		                    {
+		                        type: discard
+		                        filter: self
+		                    }
+		                    {
+		                        type: removeTokens
+		                        culture: gondor
+		                        filter: self
+		                    }
+		                ]
+		            }
+		        ]
+		        effect: {
+		            type: heal
+		            filter: choose(culture(gondor),man)
+		        }
+		    }
+		]
 		gametext: When you play this condition, spot a [gondor] Man to add 3 [gondor] tokens here.<br><b>Fellowship:</b> Add (2) and either discard this condition or remove a [gondor] token from here to heal a [gondor] Man.
 		lore: ...the king was indeed come among them, and after war he brought healing....
 		promotext: ""
@@ -455,17 +574,23 @@
 		vitality: 3
 		resistance: 7
 		keywords: Ranger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: fellowship
+		        requires: {
+		            type: location
+		            filter: forest
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: playNextSite
+		        }
+		    }
+		]
 		gametext: <b>Ranger</b>.<br><b>Fellowship:</b> If Madril is at a forest site, exert him to play the fellowship's next site.
 		lore: ...we must look to our own borders. Faramir, Orcs are on the move.'
 		promotext: ""
@@ -499,20 +624,12 @@
 		twilight: 3
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: heal
+				    filter: all(culture(gondor),companion,resistanceMoreThan(4))
 				}
 			]
 		}
@@ -549,20 +666,22 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: choose(culture(gondor),companion)
+				    memorize: chosenCompanion
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: canSpot
+				            filter: memory(chosenCompanion),resistanceMoreThan(3)
+				        }
+				        true: 3
+				        false: 2
+				    }
 				}
 			]
 		}
@@ -603,17 +722,19 @@
 		vitality: 3
 		resistance: 6
 		keywords: Ranger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: playNextSite
+		        }
+		    }
+		]
 		gametext: <b>Ranger</b>.<br>When you play this companion, you may play the fellowship's next site.
 		lore: The road may pass, but they shall not!
 		promotext: ""
@@ -647,23 +768,40 @@
 		twilight: 0
 		type: Event
 		keywords: [
-			ranger
-			Fellowship or Regroup
+			Fellowship
+			Regroup
 		]
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
+			requiresRanger: true
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(ranger)
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: if
+				    condition: {
+				        type: location
+				        filter: regionNumber(1)
+				    }
+				    true: [
+                        {
+                            type: playSite
+                            number: {
+                                type: nextSiteNumber
+                            }
+                        }
+                        {
+                            type: playSite
+                            number: {
+                                type: siteNumberAfterNext
+                            }
+                        }
+                    ]
+                    false: {
+                        type: playNextSite
+                    }
 				}
 			]
 		}

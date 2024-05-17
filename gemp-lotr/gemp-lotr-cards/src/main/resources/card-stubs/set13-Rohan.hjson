@@ -22,23 +22,16 @@
 		twilight: 2
 		type: Event
 		keywords: Response
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: responseEvent
 			trigger: {
 				
 			}
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		]
@@ -79,17 +72,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While Éomer bears a mount, he is <b>damage +1</b>.<br>While no other companion is assigned to a skirmish, Éomer is strength +1 for each other [rohan] companion you can spot.
 		lore: I have no child. Théodred my son is slain. I name Éomer my sister-son to be my heir.'
 		promotext: ""
@@ -127,17 +111,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each possession you play on Éowyn during the fellowship phase is twilight cost -1.<br>Each time the fellowship moves during the regroup phase, you may reinforce a [rohan] token (or reinforce 2 [rohan] tokens if you can spot Éomer or Théoden).
 		lore: Let her be as lord to the Eorlingas, while we are gone.'
 		promotext: ""
@@ -171,20 +146,13 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -224,17 +192,8 @@
 		strength: 1
 		itemclass: Mount
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>When you play Firefoot, you may reinforce a [rohan] token.<br>At the start of the maneuver phase, if bearer is Éomer, you may remove 2 [rohan] tokens to make him <b>defender +1</b> and strength +1 until the regroup phase.
 		lore: ""
 		promotext: ""
@@ -268,17 +227,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, add a [rohan] token here.<br><b>Regroup:</b> Discard this from play or remove a token from here to play a [rohan] possession from your discard pile on your [rohan] companion.
 		lore: Unchecked, unchallenged, killing at will!
 		promotext: ""
@@ -316,17 +266,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Háma is strength +1 for each Shadow possession you can spot.<br>Each time Háma wins a skirmish, you may discard a possession from play.
 		lore: Do not hope too much! These are dark days.'
 		promotext: ""
@@ -360,20 +301,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -410,20 +344,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -460,17 +387,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Exert Éomer to make Éowyn or Théoden strength +2.<br><b>Skirmish:</b> Exert Éowyn to make Éomer or Théoden strength +2.<br><b>Skirmish:</b> Exert Théoden to make Éomer or Éowyn strength +2.
 		lore: Also wakened in Edoras was hospitality.
 		promotext: ""
@@ -507,17 +425,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 5
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time the fellowship moves, you may add (1) and remove a Free Peoples culture token to reinforce a [rohan] token.
 		lore: Villagers from the surrounding farmlands fled to Helm's Deep seeking safety.
 		promotext: ""
@@ -554,17 +463,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 5
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When you play this, you may reinforce a [rohan] token.<br>Each time a Shadow player replaces the fellowship's current site, you may spot another [rohan] Man to make, until the regroup phase, the fellowship archery total +2 and the minion archery total -2.
 		lore: ""
 		promotext: ""
@@ -598,20 +498,13 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -649,17 +542,8 @@
 		type: Possession
 		itemclass: Ranged weapon
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is mounted, he or she is strength +1.<br>Each time bearer wins a skirmish, you may choose a Shadow player who must wound one of his or her minions.
 		lore: Riders of the Mark carried short bows easily fired from horseback.
 		promotext: ""
@@ -697,17 +581,8 @@
 		resistance: 1
 		itemclass: Mount
 		#target: a [rohan] Man
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] Man.<br>When you play Snowmane, you may reinforce a [rohan] token.<br><b>Skirmish:</b> If bearer is Théoden, you may remove 2 [rohan] tokens to exhaust a minion he is skirmishing.
 		lore: Where now the horse and the rider?'
 		promotext: ""
@@ -745,17 +620,8 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot Éowyn, Théoden is <b>defender +1</b>.<br>While you can spot Éomer, Théoden is <b>damage +1</b>.<br>While you can spot Théodred, the move limit is +1.
 		lore: Let horse be bridled, horn be sounded!'
 		promotext: ""
@@ -793,17 +659,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot a [rohan] Man who has resistance of 7 or more, Théodred is twilight cost -1.<br>At the start of each skirmish involving Théodred, you may exert each minion he is skirmishing.
 		lore: The son of Théoden defended Rohan at the Fords of Isen.
 		promotext: ""
@@ -837,17 +694,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [rohan] companions.<br>When you play this, add a [rohan] token here for each plains site and each battleground site on the adventure path.<br>At the start of each regroup phase, add a [rohan] token here for each of your companions that has muster.
 		lore: ""
 		promotext: ""

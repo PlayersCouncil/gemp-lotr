@@ -21,17 +21,8 @@
 		twilight: 0
 		type: The One Ring
 		resistance: 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Response:</b> If the Ring-bearer is about to take a wound, he or she wears The One Ring until the regroup phase.<br>While the Ring-bearer is wearing The One Ring, each time he or she is about to take a wound, add a burden instead.
 		lore: ...ash nazg thrakatulûk agh burzum-ishi krimpatul.'
 		promotext: ""
@@ -64,17 +55,8 @@
 		twilight: 0
 		type: The One Ring
 		strength: 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Response:</b> If the Ring-bearer is about to take a wound in a skirmish, he or she wears The One Ring until the regroup phase.<br>While the Ring-bearer is wearing The One Ring, each time he or she is about to take a wound in a skirmish, add a burden instead.
 		lore: One Ring to rule them all....
 		promotext: ""

@@ -21,17 +21,8 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Regroup:</b> Exert your minion and remove a threat to make the Free Peoples player discard one of his or her conditions.
 		lore: ""
 		promotext: ""
@@ -65,17 +56,8 @@
 		block: Shadows
 		direction: Right
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>River</b>. When the Fellowship moves to this site in region 2, the Free Peoples player places a card from the dead pile out of play.
 		lore: ""
 		promotext: ""
@@ -109,17 +91,8 @@
 		block: Shadows
 		direction: Right
 		keywords: River
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>River</b>. When the fellowship moves to this site, if it is a sanctuary, remove 2 burdens.
 		lore: ""
 		promotext: ""
@@ -153,17 +126,8 @@
 		block: Shadows
 		direction: Right
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Plains</b>. While you control this site, each of your hunter minions is strength +1.
 		lore: ""
 		promotext: ""

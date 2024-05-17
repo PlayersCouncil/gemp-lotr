@@ -24,17 +24,8 @@
 		strength: 1
 		itemclass: Hand weapon
 		#target: title(an [uruk-hai] Uruk-hai)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [uruk-hai] Uruk-hai.<br>While you can spot 2 controlled sites, this minion is <b>damage +1</b>.<br>While you can spot 4 controlled sites, this minion is <b>damage +3</b>.
 		lore: The servants of the White Hand laid waste to the pride of Gondor.
 		promotext: ""
@@ -68,17 +59,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time the Free Peoples player plays a possession or artifact, place an [uruk-hai] token here.<br>Each time an [uruk-hai] minion wins a skirmish, you may remove an [uruk-hai] token to exert a companion.
 		lore: The Uruk-hai assault on Helm's Deep was relentless.
 		promotext: ""
@@ -112,20 +94,13 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -166,17 +141,8 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time an [uruk-hai] hunter wins a skirmish, heal a different [uruk-hai] minion.<br><b>Skirmish:</b> Exert Saruman twice to make a companion lose the <b>hunter</b> keyword until the start of the regroup phase.
 		lore: He has claimed lordship over all this land....'
 		promotext: ""
@@ -214,17 +180,8 @@
 		strength: 8
 		vitality: 4
 		site: 4
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each companion is resistance -1.<br><b>Skirmish:</b> Exert Saruman to discard a condition borne by a companion skirmishing an [uruk-hai] minion.
 		lore: A new power is rising. Its victory is at hand.
 		promotext: ""
@@ -261,17 +218,8 @@
 		vitality: 1
 		itemclass: Hand weapon
 		#target: title(an [uruk-hai] Uruk-hai)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [uruk-hai] Uruk-hai.
 		lore: We will drive the machine of war with the sword and the spear....
 		promotext: ""
@@ -306,17 +254,8 @@
 		type: Possession
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot an [uruk-hai] hunter.<br>At the start of each Shadow phase, you may discard 2 [uruk-hai] cards from hand to play an [uruk-hai] hunter from your discard pile.<br><b>Regroup:</b> Discard this possession to return an [uruk-hai] hunter from play to your hand.
 		lore: Saruman gazed on his creations with great pride.
 		promotext: ""
@@ -354,17 +293,8 @@
 		vitality: 1
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>While you control a site, this minion cannot take wounds, except during the skirmish phase.
 		lore: It's Saruman's army! The war has started.
 		promotext: ""
@@ -402,17 +332,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>While this minion is assigned to a skirmish, each site on the adventure path gains each terrain keyword from each site you control.
 		lore: You will taste Man-flesh.
 		promotext: ""
@@ -450,17 +371,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>At the start of the archery phase, if you control a site, you may add 2 to the minion archery total for each Free Peoples culture you can spot over 2.
 		lore: ...there was a crash and a flash of flame and smoke.
 		promotext: ""
@@ -498,17 +410,8 @@
 		vitality: 2
 		site: 5
 		keywords: Hunter 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Hunter 6</b>. <helper>(While skirmishing a non-hunter character, this character is strength +6.)</helper>
 		lore: Bring out your skulking king!'
 		promotext: ""
@@ -546,17 +449,8 @@
 		vitality: 3
 		site: 5
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>While this minion is assigned to a skirmish, each hunter character is strength +1.
 		lore: They wore black armor and mail that was marked with the white hand of Saruman.
 		promotext: ""
@@ -594,17 +488,8 @@
 		vitality: 3
 		site: 5
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>This minion gains <b>hunter 3</b> for each site you control.
 		lore: This is no parley. You have nothing to say.'
 		promotext: ""
@@ -642,17 +527,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>When you play this minion, you may liberate a site to add (X), where X is the Shadow number of the liberated site.
 		lore: The Uruks were tireless in the pursuit of their prey.
 		promotext: ""
@@ -693,17 +569,8 @@
 			Fierce
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Skirmish:</b> Exert this minion to make an [uruk-hai] hunter minion strength +2.
 		lore: Under the banner of the white hand, they came in great numbers.
 		promotext: ""
@@ -741,17 +608,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>Each time this minion wins a skirmish, if you do not control a site, you may take control of a site.
 		lore: March to Helm's Deep!
 		promotext: ""
@@ -789,17 +647,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>When you play this minion, exert a companion for each site you control.
 		lore: There will be no dawn for men.
 		promotext: ""
@@ -837,17 +686,8 @@
 		vitality: 3
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>To play, remove 2 threats.
 		lore: The Orcs yelled and jeered.
 		promotext: ""
@@ -888,17 +728,8 @@
 			Damage+1
 			Hunter 2
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>. <b>Hunter 2</b>. <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper><br>The roaming penalty for each [uruk-hai] minion you play is -1.
 		lore: You've got no guts outside your own sties.'
 		promotext: ""
@@ -936,17 +767,8 @@
 		vitality: 2
 		site: 5
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>Each time a player plays an event in a skirmish involving this minion, that player may exert a non-hunter character.
 		lore: ...and there has been war between us for many months.'
 		promotext: ""
@@ -987,17 +809,8 @@
 			Fierce
 			Hunter 1
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>When you play this minion, you may spot another [uruk-hai] minion to add a threat for each Free Peoples culture you can spot.
 		lore: White Hand warriors fell to evil deeds with a passion.
 		promotext: ""
@@ -1035,17 +848,8 @@
 		vitality: 2
 		site: 5
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>While this minion is assigned to a skirmish, each hunter companion loses its special abilities and skirmish events can not be played in those companions skirmishes.
 		lore: ...the West is no longer safe.
 		promotext: ""
@@ -1083,17 +887,8 @@
 		vitality: 3
 		site: 5
 		keywords: Fierce
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>.<br>This minion is <b>damage +1</b> for each [uruk-hai] hunter assigned to a skirmish.
 		lore: They have a blasting fire, and with it they took the Wall.'
 		promotext: ""
@@ -1131,17 +926,8 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Damage +1</b>.<br>When you play this minion, if you control a site, you may take an [uruk-hai] event into hand from your discard pile.
 		lore: To War!
 		promotext: ""
@@ -1182,17 +968,8 @@
 			Fierce
 			Hunter 4
 		]
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fierce</b>. <b>Hunter 4</b>. <helper>(While skirmishing a non-hunter character, this character is strength +4.)</helper><br>Each time this minion is assigned to a non-hunter companion, you may heal a hunter.
 		lore: Leave none alive!
 		promotext: ""
@@ -1226,20 +1003,13 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -1276,17 +1046,8 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time you take control of a site, you may spot 3 [uruk-hai] minions to exert an unbound companion.<br><b>Skirmish:</b> Liberate a site to make an [uruk-hai] minion <b>damage +1</b>.
 		lore: If the wall is breached, Helm's Deep will fall.
 		promotext: ""

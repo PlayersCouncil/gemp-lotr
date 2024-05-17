@@ -23,17 +23,8 @@
 		type: Artifact
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 minions.<br>While you can spot Sauron, each other minion is <b>damage +1</b>.<br>While the fellowship is in the same region as Mount Doom, each companion is resistance -2.
 		lore: One for the Dark Lord on his dark throne.
 		promotext: ""

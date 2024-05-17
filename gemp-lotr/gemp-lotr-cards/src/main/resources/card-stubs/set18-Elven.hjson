@@ -24,17 +24,8 @@
 		strength: 1
 		itemclass: Ranged weapon
 		#target: title(an [elven] companion)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [elven] companion.<br><b>Archery:</b> If bearer is Arwen, discard 2 [elven] cards from hand to wound a minion.
 		lore: Arwen had skill with a bow matched only by her beauty.
 		promotext: ""
@@ -70,17 +61,8 @@
 		strength: 1
 		itemclass: Hand weapon
 		#target: title(an [elven] companion)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be an [elven] companion.<br>Bearer may bear this hand weapon in addition to 1 other hand weapon.<br><b>Maneuver:</b> If bearer is Arwen, exert her to draw 2 cards.
 		lore: Woe be to any against whom she wielded it.
 		promotext: ""
@@ -114,20 +96,13 @@
 		twilight: 0
 		type: Event
 		keywords: Maneuver
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -165,17 +140,8 @@
 		twilight: 3
 		type: Follower
 		strength: 2
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper><br>To play, spot 2 [elven] companions.<br>When you play Celebring, you may play an [elven] artifact from your deck.
 		lore: ...renewed shall be the blade that was broken.
 		promotext: ""
@@ -212,17 +178,8 @@
 		vitality: 1
 		itemclass: Hand weapon/shield
 		#target: title(an [elven] companion)
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, bearer must not be bearing any possessions. Bearer must be an [elven] companion.<br>Bearer cannot bear any other possessions.<br>While a unique companion bears this possession, the Free Peoples player may not use archery special abilities and the minion archery total is -1.
 		lore: Tangado haid!
 		promotext: ""
@@ -259,17 +216,8 @@
 		strength: 5
 		vitality: 3
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: While you can spot an [elven] token, this companion is strength +2.
 		lore: While they may prefer to avoid conflict, the elves can be ferocious warriors in defense of their ideals.
 		promotext: ""
@@ -303,17 +251,8 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Fellowship:</b> Remove a culture token from a Free Peoples card to add an [elven] token here.<br><b>Skirmish:</b> Remove 2 [elven] tokens from here to make a minion skirmishing an [elven] companion strength -1.
 		lore: By river you have the chance of outrunning the enemy....
 		promotext: ""
@@ -348,17 +287,8 @@
 		type: Artifact
 		#target: 
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot Galadriel or Celeborn.<br>While Galadriel is the Ring-bearer, she is strength +2 and resistance +2.<br>Each time you play an [elven] skirmish event, you may reinforce an [elven] token.
 		lore: Will you look into the mirror?
 		promotext: ""
@@ -396,17 +326,8 @@
 		strength: 9
 		vitality: 4
 		resistance: 7
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [elven] companions.<br><b>Maneuver:</b> Add a threat to take an [elven] skirmish event into hand from your discard pile.<br><b>Regroup:</b> Remove an [elven] token to play an [elven] condition from your discard pile.
 		lore: ...the power of Gil-galad has increased in his absence.'
 		promotext: ""
@@ -445,17 +366,8 @@
 		vitality: 3
 		resistance: 7
 		keywords: Ranger
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Ranger</b>.<br>To play, spot 2 [elven] companions.<br>Minions skirmishing Glorfindel cannot gain strength bonuses from possessions.<br>Each time Glorfindel wins a skirmish, you may remove a threat.
 		lore: Yet oft in lies truth is hidden....'
 		promotext: ""
@@ -493,17 +405,8 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Skirmish:</b> Exert Haldir or discard an [elven] card from hand to make a minion skirmishing Haldir strength -2.
 		lore: I bring word from Elrond of Rivendell.
 		promotext: ""
@@ -537,17 +440,8 @@
 		twilight: 2
 		type: Possession
 		#target: a companion
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: To play, spot 2 [elven] companions. Bearer must be a companion.<br><b>Regroup:</b> Discard this possession from play to reconcile your hand.
 		lore: Sam thought that it tasted far better, somehow, than it had for a good while....
 		promotext: ""
@@ -581,20 +475,13 @@
 		twilight: 0
 		type: Event
 		keywords: Fellowship
-		/*requires: {
-			
-		}
-		*/
+
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
 				}
 			]
 		}
@@ -632,17 +519,8 @@
 		twilight: 1
 		type: Follower
 		resistance: 1
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper><br>When you transfer this to an [elven] companion, you may draw 3 cards.
 		lore: Go not to the Elves for counsel, for they will say both no and yes.'
 		promotext: ""
