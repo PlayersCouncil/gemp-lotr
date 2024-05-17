@@ -447,6 +447,24 @@ public class FilterFactory {
                         return Filters.minResistance(amount + 1);
                     };
                 });
+        parameterFilters.put("maxresistance",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.maxResistance(amount);
+                    };
+                });
+        parameterFilters.put("minresistance",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.minResistance(amount);
+                    };
+                });
         parameterFilters.put("side", (parameter, environment) -> {
             final Side side = Side.Parse(parameter);
             if (side == null)

@@ -27,6 +27,18 @@
 		site: 4
 		keywords: Archer
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+                    type: modifyArcheryTotal
+                    requires: {
+                        type: canSpot
+                        filter: companion,maxResistance(4)
+                    }
+                    side: shadow
+                    amount: 1
+		        }
+		    }
 		]
 		gametext: <b>Archer</b>.<br>While you can spot a companion who has resistance 4 or less, the minion archery total is +1.
 		lore: Haradrim bowmen pick off stragglers who rout after losing a battle.
@@ -65,6 +77,50 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        text: Make lurker strength +1
+		        phase: skirmish
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(lurker)
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        text: Make lurker fierce
+		        phase: skirmish
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(lurker)
+		            keyword: fierce
+		            until: regroup
+		        }
+		    }
+		    {
+		        type: activated
+		        text: Make lurker damage +1
+		        phase: skirmish
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(lurker)
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: <b>Skirmish:</b> Remove (2) to make a lurker strength +1.<br><b>Skirmish:</b> Remove (2) to make a lurker <b>fierce</b> until the regroup phase.<br><b>Skirmish:</b> Remove (2) to make a lurker <b>damage +1</b>.
 		lore: The Men of the East were well-equipped.
@@ -103,6 +159,14 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: canSpot
+		            filter: companion,maxResistance(3)
+		        }
+		        amount: -2
+		    }
 		]
 		gametext: While you can spot a companion who has resistance 3 or less, this minion's twilight cost is -2.
 		lore: Tribes of Harad gather when their enemies appear weak.
@@ -137,13 +201,17 @@
 		twilight: 1
 		type: Event
 		keywords: Regroup
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(men),minion
+			    count: 2
+			}
 			effect: [
 				{
+				    type: wound
+				    filter: choose(unbound,companion)
 				}
 			]
 		}
@@ -183,13 +251,16 @@
 			Toil 2
 			Skirmish
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(men),minion
+			}
 			effect: [
 				{
+				    type: discard
+				    filter: choose(possession)
 				}
 			]
 		}
@@ -231,6 +302,19 @@
 		site: 4
 		keywords: Lurker
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(men),minion)
+		            amount: 4
+		        }
+		    }
 		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Discard this minion to make a [men] minion strength +4.
 		lore: The military training of the Easterlings is evident in their marching formations.
@@ -269,6 +353,18 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: location
+		                filter: battleground
+		            }
+		            filter: self
+		            keyword: fierce
+		        }
+		    }
 		]
 		gametext: While this minion is at a battleground site, it is <b>fierce</b>.
 		lore: When an enemy offers resistance, the Haradrim bloodlust rises to the occasion.
@@ -307,6 +403,21 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: companion,maxResistance(5)
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Maneuver:</b> Exert this minion to add (1) for each companion who has resistance 5 or less.
 		lore: No mere soldiers, all the Men of Harad are skilled assassins and raiders.
@@ -346,6 +457,28 @@
 		site: 4
 		keywords: Lurker
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: modifyStrength
+                        filter: self
+                        amount: -2
+                        until: regroup
+                    }
+                ]
+                effect: {
+                    type: modifyStrength
+                    filter: all(other,culture(men),minion)
+                    amount: 1
+                    until: regroup
+                }
+		    }
 		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Exert Easterling Host and make it strength -2 until the regroup phase to make each other [men] minion strength +1 until the regroup phase.
 		lore: Men of the East mass soldiers into huge groups.
@@ -385,6 +518,30 @@
 		site: 4
 		keywords: Lurker
 		effects: [
+		    {
+		        type: activatedTrigger
+		        trigger: {
+                    type: aboutToTakeWound
+                    filter: culture(men),minion
+		        }
+		        requires: {
+		            type: phase
+		            phase: skirmish
+		        }
+		        cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: removeTwilight
+                    }
+                ]
+		        effect: {
+		            type: preventWound
+		            filter: choose(culture(men),minion)
+		        }
+		    }
 		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Response:</b> If a [men] minion is about to take a wound in a skirmish, exert this minion and remove (1) to prevent that.
 		lore: Tight columns allow Easterlings to protect each other.
@@ -423,6 +580,19 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: location
+		                filter: plains
+		            }
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: While this minion is at a plains site, it is <b>damage +1</b>.
 		lore: Experienced warriors gather the disparate tribes for massive raids.
@@ -460,13 +630,17 @@
 			Toil 2
 			Archery
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(men),minion
+			}
 			effect: [
 				{
+				    type: modifyArcheryTotal
+				    side: shadow
+				    amount: 3
 				}
 			]
 		}
@@ -508,6 +682,30 @@
 		site: 4
 		keywords: Ambush 1
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: [
+                    {
+                        type: location
+                        filter: plains
+                    }
+                    {
+                        type: canSpot
+                        filter: unbound,companion
+                    }
+                ]
+                effect: {
+                    type: modifyResistance
+                    filter: choose(unbound,companion)
+                    amount: -1
+                    until: endOfTurn
+                }
+		    }
 		]
 		gametext: <b>Ambush (1)</b>.<br>When you play this minion at a plains site, you may spot an unbound companion to make that companion resistance -1 until the end of the turn.
 		lore: Accustomed as they are to traveling afoot, Dunlending mobs can strike quickly, without warning.
@@ -547,6 +745,19 @@
 		site: 4
 		keywords: Archer
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: killed
+		            filter: side(free peple),character
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: all(your,culture(men),minion)
+		            amount: 3
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: <b>Archer</b>.<br>Each time a Free Peoples character is killed, each of your [men] minions is strength +3 until the regroup phase.
 		lore: The killing frenzy of the Southrons is in stark contrast to the cool efficiency of Easterling columns.
@@ -585,6 +796,31 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: location
+		                filter: plains
+		            }
+		            filter: self
+		            keyword: archer
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: companion
+		                count: 6
+		            }
+		            filter: culture(men),minion
+		            keyword: archer
+		        }
+		    }
 		]
 		gametext: While this minion is at a plains site, it is an <b>archer</b>.<br>While you can spot 6 companions, each [men] minion is an <b>archer</b>.
 		lore: Makers of bows and arrows have a strong trade for the raiders of Harad.
@@ -623,6 +859,14 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: currentSite
+		            keyword: plains
+		        }
+		    }
 		]
 		gametext: The fellowship's current site gains <b>plains</b>.
 		lore: Their savage war bands move swiftly across flat terrain.
@@ -661,6 +905,20 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: constantlyCheck
+		        }
+		        requires: {
+		            type: cantSpot
+		            filter: another,culture(men),minion
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
 		]
 		gametext: When you cannot spot another [men] minion, discard this minion.
 		lore: Alliances between Haradrim tribes are fragile things which sometimes break down in battle.
@@ -699,6 +957,20 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: <b>Skirmish:</b> Remove (3) to make this minion <b>damage +1</b>.
 		lore: The strange craftsmen of Haradwaith fashion their war banners from woven wood.
@@ -737,6 +1009,18 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+                    type: addKeyword
+                    requires: {
+                        type: location
+                        filter: battleground
+                    }
+                    filter: self
+                    keyword: fierce
+		        }
+		    }
 		]
 		gametext: While this minion is at a battleground site, it is <b>fierce</b>.
 		lore: Raiders and brigands they may be, but in force the Southron fighters are terrifying.
@@ -775,6 +1059,21 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: assignedToSkirmish
+		            filter: self
+		            side: free people
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: side(free people),character,maxResistance(5)
+		            }
+		        }
+		    }
 		]
 		gametext: Each time the Free Peoples player assigns this minion to a skirmish, add (1) for each Free Peoples character who has resistance 5 or less.
 		lore: The cruel Men of Harad slaughter the weak and infirm during their raids on Gondor.
@@ -808,8 +1107,40 @@
 		culture: Men
 		twilight: 3
 		type: Condition
-		#target: a companion
+		target: companion
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(men),minion
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cancelStrengthBonusTo
+		            requires: {
+		                type: canSpot
+		                filter: bearer,inSkirmishAgainst(culture(men),minion)
+		            }
+		            filter: bearer
+		            from: possession
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cancelKeywordBonusFrom
+		            requires: {
+		                type: canSpot
+		                filter: bearer,inSkirmishAgainst(culture(men),minion)
+		            }
+		            keyword: damage
+		            filter: bearer
+		            from: possession
+		        }
+		    }
 		]
 		gametext: To play, spot a [men] minion.<br>Bearer must be a companion.<br>While bearer is skirmishing a [men] minion, bearer loses all strength and <b>damage</b> bonuses from possessions.
 		lore: ...ill news is an ill guest they say.'
@@ -848,8 +1179,6 @@
 		vitality: 3
 		site: 4
 		keywords: Toil 2
-		effects: [
-		]
 		gametext: <b>Toil 2</b>. <helper>(For each [men] character you exert when playing this, its twilight cost is -2.)</helper>
 		lore: The bellicose families of Harad cannot often agree, but when they do, they form a formidable army.
 		promotext: ""
@@ -884,8 +1213,29 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: a [men] minion
+		target: culture(men),minion
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: archer
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: exert
+		            player: free people
+		            filter: choose(side(free people),man)
+		        }
+		    }
 		]
 		gametext: Bearer must be a [men] minion.<br>Bearer is an <b>archer</b>.<br>When you play this possession, you may make the Free Peoples player exert his or her Man.
 		lore: Southron accuracy with bows is legendary.
@@ -924,6 +1274,17 @@
 		vitality: 1
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachInHand
+		                hand: free people
+		            }
+		        }
+		    }
 		]
 		gametext: This minion is strength +1 for each card in the Free Peoples player's hand.
 		lore: One or two gave Frodo a blank look and departed muttering among themselves.
@@ -959,6 +1320,34 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        requires: [
+                    {
+                        type: cardsInHandMoreThan
+                        count: 2
+                    }
+                    {
+                        type: canSpot
+                        filter: culture(men),minion
+                        count: 2
+                    }
+                ]
+                cost: {
+                    type: discardFromHand
+                    forced: false
+                    filter: all(any)
+                }
+                effect: {
+                    type: addTwilight
+                    amount: 8
+                }
+		    }
 		]
 		gametext: At the start of the maneuver phase, if you have 2 or more cards in hand, you may spot 2 [men] minions and discard your hand to add (8).
 		lore: We will fight for you!'
@@ -993,13 +1382,21 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(culture(men),minion)
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: location
+				            filter: or(battleground,plains)
+				        }
+				        true: 4
+				        false: 2
+				    }
 				}
 			]
 		}
@@ -1040,6 +1437,20 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: assignedAgainst
+		            filter: self
+		            against: character,maxResistance(5)
+		            memorizeAgainst: assignedAgainst
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(possession,attachedTo(character,maxResistance(5),memory(assignedAgainst)))
+		        }
+		    }
 		]
 		gametext: Each time this minion is assigned to a character who has resistance 5 or less, you may discard a possession borne by that character.
 		lore: Disarming strikes are common among the tactics of the Men of Harad.
@@ -1075,8 +1486,30 @@
 		type: Possession
 		vitality: 2
 		itemclass: Shield
-		#target: a [men] minion
+		target: culture(men),minion
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        amount: {
+		            type: forEachYouCanSpot
+		            filter: side(free people),possession
+		            multiplier: -1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+                    type: cantTakeWounds
+                    requires: {
+                        type: not
+                        requires: {
+                            type: phase
+                            phase: skirmish
+                        }
+                    }
+                    filter: bearer
+		        }
+		    }
 		]
 		gametext: Bearer must be a [men] minion.<br>The twilight cost of this possession is -1 for each Free Peoples possession you spot.<br>Bearer cannot take wounds except during a skirmish.
 		lore: An Easterling shield covers almost the entire body.
@@ -1112,8 +1545,22 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [men] minion
+		target: culture(men),minion
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(culture(men),minion)
+		            keyword: fierce
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: Bearer must be a [men] minion.<br><b>Skirmish:</b> Remove (2) to make a [men] minion <b>fierce</b> until the regroup phase.
 		lore: Many of the Men of the East march into battle carrying heavy bladed polearms.
@@ -1148,13 +1595,37 @@
 		twilight: 1
 		type: Event
 		keywords: Archery
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(men),minion
+			}
 			effect: [
 				{
+				    type: modifyArcheryTotal
+				    side: shadow
+				    amount: 1
+				}
+				{
+				    type: chooseActiveCards
+				    player: free people
+				    text: Choose companions who can take archery total
+				    filter: choose(companion)
+				    count: 3
+				    memorize: chosenCompanions
+				}
+				{
+				    type: memorizeActive
+				    filter: companion,not(memory(chosenCompanions))
+				    memory: companionsWhoCantTakeArcheryWounds
+				}
+				{
+				    type: addModifier
+				    modifier: {
+				        type: cantTakeArcheryWounds
+				        filter: memory(companionsWhoCantTakeArcheryWounds)
+				    }
 				}
 			]
 		}
@@ -1195,6 +1666,37 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: fierce
+		            until: regroup
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: companion
+		                count: 6
+		            }
+		            filter: culture(men),minion
+		            keyword: fierce
+		        }
+		    }
 		]
 		gametext: When you play this minion, you may exert it to make it <b>fierce</b> until the regroup phase.<br>While you can spot 6 companions, each [men] minion is <b>fierce</b>.
 		lore: Furious hatred over the land they've lost drives the mobs of Dunland.
@@ -1234,6 +1736,19 @@
 		site: 4
 		keywords: Lurker
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+                    type: winsSkirmish
+                    filter: another,culture(men),minion
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: 3
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time another [men] minion wins a skirmish, make this minion strength +3 until the regroup phase.
 		lore: The fury of the Eastern warriors grows in battle.
@@ -1272,6 +1787,29 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: [
+		            {
+		                type: canSpot
+		                filter: another,culture(men),minion
+		            }
+		            {
+		                type: canSpot
+		                filter: side(free people),character,maxResistance(5)
+		                count: 2
+		            }
+		        ]
+		        effect: {
+		            type: addModifier
+		            modifier: {
+                        type: modifyMoveLimit
+                        amount: -1
+		            }
+		            until: endOfTurn
+		        }
+		    }
 		]
 		gametext: <b>Regroup:</b> Spot another [men] minion and 2 Free Peoples characters who each have resistance 5 or less to make the move limit -1 for this turn.
 		lore: Small, harassing bands of Haradrim skirmishers make moving troops difficult.
@@ -1310,6 +1848,20 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: transfer
+		            filter: choose(or(possession,condition),attachedTo(character))
+		            where: choose(character)
+		            checkTarget: true
+		        }
+		    }
 		]
 		gametext: <b>Maneuver:</b> Exert this minion to transfer a possession or condition borne by a character to another eligible bearer.
 		lore: The strangers, especially those that had come up the Greenway, stared at them curiously.
@@ -1348,6 +1900,24 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: transfer
+		            filter: choose(condition,attachedTo(character))
+		            where: choose(character)
+		            checkTarget: true
+		        }
+		    }
 		]
 		gametext: At the start of the maneuver phase, you may remove (2) to transfer a condition borne by a character to another eligible bearer.
 		lore: But there was one... who stood looking at them with a knowing and half-mocking expression that made them feel very uncomfortable.
@@ -1386,6 +1956,20 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: assignedAgainst
+		            filter: self
+		            against: character,maxResistance(5)
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: fierce
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: Each time this minion is assigned to skirmish a character who has resistance 5 or less, it is <b>fierce</b> until the regroup phase.
 		lore: Only the strongest fighters can withstand a Southron attack.
@@ -1425,6 +2009,19 @@
 		site: 4
 		keywords: Ambush 1
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: location
+		                filter: plains
+		            }
+		            filter: self
+		            keyword: ambush
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: <b>Ambush (1)</b>.<br>While this minion is at a plains site, it gains an additional ambush (1).
 		lore: The open plain affords no shelter, no defense against the Dunlendings.
@@ -1459,13 +2056,35 @@
 		twilight: 3
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: wound
+				    filter: choose(character,inSkirmishAgainst(culture(men),minion))
+				    memorize: woundedCharacter
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: location
+				        filter: battleground
+				    }
+				    effect: {
+				        type: optional
+				        text: Would you like to remove (3) to wound {woundedCharacter} again?
+				        effect: {
+				            type: costToEffect
+				            cost: {
+				                type: removeTwilight
+				                amount: 3
+				            }
+				            effect: {
+				                type: wound
+				                filter: memory(woundedCharacter)
+				            }
+				        }
+				    }
 				}
 			]
 		}
@@ -1502,8 +2121,15 @@
 		twilight: 1
 		type: Condition
 		resistance: -2
-		#target: a companion (except the Ring-bearer)
+		target: companion,not(ringBearer)
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(men),minion
+		        }
+		    }
 		]
 		gametext: To play, spot a [men] minion.<br>Bearer must be a companion (except the Ring-bearer).
 		lore: Why should we not think that the Great Ring has come into our hands to serve us in the very hour of need?'
