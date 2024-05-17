@@ -5,6 +5,7 @@ import com.gempukku.lotro.cards.build.field.EffectProcessor;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.game.StringWhileInZoneData;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.DiscountEffect;
 import com.gempukku.lotro.logic.effects.discount.*;
@@ -40,7 +41,7 @@ public class PotentialDiscount implements EffectProcessor {
                             @Override
                             protected void discountPaidCallback(int paid) {
                                 actionContext.setValueToMemory(memory, String.valueOf(paid));
-                                actionContext.getSource().setWhileInZoneData(paid);
+                                actionContext.getSource().setWhileInZoneData(new StringWhileInZoneData(String.valueOf(paid)));
                             }
                         };
                     }
@@ -70,7 +71,7 @@ public class PotentialDiscount implements EffectProcessor {
                             @Override
                             protected void discountPaidCallback(int paid) {
                                 actionContext.setValueToMemory(memory, String.valueOf(paid));
-                                actionContext.getSource().setWhileInZoneData(paid);
+                                actionContext.getSource().setWhileInZoneData(new StringWhileInZoneData(String.valueOf(paid)));
                             }
                         };
                     }
@@ -94,7 +95,7 @@ public class PotentialDiscount implements EffectProcessor {
                             @Override
                             protected void discountPaidCallback(int paid) {
                                 actionContext.setValueToMemory(memory, String.valueOf(paid));
-                                actionContext.getSource().setWhileInZoneData(paid);
+                                actionContext.getSource().setWhileInZoneData(new StringWhileInZoneData(String.valueOf(paid)));
                             }
                         };
                     }
@@ -124,7 +125,7 @@ public class PotentialDiscount implements EffectProcessor {
                             @Override
                             protected void discountPaidCallback(int paid) {
                                 actionContext.setValueToMemory(memory, "Yes");
-                                actionContext.getSource().setWhileInZoneData(memory);
+                                actionContext.getSource().setWhileInZoneData(new StringWhileInZoneData(memory));
                             }
                         };
                     }
@@ -154,7 +155,7 @@ public class PotentialDiscount implements EffectProcessor {
                             @Override
                             protected void discountPaidCallback(int paid) {
                                 actionContext.setValueToMemory(memory, "Yes");
-                                actionContext.getSource().setWhileInZoneData(memory);
+                                actionContext.getSource().setWhileInZoneData(new StringWhileInZoneData(memory));
                             }
                         };
                     }

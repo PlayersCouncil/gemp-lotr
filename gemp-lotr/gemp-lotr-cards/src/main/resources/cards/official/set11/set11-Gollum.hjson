@@ -22,20 +22,23 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: [
+                {
+                    type: canSpot
+                    filter: minion,inSkirmishAgainst(side(free people),character,resistanceLessThan(3))
+                }
+                {
+                    type: canSpot
+                    filter: name(Gollum)
+                }
+            ]
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: wound
+				    filter: choose(side(free people),character,resistanceLessThan(3),inSkirmishAgainst(minion))
+				    times: 2
 				}
 			]
 		}
@@ -72,22 +75,26 @@
 		culture: Gollum
 		twilight: 2
 		type: Minion
-		race: 
 		strength: 5
 		vitality: 4
 		site: 3
 		keywords: Lurker
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(another,minion)
+		            amount: 2
+		        }
+		    }
+		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Exert Gollum twice to make another minion strength +2.
 		lore: O yes, Shelob will get him, not Sméagol: he promised; he won't hurt Master at all.'
 		promotext: ""
@@ -121,20 +128,16 @@
 		twilight: 2
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			    type: discard
+			    filter: choose(name(Gollum))
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: wound
+				    filter: choose(unbound,companion,resistanceLessThan(7))
 				}
 			]
 		}
@@ -171,17 +174,24 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesSkirmish
+		            filter: companion
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(name(Gollum))
+		        }
+		        effect: {
+                    type: putCardsFromDiscardIntoHand
+                    filter: choose(culture(gollum))
+		        }
+		    }
+		]
 		gametext: Each time a companion loses a skirmish, you may exert Gollum to take a [gollum] card into hand from your discard pile.
 		lore: He's much more dangerous than he looks.'
 		promotext: ""
@@ -215,20 +225,37 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: {
+			    type: canSpot
+			    filter: name(Gollum)
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: addTwilight
+				    amount: 3
+				}
+				{
+				    type: chooseActiveCards
+				    text: Choose our site to replace
+				    filter: choose(your,site,zone(adventure path))
+				    memorize: chosenSite
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: memoryMatches
+				        memory: chosenSite
+				        filter: any
+				    }
+				    effect: {
+                        type: playSite
+                        number: {
+                            type: siteNumberInMemory
+                            memory: chosenSite
+                        }
+				    }
 				}
 			]
 		}
@@ -265,20 +292,16 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: choose(name(Sméagol))
+				    amount: {
+				        type: forEachYouCanSpot
+				        filter: companion,resistanceMoreThan(4)
+				    }
 				}
 			]
 		}
@@ -315,20 +338,26 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+			    type: exert
+			    filter: choose(name(Gollum))
+			    memorize: gollum
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: modifyStrength
+				    filter: choose(not(memory(gollum)),minion)
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: location
+				            filter: mountain
+				        }
+				        true: 3
+				        false: 2
+				    }
 				}
 			]
 		}
@@ -365,17 +394,26 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesSkirmish
+		            filter: companion
+		        }
+		        requires: {
+		            type: fierceSkirmish
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(name(Gollum))
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
+		]
 		gametext: Each time a companion loses a fierce skirmish, you may exert Gollum to add a burden.
 		lore: A sudden weight smote him and he crashed forward, tearing the backs of his hands that still clasped his master's.
 		promotext: ""
@@ -408,21 +446,32 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Fellowship or Regroup
-		/*requires: {
-			
-		}
-		*/
+		keywords: [
+		    Fellowship
+		    Regroup
+		]
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: {
+			    type: canSpot
+			    filter: name(Sméagol)
+			}
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: playNextSite
+				}
+				{
+				    type: optional
+				    text: Do you want to return it to hand?
+				    effect: {
+				        type: costToEffect
+				        cost: {
+				            type: addBurdens
+				        }
+				        effect: {
+				            type: putPlayedEventIntoHand
+				        }
+				    }
 				}
 			]
 		}
@@ -459,17 +508,45 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: chooseAKeyword
+                        keywords: forest,mountain,plains,river
+                        memorize: chosenKeyword
+                    }
+                    {
+                        type: storeKeyword
+                        memory: chosenKeyword
+                    }
+                ]
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: storedKeyword
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(or(name(Gollum),name(Sméagol)))
+		        }
+		        effect: {
+		            type: removeTwilight
+		            amount: 4
+		        }
+		    }
+		    {
+		        type: displayableInformation
+		        text: Selected keyword is {stored}
+		    }
+		]
 		gametext: When you play this condition, name forest, mountain, plains, or river.<br>Each time the fellowship moves to a site that has the named keyword, you may exert Gollum or Sméagol to remove (4).
 		lore: Here! We can get down here. Sméagol went this way once: I went this way, hiding from Orcs.'
 		promotext: ""
@@ -503,22 +580,45 @@
 		culture: Gollum
 		twilight: 0
 		type: Companion
-		race: 
 		strength: 3
 		vitality: 4
 		resistance: 5
 		keywords: Ring-bound
-		/*requires: {
-			
-		}
 		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
+		    {
+		        type: extraCost
+		        cost: {
+		            type: addBurdens
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: playNextSite
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: location
+		            filter: marsh
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: cancelSkirmish
+		            filter: self
+		        }
+		    }
+		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br>Each time Sméagol wins a skirmish, you may play the fellowship's next site.<br><b>Skirmish:</b> If Sméagol is at a marsh, exert him to cancel a skirmish involving him.
 		lore: They would have foundered in the Dead Marshes but for Gollum.
 		promotext: ""
@@ -552,20 +652,22 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: [
+                {
+                    type: canSpot
+                    filter: culture(gollum),minion
+                }
+                {
+                    type: location
+                    filter: mountain
+                }
+            ]
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+				    type: playCardFromDiscard
+				    filter: choose(minion)
 				}
 			]
 		}

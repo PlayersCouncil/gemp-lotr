@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.set15.men;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.StringWhileInZoneData;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
@@ -34,8 +35,8 @@ public class Card15_076 extends AbstractPermanent {
 
     @Override
     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
-return Collections.singletonList(new RemoveGameTextModifier(self, Filters.and(CardType.SITE, Zone.ADVENTURE_PATH, Filters.name((String) self.getWhileInZoneData()))));
-}
+        return Collections.singletonList(new RemoveGameTextModifier(self, Filters.and(CardType.SITE, Zone.ADVENTURE_PATH, Filters.name(fromData(self.getWhileInZoneData())))));
+    }
 
     @Override
     public List<RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult, PhysicalCard self) {
@@ -47,11 +48,21 @@ return Collections.singletonList(new RemoveGameTextModifier(self, Filters.and(Ca
                 PhysicalCard randomSite = randomCards.get(0);
                 action.appendEffect(
                         new RevealCardEffect(self, randomCards.get(0)));
-                self.setWhileInZoneData(randomSite.getBlueprint().getTitle());
+                self.setWhileInZoneData(toData(randomSite.getBlueprint().getTitle()));
             }
             return Collections.singletonList(action);
         }
         return null;
+    }
+
+    private String fromData(PhysicalCard.WhileInZoneData data) {
+        if (data == null)
+            return null;
+        return data.getValue();
+    }
+
+    private PhysicalCard.WhileInZoneData toData(String cardTitle) {
+        return new StringWhileInZoneData(cardTitle);
     }
 
     @Override

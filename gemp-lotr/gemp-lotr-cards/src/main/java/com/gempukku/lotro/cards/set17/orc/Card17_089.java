@@ -4,6 +4,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.ReadableStringWhileInZoneData;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.cardtype.AbstractAttachable;
@@ -59,7 +60,7 @@ public class Card17_089 extends AbstractAttachable {
                         new Filter() {
                             @Override
                             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                                return self.getWhileInZoneData() != null && physicalCard.getBlueprint().getRace() == self.getWhileInZoneData();
+                                return self.getWhileInZoneData() != null && physicalCard.getBlueprint().getRace() == fromData(self.getWhileInZoneData());
                             }
                         })), 3));
         modifiers.add(
@@ -67,7 +68,7 @@ public class Card17_089 extends AbstractAttachable {
                         new Filter() {
                             @Override
                             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                                return self.getWhileInZoneData() != null && physicalCard.getBlueprint().getRace() == self.getWhileInZoneData();
+                                return self.getWhileInZoneData() != null && physicalCard.getBlueprint().getRace() == fromData(self.getWhileInZoneData());
                             }
                         })), Keyword.DAMAGE, 1));
         return modifiers;
@@ -88,7 +89,7 @@ public class Card17_089 extends AbstractAttachable {
                         @Override
                         protected void cardSelected(LotroGame game, PhysicalCard card) {
                             Race race = card.getBlueprint().getRace();
-                            self.setWhileInZoneData(race);
+                            self.setWhileInZoneData(toData(race));
 
                         }
                     });
@@ -97,10 +98,20 @@ public class Card17_089 extends AbstractAttachable {
         return null;
     }
 
+    private Race fromData(PhysicalCard.WhileInZoneData data) {
+        if (data == null)
+            return null;
+        return Race.valueOf(data.getValue());
+    }
+
+    private PhysicalCard.WhileInZoneData toData(Race race) {
+        return new ReadableStringWhileInZoneData(race.name(), race.getHumanReadable());
+    }
+
     @Override
     public String getDisplayableInformation(PhysicalCard self) {
         if (self.getWhileInZoneData() != null)
-            return "Selected race is: " + ((Race) self.getWhileInZoneData()).getHumanReadable();
+            return "Selected race is: " + self.getWhileInZoneData().getHumanReadable();
         return null;
     }
 }

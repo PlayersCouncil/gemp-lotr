@@ -7,6 +7,7 @@ import com.gempukku.lotro.common.Race;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.ReadableStringWhileInZoneData;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.cardtype.AbstractMinion;
@@ -48,7 +49,7 @@ public class Card12_054 extends AbstractMinion {
                 new Filter() {
                     @Override
                     public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                        return self.getWhileInZoneData() != null && physicalCard.getBlueprint().getCulture() == (Culture) self.getWhileInZoneData();
+                        return self.getWhileInZoneData() != null && physicalCard.getBlueprint().getCulture() == fromData(self.getWhileInZoneData());
                     }
                 }), -1));
     }
@@ -56,7 +57,7 @@ public class Card12_054 extends AbstractMinion {
     @Override
     public String getDisplayableInformation(PhysicalCard self) {
         if (self.getWhileInZoneData() != null)
-            return "Chosen culture is " + ((Culture) self.getWhileInZoneData()).getHumanReadable();
+            return "Chosen culture is " + self.getWhileInZoneData().getHumanReadable();
         return null;
     }
 
@@ -75,12 +76,22 @@ public class Card12_054 extends AbstractMinion {
                             new MultipleChoiceAwaitingDecision(1, "Choose a culture", possibleCultures.toArray(new String[possibleCultures.size()])) {
                                 @Override
                                 protected void validDecisionMade(int index, String result) {
-                                    self.setWhileInZoneData(Culture.findCultureByHumanReadable(result));
+                                    self.setWhileInZoneData(toData(Culture.findCultureByHumanReadable(result)));
                                     game.getGameState().sendMessage(self.getOwner() +" has chosen "+ result);
                                 }
                             }));
             return Collections.singletonList(action);
         }
         return null;
+    }
+
+    private Culture fromData(PhysicalCard.WhileInZoneData data) {
+        if (data == null)
+            return null;
+        return Culture.valueOf(data.getValue());
+    }
+
+    private PhysicalCard.WhileInZoneData toData(Culture culture) {
+        return new ReadableStringWhileInZoneData(culture.name(), culture.getHumanReadable());
     }
 }

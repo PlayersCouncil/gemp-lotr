@@ -25,7 +25,7 @@ public class PhysicalCardImpl implements PhysicalCard {
     private List<ModifierHook> _modifierHooksControlledSite;
     private List<ModifierHook> _modifierHooksPermanentSite;
 
-    private Object _whileInZoneData;
+    private WhileInZoneData _whileInZoneData;
 
     private Integer _siteNumber;
 
@@ -174,13 +174,13 @@ public class PhysicalCardImpl implements PhysicalCard {
     }
 
     @Override
-    public Object getWhileInZoneData() {
+    public WhileInZoneData getWhileInZoneData() {
         return _whileInZoneData;
     }
 
     @Override
-    public void setWhileInZoneData(Object object) {
-        _whileInZoneData = object;
+    public void setWhileInZoneData(WhileInZoneData whileInZoneData) {
+        _whileInZoneData = whileInZoneData;
     }
 
     @Override

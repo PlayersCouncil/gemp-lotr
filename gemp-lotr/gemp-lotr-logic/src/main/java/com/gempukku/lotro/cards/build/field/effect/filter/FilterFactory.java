@@ -102,10 +102,10 @@ public class FilterFactory {
         simpleFilters.put("idinstored",
                 (actionContext ->
                         (Filter) (game, physicalCard) -> {
-                            final String whileInZoneData = (String) actionContext.getSource().getWhileInZoneData();
+                            final PhysicalCard.WhileInZoneData whileInZoneData = actionContext.getSource().getWhileInZoneData();
                             if (whileInZoneData == null)
                                 return false;
-                            for (String cardId : whileInZoneData.split(",")) {
+                            for (String cardId : whileInZoneData.getValue().split(",")) {
                                 if (cardId.equals(String.valueOf(physicalCard.getCardId())))
                                     return true;
                             }
@@ -137,6 +137,13 @@ public class FilterFactory {
                 (actionContext) -> {
                     final CharacterLostSkirmishResult lostSkirmish = (CharacterLostSkirmishResult) actionContext.getEffectResult();
                     return lostSkirmish.getLoser();
+                });
+        simpleFilters.put("storedkeyword",
+                (actionContext) -> {
+                    PhysicalCard.WhileInZoneData data = actionContext.getSource().getWhileInZoneData();
+                    if (data == null)
+                        return Filters.none;
+                    return Keyword.valueOf(data.getValue());
                 });
         simpleFilters.put("unbound",
                 (actionContext) -> Filters.unboundCompanion);
@@ -391,11 +398,10 @@ public class FilterFactory {
                 (parameter, environment) -> {
                     if (parameter.equals("stored")) {
                         return actionContext -> (Filter) (game, physicalCard) -> {
-                            final String value = (String) actionContext.getSource().getWhileInZoneData();
-                            if (value == null)
-                                return false;
-                            else
-                                return Race.valueOf(value) == physicalCard.getBlueprint().getRace();
+                            final PhysicalCard.WhileInZoneData value = actionContext.getSource().getWhileInZoneData();
+                            if (value != null)
+                                return Race.valueOf(value.getValue()) == physicalCard.getBlueprint().getRace();
+                            return false;
                         };
                     } else if (parameter.equals("cannotspot")) {
                         return actionContext -> (Filter) (game, physicalCard) -> {

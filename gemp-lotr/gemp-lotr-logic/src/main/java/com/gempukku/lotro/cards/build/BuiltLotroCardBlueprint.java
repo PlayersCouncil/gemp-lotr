@@ -46,7 +46,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private String formattedGameText;
     private String loreText;
     private String promoText;
-
+    private String displayableInformation;
 
     private List<Requirement> requirements;
     private List<FilterableSource> targetFilters;
@@ -361,6 +361,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public void setDisplayableInformation(String value) {
+        this.displayableInformation = value;
     }
 
     // Implemented methods
@@ -985,6 +989,14 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public String getDisplayableInformation(PhysicalCard self) {
+        if (displayableInformation != null) {
+            PhysicalCard.WhileInZoneData whileInZoneData = self.getWhileInZoneData();
+            if (whileInZoneData != null) {
+                return displayableInformation.replace("{stored}", whileInZoneData.getHumanReadable());
+            } else {
+                return displayableInformation;
+            }
+        }
         return null;
     }
 
