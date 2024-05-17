@@ -430,6 +430,21 @@ public class FilterFactory {
 
                     return (actionContext) -> Filters.regionNumberBetweenInclusive(min, max);
                 });
+        parameterFilters.put("resistancelessthanfilter",
+                (parameter, environment) -> {
+                    FilterableSource filter = environment.getFilterFactory().createFilter(parameter, environment);
+
+                    return (actionContext) -> {
+                        Filterable filterable = filter.getFilterable(actionContext);
+                        return new Filter() {
+                            @Override
+                            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
+                                int resistance = game.getModifiersQuerying().getResistance(game, physicalCard);
+                                return Filters.countActive(game, filterable, Filters.maxResistance(resistance - 1)) > 0;
+                            }
+                        };
+                    };
+                });
         parameterFilters.put("resistancelessthan",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
