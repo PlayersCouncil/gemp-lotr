@@ -28,6 +28,7 @@ public class RequirementFactory {
         requirementProducers.put("canspottwilight", new CanSpotTwilight());
         requirementProducers.put("canspotwounds", new CanSpotWounds());
         requirementProducers.put("cantspot", new CantSpot());
+        requirementProducers.put("cantspotburdens", new CantSpotBurdens());
         requirementProducers.put("cantspotfpcultures", new CantSpotFPCultures());
         requirementProducers.put("cantspotthreats", new CantSpotThreats());
         requirementProducers.put("cardsindeckcount", new CardsInDeckCount());

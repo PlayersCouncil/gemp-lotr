@@ -23,6 +23,35 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+            {
+                type: trigger
+                optional: true
+                trigger: {
+                    type: playerDrawsCard
+                    player: shadow
+                }
+                requires: {
+                    type: phase
+                    phase: Shadow
+                }
+                effect: {
+                    type: removeTwilight
+                    amount: 1
+                }
+            }
+            {
+                type: activated
+                phase: maneuver
+                cost: {
+                    type: exert
+                    filter: choose(name(Gandalf))
+                }
+                effect: {
+                    type: wound
+                    filter: choose(name(Saruman))
+                    times: 2
+                }
+            }
 		]
 		gametext: Each time an opponent draws a card (or takes a card into hand) during the Shadow phase, you may remove (1).<br><b>Maneuver:</b> Exert Gandalf to wound Saruman twice.
 		lore: There is only one Lord of the Ring.'
@@ -61,13 +90,25 @@
 			Toil 3
 			Fellowship
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(gandalf),wizard
+			}
 			effect: [
+			    {
+			        type: chooseHowManyToSpot
+			        filter: companion
+			        memorize: spotCount
+			    }
 				{
+				    type: reorderTopCardsOfDrawDeck
+				    count: {
+				        type: subtract
+				        firstNumber: memory(spotCount)
+				        secondNumber: 1
+				    }
 				}
 			]
 		}
@@ -109,6 +150,33 @@
 		vitality: 4
 		resistance: 7
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: [
+		            {
+		                type: exert
+		                filter: choose(self,notAssignedToSkirmish)
+		            }
+		            {
+		                type: exert
+		                filter: choose(another,unbound,companion,inSkirmishAgainst(minion))
+		                memorize: anotherCompanion
+		            }
+		        ]
+		        effect: [
+		            {
+		                type: modifyStrength
+		                filter: self
+		                amount: 3
+		            }
+		            {
+		                type: replaceInSkirmish
+		                filter: memory(anotherCompanion)
+		                with: self
+		            }
+		        ]
+		    }
 		]
 		gametext: <b>Skirmish:</b> If Gandalf is not assigned to a skirmish, exert him and another unbound companion skirmishing a minion to make Gandalf strength +3 and have him replace that companion in that skirmish.
 		lore: Look to my coming at first light on the fifth day.'
@@ -142,8 +210,30 @@
 		culture: Gandalf
 		twilight: 0
 		type: Possession
-		#target: title(Gandalf)
+		target: title(Gandalf)
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: battleground
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: addBurdens
+		            amount: 2
+		        }
+		        effect: {
+		            type: removeTwilight
+		            amount: twilightCount
+		        }
+		    }
 		]
 		gametext: Bearer must be Gandalf.<br>Each time the fellowship moves from a battleground site, add a burden.<br><b>Regroup:</b> Add 2 burdens to remove all twilight tokens from the twilight pool.
 		lore: He wore a tall pointed blue hat....
@@ -181,13 +271,37 @@
 			Spell
 			Fellowship
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(gandalf),wizard
+			}
 			effect: [
 				{
+				    type: choice
+				    texts: [
+				        Make opponent discard a condition
+				        Discard condition
+				    ]
+				    effects: [
+				        {
+				            type: discard
+				            player: shadow
+				            filter: choose(side(shadow),condition)
+				        }
+				        {
+				            type: conditional
+				            requires: {
+				                type: location
+				                filter: battleground
+				            }
+				            effect: {
+				                type: discard
+				                filter: choose(condition)
+				            }
+				        }
+				    ]
 				}
 			]
 		}
@@ -229,6 +343,30 @@
 		vitality: 3
 		resistance: 5
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: skirmish
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        effect: {
+		            type: removeBurdens
+		            amount: {
+		                type: condition
+		                condition: {
+		                    type: canSpot
+		                    filter: another,culture(gandalf),companion
+		                }
+		                true: 2
+		                false: 1
+		            }
+		        }
+		    }
 		]
 		gametext: At the start of each skirmish involving Járnsmid, you may remove a burden (or 2 burdens if you can spot another [gandalf] companion).
 		lore: Sauron's Easterling allies were another trial for the Bardings, still keenly aware of the great efforts to rebuild Dale.
@@ -266,13 +404,21 @@
 			Spell
 			Skirmish
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(name(Gandalf))
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: cantSpotBurdens
+				            amount: 5
+				        }
+				        true: 4
+				        false: 2
+				    }
 				}
 			]
 		}
@@ -308,9 +454,38 @@
 		culture: Gandalf
 		twilight: 0
 		type: Condition
-		#target: a companion
+		target: companion,not(hasAttached(name(Salve)))
 		keywords: Spell
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(gandalf),wizard
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: bearer
+		        }
+		        cost: [
+		            {
+		                type: memorizeActive
+		                filter: bearer
+		                memory: bearer
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		            {
+		                type: preventWound
+		                filter: memory(bearer)
+		            }
+		        ]
+		    }
 		]
 		gametext: <b>Spell</b>. To play, spot a [gandalf] Wizard. Bearer must be a companion. Limit 1 per bearer.<br><b>Response:</b> If bearer is about to take a wound that would kill him or her, discard this condition to prevent that wound.
 		lore: ...the whole hall became suddenly dark as night.
@@ -345,13 +520,25 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(culture(gandalf),companion)
+				    amount: 2
+				}
+				{
+				    type: conditional
+				    requires: {
+				        type: location
+				        filter: or(battleground,dwelling)
+				    }
+                    effect: {
+                        type: putCardsFromDiscardIntoHand
+                        filter: choose(culture(gandalf),condition)
+                        count: 0-1
+                    }
 				}
 			]
 		}
@@ -387,14 +574,29 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Maneuver or Regroup
-
+		keywords: [
+		    Maneuver
+		    Regroup
+		]
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(gandalf),wizard
+			}
 			effect: [
 				{
+				    type: chooseActiveCards
+				    text: Choose site to replace
+				    filter: choose(siteInCurrentRegion)
+				    memorize: chosenSite
+				}
+				{
+				    type: playSite
+				    number: {
+				        type: siteNumberInMemory
+				        memory: chosenSite
+				    }
 				}
 			]
 		}
@@ -430,8 +632,26 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
-		#target: a companion (except the Ring-bearer)
+		target: companion,not(ringBearer),not(hasAttached(name(Watch and Wait)))
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(gandalf),companion
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: removeBurdens
+		        }
+		    }
 		]
 		gametext: To play, spot a [gandalf] companion. Bearer must be a companion (except the Ring-bearer). Limit 1 per bearer.<br>Each time bearer wins a skirmish, you may remove a burden.
 		lore: I could not take it from him without doing greater harm; and I had no right to do so anyway.'
@@ -467,6 +687,30 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: location
+		                filter: underground
+		            }
+		            filter: name(Gandalf)
+		            keyword: muster
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: location
+		                filter: battleground
+		            }
+		            filter: culture(gandalf),character
+		            keyword: muster
+		        }
+		    }
 		]
 		gametext: While Gandalf is at an underground site, he gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>While the fellowship is at a battleground site, each [gandalf] character gains <b>muster</b>.
 		lore: We come, we come with roll of drum....'
