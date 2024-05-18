@@ -92,6 +92,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("memorizediscard", new MemorizeDiscard());
         effectAppenderProducers.put("memorizenumber", new MemorizeNumber());
         effectAppenderProducers.put("memorizestacked", new MemorizeStacked());
+        effectAppenderProducers.put("memorizetopofdeck", new MemorizeTopOfDeck());
         effectAppenderProducers.put("memorizevalue", new MemorizeValue());
         effectAppenderProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
         effectAppenderProducers.put("modifyresistance", new ModifyResistance());

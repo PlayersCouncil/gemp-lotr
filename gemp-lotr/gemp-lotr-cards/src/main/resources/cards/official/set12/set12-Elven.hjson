@@ -22,13 +22,38 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
+			requires: {
+			    type: canSpot
+			    filter: elf
 			},
 			effect: [
 				{
+				    type: memorizeNumber
+				    memory: cardCount
+				    amount: {
+				        type: forEachTopCardOfDeckUntilMatching
+				        filter: side(shadow)
+				    }
+				}
+				{
+				    type: modifyStrength
+				    filter: choose(elf)
+				    amount: {
+				        type: multiply
+				        multiplier: 2
+				        source: memory(cardCount)
+				    }
+				}
+				{
+				    type: memorizeTopOfDeck
+				    count: memory(cardCount)
+				    memory: topCards
+				}
+				{
+				    type: putCardsFromDeckOnBottomOfDeck
+				    filter: memory(topCards)
 				}
 			]
 		}
@@ -70,6 +95,29 @@
 		vitality: 4
 		resistance: 7
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmishAgainst(minion)
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: putCardsFromDiscardOnTopOfDeck
+		            filter: choose(culture(elven))
+		        }
+		    }
 		]
 		gametext: To play, spot an Elf.<br><b>Skirmish:</b> If Elrond is skirmishing a minion, exert him to place an [elven] card from your discard pile on top of your draw deck.
 		lore: I was there the day the strength of Men failed.'
@@ -105,8 +153,24 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: title(Arwen or Elrond)
+		target: or(title(Arwen),title(Elrond))
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(condition)
+		        }
+		    }
 		]
 		gametext: Bearer must be Arwen or Elrond.<br>Each time bearer wins a skirmish, you may exert him or her to discard a condition from play.
 		lore: This blade is called Hadafang, a noble defense against the enemy throng for a noble lady.
@@ -142,8 +206,16 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		#target: title(Legolas)
+		target: title(Legolas)
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: or(orc,urukHai),inSkirmishAgainst(name(Legolas))
+		            amount: -2
+		        }
+		    }
 		]
 		gametext: Bearer must be Legolas.<br>Each Orc or Uruk-hai skirmishing Legolas is strength -2.
 		lore: Sharp, bone-handled knives defend the Elves of Mirkwood at close quarters.
@@ -183,6 +255,24 @@
 		vitality: 3
 		resistance: 6
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: [
+                        {
+                            type: location
+                            filter: forest
+                        }
+                        {
+                            type: canSpot
+                            filter: another,elf
+                        }
+		            ]
+		            filter: self
+		            keyword: archer
+		        }
+		    }
 		]
 		gametext: While Orophin is at a forest site and you can spot another Elf, Orophin is an <b>archer</b>.
 		lore: ...wolves were howling on the wood's borders: but on the land of Lórien no shadow lay.
@@ -218,6 +308,26 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            filter: choose(companion)
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(companion)
+		        }
+		    }
 		]
 		gametext: To play, spot an Elf.<br><b>Fellowship:</b> Discard a companion from hand to heal a companion.
 		lore: Now you shall rest, and we will not speak of your further road for a while.'
@@ -257,6 +367,30 @@
 		vitality: 3
 		resistance: 6
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        effect: [
+		            {
+		                type: revealTopCardsOfDrawDeck
+		                memorize: revealedCard
+		            }
+		            {
+		                type: conditional
+		                requires: {
+		                    type: memoryMatches
+		                    memory: revealedCard
+		                    filter: culture(elven)
+		                }
+		                effect: {
+		                    type: addKeyword
+		                    filter: self
+		                    keyword: archer
+		                    until: regroup
+		                }
+		            }
+		        ]
+		    }
 		]
 		gametext: <b>Maneuver:</b> Reveal the top card of your draw deck. If it is an [elven] card, Rúmil is an <b>archer</b> until the regroup phase.
 		lore: ...the Elves feared and distrusted the world outside....
@@ -294,13 +428,16 @@
 			Toil 2
 			Maneuver
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: elf,companion
+			}
 			effect: [
 				{
+				    type: discard
+				    filter: choose(condition)
 				}
 			]
 		}
@@ -341,6 +478,31 @@
 			Support Area
 		]
 		effects: [
+		    {
+		        type: activated
+		        phase: archery
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            filter: choose(culture(elven),character)
+		        }
+		        effect: {
+		            type: modifyArcheryTotal
+		            side: free people
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+                    type: movesFrom
+                    filter: underground
+		        }
+		        effect: {
+		            type: returnToHand
+		            filter: choose(elf)
+		        }
+		    }
 		]
 		gametext: <b>Toil 1</b>. <helper>(For each [elven] character you exert when playing this, its twilight cost is -1.)</helper><br><b>Archery:</b> Discard an [elven] character from hand to make the fellowship archery total +1.<br>Each time the fellowship moves from an underground site, return your Elf to your hand.
 		lore: ""
