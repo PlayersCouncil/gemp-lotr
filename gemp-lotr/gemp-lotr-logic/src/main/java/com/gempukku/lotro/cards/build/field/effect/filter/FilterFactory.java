@@ -143,6 +143,13 @@ public class FilterFactory {
                     final CharacterLostSkirmishResult lostSkirmish = (CharacterLostSkirmishResult) actionContext.getEffectResult();
                     return lostSkirmish.getLoser();
                 });
+        simpleFilters.put("storedculture",
+                (actionContext) -> {
+                    PhysicalCard.WhileInZoneData data = actionContext.getSource().getWhileInZoneData();
+                    if (data == null)
+                        return Filters.none;
+                    return Culture.valueOf(data.getValue());
+                });
         simpleFilters.put("storedkeyword",
                 (actionContext) -> {
                     PhysicalCard.WhileInZoneData data = actionContext.getSource().getWhileInZoneData();

@@ -32,6 +32,35 @@
 			Lurker
 		]
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: chooseACulture
+                        memorize: chosenCulture
+                    }
+                    {
+                        type: storeCulture
+                        memory: chosenCulture
+                    }
+                ]
+		    }
+		    {
+		        type: displayableInformation
+		        text: Chosen culture - {stored}
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: companion,storedCulture
+		            amount: -1
+		        }
+		    }
 		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>. <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>When you play Saruman, name a culture. Each companion of the named culture is strength -1.
 		lore: White!" he sneered. "It serves as a beginning."'"

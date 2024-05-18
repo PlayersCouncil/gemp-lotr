@@ -31,6 +31,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("canplaynextaction", new CanPlayNextAction());
         effectAppenderProducers.put("choice", new Choice());
         effectAppenderProducers.put("chooseactivecards", new ChooseActiveCards());
+        effectAppenderProducers.put("chooseaculture", new ChooseACulture());
         effectAppenderProducers.put("chooseakeyword", new ChooseAKeyword());
         effectAppenderProducers.put("chooseandaddtwilight", new ChooseAndAddTwilight());
         effectAppenderProducers.put("chooseandheal", new ChooseAndHeal());
@@ -180,6 +181,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("stackplayedevent", new StackPlayedEvent());
         effectAppenderProducers.put("stacktopcardsofdrawdeck", new StackTopCardsOfDrawDeck());
         effectAppenderProducers.put("startskirmish", new StartSkirmish());
+        effectAppenderProducers.put("storeculture", new StoreCulture());
         effectAppenderProducers.put("storekeyword", new StoreKeyword());
         effectAppenderProducers.put("storewhileinzone", new StoreWhileInZone());
         effectAppenderProducers.put("takecontrolofsite", new TakeControlOfSite());
