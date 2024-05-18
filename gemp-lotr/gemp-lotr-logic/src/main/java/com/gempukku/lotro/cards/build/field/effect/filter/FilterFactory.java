@@ -14,8 +14,11 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.SingleMemoryEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.CharacterLostSkirmishResult;
+import com.google.common.base.Predicates;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class FilterFactory {
     private final Map<String, FilterableSource> simpleFilters = new HashMap<>();
@@ -99,6 +102,8 @@ public class FilterFactory {
                     }
                     return Filters.none;
                 }));
+        simpleFilters.put("hasrace",
+                (actionContext -> (Filter) (game, physicalCard) -> physicalCard.getBlueprint().getRace() != null));
         simpleFilters.put("idinstored",
                 (actionContext ->
                         (Filter) (game, physicalCard) -> {
@@ -424,6 +429,12 @@ public class FilterFactory {
                     }
                     throw new InvalidCardDefinitionException("Unknown race definition in filter: " + parameter
                             + ".  Do not use race() for races; instead just list the race by itself.");
+                });
+        parameterFilters.put("raceinmemory",
+                (parameter, environment) -> actionContext -> {
+                    Set<Race> races = actionContext.getCardsFromMemory(parameter).stream().map(
+                            (Function<PhysicalCard, Race>) physicalCard -> physicalCard.getBlueprint().getRace()).filter(Predicates.notNull()).collect(Collectors.toSet());
+                    return (Filter) (game, physicalCard) -> races.contains(physicalCard.getBlueprint().getRace());
                 });
         parameterFilters.put("regionnumber",
                 (parameter, environment) -> {

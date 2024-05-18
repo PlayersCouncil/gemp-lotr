@@ -248,18 +248,37 @@ public class ValueResolver {
                     final Filterable on1 = onFilter.getFilterable(actionContext);
                     return new MultiplyEvaluator(multiplier.getEvaluator(actionContext), new CountStackedEvaluator(on1, filterableSource.getFilterable(actionContext)));
                 };
+            } else if (type.equalsIgnoreCase("forEachHasAttached")) {
+                FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
+                final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                final ValueSource overSource = resolveEvaluator(object.get("over"), 0, environment);
+                final ValueSource limitSource = resolveEvaluator(object.get("limit"), Integer.MAX_VALUE, environment);
+                final ValueSource multiplier = resolveEvaluator(object.get("multiplier"), 1, environment);
+                final ValueSource divider = resolveEvaluator(object.get("divider"), 1, environment);
+                final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+                return actionContext ->
+                        (Evaluator) (game, cardAffected) -> {
+                            Filterable filterable = filterableSource.getFilterable(actionContext);
+                            return evaluateNumber(
+                                    Filters.countActive(game, Filters.attachedTo(cardAffected), filterable),
+                                    overSource.getEvaluator(actionContext), limitSource.getEvaluator(actionContext),
+                                    multiplier.getEvaluator(actionContext), divider.getEvaluator(actionContext),
+                                    game, cardAffected);
+                        };
             } else if (type.equalsIgnoreCase("forEachYouCanSpot")) {
                 FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
                 final ValueSource overSource = resolveEvaluator(object.get("over"), 0, environment);
                 final ValueSource limitSource = resolveEvaluator(object.get("limit"), Integer.MAX_VALUE, environment);
                 final ValueSource multiplier = resolveEvaluator(object.get("multiplier"), 1, environment);
-                final int divider = FieldUtils.getInteger(object.get("divider"), "divider", 1);
+                final ValueSource divider = resolveEvaluator(object.get("divider"), 1, environment);
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
-                return actionContext -> new DivideEvaluator(divider,
-                        new MultiplyEvaluator(multiplier.getEvaluator(actionContext),
-                                new CountSpottableEvaluator(overSource.getEvaluator(actionContext), limitSource.getEvaluator(actionContext),
-                                        filterableSource.getFilterable(actionContext))));
+                return actionContext ->
+                        (Evaluator) (game, cardAffected) -> evaluateNumber(
+                                Filters.countSpottable(game, filterableSource.getFilterable(actionContext)),
+                                overSource.getEvaluator(actionContext), limitSource.getEvaluator(actionContext),
+                                multiplier.getEvaluator(actionContext), divider.getEvaluator(actionContext),
+                                game, cardAffected);
             } else if (type.equalsIgnoreCase("forEachInDiscard")) {
                 FieldUtils.validateAllowedFields(object, "filter", "multiplier", "limit");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
@@ -569,5 +588,14 @@ public class ValueResolver {
             throw new InvalidCardDefinitionException("Unrecognized type of an evaluator " + type);
         }
         throw new InvalidCardDefinitionException("Unable to resolve an evaluator");
+    }
+
+    private static int evaluateNumber(int value, Evaluator over, Evaluator limit, Evaluator multiplier, Evaluator divider,
+                                      LotroGame game, PhysicalCard cardAffected) {
+        int result = Math.max(0, value - over.evaluateExpression(game, cardAffected));
+        result = Math.min(limit.evaluateExpression(game, cardAffected), result);
+        result *= multiplier.evaluateExpression(game, cardAffected);
+        result /= divider.evaluateExpression(game, cardAffected);
+        return result;
     }
 }
