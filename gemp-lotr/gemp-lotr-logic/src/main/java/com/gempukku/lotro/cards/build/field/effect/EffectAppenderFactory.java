@@ -81,6 +81,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("if", new IfEffect());
         effectAppenderProducers.put("incrementperphaselimit", new IncrementPerPhaseLimit());
         effectAppenderProducers.put("incrementperturnlimit", new IncrementPerTurnLimit());
+        effectAppenderProducers.put("incrementtoil", new IncrementToil());
         effectAppenderProducers.put("kill", new Kill());
         effectAppenderProducers.put("liberatesite", new LiberateSite());
         effectAppenderProducers.put("lookatdrawdeck", new LookAtDrawDeck());
@@ -165,6 +166,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("revealrandomcardsfromhand", new RevealRandomCardsFromHand());
         effectAppenderProducers.put("revealtopcardsofdrawdeck", new RevealTopCardsOfDrawDeck());
         effectAppenderProducers.put("sendmessage", new SendMessage());
+        effectAppenderProducers.put("setupextraassignmentandskirmishes", new SetupExtraAssignmentAndSkirmishes());
         effectAppenderProducers.put("shadowcanthaveinitiative", new ShadowCantHaveInitiative());
         effectAppenderProducers.put("shufflecardsfromdiscardintodrawdeck", new ShuffleCardsFromDiscardIntoDrawDeck());
         effectAppenderProducers.put("shufflecardsfromhandintodrawdeck", new ShuffleCardsFromHandIntoDrawDeck());

@@ -24,9 +24,11 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("abouttotakewound", new AboutToTakeWound());
         triggerCheckers.put("addsburden", new AddsBurden());
         triggerCheckers.put("addsthreat", new AddsThreat());
+        triggerCheckers.put("afterallskirmishes", new AfterAllSkirmishes());
         triggerCheckers.put("assignedagainst", new AssignedAgainst());
         triggerCheckers.put("assignedtoskirmish", new AssignedToSkirmish());
         triggerCheckers.put("beforethreatwounds", new BeforeThreatWounds());
+        triggerCheckers.put("beforetoil", new BeforeToil());
         triggerCheckers.put("cancelledskirmish", new CancelledSkirmish());
         triggerCheckers.put("constantlycheck", new ConstantlyCheckTrigger());
         triggerCheckers.put("discarded", new Discarded());
