@@ -63,6 +63,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("revealedcardfromhand", new RevealedCardFromHand());
         triggerCheckers.put("skirmishabouttoend", new SkirmishAboutToEnd());
         triggerCheckers.put("startofphase", new StartOfPhase());
+        triggerCheckers.put("startofskirmishinvolving", new StartOfSkirmishInvolving());
         triggerCheckers.put("startofturn", new StartOfTurn());
         triggerCheckers.put("takesoffring", new TakesOffRing());
         triggerCheckers.put("takeswound", new TakesWound());
