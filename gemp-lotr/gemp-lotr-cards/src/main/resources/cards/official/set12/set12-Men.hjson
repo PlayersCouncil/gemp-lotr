@@ -26,6 +26,20 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: assignedAgainst
+		            filter: self
+		            against: exhausted,companion
+		        }
+                effect: {
+                    type: addKeyword
+                    filter: self
+                    keyword: fierce
+                    until: regroup
+                }
+		    }
 		]
 		gametext: Each time this minion is assigned to skirmish an exhausted companion, it is <b>fierce</b> until the regroup phase.
 		lore: Out of some savage land in the wide East they come, we deem.'
@@ -69,6 +83,14 @@
 			Toil 1
 		]
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: wounded,culture(men),minion
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: <b>Fierce</b>. <b>Toil 1</b>. <helper>(For each [men] character you exert when playing this, its twilight cost is -1.)</helper><br>Each wounded [men] minion is strength +2.
 		lore: ...they have allied them with the Enemy, and now make a heavy stroke in his cause.'
@@ -107,6 +129,42 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: other,character
+		            }
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: companion,maxResistance(3)
+		            }
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: companion,maxResistance(0)
+		            }
+		            filter: self
+		            keyword: fierce
+		    }
+		    }
 		]
 		gametext: This minion is strength +1 for each other character you can spot.<br>While you can spot a companion who has resistance 3 or less, this minion is <b>damage +1</b>.<br>While you can spot a companion who has resistance 0, this minion is <b>fierce</b>.
 		lore: ""
@@ -142,6 +200,19 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: discarded
+		            filter: culture(men),possession
+		            memorize: discardedPossession
+		        }
+		        effect: {
+		            type: stackCardsFromDiscard
+		            filter: memory(discardedPossession)
+		            where: self
+		        }
+		    }
 		]
 		gametext: <b>Response:</b> If a [men] possession is discarded from play, stack it here.<br><b>Shadow:</b> Remove (1) to play a possession stacked here as if from hand.
 		lore: Not tall, but broad and grim... wielding great axes.'
@@ -180,6 +251,15 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: self,inSkirmishAgainst(Man)
+		            keyword: damage
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: While this minion is skirmishing a Man, it is <b>damage +2</b>.
 		lore: Long have the Men of Rhûn thirsted for the wealth of Gondor, and many times have they sought to claim it.
@@ -219,6 +299,22 @@
 		site: 4
 		keywords: Fierce
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+                    type: modifyStrength
+                    filter: self,inFierceSkirmish
+                    amount: {
+                        type: condition
+                        condition: {
+                            type: canSpot
+                            filter: self,inSkirmishAgainst(companion,maxResistance(4))
+                        }
+                        true: 10
+                        false: 7
+                    }
+		        }
+		    }
 		]
 		gametext: <b>Fierce</b>.<br>While this minion is in a fierce skirmish, it is strength +7 (or +10 if it is skirmishing a companion who has resistance 4 or less).
 		lore: Already given to fierce passions, a warrior of Dunland quickly frenzies in the heat of battle.
@@ -257,6 +353,17 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: other,character
+		            }
+		        }
+		    }
 		]
 		gametext: This minion is strength +1 for each other character you can spot.
 		lore: ...the Riders can use men and other creatures as spies, as we found at Bree.'
@@ -295,6 +402,26 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyResistance
+		            requires: {
+		                type: canSpot
+		                filter: self,exhausted
+		            }
+		            filter: unbound,companion
+		            amount: {
+		                type: condition
+		                condition: {
+		                    type: location
+		                    filter: battleground
+		                }
+		                true: -2
+		                false: -1
+		            }
+		        }
+		    }
 		]
 		gametext: While this minion is exhausted, each unbound companion is resistance -1 (or -2 if the fellowship is at a battleground site).
 		lore: ...unfriendly to the Dúnedain, hating the Rohirrim.
@@ -333,6 +460,27 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: sum
+		                source: [
+		                    {
+		                        type: forEachWound
+		                        filter: companion,inSkirmishAgainst(self),minResistance(3)
+		                    }
+		                    {
+		                        type: forEachWound
+		                        filter: companion,inSkirmishAgainst(self),maxResistance(2)
+		                        multiplier: 2
+		                    }
+		                ]
+		            }
+		        }
+		    }
 		]
 		gametext: This minion is strength +1 for each wound on each companion he is skirmishing (or +2 for each if that companion has resistance 2 or less).
 		lore: They hold the northward road; and many have passed on into Anórien. The Rohirrim cannot come.'
@@ -372,6 +520,21 @@
 		site: 4
 		keywords: Ambush 3
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: constantlyCheck
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+		                type: modifyMoveLimit
+		                amount: 1
+		            }
+		            until: endOfTurn
+		        }
+		        limitPerTurn: 1
+		    }
 		]
 		gametext: <b>Ambush (3)</b>.<br>The move limit for this turn is +1.
 		lore: As with wild animals, fleeing prey seems only to incite the warriors of Harad.
@@ -410,6 +573,14 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: self,hasAttached(possession)
+		            keyword: fierce
+		        }
+		    }
 		]
 		gametext: While this minion is bearing a possession, it is <b>fierce</b>.
 		lore: While Dunlendings lack the skills of the trained soldiers they attack, they carry in them a well-honed hatred.
@@ -447,13 +618,13 @@
 			Toil 2
 			Skirmish
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(culture(men),minion)
+				    amount: 6
 				}
 			]
 		}
@@ -491,6 +662,24 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(men),minion
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: or(battleground,plains)
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: To play, spot a [men] minion.<br>Each time the fellowship moves to a battleground or plains site, add (1).
 		lore: ...the mûmakil were bellowing....
@@ -531,6 +720,23 @@
 		site: 3
 		keywords: Lurker
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: losesSkirmish
+		            filter: companion
+		            against: culture(men),minion
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(companion)
+		        }
+		    }
 		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time a companion loses a skirmish involving a [men] minion, you may exert Gríma to exert a companion.
 		lore: In his eyes was the hunted look of a beast seeking some gap in the ring of his enemies.
@@ -570,6 +776,18 @@
 		site: 4
 		keywords: Lurker
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: losesSkirmish
+		            filter: companion
+		            against: culture(men),minion
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time a companion loses a skirmish involving a [men] minion, add (2).
 		lore: Though Dunlendings are by no means cowardly, their prowess in battle seems to manifest more as victory grows more assured.
@@ -605,6 +823,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cancelStrengthBonusTo
+		            requires: {
+		                type: canSpot
+		                filter: companion
+		                count: 6
+		            }
+		            filter: companion,inSkirmishAgainst(culture(men),minion)
+		            from: possession
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: canSpot
+		            filter: your,culture(men),minion
+		        }
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: transfer
+		            filter: choose(side(free people),possession,attachedTo(companion))
+		            where: choose(any)
+		            checkTarget: true
+		        }
+		    }
 		]
 		gametext: While you can spot 6 companions, each companion skirmishing a [men] minion loses all strength bonuses from possessions.<br><b>Maneuver:</b> Spot your [men] minion and discard this condition to transfer a Free Peoples possession borne by a companion to another eligible bearer.
 		lore: ""
@@ -640,6 +889,47 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: [
+                    {
+                        type: killed
+                        filter: culture(men),minion
+                    }
+                    {
+                        type: discarded
+                        filter: culture(men),minion
+                    }
+                ]
+                requires: {
+                    type: not
+                    requires: {
+                        type: phase
+                        phase: regroup
+                    }
+                }
+                effect: [
+                    {
+                        type: play
+                        filter: choose(culture(men),minion)
+                        cost: -2
+                        memorize: playedMinion
+                    }
+                    {
+                        type: addKeyword
+                        filter: memory(playedMinion)
+                        keyword: fierce
+                        until: regroup
+                    }
+                    {
+                        type: modifyStrength
+                        filter: memory(playedMinion)
+                        amount: 2
+                        until: regroup
+                    }
+                ]
+		    }
 		]
 		gametext: Each time a [men] minion is killed or discarded from play (except during the regroup phase), you may play a [men] minion. Its twilight cost is -2, and it is <b>fierce</b> and strength +2 until the regroup phase.
 		lore: Not long now shall stand the high hall which Brego son of Eorl built. Fire shall devour the high seat.'
@@ -675,8 +965,31 @@
 		type: Possession
 		strength: 3
 		itemclass: Mount
-		#target: The Mouth of Sauron
+		target: title(The Mouth of Sauron)
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: fierce
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: culture(men),minion
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(culture(men),minion)
+		        }
+		    }
 		]
 		gametext: Bearer must be The Mouth of Sauron.<br>He is <b>fierce</b>.<br><b>Response:</b> If a [men] minion is about to take a wound, remove (3) to prevent that.
 		lore: ...it was huge and hideous, and its face was a frightful mask....
@@ -716,6 +1029,18 @@
 		vitality: 3
 		site: 5
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: playCardFromDrawDeck
+		            filter: choose(culture(men),or(condition,possession))
+		        }
+		    }
 		]
 		gametext: <b>Maneuver:</b> Exert The Mouth of Sauron to play a [men] condition or [men] possession from your draw deck.
 		lore: ...he learned great sorcery, and knew much of the mind of Sauron; and he was more cruel than any orc.
@@ -755,6 +1080,28 @@
 		site: 4
 		keywords: Archer
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: [
+                    {
+                        type: location
+                        filter: or(battleground,plains)
+                    }
+                    {
+                        type: canSpot
+                        filter: another,culture(men),minion
+                    }
+                ]
+                effect: {
+                    type: discard
+                    filter: choose(possession)
+                }
+		    }
 		]
 		gametext: <b>Archer</b>.<br>When you play this minion to a battleground or plains site, you may spot another [men] minion to discard a possession from play.
 		lore: Only the best marksmen can keep their aim true as they are carried along by the great beasts of the Haradrim.
@@ -790,15 +1137,18 @@
 		type: Event
 		keywords: [
 			Toil 2
-			Maneuver or Regroup
+			Maneuver
+			Regroup
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: addTwilight
+				    amount: {
+				        type: forEachYouCanSpot
+				        filter: culture(men)
+				    }
 				}
 			]
 		}
@@ -836,6 +1186,29 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(men),minion
+		            count: 3
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 1
+		        }
+		        effect: {
+		            type: modifyResistance
+                    filter: all(unbound,companion)
+                    amount: -1
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: At the start of the maneuver phase, you may spot 3 [men] minions and remove (1) to make each unbound companion resistance -1 until the regroup phase.
 		lore: Now the Wild Men are moving through the Westfold, burning as they go.'
@@ -871,8 +1244,24 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [men] minion
+		target: culture(men),minion
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: bearer,inSkirmishAgainst(companion,maxResistance(5))
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: bearer,inSkirmishAgainst(companion,maxResistance(3))
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: Bearer must be a [men] minion.<br>While bearer is skirmishing a companion who has resistance 5 or less, bearer is strength +2.<br>While bearer is skirmishing a companion who has resistance 3 or less, bearer is strength +2.
 		lore: ""
@@ -911,6 +1300,37 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: assignedToSkirmish
+		            filter: self
+		        }
+		        requires: {
+		            type: not
+		            requires: {
+		                type: location
+		                filter: plains
+		            }
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Remove 2 twilight
+		                Discard this minion
+		            ]
+		            effects: [
+		                {
+		                    type: removeTwilight
+		                    amount: 2
+		                }
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		            ]
+		        }
+		    }
 		]
 		gametext: Each time this minion is assigned to a skirmish, if it is not at a plains site, remove (2) or discard this minion.
 		lore: For behold! the storm comes, and now all friends should gather together, lest each singly be destroyed.'
