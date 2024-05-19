@@ -27,6 +27,15 @@
 		vitality: 3
 		site: 5
 		effects: [
+		    {
+		        type: activated
+		        phase: assignment
+		        effect: {
+		            type: assignFpCharacterToSkirmish
+		            fpCharacter: choose(companion,highestStrength(companion))
+		            against: self
+		        }
+		    }
 		]
 		gametext: <b>Assignment:</b> Assign The Mouth of Sauron to the companion who has the highest strength. (If two or more are tied for highest, choose one.)
 		lore: Is there anyone in this rout with authority to treat with me?' he asked. 'Or indeed with wit to understand me?'

@@ -293,6 +293,28 @@ public class FilterFactory {
                                 return Filters.filter(game.getGameState().getSkirmish().getShadowCharacters(), game, filterable).size() >= count;
                             });
                 });
+        parameterFilters.put("higheststrength",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return actionContext -> {
+                        final Filterable sourceFilterable = filterableSource.getFilterable(actionContext);
+                        return Filters.and(
+                                sourceFilterable, Filters.strengthEqual(
+                                        new SingleMemoryEvaluator(
+                                                new Evaluator() {
+                                                    @Override
+                                                    public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {
+                                                        int maxStrength = Integer.MAX_VALUE;
+                                                        for (PhysicalCard card : Filters.filterActive(game, sourceFilterable))
+                                                            maxStrength = Math.max(maxStrength, game.getModifiersQuerying().getStrength(game, card));
+                                                        return maxStrength;
+                                                    }
+                                                }
+                                        )
+                                )
+                        );
+                    };
+                });
         parameterFilters.put("loweststrength",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
