@@ -439,3 +439,24 @@ body {
     font-size: 3rem; 
     transform:translateY(30%);
 }
+
+#auto-zoom-li {
+    float: right;
+}
+
+ul.ui-tabs-nav {
+    height: 14px;
+}
+
+#auto-zoom-toggle {
+    width: 25px;
+    height: 20px;
+    padding: 0px;
+    margin-top:-5px;
+    margin-right: -5px;
+}
+
+.ui-button-icon-primary.ui-icon.ui-icon-search,
+.ui-button-icon-primary.ui-icon.ui-icon-circle-close {
+    margin-left:4px;
+}

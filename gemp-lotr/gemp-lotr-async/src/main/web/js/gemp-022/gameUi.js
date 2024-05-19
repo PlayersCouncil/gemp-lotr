@@ -71,6 +71,7 @@ var GempLotrGameUI = Class.extend({
     windowHeight: null,
 
     tabPane: null,
+    autoZoom: null,
 
     animations: null,
     replayPlay: false,
@@ -172,6 +173,8 @@ var GempLotrGameUI = Class.extend({
         this.skirmishFellowshipGroup = new NormalCardGroup($("#main"), function (card) {
             return (card.zone == "SUPPORT" || card.zone == "FREE_CHARACTERS") && card.skirmish == true;
         }, false);
+        
+        this.autoZoom = new AutoZoom("autoZoomInGame");
 
         this.initializeDialogs();
 
@@ -462,18 +465,44 @@ var GempLotrGameUI = Class.extend({
                     return false;
                 }
                 return true;
+            });  
+        $('body').unbind('mouseover');
+        $("body").mouseover(
+            function (event) {
+                return that.autoZoom.handleMouseOver(event, 
+                   that.dragCardId != null, that.infoDialog.dialog("isOpen"));
             });
+                  
+        $('body').unbind('mousedown');
         $("body").mousedown(
             function (event) {
+                that.autoZoom.handleMouseDown(event);
+
                 $("body").bind("mousemove", dragFunc);
                 return that.dragStartCardFunction(event);
             });
+        $('body').unbind('mouseup');
         $("body").mouseup(
             function (event) {
                 $("body").unbind("mousemove", dragFunc);
                 return that.dragStopCardFunction(event);
             });
         
+        //If we ever add double-sided cards, this will be needed for
+        // the card hover.
+        
+        $('body').unbind('keydown');
+        $("body").keydown(
+            function (event) {
+                return that.autoZoom.handleKeyDown(event);
+            });
+
+        $('body').unbind('keyup');
+        $("body").keyup(
+            function (event) {
+                return that.autoZoom.handleKeyUp(event);
+            });
+
         this.initialized = true;
     },
     
@@ -503,11 +532,20 @@ var GempLotrGameUI = Class.extend({
             tabsLabels += "<li><a href='#settingsBox' class='slimTab'>Settings</a></li><li><a href='#gameOptionsBox' class='slimTab'>Options</a></li><li><a href='#playersInRoomBox' class='slimTab'>Players</a></li>";
             tabsBodies += "<div id='settingsBox' class='slimPanel'></div><div id='gameOptionsBox' class='slimPanel'></div><div id='playersInRoomBox' class='slimPanel'></div>";
         }
+        
+        if(!this.autoZoom.isTouchDevice) {
+            tabsLabels += "<li id='auto-zoom-li'>";
+        }
+        
         var tabsStr = "<div id='bottomLeftTabs'><ul>" + tabsLabels + "</ul>" + tabsBodies + "</div>";
 
         this.tabPane = $(tabsStr).tabs();
 
         $("#main").append(this.tabPane);
+        
+        if (this.autoZoom.autoZoomToggle != null) {
+            this.autoZoom.autoZoomToggle.appendTo("#auto-zoom-li");
+        }
 
         this.chatBoxDiv = $("#chatBox");
 
@@ -560,7 +598,7 @@ var GempLotrGameUI = Class.extend({
             that.settingsAlwaysDropDown = selected;
             $.cookie("alwaysDropDown", "" + selected, {expires: 365});
         });
-
+        
         $("#settingsBox").append("Phases when game auto-passes for you, if you have no phase actions to play<br />");
         $("#settingsBox").append("<input id='autoPassFELLOWSHIP' type='checkbox' value='selected' /><label for='autoPassFELLOWSHIP'>Fellowship</label> ");
         $("#settingsBox").append("<input id='autoPassSHADOW' type='checkbox' value='selected' /><label for='autoPassSHADOW'>Shadow</label> ");
@@ -671,7 +709,7 @@ var GempLotrGameUI = Class.extend({
 
         return true;
     },
-
+    
     dragCardId: null,
     dragCardIndex: null,
     draggedCardIndex: null,

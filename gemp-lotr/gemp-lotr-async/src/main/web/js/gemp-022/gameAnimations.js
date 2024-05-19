@@ -69,6 +69,8 @@ var GameAnimations = Class.extend({
 
                         var cardHeight = (gameHeight / 2);
                         var cardWidth = card.getWidthForHeight(cardHeight);
+                        
+                        that.handleCardAnimatedStart(cardDiv);
 
                         $(cardDiv).css(
                             {
@@ -156,6 +158,8 @@ var GameAnimations = Class.extend({
                                     shadowStartPosX = $(targetCard).position().left;
                                     shadowStartPosY = $(targetCard).position().top;
                                 }
+                                
+                                that.handleCardAnimatedStart(cardDiv);
 
                                 $(cardDiv).css(
                                     {
@@ -189,6 +193,8 @@ var GameAnimations = Class.extend({
                                 var cardData = $(this).data("card");
                                 if (cardData.zone == "ANIMATION") {
                                     $(this).remove();
+                                } else {
+                                    that.handleCardAnimatedEnd(this);
                                 }
                             }
                         );
@@ -273,6 +279,8 @@ var GameAnimations = Class.extend({
 
                     var cardHeight = (gameHeight / 2);
                     var cardWidth = card.getWidthForHeight(cardHeight);
+                    
+                    that.handleCardAnimatedStart(cardDiv);
 
                     $(cardDiv).css(
                         {
@@ -286,7 +294,8 @@ var GameAnimations = Class.extend({
 
                     $(cardDiv).animate(
                         {
-                            opacity:1},
+                            opacity:1
+                        },
                         {
                             duration:that.getAnimationLength(that.putCardIntoPlayDuration / 8),
                             easing:"linear",
@@ -297,7 +306,8 @@ var GameAnimations = Class.extend({
                                     cardWidth / 2 + now * (cardWidth / 2),
                                     cardHeight / 2 + now * (cardHeight / 2), 100);
                             },
-                            complete:next});
+                            complete:next
+                        });
                 }).queue(
                 function (next) {
                     setTimeout(next, that.getAnimationLength(that.putCardIntoPlayDuration * (5 / 8)));
@@ -330,6 +340,7 @@ var GameAnimations = Class.extend({
                 function (next) {
                     var cardDiv = $(".card:cardId(" + cardId + ")");
                     $(cardDiv).css({zIndex:oldValues["zIndex"]});
+                    that.handleCardAnimatedEnd(cardDiv);
                     next();
                 });
         }
@@ -395,7 +406,9 @@ var GameAnimations = Class.extend({
         if (animate && (this.game.spectatorMode || this.game.replayMode || (participantId != this.game.bottomPlayerId))) {
             $("#main").queue(
                 function (next) {
-                    $(".card:cardId(" + cardRemovedIds + ")")
+                    const cardDiv = $(".card:cardId(" + cardRemovedIds + ")");
+                    that.handleCardAnimatedStart(cardDiv);
+                    cardDiv
                         .animate(
                         {
                             opacity:0},
@@ -952,5 +965,13 @@ var GameAnimations = Class.extend({
                 that.game.layoutUI(true);
                 next();
             });
+    },
+
+    handleCardAnimatedStart: function (cardDiv) {
+        cardDiv && cardDiv[0] && $(cardDiv[0]).addClass('card-animating')
+    },
+
+    handleCardAnimatedEnd: function (cardDiv) {
+        cardDiv && cardDiv[0] && $(cardDiv[0]).removeClass('card-animating')
     }
 });

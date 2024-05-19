@@ -56,6 +56,8 @@ var GempLotrDeckBuildingUI = Class.extend({
     collectionType:null,
 
     specialSelection:false,
+    
+    autoZoom: null,
 
     init:function () {
         var that = this;
@@ -102,6 +104,8 @@ var GempLotrDeckBuildingUI = Class.extend({
                         that.setMapVisibility(false);
                     }
                 });
+        
+        this.autoZoom = new AutoZoom("autoZoomInDeckbuilder");
 
         var collectionSelect = $("#collectionSelect");
 
@@ -120,6 +124,10 @@ var GempLotrDeckBuildingUI = Class.extend({
         var deckListBut = $("#deckListBut").button();
         
         var notesBut = $("#notesBut").button();
+        
+        if(this.autoZoom.autoZoomToggle != null) {
+            this.autoZoom.autoZoomToggle.appendTo(this.manageDecksDiv);
+        }
 
         this.deckNameSpan = ("#editingDeck");
 
@@ -261,14 +269,38 @@ var GempLotrDeckBuildingUI = Class.extend({
                 }
                 return true;
             });
+        $('body').unbind('mouseover');
+        $("body").mouseover(
+            function (event) {
+                return that.autoZoom.handleMouseOver(event, 
+                   that.dragCardId != null, that.infoDialog.dialog("isOpen"));
+            });
+
         $("body").mousedown(
                 function (event) {
+                    that.autoZoom.handleMouseDown(event);
+                    
                     return that.dragStartCardFunction(event);
                 });
         $("body").mouseup(
                 function (event) {
                     return that.dragStopCardFunction(event);
                 });
+        
+        //If we ever add double-sided cards, this will be needed for
+        // the card hover.
+        
+        $('body').unbind('keydown');
+        $("body").keydown(
+            function (event) {
+                return that.autoZoom.handleKeyDown(event);
+            });
+
+        $('body').unbind('keyup');
+        $("body").keyup(
+            function (event) {
+                return that.autoZoom.handleKeyUp(event);
+            });
 
         var width = $(window).width();
         var height = $(window).height();

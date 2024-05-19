@@ -1,0 +1,17 @@
+
+.previewImage {
+    position: absolute;
+    z-index: 1099;
+    pointer-events: none;
+    
+}
+
+.previewImage, .previewImage img,
+.card, .card img  {
+    border-radius: 5%;
+}
+
+
+
+
+

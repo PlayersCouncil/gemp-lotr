@@ -105,24 +105,16 @@ button.navigation-butt {
     padding: 0;
 }
 
-button.navigation-butt {
-    padding: 0.5em;
-}
-
-.navigation-butt.ui-button-icon-only > .ui-button-text{
-    padding: 0;
-}
-
-.navigation-butt.ui-button-icon-only {
-    width:  25px;
-}
-
 .ui-button-icon-only .ui-button-icon-primary.ui-icon {
     margin:  auto auto auto -4px;
 }
 
 #culture-buttons .ui-button {
     padding: 0;
+}
+
+#collectionSelect {
+    order:  99;
 }
 
 #collectionSelect {
@@ -140,6 +132,11 @@ button.navigation-butt {
 
 .notesDialog {
     display: flex;
+}
+
+#auto-zoom-toggle {
+    width: 27px;
+    height: 23px;
 }
 
 

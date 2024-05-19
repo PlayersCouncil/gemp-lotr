@@ -204,21 +204,21 @@ var packBlueprints = {
     "SHELBI - Treebeard Starter":"/gemp-lotr/images/boosters/shelbi-treebeard.jpg"
 };
 
-var Card = Class.extend({
-    blueprintId: null,
-    foil: null,
-    tengwar: null,
-    hasWiki: null,
-    horizontal: null,
-    imageUrl: null,
-    zone: null,
-    cardId: null,
-    owner: null,
-    siteNumber: null,
-    attachedCards: null,
-    errata: null,
+class Card {
+    blueprintId = null;
+    foil = null;
+    tengwar = null;
+    hasWiki = null;
+    horizontal = null;
+    imageUrl = null;
+    zone = null;
+    cardId = null;
+    owner = null;
+    siteNumber = null;
+    attachedCards = null;
+    errata = null;
 
-    init: function (blueprintId, zone, cardId, owner, siteNumber) {
+    constructor(blueprintId, zone, cardId, owner, siteNumber) {
         this.blueprintId = blueprintId;
 
         var imageBlueprint = blueprintId;
@@ -233,7 +233,7 @@ var Card = Class.extend({
         if (this.tengwar)
             bareBlueprint = bareBlueprint.substring(0, len - 1);
 
-        this.hasWiki = this.getFixedImage(imageBlueprint) == null
+        this.hasWiki = Card.getFixedImage(imageBlueprint) == null
             && packBlueprints[imageBlueprint] == null;
 
         this.zone = zone;
@@ -251,14 +251,14 @@ var Card = Class.extend({
                 this.imageUrl = cardFromCache.imageUrl;
                 this.errata = cardFromCache.errata;
             } else {
-                this.imageUrl = this.getUrlByBlueprintId(bareBlueprint);
-                this.horizontal = this.isHorizontal(bareBlueprint);
+                this.imageUrl = Card.getImageUrl(bareBlueprint, this.tengwar);
+                this.horizontal = Card.isHorizontal(bareBlueprint);
 
                 var separator = bareBlueprint.indexOf("_");
                 var setNo = parseInt(bareBlueprint.substr(0, separator));
                 var cardNo = parseInt(bareBlueprint.substr(separator + 1));
 
-                this.errata = this.getErrata(setNo, cardNo) != null;
+                this.errata = Card.getErrata(setNo, cardNo) != null;
                 cardCache[imageBlueprint] = {
                     imageUrl: this.imageUrl,
                     horizontal: this.horizontal,
@@ -266,9 +266,9 @@ var Card = Class.extend({
                 };
             }
         }
-    },
-
-    getFixedImage: function (blueprintId) {
+    }
+    
+    static getFixedImage (blueprintId) {
         var img = fixedImages[blueprintId];
         if (img != null)
             return img;
@@ -282,17 +282,17 @@ var Card = Class.extend({
         if (img != null)
             return img;
         return null;
-    },
+    }
 
-    isTengwar: function () {
+    isTengwar() {
         return this.tengwar;
-    },
+    }
 
-    isFoil: function () {
+    isFoil() {
         return this.foil;
-    },
+    }
 
-    hasErrata: function () {
+    hasErrata() {
         var separator = this.blueprintId.indexOf("_");
         var setNo = parseInt(this.blueprintId.substr(0, separator));
         
@@ -300,13 +300,13 @@ var Card = Class.extend({
             return true;
         
         return this.errata;
-    },
+    }
 
-    isPack: function () {
+    isPack() {
         return packBlueprints[this.blueprintId] != null;
-    },
+    }
 
-    isHorizontal: function (blueprintId) {
+    static isHorizontal(blueprintId) {
         var separator = blueprintId.indexOf("_");
         var setNo = parseInt(blueprintId.substr(0, separator));
         var cardNo = parseInt(blueprintId.substr(separator + 1));
@@ -361,11 +361,12 @@ var Card = Class.extend({
             return (cardNo >= 57 && cardNo <= 64);
 
         return false;
-    },
+    }
 
-    getUrlByBlueprintId: function (blueprintId, ignoreErrata) {
-        if (this.getFixedImage(blueprintId) != null)
-            return this.getFixedImage(blueprintId);
+    static getImageUrl(blueprintId, tengwar, ignoreErrata) {
+        let image = Card.getFixedImage(blueprintId)
+        if (image != null)
+            return image;
 
         if (packBlueprints[blueprintId] != null)
             return packBlueprints[blueprintId];
@@ -382,36 +383,36 @@ var Card = Class.extend({
 
         var cardStr;
 
-        if (this.isMasterworks(setNo, cardNo))
-            cardStr = this.formatSetNo(setNo) + "O0" + (cardNo - this.getMasterworksOffset(setNo));
+        if (Card.isMasterworks(setNo, cardNo))
+            cardStr = Card.formatSetNo(setNo) + "O0" + (cardNo - this.getMasterworksOffset(setNo));
         else
-            cardStr = this.formatCardNo(setNo, cardNo);
+            cardStr = Card.formatCardNo(setNo, cardNo);
 
-        return mainLocation + "LOTR" + cardStr + (this.isTengwar() ? "T" : "") + ".jpg";
-    },
+        return mainLocation + "LOTR" + cardStr + (tengwar ? "T" : "") + ".jpg";
+    }
 
-    getWikiLink: function () {
-        var imageUrl = this.getUrlByBlueprintId(this.blueprintId, true);
+    getWikiLink() {
+        var imageUrl = Card.getImageUrl(this.blueprintId, false, true);
         var afterLastSlash = imageUrl.lastIndexOf("/") + 1;
         var countAfterLastSlash = imageUrl.length - 4 - afterLastSlash;
         return "http://wiki.lotrtcgpc.net/wiki/" + imageUrl.substr(afterLastSlash, countAfterLastSlash);
-    },
+    }
 
-    hasWikiInfo: function () {
+    hasWikiInfo() {
         return this.hasWiki;
-    },
+    }
 
-    formatSetNo: function (setNo) {
+    static formatSetNo(setNo) {
         var setNoStr;
         if (setNo < 10)
             setNoStr = "0" + setNo;
         else
             setNoStr = setNo;
         return setNoStr;
-    },
+    }
 
-    formatCardNo: function (setNo, cardNo) {
-        var setNoStr = this.formatSetNo(setNo);
+    static formatCardNo(setNo, cardNo) {
+        var setNoStr = Card.formatSetNo(setNo);
 
         var cardStr;
         if (cardNo < 10)
@@ -422,21 +423,21 @@ var Card = Class.extend({
             cardStr = setNoStr + "" + cardNo;
 
         return cardStr;
-    },
+    }
 
-    getMainLocation: function (setNo, cardNo) {
+    static getMainLocation(setNo, cardNo) {
         return "https://i.lotrtcgpc.net/decipher/";
-    },
+    }
 
-    getMasterworksOffset: function (setNo) {
+    static getMasterworksOffset(setNo) {
         if (setNo == 17)
             return 148;
         if (setNo == 18)
             return 140;
         return 194;
-    },
+    }
 
-    isMasterworks: function (setNo, cardNo) {
+    static isMasterworks(setNo, cardNo) {
         if (setNo == 12)
             return cardNo > 194;
         if (setNo == 13)
@@ -448,9 +449,9 @@ var Card = Class.extend({
         if (setNo == 18)
             return cardNo > 140;
         return false;
-    },
+    }
 
-    remadeErratas: {
+    static remadeErratas = {
         "0": [7],
         "1": [3, 12, 43, 46, 55, 109, 113, 138, 162, 211, 235, 263, 309, 318, 331, 338, 343, 360],
         "3": [48, 110],
@@ -460,35 +461,35 @@ var Card = Class.extend({
         "8": [20, 33, 69],
         "17": [15, 87, 96, 118],
         "18": [8, 12, 20, 25, 35, 48, 50, 55, 77, 78, 79, 80, 82, 94, 97, 133]
-    },
+    }
 
-    getErrata: function (setNo, cardNo) {
-        if (this.remadeErratas["" + setNo] != null && $.inArray(cardNo, this.remadeErratas["" + setNo]) != -1)
-            return "/gemp-lotr/images/erratas/LOTR" + this.formatCardNo(setNo, cardNo) + ".jpg";
+    static getErrata(setNo, cardNo) {
+        if (this.remadeErratas["" + setNo] != null && $.inArray(cardNo, Card.remadeErratas["" + setNo]) != -1)
+            return "/gemp-lotr/images/erratas/LOTR" + Card.formatCardNo(setNo, cardNo) + ".jpg";
         return null;
-    },
+    }
 
-    getHeightForWidth: function (width) {
+    getHeightForWidth(width) {
         if (this.horizontal)
             return Math.floor(width * cardScale);
         else
             return Math.floor(width / cardScale);
-    },
+    }
 
-    getWidthForHeight: function (height) {
+    getWidthForHeight(height) {
         if (this.horizontal)
             return Math.floor(height / cardScale);
         else
             return Math.floor(height * cardScale);
-    },
+    }
 
-    getWidthForMaxDimension: function (maxDimension) {
+    getWidthForMaxDimension(maxDimension) {
         if (this.horizontal)
             return maxDimension;
         else
             return Math.floor(maxDimension * cardScale);
     }
-});
+}
 
 function createCardDiv(image, text, foil, tokens, noBorder, errata) {
     var cardDiv = $("<div class='card'><img src='" + image + "' width='100%' height='100%'>" + ((text != null) ? text : "") + "</div>");
