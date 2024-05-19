@@ -354,15 +354,10 @@ public class ValueResolver {
                         (Evaluator) (game, cardAffected) -> multiplier * Filters.filter(game.getGameState().getDeadPile(game.getGameState().getCurrentPlayerId()),
                                 game, filterableSource.getFilterable(actionContext)).size();
             } else if (type.equalsIgnoreCase("fromMemory")) {
-                FieldUtils.validateAllowedFields(object, "memory", "multiplier", "limit", "over");
+                FieldUtils.validateAllowedFields(object, "memory", "limit", "over", "multiplier", "divider");
                 String memory = FieldUtils.getString(object.get("memory"), "memory");
-                final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
-                final int limit = FieldUtils.getInteger(object.get("limit"), "limit", Integer.MAX_VALUE);
-                final int over = FieldUtils.getInteger(object.get("over"), "over", 0);
-                return (actionContext) -> {
-                    int result = Math.max(0, Integer.parseInt(actionContext.getValueFromMemory(memory)) - over);
-                    return new ConstantEvaluator(Math.min(limit, multiplier * result));
-                };
+                return new SmartValueSource(environment, object,
+                        actionContext -> (game, cardAffected) -> Integer.parseInt(actionContext.getValueFromMemory(memory)));
             } else if (type.equalsIgnoreCase("multiply")) {
                 FieldUtils.validateAllowedFields(object, "multiplier", "source");
                 final ValueSource multiplier = ValueResolver.resolveEvaluator(object.get("multiplier"), environment);
