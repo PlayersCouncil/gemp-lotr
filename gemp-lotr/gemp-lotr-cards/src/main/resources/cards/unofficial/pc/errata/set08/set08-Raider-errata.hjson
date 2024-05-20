@@ -183,10 +183,10 @@
 							filter: choose(possession,side(Shadow))
 						}
 						effect: {
-							type: ReinforceTokens
-							culture: raider
-							filter: choose(culture(raider))
-							amount: 2
+                            type: ReinforceTokens
+                            filter: choose(culture(raider))
+                            culture: raider
+                            times: 2
 						}
 					}
 					{
