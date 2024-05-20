@@ -20,12 +20,14 @@ public class CanSpotCultureTokens implements RequirementProducer {
         final Culture culture = FieldUtils.getEnum(Culture.class, object.get("culture"), "culture");
         final Token tokenForCulture = Token.findTokenForCulture(culture);
 
-        if(tokenForCulture == null)
-            throw new InvalidCardDefinitionException("Culture is required for CanSpotCultureTokens.");
-
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
-        return (actionContext) -> PlayConditions.canSpotCultureTokensOnCards(actionContext.getGame(), tokenForCulture, count,
-                filterableSource.getFilterable(actionContext));
+        if (tokenForCulture == null) {
+            return (actionContext) -> PlayConditions.canSpotAllCultureTokensOnCards(actionContext.getGame(), count,
+                    filterableSource.getFilterable(actionContext));
+        } else {
+            return (actionContext) -> PlayConditions.canSpotCultureTokensOnCards(actionContext.getGame(), tokenForCulture, count,
+                    filterableSource.getFilterable(actionContext));
+        }
     }
 }

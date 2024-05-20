@@ -92,6 +92,8 @@ public class FilterFactory {
                 (actionContext) -> Filters.currentSite);
         simpleFilters.put("currentsitenumber",
                 (actionContext -> Filters.siteNumber(actionContext.getGame().getGameState().getCurrentSiteNumber())));
+        simpleFilters.put("nextsitenumber",
+                (actionContext -> Filters.siteNumber(actionContext.getGame().getGameState().getCurrentSiteNumber() + 1)));
         simpleFilters.put("exhausted", (actionContext) -> Filters.exhausted);
         simpleFilters.put("gettingdiscarded",
                 (actionContext -> {
