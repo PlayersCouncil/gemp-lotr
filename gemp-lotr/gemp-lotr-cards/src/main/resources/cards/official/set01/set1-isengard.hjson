@@ -338,7 +338,8 @@
 				{
 					type: addModifier
 					modifier: {
-						type: cancelStrengthBonusFrom
+						type: cancelStrengthBonus
+						filter: any
 						from: memory(chosenPossession)
 					}
 					until: start(regroup)
@@ -735,7 +736,7 @@
 		effects: {
 			type: modifier
 			modifier: {
-				type: cancelStrengthBonusTo
+				type: cancelStrengthBonus
 				filter: character,inSkirmishAgainst(self)
 				from: weapon
 			}

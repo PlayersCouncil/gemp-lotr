@@ -222,7 +222,7 @@
 			{
 				type: modifier
 				modifier: {
-					type: cancelStrengthBonusTo
+					type: cancelStrengthBonus
 					filter: companion,culture(dwarven)
 					from: weapon
 				}

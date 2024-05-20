@@ -248,7 +248,7 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: cancelStrengthBonusTo
+		            type: cancelStrengthBonus
 		            filter: companion,inSkirmishAgainst(self)
 		            from: possession
 		        }
@@ -256,7 +256,7 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: cancelKeywordBonusFrom
+		            type: cancelKeywordBonus
 		            filter: companion,inSkirmishAgainst(self)
 		            from: possession
 		        }

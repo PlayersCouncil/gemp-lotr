@@ -240,7 +240,7 @@
 			{
 				type: modifier
 				modifier: {
-					type: cancelStrengthBonusTo
+					type: cancelStrengthBonus
 					filter: minion,inSkirmishAgainst(bearer,name(Boromir))
 					from: weapon
 				}

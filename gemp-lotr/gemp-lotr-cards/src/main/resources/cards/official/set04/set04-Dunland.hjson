@@ -1337,7 +1337,7 @@
 		            {
 		                type: addModifier
 		                modifier: {
-		                    type: cancelStrengthBonusTo
+		                    type: cancelStrengthBonus
 		                    filter: inSkirmishAgainst(memory(chosenMan))
 		                    from: possession
 		                }

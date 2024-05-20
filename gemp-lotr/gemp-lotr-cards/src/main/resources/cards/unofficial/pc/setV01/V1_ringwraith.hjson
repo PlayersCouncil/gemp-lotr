@@ -80,7 +80,7 @@
 			{
 				type: modifier
 				modifier: {
-					type: cancelkeywordbonusfrom
+					type: cancelKeywordBonus
 					filter: inSkirmishAgainst(bearer)
 					from: attachedTo(inSkirmishAgainst(bearer))
 					keyword: damage
@@ -93,7 +93,8 @@
 			{
 				type: modifier
 				modifier: {
-					type: cancelstrengthbonusfrom
+					type: cancelStrengthBonus
+					filter: any
 					from: attachedTo(inSkirmishAgainst(bearer))
 					requires: {
 						type: canSpot

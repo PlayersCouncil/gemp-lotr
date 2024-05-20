@@ -758,7 +758,7 @@
         effects: {
             type: modifier
             modifier: {
-                type: cancelKeywordBonusFrom
+                type: cancelKeywordBonus
                 filter: character,inSkirmishAgainst(culture(isengard),orc)
                 keyword: damage
                 from: weapon

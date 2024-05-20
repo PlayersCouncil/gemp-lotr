@@ -1119,7 +1119,7 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: cancelStrengthBonusTo
+		            type: cancelStrengthBonus
 		            requires: {
 		                type: canSpot
 		                filter: bearer,inSkirmishAgainst(culture(men),minion)
@@ -1131,7 +1131,7 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: cancelKeywordBonusFrom
+		            type: cancelKeywordBonus
 		            requires: {
 		                type: canSpot
 		                filter: bearer,inSkirmishAgainst(culture(men),minion)

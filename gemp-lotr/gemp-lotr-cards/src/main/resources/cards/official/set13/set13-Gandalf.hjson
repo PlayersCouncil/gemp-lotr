@@ -23,6 +23,38 @@
 		twilight: 2
 		type: Follower
 		effects: [
+            {
+                type: aidCost
+                cost: {
+                    type: addTwilight
+                    amount: 2
+                }
+            }
+            {
+                type: trigger
+                optional: true
+                trigger: {
+                    type: transferred
+                    filter: self
+                    to: companion
+                }
+                effect: {
+                    type: reinforceTokens
+                    culture: gandalf
+                }
+            }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyStrength
+                    requires: {
+                        type: canSpot
+                        filter: culture(gandalf),companion
+                    }
+                    filter: minion,inSkirmishAgainst(bearer)
+                    amount: -1
+                }
+            }
 		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, <span style="word-spacing:-0.08em">you may add (2) to transfer this to a companion.)</span></helper><br>Each time you transfer this to a companion, you may reinforce a [gandalf] token.<br>While you can spot a [gandalf] companion, each minion skirmishing bearer is strength -1.
 		lore: Third of the Istari to be named, he was clad in sea-blue.
@@ -62,6 +94,23 @@
 		vitality: 3
 		resistance: 6
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: fellowship
+		        }
+		        cost: {
+		            type: removeTokensCumulative
+		            filter: side(free people)
+		            count: 2
+		        }
+		        effect: {
+		            type: putCardsFromDiscardIntoHand
+		            filter: choose(culture(gandalf),event)
+		        }
+		    }
 		]
 		gametext: At the start of the fellowship phase, you may remove 2 Free Peoples culture tokens to take a [gandalf] event into hand from your discard pile.
 		lore: ...its inhabitants, traditional trading partners of Esgaroth and Dale, now look to their northern allies for protection against the wild Easterlings....
@@ -97,6 +146,46 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: gandalf
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: choice
+		            texts: [
+		                Discard this from play
+		                Remove a token from here
+		            ]
+		            effects: [
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		                {
+		                    type: removeTokens
+		                    culture: gandalf
+		                    filter: self
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(culture(gandalf),companion)
+		            keyword: muster
+		            until: endOfTurn
+		        }
+		    }
 		]
 		gametext: When you play this, add a [gandalf] token here.<br><b>Maneuver:</b> Discard this from play or remove a token from here to spot a [gandalf] companion. That companion gains <b>muster</b> until end of turn.
 		lore: The Hosts of Isengard roared, swaying this way and that, turning from fear to fear.
@@ -134,13 +223,18 @@
 			Spell
 			Skirmish
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(gandalf),companion
+			    count: 3
+			}
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(minion,inSkirmishAgainst(companion))
+				    amount: -3
 				}
 			]
 		}
@@ -180,13 +274,23 @@
 			Spell
 			Skirmish
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(culture(gandalf),companion)
+				    memorize: chosenCompanion
+				    amount: {
+				        type: condition
+				        condition: {
+                            type: memoryMatches
+                            memory: chosenCompanion
+                            filter: hasAttached(follower)
+				        }
+				        true: 4
+				        false: 2
+				    }
 				}
 			]
 		}
@@ -229,6 +333,43 @@
 		resistance: 5
 		keywords: CAN_START_WITH_RING
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: self,ringBearer
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Add 3 burdens
+		                Discard 2 {gandalf} cards from hand
+		            ]
+		            effects: [
+		                {
+		                    type: addBurdens
+		                    amount: 3
+		                }
+		                {
+		                    type: conditional
+		                    requires: {
+		                        type: canSpot
+		                        filter: other,companion
+		                        count: 2
+		                    }
+		                    effect: {
+		                        type: discardFromHand
+		                        forced: false
+		                        filter: choose(culture(gandalf))
+		                        count: 2
+		                    }
+		                }
+		            ]
+		        }
+		    }
 		]
 		gametext: While Gandalf is the Ring-bearer, each time the fellowship moves, add 3 burdens unless you spot 2 other companions and discard 2 [gandalf] cards from hand.
 		lore: But all worthy things that are in peril as the world now stands, those are my care.'
@@ -263,16 +404,39 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-
-		effects: {
-			type: event
-			cost: {
-			},
-			effect: [
-				{
-				}
-			]
-		}
+		effects: [
+		    {
+		        type: activatedInDiscard
+                phase: skirmish
+                cost: {
+                    type: removeCardsInDiscardFromGame
+                    filter: choose(other,culture(gandalf))
+                    count: 4
+                }
+                effect: {
+                   type: playCardFromDiscard
+                   filter: self
+                   extraEffects: {
+                       type: removeFromTheGame
+                       filter: self
+                   }
+                }
+		    }
+            {
+                type: event
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+                effect: [
+                    {
+                        type: modifyStrength
+                        filter: choose(your,culture(gandalf),companion)
+                        amount: 3
+                    }
+                ]
+            }
+        ]
 		gametext: You may remove from the game 4 other [gandalf] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Spot Gandalf to make your [gandalf] companion strength +3.
 		lore: ...at dawn on the fifth day.'
 		promotext: ""
@@ -306,13 +470,19 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-
 		effects: {
 			type: event
 			cost: {
-			},
+			    type: discard
+			    filter: choose(your,culture(gandalf),condition)
+			}
 			effect: [
 				{
+				    type: discard
+				    filter: choose(condition)
+				}
+				{
+				    type: drawCards
 				}
 			]
 		}
@@ -350,8 +520,44 @@
 		twilight: 0
 		type: Artifact
 		resistance: -2
-		#target: title(Gandalf)
+		target: title(Gandalf)
 		effects: [
+		    {
+		        type: extraCost
+		        requires: {
+		            type: canSpot
+		            filter: name(The Palantír of Orthanc)
+		        }
+		        cost: {
+		            type: discard
+		            filter: choose(name(The Palantír of Orthanc))
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: fellowship
+		        }
+		        cost: {
+		            type: addBurdens
+		        }
+		        effect: [
+                    {
+                        type: revealHand
+                        hand: shadow
+                        memorize: revealedCards
+                    }
+                    {
+                        type: discardFromHand
+                        forced: true
+                        hand: shadow
+                        player: shadow
+                        filter: choose(memory(revealedCards),minion)
+                    }
+                ]
+		    }
 		]
 		gametext: Bearer must be Gandalf. To play this, if you can spot The Palantír of Orthanc, discard it.<br>At the start of the fellowship phase, you may add a burden to reveal a Shadow player's hand. He or she must choose a revealed minion and discard it from hand.
 		lore: ...a heavy shining thing came hurtling down from above.
@@ -388,6 +594,38 @@
 		type: Follower
 		strength: 1
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: transferred
+		            filter: self
+		            to: companion,not(culture(gandalf))
+		        }
+		        effect: {
+		            type: exert
+		            filter: bearer
+		            times: 2
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(condition)
+		        }
+		    }
 		]
 		gametext: <b>Aid</b> – (2).<br>Each time you transfer this to a companion, except a [gandalf] companion, exert bearer twice.<br>Each time bearer wins a skirmish, you may discard a condition from play.
 		lore: Brought as a companion by Alatar, he traveled the South and East to aid the Free Peoples.
@@ -424,6 +662,26 @@
 		type: Follower
 		resistance: 2
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cancelStrengthBonus
+		            requires: {
+		                type: canSpot
+		                filter: culture(gandalf),companion
+		                count: 2
+		            }
+		            filter: minion,inSkirmishAgainst(bearer)
+		            from: possession
+		        }
+		    }
 		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, <span style="word-spacing:-0.08em">you may add (2) to transfer this to a companion.)</span></helper><br>While you can spot 2 [gandalf] companions, minions skirmishing bearer do not gain strength bonuses from possessions.
 		lore: It would have been useless in any case to try and win over the honest Radagast to treachery.'
@@ -458,13 +716,18 @@
 		twilight: 1
 		type: Event
 		keywords: Fellowship
-
 		effects: {
 			type: event
 			cost: {
-			},
+			    type: discardFromHand
+			    forced: false
+			    filter: choose(side(shadow))
+			    count: 2
+			}
 			effect: [
 				{
+				    type: putCardsFromDiscardIntoHand
+				    filter: choose(culture(gandalf),event)
 				}
 			]
 		}
@@ -503,8 +766,33 @@
 		type: Possession
 		strength: 1
 		itemclass: Mount
-		#target: a Wizard
+		target: wizard
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: reinforceTokens
+		            culture: gandalf
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTokensCumulative
+		            culture: gandalf
+		            count: 2
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,inSkirmishAgainst(bearer))
+		        }
+		    }
 		]
 		gametext: Bearer must be a Wizard.<br>When you play Shadowfax, you may reinforce a [gandalf] token.<br><b>Skirmish:</b> Remove 2 [gandalf] tokens to wound a minion skirmishing bearer.
 		lore: Then Shadowfax gathered himself together and sprang away, and the night flowed over him....
@@ -540,6 +828,22 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: companion,hasAttached(follower)
+		            keyword: muster
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: companion,hasAttached(follower),culture(gandalf)
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: Each companion bearing a follower gains <b>muster</b> (and is strength +1 if that companion is a [gandalf] companion).
 		lore: Gandalf obviously expected to find Treebeard here; and Treebeard might almost have been loitering about near the gates on purpose to meet him.'
@@ -575,6 +879,55 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: wizard
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: gandalf
+		            filter: self
+		            count: {
+		                type: regionNumber
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: choice
+		            texts: [
+		                Discard this from play
+		                Remove 2 tokens from here
+		            ]
+		            effects: [
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		                {
+		                    type: removeTokens
+		                    culture: gandalf
+		                    filter: self
+		                    count: 2
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(side(shadow),condition)
+		        }
+		    }
 		]
 		gametext: To play, spot a Wizard.<br>When you play this, add X [gandalf] tokens here, where X is the current region number.<br><b>Maneuver:</b> Discard this from play or remove 2 tokens from here to discard a Shadow condition from play.
 		lore: Of the Wizards, it was Gandalf that chose no home.
@@ -610,6 +963,26 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: [
+                    {
+                        type: exert
+                        filter: choose(your,culture(gandalf),companion)
+                        memorize: exertedCompanion
+                    }
+                    {
+                        type: addBurdens
+                    }
+                ]
+                effect: {
+                    type: addKeyword
+                    filter: memory(exertedCompanion)
+                    keyword: damage
+                    amount: 1
+                }
+		    }
 		]
 		gametext: <b>Skirmish:</b> Exert your [gandalf] companion and add a burden to make that companion <b>damage +1</b>.
 		lore: There was none to see, or perhaps in after ages songs would still be sung of the Battle of the Peak.'

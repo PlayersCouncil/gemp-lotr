@@ -1031,7 +1031,7 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: cancelStrengthBonusTo
+		            type: cancelStrengthBonus
 		            filter: man,inSkirmishAgainst(self)
 		            from: weapon
 		        }

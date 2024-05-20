@@ -826,7 +826,7 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: cancelStrengthBonusTo
+		            type: cancelStrengthBonus
 		            requires: {
 		                type: canSpot
 		                filter: companion
