@@ -575,6 +575,15 @@ public class FilterFactory {
                         return Filters.lessStrengthThan(strength);
                     };
                 });
+        parameterFilters.put("maxstrength",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.lessStrengthThan(amount + 1);
+                    };
+                });
         parameterFilters.put("strengthlessthan",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);

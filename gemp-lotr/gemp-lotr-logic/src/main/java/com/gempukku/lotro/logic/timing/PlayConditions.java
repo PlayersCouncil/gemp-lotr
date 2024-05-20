@@ -108,6 +108,10 @@ public class PlayConditions {
         return Filters.filter(game.getGameState().getDiscard(playerId), game, cardFilters).size() >= count;
     }
 
+    public static boolean hasCardInRemoved(LotroGame game, String playerId, int count, Filterable... cardFilters) {
+        return Filters.filter(game.getGameState().getRemoved(playerId), game, cardFilters).size() >= count;
+    }
+
     public static boolean canRemoveFromDiscardToPlay(PhysicalCard source, LotroGame game, String playerId, int count, Filterable... cardFilter) {
         return Filters.filter(game.getGameState().getDiscard(playerId), game, Filters.and(cardFilter, Filters.not(source))).size() >= count;
     }

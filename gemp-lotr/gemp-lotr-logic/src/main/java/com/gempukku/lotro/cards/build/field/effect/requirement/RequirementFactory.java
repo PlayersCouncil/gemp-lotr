@@ -38,6 +38,7 @@ public class RequirementFactory {
         requirementProducers.put("fierceskirmish", new FierceSkirmish());
         requirementProducers.put("hascardindeadpile", new HasCardInDeadPile());
         requirementProducers.put("hascardindiscard", new HasCardInDiscard());
+        requirementProducers.put("hascardinremoved", new HasCardInRemoved());
         requirementProducers.put("hascardstacked", new HasCardStacked());
         requirementProducers.put("hascardinhand", new HasCardInHand());
         requirementProducers.put("hasinmemory", new HasInMemory());

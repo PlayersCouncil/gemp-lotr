@@ -33,6 +33,7 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("killedtrigger", new KilledTriggerEffectProcessor());
         effectProcessors.put("stackedonmodifier", new StackedOnModifier());
         effectProcessors.put("modifier", new Modifier());
+        effectProcessors.put("modifierindiscard", new ModifierInDiscard());
         effectProcessors.put("permanentsitemodifier", new PermanentSiteModifier());
         effectProcessors.put("modifyowncost", new ModifyOwnCost());
         effectProcessors.put("playedinotherphase", new PlayedInOtherPhase());

@@ -134,7 +134,7 @@ public class PotentialDiscount implements EffectProcessor {
         else if (discountType.equalsIgnoreCase("ifRemoveFromDiscard")) {
             FieldUtils.validateAllowedFields(discount, "count", "filter");
 
-            final ValueSource removeCountSource = ValueResolver.resolveEvaluator(value.get("count"), environment);
+            final ValueSource removeCountSource = ValueResolver.resolveEvaluator(discount.get("count"), environment);
             final String filter = FieldUtils.getString(discount.get("filter"), "filter", "any");
             final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
