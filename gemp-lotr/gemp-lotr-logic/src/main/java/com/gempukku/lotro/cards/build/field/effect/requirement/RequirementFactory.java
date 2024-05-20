@@ -43,6 +43,7 @@ public class RequirementFactory {
         requirementProducers.put("hasinmemory", new HasInMemory());
         requirementProducers.put("hasinzonedata", new HasInZoneData());
         requirementProducers.put("haveinitiative", new HaveInitiative());
+        requirementProducers.put("isahead", new IsAhead());
         requirementProducers.put("isequal", new IsEqual());
         requirementProducers.put("isgreaterthan", new IsGreaterThan());
         requirementProducers.put("isgreaterthanorequal", new IsGreaterThanOrEqual());

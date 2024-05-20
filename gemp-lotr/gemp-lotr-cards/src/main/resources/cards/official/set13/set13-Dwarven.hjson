@@ -24,8 +24,40 @@
 		type: Possession
 		resistance: 1
 		itemclass: Mount
-		#target: a Dwarf
+		target: dwarf
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: reinforceTokens
+		            culture: dwarven
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: bearer
+		        }
+		        requires: {
+		            type: phase
+		            phase: skirmish
+		        }
+		        cost: {
+		            type: removeTokensCumulative
+		            count: 2
+		            culture: dwarven
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(bearer)
+		        }
+		    }
 		]
 		gametext: Bearer must be a Dwarf.<br>When you play Arod, you may reinforce a [dwarven] token.<br><b>Response:</b> If bearer is about to take a wound during a skirmish, remove 2 [dwarven] tokens to prevent that.
 		lore: A smaller and lighter horse, but restive and fiery....
@@ -60,13 +92,35 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(dwarf)
+				    memorize: chosenDwarf
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: canSpotCultureTokens
+				            culture: dwarven
+				        }
+				        true: 4
+				        false: 3
+				    }
+				}
+				{
+				    type: conditional
+				    requires: {
+                        type: canSpotCultureTokens
+                        culture: dwarven
+				    }
+				    effect: {
+				        type: addKeyword
+				        filter: memory(chosenDwarf)
+				        keyword: damage
+				        amount: 1
+				    }
 				}
 			]
 		}
@@ -104,6 +158,56 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: choose(dwarf,notAssignedToSkirmish)
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Wound 2 Orcs
+		                Wound 1 Orc twice
+		            ]
+		            effects: [
+		                {
+		                    type: wound
+		                    filter: choose(orc)
+		                    count: 2
+		                }
+		                {
+		                    type: wound
+		                    filter: choose(orc)
+		                    times: 2
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: constantlyCheck
+		        }
+		        requires: {
+		            type: isAhead
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
 		]
 		gametext: Each time the fellowship moves, add (2).<br><b>Skirmish:</b> Exert a Dwarf who is not assigned to a skirmish to wound 2 Orcs (or to wound 1 Orc twice).<br>Discard this from play if the fellowship is ahead on the adventure path.
 		lore: ...the War of the Dwarves and the Orcs....
@@ -138,16 +242,36 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-
-		effects: {
-			type: event
-			cost: {
-			},
-			effect: [
-				{
-				}
-			]
-		}
+		effects: [
+            {
+                type: activatedInDiscard
+                phase: skirmish
+                cost: {
+                    type: removeCardsInDiscardFromGame
+                    filter: choose(other,culture(dwarven))
+                    count: 4
+                }
+                effect:
+                {
+                   type: playCardFromDiscard
+                   filter: self
+                   extraEffects: {
+                       type: removeFromTheGame
+                       filter: self
+                   }
+                }
+            }
+            {
+                type: event
+                effect: [
+                    {
+                        type: modifyStrength
+                        filter: choose(dwarf,hasAttached(hand weapon))
+                        amount: 3
+                    }
+                ]
+            }
+        ]
 		gametext: You may remove from the game 4 other [dwarven] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make your Dwarf bearing a hand weapon strength +3.
 		lore: ...Seven for the Dwarf-lords in their halls of stone....
 		promotext: ""
@@ -187,6 +311,37 @@
 		resistance: 6
 		keywords: Damage+1
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: minion,assignedToSkirmish(any)
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: assignment
+		        cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: spot
+                        filter: choose(minion,lurker)
+                        memorize: spottedLurker
+                    }
+                ]
+		        effect: {
+		            type: removeKeyword
+		            filter: memory(spottedLurker)
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: <b>Damage +1</b>.<br>Gimli is strength +1 for each minion assigned to a skirmish.<br><b>Assignment:</b> Exert Gimli and spot a lurker minion to make that minion lose <b>lurker</b> until the regroup phase.
 		lore: <span style="word-spacing:-0.01em;font-size:97%">"He and his people did great works in Gondor and Rohan."</span>
@@ -221,19 +376,30 @@
 		twilight: 1
 		type: Event
 		keywords: Response
-
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: winsSkirmish
+				filter: dwarf
 			}
-			cost: {
+			requires: {
+			    type: fierceSkirmish
 			}
 			effect: [
 				{
+				    type: playCardFromDiscard
+				    filter: choose(culture(dwarven),possession)
+				}
+				{
+				    type: optional
+				    text: Would you like to reinforce {dwarven} token
+				    effect: {
+				        type: reinforceTokens
+				        culture: dwarven
+				    }
 				}
 			]
-		]
+		}
 		gametext: If a Dwarf wins a fierce skirmish, play a [dwarven] possession from your discard pile and you may reinforce a [dwarven] token.
 		lore: ...but Gimli had to be dragged away by Legolas....
 		promotext: ""
@@ -267,13 +433,17 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-
 		effects: {
 			type: event
 			cost: {
+			    type: removeTokens
+			    culture: dwarven
+			    filter: choose(any)
 			},
 			effect: [
 				{
+				    type: heal
+				    filter: choose(dwarf)
 				}
 			]
 		}
@@ -311,6 +481,58 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: extraCost
+		        cost: {
+		            type: exert
+		            filter: choose(dwarf)
+		            count: 2
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: dwarven
+		            filter: self
+		            count: {
+		                type: forEachYouCanSpot
+		                filter: or(mountain,underground),zone(adventure path)
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: choice
+		            texts: [
+		                Discard this from play
+		                Remove 2 tokens from here
+		            ]
+		            effects: [
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		                {
+		                    type: removeTokens
+		                    culture: dwarven
+		                    count: 2
+		                    filter: self
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: discardTopCardsFromDeck
+		            forced: true
+		            deck: shadow
+		        }
+		    }
 		]
 		gametext: To play, exert 2 Dwarves.<br>When you play this, add a [dwarven] token here for each mountain site and each underground site on the adventure path.<br><b>Skirmish:</b> Discard this from play or remove 2 tokens from here to make a Shadow player discard the top card of his or her draw deck.
 		lore: ""

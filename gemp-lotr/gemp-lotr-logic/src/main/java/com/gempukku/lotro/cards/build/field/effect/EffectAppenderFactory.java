@@ -151,6 +151,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("removetext", new RemoveText());
         effectAppenderProducers.put("removethreats", new RemoveThreats());
         effectAppenderProducers.put("removetokens", new RemoveTokens());
+        effectAppenderProducers.put("removetokenscumulative", new RemoveTokensCumulative());
         effectAppenderProducers.put("removetwilight", new RemoveTwilight());
         effectAppenderProducers.put("reordertopcardsofdrawdeck", new ReorderTopCardsOfDrawDeck());
         effectAppenderProducers.put("repeat", new Repeat());
