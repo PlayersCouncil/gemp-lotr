@@ -424,7 +424,8 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: opponentsCantPlayPhaseEventsOrPhaseSpecialAbilities
+		            type: cantPlayPhaseEventsOrPhaseSpecialAbilities
+		            player: shadow
 		            phase: skirmish
 		            requires: {
 		                type: canSpot

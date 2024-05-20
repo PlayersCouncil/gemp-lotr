@@ -663,7 +663,8 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: opponentsCantPlayPhaseEventsOrPhaseSpecialAbilities
+		            type: cantPlayPhaseEventsOrPhaseSpecialAbilities
+		            player: free people
 		            phase: archery
 		        }
 		    }
@@ -1811,7 +1812,8 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: opponentsCantPlayPhaseEventsOrPhaseSpecialAbilities
+		            type: cantPlayPhaseEventsOrPhaseSpecialAbilities
+		            player: free people
 		            phase: skirmish
 		            requires: {
 		                type: canSpot
