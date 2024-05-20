@@ -33,6 +33,8 @@ public class ValueResolver {
                 return actionContext -> (Evaluator) (game, cardAffected) -> actionContext.getGame().getGameState().getTwilightPool();
             } else if (stringValue.equalsIgnoreCase("burdenCount")) {
                 return actionContext -> (Evaluator) (game, cardAffected) -> actionContext.getGame().getGameState().getBurdens();
+            } else if (stringValue.equalsIgnoreCase("moveCount")) {
+                return actionContext -> (Evaluator) (game, cardAffected) -> actionContext.getGame().getGameState().getMoveCount();
             } else if (stringValue.contains("-")) {
                 final String[] split = stringValue.split("-", 2);
                 final int min = Integer.parseInt(split[0]);
@@ -194,6 +196,18 @@ public class ValueResolver {
                                     return Math.min(limit, wounds);
                                 });
                     }
+                };
+            } else if (type.equalsIgnoreCase("woundsTakenInCurrentPhase")) {
+                FieldUtils.validateAllowedFields(object, "filter");
+                final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+
+                return (actionContext) -> (game, cardAffected) -> {
+                    int count = 0;
+                    for (PhysicalCard physicalCard : Filters.filterActive(game, filterableSource.getFilterable(actionContext))) {
+                        count += game.getModifiersEnvironment().getWoundsTakenInCurrentPhase(physicalCard);
+                    }
+                    return count;
                 };
             } else if (type.equalsIgnoreCase("forEachKeyword")) {
                 FieldUtils.validateAllowedFields(object, "filter", "keyword");

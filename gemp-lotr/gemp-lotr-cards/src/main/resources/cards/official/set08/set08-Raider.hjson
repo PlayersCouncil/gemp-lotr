@@ -368,7 +368,7 @@
 		            filter: self
 		        }
 		        cost: {
-		            type: removeTokens
+		            type: removeTokensCumulative
 		            count: 2
 		        }
                 effect: {
@@ -426,6 +426,7 @@
 		        }
 		        cost: {
 		            type: removeTokens
+		            filter: choose(any)
 		            culture: raider
 		        }
 		        effect: {

@@ -105,6 +105,7 @@
                     {
                         type: removeTokens
                         culture: isengard
+                        filter: self
                         count: 3
                     }
                     {

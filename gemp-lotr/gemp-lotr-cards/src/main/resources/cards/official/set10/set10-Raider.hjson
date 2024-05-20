@@ -154,6 +154,7 @@
 		        }
 		        cost: {
 		            type: removeTokens
+		            filter: choose(any)
 		            culture: raider
 		        }
 		        effect: {

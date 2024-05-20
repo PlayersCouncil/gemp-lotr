@@ -46,7 +46,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantplaycardson", new CantPlayCardsOn());
         modifierProducers.put("cantplayphaseevents", new CantPlayPhaseEvents());
         modifierProducers.put("cantplayphaseeventsorphasespecialabilities", new CantPlayPhaseEventsOrPhaseSpecialAbilities());
-        modifierProducers.put("cantplayphasespecialabilities", new CantPlayPhaseSpecialAbilities());
+        modifierProducers.put("cantplayspecialabilities", new CantPlaySpecialAbilities());
         modifierProducers.put("cantpreventwounds", new AddModifierFlag(ModifierFlag.CANT_PREVENT_WOUNDS));
         modifierProducers.put("cantremoveburdens", new CantRemoveBurdens());
         modifierProducers.put("cantremovethreats", new CantRemoveThreats());

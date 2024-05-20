@@ -165,6 +165,7 @@
 				phase: fellowship
 				cost: {
 					type: removeTokens
+					filter: self
 					count: 2
 					culture: shire
 				}

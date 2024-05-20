@@ -27,6 +27,34 @@
 		vitality: 3
 		resistance: 7
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyResistance
+		            requires: {
+		                type: location
+		                filter: forest
+		            }
+		            filter: other,culture(elven),companion
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(minion,inSkirmishAgainst(self))
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: other,companion,assignedToSkirmish(any)
+		            }
+		        }
+		    }
 		]
 		gametext: While the fellowship is at a forest site, each of your other [elven] companions is resistance +1.<br><b>Skirmish:</b> Exert Arwen to make a minion she is skirmishing strength -1 for each other companion assigned to a skirmish.
 		lore: Arwen vanimelda, namarië!'
@@ -63,8 +91,46 @@
 		type: Possession
 		resistance: 1
 		itemclass: Mount
-		#target: title(an Elf)
+		target: elf
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: reinforceTokens
+		            culture: elven
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTokensCumulative
+		            culture: elven
+		            count: 2
+		        }
+		        effect: [
+		            {
+                        type: heal
+                        filter: bearer
+                    }
+                    {
+                        type: conditional
+                        requires: {
+                            type: canSpot
+                            filter: bearer,inFierceSkirmish
+                        }
+                        effect: {
+                            type: heal
+                            filter: choose(not(bearer),elf)
+                        }
+                    }
+		        ]
+		    }
 		]
 		gametext: Bearer must be an Elf.<br>When you play Asfaloth, you may reinforce an [elven] token.<br><b>Skirmish:</b> Remove 2 [elven] tokens to heal bearer (or heal bearer and heal another Elf if bearer is in a fierce skirmish).
 		lore: ...my horse will not let any rider fall....'
@@ -104,6 +170,33 @@
 		vitality: 3
 		resistance: 7
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: location
+		                filter: forest
+		            }
+		            filter: elf,minResistance(7)
+		            keyword: muster
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+                    type: moves
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: putCardsFromDiscardIntoHand
+		            filter: choose(culture(elven),event)
+		        }
+		    }
 		]
 		gametext: While the fellowship is at a forest site, each Elf who has resistance 7 or more gains <b>muster</b>.<br>Each time the fellowship moves during the regroup phase, you may take an [elven] event into hand from your discard pile.
 		lore: I did not know that your plight was so evil.'
@@ -139,6 +232,33 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+                    type: endOfTurn
+		        }
+		        requires: {
+		            type: isEqual
+		            firstNumber: moveCount
+		            secondNumber: 1
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfSkirmishInvolving
+		            filter: elf
+		            against: wounded,minion
+		        }
+		        effect: {
+		            type: drawCards
+		        }
+		    }
 		]
 		gametext: At the end of your turn, discard this from play if the fellowship did not move more than once this turn.<br>At the start of each skirmish involving an Elf and a wounded minion, you may draw a card.
 		lore: Many stairs they climbed to meet the Galadhrim.
@@ -174,6 +294,32 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: assignment
+		        effect: [
+                    {
+                        type: discard
+                        filter: self
+                    }
+                    {
+                        type: assignFpCharacterToSkirmish
+                        fpCharacter: choose(culture(elven),companion)
+                        against: choose(minion)
+                        memorizeFPCharacter: assignedCompanion
+                        memorizeMinion: assignedMinion
+                    }
+                    {
+                        type: addModifier
+                        modifier: {
+                            type: cantPlaySpecialAbilities
+                            phase: skirmish
+                            filter: or(memory(assignedCompanion),memory(assignedMinion))
+                        }
+                        until: regroup
+                    }
+                ]
+		    }
 		]
 		gametext: <b>Assignment:</b> Discard this from play and assign a minion to an [elven] companion. Those characters cannot use skirmish special abilities until the start of the regroup phase.
 		lore: At that moment there came a roaring and a rushing: a noise of loud waters rolling many stones.
@@ -208,13 +354,22 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(culture(elven),companion)
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: isGreaterThan
+				            firstNumber: moveCount
+				            secondNumber: 1
+				        }
+				        true: 5
+				        false: 2
+				    }
 				}
 			]
 		}
@@ -256,6 +411,46 @@
 		vitality: 3
 		resistance: 7
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		            count: 3
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: moves
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: [
+		            {
+		                type: revealTopCardsOfDrawDeck
+		                count: {
+		                    type: forEachYouCanSpot
+		                    filter: forest,zone(adventure path)
+		                }
+		                memorize: revealedCards
+		            }
+		            {
+		                type: repeat
+		                times: {
+		                    type: forEachMatchingInMemory
+		                    filter: culture(elven)
+		                }
+		                effect: {
+		                    type: heal
+		                    filter: choose(elf)
+		                }
+		            }
+		        ]
+		    }
 		]
 		gametext: To play, spot 3 Elves.<br>Each time the fellowship moves during the regroup phase, you may reveal a card from the top of your draw deck for each forest on the adventure path to heal an Elf for each [elven] card revealed.
 		lore: Do not let your hearts be troubled....'
@@ -290,13 +485,24 @@
 		twilight: 0
 		type: Event
 		keywords: Maneuver
-
 		effects: {
 			type: event
 			cost: {
-			},
+			    type: exert
+			    filter: choose(elf)
+			}
 			effect: [
 				{
+				    type: putCardsFromDiscardIntoHand
+				    filter: choose(culture(elven),skirmish,event)
+				}
+				{
+				    type: optional
+				    text: Would you like to reinforce {elven} token?
+				    effect: {
+				        type: reinforceTokens
+				        culture: elven
+				    }
 				}
 			]
 		}
@@ -333,16 +539,43 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-
-		effects: {
-			type: event
-			cost: {
-			},
-			effect: [
-				{
-				}
-			]
-		}
+		effects: [
+		    {
+		        type: activatedInDiscard
+                phase: skirmish
+                cost: {
+                    type: removeCardsInDiscardFromGame
+                    filter: choose(other,culture(elven))
+                    count: 4
+                }
+                effect:
+                {
+                   type: playCardFromDiscard
+                   filter: self
+                   extraEffects: {
+                       type: removeFromTheGame
+                       filter: self
+                   }
+                }
+		    }
+            {
+                type: event
+                effect: [
+                    {
+                        type: conditional
+                        requires: {
+                            type: location
+                            filter: or(forest,river)
+                        }
+                        effect: {
+                            type: modifyStrength
+                            filter: choose(minion,inSkirmishAgainst(your,elf))
+                            amount: -3
+                        }
+                    }
+                ]
+            }
+        ]
 		gametext: You may remove from the game 4 other [elven] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make a minion skirmishing your Elf at a forest or river site strength -3.
 		lore: Men multiply and the Firstborn decrease....'
 		promotext: ""
@@ -382,6 +615,32 @@
 		resistance: 6
 		keywords: Archer
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+                    type: startOfPhase
+                    phase: archery
+		        }
+		        effect: [
+		            {
+		                type: revealTopCardsOfDrawDeck
+		                memorize: revealedCard
+		            }
+		            {
+		                type: conditional
+		                requires: {
+                            type: memoryMatches
+                            memory: revealedCard
+                            filter: culture(elven)
+		                }
+		                effect: {
+		                    type: wound
+		                    filter: choose(minion)
+		                }
+		            }
+		        ]
+		    }
 		]
 		gametext: <b>Archer</b>.<br>At the start of each archery phase, you may reveal the top card of your draw deck. If it is an [elven] card, wound a minion.
 		lore: My heart bids me go on... but we must hold together. I will follow your counsel.'
@@ -416,13 +675,23 @@
 		twilight: 4
 		type: Event
 		keywords: Archery
-
 		effects: {
 			type: event
+			requires: {
+			    type: canSpot
+			    filter: elf
+			    count: 3
+			}
 			cost: {
+    			type: chooseActiveCards
+    			text: Choose a minion with a race that will be spared
+    			filter: choose(minion,hasRace)
+    			memorize: chosenMinion
 			},
 			effect: [
 				{
+				    type: wound
+				    filter: all(minion,not(raceInMemory(chosenMinion)))
 				}
 			]
 		}
@@ -463,6 +732,35 @@
 		vitality: 3
 		resistance: 6
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: self
+		        }
+		        requires: [
+                    {
+                        type: canSpot
+                        filter: another,companion,assignedToSkirmish(any)
+                    }
+                    {
+                        type: phase
+                        phase: skirmish
+                    }
+                    {
+                        type: isGreaterThan
+                        firstNumber: {
+                            type: woundsTakenInCurrentPhase
+                            filter: self
+                        }
+                        secondNumber: 0
+                    }
+                ]
+                effect: {
+                    type: preventWound
+                    filter: self
+                }
+		    }
 		]
 		gametext: While another companion is assigned to a skirmish, during each skirmish, prevent all wounds to this companion after the first wound.
 		lore: There was a sound of soft laughter over their heads, and then another clear voice spoke in an elven-tongue.
@@ -497,13 +795,25 @@
 		twilight: 2
 		type: Event
 		keywords: Archery
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: elf,archer
+			    count: 2
+			}
 			effect: [
 				{
+				    type: modifyArcheryTotal
+				    side: free people
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: shadowPlayerReplacedCurrentSite
+				        }
+				        true: 2
+				        false: 1
+				    }
 				}
 			]
 		}
@@ -541,6 +851,56 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: elf
+		            count: 2
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: elven
+		            filter: self
+		            count: {
+		                type: forEachYouCanSpot
+		                filter: or(forest,river),zone(adventure path)
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: choice
+		            texts: [
+		                Discard this from play
+		                Remove 2 tokens from here
+		            ]
+		            effects: [
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		                {
+		                    type: removeTokens
+		                    culture: elven
+		                    filter: self
+		                    count: 2
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: reconcileHand
+		        }
+		    }
 		]
 		gametext: To play, spot 2 Elves.<br>When you play this, add an [elven] token here for each forest site and each river site on the adventure path.<br><b>Regroup:</b> Discard this from play or remove 2 tokens from here to reconcile your hand.
 		lore: ""
@@ -579,6 +939,24 @@
 		vitality: 3
 		resistance: 6
 		effects: [
+		    {
+		        type: activatedTrigger
+		        trigger: {
+                    type: played
+                    filter: your,event
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: putPlayedEventOnTopOfDrawDeck
+		        }
+		    }
 		]
 		gametext: <b>Response:</b> If you play an event during a skirmish involving this companion, exert this companion to place that event on top of your draw deck.
 		lore: Cloaked by Elven garments and by darkness, warriors led by Haldir reinforced Helm's Deep.
@@ -613,13 +991,16 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(elf)
+				    amount: {
+				        type: forEachYouCanSpot
+				        filter: hasToken(elven)
+				    }
 				}
 			]
 		}
@@ -657,6 +1038,62 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(minion,inSkirmishAgainst(elf))
+		            memorize: chosenMinion
+		            amount: {
+		                type: sum
+		                source: [
+		                    {
+		                        type: condition
+		                        condition: {
+		                            type: memoryMatches
+		                            memory: chosenMinion
+		                            filter: inSkirmishAgainst(companion,minResistance(4))
+		                        }
+		                        true: -1
+		                        false: 0
+		                    }
+		                    {
+		                        type: condition
+		                        condition: {
+		                            type: memoryMatches
+		                            memory: chosenMinion
+		                            filter: wounded
+		                        }
+		                        true: -1
+		                        false: 0
+		                    }
+		                    {
+		                        type: condition
+		                        condition: {
+		                            type: canSpot
+		                            filter: elf,archer
+		                        }
+		                        true: -1
+		                        false: 0
+		                    }
+		                    {
+		                        type: condition
+		                        condition: {
+		                            type: location
+		                            filter: forest
+		                        }
+		                        true: -1
+		                        false: 0
+		                    }
+		                ]
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Skirmish:</b> Discard this condition from play to make a minion skirmishing an Elf strength -1 for each of the following that is true: it is skirmishing a companion who has resistance 4 or more; it is wounded; you can spot an Elf archer; the fellowship is at a forest site.
 		lore: Yrch,' said Legolas, falling into his own tongue.
@@ -695,6 +1132,33 @@
 			Support Area
 		]
 		effects: [
+		    {
+		        type: activated
+		        phase: archery
+		        cost: [
+                    {
+                        type: discard
+                        filter: self
+                    }
+                    {
+                        type: spot
+                        filter: choose(elf,archer)
+                        count: 3
+                        memorize: spottedElves
+                    }
+                ]
+                effect: [
+                    {
+                        type: discard
+                        filter: choose(minion)
+                    }
+                    {
+                        type: removeKeyword
+                        filter: memory(spottedElves)
+                        keyword: archer
+                    }
+                ]
+		    }
 		]
 		gametext: <b>Toil 2</b>. <helper>(For each [elven] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Archery:</b> Discard this from play and spot 3 Elf archers to discard a minion from play. Each of those archers loses <b>archer</b> and cannot gain archer.
 		lore: Stringing the bow and fitting an arrow....
@@ -730,6 +1194,39 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: endOfTurn
+		        }
+		        requires: {
+		            type: isEqual
+		            firstNumber: moveCount
+		            secondNumber: 1
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: moves
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: drawCards
+		            count: {
+		                type: forEachYouCanSpot
+		                filter: or(title(Arwen),title(Celeborn),title(Galadriel))
+		            }
+		        }
+		    }
 		]
 		gametext: At the end of your turn, discard this from play if the fellowship did not move more than once this turn.<br>Each time the fellowship moves during the regroup phase, you may draw a card for each of the following you can spot: Arwen, Celeborn, or Galadriel.
 		lore: ""

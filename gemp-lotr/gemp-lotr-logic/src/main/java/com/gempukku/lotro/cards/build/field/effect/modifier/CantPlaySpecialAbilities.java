@@ -4,37 +4,32 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.logic.modifiers.CantUseSpecialAbilitiesModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
-import com.gempukku.lotro.logic.modifiers.PlayerCantUsePhaseSpecialAbilitiesModifier;
-import com.gempukku.lotro.logic.modifiers.PlayersCantUsePhaseSpecialAbilitiesModifier;
 import org.json.simple.JSONObject;
 
-public class CantPlayPhaseSpecialAbilities implements ModifierSourceProducer {
+public class CantPlaySpecialAbilities implements ModifierSourceProducer {
     @Override
     public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(object, "player", "phase", "requires");
+        FieldUtils.validateAllowedFields(object, "player", "phase", "requires", "filter");
 
         String player = FieldUtils.getString(object.get("player"), "player");
         final Phase phase = FieldUtils.getEnum(Phase.class, object.get("phase"), "phase");
-        if (phase == null)
-            throw new InvalidCardDefinitionException("Has to have a phase defined");
 
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
+        String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
         PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player, environment) : null;
+        FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
         return new ModifierSource() {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
-                if (playerSource != null) {
-                    String bannedPlayer = playerSource.getPlayer(actionContext);
-                    return new PlayerCantUsePhaseSpecialAbilitiesModifier(actionContext.getSource(),
-                            new RequirementCondition(requirements, actionContext), bannedPlayer, phase);
-                } else {
-                    return new PlayersCantUsePhaseSpecialAbilitiesModifier(actionContext.getSource(),
-                            new RequirementCondition(requirements, actionContext), phase);
-                }
+                String bannedPlayer = (playerSource != null) ? playerSource.getPlayer(actionContext) : null;
+
+                return new CantUseSpecialAbilitiesModifier(actionContext.getSource(),
+                        new RequirementCondition(requirements, actionContext), phase, bannedPlayer, filterableSource.getFilterable(actionContext));
             }
         };
     }

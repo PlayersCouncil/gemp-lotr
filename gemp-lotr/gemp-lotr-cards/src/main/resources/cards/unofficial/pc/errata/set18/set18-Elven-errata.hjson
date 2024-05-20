@@ -134,6 +134,7 @@
 				phase: regroup
 				cost: {
 					type: removetokens
+					filter: choose(any)
 					count: 1
 					culture: elven
 				}

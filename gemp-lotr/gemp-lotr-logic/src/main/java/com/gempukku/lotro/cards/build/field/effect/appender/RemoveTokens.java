@@ -32,7 +32,9 @@ public class RemoveTokens implements EffectAppenderProducer {
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final Culture culture = FieldUtils.getEnum(Culture.class, effectObject.get("culture"), "culture");
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "self");
+        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        if (filter == null)
+            throw new InvalidCardDefinitionException("Filter needs to be defined");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final Token token = (culture != null) ? Token.findTokenForCulture(culture) : null;
