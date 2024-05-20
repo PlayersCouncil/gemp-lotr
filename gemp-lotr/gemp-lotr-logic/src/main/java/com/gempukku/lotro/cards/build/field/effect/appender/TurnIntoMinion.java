@@ -34,7 +34,7 @@ import java.util.List;
 public class TurnIntoMinion implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "count", "strength", "vitality", "keywords", "until");
+        FieldUtils.validateAllowedFields(effectObject, "filter", "count", "strength", "vitality", "keywords", "until", "memorize");
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
@@ -43,7 +43,14 @@ public class TurnIntoMinion implements EffectAppenderProducer {
         String keywords = FieldUtils.getString(effectObject.get("keywords"), "keywords");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
 
-        String memory = "_temp";
+        String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
+
+        List<Keyword> keywordsList = new ArrayList<>();
+        if (keywords != null) {
+            for (String key : keywords.split(",")) {
+                keywordsList.add(FieldUtils.getEnum(Keyword.class, key, "keyword"));
+            }
+        }
 
         MultiEffectAppender result = new MultiEffectAppender();
         result.addEffectAppender(
@@ -67,9 +74,8 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                                             addModifier(action, new VitalityModifier(card, card, vitalityValue), until);
                                             addModifier(action, new IsAdditionalCardTypeModifier(card, card, CardType.MINION), until);
                                             if (keywords != null) {
-                                                String[] keywordSplit = keywords.split(",");
-                                                for (String keyword : keywordSplit) {
-                                                    addModifier(action, new KeywordModifier(card, card, Keyword.valueOf(keyword)), until);
+                                                for (Keyword keyword : keywordsList) {
+                                                    addModifier(action, new KeywordModifier(card, card, keyword), until);
                                                 }
                                             }
                                             addModifier(action, new MayNotBearModifier(card, card, Filters.any), until);

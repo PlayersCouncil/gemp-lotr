@@ -12,7 +12,7 @@ public class CantBear implements ModifierSourceProducer {
         FieldUtils.validateAllowedFields(object, "filter", "cardFilter");
 
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
-        final String cardFilter = FieldUtils.getString(object.get("cardFilter"), "cardFilter");
+        final String cardFilter = FieldUtils.getString(object.get("cardFilter"), "cardFilter", "any");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource cardFilterSource = environment.getFilterFactory().generateFilter(cardFilter, environment);
