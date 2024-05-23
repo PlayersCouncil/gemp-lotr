@@ -22,14 +22,59 @@
 		twilight: 3
 		type: Event
 		keywords: Regroup
-
 		effects: {
 			type: event
-			cost: {
-			},
+			cost: [
+                {
+                    type: exert
+                    filter: choose(your,nazgul)
+                    times: 2
+                }
+                {
+                    type: spot
+                    filter: choose(exhausted,companion)
+                    memorize: exhaustedCompanion
+                }
+            ]
 			effect: [
-				{
-				}
+                {
+                    type: if
+                    condition: {
+                        type: location
+                        filter: regionNumber(1)
+                    }
+                    true: {
+                        type: costToEffect
+                        cost: {
+                            type: heal
+                            filter: memory(exhaustedCompanion)
+                        }
+                        effect: {
+                            type: addBurdens
+                        }
+                    }
+                    false: {
+                        type: repeat
+                        times: {
+                            type: forEachWound
+                            filter: memory(exhaustedCompanion)
+                        }
+                        effect: {
+                            type: optional
+                            text: Would you like to heal {exhaustedCompanion} to add a burden?
+                            effect: {
+                                type: costToEffect
+                                cost: {
+                                    type: heal
+                                    filter: memory(exhaustedCompanion)
+                                }
+                                effect: {
+                                    type: addBurdens
+                                }
+                            }
+                        }
+                    }
+                }
 			]
 		}
 		gametext: To play, exert your Nazgûl twice and spot an exhausted companion.<br>Heal that companion to add a burden. If the fellowship is not in region 1, you may repeat this for each other wound on that companion.
@@ -65,16 +110,26 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-
-		effects: {
-			type: event
-			cost: {
-			},
-			effect: [
-				{
-				}
-			]
-		}
+		effects: [
+		    {
+		        type: discount
+		        discount: {
+		            type: ifRemoveFromDiscard
+		            filter: culture(wraith)
+		            count: 4
+		        }
+		    }
+            {
+                type: event
+                effect: [
+                    {
+                        type: modifyStrength
+                        filter: choose(nazgul,inFierceSkirmish)
+                        amount: 2
+                    }
+                ]
+            }
+        ]
 		gametext: You may remove from the game 4 [wraith] cards in your discard pile instead of paying the twilight cost for this card.<br>Make your Nazgûl in a fierce skirmish strength +2.
 		lore: Down, down it came, and then, folding its fingered webs, it gave a croaking cry....
 		promotext: ""
@@ -111,13 +166,38 @@
 			Toil 1
 			Shadow
 		]
-
 		effects: {
 			type: event
+			requires: {
+			    type: canSpot
+			    filter: culture(wraith),your,zone(support)
+			}
 			cost: {
-			},
+			    type: spot
+			    filter: choose(companion)
+			    memorize: spottedCompanion
+			}
 			effect: [
 				{
+				    type: drawCards
+				    count: {
+				        type: sum
+				        source: [
+				            {
+				                type: forEachWound
+				                filter: memory(spottedCompanion)
+				            }
+				            {
+				                type: condition
+				                condition: {
+				                    type: canSpot
+				                    filter: nazgul
+				                }
+				                true: 1
+				                false: 0
+				            }
+				        ]
+				    }
 				}
 			]
 		}
@@ -155,6 +235,50 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: wraith
+		            filter: self
+		            count: {
+		                type: forEachYouCanSpot
+		                filter: culture(wraith),your,zone(support)
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: choice
+		            texts: [
+		                Discard this from play
+		                Remove 2 tokens from here
+		            ]
+		            effects: [
+		                {
+		                    type: discard
+		                    filter: self
+		                }
+		                {
+		                    type: removeTokens
+		                    filter: self
+		                    count: 2
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: playCardFromDrawDeck
+		            filter: choose(culture(wraith),mount)
+		            on: your,culture(wraith),minion
+		        }
+		    }
 		]
 		gametext: When you play this, you may add a [wraith] token here for each [wraith] card in your support area.<br><b>Shadow:</b> Discard this from play or remove 2 tokens from here to play a [wraith] mount from your draw deck on your [wraith] minion.
 		lore: That is the worst news that has come to Bree....'
@@ -189,12 +313,42 @@
 		culture: Wraith
 		twilight: 6
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 11
 		vitality: 4
 		site: 3
 		keywords: Fierce
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: other,nazgul
+		            count: 2
+		        }
+		        effect: {
+		            type: if
+		            condition: {
+		                type: canSpot
+		                filter: companion
+		                count: 6
+		            }
+		            true: {
+		                type: exert
+		                filter: all(companion)
+		            }
+		            false: {
+		                type: exert
+		                filter: choose(unbound,companion)
+		                count: 2
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Fierce</b>.<br>When you play Úlairë Enquëa, if you can spot 2 other Nazgûl, you may exert 2 unbound companions (or exert each companion if you can spot 6 companions).
 		lore: It is many a year since the Nine walked abroad.'
@@ -229,12 +383,31 @@
 		culture: Wraith
 		twilight: 4
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
 		keywords: Fierce
 		effects: [
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: discardFromHand
+                        forced: false
+                        filter: choose(nazgul)
+                    }
+               ]
+               effect: {
+                    type: discard
+                    filter: choose(condition)
+               }
+		    }
 		]
 		gametext: <b>Fierce</b>.<br><b>Shadow:</b> Exert Úlairë Lemenya and discard a Nazgûl from your hand to discard a condition from play.
 		lore: As the Shadow grows once more, they too may walk again.'
@@ -269,12 +442,20 @@
 		culture: Wraith
 		twilight: 4
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
 		keywords: Fierce
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: canSpot
+		            filter: companion,maxResistance(3)
+		        }
+		        amount: -2
+		    }
 		]
 		gametext: <b>Fierce</b>.<br>While you can spot a companion who has resistance 3 or less, Úlairë Nertëa is twilight cost -2.
 		lore: From inside the hood came a noise as of someone sniffling to catch an elusive scent....
