@@ -53,6 +53,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("canttakearcherywounds", new CantTakeArcheryWounds());
         modifierProducers.put("canttakemorewoundsthan", new CantTakeMoreWoundsThan());
         modifierProducers.put("canttakewounds", new CantTakeWounds());
+        modifierProducers.put("canttouchtokens", new AddModifierFlag(ModifierFlag.CANT_TOUCH_CULTURE_TOKENS));
         modifierProducers.put("cantusespecialabilities", new CantUseSpecialAbilities());
         modifierProducers.put("disablegametext", new DisableGameText());
         modifierProducers.put("doesnotaddtoarcherytotal", new DoesNotAddToArcheryTotal());

@@ -297,6 +297,38 @@ public class FilterFactory {
                                 return Filters.filter(game.getGameState().getSkirmish().getShadowCharacters(), game, filterable).size() >= count;
                             });
                 });
+        parameterFilters.put("highestracecount",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return actionContext -> {
+                        final Filterable sourceFilterable = filterableSource.getFilterable(actionContext);
+
+                        Map<Race, Integer> counts = new HashMap<>();
+                        for (PhysicalCard card : Filters.filterActive(actionContext.getGame(), sourceFilterable)) {
+                            final Race race = card.getBlueprint().getRace();
+                            if (race != null) {
+                                Integer count = counts.get(race);
+                                if (count == null)
+                                    count = 0;
+                                counts.put(race, count + 1);
+                            }
+                        }
+
+                        int highestCount = 0;
+                        for (Integer value : counts.values()) {
+                            if (value > highestCount)
+                                highestCount = value;
+                        }
+
+                        Set<Race> highestNumberRaces = new HashSet<>();
+                        for (Map.Entry<Race, Integer> raceIntegerEntry : counts.entrySet()) {
+                            if (raceIntegerEntry.getValue() == highestCount)
+                                highestNumberRaces.add(raceIntegerEntry.getKey());
+                        }
+
+                        return Filters.or(highestNumberRaces.toArray(new Race[0]));
+                    };
+                });
         parameterFilters.put("higheststrength",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);

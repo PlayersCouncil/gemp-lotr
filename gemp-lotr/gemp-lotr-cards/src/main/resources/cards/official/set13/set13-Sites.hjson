@@ -23,6 +23,20 @@
 		direction: Left
 		keywords: Underground
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		            filter: self,not(regionNumber(1))
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
 		]
 		gametext: <b>Underground</b>. If this site is not in region 1 when the fellowship moves from here during the regroup phase, add a burden.
 		lore: ""
@@ -58,6 +72,23 @@
 		direction: Right
 		keywords: Underground
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        player: free people
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: removeBurdens
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: <b>Underground</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may remove 2 burdens.
 		lore: ""
@@ -93,6 +124,23 @@
 		direction: Right
 		keywords: Battleground
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        player: free people
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: drawCards
+		            player: free people
+		        }
+		    }
 		]
 		gametext: <b>Battleground</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may draw a card.
 		lore: ""
@@ -128,6 +176,23 @@
 		direction: Left
 		keywords: Dwelling
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        player: shadow
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            count: 2
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
 		]
 		gametext: <b>Dwelling</b>. When the fellowship moves to this site, the first Shadow player may discard 2 cards from hand to add a burden.
 		lore: ""
@@ -162,6 +227,53 @@
 		block: Shadows
 		direction: Right
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        player: free people
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: [
+		            {
+		                type: heal
+		                filter: choose(companion,culture(dwarven))
+		            }
+		            {
+		                type: heal
+		                filter: choose(companion,culture(elven))
+		            }
+		            {
+		                type: heal
+		                filter: choose(companion,culture(gandalf))
+		            }
+		            {
+		                type: heal
+		                filter: choose(companion,culture(gollum))
+		            }
+		            {
+		                type: heal
+		                filter: choose(companion,culture(gondor))
+		            }
+		            {
+		                type: heal
+		                filter: choose(companion,culture(rohan))
+		            }
+		            {
+		                type: heal
+		                filter: choose(companion,culture(shire))
+		            }
+		            {
+		                type: heal
+		                filter: choose(companion,culture(esgaroth))
+		            }
+		        ]
+		    }
 		]
 		gametext: <span style="word-spacing:-0.02em;font-size:98%"><b>Forest</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may heal a companion of each culture.</span>
 		lore: ""
@@ -197,6 +309,14 @@
 		direction: Left
 		keywords: Marsh
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: companion,highestRaceCount(companion)
+		            amount: -1
+		        }
+		    }
 		]
 		gametext: <b>Marsh</b>. Each companion of each race that has the most companions is strength -1.
 		lore: ""
@@ -232,6 +352,17 @@
 		direction: Left
 		keywords: River
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: character
+		            amount: {
+		                type: forEachHasAttached
+		                filter: any
+		            }
+		        }
+		    }
 		]
 		gametext: <b>River</b>. Each character is strength +1 for each card borne by that character.
 		lore: ""
@@ -267,6 +398,25 @@
 		direction: Left
 		keywords: Battleground
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: isGreaterThan
+		                firstNumber: {
+		                    type: forEachYouCanSpot
+		                    filter: companion
+		                }
+		                secondNumber: {
+		                    type: forEachYouCanSpot
+		                    filter: minion
+		                }
+		            }
+		            filter: minion
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: <b>Battleground</b>. While a player can spot more companions than minions, each minion is strength +1.
 		lore: ""
@@ -305,6 +455,23 @@
 			Plains
 		]
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        player: shadow
+		        trigger: {
+		            type: startOfPhase
+		            phase: regroup
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(minion)
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(companion)
+		        }
+		    }
 		]
 		gametext: <b>Battleground</b>. <b>Plains</b>. At the start of the regroup phase, each Shadow player may exert a minion to exert a companion.
 		lore: ""
@@ -340,6 +507,12 @@
 		direction: Left
 		keywords: Mountain
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantTouchTokens
+		        }
+		    }
 		]
 		gametext: <b>Mountain</b>. Culture tokens cannot be added, removed, or reinforced.
 		lore: ""
