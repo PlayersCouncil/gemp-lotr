@@ -258,6 +258,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     public void setPlayEventAction(ActionSource playEventAction) {
+        if (this.playEventAction != null)
+            throw new RuntimeException("Cant set play event action more than once");
         this.playEventAction = playEventAction;
     }
 

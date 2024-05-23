@@ -540,54 +540,94 @@
 		effects: [
             {
                 type: event
-                requires: [
+                cost: [
                     {
-                        type: location
-                        filter: regionNumber(1)
-                    }
-                    {
-                        type: canSpot
-                        filter: name(Gollum)
+                        type: choice
+                        texts: [
+                            Spot Gollum
+                            Spot Gollum
+                            Spot anything
+                        ]
+                        effects: [
+                            {
+                                type: conditional
+                                requires: {
+                                    type: location
+                                    filter: regionNumber(1)
+                                }
+                                effect: {
+                                    type: spot
+                                    filter: name(Gollum)
+                                }
+                            }
+                            {
+                                type: conditional
+                                requires: {
+                                    type: location
+                                    filter: regionNumber(2)
+                                }
+                                effect: {
+                                    type: spot
+                                    filter: name(Gollum)
+                                }
+                            }
+                            {
+                                type: conditional
+                                requires: {
+                                    type: location
+                                    filter: regionNumber(3)
+                                }
+                                effect: {
+                                    type: spot
+                                    filter: any
+                                }
+                            }
+                        ]
                     }
                 ]
                 effect: [
                     {
-                        type: wound
-                        filter: choose(companion)
-                    }
-                ]
-            }
-            {
-                type: event
-                requires: [
-                    {
-                        type: location
-                        filter: regionNumber(2)
-                    }
-                    {
-                        type: canSpot
-                        filter: name(Gollum)
-                    }
-                ]
-                effect: [
-                    {
-                        type: exert
-                        filter: choose(companion)
-                    }
-                ]
-            }
-            {
-                type: event
-                requires: [
-                    {
-                        type: location
-                        filter: regionNumber(3)
-                    }
-                ]
-                effect: [
-                    {
-                        type: playCardFromDiscard
-                        filter: choose(culture(gollum),minion)
+                        type: choice
+                        texts: [
+                            Wound a companion
+                            Exert a companion
+                            Play Gollum from discard
+                        ]
+                        effects: [
+                            {
+                                type: conditional
+                                requires: {
+                                    type: location
+                                    filter: regionNumber(1)
+                                }
+                                effect: {
+                                    type: wound
+                                    filter: choose(companion)
+                                }
+                            }
+                            {
+                                type: conditional
+                                requires: {
+                                    type: location
+                                    filter: regionNumber(2)
+                                }
+                                effect: {
+                                    type: exert
+                                    filter: choose(companion)
+                                }
+                            }
+                            {
+                                type: conditional
+                                requires: {
+                                    type: location
+                                    filter: regionNumber(3)
+                                }
+                                effect: {
+                                    type: playCardFromDiscard
+                                    filter: choose(culture(gollum),minion)
+                                }
+                            }
+                        ]
                     }
                 ]
             }
