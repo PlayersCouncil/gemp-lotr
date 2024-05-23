@@ -1054,7 +1054,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         return result;
     }
 
-    private static Set<String> frodosWithNon10Resistance = Sets.newHashSet("Resolute Hobbit");
+    private static Set<String> frodosWithNon10Resistance = Sets.newHashSet("Resolute Hobbit", "Frenzied Fighter");
     private static Set<String> samsWithNon5Resistance = Sets.newHashSet("Loyal Friend", "Dropper of Eaves", "Humble Halfling", "Steadfast Friend");
 
     public void validateConsistency() throws InvalidCardDefinitionException {
