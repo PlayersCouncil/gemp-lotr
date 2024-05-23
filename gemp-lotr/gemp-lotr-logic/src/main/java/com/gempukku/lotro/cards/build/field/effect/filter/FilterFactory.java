@@ -90,6 +90,8 @@ public class FilterFactory {
                 }));
         simpleFilters.put("currentsite",
                 (actionContext) -> Filters.currentSite);
+        simpleFilters.put("nextsite",
+                (actionContext) -> Filters.nextSite);
         simpleFilters.put("currentsitenumber",
                 (actionContext -> Filters.siteNumber(actionContext.getGame().getGameState().getCurrentSiteNumber())));
         simpleFilters.put("nextsitenumber",

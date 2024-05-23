@@ -64,7 +64,7 @@ public class Filters {
     }
 
     public static boolean canSpot(LotroGame game, int count, Filterable... filters) {
-        return countSpottable(game, filters)>=count;
+        return countSpottable(game, filters) >= count;
     }
 
     public static Collection<PhysicalCard> filterActive(LotroGame game, Filterable... filters) {
@@ -94,8 +94,8 @@ public class Filters {
         GetCardsMatchingFilterVisitor matchingFilterVisitor = new GetCardsMatchingFilterVisitor(game, Filters.and(filters, Filters.spottable));
         game.getGameState().iterateActiveCards(matchingFilterVisitor);
         int result = matchingFilterVisitor.getCounter();
-        if (filters.length==1)
-            result+=game.getModifiersQuerying().getSpotBonus(game, filters[0]);
+        if (filters.length == 1)
+            result += game.getModifiersQuerying().getSpotBonus(game, filters[0]);
         return result;
     }
 
@@ -466,7 +466,7 @@ public class Filters {
         return new Filter() {
             @Override
             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return game.getModifiersQuerying().canTakeWounds(game, (woundSource != null)?Collections.singleton(woundSource):Collections.emptySet(), physicalCard, count) && game.getModifiersQuerying().getVitality(game, physicalCard) >= count;
+                return game.getModifiersQuerying().canTakeWounds(game, (woundSource != null) ? Collections.singleton(woundSource) : Collections.emptySet(), physicalCard, count) && game.getModifiersQuerying().getVitality(game, physicalCard) >= count;
             }
         };
     }
@@ -758,6 +758,13 @@ public class Filters {
         }
     };
 
+    public static final Filter nextSite = new Filter() {
+        @Override
+        public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
+            return game.getGameState().getSite(game.getGameState().getCurrentSiteNumber() + 1) == physicalCard;
+        }
+    };
+
     public static final Filter currentRegion = new Filter() {
         @Override
         public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
@@ -768,6 +775,7 @@ public class Filters {
     public static Filter siteNumber(final int siteNumber) {
         return siteNumberBetweenInclusive(siteNumber, siteNumber);
     }
+
     public static Filter siteHasSiteNumber = Filters.and(CardType.SITE,
             new Filter() {
                 @Override
@@ -782,14 +790,13 @@ public class Filters {
         return new Filter() {
             @Override
             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                if(physicalCard.getBlueprint().getCardType() == CardType.MINION)
-                {
+                if (physicalCard.getBlueprint().getCardType() == CardType.MINION) {
                     int sitenum = game.getModifiersQuerying().getMinionSiteNumber(game, physicalCard);
                     return sitenum >= minSiteNumber && sitenum <= maxSiteNumber;
                 }
 
-                return (physicalCard.getSiteNumber()!=null)
-                        && (physicalCard.getSiteNumber()>=minSiteNumber) && (physicalCard.getSiteNumber()<=maxSiteNumber);
+                return (physicalCard.getSiteNumber() != null)
+                        && (physicalCard.getSiteNumber() >= minSiteNumber) && (physicalCard.getSiteNumber() <= maxSiteNumber);
             }
         };
     }
@@ -803,14 +810,16 @@ public class Filters {
                 }
             });
 
-    public static Filter region(final int region) { return regionNumberBetweenInclusive(region, region); }
+    public static Filter region(final int region) {
+        return regionNumberBetweenInclusive(region, region);
+    }
 
     public static Filter regionNumberBetweenInclusive(final int minRegionNumber, final int maxRegionNumber) {
         return new Filter() {
             @Override
             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
 
-                if(physicalCard.getSiteNumber() == null)
+                if (physicalCard.getSiteNumber() == null)
                     return false;
 
                 int regionNumber = GameUtils.getRegion(physicalCard.getSiteNumber());
