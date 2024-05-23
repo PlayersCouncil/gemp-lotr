@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ValueResolver {
@@ -280,13 +281,13 @@ public class ValueResolver {
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> {
-                        final Filterable filterable = filterableSource.getFilterable(actionContext);
-                        int count = 0;
-                        for (String player : game.getGameState().getPlayerOrder().getAllPlayers())
-                            count += Filters.filter(game.getGameState().getDiscard(player), game, filterable).size();
+                            final Filterable filterable = filterableSource.getFilterable(actionContext);
+                            int count = 0;
+                            for (String player : game.getGameState().getPlayerOrder().getAllPlayers())
+                                count += Filters.filter(game.getGameState().getDiscard(player), game, filterable).size();
 
                             return count;
-                    }
+                        }
                 );
             } else if (type.equalsIgnoreCase("forEachTopCardOfDeckUntilMatching")) {
                 FieldUtils.validateAllowedFields(object, "filter", "deck", "over", "limit", "multiplier", "divider");
@@ -586,7 +587,14 @@ public class ValueResolver {
                     int result = 0;
                     final Filterable filterable = filterableSource.getFilterable(actionContext);
                     for (PhysicalCard physicalCard : Filters.filterActive(game, filterable)) {
-                        result += game.getGameState().getTokenCount(physicalCard, tokenForCulture);
+                        if (tokenForCulture != null) {
+                            result += game.getGameState().getTokenCount(physicalCard, tokenForCulture);
+                        } else {
+                            for (Map.Entry<Token, Integer> tokens : game.getGameState().getTokens(physicalCard).entrySet()) {
+                                if (tokens.getKey().getCulture() != null)
+                                    result += tokens.getValue();
+                            }
+                        }
                     }
 
                     return multiplier * Math.min(limit, result);
