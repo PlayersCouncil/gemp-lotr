@@ -179,6 +179,45 @@ public class CardResolver {
         throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
     }
 
+    public static EffectAppender resolveCardsInAdventureDeck(String type, FilterableSource additionalFilter, ValueSource countSource, String memory, String adventureDeckPlayer, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        final PlayerSource handSource = PlayerResolver.resolvePlayer(adventureDeckPlayer, environment);
+        Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
+            String handPlayer1 = handSource.getPlayer(actionContext);
+            return actionContext.getGame().getGameState().getAdventureDeck(handPlayer1);
+        };
+
+        if (type.startsWith("random(") && type.endsWith(")")) {
+            final int count = Integer.parseInt(type.substring(type.indexOf("(") + 1, type.lastIndexOf(")")));
+            return new DelayedAppender() {
+                @Override
+                public boolean isPlayableInFull(ActionContext actionContext) {
+                    final String handPlayer = handSource.getPlayer(actionContext);
+                    return actionContext.getGame().getGameState().getHand(handPlayer).size() >= count;
+                }
+
+                @Override
+                protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                    final String handPlayer = handSource.getPlayer(actionContext);
+                    return new UnrespondableEffect() {
+                        @Override
+                        protected void doPlayEffect(LotroGame game) {
+                            List<? extends PhysicalCard> hand = game.getGameState().getHand(handPlayer);
+                            List<PhysicalCard> randomCardsFromHand = GameUtils.getRandomCards(hand, 2);
+                            actionContext.setCardMemory(memory, randomCardsFromHand);
+                        }
+                    };
+                }
+            };
+        } else if (type.equals("self")) {
+            return resolveSelf(additionalFilter, additionalFilter, countSource, memory, cardSource);
+        } else if (type.startsWith("memory(") && type.endsWith(")")) {
+            return resolveMemoryCards(type, additionalFilter, additionalFilter, countSource, memory, cardSource);
+        } else if (type.startsWith("all(") && type.endsWith(")")) {
+            return resolveAllCards(type, additionalFilter, memory, environment, cardSource);
+        }
+        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
+    }
+
     public static EffectAppender resolveCardsInDiscard(String type, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         return resolveCardsInDiscard(type, null, countSource, memory, choicePlayer, choiceText, environment);
     }

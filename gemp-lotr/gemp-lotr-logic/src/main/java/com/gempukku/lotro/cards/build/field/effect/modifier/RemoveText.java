@@ -2,30 +2,26 @@ package com.gempukku.lotro.cards.build.field.effect.modifier;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
-import com.gempukku.lotro.logic.modifiers.CantReplaceSiteModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
+import com.gempukku.lotro.logic.modifiers.RemoveGameTextModifier;
 import org.json.simple.JSONObject;
 
-public class CantReplaceSite implements ModifierSourceProducer {
+public class RemoveText implements ModifierSourceProducer {
     @Override
     public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(object, "filter", "requires", "player");
+        FieldUtils.validateAllowedFields(object, "filter", "requires");
 
-        final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
-        final String player = FieldUtils.getString(object.get("player"), "player");
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
+        final String filter = FieldUtils.getString(object.get("filter"), "filter");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
-        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player, environment) : null;
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return new ModifierSource() {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
-                String bannedPlayer = playerSource != null ? playerSource.getPlayer(actionContext) : null;
-                return new CantReplaceSiteModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext), bannedPlayer,
+                return new RemoveGameTextModifier(actionContext.getSource(),
+                        new RequirementCondition(requirements, actionContext),
                         filterableSource.getFilterable(actionContext));
             }
         };

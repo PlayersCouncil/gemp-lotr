@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.SitesBlock;
@@ -19,13 +20,15 @@ import org.json.simple.JSONObject;
 public class PlaySite implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "block", "filter", "number", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "block", "filter", "number", "memorize", "player");
         final SitesBlock block = FieldUtils.getEnum(SitesBlock.class, effectObject.get("block"), "block");
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "any");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("number"), environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
+        final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
 
         return new DelayedAppender() {
             @Override
@@ -33,7 +36,7 @@ public class PlaySite implements EffectAppenderProducer {
                 final LotroGame game = actionContext.getGame();
                 final int siteNumber = valueSource.getEvaluator(actionContext).evaluateExpression(game, null);
                 final Filterable filterable = filterableSource.getFilterable(actionContext);
-                final String playerId = actionContext.getPerformingPlayer();
+                final String playerId = playerSource.getPlayer(actionContext);
 
                 if (siteNumber > 9 || siteNumber < 1)
                     return false;
@@ -62,7 +65,8 @@ public class PlaySite implements EffectAppenderProducer {
                 final LotroGame game = actionContext.getGame();
                 final int siteNumber = valueSource.getEvaluator(actionContext).evaluateExpression(game, null);
                 final Filterable filterable = filterableSource.getFilterable(actionContext);
-                return new PlaySiteEffect(action, actionContext.getPerformingPlayer(), block, siteNumber, filterable) {
+                final String playerId = playerSource.getPlayer(actionContext);
+                return new PlaySiteEffect(action, playerId, block, siteNumber, filterable) {
                     @Override
                     protected void sitePlayedCallback(PhysicalCard site) {
                         if (memorize != null) {

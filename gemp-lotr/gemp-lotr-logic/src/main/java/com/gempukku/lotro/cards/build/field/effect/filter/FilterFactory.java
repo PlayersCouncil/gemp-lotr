@@ -161,6 +161,13 @@ public class FilterFactory {
                         return Filters.none;
                     return Keyword.valueOf(data.getValue());
                 });
+        simpleFilters.put("storedtitle",
+                (actionContext) -> {
+                    PhysicalCard.WhileInZoneData data = actionContext.getSource().getWhileInZoneData();
+                    if (data == null)
+                        return Filters.none;
+                    return Filters.name(data.getValue());
+                });
         simpleFilters.put("unbound",
                 (actionContext) -> Filters.unboundCompanion);
         simpleFilters.put("uncontrolled",

@@ -35,7 +35,7 @@ public class Card15_193 extends AbstractShadowsSite {
             int region = GameUtils.getRegion(self.getSiteNumber());
             self.setWhileInZoneData(new StringWhileInZoneData(null));
             game.getModifiersEnvironment().addAlwaysOnModifier(
-                    new CantReplaceSiteModifier(self, null, Filters.and(CardType.SITE, Zone.ADVENTURE_PATH, Filters.region(region))));
+                    new CantReplaceSiteModifier(self, null, null, Filters.and(CardType.SITE, Zone.ADVENTURE_PATH, Filters.region(region))));
         }
         return null;
     }

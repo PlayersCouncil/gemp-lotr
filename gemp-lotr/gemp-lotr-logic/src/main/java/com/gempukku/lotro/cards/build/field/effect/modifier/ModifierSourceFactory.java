@@ -78,6 +78,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("nomorethanoneminionmaybeassignedtoeachskirmish", new NoMorethanOneMinionMayBeAssignedToEachSkirmish());
         modifierProducers.put("opponentmaynotdiscard", new OpponentMayNotDiscard());
         modifierProducers.put("removekeyword", new RemoveKeyword());
+        modifierProducers.put("removetext", new RemoveText());
         modifierProducers.put("ringbearercanttakethreatwounds", new AddModifierFlag(ModifierFlag.RING_BEARER_CANT_TAKE_THREAT_WOUNDS));
         modifierProducers.put("ringtextisinactive", new AddModifierFlag(ModifierFlag.RING_TEXT_INACTIVE));
         modifierProducers.put("sarumanfirstsentenceinactive", new AddModifierFlag(ModifierFlag.SARUMAN_FIRST_SENTENCE_INACTIVE));

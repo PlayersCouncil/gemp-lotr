@@ -94,6 +94,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("memorizediscard", new MemorizeDiscard());
         effectAppenderProducers.put("memorizenumber", new MemorizeNumber());
         effectAppenderProducers.put("memorizestacked", new MemorizeStacked());
+        effectAppenderProducers.put("memorizetitle", new MemorizeTitle());
         effectAppenderProducers.put("memorizetopofdeck", new MemorizeTopOfDeck());
         effectAppenderProducers.put("memorizevalue", new MemorizeValue());
         effectAppenderProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
@@ -162,6 +163,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("returntohand", new ReturnToHand());
         effectAppenderProducers.put("revealbottomcardsofdrawdeck", new RevealBottomCardsOfDrawDeck());
         effectAppenderProducers.put("revealcards", new RevealCards());
+        effectAppenderProducers.put("revealcardsfromadventuredeck", new RevealCardsFromAdventureDeck());
         effectAppenderProducers.put("revealcardsfromhand", new RevealCardsFromHand());
         effectAppenderProducers.put("revealhand", new RevealHand());
         effectAppenderProducers.put("revealrandomcardsfromhand", new RevealRandomCardsFromHand());

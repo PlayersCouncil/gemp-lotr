@@ -1,4 +1,4 @@
-
+{
 
 	15_72: {
 		cardInfo: {
@@ -27,6 +27,36 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeAssignedToSkirmishAgainst
+		            requires: {
+		                type: canSpot
+		                filter: self,unwounded
+		            }
+		            side: free people
+		            fpCharacter: companion
+		            minion: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: controlledSite
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: If Bill Ferny is unwounded, the Free Peoples player cannot assign him to skirmish a companion.<br><b>Shadow:</b> Exert Bill Ferny twice and spot a site you control to add (2).
 		lore: ...he would sell anything to anybody; or make mischief for amusement.'
@@ -65,6 +95,31 @@
 		vitality: 1
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: playCardFromDiscard
+                        filter: choose(culture(men),minion)
+                        memorize: playedMinion
+                    }
+                    {
+                        type: addKeyword
+                        filter: memory(playedMinion)
+                        keyword: fierce
+                        until: regroup
+                    }
+                ]
+		    }
 		]
 		gametext: <b>Skirmish:</b> If this minion is skirmishing, discard this minion to play a [men] minion from your discard pile. That minion is <b>fierce</b> until the regroup phase.
 		lore: They hold the northward road; and many have passed on into Anórien.'
@@ -104,6 +159,62 @@
 		site: 4
 		keywords: Fierce
 		effects: [
+		    {
+		        type: activated
+		        text: Make a {men} Man strength +2
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: controlledSite
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(men),man)
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        text: Make a {men} Man strength +3
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: controlledSite
+		            count: 2
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(men),man)
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: activated
+		        text: Make a {men} Man strength +4
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: controlledSite
+		            count: 3
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 2
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(men),man)
+		            amount: 4
+		        }
+		    }
 		]
 		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Spot a site you control and remove (2) to make a [men] Man strength +2.<br><b>Skirmish:</b> Spot 2 sites you control and remove (2) to make a [men] Man strength +3.<br><b>Skirmish:</b> Spot 3 sites you control and remove (2) to make a [men] Man strength +4.
 		lore: ""
@@ -142,6 +253,31 @@
 		vitality: 1
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: playCardFromDiscard
+                        filter: choose(culture(men),minion)
+                        memorize: playedMinion
+                    }
+                    {
+                        type: addKeyword
+                        filter: memory(playedMinion)
+                        keyword: fierce
+                        until: regroup
+                    }
+                ]
+		    }
 		]
 		gametext: <b>Skirmish:</b> If this minion is skirmishing, discard this minion to play a [men] minion from your discard pile. That minion is <b>fierce</b> until the regroup phase.
 		lore: Easterlings came to Mordor to aid Sauron in his final assault.
@@ -177,6 +313,46 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(men),man
+		            count: 2
+		        }
+		        effect: [
+                    {
+                        type: revealCardsFromAdventureDeck
+                        player: free people
+                        memorize: revealedCard
+                        filter: random(1)
+                    }
+                    {
+                        type: memorizeTitle
+                        from: revealedCard
+                        memory: cardTitle
+                    }
+                    {
+                        type: storeWhileInZone
+                        memory: cardTitle
+                    }
+                ]
+		    }
+		    {
+		        type: displayableInformation
+		        text: Random site title is: {stored}
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: removeText
+		            filter: site,zone(adventure path),storedTitle
+		        }
+		    }
 		]
 		gametext: When you play this, spot 2 [men] Men to randomly reveal a site from the Free Peoples player's adventure deck. Note its card title. Each site on the adventure path with the same card title as the selected site loses its game text.
 		lore: Destruction sometimes brings new opportunities.
@@ -215,6 +391,31 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmish
+		        }
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: playCardFromDiscard
+                        filter: choose(culture(men),minion)
+                        memorize: playedMinion
+                    }
+                    {
+                        type: addKeyword
+                        filter: memory(playedMinion)
+                        keyword: fierce
+                        until: regroup
+                    }
+                ]
+		    }
 		]
 		gametext: <b>Skirmish:</b> If this minion is skirmishing, discard this minion to play a [men] minion from your discard pile. That minion is <b>fierce</b> until the regroup phase.
 		lore: In battle, Easterlings surprise their foes with a great number of different techniques.
@@ -253,6 +454,40 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        requires: {
+		            type: or
+		            requires: [
+		                {
+		                    type: and
+		                    requires: [
+		                        {
+		                            type: canSpot
+		                            filter: another,culture(men),man
+		                        }
+		                        {
+		                            type: canSpot
+		                            filter: character
+		                            count: 8
+		                        }
+		                    ]
+		                }
+		                {
+		                    type: canSpotFPCultures
+		                    amount: 3
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
 		]
 		gametext: At the start of the maneuver phase, if you can spot another [men] Man and 8 characters (or if you can spot 3 Free Peoples cultures), you may take control of a site.
 		lore: Years of anger have a tendency to bring focus to one's rage.
@@ -291,6 +526,44 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: isGreaterThan
+		                firstNumber: {
+		                    type: forEachYouCanSpot
+		                    filter: companion
+		                }
+		                secondNumber: {
+		                    type: forEachYouCanSpot
+		                    filter: minion
+		                }
+		            }
+		            filter: culture(men),hunter
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: isGreaterThan
+		                firstNumber: {
+		                    type: forEachYouCanSpot
+		                    filter: companion
+		                }
+		                secondNumber: {
+		                    type: forEachYouCanSpot
+		                    filter: minion
+		                }
+		            }
+		            filter: culture(men),hunter
+		            keyword: archer
+		        }
+		    }
 		]
 		gametext: While you can spot more companions than minions, each [men] hunter is strength +2 and is an <b>archer</b>.
 		lore: Dunlendings don't mind being outnumbered in battle.
@@ -326,8 +599,16 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [men] Man
+		target: culture(men),man
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self,inSkirmishAgainst(hunter,companion)
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: Bearer must be a [men] Man.<br>While bearer is skirmishing a hunter companion, bearer is strength +2.
 		lore: To his surprise, Frodo's cloak served as an effective camouflage among the rocks.
@@ -362,8 +643,37 @@
 		twilight: 1
 		type: Condition
 		resistance: -1
-		#target: a companion (except the Ring-bearer)
+		target: companion,not(ringBearer)
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(men),man
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantTakeWounds
+		            requires: {
+		                type: phase
+		                phase: archery
+		            }
+		            filter: bearer
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfPhase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
 		]
 		gametext: To play, spot a [men] Man. Bearer must be a companion (except the Ring-bearer).<br>Bearer cannot take wounds during the archery phase. At the start of the regroup phase, discard this condition.
 		lore: Mordor will pay for this!
@@ -402,6 +712,28 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+                    requires: {
+                        type: controlsSite
+                    }
+                    filter: self
+                    amount: 3
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+                    requires: {
+                        type: controlsSite
+                    }
+                    filter: self
+                    keyword: fierce
+		        }
+		    }
 		]
 		gametext: While you control a site, this minion is strength +3 and <b>fierce</b>.
 		lore: Acquiring more territories only increases the rage of the Dunlendings.
@@ -441,6 +773,18 @@
 		site: 4
 		keywords: Hunter 1
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: follower
+		                multiplier: 3
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>This minion is strength +3 for each follower you can spot.
 		lore: Hunters are valuable members of Dunlending tribes.
@@ -475,13 +819,17 @@
 		twilight: 3
 		type: Event
 		keywords: Archery
-
 		effects: {
 			type: event
 			cost: {
-			},
+			    type: wound
+			    filter: choose(culture(men),archer)
+			    count: 3
+			}
 			effect: [
 				{
+				    type: exhaust
+				    filter: choose(companion)
 				}
 			]
 		}
@@ -518,13 +866,35 @@
 		twilight: 1
 		type: Event
 		keywords: Maneuver
-
 		effects: {
 			type: event
-			cost: {
-			},
+			cost: [
+			    {
+			        type: exert
+			        filter: choose(your,culture(men),man)
+			    }
+			    {
+			        type: spot
+			        filter: choose(unbound,companion,hasAttachedCount(3,any))
+			        memorize: chosenCompanion
+			    }
+			]
 			effect: [
 				{
+				    type: preventable
+				    player: free people
+				    text: Would you like to add a burden to discard Free Peoples cards from {chosenCompanion} instead of returning them to hand?
+				    cost: {
+                        type: addBurdens
+				    }
+				    effect: {
+				        type: returnToHand
+				        filter: all(side(free people),attachedTo(memory(chosenCompanion)))
+				    }
+				    instead: {
+				        type: discard
+				        filter: all(side(free people),attachedTo(memory(chosenCompanion)))
+				    }
 				}
 			]
 		}
@@ -566,6 +936,20 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(companion,not(ringBearer))
+		            times: 2
+		        }
+		    }
 		]
 		gametext: <b>Maneuver:</b> Exert Mûmak Commander twice to exert a companion twice (except the Ring-bearer).
 		lore: ...high upon his neck still desperately clung a tiny figure – the body of a mighty warrior....
@@ -604,6 +988,29 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: companion,minStrength(12)
+		            }
+		            filter: self
+		            amount: 5
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self,hasAttached(hand weapon)
+		        }
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
 		]
 		gametext: While you can spot a companion of strength 12 or more, this minion is strength +5.<br>Each time this minion wins a skirmish, if he bears a hand weapon, you may take control of a site.
 		lore: The only thing scarier than a Wild Man is a Wild Man with an axe.
@@ -638,8 +1045,24 @@
 		twilight: 0
 		type: Condition
 		resistance: -1
-		#target: a companion (except the Ring-bearer)
+		target: companion,not(ringBearer),not(hasAttached(title(Pursuing Horde)))
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(men),man
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        effect: {
+		            type: addTwilight
+		        }
+		    }
 		]
 		gametext: To play, spot a [men] Man. Bearer must be a companion (except the Ring-bearer). Limit 1 per companion.<br>Each time the fellowship moves, add (1).
 		lore: Once the Dunlendings track their enemy they will not lose their trail.
@@ -675,6 +1098,34 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantReplaceSite
+		            requires: {
+		                type: canSpot
+		                filter: culture(men),man
+		            }
+		            player: free people
+		            filter: siteInCurrentRegion
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: archery
+		        requires: {
+		            type: canSpot
+		            filter: culture(men),man
+		        }
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(unbound,companion)
+		        }
+		    }
 		]
 		gametext: While you can spot a [men] Man, the Free Peoples player cannot replace a site in the current region.<br><b>Archery:</b> Spot a [men] Man and remove (3) to exert an unbound companion.
 		lore: The Men of Harad kept a large supply of arrows at hand.
@@ -713,6 +1164,41 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfPhase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: preventable
+		            player: shadow
+		            text: Would you like to spot 3 Men to prevent liberating site?
+		            cost: {
+		                type: spot
+		                filter: man
+		                count: 3
+		            }
+		            effect: {
+		                type: liberateSite
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: canSpot
+		            filter: another,culture(men),man
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
 		]
 		gametext: At the start of the regroup phase, the Free People's player may liberate a site. You may spot 3 Men to prevent this.<br><b>Maneuver:</b> Spot another [men] Man and exert this minion to take control of a site.
 		lore: Dunlendings take delight in destruction.
@@ -751,6 +1237,36 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: hunter
+		            }
+		            filter: self
+		            keyword: hunter
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(culture(men),man)
+		            count: 2
+		        }
+		        effect: {
+                    type: discard
+                    filter: choose(follower)
+		        }
+		    }
 		]
 		gametext: While you can spot a hunter, this minion gains <b>hunter 1</b>.<br>Each time this minion wins a skirmish, you may exert 2 [men] Men to discard a follower.
 		lore: No villager is safe when the Wild Men attack.
@@ -789,6 +1305,36 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: hasCardInAdventureDeck
+		            player: free people
+		            filter: any
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(culture(men),man)
+		            count: 2
+		        }
+		        effect: [
+                    {
+                        type: revealCardsFromAdventureDeck
+                        player: free people
+                        filter: random(1)
+                        memorize: revealedSite
+                    }
+                    {
+                        type: playSite
+                        player: free people
+                        filter: memory(revealedSite)
+                        number: {
+                            type: currentSiteNumber
+                        }
+                    }
+                ]
+            }
 		]
 		gametext: <b>Maneuver:</b> If the Free People's player has at least 1 site in his or her adventure deck, exert 2 [men] Men to randomly choose a site from that deck. Replace the fellowship's current site with that site.
 		lore: The Southrons are skilled at fighting in many different kinds of terrain.
@@ -827,6 +1373,17 @@
 		vitality: 1
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: controlsSite
+		            }
+		            filter: self
+		            keyword: archer
+		        }
+		    }
 		]
 		gametext: While you control a site, this minion is an <b>archer</b>.
 		lore: The Wild Men will defend their territories at all costs.
@@ -865,6 +1422,49 @@
 		vitality: 3
 		site: 4
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(men),man
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: companion,minStrength(10)
+		            }
+		            filter: self
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: choice
+		            texts: [
+		                Remove 2 burdens
+		                Remove 2 threats
+		            ]
+		            effects: [
+		                {
+		                    type: removeBurdens
+		                    amount: 2
+		                }
+		                {
+		                    type: removeThreats
+		                    amount: 2
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: takeControlOfSite
+		        }
+		    }
 		]
 		gametext: To play, spot a [men] Man.<br>While you can spot a companion of strength 10 or more, this minion is strength +3.<br><b>Maneuver:</b> Remove 2 burdens or 2 threats to control a site.
 		lore: The Hillmen are always searching for lands to conquer.

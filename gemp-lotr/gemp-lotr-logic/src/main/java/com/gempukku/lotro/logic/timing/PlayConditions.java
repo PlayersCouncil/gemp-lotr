@@ -104,6 +104,10 @@ public class PlayConditions {
         return hasCardInDiscard(game, playerId, count, cardFilters);
     }
 
+    public static boolean hasCardInAdventureDeck(LotroGame game, String playerId, int count, Filterable... cardFilters) {
+        return Filters.filter(game.getGameState().getAdventureDeck(playerId), game, cardFilters).size() >= count;
+    }
+
     public static boolean hasCardInDiscard(LotroGame game, String playerId, int count, Filterable... cardFilters) {
         return Filters.filter(game.getGameState().getDiscard(playerId), game, cardFilters).size() >= count;
     }

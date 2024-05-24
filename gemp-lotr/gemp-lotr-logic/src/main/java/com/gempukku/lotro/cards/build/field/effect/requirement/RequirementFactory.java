@@ -36,6 +36,7 @@ public class RequirementFactory {
         requirementProducers.put("controlssite", new ControlsSite());
         requirementProducers.put("didwinskirmish", new DidWinSkirmish());
         requirementProducers.put("fierceskirmish", new FierceSkirmish());
+        requirementProducers.put("hascardinadventuredeck", new HasCardInAdventureDeck());
         requirementProducers.put("hascardindeadpile", new HasCardInDeadPile());
         requirementProducers.put("hascardindiscard", new HasCardInDiscard());
         requirementProducers.put("hascardinremoved", new HasCardInRemoved());
