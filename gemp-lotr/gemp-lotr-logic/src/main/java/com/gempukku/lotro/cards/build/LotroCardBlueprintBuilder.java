@@ -54,8 +54,9 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("alts", new NullProcessor());
     }
 
-    public LotroCardBlueprint buildFromJson(JSONObject json) throws InvalidCardDefinitionException {
+    public LotroCardBlueprint buildFromJson(String cardId, JSONObject json) throws InvalidCardDefinitionException {
         BuiltLotroCardBlueprint result = new BuiltLotroCardBlueprint();
+        result.setId(cardId);
 
         Set<Map.Entry<String, Object>> values = json.entrySet();
         for (Map.Entry<String, Object> value : values) {

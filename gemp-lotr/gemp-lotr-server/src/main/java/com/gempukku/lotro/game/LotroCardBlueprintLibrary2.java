@@ -2,7 +2,6 @@ package com.gempukku.lotro.game;
 
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
-import com.gempukku.lotro.cards.set18.wraith.Card18_133;
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.game.packs.DefaultSetDefinition;
@@ -13,13 +12,11 @@ import com.google.common.reflect.ClassPath;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.checkerframework.checker.regex.qual.Regex;
 import org.hjson.JsonValue;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.annotation.RegEx;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -222,8 +219,7 @@ public class LotroCardBlueprintLibrary2 {
                 }
                 final JSONObject cardDefinition = cardEntry.getValue();
                 try {
-                    final var lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(cardDefinition);
-                    lotroCardBlueprint.setId(blueprintId);
+                    final var lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(blueprintId, cardDefinition);
                     _blueprints.put(blueprintId, lotroCardBlueprint);
                 } catch (InvalidCardDefinitionException exp) {
                     logger.error("Unable to load card " + blueprintId +

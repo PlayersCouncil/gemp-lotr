@@ -1093,7 +1093,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (Arrays.asList(CardType.MINION, CardType.COMPANION, CardType.ALLY).contains(cardType)) {
             if (vitality == 0)
                 throw new InvalidCardDefinitionException("Character has 0 vitality");
-            if (strength == 0)
+            if (strength == 0 && !id.equals("15_43"))
                 throw new InvalidCardDefinitionException("Character has 0 strength");
         }
         if (cardType == CardType.SITE && siteBlock == null)

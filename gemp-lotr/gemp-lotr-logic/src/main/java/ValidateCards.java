@@ -42,7 +42,7 @@ public class ValidateCards {
                 String blueprint = cardEntry.getKey();
                 final JSONObject cardDefinition = cardEntry.getValue();
                 try {
-                    final LotroCardBlueprint lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(cardDefinition);
+                    final LotroCardBlueprint lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(blueprint, cardDefinition);
                 } catch (InvalidCardDefinitionException exp) {
                     System.out.println("Unable to load card " + blueprint);
                     exp.printStackTrace();

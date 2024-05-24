@@ -216,8 +216,7 @@ public class LotroCardBlueprintLibrary {
                 }
                 final JSONObject cardDefinition = cardEntry.getValue();
                 try {
-                    final var lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(cardDefinition);
-                    lotroCardBlueprint.setId(blueprintId);
+                    final var lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(blueprintId, cardDefinition);
                     _blueprints.put(blueprintId, lotroCardBlueprint);
                 } catch (InvalidCardDefinitionException exp) {
                     logger.error("Unable to load card " + blueprintId +

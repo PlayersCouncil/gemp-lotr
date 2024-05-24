@@ -620,6 +620,15 @@ public class FilterFactory {
                         return Filters.lessStrengthThan(amount + 1);
                     };
                 });
+        parameterFilters.put("minstrength",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.moreStrengthThan(amount - 1);
+                    };
+                });
         parameterFilters.put("strengthlessthan",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
