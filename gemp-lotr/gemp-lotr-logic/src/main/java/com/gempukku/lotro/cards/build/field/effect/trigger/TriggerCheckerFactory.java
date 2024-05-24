@@ -17,6 +17,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("abouttobekilled", new AboutToBeKilled());
         triggerCheckers.put("abouttobeoverwhelmed", new AboutToBeOverwhelmed());
         triggerCheckers.put("abouttodiscard", new AboutToDiscard());
+        triggerCheckers.put("abouttodrawcard", new AboutToDrawCard());
         triggerCheckers.put("abouttoexert", new AboutToExert());
         triggerCheckers.put("abouttoheal", new AboutToHeal());
         triggerCheckers.put("abouttomoveto", new AboutToMoveTo());
