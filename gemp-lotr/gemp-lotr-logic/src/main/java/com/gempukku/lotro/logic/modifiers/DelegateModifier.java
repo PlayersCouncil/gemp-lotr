@@ -165,8 +165,8 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
-    public boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard physicalCard, Set<PhysicalCard> winners) {
-        return delegate.canTakeWoundsFromLosingSkirmish(game, physicalCard, winners);
+    public boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard physicalCard) {
+        return delegate.canTakeWoundsFromLosingSkirmish(game, physicalCard);
     }
 
     @Override

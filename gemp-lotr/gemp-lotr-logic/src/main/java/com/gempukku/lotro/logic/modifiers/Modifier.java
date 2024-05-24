@@ -61,7 +61,7 @@ public interface Modifier {
 
     boolean canTakeWounds(LotroGame game, Collection<PhysicalCard> woundSources, PhysicalCard physicalCard, int woundsAlreadyTakenInPhase, int woundsToTake);
 
-    boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard physicalCard, Set<PhysicalCard> winners);
+    boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard physicalCard);
 
     boolean canTakeArcheryWound(LotroGame game, PhysicalCard physicalCard);
 

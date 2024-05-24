@@ -31,6 +31,19 @@
 			Hunter 1
 		]
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(hunter,companion)
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Skirmish:</b> Exert Aragorn to make a hunter companion strength +1.
 		lore: Ride out with me. Ride out and meet them.
@@ -74,6 +87,27 @@
 			Hunter 2
 		]
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: addThreats
+		        }
+		        effect: [
+		            {
+		                type: memorizeNumber
+		                memory: aragornStrength
+		                amount: {
+		                    type: forEachStrength
+		                    filter: self
+		                }
+		            }
+                    {
+                        type: exert
+                        filter: choose(not(hunter),minion,strengthLessThan(memory(aragornStrength)))
+                    }
+                ]
+		    }
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 2</b>. <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper><br><b>Maneuver:</b> Add a threat to exert a non- hunter minion with strength less than Aragorn.
 		lore: I will follow the Orcs....'
@@ -109,8 +143,27 @@
 		twilight: 1
 		type: Possession
 		itemclass: Ranged weapon
-		#target: title(Aragorn)
+		target: title(Aragorn)
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: archer
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: archery
+		        cost: {
+		            type: addThreats
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion,lowestStrength(minion))
+		        }
+		    }
 		]
 		gametext: Bearer must be Aragorn.<br>He is an <b>archer</b>.<br><b>Archery:</b> Add a threat to wound a minion with the lowest strength.
 		lore: The bow can reach what the sword cannot.
@@ -154,6 +207,21 @@
 			Hunter 1
 		]
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: fellowship
+		        }
+		        cost: {
+		            type: addTwilight
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(ranger)
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>At the start of each fellowship phase, you may add (1) to heal a ranger.
 		lore: Curse the Southrons!'
@@ -194,6 +262,29 @@
 			Support Area
 		]
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        amount: {
+		            type: forEachYouCanSpot
+		            filter: culture(gondor),ranger
+		            multiplier: -1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: choose(culture(gondor),man)
+		            count: 2
+		        }
+		        effect: {
+		            type: transfer
+		            fromSupport: true
+		            filter: self
+		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+		        }
+		    }
 		]
 		gametext: <b>Fortification</b>. This condition is twilight cost -1 for each [gondor] ranger you spot.<br><b>Skirmish:</b> Exert 2 [gondor] Men to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
 		lore: In times of war, the beauty of the walls matters little.
@@ -236,6 +327,20 @@
 			Hunter 1
 		]
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(gondor),ranger)
+		            amount: 2
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>Each time this companion wins a skirmish, you may make a [gondor] ranger strength +2 until the regroup phase.
 		lore: We come to ambush the Men of Harad.'
@@ -248,7 +353,7 @@
 		}
 	}
 
-	15_60: {
+	15_206: {
 		cardInfo: {
 			imagePath: decipher/LOTR15060.jpg
 			javaClass: true
@@ -264,6 +369,7 @@
 			style: Standard
 		}
 		title: Forth the Three Hunters!
+		subtitle: Gondor Version
 		unique: false
 		side: Free Peoples
 		culture: Gondor
@@ -271,6 +377,85 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: archery
+		        cost: [
+                    {
+                        type: exert
+                        filter: choose(name(Legolas))
+                    }
+                    {
+                        type: exert
+                        filter: choose(name(Aragorn))
+                    }
+                ]
+                effect: {
+                    type: wound
+                    filter: choose(minion)
+                }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: choose(name(Aragorn))
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: name(Gimli)
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(minion)
+		            amount: {
+		                type: condition
+		                condition: [
+                            {
+                                type: canSpot
+                                filter: name(Aragorn),hunter
+                            }
+                            {
+                                type: canSpot
+                                filter: name(Gimli),hunter
+                            }
+                        ]
+                        true: -3
+                        false: -1
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(name(Gimli))
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: name(Legolas)
+		        }
+		        effect: {
+		            type: drawCards
+		            count: {
+		                type: condition
+		                condition: [
+                            {
+                                type: canSpot
+                                filter: name(Gimli),hunter
+                            }
+                            {
+                                type: canSpot
+                                filter: name(Legolas),hunter
+                            }
+                        ]
+                        true: 2
+                        false: 1
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Archery:</b> Exert Legolas and exert Aragorn to wound a minion.<br><b>Skirmish:</b> Exert Aragorn and spot Gimli to make a minion strength -1 (or -3 if Aragorn and Gimli are hunters).<br><b>Regroup:</b> Exert Gimli and spot Legolas to draw a card (or 2 cards if Gimli and Legolas are hunters).
 		lore: ""
@@ -313,6 +498,41 @@
 			Hunter 1
 		]
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: phase
+		            phase: play starting fellowship
+		        }
+		        amount: -1
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: choice
+		            texts: [
+		                Remove a {gondor} token
+		                Exert a {gondor} Man
+		            ]
+		            effects: [
+		                {
+		                    type: removeTokens
+		                    culture: gondor
+		                    filter: choose(any)
+		                }
+		                {
+		                    type: exert
+		                    filter: choose(culture(gondor),man)
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: modifySiteNumber
+		            filter: choose(minion)
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>.<br>When this companion is in your starting fellowship, he is twilight cost -1.<br><b>Skirmish:</b> Remove a [gondor] token or exert a [gondor] Man to make the site number of a minion +2.
 		lore: Rangers use all five senses to hunt their prey.
@@ -348,8 +568,33 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [gondor] Man
+		target: culture(gondor),man
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: roaming,minion
+		            }
+		            filter: bearer
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: bearer
+		            times: 2
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(roaming,minion)
+		        }
+		    }
 		]
 		gametext: Bearer must be a [gondor] Man.<br>While you can spot a roaming minion, bearer is strength +1.<br><b>Maneuver:</b> Exert bearer twice to discard a roaming minion.
 		lore: Most Rangers of Ithilien carried spears, bows, and swords while marching.
@@ -393,6 +638,22 @@
 			Hunter 1
 		]
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmishAgainst(roaming,minion)
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(roaming,minion,inSkirmishAgainst(self))
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Skirmish:</b> Exert Mablung to wound a roaming minion he is skirmishing.
 		lore: We come to teach them another lesson.'
@@ -436,6 +697,30 @@
 			Hunter 1
 		]
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: canSpot
+		            filter: culture(gondor),ranger
+		            count: 2
+		        }
+		        amount: -2
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        effect: {
+		            type: modifySiteNumber
+		            filter: all(minion)
+		            amount: {
+		                type: forEachThreat
+		            }
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>.<br>While you can spot 2 [gondor] rangers, Madril is twilight cost -2.<br>At the start of the maneuver phase, each minion is site number +1 for each threat you can spot until the start of the regroup phase.
 		lore: For that is the ruin of Osgiliath....'
@@ -471,6 +756,33 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: name(Aragorn)
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(hunter,or(culture(dwarven),culture(elven)),companion)
+		            amount: 1
+		            until: regroup
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(gondor),man)
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: Each time Aragorn wins a skirmish, you may make a hunter [dwarven] companion or hunter [elven] companion strength +1 until the regroup phase.<br><b>Skirmish:</b> Discard this condition to make a [gondor] Man strength +2.
 		lore: ...we no longer need any trail to tell us which way....'
@@ -505,13 +817,27 @@
 		twilight: 0
 		type: Event
 		keywords: Maneuver
-
 		effects: {
 			type: event
 			cost: {
-			},
+			    type: exert
+			    filter: choose(culture(gondor),man)
+			}
 			effect: [
 				{
+				    type: wound
+				    filter: choose(minion)
+				    memorize: chosenMinion
+				    times: {
+				        type: condition
+				        condition: {
+				            type: memoryMatches
+				            memory: chosenMinion
+				            filter: hunter
+				        }
+				        true: 2
+				        false: 1
+				    }
 				}
 			]
 		}
@@ -554,6 +880,42 @@
 			Support Area
 		]
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        amount: {
+		            type: forEachYouCanSpot
+		            filter: culture(gondor),ranger
+		            multiplier: -1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: choice
+		            texts: [
+		                Exert a {gondor} Man
+		                Spot 2 rangers
+		            ]
+		            effects: [
+		                {
+		                    type: exert
+		                    filter: choose(culture(gondor),man)
+		                }
+		                {
+		                    type: spot
+		                    filter: ranger
+		                    count: 2
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: transfer
+		            fromSupport: true
+		            filter: self
+		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+		        }
+		    }
 		]
 		gametext: <b>Fortification</b>. The twilight cost of this condition is -1 for each [gondor] ranger you spot.<br><b>Skirmish:</b> Exert a [gondor] Man or spot 2 rangers to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
 		lore: The doors of Minas Tirith were meant to keep out more than Orcs.
@@ -590,8 +952,54 @@
 		vitality: 1
 		resistance: 1
 		itemclass: Cloak
-		#target: a [gondor] Man
+		target: culture(gondor),man
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            requires: {
+		                type: or
+		                requires: [
+		                    {
+		                        type: canSpot
+		                        filter: bearer,ranger
+		                    }
+		                    {
+		                        type: location
+		                        filter: forest
+		                    }
+		                ]
+		            }
+		            filter: minion,inSkirmishAgainst(bearer)
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: choice
+		            texts: [
+		                Add a threat
+		                Exert bearer
+		            ]
+		            effects: [
+		                {
+		                    type: addThreats
+		                }
+		                {
+		                    type: exert
+		                    filter: bearer
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: modifySiteNumber
+		            filter: choose(minion,inSkirmishAgainst(culture(gondor),man))
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: Bearer must be a [gondor] Man.<br>While bearer is a ranger or at a forest site, each minion skirmishing bearer is site number +2.<br><b>Skirmish:</b> Add a threat or exert bearer to make a minion skirmishing a [gondor] Man site number +2.
 		lore: ""
@@ -634,6 +1042,19 @@
 			Hunter 1
 		]
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfSkirmishInvolving
+		            filter: self
+		            against: roaming,minion
+		        }
+		        effect: {
+		            type: reinforceTokens
+		            culture: gondor
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>At the start of each skirmish involving this companion and a roaming minion, you may reinforce a [gondor] token.
 		lore: We have not found what we sought....'
@@ -672,6 +1093,41 @@
 			Support Area
 		]
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantTakeWoundsFromLosingSkirmish
+		            filter: character,inSkirmishAgainst(bearer)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+                cost: {
+                    type: choice
+                    texts: [
+                        Exert a {gondor} Man
+                        Spot 3 rangers
+                    ]
+                    effects: [
+                        {
+                            type: exert
+                            filter: choose(culture(gondor),man)
+                        }
+                        {
+                            type: spot
+                            filter: ranger
+                            count: 3
+                        }
+                    ]
+                }
+                effect: {
+                    type: transfer
+                    fromSupport: true
+                    filter: self
+                    where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+                }
+		    }
 		]
 		gametext: <b>Fortification</b>. Characters skirmishing bearer cannot take wounds from losing a skirmish involving bearer.<br><b>Skirmish:</b> Exert a [gondor] Man or spot 3 rangers to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
 		lore: ""
@@ -714,6 +1170,17 @@
 			Hunter 1
 		]
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: roaming,minion
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>This companion is strength +1 for each roaming minion you can spot.
 		lore: Their faces were hooded and masked with green, except for their eyes....

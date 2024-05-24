@@ -72,7 +72,7 @@ public interface ModifiersQuerying {
     // Wounds/exertions
     public boolean canTakeWounds(LotroGame game, Collection<PhysicalCard> woundSources, PhysicalCard card, int woundsToTake);
 
-    public boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard card, Set<PhysicalCard> winners);
+    public boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard card);
 
     public boolean canTakeArcheryWound(LotroGame game, PhysicalCard card);
 
