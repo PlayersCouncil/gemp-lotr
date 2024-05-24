@@ -10,6 +10,7 @@ import com.gempukku.lotro.logic.timing.TriggerConditions;
 import com.gempukku.lotro.logic.timing.results.CharacterWonSkirmishResult;
 import org.json.simple.JSONObject;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class WinsSkirmish implements TriggerCheckerProducer {
@@ -42,7 +43,7 @@ public class WinsSkirmish implements TriggerCheckerProducer {
                 }
                 if (result && memorizeLoser != null) {
                     CharacterWonSkirmishResult wonResult = (CharacterWonSkirmishResult) actionContext.getEffectResult();
-                    Set<PhysicalCard> losers = wonResult.getInvolving();
+                    Set<PhysicalCard> losers = new HashSet<>(wonResult.getInvolving());
                     PhysicalCard winner = wonResult.getWinner();
                     if (winner != null) {
                         losers.remove(winner);
