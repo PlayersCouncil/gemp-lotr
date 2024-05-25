@@ -1,0 +1,717 @@
+{
+
+	17_27: {
+		cardInfo: {
+			imagePath: decipher/LOTR17027.jpg
+			javaClass: true
+			//parentId: 17_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17R27
+			rarity: R
+			setNum: "17"
+			cardNum: 27
+			style: Standard
+		}
+		title: Andúril
+		subtitle: Sword That Was Broken
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Artifact
+		strength: 2
+		vitality: 1
+		itemclass: Hand weapon
+		target: title(Aragorn)
+		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Liberate a site
+		                Discard a condition borne by a companion
+		            ]
+		            effects: [
+		                {
+		                    type: liberateSite
+		                }
+		                {
+		                    type: discard
+		                    filter: choose(condition,attachedTo(companion))
+		                }
+		            ]
+		        }
+		    }
+		]
+		gametext: Bearer must be Aragorn. He is <b>damage +1</b>.<br>Each time Aragorn wins a skirmish, you may exert him to liberate a site or discard a condition borne by a companion.
+		lore: It has been Remade.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_28: {
+		cardInfo: {
+			imagePath: decipher/LOTR17028.jpg
+			javaClass: true
+			//parentId: 17_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17R28
+			rarity: R
+			setNum: "17"
+			cardNum: 28
+			style: Standard
+		}
+		title: Faramir
+		subtitle: Bearer of Quality
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 6
+		keywords: CAN_START_WITH_RING
+		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfSkirmishInvolving
+		            filter: self,ringBearer
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Add 2 burdens
+		                Add 2 threats
+		            ]
+		            effects: [
+		                {
+		                    type: addBurdens
+		                    amount: 2
+		                }
+		                {
+		                    type: addThreats
+		                    amount: 2
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: self,ringBearer
+		        }
+		        cost: {
+		            type: wound
+		            filter: self
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(minion,inSkirmishAgainst(culture(gondor),man))
+		            keyword: roaming
+		            until: endOfTurn
+		        }
+		    }
+		]
+		gametext: While Faramir is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or 2 threats.<br><b>Skirmish:</b> While Faramir is the Ring- bearer, you may wound Faramir to make a minion skirmishing a [gondor] Man roaming until the end of turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_29: {
+		cardInfo: {
+			imagePath: decipher/LOTR17029.jpg
+			javaClass: true
+			//parentId: 17_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17R29
+			rarity: R
+			setNum: "17"
+			cardNum: 29
+			style: Standard
+		}
+		title: Faramir's Bow
+		subtitle: Ithilien Longbow
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Ranged weapon
+		target: culture(gondor),ranger
+		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer,name(Faramir)
+		            keyword: archer
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifySiteNumber
+		            filter: minion,inSkirmishAgainst(culture(gondor),ranger)
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: bearer
+		            times: 2
+		        }
+		        effect: {
+		            type: exhaust
+		            filter: choose(minion,inSkirmishAgainst(name(Faramir)))
+		        }
+		    }
+		]
+		gametext: Bearer must be a [gondor] ranger.<br>If bearer is Faramir, he is an <b>archer</b>.<br>The site number of each minion skirmishing a [gondor] ranger is +1.<br><b>Skirmish:</b> Exert bearer twice to exhaust a minion Faramir is skirmishing.
+		lore: ...great bows. Almost their own height....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_30: {
+		cardInfo: {
+			imagePath: decipher/LOTR17030.jpg
+			javaClass: true
+			//parentId: 17_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17S30
+			rarity: S
+			setNum: "17"
+			cardNum: 30
+			style: Standard
+		}
+		title: Madril
+		subtitle: Loyal Lieutenant
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: [
+			Ranger
+			Hunter 1
+		]
+		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeDiscarded
+		            requires: {
+		                type: canSpot
+		                filter: roaming,minion
+		            }
+		            filter: your,culture(gondor),condition
+		            by: side(shadow)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: choose(ranger)
+		            count: 2
+		        }
+		        effect: {
+		            type: modifySiteNumber
+		            filter: choose(minion)
+		            amount: 2
+		            until: regroup
+		        }
+		    }
+		]
+		gametext: <b>Ranger</b>. <b>Hunter 1</b>.<br>While you can spot a roaming minion, your [gondor] conditions cannot be discarded from play by Shadow cards.<br><b>Maneuver:</b> Exert 2 rangers to make a minion's site number +2 until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR17031.jpg
+			javaClass: true
+			//parentId: 17_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17R31
+			rarity: R
+			setNum: "17"
+			cardNum: 31
+			style: Standard
+		}
+		title: Narsil
+		subtitle: Forged by Telchar
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Artifact
+		strength: 3
+		itemclass: Hand weapon
+		target: or(title(Elendil),title(Isildur))
+		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(side(shadow),possession)
+		        }
+		    }
+		]
+		gametext: Bearer must be Elendil or Isildur. Bearer is <b>damage +1</b>.<br>Each time bearer wins a skirmish, you may exert him to discard a Shadow possession.
+		lore: ...and the sword of Elendil filled Orcs and Men with fear....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR17032.jpg
+			javaClass: true
+			//parentId: 17_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17U32
+			rarity: U
+			setNum: "17"
+			cardNum: 32
+			style: Standard
+		}
+		title: Nimble Attack
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		keywords: [
+		    Fellowship
+		    Skirmish
+		]
+		effects: {
+			type: event
+			requires: {
+			    type: canSpot
+			    filter: culture(gondor),companion
+			    count: 2
+			}
+			cost: {
+			    type: addThreats
+			}
+			effect: [
+				{
+				    type: discard
+				    filter: choose(side(shadow),possession)
+				}
+			]
+		}
+		gametext: Spot 2 [gondor] companions and add a threat to discard a Shadow possession.
+		lore: We shall be pursued as soon as news of our deed reaches the Enemy....'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR17033.jpg
+			javaClass: true
+			//parentId: 17_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17S33
+			rarity: S
+			setNum: "17"
+			cardNum: 33
+			style: Standard
+		}
+		title: Ranger of the White Tree
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 5
+		keywords: [
+			Ranger
+			Hunter 1
+		]
+		effects: [
+            {
+                type: modifyOwnCost
+                requires: [
+                    {
+                        type: phase
+                        phase: play starting fellowship
+                    }
+                    {
+                        type: canSpot
+                        filter: unbound,culture(gondor),companion,minTwilight(3)
+                    }
+                ]
+                amount: -2
+            }
+            {
+                type: activated
+                phase: maneuver
+                cost: {
+                    type: exert
+                    filter: self
+                }
+                requires: {
+                    type: canSpot
+                    filter: roaming,minion
+                }
+                effect: {
+                    type: addKeyword
+                    filter: self
+                    keyword: defender
+                    amount: 1
+                    until: regroup
+                }
+            }
+		]
+		gametext: <b>Ranger</b>. <b>Hunter 1</b>.<br>When this is in your starting fellowship and you can spot an unbound [gondor] companion with cost 3 or more, his twilight cost is -2.<br><b>Maneuver:</b> Exert this companion and spot a roaming minion to make him <b>defender +1</b> until the start of the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR17034.jpg
+			javaClass: true
+			//parentId: 17_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17U34
+			rarity: U
+			setNum: "17"
+			cardNum: 34
+			style: Standard
+		}
+		title: Spirit of the White Tree
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		target: culture(gondor),companion
+		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantPlayPhaseEventsOrPhaseSpecialAbilities
+		            player: shadow
+		            phase: skirmish
+		            requires: {
+		                type: canSpot
+		                filter: bearer,inSkirmish
+		            }
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: addsBurden
+		            player: shadow
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
+		]
+		gametext: Bearer must be a [gondor] companion.<br>An opponent can not play skirmish events or use skirmish special abilities during skirmishes involving bearer.<br>Each time a Shadow player adds a burden, discard this condition.
+		lore: A blossom of hope.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR17035.jpg
+			javaClass: true
+			//parentId: 17_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17S35
+			rarity: S
+			setNum: "17"
+			cardNum: 35
+			style: Standard
+		}
+		title: Soldier's Cache
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		site: 3
+		keywords: [
+			Fortification
+			Support Area
+		]
+		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        cost: {
+		            type: choice
+		            texts: [
+		                Spot 3 rangers
+		                Exert a {gondor} Man
+		            ]
+		            effects: [
+		                {
+		                    type: spot
+		                    filter: ranger
+		                    count: 3
+		                }
+		                {
+		                    type: exert
+		                    filter: choose(culture(gondor),man)
+		                }
+		            ]
+		        }
+		        effect: [
+                    {
+                        type: transfer
+                        filter: self
+                        where: choose(minion)
+                        memorizeTarget: chosenMinion
+                    }
+                    {
+                        type: wound
+                        filter: memory(chosenMinion)
+                    }
+                ]
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(ranger)
+		        }
+		        effect: {
+		            type: reinforceTokens
+		            culture: gondor
+		        }
+		    }
+		]
+		gametext: <b>Fortification</b>.<br>At the start of your maneuver phase, you may spot 3 rangers or exert a [gondor] Man to transfer this condition to a minion. Wound that minion.<br><b>Regroup:</b> Exert a ranger to reinforce a [gondor] token.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR17036.jpg
+			javaClass: true
+			//parentId: 17_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17R36
+			rarity: R
+			setNum: "17"
+			cardNum: 36
+			style: Standard
+		}
+		title: Throne of Minas Tirith
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: or
+		            requires: [
+		                {
+		                    type: canSpot
+		                    filter: name(Denethor)
+		                }
+		                {
+		                    type: canSpot
+		                    filter: culture(gondor),companion
+		                    count: 2
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            # this also covered a killed minions
+                    type: discarded
+                    filter: minion
+                }
+		        requires: {
+                    type: phase
+                    phase: skirmish
+		        }
+		        effect: {
+		            type: reinforceTokens
+		            culture: gondor
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTokensCumulative
+		            culture: gondor
+		            count: 3
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(possession)
+		        }
+		    }
+		]
+		gametext: To play, spot Denethor (or 2 [gondor] companions).<br>Each time a minion is killed or discarded from play during a skirmish, you may reinforce a [gondor] token.<br><b>Skirmish:</b> Remove 3 [gondor] tokens to discard a possession.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -99,10 +99,12 @@ public class TriggerConditions {
         return false;
     }
 
-    public static boolean addedBurden(LotroGame game, EffectResult effectResult, Filterable... sourceFilters) {
+    public static boolean addedBurden(LotroGame game, String playerId, EffectResult effectResult, Filterable... sourceFilters) {
         if (effectResult.getType() == EffectResult.Type.ADD_BURDEN) {
             AddBurdenResult burdenResult = (AddBurdenResult) effectResult;
-            return (Filters.and(sourceFilters).accepts(game, burdenResult.getSource()));
+            if (playerId != null && !playerId.equals(burdenResult.getPerformingPlayer()))
+                return false;
+            return Filters.and(sourceFilters).accepts(game, burdenResult.getSource());
         }
         return false;
     }
