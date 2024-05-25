@@ -23,6 +23,14 @@
 		direction: Left
 		keywords: River
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyArcheryTotal
+		            side: shadow
+		            amount: -3
+		        }
+		    }
 		]
 		gametext: <b>River</b>. The fellowship archery total is -3.
 		lore: ""
@@ -58,6 +66,21 @@
 		direction: Left
 		keywords: Underground
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyCost
+		            requires: {
+		                type: not
+		                requires: {
+		                    type: playedCardThisPhase
+		                    filter: hunter,minion
+		                }
+		            }
+		            filter: hunter,minion
+		            amount: -2
+		        }
+		    }
 		]
 		gametext: <b>Underground</b>. The twilight cost of the first hunter minion played each Shadow phase is -2.
 		lore: ""
@@ -92,6 +115,30 @@
 		block: Shadows
 		direction: Right
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        effect: {
+		            type: addThreats
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: companion
+		                over: 4
+		                multiplier: {
+		                    type: condition
+		                    condition: {
+		                        type: canSpot
+		                        filter: hunter,minion
+		                    }
+		                    true: 2
+		                    false: 1
+		                }
+		            }
+		        }
+		    }
 		]
 		gametext: When the Fellowship moves to this site, add a threat (or 2 if you can spot a hunter minion) for each companion over 4.
 		lore: ""
@@ -126,6 +173,24 @@
 		block: Shadows
 		direction: Right
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        player: free people
+		        trigger: {
+		            type: startOfPhase
+		            phase: fellowship
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(hunter,companion)
+		            count: 2
+		        }
+		        effect: {
+		            type: playCardFromDrawDeck
+		            filter: choose(hunter,companion)
+		        }
+		    }
 		]
 		gametext: At the start of the fellowship phase, you may exert two hunter companions to play a hunter companion from your draw deck.
 		lore: ""
@@ -161,6 +226,19 @@
 		direction: Left
 		keywords: Battleground
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: {
+		                type: forEachCulture
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Battleground</b>. Each time the fellowship moves to this site, add (1) for each culture you can spot.
 		lore: ""
@@ -196,6 +274,20 @@
 		direction: Right
 		keywords: Battleground
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: transferred
+		            filter: follower
+		            to: character
+		        }
+		        effect: {
+		            type: exert
+		            player: shadow
+		            filter: choose(companion)
+		            times: 2
+		        }
+		    }
 		]
 		gametext: <b>Battleground</b>. Each time a follower is transferred to a character, the first Shadow player may exert a companion twice.
 		lore: ""
@@ -235,6 +327,38 @@
 			Underground
 		]
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: constantlyCheck
+		        }
+		        requires: {
+		            type: not
+		            requires: {
+		                type: hasInZoneData
+		                filter: self
+		            }
+		        }
+		        effect: [
+		            {
+		                type: memorizeValue
+		                memory: used
+		                value: yes
+		            }
+		            {
+		                type: storeWhileInZone
+		                memory: used
+		            }
+                    {
+                        type: addModifier
+                        modifier: {
+                            type: cantReplaceSite
+                            filter: inSameRegion
+                        }
+                        until: endOfGame
+                    }
+                ]
+		    }
 		]
 		gametext: <b>Battleground</b>. <b>Mountain</b>. <b>Underground</b>. Until the end of the game, sites in this region cannot be replaced.
 		lore: ""
@@ -270,6 +394,14 @@
 		direction: Left
 		keywords: Plains
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: hunter,character
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: <b>Plains</b>. Each hunter character is strength +1.
 		lore: ""
