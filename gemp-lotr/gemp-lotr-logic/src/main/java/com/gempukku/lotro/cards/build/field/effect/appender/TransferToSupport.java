@@ -20,9 +20,10 @@ import java.util.List;
 public class TransferToSupport implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter");
+        FieldUtils.validateAllowedFields(effectObject, "filter", "memorizeBearer");
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        String bearerMemory = FieldUtils.getString(effectObject.get("memorizeBearer"), "memorizeBearer");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
@@ -36,7 +37,12 @@ public class TransferToSupport implements EffectAppenderProducer {
                         if (transferCard.isEmpty())
                             return null;
 
-                        return Collections.singletonList(new TransferToSupportEffect(transferCard.iterator().next()));
+                        PhysicalCard toTransferCard = transferCard.iterator().next();
+                        if (bearerMemory != null && toTransferCard.getAttachedTo() != null) {
+                            actionContext.setCardMemory(bearerMemory, toTransferCard.getAttachedTo());
+                        }
+
+                        return Collections.singletonList(new TransferToSupportEffect(toTransferCard));
                     }
                 });
 

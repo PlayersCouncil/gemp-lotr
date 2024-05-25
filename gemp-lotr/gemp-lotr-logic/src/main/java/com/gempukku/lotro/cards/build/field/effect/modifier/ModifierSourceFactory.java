@@ -75,6 +75,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("modifysanctuaryheal", new ModifySanctuaryHeal());
         modifierProducers.put("modifysitenumber", new ModifySiteNumber());
         modifierProducers.put("modifystrength", new ModifyStrength());
+        modifierProducers.put("modifyvitality", new ModifyVitality());
         modifierProducers.put("nomorethanoneminionmaybeassignedtoeachskirmish", new NoMorethanOneMinionMayBeAssignedToEachSkirmish());
         modifierProducers.put("opponentmaynotdiscard", new OpponentMayNotDiscard());
         modifierProducers.put("removekeyword", new RemoveKeyword());

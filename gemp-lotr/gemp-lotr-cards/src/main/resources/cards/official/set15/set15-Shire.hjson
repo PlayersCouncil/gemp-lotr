@@ -22,13 +22,16 @@
 		twilight: 0
 		type: Event
 		keywords: Fellowship
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: hobbit
+			}
 			effect: [
 				{
+				    type: playCardFromDrawDeck
+				    filter: choose(culture(shire),follower)
 				}
 			]
 		}
@@ -70,11 +73,18 @@
 		vitality: 4
 		resistance: 10
 		keywords: [
-			Ring-bearer
 			Ring-bound
 			CAN_START_WITH_RING
 		]
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self,inSkirmishAgainst(minion,maxStrength(8))
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: <b>Ring-bearer.</b> <b>Ring-bound</b>.<br>While skirmishing a minion of strength 8 or less, Frodo is strength +2.
 		lore: Let's... get out of this cursed place as quick as we can – if we can!'
@@ -110,9 +120,7 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a Hobbit
-		effects: [
-		]
+		target: hobbit
 		gametext: Bearer must be a Hobbit.
 		lore: These are for you. Keep them close.
 		promotext: ""
@@ -148,6 +156,42 @@
 		type: Follower
 		strength: 2
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: addBurdens
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: hobbit
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: bearer
+		        }
+		        cost: [
+		            {
+		                type: memorizeActive
+		                filter: bearer
+		                memory: bearer
+		            }
+		            {
+		                type: transferToSupport
+		                filter: self
+		            }
+		        ]
+		        effect: {
+		            type: preventWound
+		            filter: memory(bearer)
+		        }
+		    }
 		]
 		gametext: <b>Aid</b> – Add 2 burdens. <helper>(At the start of the maneuver phase, you may add 2 burdens to transfer this to a companion.)</helper><br>To play, spot a Hobbit.<br><b>Response:</b> If bearer is about to take a wound, transfer Hobbiton Brewer to your support area to prevent that wound.
 		lore: ""
@@ -185,6 +229,31 @@
 		strength: 1
 		resistance: 1
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: addBurdens
+		        }
+		    }
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: hobbit
+		            count: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: bearer
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: fierce,minion
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Aid</b> – Add a burden. <helper>(At the start of the maneuver phase, you may add a burden to transfer this to a companion.)</helper><br>To play, spot 2 Hobbits.<br>Bearer is strength +1 for each fierce minion you can spot.
 		lore: ...for ages folk in the Shire smoked various herbs....
@@ -220,6 +289,30 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyVitality
+		            filter: hobbit,hasAttached(hand weapon)
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyResistance
+		            filter: hobbit,hasAttached(follower)
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: unwounded,hobbit
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: Each Hobbit bearing a hand weapon is vitality +1.<br>Each Hobbit bearing a follower is resistance +1.<br>Each unwounded Hobbit is strength +1.
 		lore: ...she is very beautiful, and is going to be beautifuller still.'
@@ -259,6 +352,30 @@
 		vitality: 4
 		resistance: 9
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self,hasAttached(follower)
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmishAgainst(hunter,minion)
+		        }
+		        cost: {
+		            type: addThreats
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: While Merry bears a follower, he is strength +2.<br><b>Skirmish:</b> If Merry is skirmishing a hunter minion, add a threat to make Merry strength +2.
 		lore: Three-foot-eight? You did something!
@@ -293,13 +410,17 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
 			cost: {
-			},
+			    type: transferToSupport
+			    filter: choose(follower,attachedTo(hobbit))
+			    memorizeBearer: bearer
+			}
 			effect: [
 				{
+                    type: cancelSkirmish
+                    filter: memory(bearer)
 				}
 			]
 		}
@@ -341,6 +462,31 @@
 		vitality: 4
 		resistance: 9
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyCost
+		            filter: culture(shire),follower
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: self,inSkirmishAgainst(hunter,minion)
+		        }
+		        cost: {
+		            type: exert
+		            filter: choose(ringBearer)
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: self
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: Each [shire] follower is twilight cost -1.<br><b>Skirmish:</b> If Pippin is skirmishing a hunter minion, exert the Ring-bearer to make Pippin strength +2.
 		lore: I've always been taller than you.
@@ -376,6 +522,33 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToAddBurden
+		            filter: side(shadow)
+		            memorize: cardAddingBurdens
+		        }
+		        cost: [
+		            {
+		                type: discard
+		                filter: choose(culture(shire),follower)
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		        effect: [
+                    {
+                        type: preventAddingAllBurdens
+                    }
+                    {
+                        type: discard
+                        filter: memory(cardAddingBurdens)
+                    }
+                ]
+		    }
 		]
 		gametext: <b>Response:</b> If a Shadow card is about to add any number of burdens, discard a [shire] follower and this condition from play to prevent that and discard that Shadow card.
 		lore: As for the Hobbits of the Shire... they were a merry folk.
@@ -416,6 +589,41 @@
 		resistance: 9
 		keywords: Ring-bound
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyResistance
+		            filter: self,ringBearer
+		            amount: -4
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: canSpot
+		            filter: self,hasAttached(follower)
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(another,hobbit)
+		        }
+		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
+			}
 		]
 		gametext: <b>Ring-bound</b>. While Sam bears the One Ring, he is resistance -4.<br><b>Maneuver:</b> If Sam is bearing a follower, exert him to heal another Hobbit.<br><b>Response:</b> If Frodo is killed, make Sam the Ring-bearer.
 		lore: ""
@@ -450,13 +658,21 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
+			cost: [
+			    {
+			        type: addThreats
+			    }
+			    {
+			        type: exert
+			        filter: choose(ringBearer)
+			    }
+			]
 			effect: [
 				{
+				    type: wound
+				    filter: all(not(hunter),minion,inSkirmishAgainst(your,culture(shire),ringBearer))
 				}
 			]
 		}
