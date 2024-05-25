@@ -48,6 +48,7 @@ public class FilterFactory {
         simpleFilters.put("canbediscarded", (actionContext -> Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource())));
         simpleFilters.put("canbereturnedtohand", (actionContext -> Filters.canBeReturnedToHand(actionContext.getSource())));
         simpleFilters.put("canexert", (actionContext -> Filters.canExert(actionContext.getSource())));
+        simpleFilters.put("canwound", (actionContext -> Filters.canTakeWounds(actionContext.getSource(), 1)));
         simpleFilters.put("controlledbyotherplayer",
                 (actionContext -> Filters.siteControlledByOtherPlayer(actionContext.getPerformingPlayer())));
         simpleFilters.put("controlledsite",

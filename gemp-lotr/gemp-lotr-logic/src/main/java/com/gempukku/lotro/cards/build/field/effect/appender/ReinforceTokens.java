@@ -11,6 +11,7 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolve
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Token;
+import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -23,6 +24,7 @@ import org.json.simple.JSONObject;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ReinforceTokens implements EffectAppenderProducer {
     @Override
@@ -35,18 +37,19 @@ public class ReinforceTokens implements EffectAppenderProducer {
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("times"), 1, environment);
 
+        Filter tokenFilter = token != null ? Filters.hasToken(token, 1) : Filters.hasAnyCultureTokens(1);
+
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCard(filter, (actionContext) -> Filters.hasToken(token, 1),
+                CardResolver.resolveCard(filter, (actionContext) -> tokenFilter,
                         memory, "you", "Choose card to reinforce tokens on", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
                     public boolean isPlayableInFull(ActionContext actionContext) {
                         final LotroGame game = actionContext.getGame();
-                        return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS)
-                                && Filters.countActive(game, Filters.hasToken(token)) > 0;
+                        return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS);
                     }
 
                     @Override
@@ -56,8 +59,16 @@ public class ReinforceTokens implements EffectAppenderProducer {
                         final int tokenCount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
 
                         List<Effect> result = new LinkedList<>();
-                        for (PhysicalCard card : cardsFromMemory)
-                            result.add(new AddTokenEffect(actionContext.getSource(), card, token, tokenCount));
+                        for (PhysicalCard card : cardsFromMemory) {
+                            if (token != null) {
+                                result.add(new AddTokenEffect(actionContext.getSource(), card, token, tokenCount));
+                            } else {
+                                Token tokenOnCard = getFirstCultureToken(actionContext.getGame().getGameState().getTokens(card));
+                                if (tokenOnCard != null) {
+                                    result.add(new AddTokenEffect(actionContext.getSource(), card, tokenOnCard, tokenCount));
+                                }
+                            }
+                        }
 
                         return result;
                     }
@@ -66,4 +77,11 @@ public class ReinforceTokens implements EffectAppenderProducer {
         return result;
     }
 
+    private Token getFirstCultureToken(Map<Token, Integer> tokens) {
+        for (Map.Entry<Token, Integer> tokenCountEntry : tokens.entrySet()) {
+            if (tokenCountEntry.getValue() > 0 && tokenCountEntry.getKey().getCulture() != null)
+                return tokenCountEntry.getKey();
+        }
+        return null;
+    }
 }
