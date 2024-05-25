@@ -412,6 +412,11 @@ public class ValueResolver {
                                 });
                     }
                 };
+            } else if (type.equalsIgnoreCase("forEachTwilight")) {
+                FieldUtils.validateAllowedFields(object, "limit", "over", "multiplier", "divider");
+
+                return new SmartValueSource(environment, object,
+                        actionContext -> (game, cardAffected) -> game.getGameState().getTwilightPool());
             } else if (type.equalsIgnoreCase("forEachResistance")) {
                 FieldUtils.validateAllowedFields(object, "multiplier", "over", "filter");
                 final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
