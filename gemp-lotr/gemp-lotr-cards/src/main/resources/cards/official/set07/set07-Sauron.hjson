@@ -1298,7 +1298,7 @@
                         from: 0
                         to: {
                             type: min
-                            first: {
+                            firstNumber: {
                                 type: subtract
                                 firstNumber: {
                                     type: forEachYouCanSpot
@@ -1308,7 +1308,7 @@
                                     type: forEachThreat
                                 }
                             }
-                            second: 3
+                            secondNumber: 3
                         }
                         memorize: threatCount
                     }

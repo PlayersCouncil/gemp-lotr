@@ -741,8 +741,8 @@
                 type: addTwilight
                 amount: {
                     type: min
-                    first: 5
-                    second: {
+                    firstNumber: 5
+                    secondNumber: {
                         type: forEachBurden
                     }
                 }

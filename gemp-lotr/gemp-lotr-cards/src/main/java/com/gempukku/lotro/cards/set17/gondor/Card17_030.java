@@ -39,10 +39,10 @@ public class Card17_030 extends AbstractCompanion {
 
     @Override
     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
-return Collections.singletonList(new CantDiscardFromPlayModifier(self, "Cannot be discarded from play by Shadow cards",
-new SpotCondition(CardType.MINION, Keyword.ROAMING),
-Filters.and(Filters.owner(self.getOwner()), Culture.GONDOR, CardType.CONDITION), Side.SHADOW));
-}
+        return Collections.singletonList(new CantDiscardFromPlayModifier(self, "Cannot be discarded from play by Shadow cards",
+                new SpotCondition(CardType.MINION, Keyword.ROAMING), null,
+                Filters.and(Filters.owner(self.getOwner()), Culture.GONDOR, CardType.CONDITION), Side.SHADOW));
+    }
 
     @Override
     public List<? extends ActivateCardAction> getPhaseActionsInPlay(String playerId, LotroGame game, final PhysicalCard self) {

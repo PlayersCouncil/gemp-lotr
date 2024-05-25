@@ -45,11 +45,11 @@
 						from: 0
 						to: {
 							type: Min
-							first: {
+							firstNumber: {
 								type: ForEachWound
 								filter: memory(chosenAlly)
 							}
-							second: 2
+							secondNumber: 2
 						}
 						memorize: heals
 					}

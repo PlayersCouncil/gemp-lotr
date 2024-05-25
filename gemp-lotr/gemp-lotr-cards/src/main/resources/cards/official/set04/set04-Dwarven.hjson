@@ -656,13 +656,13 @@
 		            filter: name(Gimli)
 		            amount: {
 		                type: min
-                        first: {
+                        firstNumber: {
                             type: forEachToken
                             filter: self
                             culture: dwarven
                             limit: 3
                         }
-		                second: {
+		                secondNumber: {
                             type: forEachToken
                             filter: name(Final Count)
                             culture: elven

@@ -13,8 +13,8 @@ public abstract class SoloAdventure implements Adventure {
     @Override
     public void applyAdventureRules(LotroGame game, DefaultActionsEnvironment actionsEnvironment, ModifiersLogic modifiersLogic) {
         modifiersLogic.addAlwaysOnModifier(
-                new CantDiscardFromPlayModifier(null, "Can't be discarded from play", CardType.ADVENTURE, Filters.any));
+                new CantDiscardFromPlayModifier(null, "Can't be discarded from play", null, null, CardType.ADVENTURE, Filters.any));
         modifiersLogic.addAlwaysOnModifier(
-                new CantReturnToHandModifier(null, "Can't be returned to hand", CardType.ADVENTURE, Filters.any));
+                new CantReturnToHandModifier(null, "Can't be returned to hand", null, CardType.ADVENTURE, Filters.any));
     }
 }

@@ -553,9 +553,9 @@ public class ValueResolver {
                     return result;
                 };
             } else if (type.equalsIgnoreCase("max")) {
-                FieldUtils.validateAllowedFields(object, "first", "second");
-                ValueSource first = resolveEvaluator(object.get("first"), environment);
-                ValueSource second = resolveEvaluator(object.get("second"), environment);
+                FieldUtils.validateAllowedFields(object, "firstNumber", "secondNumber");
+                ValueSource first = resolveEvaluator(object.get("firstNumber"), environment);
+                ValueSource second = resolveEvaluator(object.get("secondNumber"), environment);
 
                 return actionContext -> (game, cardAffected) ->
                         Math.max(
@@ -563,9 +563,9 @@ public class ValueResolver {
                                 second.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)
                         );
             } else if (type.equalsIgnoreCase("min")) {
-                FieldUtils.validateAllowedFields(object, "first", "second");
-                ValueSource first = resolveEvaluator(object.get("first"), environment);
-                ValueSource second = resolveEvaluator(object.get("second"), environment);
+                FieldUtils.validateAllowedFields(object, "firstNumber", "secondNumber");
+                ValueSource first = resolveEvaluator(object.get("firstNumber"), environment);
+                ValueSource second = resolveEvaluator(object.get("secondNumber"), environment);
 
                 return actionContext -> (game, cardAffected) ->
                         Math.min(

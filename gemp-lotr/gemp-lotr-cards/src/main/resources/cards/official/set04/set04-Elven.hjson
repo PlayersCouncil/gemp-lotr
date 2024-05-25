@@ -619,13 +619,13 @@
 		            filter: name(Legolas)
 		            amount: {
 		                type: min
-                        first: {
+                        firstNumber: {
                             type: forEachToken
                             filter: self
                             culture: elven
                             limit: 3
                         }
-		                second: {
+		                secondNumber: {
                             type: forEachToken
                             filter: name(My Axe Is Notched)
                             culture: dwarven

@@ -22,13 +22,37 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(culture(rohan),companion)
+				    memorize: chosenCompanion
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: memoryMatches
+				            memory: chosenCompanion
+				            filter: hunter,companion
+				        }
+				        true: 3
+				        false: 2
+				    }
+				}
+				{
+				    type: conditional
+				    requires: {
+                        type: memoryMatches
+                        memory: chosenCompanion
+                        filter: hunter,companion
+				    }
+				    effect: {
+				        type: addKeyword
+				        filter: memory(chosenCompanion)
+				        keyword: damage
+				        amount: 1
+				    }
 				}
 			]
 		}
@@ -65,13 +89,24 @@
 		twilight: 1
 		type: Event
 		keywords: Assignment
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: addKeyword
+				    filter: choose(culture(rohan),companion)
+				    keyword: defender
+				    amount: 1
+				    until: regroup
+				    memorize: chosenCompanion
+				}
+				{
+				    type: addModifier
+				    modifier: {
+    				    type: cantTakeWounds
+       				    filter: minion,inSkirmishAgainst(memory(chosenCompanion))
+				    }
+				    until: regroup
 				}
 			]
 		}
@@ -117,6 +152,28 @@
 			Hunter 2
 		]
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		        }
+		        amount: -1
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+                    type: discardFromHand
+                    forced: false
+                    filter: choose(culture(rohan))
+                }
+                effect: {
+                    type: modifyStrength
+                    filter: self
+                    amount: 2
+                }
+		    }
 		]
 		gametext: <b>Valiant</b>. <b>Hunter 2</b>. <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper><br>While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br><b>Skirmish:</b> Discard a [rohan] card from hand to make Éomer strength +2.
 		lore: ""
@@ -153,8 +210,48 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [rohan] Man
+		target: culture(rohan),man
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer,name(Éomer),unwounded
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyResistance
+		            filter: bearer,name(Éomer),unwounded
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        requires: {
+		            type: canSpot
+		            filter: bearer,name(Éomer)
+		        }
+		        cost: [
+		            {
+		                type: memorizeActive
+		                memory: bearer
+		                filter: bearer
+		            }
+		            {
+		                type: discard
+		                filter: self
+		            }
+		        ]
+		        effect: {
+		            type: wound
+		            filter: choose(minion,inSkirmishAgainst(memory(bearer)))
+		        }
+		    }
 		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is Éomer and he is unwounded, he is <b>damage +1</b> and resistance +1.<br><b>Skirmish:</b> If bearer is Éomer, discard this possession to wound a minion he is skirmishing.
 		lore: Aim for their heads!
@@ -195,6 +292,21 @@
 		resistance: 6
 		keywords: Valiant
 		effects: [
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: or(and(hunter,companion),and(valiant,man))
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(or(and(hunter,companion),and(valiant,man)))
+		        }
+		    }
 		]
 		gametext: <b>Valiant</b>.<br><b>Response:</b> If a hunter companion or valiant Man is about to take a wound, exert Éowyn to prevent that wound.
 		lore: I can fight!
@@ -238,6 +350,26 @@
 			Hunter 1
 		]
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: hunter
+		                count: 3
+		            }
+		            filter: self
+		            amount: 3
+		        }
+		    }
 		]
 		gametext: <b>Valiant</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper> To play, spot a [rohan] Man.<br>While you can spot 3 hunters, Gamling is strength +3.
 		lore: Dawn is not far off... But dawn will not help us, I fear.'
@@ -272,13 +404,23 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(culture(rohan),man)
+				    amount: {
+				        type: max
+				        firstNumber: {
+				            type: forEachYouCanSpot
+				            filter: valiant,man
+				        }
+				        secondNumber: {
+				            type: forEachYouCanSpot
+				            filter: hunter
+				        }
+				    }
 				}
 			]
 		}
@@ -320,6 +462,46 @@
 		vitality: 3
 		resistance: 6
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: mount
+		                count: 2
+		            }
+		            filter: self
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: mount
+		                count: 3
+		            }
+		            filter: self
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeDiscarded
+		            requires: {
+		                type: canSpot
+		                filter: side(free people),mount
+		                count: 4
+		            }
+		            filter: side(free people),mount
+		            player: shadow
+		        }
+		    }
 		]
 		gametext: While you can spot 2 mounts, Haleth is strength +2.<br>While you can spot 3 mounts, Haleth is <b>damage +1</b>.<br>While you can spot 4 Free Peoples mounts, those mounts can not be discarded by a Shadow player.
 		lore: ""
@@ -354,8 +536,32 @@
 		twilight: 2
 		type: Possession
 		itemclass: Mount
-		#target: a [rohan] Man
+		target: culture(rohan),man
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfSkirmishInvolving
+		            filter: bearer
+		        }
+		        effect: {
+		            type: exert
+		            filter: all(minion,inSkirmishAgainst(bearer))
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(rohan),man)
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br><b>Skirmish:</b> Exert bearer to make a [rohan] Man strength +1.
 		lore: Aragorn saw a shadow on the distant green, a dark swift-moving blur.
@@ -394,6 +600,26 @@
 		vitality: 3
 		resistance: 6
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: canSpot
+		            filter: valiant,man
+		        }
+		        amount: -1
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: cantSpot
+		                filter: site,controlledByOtherPlayer
+		            }
+		            filter: self
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: While you can spot a valiant Man, this companion's twilight cost is -1.<br>This companion is strength +2 while no opponent controls a site.
 		lore: And they became our allies, and have ever proved true to us....'
@@ -428,13 +654,23 @@
 		twilight: 2
 		type: Event
 		keywords: Maneuver
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(rohan),man
+			}
 			effect: [
 				{
+				    type: repeat
+				    times: {
+				        type: forEachYouCanSpot
+				        filter: hunter,character
+				    }
+				    effect: {
+				        type: playCardFromDiscard
+				        filter: choose(possession)
+				    }
 				}
 			]
 		}
@@ -471,13 +707,26 @@
 		twilight: 1
 		type: Event
 		keywords: Fellowship
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: or
+			    requires: [
+			        {
+			            type: canSpot
+			            filter: culture(rohan),man
+			            count: 2
+			        }
+			        {
+			            type: canSpot
+			            filter: hunter,culture(rohan),man
+			        }
+			    ]
+			}
 			effect: [
 				{
+				    type: playCardFromDrawDeck
+				    filter: choose(culture(rohan),or(companion,follower))
 				}
 			]
 		}
@@ -514,8 +763,19 @@
 		twilight: 1
 		type: Possession
 		itemclass: Mount
-		#target: a [rohan] Man
+		target: culture(rohan),man
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfSkirmishInvolving
+		            filter: bearer
+		        }
+		        effect: {
+		            type: exert
+		            filter: all(minion,inSkirmishAgainst(bearer))
+		        }
+		    }
 		]
 		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
 		lore: Their horses were of great stature, strong and clean- limbed; their grey coats glistened, their long tails flowed in the wind....
@@ -551,6 +811,27 @@
 		type: Follower
 		strength: 1
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: addTwilight
+		        }
+		    }
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+                    type: addKeyword
+                    filter: bearer
+                    keyword: mounted
+                }
+		    }
 		]
 		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, you may add (1) to transfer this to a companion.)</helper> To play, spot a [rohan] Man.<br>Bearer is considered to be mounted.
 		lore: Rohirrim warriors were seldom seen without their mount.
@@ -585,6 +866,36 @@
 		twilight: 1
 		type: Follower
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: addTwilight
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: transferred
+		            filter: self
+		            to: companion,not(culture(rohan))
+		        }
+		        effect: {
+		            type: exert
+		            filter: bearer
+		            times: 2
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: liberateSite
+		        }
+		    }
 		]
 		gametext: <b>Aid</b> – (1).<br>Each time you transfer this to a companion, except a [rohan] companion, exert bearer twice.<br>Each time bearer wins a skirmish, you may liberate a site.
 		lore: In preparation for the Battle of Helm's Deep, everyone helped fortify the doors and walls.
@@ -620,8 +931,17 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [rohan] Man
+		target: culture(rohan),man
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+                    type: addKeyword
+                    filter: bearer,inSkirmishAgainst(hunter,minion)
+                    keyword: damage
+                    amount: 1
+                }
+		    }
 		]
 		gametext: Bearer must be a [rohan] Man.<br>While bearer is skirmishing a hunter minion, bearer is <b>damage +1</b>.
 		lore: Rohirrim young and old were given weapons of all kinds to defend Helm's Deep.
@@ -656,6 +976,31 @@
 		twilight: 2
 		type: Follower
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: addTwilight
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: bearer
+		            amount: {
+		                type: forEachHasAttached
+		                filter: possession
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper> To play, spot a [rohan] Man.<br>Bearer is strength +1 for each possession he or she bears.
 		lore: ...any weapon that you bear, be it only a staff, you must leave it on the threshold.'
@@ -695,6 +1040,25 @@
 		resistance: 6
 		keywords: Valiant
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		        }
+		        amount: -1
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachYouCanSpot
+		                filter: hunter,minion
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Valiant</b>. While you can spot a [rohan] Man, this companion's twilight cost is -1.<br>This companion is strength +1 for each hunter minion you can spot.
 		lore: Let us ride on!'
@@ -734,6 +1098,39 @@
 		resistance: 6
 		keywords: Valiant
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        cost: {
+		            type: choice
+		            texts: [
+		                Spot a hunter minion
+		                Exert 2 valiant Men
+		            ]
+		            effects: [
+		                {
+		                    type: spot
+		                    filter: hunter,minion
+		                }
+		                {
+		                    type: exert
+		                    filter: choose(valiant,man)
+		                    count: 2
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: defender
+		            amount: 1
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: <b>Valiant</b>.<br>At the start of the maneuver phase, you may spot a hunter minion (or exert 2 valiant Men) to make this companion <b>defender +1</b> until the regroup phase.
 		lore: ...a warrior should have more skills and knowledge than only the craft of weapons and slaying....'
@@ -770,8 +1167,17 @@
 		strength: 1
 		resistance: 1
 		itemclass: Hand weapon
-		#target: a [rohan] Man
+		target: culture(rohan),man
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+                    type: addKeyword
+                    filter: bearer,mounted
+                    keyword: defender
+                    amount: 1
+                }
+		    }
 		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is mounted, bearer is <b>defender +1</b>.
 		lore: Rohirrim spears are much deadlier when the bearer is on horseback.
@@ -806,8 +1212,51 @@
 		twilight: 2
 		type: Possession
 		itemclass: Shield
-		#target: a [rohan] Man
+		target: culture(rohan),man
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: cantSpot
+		                filter: site,controlledByOtherPlayer
+		            }
+		            filter: bearer
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+		            {
+		                type: memorizeActive
+		                filter: bearer
+		                memory: bearer
+		            }
+                    {
+                        type: discard
+                        filter: self
+                    }
+                ]
+		        effect: {
+		            type: repeat
+		            times: {
+		                type: condition
+		                condition: {
+		                    type: memoryMatches
+		                    memory: bearer
+		                    filter: mounted
+		                }
+		                true: 2
+		                false: 1
+		            }
+		            effect: {
+		                type: liberateSite
+		            }
+		        }
+		    }
 		]
 		gametext: Bearer must be a [rohan] Man.<br>While no opponent controls a site, bearer is strength +1.<br><b>Regroup:</b> Discard this to liberate a site (or two sites if bearer is mounted).
 		lore: Sometimes the best offense is a good defense.
@@ -842,13 +1291,22 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: your,culture(rohan),man,hasAttached(possession)
+			}
 			effect: [
 				{
+				    type: chooseActiveCards
+				    text: Choose a character
+				    filter: choose(character)
+				    memorize: chosenCharacter
+				}
+				{
+				    type: discard
+				    filter: all(possession,attachedTo(memory(chosenCharacter)))
 				}
 			]
 		}

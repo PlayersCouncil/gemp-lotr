@@ -28,10 +28,10 @@
 					from: 0
 					to: {
 						type: max
-						first: {
+						firstNumber: {
 							type: ForEachBurden
 						}
-						second: {
+						secondNumber: {
 							type: ForEachYouCanSpot
 							filter: minion
 						}
