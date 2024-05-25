@@ -1054,6 +1054,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         return result;
     }
 
+    private static Set<String> frodosThatCantStartWithRing = Sets.newHashSet("Frenzied Fighter");
     private static Set<String> frodosWithNon10Resistance = Sets.newHashSet("Resolute Hobbit", "Frenzied Fighter");
     private static Set<String> samsWithNon5Resistance = Sets.newHashSet("Loyal Friend", "Dropper of Eaves", "Humble Halfling", "Steadfast Friend", "Innocent Traveler");
 
@@ -1109,6 +1110,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("Possession, condition or artifact without a filter needs a SUPPORT_AREA keyword");
         if (cardType == CardType.FOLLOWER && aidCostSource == null)
             throw new InvalidCardDefinitionException("Follower requires an aid cost");
+        if (title.equals("Frodo") && (keywords == null || !keywords.containsKey(Keyword.CAN_START_WITH_RING)) && !frodosThatCantStartWithRing.contains(subtitle)) {
+            throw new InvalidCardDefinitionException("Frodo (except some permitted) must be able to start with ring");
+        }
         if (title.equals("Frodo") && resistance != 10 && !frodosWithNon10Resistance.contains(subtitle)) {
             throw new InvalidCardDefinitionException("Frodo (except some permitted) needs to have resistance of 10");
         }

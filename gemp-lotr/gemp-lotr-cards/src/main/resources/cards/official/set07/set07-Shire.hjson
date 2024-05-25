@@ -27,7 +27,10 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 10
-		keywords: Ring-bound
+		keywords: [
+		    Ring-bound
+		    Can start with ring
+		]
 		effects: [
 		    {
 		        type: trigger
@@ -82,7 +85,10 @@
 		vitality: 4
 		signet: Gandalf
 		resistance: 10
-		keywords: Ring-bound
+		keywords: [
+		    Ring-bound
+		    Can start with ring
+		]
 		effects: [
 		    {
 		        type: activated
