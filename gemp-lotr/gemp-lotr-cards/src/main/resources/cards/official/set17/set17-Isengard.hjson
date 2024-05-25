@@ -27,6 +27,45 @@
 		vitality: 4
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeAssignedToSkirmish
+		            filter: self
+		            requires: {
+		                type: sarumanFirstSentenceActive
+		            }
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: companion
+		                count: 6
+		            }
+		            filter: minion
+		            keyword: hunter
+		            amount: 2
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: hunter,minion
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: preventWound
+		            filter: choose(hunter,minion)
+		        }
+		    }
 		]
 		gametext: Saruman cannot be assigned to a skirmish.<br>While you can spot 6 companions, each minion gains <b>hunter 2</b>.<br><b>Response:</b> If a hunter minion is about to take a wound, exert Saruman to prevent that.
 		lore: ""
@@ -63,6 +102,24 @@
 		type: Follower
 		strength: 2
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: addTwilight
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(companion)
+		        }
+		    }
 		]
 		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, <span style="word-spacing:-0.08em">you may remove (1) to transfer this to a minion.)</span></helper><br>Each time bearer wins a skirmish, you may exert a companion.
 		lore: I gave you the chance of aiding me willingly, but you have elected the way of pain.'
@@ -99,6 +156,40 @@
 		#target: 
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: name(Saruman)
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: minion
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(minion)
+		            keyword: fierce
+		            until: regroup
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: wizard
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: wizard
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: Each time you play Saruman, spot a minion. That minion is <b>fierce</b> until the start of the regroup phase.<br>Each Wizard is strength +3 and <b>damage +1</b>.
 		lore: From the heights of Orthanc, Saruman spied on Middle-earth and plotted his rise to power.
