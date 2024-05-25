@@ -643,7 +643,7 @@
 						type: multiply
 						multiplier: -1
 						source: {
-							type: countStacked
+							type: forEachStacked
 							on: self
 							filter: minion
 						}
@@ -867,7 +867,7 @@
           type: limit
           limit: 3
           value: {
-            type: countStacked
+            type: forEachStacked
             on: culture(isengard),artifact
             filter: culture(isengard),spell
           }

@@ -3263,7 +3263,7 @@
 		            type: modifyStrength
 		            filter: culture(sauron),orc
 		            amount: {
-		                type: countStacked
+		                type: forEachStacked
 		                filter: besieger
 		                on: site
 		            }

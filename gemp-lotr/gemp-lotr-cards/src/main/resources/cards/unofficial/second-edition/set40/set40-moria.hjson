@@ -16,7 +16,7 @@
 				type: modifyStrength
 				filter: self
 				amount: {
-					type: countStacked
+					type: forEachStacked
 					on: culture(moria),condition
 					filter: goblin
 				}
@@ -297,7 +297,7 @@
 				type: multiply
 				multiplier: -1
 				source: {
-					type: countStacked
+					type: forEachStacked
 					on: culture(moria),condition
 					filter: goblin
 				}

@@ -26,8 +26,12 @@ public class AddThreats implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 final int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                final String playerAddingBurden = playerSource.getPlayer(actionContext);
-                return new AddThreatsEffect(playerAddingBurden, actionContext.getSource(), amount);
+                final String playerAddingThreats = playerSource.getPlayer(actionContext);
+                if (amount > 0) {
+                    return new AddThreatsEffect(playerAddingThreats, actionContext.getSource(), amount);
+                } else {
+                    return null;
+                }
             }
 
             @Override

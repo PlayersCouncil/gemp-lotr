@@ -500,7 +500,7 @@
 		                filter: memory(chosenDwarf)
 		                keyword: damage
 		                amount: {
-		                    type: countStacked
+		                    type: forEachStacked
 		                    on: self
 		                    filter: culture(dwarven)
 		                    multiplier: 2
@@ -633,7 +633,7 @@
 		                type: wound
 		                filter: choose(minion,inSkirmishAgainst(dwarf))
 		                times: {
-		                    type: countStacked
+		                    type: forEachStacked
 		                    on: self
 		                    filter: culture(dwarven)
 		                }

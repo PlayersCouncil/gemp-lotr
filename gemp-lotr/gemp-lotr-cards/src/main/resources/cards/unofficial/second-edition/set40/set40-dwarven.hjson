@@ -355,7 +355,7 @@
 					type: limit
 					limit: 2
 					value: {
-						type: countStacked
+						type: forEachStacked
 						on: self
 					}
 				}

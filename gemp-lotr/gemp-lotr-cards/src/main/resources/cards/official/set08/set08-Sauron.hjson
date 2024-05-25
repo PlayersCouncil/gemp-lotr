@@ -830,7 +830,7 @@
 		    {
 		        type: modifyOwnCost
 		        amount: {
-		            type: countStacked
+		            type: forEachStacked
 		            filter: culture(sauron),minion
 		            on: site
 		            multiplier: -2

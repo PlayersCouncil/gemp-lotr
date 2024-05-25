@@ -250,7 +250,7 @@ public class ValueResolver {
                 return (actionContext) -> new CardPhaseLimitEvaluator(actionContext.getGame(), actionContext.getSource(),
                         actionContext.getGame().getGameState().getCurrentPhase(), limitSource.getEvaluator(actionContext),
                         valueSource.getEvaluator(actionContext));
-            } else if (type.equalsIgnoreCase("countStacked")) {
+            } else if (type.equalsIgnoreCase("forEachStacked")) {
                 FieldUtils.validateAllowedFields(object, "on", "filter", "multiplier");
                 final String on = FieldUtils.getString(object.get("on"), "on");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");

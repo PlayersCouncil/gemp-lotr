@@ -58,7 +58,11 @@ public class AddTwilight implements EffectAppenderProducer {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         int twilight = Integer.parseInt(actionContext.getValueFromMemory(memorize));
-                        return new AddTwilightEffect(actionContext.getSource(), twilight);
+                        if (twilight > 0) {
+                            return new AddTwilightEffect(actionContext.getSource(), twilight);
+                        } else {
+                            return null;
+                        }
                     }
                 });
         return result;

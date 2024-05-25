@@ -323,7 +323,7 @@
 						type: range
 						from: 1
 						to: {
-							type: countStacked
+							type: forEachStacked
 							on: self
 						}
 					}

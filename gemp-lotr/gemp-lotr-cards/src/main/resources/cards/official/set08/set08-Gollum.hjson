@@ -233,7 +233,7 @@
 		            type: modifyStrength
 		            filter: self
 		            amount: {
-		                type: countStacked
+		                type: forEachStacked
 		                filter: minion
 		                on: culture(gollum),possession
 		                multiplier: 3

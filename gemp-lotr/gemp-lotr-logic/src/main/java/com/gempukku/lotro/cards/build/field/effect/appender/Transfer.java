@@ -19,8 +19,6 @@ import com.gempukku.lotro.logic.timing.RuleUtils;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 public class Transfer implements EffectAppenderProducer {
     @Override
@@ -58,7 +56,7 @@ public class Transfer implements EffectAppenderProducer {
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
-                    protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                    protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> transferCard = actionContext.getCardsFromMemory(memorizeTransferred);
                         if (transferCard.isEmpty())
                             return null;
@@ -67,11 +65,11 @@ public class Transfer implements EffectAppenderProducer {
                         if (fromSupport && transferredCard.getZone() != Zone.SUPPORT)
                             return null;
 
-                        final Collection<? extends PhysicalCard> transferredToCard = actionContext.getCardsFromMemory(memorizeTarget);
-                        if (transferredToCard.isEmpty())
+                        final PhysicalCard transferredToCard = actionContext.getCardFromMemory(memorizeTarget);
+                        if (transferredToCard == null)
                             return null;
 
-                        return Collections.singletonList(new TransferPermanentEffect(transferredCard, transferredToCard.iterator().next()));
+                        return new TransferPermanentEffect(transferredCard, transferredToCard);
                     }
                 });
 

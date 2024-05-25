@@ -27,7 +27,11 @@ public class AddBurdens implements EffectAppenderProducer {
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 final String playerAddingBurden = playerSource.getPlayer(actionContext);
                 final int amount = amountSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                return new AddBurdenEffect(playerAddingBurden, actionContext.getSource(), amount);
+                if (amount > 0) {
+                    return new AddBurdenEffect(playerAddingBurden, actionContext.getSource(), amount);
+                } else {
+                    return null;
+                }
             }
 
             @Override
