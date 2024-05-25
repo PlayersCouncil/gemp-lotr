@@ -276,15 +276,22 @@ public class ValueResolver {
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> Filters.countSpottable(game, filterableSource.getFilterable(actionContext)));
             } else if (type.equalsIgnoreCase("forEachInDiscard")) {
-                FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
+                FieldUtils.validateAllowedFields(object, "discard", "filter", "over", "limit", "multiplier", "divider");
+                final String discard = FieldUtils.getString(object.get("discard"), "discard");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+                PlayerSource discardSource = discard != null ? PlayerResolver.resolvePlayer(discard, environment) : null;
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> {
                             final Filterable filterable = filterableSource.getFilterable(actionContext);
+                            String playerId = discardSource != null ? discardSource.getPlayer(actionContext) : null;
                             int count = 0;
-                            for (String player : game.getGameState().getPlayerOrder().getAllPlayers())
-                                count += Filters.filter(game.getGameState().getDiscard(player), game, filterable).size();
+                            if (playerId != null) {
+                                count += Filters.filter(game.getGameState().getDiscard(playerId), game, filterable).size();
+                            } else {
+                                for (String player : game.getGameState().getPlayerOrder().getAllPlayers())
+                                    count += Filters.filter(game.getGameState().getDiscard(player), game, filterable).size();
+                            }
 
                             return count;
                         }

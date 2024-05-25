@@ -1,13 +1,11 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
-import com.gempukku.lotro.cards.build.ActionContext;
-import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
-import com.gempukku.lotro.cards.build.ValueSource;
+import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -20,22 +18,25 @@ import java.util.Collection;
 public class RemoveCardsInDiscardFromGame implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter");
+        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "player");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
+
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDiscard(filter, valueSource, "_temp", "you", "Choose cards from discard", environment));
+                CardResolver.resolveCardsInDiscard(filter, valueSource, "_temp", player, "Choose cards from discard", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cards = actionContext.getCardsFromMemory("_temp");
-                        return new RemoveCardsFromDiscardEffect(actionContext.getPerformingPlayer(), actionContext.getSource(),
-                                cards);
+                        String player = playerSource.getPlayer(actionContext);
+                        return new RemoveCardsFromDiscardEffect(player, actionContext.getSource(), cards);
                     }
                 });
 
