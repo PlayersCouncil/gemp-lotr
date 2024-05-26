@@ -31,6 +31,32 @@
 			Hunter 1
 		]
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        cost: {
+		            type: addThreats
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion)
+		            memorize: chosenMinion
+		            times: {
+		                type: condition
+		                condition: {
+		                    type: memoryMatches
+		                    memory: chosenMinion
+		                    filter: hunter,minion
+		                }
+		                true: 2
+		                false: 1
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Damage +1</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>Each time Gimli wins a skirmish, you may add a threat to wound a minion (or wound a hunter minion twice).
 		lore: ""
@@ -66,6 +92,47 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            player: you
+		            filter: self
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: dwarven
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: choice
+		            texts: [
+		                Discard this condition
+		                Remove a {dwarven} token here
+		            ]
+                    effects: [
+                        {
+                            type: discard
+                            filter: self
+                        }
+                        {
+                            type: removeTokens
+                            culture: dwarven
+                            filter: self
+                        }
+                    ]
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(culture(dwarven),companion)
+		            keyword: hunter
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: When you play this condition, place a [dwarven] token here.<br><b>Skirmish:</b> Discard this condition from play or remove a [dwarven] token from here to make a [dwarven] companion gain <b>hunter 1</b>.
 		lore: Let us hunt some Orc!
@@ -104,6 +171,20 @@
 			Support Area
 		]
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: choose(culture(dwarven),companion)
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: choose(currentSite)
+		            keyword: mountain
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: <b>Tale</b>.<br><b>Maneuver:</b> Exert a [dwarven] companion to make the fellowship's current site gain <b>mountain</b> until the regroup phase.
 		lore: ""
