@@ -22,12 +22,36 @@
 		culture: Wraith
 		twilight: 5
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 10
 		vitality: 3
 		site: 3
 		keywords: Fierce
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyResistance
+		            filter: unbound,companion
+		            amount: {
+		                type: forEachHasAttached
+		                filter: any
+		                multiplier: -1
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(companion,maxResistance(2))
+		        }
+		    }
 		]
 		gametext: <b>Fierce</b>.<br>Each unbound companion is resistance -1 for each card he or she bears.<br><b>Skirmish:</b> Exert Úlairë Cantëa to exert a companion with resistance 2 or less.
 		lore: Drawn to the power of the one. They will never stop hunting you.
@@ -62,12 +86,48 @@
 		culture: Wraith
 		twilight: 6
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 11
 		vitality: 4
 		site: 3
 		keywords: Fierce
 		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: heals
+					filter: companion
+					player: free peoples
+				}
+				effect: {
+					type: addBurdens
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					filter: self
+					times: 2
+				}
+				effect: {
+					type: discard
+					filter: choose(condition)
+					count: {
+						type: condition
+						condition: {
+							type: canSpot
+							filter: condition,side(free people)
+							count: 5
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>Each time the Free Peoples player heals a companion, you may add a burden.<br><b>Maneuver:</b> Exert Úlairë Enquëa twice to discard a condition (or two conditions if you can spot 5 Free Peoples player's conditions).
 		lore: At all times they feel the presence of the ring.
@@ -102,12 +162,50 @@
 		culture: Wraith
 		twilight: 4
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
 		keywords: Fierce
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            player: you
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,nazgul
+		        }
+		        effect: {
+		            type: drawCards
+		            count: {
+		                type: forEachYouCanSpot
+		                filter: wounded,companion
+		            }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: [
+		            {
+		                type: exert
+		                filter: self
+		            }
+		            {
+		                type: discardFromHand
+		                forced: false
+		                filter: choose(culture(wraith))
+		            }
+		        ]
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
 		]
 		gametext: <b>Fierce</b>.<br>When you play Úlairë Otsëa, you may spot another Nazgûl to draw a card for each wounded companion you can spot.<br><b>Regroup:</b> Exert Úlairë Otsëa and discard a [wraith] card from hand to add a burden.
 		lore: Blinded by their greed, they took them without question.
@@ -143,8 +241,44 @@
 		type: Artifact
 		strength: 1
 		itemclass: Ring
-		#target: a Nazgûl
+		target: nazgul
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer
+		        }
+		        effect: {
+		            type: choice
+		            player: free people
+		            texts: [
+		                Add a burden
+		                Exert a companion
+		            ]
+		            effects: [
+		                {
+		                    type: addBurdens
+		                    player: free people
+		                }
+		                {
+		                    type: exert
+		                    player: free people
+		                    filter: choose(companion)
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: reconciles
+		        }
+		        effect: {
+		            type: returnToHand
+		            filter: bearer
+		        }
+		    }
 		]
 		gametext: Bearer must be a Nazgûl.<br>Each time bearer wins a skirmish, the Free Peoples player must either add a burden or exert a companion.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
 		lore: ""
@@ -179,8 +313,44 @@
 		twilight: 0
 		type: Artifact
 		itemclass: Ring
-		#target: a Nazgûl
+		target: nazgul
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            player: you
+		            filter: self
+		        }
+		        cost: {
+		            type: removeThreats
+		            amount: 2
+		        }
+		        effect: {
+		            type: putCardsFromDiscardIntoHand
+		            filter: choose(culture(wraith))
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: reconciles
+		        }
+		        effect: {
+		            type: returnToHand
+		            filter: bearer
+		        }
+		    }
 		]
 		gametext: Bearer must be a Nazgûl. Bearer is <b>damage +1</b>.<br>When you play this artifact, you may remove two threats to take a [wraith] card into hand from your discard pile.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
 		lore: ""
@@ -215,12 +385,32 @@
 		culture: Wraith
 		twilight: 8
 		type: Minion
-		race: Nazgûl
+		race: Nazgul
 		strength: 14
 		vitality: 4
 		site: 3
 		keywords: Fierce
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: repeat
+		            times: {
+                        type: forEachYouCanSpot
+                        filter: companion
+                        over: 4
+		            }
+		            effect: {
+		                type: exert
+		                filter: choose(companion)
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Fierce</b>.<br>Each time the Witch-king wins a fierce skirmish, you may exert a companion for each companion you can spot over 4.
 		lore: ""
