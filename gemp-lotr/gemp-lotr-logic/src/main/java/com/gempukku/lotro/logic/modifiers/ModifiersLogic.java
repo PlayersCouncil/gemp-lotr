@@ -342,11 +342,11 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     private boolean isCandidateForKeywordRemovalWithTextRemoval(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
-        if (keyword == Keyword.ROAMING)
+        if (!keyword.isRealKeyword())
             return false;
-        if (keyword == Keyword.RING_BOUND)
-            if (game.getGameState().getRingBearer(physicalCard.getOwner()) == physicalCard)
-                return false;
+        // Ring-bearer is ALWAYS Ring-bound and cannot lose that
+        if (keyword == Keyword.RING_BOUND && game.getGameState().getRingBearer(physicalCard.getOwner()) == physicalCard)
+            return false;
         return true;
     }
 

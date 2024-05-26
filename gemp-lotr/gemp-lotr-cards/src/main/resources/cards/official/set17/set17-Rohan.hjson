@@ -28,6 +28,19 @@
 		resistance: 6
 		keywords: Valiant
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpot
+		                filter: ringBearer,assignedToSkirmish(any)
+		            }
+		            filter: culture(rohan),companion
+		            keyword: hunter
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: <b>Valiant</b>. While the Ring-bearer is assigned to a skirmish, each [rohan] companion gains <b>hunter 1</b>.
 		lore: No enemy has yet taken the Hornburg. Depart, or not one of you will be spared.'
@@ -63,6 +76,35 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: location
+		                filter: plains
+		            }
+		            filter: mounted,companion
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),man
+		            count: 2
+		        }
+		        cost: {
+		            type: discard
+		            filter: choose(culture(rohan),possession)
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(possession)
+		        }
+		    }
 		]
 		gametext: While at a plains site, each mounted companion is strength +1.<br><b>Regroup:</b> Spot 2 [rohan] Men and discard a [rohan] possession to discard a possession.
 		lore: Assemble the army at Dunharrow, as many men as can be found.
@@ -103,6 +145,37 @@
 		resistance: 7
 		keywords: Damage+1
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: ringBearer,assignedToSkirmish(any)
+		            }
+		            filter: self
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: canSpot
+		            filter: self,mounted
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: self
+		            keyword: defender
+		            amount: 1
+		            until: endOfTurn
+		        }
+		    }
 		]
 		gametext: <b>Damage +1</b>.<br>While the Ring-bearer is assigned to a skirmish, Éomer is strength +3.<br><b>Maneuver:</b> If Éomer is mounted, exert him to make him <b>defender +1</b> until the end of turn.
 		lore: We cannot achieve victory through strength of arms.
@@ -142,6 +215,41 @@
 		vitality: 3
 		resistance: 7
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantTakeWounds
+		            requires: {
+                        type: canSpot
+                        filter: ringBearer,assignedToSkirmish(any)
+		            }
+		            filter: self,inSkirmish
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: assignment
+		        cost: [
+                    {
+                        type: exert
+                        filter: self
+                    }
+                    {
+                        type: assignFPCharacterToSkirmish
+                        fpCharacter: choose(ringBearer)
+                        against: choose(minion)
+                        memorizeMinion: chosenMinion
+                    }
+                ]
+                effect: {
+                    type: addModifier
+                    modifier: {
+                        type: removeAllKeywords
+                        filter: memory(chosenMinion)
+                    }
+                    until: regroup
+                }
+		    }
 		]
 		gametext: While the Ring-bearer is assigned to a skirmish, Éowyn cannot take wounds while skirmishing.<br><b>Assignment:</b> Exert Éowyn and assign a minion to the Ring-bearer to make that minion lose all game text keywords and unable to gain game text keywords until the regroup phase.
 		lore: ""
@@ -177,6 +285,34 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: removeKeyword
+		            requires: {
+		                type: canSpot
+		                filter: ringBearer,assignedToSkirmish(any)
+		            }
+		            filter: minion,inSkirmishAgainst(culture(rohan),companion)
+		            keyword: hunter
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: choose(culture(rohan),companion)
+		            memorize: exertedCompanion
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: memory(exertedCompanion)
+		            keyword: hunter
+		            amount: 1
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: While the Ring-bearer is assigned to a skirmish, each minion skirmishing a [rohan] companion loses <b>hunter</b> and is unable to gain hunter.<br><b>Skirmish:</b> Exert a [rohan] companion to make that companion gain <b>hunter 1</b> until the start of the regroup phase.
 		lore: ""
@@ -213,6 +349,52 @@
 		#target: 
 		keywords: Support Area
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: or
+		            requires: [
+		                {
+		                    type: canSpot
+		                    filter: name(Théoden)
+		                }
+		                {
+		                    type: canSpot
+		                    filter: culture(rohan),companion
+		                    count: 2
+		                }
+		            ]
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeAssignedToSkirmish
+		            filter: or(name(Saruman),name(Gríma))
+		        }
+		    }
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToTakeWound
+		            filter: culture(rohan),man
+		        }
+		        cost: [
+		            {
+		                type: exert
+		                filter: choose(culture(rohan),man)
+		                memorize: exertedMan
+		            }
+		            {
+		                type: addTwilight
+		                amount: 2
+		            }
+		        ]
+		        effect: {
+		            type: preventWound
+		            filter: choose(culture(rohan),man,not(memory(exertedMan)))
+		        }
+		    }
 		]
 		gametext: To play, spot Théoden (or 2 [rohan] companions).<br>Saruman and Gríma cannot be assigned to skirmishes.<br><b>Response:</b> If a [rohan] Man is about to take a wound, exert another [rohan] Man and add (2) to prevent that.
 		lore: ""
@@ -252,6 +434,31 @@
 		vitality: 3
 		resistance: 6
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cancelStrengthBonus
+		            requires: {
+		                type: canSpot
+		                filter: ringBearer,assignedToSkirmish(any)
+		            }
+		            filter: minion,inSkirmishAgainst(self)
+		            from: possession
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cancelKeywordBonus
+		            requires: {
+		                type: canSpot
+		                filter: ringBearer,assignedToSkirmish(any)
+		            }
+		            filter: minion,inSkirmishAgainst(self)
+		            keyword: damage
+		            from: possession
+		        }
+		    }
 		]
 		gametext: While the Ring-bearer is assigned to a skirmish, each minion skirmishing Háma loses strength bonuses and <b>damage</b> bonuses from possessions.
 		lore: Hail, Théoden King!
@@ -287,6 +494,32 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),companion
+		            count: 3
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: assignment
+		        cost: {
+		            type: assignFPCharacterToSkirmish
+		            fpCharacter: choose(name(Frodo))
+		            against: choose(minion)
+		            memorizeMinion: chosenMinion
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+                        type: removeAllKeywords
+                        filter: memory(chosenMinion)
+		            }
+		            until: regroup
+		        }
+		    }
 		]
 		gametext: To play, spot 3 [rohan] companions.<br><b>Assignment:</b> Assign a minion to Frodo to make that minion lose all game text keywords of your choice and unable to gain game text keywords until the regroup phase.
 		lore: Saruman's arm will have grown long indeed if he thinks he can reach us here.
@@ -325,6 +558,18 @@
 		vitality: 3
 		resistance: 5
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: ringBearer,assignedToSkirmish(any)
+		            }
+		            filter: self
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: While the Ring-bearer is assigned to a skirmish, this companion is strength +2.
 		lore: For ages, the people of Rohan have been allied to Gondor.
@@ -364,6 +609,34 @@
 		vitality: 3
 		resistance: 7
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: ringBearer,assignedToSkirmish(any)
+		            }
+		            filter: culture(rohan),companion
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        requires: {
+		            type: canSpot
+		            filter: culture(rohan),follower
+		            count: 2
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: liberateSite
+		        }
+		    }
 		]
 		gametext: While the Ring-bearer is assigned to a skirmish, each [rohan] companion is strength +1.<br><b>Regroup:</b> Spot 2 [rohan] followers and exert Théoden to liberate a site.
 		lore: When last I looked, Théoden, was King of Rohan.
@@ -398,13 +671,30 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
 			cost: {
-			},
+			    type: spot
+			    filter: choose(culture(rohan),companion)
+			    memorize: spottedCompanion
+			}
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(name(Frodo))
+				    amount: 5
+				    memorize: frodo
+				}
+				{
+				    type: addTrigger
+				    trigger: {
+				        type: losesSkirmish
+				        filter: memory(frodo)
+				    }
+				    effect: {
+				        type: discard
+				        filter: memory(spottedCompanion)
+				    }
 				}
 			]
 		}
@@ -445,6 +735,25 @@
 		vitality: 3
 		resistance: 6
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeTransferred
+		            filter: possession,attachedTo(self)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: play
+		            filter: choose(possession)
+		            on: self
+		        }
+		        effect: {
+		            type: liberateSite
+		        }
+		    }
 		]
 		gametext: Possessions cannot be transferred from this companion to another character.<br><b>Fellowship:</b> Play a possession on this companion to liberate a site.
 		lore: Rohirrim territories are not easily taken.

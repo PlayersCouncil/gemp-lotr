@@ -258,6 +258,7 @@
 		        modifier: {
 		            type: cancelKeywordBonus
 		            filter: companion,inSkirmishAgainst(self)
+		            keyword: damage
 		            from: possession
 		        }
 		    }
