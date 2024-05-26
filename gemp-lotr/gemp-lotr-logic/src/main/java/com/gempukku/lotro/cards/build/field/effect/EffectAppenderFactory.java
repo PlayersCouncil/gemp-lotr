@@ -146,6 +146,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("reinforcetokens", new ReinforceTokens());
         effectAppenderProducers.put("removealltokens", new RemoveAllTokens());
         effectAppenderProducers.put("removeburdens", new RemoveBurdens());
+        effectAppenderProducers.put("removecardsindeadpilefromgame", new RemoveCardsInDeadPileFromGame());
         effectAppenderProducers.put("removecardsindiscardfromgame", new RemoveCardsInDiscardFromGame());
         effectAppenderProducers.put("removecharacterfromskirmish", new RemoveCharacterFromSkirmish());
         effectAppenderProducers.put("removefromthegame", new RemoveFromTheGame());

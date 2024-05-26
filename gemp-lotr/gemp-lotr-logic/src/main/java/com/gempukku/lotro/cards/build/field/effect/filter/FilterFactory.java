@@ -51,6 +51,8 @@ public class FilterFactory {
         simpleFilters.put("canwound", (actionContext -> Filters.canTakeWounds(actionContext.getSource(), 1)));
         simpleFilters.put("controlledbyotherplayer",
                 (actionContext -> Filters.siteControlledByOtherPlayer(actionContext.getPerformingPlayer())));
+        simpleFilters.put("controlledbyshadowplayer",
+                (actionContext -> Filters.siteControlledByOtherPlayer(actionContext.getGame().getGameState().getCurrentPlayerId())));
         simpleFilters.put("controlledsite",
                 (actionContext -> Filters.siteControlled(actionContext.getPerformingPlayer())));
         simpleFilters.put("siteyoucontrol",
