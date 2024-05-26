@@ -23,6 +23,42 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: extraCost
+		        cost: {
+		            type: exert
+		            filter: choose(your,mounted,culture(orc),orc)
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: assignedAgainst
+		            side: free people
+		            filter: mounted,culture(orc),orc
+		            against: companion
+		            memorizeAgainst: chosenCompanion
+		        }
+		        effect: {
+		            type: choice
+		            player: free people
+		            texts: [
+		                Exert {chosenCompanion}
+		                Add 2 twilight
+		            ]
+		            effects: [
+		                {
+		                    type: exert
+		                    player: free people
+		                    filter: memory(chosenCompanion)
+		                }
+		                {
+		                    type: addTwilight
+		                    amount: 2
+		                }
+		            ]
+		        }
+		    }
 		]
 		gametext: To play, exert your mounted [orc] Orc.<br>Each time the Free Peoples player assigns a mounted [orc] Orc to a companion, he or she must choose to either exert that companion or add (2).
 		lore: The wolf snarled and sprang towards them with a great leap.
@@ -58,6 +94,33 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: cantSpot
+		            filter: minion
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyCost
+		            filter: minion
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: culture(orc),minion
+		            }
+		            filter: companion
+		            amount: -1
+		        }
+		    }
 		]
 		gametext: To play, spot no minions.<br>Each time you play a minion, it is twilight cost +1.<br>While you can spot an [orc] minion, each companion is strength -1.
 		lore: An Orc often was spurred into battle as if death was preferable to the torment of its orkish life.
@@ -93,6 +156,26 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: winsSkirmish
+		            filter: mounted,culture(orc),orc
+		        }
+		        effect: [
+		            {
+		                type: revealHand
+		                hand: free people
+		                memorize: revealedCards
+		            }
+		            {
+		                type: putCardsFromHandOnBottomOfDeck
+		                player: free people
+		                filter: choose(memory(revealedCards),side(free people))
+		                count: 2
+		            }
+		        ]
+		    }
 		]
 		gametext: Each time a mounted [orc] Orc wins a skirmish, the Free Peoples player must reveal his or her hand and place two Free Peoples cards revealed on the bottom of his or her draw deck.
 		lore: Wargs! We are under attack!
@@ -127,13 +210,23 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(culture(orc),minion)
+				    memorize: chosenMinion
+				    amount: {
+				        type: condition
+				        condition: {
+				            type: memoryMatches
+				            memory: chosenMinion
+				            filter: mounted
+				        }
+				        true: 4
+				        false: 2
+				    }
 				}
 			]
 		}
@@ -176,6 +269,40 @@
 		site: 4
 		keywords: Hunter 2
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+                    requires: {
+                        type: canSpot
+                        filter: culture(uruk-hai),minion
+                    }
+                    filter: culture(orc),orc
+                    keyword: hunter
+                    amount: {
+                        type: condition
+                        condition: {
+                            type: canSpot
+                            filter: culture(uruk-hai),minion,name(Uglúk)
+                        }
+                        true: 2
+                        false: 1
+                    }
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        effect: {
+		            type: playCardFromDrawDeck
+		            filter: choose(culture(uruk-hai),hunter,minion)
+		        }
+		    }
 		]
 		gametext: <b>Hunter 2</b>.<br>While you can spot an [uruk-hai] minion, each [orc] Orc gains <b>hunter 1</b> (if that [uruk-hai] minion is Uglúk, each [orc] Orc gains an additional <b>hunter 1</b>).<br><b>Shadow:</b> Exert Grishnákh twice to play an [uruk-hai] hunter minion from your draw deck.
 		lore: ""
@@ -214,6 +341,18 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: follower,attachedTo(companion)
+		            }
+		            filter: culture(orc),minion
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: While you can spot a follower attached to a companion, each [orc] minion is strength +2.
 		lore: Vile villain of all that opposed his master.
@@ -252,6 +391,17 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(culture(orc),minion)
+		        }
+		    }
 		]
 		gametext: When this minion wins a skirmish, discard an [orc] minion from play.
 		lore: These Orcs were fearsome warriors.
@@ -290,6 +440,35 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: culture(orc),mount
+		        }
+		        effect: {
+		            type: drawCards
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: assignment
+		        requires: {
+                    type: canSpot
+                    filter: self,mounted
+		        }
+		        cost: {
+		            type: exert
+		            filter: self
+		            times: 2
+		        }
+		        effect: {
+		            type: assignFPCharacterToSkirmish
+		            fpCharacter: choose(companion,minStrength(9))
+		            against: self
+		        }
+		    }
 		]
 		gametext: Each time you play an [orc] mount, you may draw a card.<br><b>Assignment:</b> If this minion is mounted, exert it twice to assign it to a companion of strength 9 or more.
 		lore: With speed and numbers, these feared riders were not easily avoided.
@@ -328,6 +507,29 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,culture(orc),minion
+		        }
+		        effect: {
+		            type: repeat
+		            times: {
+		                type: forEachFPCulture
+		                over: 2
+		            }
+		            effect: {
+                        type: exert
+                        filter: choose(companion)
+		            }
+		        }
+		    }
 		]
 		gametext: Each time you play this minion, you may spot another [orc] minion to exert a companion for each Free Peoples culture you can spot over 2.
 		lore: Under the cover of darkness the Orcs came.
@@ -366,6 +568,47 @@
 		vitality: 4
 		site: 4
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: culture(orc),orc
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: location
+		                filter: underground
+		            }
+		            filter: self
+		            keyword: fierce
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantReplaceSite
+		            requires: {
+		                type: location
+		                filter: underground
+		            }
+		            player: free people
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantPlaySite
+		            requires: {
+		                type: location
+		                filter: underground
+		            }
+		            player: free people
+		        }
+		    }
 		]
 		gametext: To play, spot an [orc] Orc.<br>While at an underground site, this minion is <b>fierce</b> and the Free Peoples player may not replace sites or play a site from his or her adventure deck.
 		lore: Dwellers of foul pits and tunnels.
@@ -404,6 +647,34 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self,mounted
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(companion)
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+		            filter: choose(culture(orc),minion)
+		            count: 3
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(orc),mount
+		        }
+		        effect: {
+		            type: discard
+		            filter: choose(condition)
+		        }
+		    }
 		]
 		gametext: Each time this minion wins a skirmish, if it is mounted, exert a companion.<br><b>Shadow:</b> Exert 3 [orc] minions and spot an [orc] mount to discard a condition.
 		lore: Quick to contain their fleeing victims, the Orkish riders were always feared.
@@ -442,6 +713,16 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachTwilight
+		            }
+		        }
+		    }
 		]
 		gametext: This minion is strength +1 for each twilight token you can spot.
 		lore: They feared their master more than any enemy.
@@ -480,6 +761,29 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: startOfSkirmishInvolving
+		            filter: self
+		        }
+		        cost: {
+		            type: revealCardsFromHand
+		            filter: choose(culture(orc),condition)
+		        }
+		        effect: [
+                    {
+                        type: wound
+                        filter: choose(companion,inSkirmishAgainst(self))
+                        times: 2
+                    }
+                    {
+                        type: discard
+                        filter: self
+                    }
+                ]
+		    }
 		]
 		gametext: At the start of each skirmish involving this minion, you may reveal an [orc] condition from hand to wound the companion this minion is skirmishing twice and then discard this minion.
 		lore: Spawned from terrible acts, the Orcs emerged as ruined and terrible forms of life.
@@ -518,6 +822,23 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+		            type: canSpot
+		            filter: culture(orc),condition
+		            count: 2
+		        }
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(unbound,companion)
+		        }
+		    }
 		]
 		gametext: <b>Maneuver:</b> Spot 2 [orc] conditions and discard this minion from play to wound an unbound companion.
 		lore: They came from dark and evil places.
@@ -556,6 +877,18 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: self
+		            amount: {
+		                type: forEachInDiscard
+		                discard: you
+		                filter: culture(orc),condition
+		            }
+		        }
+		    }
 		]
 		gametext: This minion is strength +1 for each [orc] condition in your discard pile.
 		lore: As the Orcs silently approached, the fear they brought multiplied.
@@ -594,6 +927,27 @@
 		vitality: 1
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: mounted,culture(orc),orc
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            filter: choose(culture(orc))
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            filter: choose(culture(orc),mount)
+		        }
+		    }
 		]
 		gametext: Each mounted [orc] Orc is strength +1.<br><b>Shadow:</b> Discard an [orc] card from your hand to play an [orc] mount from your discard pile.
 		lore: They formed the cavalry of the Orc legions.
@@ -632,6 +986,24 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: another,culture(orc),minion
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: {
+		                type: regionNumber
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Shadow:</b> Exert this minion and spot another [orc] minion to add (X), where X is the number of the current region.
 		lore: Orcs were kept in check by the light of the sun.
@@ -670,6 +1042,21 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: {
+		                type: forEachTwilightCostToPlay
+		                filter: currentSite
+		            }
+		        }
+		    }
 		]
 		gametext: <b>Shadow:</b> Exert this minion to add (X), where X is the current site's Shadow number.
 		lore: Bred in dark sorcery.
@@ -708,6 +1095,27 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyCost
+		            filter: culture(orc),mount
+		            amount: -1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(mounted,culture(orc),orc)
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: Each [orc] mount is twilight cost -1.<br><b>Skirmish:</b> Remove (3) to make a mounted [orc] Orc strength +2.
 		lore: There is not much that is fouler than Orcs.
@@ -746,6 +1154,31 @@
 		vitality: 4
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: culture(orc),mount
+		        }
+		        effect: {
+		            type: reinforceTokens
+		            culture: orc
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: wound
+		            player: free people
+		            filter: choose(companion)
+		        }
+		    }
 		]
 		gametext: Each time you play an [orc] mount, you may reinforce an [orc] token.<br><b>Regroup:</b> Exert Orkish Veteran to make the Free Peoples player wound a companion.
 		lore: Skin as dark as wood that has been charred by flame.
@@ -784,6 +1217,33 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: mounted,culture(orc),minion
+		        }
+		        effect: {
+		            type: putCardsFromHandOnTopOfDeck
+		            hand: free people
+		            player: free people
+		            count: 1
+		            reveal: false
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+		            type: playCardFromDiscard
+		            filter: choose(culture(orc),mount)
+		        }
+		    }
 		]
 		gametext: Each time a mounted [orc] minion wins a skirmish, you may make the Free Peoples player place a card from his or her hand on top of his or her draw deck.<br><b>Shadow:</b> Exert Orkish Warg-master to play an [orc] mount from your discard pile.
 		lore: Argh!!
@@ -822,6 +1282,32 @@
 		vitality: 2
 		site: 4
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpot
+		                filter: companion,minStrength(12)
+		            }
+		            filter: self
+		            amount: 4
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: moves
+		        }
+		        requires: {
+		            type: phase
+		            phase: regroup
+		        }
+		        effect: {
+		            type: discard
+		            filter: self
+		        }
+		    }
 		]
 		gametext: While you can spot a companion of strength 12 or more, this minion is strength +4. Each time the fellowship moves during the regroup phase, discard this minion.
 		lore: These Orcs were loathsome as Elves were fair.
@@ -858,8 +1344,56 @@
 		strength: 2
 		vitality: 2
 		itemclass: Mount
-		#target: title(an [orc] Orc with strength 10 or less)
+		target: culture(orc),orc,maxStrength(10)
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: fierce
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: chooseActiveCards
+		                filter: choose(character,hasRace)
+		                text: Spot a race
+		                memorize: chosenCharacter
+		            }
+		            {
+		                type: storeRaceFromCard
+		                memory: chosenCharacter
+		            }
+		        ]
+		    }
+		    {
+		        type: displayableInformation
+		        text: Chosen race is {stored}
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            filter: bearer,inSkirmishAgainst(race(stored))
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer,inSkirmishAgainst(race(stored))
+		            keyword: damage
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: Bearer must be an [orc] Orc with strength 10 or less. Bearer is <b>fierce</b>.<br>When you play this possession, spot a race. While bearer is skirmishing a companion of that race, bearer is strength +3 and <b>damage +1</b>.
 		lore: The wolves of Isengard will return.
@@ -895,8 +1429,22 @@
 		type: Possession
 		strength: 2
 		itemclass: Armor
-		#target: title(an [orc] Orc)
+		target: culture(orc),orc
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+                    type: cantTakeWounds
+                    filter: bearer,mounted
+                    requires: {
+                        type: not
+                        requires: {
+                            type: phase
+                            phase: skirmish
+                        }
+                    }
+		        }
+		    }
 		]
 		gametext: Bearer must be an [orc] Orc.<br>While bearer is mounted, it cannot take wounds except during the skirmish phase.
 		lore: Foul of smell but light to bear, a warg would often allow its rider little leeway.
@@ -933,8 +1481,33 @@
 		strength: 2
 		vitality: 1
 		itemclass: Mount
-		#target: title(an [orc] Orc with strength 10 or less)
+		target: culture(orc),orc,maxStrength(10)
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: fierce
+		        }
+		    }
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: self
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(orc),orc,not(hasAttached(mount))
+		            count: 2
+		        }
+		        effect: {
+		            type: playCardFromDrawDeck
+		            filter: choose(culture(orc),mount)
+		        }
+		    }
 		]
 		gametext: Bearer must be an [orc] Orc with strength 10 or less. Bearer is <b>fierce</b>.<br>When you play this, you may spot 2 [orc] Orcs that are not bearing mounts to play an [orc] mount from your draw deck.
 		lore: The wolf that one hears is worse than the orc that one fears.'
@@ -971,8 +1544,16 @@
 		strength: 4
 		vitality: 2
 		itemclass: Mount
-		#target: title(an [orc] Orc with strength 9 or less)
+		target: culture(orc),orc,maxStrength(9)
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: fierce
+		        }
+		    }
 		]
 		gametext: Bearer must be an [orc] Orc with strength 9 or less. Bearer is <b>fierce</b>.
 		lore: ...where the warg howls, there also the orc prowls.'
