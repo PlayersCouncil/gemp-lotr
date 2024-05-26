@@ -22,13 +22,19 @@
 		twilight: 2
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: name(Shelob)
+			}
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(minion)
+				    amount: {
+				        type: forEachThreat
+				    }
 				}
 			]
 		}
@@ -66,6 +72,21 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activatedTrigger
+		        trigger: {
+		            type: aboutToDiscard
+		            opponent: true
+		            filter: your,other,culture(gollum),condition
+		        }
+		        cost: {
+		            type: removeTwilight
+		        }
+		        effect: {
+		            type: preventDiscard
+		            filter: choose(your,other,culture(gollum),condition)
+		        }
+		    }
 		]
 		gametext: <b>Response:</b> If a Free Peoples player's card is about to discard your other [gollum] condition, remove (1) to prevent that.
 		lore: Presently they were under the shadow, and there in the midst of it they saw the opening of a cave. 'This is the way in,' said Gollum softly.
@@ -100,13 +121,16 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-
 		effects: {
 			type: event
 			cost: {
-			},
+			    type: heal
+			    filter: choose(ringBound,companion)
+			}
 			effect: [
 				{
+				    type: reinforceTokens
+				    culture: gollum
 				}
 			]
 		}
@@ -143,13 +167,31 @@
 		twilight: 0
 		type: Event
 		keywords: Shadow
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(gollum)
+			}
 			effect: [
 				{
+				    type: choice
+				    texts: [
+				        Play a non-roaming minion
+				        Play a roaming minion
+				    ]
+				    effects: [
+				        {
+				            type: play
+				            filter: choose(not(roaming),minion)
+				            cost: -1
+				        }
+				        {
+				            type: play
+				            filter: choose(roaming,minion)
+				            cost: -3
+				        }
+				    ]
 				}
 			]
 		}
@@ -187,6 +229,41 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: shadow
+		        cost: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		        effect: [
+		            {
+		                type: putCardsFromDeckIntoHand
+		                filter: choose(culture(gollum))
+		                reveal: true
+		                shuffle: true
+		            }
+		            {
+		                type: discardFromHand
+    		            forced: false
+		                filter: random(1)
+		            }
+		        ]
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            filter: choose(culture(gollum))
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(culture(gollum),minion)
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: <b>Shadow:</b> Remove (3) to take a [gollum] card into hand from your draw deck, then randomly discard a card from your hand.<br><b>Skirmish:</b> Discard a [gollum] card from hand to make a [gollum] minion strength +2.
 		lore: But I still feel that they are looking at me, or thinking about me: making some other plan, perhaps.'
@@ -224,10 +301,14 @@
 
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: or(name(Gollum),name(Sméagol))
+			}
 			effect: [
 				{
+				    type: returnToHand
+				    filter: choose(follower)
 				}
 			]
 		}
@@ -270,6 +351,49 @@
 		site: 8
 		keywords: Fierce
 		effects: [
+		    {
+		        type: trigger
+		        text: Add threats up to the number of burdens
+		        optional: true
+                trigger: {
+                    type: winsSkirmish
+                    filter: self
+                }
+                effect: {
+                    type: addThreats
+                    amount: {
+                        type: forEachBurden
+                    }
+                }
+		    }
+		    {
+		        type: trigger
+		        text: Play Gollum from your discard pile
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: [
+                    {
+                        type: playCardFromDiscard
+                        filter: choose(name(Gollum))
+                        memorize: playedGollum
+                    }
+                    {
+                        type: modifyStrength
+                        filter: memory(playedGollum)
+                        amount: 3
+                        until: endOfTurn
+                    }
+                    {
+                        type: addKeyword
+                        filter: memory(playedGollum)
+                        keyword: fierce
+                        until: endOfTurn
+                    }
+                ]
+		    }
 		]
 		gametext: <b>Fierce</b>.<br>Each time Shelob wins a skirmish, you may add threats up to the number of burdens you can spot.<br>Each time Shelob wins a skirmish, you may play Gollum from your discard pile; he is strength +3 and <b>fierce</b> until the end of turn.
 		lore: ""
@@ -304,13 +428,22 @@
 		twilight: 10
 		type: Event
 		keywords: Regroup
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: name(Shelob)
+			}
 			effect: [
 				{
+				    type: kill
+				    player: free people
+				    filter: choose(companion,not(ringBearer))
+				}
+				{
+				    type: returnToHand
+				    player: free people
+				    filter: choose(companion,not(ringBearer))
 				}
 			]
 		}
@@ -347,19 +480,22 @@
 		twilight: 0
 		type: Event
 		keywords: Response
-
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: played
+				filter: skirmish,event
 			}
-			cost: {
+			requires: {
+			    type: canSpot
+			    filter: name(Sméagol)
 			}
 			effect: [
 				{
+				    type: cancelEvent
 				}
 			]
-		]
+		}
 		gametext: If a skirmish event is played, spot Sméagol to cancel that event.
 		lore: Oh yes we could! Spoil nice fish. Give it to usss rrraw... and wrrriggling! You keep nasty chips.
 		promotext: ""
@@ -393,13 +529,21 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: reinforceTokens
+				    culture: gollum
+				}
+				{
+				    type: optional
+				    player: shadow
+				    text: Would you like to draw a card?
+				    effect: {
+				        type: drawCards
+				        player: shadow
+				    }
 				}
 			]
 		}
