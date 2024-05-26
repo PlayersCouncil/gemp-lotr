@@ -71,6 +71,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("modifyinitiativehandsize", new ModifyInitiativeHandSize());
         modifierProducers.put("modifymovelimit", new ModifyMoveLimit());
         modifierProducers.put("modifyplayoncost", new ModifyPlayOnCost());
+        modifierProducers.put("modifyracespotcount", new ModifyRaceSpotCount());
         modifierProducers.put("modifyresistance", new ModifyResistance());
         modifierProducers.put("modifyroamingpenalty", new ModifyRoamingPenalty());
         modifierProducers.put("modifysanctuaryheal", new ModifySanctuaryHeal());
