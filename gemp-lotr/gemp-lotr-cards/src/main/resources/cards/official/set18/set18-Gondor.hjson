@@ -28,6 +28,32 @@
 		resistance: 8
 		keywords: Hunter 2
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+		                type: canSpotFPCultures
+		                amount: 3
+		            }
+		            filter: self
+		            keyword: defender
+		            amount: 1
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            requires: {
+                        type: canSpotShadowCultures
+                        amount: 2
+		            }
+		            filter: self
+		            keyword: defender
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: <b>Hunter 2</b>.<br>While you can spot 3 Free Peoples cultures, Aragorn is <b>defender +1</b>.<br>While you can spot 2 Shadow cultures, Aragorn is <b>defender +1</b>.
 		lore: ""
@@ -63,8 +89,16 @@
 		type: Possession
 		strength: 1
 		itemclass: Armor
-		#target: a [gondor] Man
+		target: culture(gondor),man
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: knight
+		        }
+		    }
 		]
 		gametext: Bearer must be a [gondor] Man.<br>Bearer is a <b>knight</b>.
 		lore: Surely this is the greatest jest in all the history of Gondor: that we should ride with seven thousand, scarce as many as the vanguard of its army in the days of its power, to assail the mountains and the impenetrable gate of the Black Land!'
@@ -105,6 +139,27 @@
 		resistance: 5
 		keywords: Ranger
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            player: you
+		            filter: self
+		        }
+		        requires: {
+		            type: not
+		            requires: {
+		                type: phase
+		                phase: play starting fellowship
+		            }
+		        }
+		        effect: {
+		            type: playCardFromDrawDeck
+		            filter: choose(culture(gondor),possession,maxTwilight(1))
+		            on: self
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>.<br>When you play Boromir (except in your starting fellowship), you may play a possession with a twilight cost of 1 or less on him from your draw deck. Reshuffle your draw deck.
 		lore: Yes, there is weakness. There is frailty. But there is courage also, and honor to be found in Men.
@@ -141,6 +196,34 @@
 		#target: 
 		keywords: Support Area
 		effects: [
+		    {
+		        type: toPlay
+		        requires: {
+		            type: canSpot
+		            filter: or(name(Aragorn),name(Elendil),name(Isildur))
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: [
+		            {
+		                type: spot
+		                filter: choose(culture(gondor),man,minVitality(3))
+		                memorize: spottedMan
+		            }
+		            {
+		                type: discardFromHand
+		                forced: false
+		                filter: choose(culture(gondor))
+		            }
+		        ]
+		        effect: {
+		            type: modifyStrength
+		            filter: memory(spottedMan)
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: To play, spot Aragorn, Elendil, or Isildur.<br><b>Skirmish:</b> Spot a [gondor] Man with 3 or more vitality and discard a [gondor] card from hand to make that Man strength +2.
 		lore: Et Eärello Endorenna utúlien. Sinome maruvan ar Hildinyar tenn' Ambar-metta!
@@ -180,6 +263,37 @@
 		vitality: 3
 		resistance: 5
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesFrom
+		        }
+		        effect: {
+		            type: addBurdens
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: choose(another,culture(gondor),man)
+		            memorize: exertedMan
+		        }
+		        effect: [
+		            {
+		                type: modifyStrength
+		                filter: memory(exertedMan)
+		                amount: 1
+		            }
+		            {
+		                type: addKeyword
+		                filter: memory(exertedMan)
+		                keyword: damage
+		                amount: 1
+		            }
+		        ]
+		    }
 		]
 		gametext: Each time the fellowship moves from a site, add a burden.<br><b>Skirmish:</b> Exert another [gondor] Man to make him or her strength +1 and <b>damage +1</b>.
 		lore: No tomb for Denethor and Faramir. No long, slow sleep of death embalmed.
@@ -215,8 +329,15 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		#target: a [gondor] Man
+		target: culture(gondor),man
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: removeText
+		            filter: bearer,name(Denethor)
+		        }
+		    }
 		]
 		gametext: Bearer must be a [gondor] Man.<br>While bearer is Denethor, his game text does not apply.
 		lore: But if doom denies this to me, then I will have naught: neither life diminished, nor love halved, nor honour abated.
@@ -251,13 +372,21 @@
 		twilight: 1
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
-			cost: {
-			},
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: choose(ranger)
+				    amount: 2
+				}
+				{
+				    type: optional
+				    text: Would you like to reinforce {gondor} token?
+				    effect: {
+				        type: reinforceTokens
+				        culture: gondor
+				    }
 				}
 			]
 		}
@@ -295,8 +424,22 @@
 		type: Possession
 		strength: 1
 		itemclass: Ranged weapon
-		#target: a [gondor] ranger
+		target: culture(gondor),ranger
 		effects: [
+		    {
+		        type: activated
+		        phase: archery
+		        cost: {
+		            type: discardFromHand
+		            forced: false
+		            filter: choose(culture(gondor))
+		        }
+		        effect: {
+		            type: modifyArcheryTotal
+		            side: free people
+		            amount: 1
+		        }
+		    }
 		]
 		gametext: Bearer must be a [gondor] ranger.<br><b>Archery:</b> Discard 2 [gondor] cards from hand to make the fellowship archery total +1.
 		lore: Well trained and deadly accurate, a ranger's bow was more an extension of himself than a weapon of wood.
@@ -333,6 +476,52 @@
 		strength: -1
 		keywords: Support Area
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBear
+		            filter: bearer
+		            cardFilter: side(shadow)
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: transferred
+		            filter: self
+		        }
+		        effect: {
+		            type: discard
+		            filter: all(side(shadow),attachedTo(bearer))
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: choice
+		            texts: [
+		                Exert a {gondor} Man
+		                Spot a ranger
+		            ]
+		            effects: [
+		                {
+		                    type: exert
+		                    filter: choose(culture(gondor),man)
+		                }
+		                {
+		                    type: spot
+		                    filter: ranger
+		                }
+		            ]
+		        }
+		        effect: {
+		            type: transfer
+		            filter: self
+		            fromSupport: true
+		            where: choose(minion)
+		        }
+		    }
 		]
 		gametext: Bearer cannot bear any Shadow cards.<br>When this condition is transferred to bearer, discard all Shadow cards it bears.<br><b>Maneuver:</b> Exert a [gondor] Man or spot a ranger to transfer this condition from your support area to a minion.
 		lore: In a flurry of swordplay, Aragorn sliced his arm off.
@@ -368,6 +557,13 @@
 		type: Follower
 		strength: 2
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: exert
+		            filter: choose(culture(gondor),companion)
+		        }
+		    }
 		]
 		gametext: <b>Aid</b> – Exert a [gondor] companion. <helper>(At the start of the maneuver phase, you may exert a [gondor] companion to transfer this to a companion.)</helper>
 		lore: ...and on the slopes of Mount Doom they fought for the freedom of Middle-earth.
@@ -411,6 +607,26 @@
 			Hunter 2
 		]
 		effects: [
+		    {
+		        type: modifyOwnCost
+		        requires: {
+		            type: phase
+		            phase: play starting fellowship
+		        }
+		        amount: -1
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: exert
+		            filter: self
+		        }
+		        effect: {
+                    type: heal
+                    filter: choose(another,companion,minResistance(5))
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 2</b>.<br>If Faramir is in your starting fellowship, his twilight cost is -1.<br><b>Maneuver:</b> Exert Faramir to heal another companion with resistance 5 or more.
 		lore: There are no travelers in this land. Only servants of the Dark Tower.
@@ -445,6 +661,28 @@
 		twilight: 1
 		type: Follower
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: addThreats
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: transferred
+		            filter: self
+		            to: companion
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: culture(gondor),possession
+		        }
+		        effect: {
+		            type: heal
+		            filter: bearer
+		        }
+		    }
 		]
 		gametext: <b>Aid</b> – Add a threat. <helper>(At the start of the maneuver phase, you may add a threat to transfer this to a companion.)</helper><br>When you attach this card to a companion, spot a [gondor] possession to heal that companion.
 		lore: Cloaked rangers armed with deadly arrows and swords.
@@ -483,6 +721,57 @@
 			Support Area
 		]
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            filter: not(culture(wraith)),minion
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: man
+		        }
+		        effect: {
+		            type: addTokens
+		            culture: gondor
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: {
+		            type: removeTokens
+		            count: 3
+		            culture: gondor
+		            filter: self
+		        }
+		        effect: {
+		            type: preventable
+		            player: shadow
+	                text: Would you like to remove 2 twilight to prevent effect of The Faithful Stone?
+		            cost: {
+		                type: removeTwilight
+		                amount: 2
+		            }
+		            effect: [
+                        {
+                            type: spot
+                            filter: choose(minion)
+                            memorize: spottedMinion
+                        }
+                        {
+                            type: addModifier
+                            modifier: {
+                                type: cantBeAssignedToSkirmish
+                                filter: memory(spottedMinion)
+                            }
+                            until: regroup
+                        }
+                    ]
+		        }
+		    }
 		]
 		gametext: <b>Tale</b>. Each time a non-[wraith] minion is played, you may spot a Man to add a [gondor] token here.<br><b>Maneuver:</b> Remove 3 [gondor] tokens from here to spot a minion. That minion cannot be assigned to a skirmish until the regroup phase. Any Shadow player may remove (2) to prevent this.
 		lore: Each turn was guarded by Púkel-men stones with their huge, clumsy arms folded across their round bellies.
@@ -517,13 +806,18 @@
 		twilight: 0
 		type: Event
 		keywords: Skirmish
-
 		effects: {
 			type: event
 			cost: {
-			},
+			    type: exert
+			    filter: choose(knight)
+			    memorize: exertedKnight
+			}
 			effect: [
 				{
+				    type: modifyStrength
+				    filter: memory(exertedKnight)
+				    amount: 3
 				}
 			]
 		}
@@ -562,6 +856,24 @@
 		type: Follower
 		resistance: 3
 		effects: [
+		    {
+		        type: aidCost
+		        cost: {
+		            type: addTwilight
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: transferred
+		            filter: self
+		            to: companion,not(culture(gondor),man)
+		        }
+		        effect: {
+		            type: addTwilight
+		            amount: 4
+		        }
+		    }
 		]
 		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, you may add (1) to transfer this to a companion.)</helper><br>Each time you attach this to a companion, except a [gondor] Man, add (4).
 		lore: If the personal servants of Denethor were aware of his madness, they were wise to conceal it.
@@ -597,8 +909,52 @@
 		twilight: 0
 		type: Possession
 		resistance: 1
-		#target: a [gondor] Man
+		target: culture(gondor),man
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: [
+		            {
+		                type: exert
+		                filter: bearer
+		            }
+		            {
+		                type: discard
+		                filter: choose(follower)
+		            }
+		        ]
+		        effect: [
+		            {
+		                type: modifyStrength
+		                filter: bearer
+		                amount: 4
+		                until: regroup
+		            }
+		            {
+		                type: conditional
+		                requires: {
+		                    type: canSpot
+		                    filter: bearer,name(Boromir)
+		                }
+		                effect: [
+                            {
+                                type: addKeyword
+                                filter: bearer
+                                keyword: defender
+                                amount: 1
+                                until: regroup
+                            }
+                            {
+                                type: alterOverwhelmMultiplier
+                                filter: bearer
+                                multiplier: 3
+                                until: regroup
+                            }
+                        ]
+		            }
+		        ]
+		    }
 		]
 		gametext: Bearer must be a [gondor] Man.<br><b>Maneuver:</b> Exert bearer and discard a follower from play to make bearer strength +4 until the regroup phase (if bearer is Boromir, he is also <b>defender +1</b> and cannot be overwhelmed unless his strength is tripled).
 		lore: ""
@@ -639,6 +995,28 @@
 		resistance: 1
 		keywords: Knight
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: losesSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: exert
+		            filter: choose(companion)
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: winsSkirmish
+		            filter: self
+		        }
+		        effect: {
+		            type: heal
+		            filter: choose(companion)
+		        }
+		    }
 		]
 		gametext: <b>Knight</b>.<br>Each time Isildur loses a skirmish, exert a companion.<br>Each time Isildur wins a skirmish, heal a companion.
 		lore: It was in this moment, when all hope had faded, that Isildur, son of the king, took up his father's sword.
@@ -672,8 +1050,39 @@
 		culture: Gondor
 		twilight: 0
 		type: Condition
-		#target: a [gondor] Man
+		target: culture(gondor),man
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        requires: {
+                    type: location
+                    filter: or(regionNumber(1),regionNumber(2))
+		        }
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: addKeyword
+		            filter: bearer
+		            keyword: defender
+		            amount: 1
+		            until: regroup
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+                    type: discard
+                    filter: self
+                }
+                effect: {
+                    type: heal
+                    filter: choose(companion)
+                }
+		    }
 		]
 		gametext: Bearer must be a [gondor] Man.<br><b>Maneuver:</b> If the fellowship is in region 1 or region 2, you may exert bearer to make him or her <b>defender +1</b> until the regroup phase.<br><b>Regroup:</b> Discard this to heal a companion.
 		lore: This is no mere ranger. He is Aragorn, son of Arathorn. You owe him your allegiance.
@@ -713,6 +1122,18 @@
 		resistance: 6
 		keywords: Ranger
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: modifyStrength
+		            requires: {
+		                type: canSpotCultureTokens
+		                culture: gondor
+		            }
+		            filter: self
+		            amount: 2
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>.<br>While you can spot a [gondor] token, this companion is strength +2.
 		lore: All had swords at their sides, and were clad in green and brown of varied hues, as if the better to walk unseen in the glades of Ithilien.
@@ -747,8 +1168,35 @@
 		twilight: 1
 		type: Possession
 		itemclass: Shield
-		#target: a [gondor] Man
+		target: culture(gondor),man
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+                    type: modifyArcheryTotal
+                    side: shadow
+                    amount: -1
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: discard
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: shuffleHandIntoDrawDeck
+		                player: shadow
+		            }
+		            {
+		                type: drawCards
+		                player: shadow
+		                count: 8
+		            }
+		        ]
+		    }
 		]
 		gametext: Bearer must be a [gondor] Man.<br>The minion archery total is -1.<br><b>Regroup:</b> Discard this possession from play to make each opponent shuffle his or her hand into his or her draw deck and draw 8 cards.
 		lore: Tipped with silver, and adorned with the White Tree.
@@ -788,6 +1236,56 @@
 			Support Area
 		]
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+                    type: startOfPhase
+                    phase: maneuver
+		        }
+		        cost: {
+		            type: choice
+		            texts: [
+		                Spot 3 rangers
+		                Exert a {gondor} Man
+		            ]
+		            effects: [
+		                {
+		                    type: spot
+		                    filter: ranger
+		                    count: 3
+		                }
+		                {
+		                    type: exert
+		                    filter: choose(culture(gondor),man)
+		                }
+		            ]
+		        }
+		        effect: [
+                    {
+                        type: transfer
+                        filter: self
+                        where: choose(minion)
+                        memorizeTarget: chosenMinion
+                    }
+                    {
+                        type: wound
+                        filter: memory(chosenMinion)
+                    }
+                ]
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+		            type: exert
+		            filter: choose(ranger)
+		        }
+		        effect: {
+		            type: reinforceTokens
+		            culture: gondor
+		        }
+		    }
 		]
 		gametext: <b>Fortification</b>.<br>At the start of your maneuver phase, you may spot 3 rangers or exert a [gondor] Man to transfer this condition to a minion. Wound that minion.<br><b>Regroup:</b> Exert a ranger to reinforce a [gondor] token.
 		lore: ""
@@ -828,6 +1326,20 @@
 		resistance: 8
 		keywords: Ranger
 		effects: [
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: exert
+		            filter: choose(culture(gondor),man,minResistance(6))
+		            memorize: exertedMan
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: memory(exertedMan)
+		            amount: 3
+		        }
+		    }
 		]
 		gametext: <b>Ranger</b>.<br><b>Skirmish:</b> Exert a [gondor] Man with a resistance 6 or more to make that Man strength +3.
 		lore: Little do they know of our long labour for the safekeeping of their borders, and yet I grudge it not.'

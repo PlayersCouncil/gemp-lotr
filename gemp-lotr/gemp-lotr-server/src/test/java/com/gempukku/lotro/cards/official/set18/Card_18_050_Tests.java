@@ -219,7 +219,7 @@ public class Card_18_050_Tests
 		assertEquals(0, scn.GetCultureTokensOn(stone));
 
 		assertEquals(2, scn.GetTwilight());
-		assertTrue(scn.ShadowDecisionAvailable("Would you like to - remove (2) to prevent"));
+		assertTrue(scn.ShadowDecisionAvailable("Would you like to remove 2 twilight to prevent"));
 		scn.ShadowChooseYes();
 		assertEquals(0, scn.GetTwilight());
 
