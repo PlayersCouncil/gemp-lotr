@@ -8,7 +8,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.timing.Action;
 
 public class PlayersCantUseCardSpecialAbilitiesModifier extends AbstractModifier {
-
     private final Filter _sourceFilters;
 
     public PlayersCantUseCardSpecialAbilitiesModifier(PhysicalCard source, Filterable... sourceFilters) {

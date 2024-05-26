@@ -27,7 +27,8 @@ public class PutCardsFromDeckOnBottomOfDeck implements EffectAppenderProducer {
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
-        final boolean reveal = FieldUtils.getBoolean(effectObject.get("reveal"), "reveal", true);
+        // TODO - changed the default - have to go through all cards to check which should be revealed
+        final boolean reveal = FieldUtils.getBoolean(effectObject.get("reveal"), "reveal", false);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
