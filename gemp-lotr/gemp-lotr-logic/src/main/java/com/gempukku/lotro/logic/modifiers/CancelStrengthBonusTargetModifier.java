@@ -14,7 +14,7 @@ public class CancelStrengthBonusTargetModifier extends AbstractModifier {
     }
 
     public CancelStrengthBonusTargetModifier(PhysicalCard source, Condition condition, Filterable affectFilter, Filterable sourceFilter) {
-        super(source, "Has some strength bonuses cancelled", affectFilter, condition, ModifierEffect.STRENGTH_BONUS_TARGET_MODIFIER);
+        super(source, "Has some strength bonuses cancelled", affectFilter, condition, ModifierEffect.STRENGTH_BONUS_MODIFIER);
         _sourceFilter = Filters.changeToFilter(sourceFilter);
     }
 

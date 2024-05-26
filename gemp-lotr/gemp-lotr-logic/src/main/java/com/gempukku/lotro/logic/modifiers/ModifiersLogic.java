@@ -419,16 +419,10 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean appliesStrengthBonusModifier(LotroGame game, PhysicalCard modifierSource, PhysicalCard modifierTarget) {
-        if (modifierSource != null)
-            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.STRENGTH_BONUS_SOURCE_MODIFIER, modifierSource)) {
-                if (!modifier.appliesStrengthBonusModifier(game, modifierSource, modifierTarget))
-                    return false;
-            }
-        if (modifierTarget != null)
-            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.STRENGTH_BONUS_TARGET_MODIFIER, modifierTarget)) {
-                if (!modifier.appliesStrengthBonusModifier(game, modifierSource, modifierTarget))
-                    return false;
-            }
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.STRENGTH_BONUS_MODIFIER, modifierTarget)) {
+            if (!modifier.appliesStrengthBonusModifier(game, modifierSource, modifierTarget))
+                return false;
+        }
         return true;
     }
 

@@ -24,8 +24,20 @@
 		strength: 2
 		vitality: 1
 		itemclass: Hand weapon
-		#target: a [gandalf] Man
+		target: culture(gandalf),man
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: winsSkirmish
+		            filter: bearer,name(Grimbeorn)
+		        }
+		        effect: {
+		            type: putCardsFromDiscardIntoHand
+		            filter: choose(culture(gandalf))
+		        }
+		    }
 		]
 		gametext: Bearer must be a [gandalf] Man.<br>While Grimbeorn is bearing this possession, each time he wins a skirmish, you may take a [gandalf] card from your discard pile into hand.
 		lore: No Orc or wolf dared enter the land of the Beornings.
@@ -63,13 +75,26 @@
 			Spell
 			Skirmish
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: culture(gandalf),wizard
+			}
 			effect: [
 				{
+				    type: chooseActiveCards
+				    filter: choose(minion)
+				    text: Choose minion to lose all strength bonuses from possessions
+				    memorize: chosenMinion
+				}
+				{
+				    type: addModifier
+				    modifier: {
+                        type: cancelStrengthBonus
+                        filter: memory(chosenMinion)
+                        from: possession
+				    }
 				}
 			]
 		}
@@ -106,13 +131,64 @@
 		twilight: 3
 		type: Event
 		keywords: Maneuver
-
 		effects: {
 			type: event
 			cost: {
+			    type: choice
+			    texts: [
+			        Exert 2 Ents
+			        Spot a {gandalf} companion
+			    ]
+			    effects: [
+			        {
+			            type: conditional
+			            requires: {
+			                type: location
+			                filter: or(regionNumber(1),regionNumber(2))
+			            }
+			            effect: {
+			                type: exert
+			                filter: choose(ent)
+			                count: 2
+			            }
+			        }
+			        {
+			            type: conditional
+			            requires: {
+			                type: location
+			                filter: regionNumber(3)
+			            }
+			            effect: {
+			                type: spot
+			                filter: culture(gandalf),companion
+			            }
+			        }
+			    ]
 			},
 			effect: [
 				{
+				    type: conditional
+                    requires: {
+                        type: location
+                        filter: or(regionNumber(1),regionNumber(2))
+                    }
+                    effect: {
+                        type: addKeyword
+                        filter: choose(ent)
+                        keyword: defender
+                        amount: 1
+                        until: regroup
+                    }
+				}
+				{
+                    type: conditional
+                    requires: {
+                        type: location
+                        filter: regionNumber(3)
+                    }
+                    effect: {
+                        type: drawCards
+                    }
 				}
 			]
 		}
@@ -150,6 +226,35 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: fellowship
+		        cost: {
+		            type: exert
+		            filter: choose(culture(gandalf),man)
+		        }
+		        effect: {
+		            type: addTokens
+		            count: 2
+		            culture: gandalf
+		            filter: self
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: skirmish
+		        cost: {
+		            type: removeTokens
+		            count: 3
+		            culture: gandalf
+		            filter: self
+		        }
+		        effect: {
+		            type: modifyStrength
+		            filter: choose(companion)
+		            amount: 3
+		        }
+		    }
 		]
 		gametext: <b>Fellowship:</b> Exert a [gandalf] Man to add 2 [gandalf] tokens here.<br><b>Skirmish:</b> Remove 3 [gandalf] tokens from here to make a companion strength +3.
 		lore: To give his people time to escape, Brand stood against the Mordor army until he was slain. His friend, the dwarf Dáin Ironfoot, stood over him until he too was slain.
@@ -189,6 +294,43 @@
 		vitality: 3
 		resistance: 5
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+                    type: modifyStrength
+                    requires: {
+                        type: canSpotCultureTokens
+                        culture: gandalf
+                        amount: 2
+                    }
+                    filter: your,culture(gandalf),man
+                    amount: 2
+		        }
+		    }
+		    {
+		        type: activated
+		        phase: regroup
+		        cost: {
+                    type: discard
+                    filter: choose(follower)
+		        }
+		        effect: {
+		            type: choice
+		            texts: [
+		                Draw a card
+		                Take a {gandalf} skirmish event from discard to hand
+		            ]
+		            effects: [
+		                {
+		                    type: drawCards
+		                }
+                        {
+                            type: putCardsFromDiscardIntoHand
+                            filter: choose(culture(gandalf),skirmish,event)
+                        }
+		            ]
+		        }
+		    }
 		]
 		gametext: While you can spot 2 [gandalf] tokens, each of your [gandalf] Men is strength +2.<br><b>Regroup:</b> Discard a follower from play to choose one: draw a card; or take a [gandalf] skirmish event from your discard pile into hand.
 		lore: A guide through books and scrolls from floor to ceiling.
@@ -226,13 +368,20 @@
 			Spell
 			Maneuver
 		]
-
 		effects: {
 			type: event
-			cost: {
-			},
+			requires: {
+			    type: canSpot
+			    filter: pipeweed
+			    count: 2
+			}
 			effect: [
 				{
+				    type: removeBurdens
+				    amount: {
+				        type: forEachYouCanSpot
+				        filter: culture(gandalf),wizard
+				    }
 				}
 			]
 		}
@@ -273,6 +422,42 @@
 			Support Area
 		]
 		effects: [
+		    {
+		        type: extraCost
+		        cost: {
+		            type: exert
+		            filter: choose(name(Gandalf))
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+                    type: played
+                    player: you
+                    filter: self
+		        }
+		        effect: {
+		            type: removeTwilight
+		            amount: 3
+		        }
+		    }
+		    {
+		        type: trigger
+		        trigger: {
+		            type: startOfPhase
+		            phase: maneuver
+		        }
+		        effect: [
+		            {
+		                type: addTwilight
+		                amount: 4
+		            }
+		            {
+		                type: removeFromTheGame
+		                filter: self
+		            }
+		        ]
+		    }
 		]
 		gametext: <b>Spell</b>. To play, exert Gandalf.<br>When you play this condition, remove (3).<br>At the start of the maneuver phase, add (4) and remove this condition from the game.
 		lore: All we have to decide is what to do with the time that is given to us.
@@ -308,6 +493,33 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
+		    {
+		        type: activated
+		        phase: maneuver
+		        cost: [
+                    {
+                        type: addThreats
+                        amount: 2
+                    }
+                    {
+                        type: spot
+                        filter: choose(minion)
+                        memorize: spottedMinion
+                    }
+                ]
+		        requires: {
+		            type: canSpot
+		            filter: wizard
+		        }
+		        effect: {
+		            type: addModifier
+		            modifier: {
+                        type: cantPlaySpecialAbilities
+                        filter: memory(spottedMinion)
+                    }
+                    until: regroup
+		        }
+		    }
 		]
 		gametext: <b>Maneuver:</b> Add 2 threats and spot a Wizard to spot a minion in play. That minion cannot use special abilities until the regroup phase.
 		lore: Hobbits really are amazing creatures! You can learn all that there is to know about their ways in a month, and yet after a hundred years, they can still surprise you.
@@ -343,8 +555,25 @@
 		type: Possession
 		vitality: 1
 		resistance: 2
-		#target: a [gandalf] Wizard
+		target: culture(gandalf),wizard
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            player: you
+		            filter: culture(gandalf),spell
+		        }
+		        cost: {
+		            type: exert
+		            filter: bearer
+		        }
+		        effect: {
+		            type: wound
+		            filter: choose(minion)
+		        }
+		    }
 		]
 		gametext: Bearer must be a [gandalf] Wizard.<br>Each time you play a [gandalf] spell, you may exert bearer to wound a minion.
 		lore: The tools of a master of herb and beast-lore were often confined to the simplest of places.
@@ -383,6 +612,34 @@
 			Support Area
 		]
 		effects: [
+		    {
+		        type: trigger
+		        optional: true
+		        trigger: {
+		            type: played
+		            player: you
+		            filter: pipeweed
+		        }
+		        requires: {
+		            type: canSpot
+		            filter: name(Gandalf)
+		        }
+		        effect: [
+		            {
+		                type: revealTopCardsOfDrawDeck
+		                count: 3
+		                memorize: revealedCards
+		            }
+		            {
+		                type: putCardsFromDeckIntoHand
+		                filter: all(memory(revealedCards),side(free people))
+		            }
+		            {
+		                type: discardCardsFromDrawDeck
+		                filter: all(memory(revealedCards),not(side(free people)))
+		            }
+		        ]
+		    }
 		]
 		gametext: <b>Pipeweed</b>.<br>Each time you play a pipeweed card, you may spot Gandalf to reveal the top 3 cards of your draw deck. Take all Free Peoples cards revealed into hand and discard the remaining cards.
 		lore: Old Toby. The finest weed in the Southfarthing.
