@@ -6,15 +6,13 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_02_075_ErrataTests
 {
@@ -116,7 +114,7 @@ public class Card_02_075_ErrataTests
         scn.FreepsMoveCharToTable(sam);
 
         //Make ferny fierce and strength +5 just to make things easier to test
-        scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.name("Bill Ferny"), Keyword.FIERCE));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("Bill Ferny"), Keyword.FIERCE));
         scn.ApplyAdHocModifier(new StrengthModifier(null, Filters.name("Bill Ferny"), 5));
 
         scn.StartGame();
@@ -162,7 +160,7 @@ public class Card_02_075_ErrataTests
 
         scn.ShadowMoveCharToTable(ferny);
 
-        scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
 
         scn.StartGame();
 

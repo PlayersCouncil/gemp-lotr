@@ -10,7 +10,7 @@ import com.gempukku.lotro.logic.effects.AddUntilStartOfPhaseModifierEffect;
 import com.gempukku.lotro.logic.effects.ChooseAndHealCharactersEffect;
 import com.gempukku.lotro.logic.effects.ExertCharactersEffect;
 import com.gempukku.lotro.logic.effects.SelfDiscardEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 
 import java.util.Collections;
@@ -45,7 +45,7 @@ public class Card18_055 extends AbstractAttachable {
                     new ExertCharactersEffect(action, self, self.getAttachedTo()));
             action.appendEffect(
                     new AddUntilStartOfPhaseModifierEffect(
-                            new KeywordModifier(self, self.getAttachedTo(), Keyword.DEFENDER, 1), Phase.REGROUP));
+                            new AddKeywordModifier(self, self.getAttachedTo(), Keyword.DEFENDER, 1), Phase.REGROUP));
             return Collections.singletonList(action);
         }
         if (PlayConditions.canUseFPCardDuringPhase(game, Phase.REGROUP, self)

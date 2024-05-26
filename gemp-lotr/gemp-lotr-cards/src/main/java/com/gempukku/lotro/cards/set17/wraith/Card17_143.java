@@ -10,7 +10,7 @@ import com.gempukku.lotro.logic.cardtype.AbstractAttachable;
 import com.gempukku.lotro.logic.effects.RemoveThreatsEffect;
 import com.gempukku.lotro.logic.effects.ReturnCardsToHandEffect;
 import com.gempukku.lotro.logic.effects.choose.ChooseAndPutCardFromDiscardIntoHandEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.PlayConditions;
@@ -41,7 +41,7 @@ public class Card17_143 extends AbstractAttachable {
 
     @Override
     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
-return Collections.singletonList(new KeywordModifier(self, Filters.hasAttached(self), Keyword.DAMAGE, 1));
+        return Collections.singletonList(new AddKeywordModifier(self, Filters.hasAttached(self), Keyword.DAMAGE, 1));
 }
 
     @Override

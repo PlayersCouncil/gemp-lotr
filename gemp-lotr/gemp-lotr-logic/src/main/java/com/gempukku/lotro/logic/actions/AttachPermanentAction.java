@@ -126,7 +126,7 @@ public class AttachPermanentAction extends AbstractCostToEffectAction {
 
                 if (!_cardPlayed) {
                     _cardPlayed = true;
-                    _playCardEffect = new PlayCardEffect(_playedFrom, _cardToAttach, _target, null, isPaidToil());
+                    _playCardEffect = new PlayCardEffect(_cardToAttach.getOwner(), _playedFrom, _cardToAttach, _target, null, isPaidToil());
 
                     return _playCardEffect;
                 }

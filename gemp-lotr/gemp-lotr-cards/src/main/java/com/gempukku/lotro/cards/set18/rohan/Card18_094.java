@@ -11,7 +11,7 @@ import com.gempukku.lotro.logic.effects.AddTokenEffect;
 import com.gempukku.lotro.logic.effects.AddUntilEndOfPhaseModifierEffect;
 import com.gempukku.lotro.logic.effects.ChooseActiveCardEffect;
 import com.gempukku.lotro.logic.effects.RemoveTokenEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.PlayConditions;
@@ -61,7 +61,7 @@ public class Card18_094 extends AbstractPermanent {
                                             new StrengthModifier(self, card, 1)));
                             action.appendEffect(
                                     new AddUntilEndOfPhaseModifierEffect(
-                                            new KeywordModifier(self, card, Keyword.DAMAGE, 1)));
+                                            new AddKeywordModifier(self, card, Keyword.DAMAGE, 1)));
                         }
                     });
             return Collections.singletonList(action);

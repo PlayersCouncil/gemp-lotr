@@ -6,7 +6,7 @@ import com.gempukku.lotro.common.Race;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.cardtype.AbstractCompanion;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.modifiers.condition.CanSpotFPCulturesCondition;
 import com.gempukku.lotro.logic.modifiers.condition.CanSpotShadowCulturesCondition;
@@ -36,9 +36,9 @@ public class Card18_038 extends AbstractCompanion {
     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
         List<Modifier> modifiers = new LinkedList<>();
         modifiers.add(
-                new KeywordModifier(self, self, new CanSpotFPCulturesCondition(self.getOwner(), 3), Keyword.DEFENDER, 1));
+                new AddKeywordModifier(self, self, new CanSpotFPCulturesCondition(self.getOwner(), 3), Keyword.DEFENDER, 1));
         modifiers.add(
-                new KeywordModifier(self, self, new CanSpotShadowCulturesCondition(self.getOwner(), 2), Keyword.DEFENDER, 1));
+                new AddKeywordModifier(self, self, new CanSpotShadowCulturesCondition(self.getOwner(), 2), Keyword.DEFENDER, 1));
         return modifiers;
     }
 }

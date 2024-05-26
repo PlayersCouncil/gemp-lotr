@@ -13,7 +13,7 @@ import com.gempukku.lotro.logic.cardtype.AbstractCompanion;
 import com.gempukku.lotro.logic.effects.AddBurdenEffect;
 import com.gempukku.lotro.logic.effects.AddUntilEndOfPhaseModifierEffect;
 import com.gempukku.lotro.logic.effects.choose.ChooseAndExertCharactersEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.PlayConditions;
@@ -64,7 +64,7 @@ public class Card18_042 extends AbstractCompanion {
                                             new StrengthModifier(self, character, 1)));
                             action.appendEffect(
                                     new AddUntilEndOfPhaseModifierEffect(
-                                            new KeywordModifier(self, character, Keyword.DAMAGE, 1)));
+                                            new AddKeywordModifier(self, character, Keyword.DAMAGE, 1)));
                         }
                     });
             return Collections.singletonList(action);

@@ -9,8 +9,8 @@ public class PlayEventResult extends PlayCardResult {
     private final PlayEventAction _action;
     private final boolean _requiresRanger;
 
-    public PlayEventResult(PlayEventAction action, Zone playedFrom, PhysicalCard playedCard, boolean requiresRanger, boolean paidToil) {
-        super(playedFrom, playedCard, null, null, paidToil);
+    public PlayEventResult(String performingPlayerId, PlayEventAction action, Zone playedFrom, PhysicalCard playedCard, boolean requiresRanger, boolean paidToil) {
+        super(performingPlayerId, playedFrom, playedCard, null, null, paidToil);
         _action = action;
         _requiresRanger = requiresRanger;
     }

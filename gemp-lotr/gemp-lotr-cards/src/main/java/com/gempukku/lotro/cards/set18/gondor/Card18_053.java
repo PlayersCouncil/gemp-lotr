@@ -9,7 +9,7 @@ import com.gempukku.lotro.logic.cardtype.AbstractAttachableFPPossession;
 import com.gempukku.lotro.logic.effects.AddUntilStartOfPhaseModifierEffect;
 import com.gempukku.lotro.logic.effects.ExertCharactersEffect;
 import com.gempukku.lotro.logic.effects.choose.ChooseAndDiscardCardsFromPlayEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.OverwhelmedByMultiplierModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import com.gempukku.lotro.logic.timing.PlayConditions;
@@ -59,7 +59,7 @@ public class Card18_053 extends AbstractAttachableFPPossession {
             if (PlayConditions.canSpot(game, self.getAttachedTo(), Filters.boromir)) {
                 action.appendEffect(
                         new AddUntilStartOfPhaseModifierEffect(
-                                new KeywordModifier(self, self.getAttachedTo(), Keyword.DEFENDER, 1), Phase.REGROUP));
+                                new AddKeywordModifier(self, self.getAttachedTo(), Keyword.DEFENDER, 1), Phase.REGROUP));
                 action.appendEffect(
                         new AddUntilStartOfPhaseModifierEffect(
                                 new OverwhelmedByMultiplierModifier(self, self.getAttachedTo(), 3), Phase.REGROUP));

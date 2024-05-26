@@ -50,7 +50,7 @@ public class Card18_078 extends AbstractPermanent {
             ActivateCardAction action = new ActivateCardAction(self);
             action.appendEffect(
                     new AddUntilStartOfPhaseModifierEffect(
-                            new KeywordModifier(self, game.getGameState().getCurrentSite(), Keyword.BATTLEGROUND), Phase.REGROUP));
+                            new AddKeywordModifier(self, game.getGameState().getCurrentSite(), Keyword.BATTLEGROUND), Phase.REGROUP));
             return Collections.singletonList(action);
         }
         return null;

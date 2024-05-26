@@ -7,7 +7,7 @@ import com.gempukku.lotro.logic.actions.PlayEventAction;
 import com.gempukku.lotro.logic.cardtype.AbstractEvent;
 import com.gempukku.lotro.logic.effects.AddUntilEndOfPhaseModifierEffect;
 import com.gempukku.lotro.logic.effects.ChooseActiveCardEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 
 /**
@@ -35,7 +35,7 @@ public class Card18_117 extends AbstractEvent {
                                         new StrengthModifier(self, card, 2)));
                         action.appendEffect(
                                 new AddUntilEndOfPhaseModifierEffect(
-                                        new KeywordModifier(self, card, Keyword.DAMAGE, 1)));
+                                        new AddKeywordModifier(self, card, Keyword.DAMAGE, 1)));
                     }
                 });
         return action;

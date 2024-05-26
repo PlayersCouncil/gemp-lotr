@@ -9,7 +9,7 @@ import com.gempukku.lotro.logic.cardtype.AbstractAttachable;
 import com.gempukku.lotro.logic.effects.AddUntilStartOfPhaseModifierEffect;
 import com.gempukku.lotro.logic.effects.ReinforceTokenEffect;
 import com.gempukku.lotro.logic.effects.RemoveTwilightEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 
 import java.util.Collections;
@@ -50,7 +50,7 @@ public class Card18_060 extends AbstractAttachable {
                     new ReinforceTokenEffect(self, playerId, Token.MEN));
             action.appendEffect(
                     new AddUntilStartOfPhaseModifierEffect(
-                            new KeywordModifier(self, self.getAttachedTo(), Keyword.FIERCE), Phase.REGROUP));
+                            new AddKeywordModifier(self, self.getAttachedTo(), Keyword.FIERCE), Phase.REGROUP));
             return Collections.singletonList(action);
         }
         return null;

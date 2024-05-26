@@ -137,7 +137,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         else {
             LinkedList<Modifier> liveModifiers = new LinkedList<>();
             for (Modifier modifier : modifiers) {
-                if (keyword == null || ((KeywordAffectingModifier) modifier).getKeyword() == keyword) {
+                if (keyword == null || ((KeywordAffectingModifier) modifier).getKeyword() == keyword || ((KeywordAffectingModifier) modifier).getKeyword() == null) {
                     if (!_skipSet.contains(modifier)) {
                         _skipSet.add(modifier);
                         Condition condition = modifier.getCondition();

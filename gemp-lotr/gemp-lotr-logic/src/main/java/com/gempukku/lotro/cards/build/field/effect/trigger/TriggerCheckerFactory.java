@@ -69,6 +69,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("startofphase", new StartOfPhase());
         triggerCheckers.put("startofskirmishinvolving", new StartOfSkirmishInvolving());
         triggerCheckers.put("startofturn", new StartOfTurn());
+        triggerCheckers.put("takencontrolofsite", new TakenControlOfSite());
         triggerCheckers.put("takesoffring", new TakesOffRing());
         triggerCheckers.put("takeswound", new TakesWound());
         triggerCheckers.put("transferred", new Transferred());

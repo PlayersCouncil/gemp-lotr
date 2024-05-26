@@ -5,12 +5,13 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_03_017_Tests
 {
@@ -178,7 +179,7 @@ public class Card_03_017_Tests
 		var shadowSite2 = scn.GetShadowSite("site2");
 
 		//cheating to ensure site 2 qualifies
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.name("West Road"), Keyword.FOREST));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("West Road"), Keyword.FOREST));
 
 		scn.StartGame();
 

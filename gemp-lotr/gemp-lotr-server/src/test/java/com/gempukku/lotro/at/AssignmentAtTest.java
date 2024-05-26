@@ -10,7 +10,7 @@ import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Test;
 
@@ -229,7 +229,7 @@ public class AssignmentAtTest extends AbstractAtTest {
 
         // Merry gets Defender +1
         _game.getModifiersEnvironment().addUntilEndOfPhaseModifier(
-                new KeywordModifier(null, merry, Keyword.DEFENDER, 1), Phase.ASSIGNMENT);
+                new AddKeywordModifier(null, merry, Keyword.DEFENDER, 1), Phase.ASSIGNMENT);
 
         // End assignment phase
         playerDecided(P1, "");

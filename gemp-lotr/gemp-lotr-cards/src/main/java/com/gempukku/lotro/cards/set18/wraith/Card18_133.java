@@ -11,7 +11,7 @@ import com.gempukku.lotro.logic.effects.ChoiceEffect;
 import com.gempukku.lotro.logic.effects.ChooseActiveCardEffect;
 import com.gempukku.lotro.logic.effects.RemoveBurdenEffect;
 import com.gempukku.lotro.logic.effects.choose.ChooseAndAssignCharacterToMinionEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.RemoveKeywordModifier;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
@@ -66,7 +66,7 @@ public class Card18_133 extends AbstractEvent {
                                         new RemoveKeywordModifier(self, minion, Keyword.FIERCE), Phase.REGROUP));
                         action.appendEffect(
                                 new AddUntilStartOfPhaseModifierEffect(
-                                        new KeywordModifier(self, minion, Keyword.HUNTER, 2), Phase.REGROUP));
+                                        new AddKeywordModifier(self, minion, Keyword.HUNTER, 2), Phase.REGROUP));
                     }
 
                     @Override

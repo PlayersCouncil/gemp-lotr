@@ -6,7 +6,7 @@ import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 
 public class RoamingRule {
@@ -25,6 +25,6 @@ public class RoamingRule {
         });
 
         _modifiersLogic.addAlwaysOnModifier(
-                new KeywordModifier(null, roamingFilter, Keyword.ROAMING));
+                new AddKeywordModifier(null, roamingFilter, Keyword.ROAMING));
     }
 }

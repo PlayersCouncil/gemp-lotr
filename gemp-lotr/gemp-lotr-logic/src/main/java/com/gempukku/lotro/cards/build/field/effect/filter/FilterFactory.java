@@ -53,6 +53,8 @@ public class FilterFactory {
                 (actionContext -> Filters.siteControlledByOtherPlayer(actionContext.getPerformingPlayer())));
         simpleFilters.put("controlledsite",
                 (actionContext -> Filters.siteControlled(actionContext.getPerformingPlayer())));
+        simpleFilters.put("siteyoucontrol",
+                (actionContext -> Filters.siteControlled(actionContext.getPerformingPlayer())));
         simpleFilters.put("cultureindeadpile",
                 new FilterableSource() {
                     @Override

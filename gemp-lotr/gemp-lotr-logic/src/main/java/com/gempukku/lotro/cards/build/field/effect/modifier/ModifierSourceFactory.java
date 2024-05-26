@@ -16,6 +16,7 @@ public class ModifierSourceFactory {
     public ModifierSourceFactory() {
         modifierProducers.put("addactivated", new AddActivated());
         modifierProducers.put("addkeyword", new AddKeyword());
+        modifierProducers.put("addkeywordfromcards", new AddKeywordFromCards());
         modifierProducers.put("addnotwilightforcompanionmove", new AddNoTwilightForCompanionMove());
         modifierProducers.put("addsignet", new AddSignet());
         modifierProducers.put("alliestakearcheryfirewoundsinsteadofcompanions", new AddModifierFlag(ModifierFlag.ALLIES_TAKE_ARCHERY_FIRE_WOUNDS_INSTEAD_OF_COMPANIONS));

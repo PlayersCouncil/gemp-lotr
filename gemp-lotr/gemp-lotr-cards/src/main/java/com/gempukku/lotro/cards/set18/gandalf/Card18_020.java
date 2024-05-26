@@ -10,7 +10,7 @@ import com.gempukku.lotro.logic.effects.AddUntilStartOfPhaseModifierEffect;
 import com.gempukku.lotro.logic.effects.ChooseActiveCardEffect;
 import com.gempukku.lotro.logic.effects.DrawCardsEffect;
 import com.gempukku.lotro.logic.effects.choose.ChooseAndExertCharactersEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 
 /**
@@ -48,7 +48,7 @@ public class Card18_020 extends AbstractEvent {
                         protected void cardSelected(LotroGame game, PhysicalCard card) {
                             action.appendEffect(
                                     new AddUntilStartOfPhaseModifierEffect(
-                                            new KeywordModifier(self, card, Keyword.DEFENDER, 1), Phase.REGROUP));
+                                            new AddKeywordModifier(self, card, Keyword.DEFENDER, 1), Phase.REGROUP));
                         }
                     });
         }

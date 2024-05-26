@@ -75,7 +75,7 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                                             addModifier(action, new IsAdditionalCardTypeModifier(card, card, CardType.MINION), until);
                                             if (keywords != null) {
                                                 for (Keyword keyword : keywordsList) {
-                                                    addModifier(action, new KeywordModifier(card, card, keyword), until);
+                                                    addModifier(action, new AddKeywordModifier(card, card, keyword), until);
                                                 }
                                             }
                                             addModifier(action, new MayNotBearModifier(card, card, Filters.any), until);

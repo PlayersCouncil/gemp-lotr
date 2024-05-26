@@ -5,7 +5,7 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.cardtype.AbstractAttachable;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.modifiers.condition.FierceSkirmishCondition;
 
@@ -47,9 +47,9 @@ public class Card18_081 extends AbstractAttachable {
     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
         List<Modifier> modifiers = new LinkedList<>();
         modifiers.add(
-                new KeywordModifier(self, Filters.hasAttached(self), Keyword.FIERCE));
+                new AddKeywordModifier(self, Filters.hasAttached(self), Keyword.FIERCE));
         modifiers.add(
-                new KeywordModifier(self, Filters.and(Filters.name("Gothmog"), Filters.hasAttached(self)), new FierceSkirmishCondition(), Keyword.DAMAGE, 1));
+                new AddKeywordModifier(self, Filters.and(Filters.name("Gothmog"), Filters.hasAttached(self)), new FierceSkirmishCondition(), Keyword.DAMAGE, 1));
         return modifiers;
     }
 }

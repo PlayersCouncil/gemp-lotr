@@ -4,8 +4,8 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.cardtype.AbstractMinion;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.CantTakeWoundsModifier;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.modifiers.SpotCondition;
 import com.gempukku.lotro.logic.modifiers.condition.AndCondition;
@@ -38,7 +38,7 @@ public class Card18_122 extends AbstractMinion {
     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
         List<Modifier> modifiers = new LinkedList<>();
         modifiers.add(
-                new KeywordModifier(self, self, new SpotCondition(7, CardType.POSSESSION), Keyword.FIERCE, 1));
+                new AddKeywordModifier(self, self, new SpotCondition(7, CardType.POSSESSION), Keyword.FIERCE, 1));
         modifiers.add(
                 new CantTakeWoundsModifier(self,
                         new AndCondition(

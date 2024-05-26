@@ -1,10 +1,8 @@
 package com.gempukku.lotro.cards.build.field.effect.trigger;
 
-import com.gempukku.lotro.cards.build.ActionContext;
-import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
-import com.gempukku.lotro.cards.build.FilterableSource;
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
+import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -16,7 +14,7 @@ import org.json.simple.JSONObject;
 public class PlayedTriggerCheckerProducer implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "filter", "on", "memorize", "exertsRanger", "from");
+        FieldUtils.validateAllowedFields(value, "filter", "on", "memorize", "exertsRanger", "from", "player");
 
         final String filterString = FieldUtils.getString(value.get("filter"), "filter");
         final String onString = FieldUtils.getString(value.get("on"), "on");
@@ -25,6 +23,10 @@ public class PlayedTriggerCheckerProducer implements TriggerCheckerProducer {
         final FilterableSource filter = environment.getFilterFactory().generateFilter(filterString, environment);
         final FilterableSource onFilter = (onString != null) ? environment.getFilterFactory().generateFilter(onString, environment) : null;
         Zone zone = FieldUtils.getEnum(Zone.class, value.get("from"), "from");
+        String player = FieldUtils.getString(value.get("player"), "player");
+
+        // TODO: this should be used by most cards - need to revise the HJSONs
+        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player, environment) : null;
 
         return new TriggerChecker() {
             @Override
@@ -40,6 +42,11 @@ public class PlayedTriggerCheckerProducer implements TriggerCheckerProducer {
 
                 if (played) {
                     PlayCardResult playCardResult = (PlayCardResult) actionContext.getEffectResult();
+
+                    String playerId = playerSource != null ? playerSource.getPlayer(actionContext) : null;
+                    if (playerId != null && !playerId.equals(playCardResult.getPerformingPlayerId()))
+                        return false;
+
                     if (zone != null && playCardResult.getPlayedFrom() != zone)
                         return false;
 

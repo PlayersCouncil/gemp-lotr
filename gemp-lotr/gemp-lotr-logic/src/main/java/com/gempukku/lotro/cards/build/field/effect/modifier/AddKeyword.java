@@ -4,7 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import org.json.simple.JSONObject;
@@ -35,7 +35,7 @@ public class AddKeyword implements ModifierSourceProducer {
                     @Override
                     public Modifier getModifier(ActionContext actionContext) {
                         final Evaluator evaluator = amount.getEvaluator(actionContext);
-                        return new KeywordModifier(actionContext.getSource(),
+                        return new AddKeywordModifier(actionContext.getSource(),
                                 filterableSource.getFilterable(actionContext),
                                 new RequirementCondition(requirements, actionContext), keyword, evaluator);
                     }

@@ -113,7 +113,7 @@ public class PlayEventAction extends AbstractCostToEffectAction {
 
             if (!_cardPlayed) {
                 _cardPlayed = true;
-                _playCardEffect = new PlayEventEffect(this, _playedFrom, _eventPlayed, _requiresRanger, isPaidToil());
+                _playCardEffect = new PlayEventEffect(_eventPlayed.getOwner(), this, _playedFrom, _eventPlayed, _requiresRanger, isPaidToil());
                 return _playCardEffect;
             }
 

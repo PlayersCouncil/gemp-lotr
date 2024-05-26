@@ -33,7 +33,7 @@ public class Card18_105 extends AbstractCompanion {
         modifiers.add(
                 new ResistanceModifier(self, self, new SpotCondition(Filters.gandalf), 2));
         modifiers.add(
-                new KeywordModifier(self, self, new SpotCondition(Filters.name(Names.eomer)), Keyword.DAMAGE, 1));
+                new AddKeywordModifier(self, self, new SpotCondition(Filters.name(Names.eomer)), Keyword.DAMAGE, 1));
         modifiers.add(
                 new StrengthModifier(self, self, new SpotCondition(3, Culture.ROHAN, CardType.COMPANION, Filters.mounted), 2));
         return modifiers;

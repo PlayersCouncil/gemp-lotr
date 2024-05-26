@@ -6,12 +6,12 @@ import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ConcealedExposedAtTest extends AbstractAtTest {
     protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -35,7 +35,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
 
         scn.StartGame();
 
-        scn.ApplyAdHocModifier(new KeywordModifier(aragorn, aragorn, Keyword.CONCEALED));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(aragorn, aragorn, Keyword.CONCEALED));
 
         assertEquals(0, scn.GetTwilight());
         scn.FreepsPassCurrentPhaseAction();
@@ -57,7 +57,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
         scn.StartGame();
 
         scn.FreepsPlayCard(aragorn);
-        scn.ApplyAdHocModifier(new KeywordModifier(aragorn, aragorn, Keyword.CONCEALED));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(aragorn, aragorn, Keyword.CONCEALED));
 
         //4 from playing aragorn
         assertEquals(4, scn.GetTwilight());
@@ -81,7 +81,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
         scn.StartGame();
 
         scn.FreepsPlayCard(aragorn);
-        scn.ApplyAdHocModifier(new KeywordModifier(aragorn, Keyword.RANGER, Keyword.CONCEALED));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(aragorn, Keyword.RANGER, Keyword.CONCEALED));
 
 
         //4 from playing aragorn
@@ -104,9 +104,9 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
         scn.StartGame();
 
         scn.FreepsPlayCard(aragorn);
-        scn.ApplyAdHocModifier(new KeywordModifier(aragorn, Keyword.RANGER, Keyword.CONCEALED));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(aragorn, Keyword.RANGER, Keyword.CONCEALED));
 
-        scn.ApplyAdHocModifier(new KeywordModifier(null, CardType.SITE, Keyword.EXPOSED));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, Keyword.EXPOSED));
 
         //4 from playing aragorn
         assertEquals(4, scn.GetTwilight());

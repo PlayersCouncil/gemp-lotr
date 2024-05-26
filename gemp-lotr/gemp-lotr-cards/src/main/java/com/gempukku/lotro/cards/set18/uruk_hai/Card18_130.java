@@ -8,7 +8,7 @@ import com.gempukku.lotro.logic.actions.ActivateCardAction;
 import com.gempukku.lotro.logic.cardtype.AbstractMinion;
 import com.gempukku.lotro.logic.effects.AddUntilEndOfPhaseModifierEffect;
 import com.gempukku.lotro.logic.effects.RemoveTwilightEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 
@@ -45,7 +45,7 @@ public class Card18_130 extends AbstractMinion {
                             new StrengthModifier(self, self, 1)));
             action.appendEffect(
                     new AddUntilEndOfPhaseModifierEffect(
-                            new KeywordModifier(self, self, Keyword.DAMAGE, 1)));
+                            new AddKeywordModifier(self, self, Keyword.DAMAGE, 1)));
             return Collections.singletonList(action);
         }
         return null;

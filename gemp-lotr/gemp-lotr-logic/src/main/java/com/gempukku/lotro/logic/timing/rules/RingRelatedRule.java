@@ -2,8 +2,8 @@ package com.gempukku.lotro.logic.timing.rules;
 
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.CantPlayCardsModifier;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
 import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 
 public class RingRelatedRule {
@@ -15,10 +15,10 @@ public class RingRelatedRule {
 
     public void applyRule() {
         _modifiersLogic.addAlwaysOnModifier(
-                new KeywordModifier(null, Filters.or(Filters.frodo, Filters.sam), Keyword.RING_BOUND));
+                new AddKeywordModifier(null, Filters.or(Filters.frodo, Filters.sam), Keyword.RING_BOUND));
         _modifiersLogic.addAlwaysOnModifier(
                 new CantPlayCardsModifier(null, Filters.frodo, Keyword.CAN_START_WITH_RING));
         _modifiersLogic.addAlwaysOnModifier(
-                new KeywordModifier(null, Filters.ringBearer, Keyword.RING_BOUND));
+                new AddKeywordModifier(null, Filters.ringBearer, Keyword.RING_BOUND));
     }
 }

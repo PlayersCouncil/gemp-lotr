@@ -8,7 +8,7 @@ import com.gempukku.lotro.logic.actions.ActivateCardAction;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.cardtype.AbstractMinion;
 import com.gempukku.lotro.logic.effects.*;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 
@@ -43,7 +43,7 @@ public class Card18_118 extends AbstractMinion {
             ActivateCardAction action = new ActivateCardAction(self);
             action.appendEffect(
                     new AddUntilStartOfPhaseModifierEffect(
-                            new KeywordModifier(self, self, Keyword.FIERCE), Phase.REGROUP));
+                            new AddKeywordModifier(self, self, Keyword.FIERCE), Phase.REGROUP));
             return Collections.singletonList(action);
         }
         if (PlayConditions.canUseShadowCardDuringPhase(game, Phase.ASSIGNMENT, self, 0)

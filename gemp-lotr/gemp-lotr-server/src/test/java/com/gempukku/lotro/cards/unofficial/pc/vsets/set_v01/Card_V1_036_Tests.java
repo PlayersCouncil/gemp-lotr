@@ -7,14 +7,12 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_036_Tests
 {
@@ -85,7 +83,7 @@ public class Card_V1_036_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(3);
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.MARSH));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.MARSH));
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowPlayCard(vile);
 

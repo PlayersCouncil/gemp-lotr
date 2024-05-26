@@ -111,7 +111,7 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
 
             if (!_cardPlayed) {
                 _cardPlayed = true;
-                _playCardEffect = new PlayCardEffect(_fromZone, _permanentPlayed, _toZone, _playedFromCard, isPaidToil());
+                _playCardEffect = new PlayCardEffect(_permanentPlayed.getOwner(), _fromZone, _permanentPlayed, _toZone, _playedFromCard, isPaidToil());
                 return _playCardEffect;
             }
 

@@ -7,7 +7,7 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -69,7 +69,7 @@ public class Card_02_121_ErrataTests
 
         scn.StartGame();
 
-        scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
 
         scn.FreepsPassCurrentPhaseAction();
 
@@ -105,7 +105,7 @@ public class Card_02_121_ErrataTests
 
         assertEquals(6, scn.GetStrength(gimli));
 
-        scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
 
         scn.FreepsPassCurrentPhaseAction();
 

@@ -9,7 +9,7 @@ import com.gempukku.lotro.logic.cardtype.AbstractAttachable;
 import com.gempukku.lotro.logic.effects.RemoveCardsFromDeadPileEffect;
 import com.gempukku.lotro.logic.effects.TakeControlOfASiteEffect;
 import com.gempukku.lotro.logic.effects.choose.ChooseCardsFromDeadPileEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 
@@ -47,7 +47,7 @@ public class Card18_063 extends AbstractAttachable {
     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
         List<Modifier> modifiers = new LinkedList<>();
         modifiers.add(
-                new KeywordModifier(self, Filters.hasAttached(self), Keyword.DAMAGE, 1));
+                new AddKeywordModifier(self, Filters.hasAttached(self), Keyword.DAMAGE, 1));
         return modifiers;
     }
 

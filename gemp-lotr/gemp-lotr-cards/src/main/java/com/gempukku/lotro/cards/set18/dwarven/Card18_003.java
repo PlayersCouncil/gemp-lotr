@@ -7,7 +7,7 @@ import com.gempukku.lotro.logic.actions.ActivateCardAction;
 import com.gempukku.lotro.logic.cardtype.AbstractPermanent;
 import com.gempukku.lotro.logic.effects.AddUntilStartOfPhaseModifierEffect;
 import com.gempukku.lotro.logic.effects.choose.ChooseAndExertCharactersEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class Card18_003 extends AbstractPermanent {
                     new ChooseAndExertCharactersEffect(action, playerId, 1, 1, Culture.DWARVEN, CardType.COMPANION));
             action.appendEffect(
                     new AddUntilStartOfPhaseModifierEffect(
-                            new KeywordModifier(self, game.getGameState().getCurrentSite(), Keyword.MOUNTAIN), Phase.REGROUP));
+                            new AddKeywordModifier(self, game.getGameState().getCurrentSite(), Keyword.MOUNTAIN), Phase.REGROUP));
             return Collections.singletonList(action);
         }
         return null;
