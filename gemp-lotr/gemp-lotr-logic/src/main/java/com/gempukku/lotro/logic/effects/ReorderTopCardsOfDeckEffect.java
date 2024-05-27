@@ -18,13 +18,6 @@ public class ReorderTopCardsOfDeckEffect extends AbstractSubActionEffect {
     private final String _deckId;
     private final int _count;
 
-    public ReorderTopCardsOfDeckEffect(Action action, String playerId, int count) {
-        _action = action;
-        _playerId = playerId;
-        _deckId = playerId;
-        _count = count;
-    }
-
     public ReorderTopCardsOfDeckEffect(Action action, String playerId, String deckId, int count) {
         _action = action;
         _playerId = playerId;

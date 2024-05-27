@@ -28,10 +28,6 @@ public class KillEffect extends AbstractSuccessfulEffect {
         this(Collections.singleton(card), Collections.singleton(killer), cause);
     }
 
-    public KillEffect(PhysicalCard card, Collection<? extends PhysicalCard> killers, Cause cause) {
-        this(Collections.singleton(card), killers, cause);
-    }
-
     public KillEffect(Collection<? extends PhysicalCard> cards, PhysicalCard killer, Cause cause) {
         this(cards, Collections.singleton(killer), cause);
     }

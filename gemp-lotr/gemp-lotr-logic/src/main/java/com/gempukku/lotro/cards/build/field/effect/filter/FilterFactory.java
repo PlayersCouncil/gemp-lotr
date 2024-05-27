@@ -135,7 +135,7 @@ public class FilterFactory {
         simpleFilters.put("mounted", (actionContext) -> Filters.mounted);
         simpleFilters.put("notassignedtoskirmish",
                 (actionContext) -> Filters.notAssignedToSkirmish);
-        simpleFilters.put("playable", (actionContext) -> Filters.playable());
+        simpleFilters.put("playable", (actionContext) -> Filters.playable(actionContext.getGame(), 0));
         simpleFilters.put("ringbearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ring-bearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ringbound",

@@ -5,8 +5,8 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
-import com.gempukku.lotro.logic.timing.PlayConditions;
 import org.json.simple.JSONObject;
 
 public class HasCardInRemoved implements RequirementProducer {
@@ -24,7 +24,9 @@ public class HasCardInRemoved implements RequirementProducer {
         return (actionContext) -> {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
             if (playerSource != null) {
-                return PlayConditions.hasCardInRemoved(actionContext.getGame(), playerSource.getPlayer(actionContext), count, filterable);
+                LotroGame game = actionContext.getGame();
+                String playerId = playerSource.getPlayer(actionContext);
+                return Filters.filter(game.getGameState().getRemoved(playerId), game, new Filterable[]{filterable}).size() >= count;
             } else {
                 int totalCount = 0;
                 for (String playerId : GameUtils.getAllPlayers(actionContext.getGame())) {

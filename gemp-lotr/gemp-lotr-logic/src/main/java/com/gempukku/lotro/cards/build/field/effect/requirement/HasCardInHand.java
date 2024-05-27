@@ -4,7 +4,8 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.common.Filterable;
-import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.state.LotroGame;
 import org.json.simple.JSONObject;
 
 public class HasCardInHand implements RequirementProducer {
@@ -21,7 +22,9 @@ public class HasCardInHand implements RequirementProducer {
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         return (actionContext) -> {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
-            return PlayConditions.hasCardInHand(actionContext.getGame(), playerSource.getPlayer(actionContext), count, filterable);
+            LotroGame game = actionContext.getGame();
+            String playerId = playerSource.getPlayer(actionContext);
+            return Filters.filter(game.getGameState().getHand(playerId), game, new Filterable[]{filterable}).size() >= count;
         };
     }
 }

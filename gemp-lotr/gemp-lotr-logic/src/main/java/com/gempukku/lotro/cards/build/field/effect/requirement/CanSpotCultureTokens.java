@@ -6,8 +6,10 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.Token;
-import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.logic.GameUtils;
 import org.json.simple.JSONObject;
 
 public class CanSpotCultureTokens implements RequirementProducer {
@@ -23,11 +25,17 @@ public class CanSpotCultureTokens implements RequirementProducer {
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
         if (tokenForCulture == null) {
-            return (actionContext) -> PlayConditions.canSpotAllCultureTokensOnCards(actionContext.getGame(), count,
-                    filterableSource.getFilterable(actionContext));
+            return (actionContext) -> {
+                LotroGame game = actionContext.getGame();
+                Filterable[] filters = new Filterable[]{filterableSource.getFilterable(actionContext)};
+                return GameUtils.getAllSpottableCultureTokens(game, filters) >= count;
+            };
         } else {
-            return (actionContext) -> PlayConditions.canSpotCultureTokensOnCards(actionContext.getGame(), tokenForCulture, count,
-                    filterableSource.getFilterable(actionContext));
+            return (actionContext) -> {
+                LotroGame game = actionContext.getGame();
+                Filterable[] filters = new Filterable[]{filterableSource.getFilterable(actionContext)};
+                return GameUtils.getSpottableCultureTokensOfType(game, tokenForCulture, filters) >= count;
+            };
         }
     }
 }

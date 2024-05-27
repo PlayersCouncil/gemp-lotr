@@ -4,7 +4,7 @@ import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.game.state.LotroGame;
 import org.json.simple.JSONObject;
 
 public class CanSpotThreats implements RequirementProducer {
@@ -13,6 +13,9 @@ public class CanSpotThreats implements RequirementProducer {
         FieldUtils.validateAllowedFields(object, "amount");
 
         final int count = FieldUtils.getInteger(object.get("amount"), "amount", 1);
-        return (actionContext) -> PlayConditions.canSpotThreat(actionContext.getGame(), count);
+        return (actionContext) -> {
+            LotroGame game = actionContext.getGame();
+            return game.getGameState().getThreats() >= count;
+        };
     }
 }

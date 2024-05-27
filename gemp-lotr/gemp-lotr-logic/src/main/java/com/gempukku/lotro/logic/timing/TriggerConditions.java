@@ -31,22 +31,6 @@ public class TriggerConditions {
         return effectResult.getType() == EffectResult.Type.END_OF_TURN;
     }
 
-    public static boolean winsSkirmish(LotroGame game, EffectResult effectResult, Filterable... filters) {
-        if (effectResult.getType() == EffectResult.Type.CHARACTER_WON_SKIRMISH) {
-            CharacterWonSkirmishResult wonResult = (CharacterWonSkirmishResult) effectResult;
-            return Filters.and(filters).accepts(game, wonResult.getWinner());
-        }
-        return false;
-    }
-
-    public static boolean losesSkirmish(LotroGame game, EffectResult effectResult, Filterable... filters) {
-        if (effectResult.getType() == EffectResult.Type.CHARACTER_LOST_SKIRMISH) {
-            CharacterLostSkirmishResult wonResult = (CharacterLostSkirmishResult) effectResult;
-            return Filters.and(filters).accepts(game, wonResult.getLoser());
-        }
-        return false;
-    }
-
     public static boolean losesSkirmishInvolving(LotroGame game, EffectResult effectResult, Filterable loserFilter, Filterable involvingFilter) {
         if (effectResult.getType() == EffectResult.Type.CHARACTER_LOST_SKIRMISH) {
             CharacterLostSkirmishResult wonResult = (CharacterLostSkirmishResult) effectResult;

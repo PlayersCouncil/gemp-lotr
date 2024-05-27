@@ -6,7 +6,8 @@ import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
-import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.state.LotroGame;
 import org.json.simple.JSONObject;
 
 public class ControlsSite implements RequirementProducer {
@@ -17,7 +18,10 @@ public class ControlsSite implements RequirementProducer {
         final String player = FieldUtils.getString(object.get("player"), "player", "you");
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
 
-        return (actionContext) -> PlayConditions.controlsSite(actionContext.getGame(),
-                playerSource.getPlayer(actionContext));
+        return (actionContext) -> {
+            LotroGame game = actionContext.getGame();
+            String playerId = playerSource.getPlayer(actionContext);
+            return Filters.findFirstActive(game, Filters.siteControlled(playerId)) != null;
+        };
     }
 }

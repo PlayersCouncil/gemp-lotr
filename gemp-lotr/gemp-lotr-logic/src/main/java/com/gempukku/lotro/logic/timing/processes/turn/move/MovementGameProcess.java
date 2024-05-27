@@ -27,13 +27,6 @@ public class MovementGameProcess implements GameProcess {
     public void process(LotroGame game) {
         PhysicalCard currentSite = game.getGameState().getCurrentSite();
         final SystemQueueAction action = new SystemQueueAction();
-        action.appendEffect(
-                new UnrespondableEffect() {
-                    @Override
-                    protected void doPlayEffect(LotroGame game) {
-                        game.getGameState().setMoving(true);
-                    }
-                });
         game.getFormat().getAdventure().appendNextSiteAction(action);
         action.appendEffect(
                 new TriggeringResultEffect(Effect.Type.BEFORE_MOVE_FROM, new WhenMoveFromResult(currentSite), "Fellowship moved from"));
@@ -74,13 +67,6 @@ public class MovementGameProcess implements GameProcess {
                         AddTwilightEffect effect = new AddTwilightEffect(null, siteTwilightCost + companionsAddingTwilightForMoveCount);
                         effect.setSourceText("Moving");
                         action.insertEffect(effect);
-                    }
-                });
-        action.appendEffect(
-                new UnrespondableEffect() {
-                    @Override
-                    protected void doPlayEffect(LotroGame game) {
-                        game.getGameState().setMoving(false);
                     }
                 });
 

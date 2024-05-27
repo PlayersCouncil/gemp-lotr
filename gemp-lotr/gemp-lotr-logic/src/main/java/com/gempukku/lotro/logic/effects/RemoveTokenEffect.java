@@ -14,10 +14,6 @@ public class RemoveTokenEffect extends AbstractEffect {
     private final Token _token;
     private final int _count;
 
-    public RemoveTokenEffect(PhysicalCard source, PhysicalCard target, Token token) {
-        this(source, target, token, 1);
-    }
-
     public RemoveTokenEffect(PhysicalCard source, PhysicalCard target, Token token, int count) {
         _source = source;
         _target = target;
