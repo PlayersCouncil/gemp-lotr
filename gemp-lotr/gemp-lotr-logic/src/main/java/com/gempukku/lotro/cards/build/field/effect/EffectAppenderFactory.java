@@ -47,8 +47,10 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("conditional", new ConditionalEffect());
         effectAppenderProducers.put("corruptringbearer", new CorruptRingBearer());
         effectAppenderProducers.put("costtoeffect", new CostToEffect());
-        effectAppenderProducers.put("disablewoundsover", new DisableWoundsOver());
+        effectAppenderProducers.put("disablearcherytotalcontribution", new DisableArcheryTotalContribution());
+        effectAppenderProducers.put("disableskirmishassignment", new DisableSkirmishAssignment());
         effectAppenderProducers.put("disablewounds", new DisableWounds());
+        effectAppenderProducers.put("disablewoundsover", new DisableWoundsOver());
         effectAppenderProducers.put("discard", new DiscardFromPlay());
         effectAppenderProducers.put("discardbottomcardsfromdeck", new DiscardBottomCardsFromDeck());
         effectAppenderProducers.put("discardcardatrandomfromhand", new DiscardCardAtRandomFromHand());
@@ -68,7 +70,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("exhaust", new Exhaust());
         effectAppenderProducers.put("filtercardsinmemory", new FilterCardsInMemory());
         effectAppenderProducers.put("foreachplayer", new ForEachPlayer());
-        effectAppenderProducers.put("foreachshadowplayer", new ForEachShadowPlayer());
         effectAppenderProducers.put("getcardsfromtopofdeck", new GetCardsFromTopOfDeck());
         effectAppenderProducers.put("heal", new Heal());
         effectAppenderProducers.put("if", new IfEffect());
@@ -77,7 +78,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("incrementtoil", new IncrementToil());
         effectAppenderProducers.put("kill", new Kill());
         effectAppenderProducers.put("liberatesite", new LiberateSite());
-        effectAppenderProducers.put("lookatdrawdeck", new LookAtDrawDeck());
         effectAppenderProducers.put("lookathand", new LookAtHand());
         effectAppenderProducers.put("lookatrandomcardsfromhand", new LookAtRandomCardsFromHand());
         effectAppenderProducers.put("lookattopcardsofdrawdeck", new LookAtTopCardsOfDrawDeck());

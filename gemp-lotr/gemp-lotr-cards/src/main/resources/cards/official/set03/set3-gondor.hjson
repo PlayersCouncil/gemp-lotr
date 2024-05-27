@@ -171,12 +171,9 @@
                     until: start(regroup)
                 }
                 {
-                    type: addModifier
-                    modifier: {
-                        type: allyCanParticipateInArcheryFireAndSkirmishes
-                        filter: memory(chosenAlly)
-                    }
-                    until: start(regroup)
+                    type: enableParticipationInArcheryFireAndSkirmishes
+                    filter: memory(chosenAlly)
+                    until: regroup
                 }
             ]
 

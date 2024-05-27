@@ -54,6 +54,7 @@
 				{
 				    type: putCardsFromDeckOnBottomOfDeck
 				    filter: memory(topCards)
+                    reveal: true
 				}
 			]
 		}

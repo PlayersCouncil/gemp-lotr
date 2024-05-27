@@ -162,6 +162,8 @@
                     type: playCardFromDrawDeck
                     filter: choose(or(artifact,possession))
                     on: memory(bearer)
+                    showAll: true
+                    shuffle: true
                 }
 		    }
 		]
@@ -845,6 +847,8 @@
 		        effect: {
 		            type: discardCardsFromDrawDeck
 		            filter: choose(culture(gollum))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

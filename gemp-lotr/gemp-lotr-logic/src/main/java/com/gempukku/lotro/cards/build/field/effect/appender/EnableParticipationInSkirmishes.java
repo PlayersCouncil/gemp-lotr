@@ -40,7 +40,7 @@ public class EnableParticipationInSkirmishes implements EffectAppenderProducer {
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
                         return new AddUntilModifierEffect(
-                                new AllyParticipatesInSkirmishesModifier(actionContext.getSource(), Filters.in(cardsFromMemory)), until);
+                                new AllyParticipatesInSkirmishesModifier(actionContext.getSource(), null, Filters.in(cardsFromMemory)), until);
                     }
                 });
 

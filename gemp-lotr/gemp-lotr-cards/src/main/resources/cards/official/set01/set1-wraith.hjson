@@ -441,11 +441,15 @@
 				{
 					type: putCardsFromDeckIntoHand
 					filter: all(memory(revealedCards),culture(wraith))
+					reveal: true
 					shuffle: false
+					showAll: false
 				}
 				{
 					type: discardCardsFromDrawDeck
 					filter: all(memory(revealedCards),not(culture(wraith)))
+                    showAll: false
+                    shuffle: false
 				}
 			]
 		}

@@ -379,6 +379,9 @@
 				    type: putCardsFromDeckIntoHand
 				    filter: choose(cultureFromMemory(killedCompanion))
 				    count: 0-3
+					reveal: true
+					shuffle: true
+					showAll: true
 				}
 				{
 				    type: shuffleDeck

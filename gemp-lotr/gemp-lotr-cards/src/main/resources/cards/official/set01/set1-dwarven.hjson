@@ -471,6 +471,8 @@
 							effect: {
 								type: discardCardsFromDrawDeck
 								filter: choose(side(shadow),memory(revealedFreepsCards))
+								showAll: false
+								shuffle: false
 							}
 						}
 						{
@@ -500,6 +502,8 @@
 								type: discardCardsFromDrawDeck
 								deck: shadow
 								filter: choose(side(shadow),memory(revealedShadowCards))
+								showAll: false
+								shuffle: false
 							}
 						}
 						{
@@ -815,11 +819,15 @@
 				{
 					type: putCardsFromDeckIntoHand
 					filter: all(memory(revealedCards),side(free people))
+					reveal: true
 					shuffle: false
+					showAll: false
 				}
 				{
 					type: discardCardsFromDrawDeck
 					filter: all(memory(revealedCards),not(side(free people)))
+					showAll: false
+					shuffle: false
 				}
 			]
 		}

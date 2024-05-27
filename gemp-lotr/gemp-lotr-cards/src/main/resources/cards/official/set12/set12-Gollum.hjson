@@ -110,6 +110,8 @@
 				    type: playCardFromDrawDeck
 				    filter: choose(memory(revealedCards),minion)
 				    cost: -2
+                    showAll: false
+                    shuffle: false
 				}
 			]
 		}

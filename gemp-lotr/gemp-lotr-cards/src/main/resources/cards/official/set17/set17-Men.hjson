@@ -968,6 +968,8 @@
                     type: playCardFromDrawDeck
                     filter: choose(name(Stampeding Chief))
                     cost: -8
+                    showAll: true
+                    shuffle: true
                 }
             }
 		]

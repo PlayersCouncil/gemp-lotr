@@ -272,6 +272,14 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public List<String> FreepsGetCardChoices() { return GetADParamAsList(P1, "cardId"); }
     public List<String> ShadowGetCardChoices() { return GetADParamAsList(P2, "cardId"); }
+
+    public int FreepsGetSelectableCount() {
+        return GetADParamEqualsCount(P1, "selectable", "true");
+    }
+
+    public int ShadowGetSelectableCount() {
+        return GetADParamEqualsCount(P2, "selectable", "true");
+    }
     public List<String> FreepsGetBPChoices() { return GetADParamAsList(P1, "blueprintId"); }
     public List<String> ShadowGetBPChoices() { return GetADParamAsList(P2, "blueprintId"); }
     public List<String> FreepsGetMultipleChoices() { return GetADParamAsList(P1, "results"); }
@@ -279,6 +287,10 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public List<String> FreepsGetADParamAsList(String paramName) { return GetADParamAsList(P1, paramName); }
     public List<String> ShadowGetADParamAsList(String paramName) { return GetADParamAsList(P2, paramName); }
     public List<String> GetADParamAsList(String playerID, String paramName) { return Arrays.asList(GetAwaitingDecisionParam(playerID, paramName)); }
+
+    public int GetADParamEqualsCount(String playerID, String paramName, String value) {
+        return (int) Arrays.stream(GetAwaitingDecisionParam(playerID, paramName)).filter(s -> s.equals(value)).count();
+    }
     public String[] FreepsGetADParam(String paramName) { return GetAwaitingDecisionParam(P1, paramName); }
     public String[] ShadowGetADParam(String paramName) { return GetAwaitingDecisionParam(P2, paramName); }
     public String FreepsGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P1, paramName)[0]; }

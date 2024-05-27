@@ -169,6 +169,8 @@
                     {
                         type: playCardFromDrawDeck
                         filter: choose(memory(revealedCards),culture(rohan),possession)
+                        showAll: false
+                        shuffle: false
                     }
                     {
                         type: shuffleDeck
@@ -464,6 +466,8 @@
 		                {
 		                    type: playCardFromDrawDeck
 		                    filter: choose(culture(rohan),companion)
+                            showAll: true
+                            shuffle: true
 		                }
 		            ]
 		        }

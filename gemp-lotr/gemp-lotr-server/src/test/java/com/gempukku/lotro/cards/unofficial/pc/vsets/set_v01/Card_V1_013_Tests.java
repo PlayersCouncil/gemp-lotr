@@ -10,9 +10,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_013_Tests
 {
@@ -94,7 +92,7 @@ public class Card_V1_013_Tests
 		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(counsel);
-		assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
+        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		// Choices available should be 1 Elrond, 1 Galadriel, 1 Orophin
 		assertEquals(3, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(scn.GetFreepsCard("elrond"));
@@ -126,7 +124,7 @@ public class Card_V1_013_Tests
 		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(counsel);
-		assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
+        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		// Choices available should be 1 Elrond, 1 Galadriel, 1 Orophin
 		assertEquals(3, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(scn.GetFreepsCard("elrond"));

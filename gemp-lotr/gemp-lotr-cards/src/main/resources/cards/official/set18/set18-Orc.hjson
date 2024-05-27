@@ -316,6 +316,8 @@
 		            deck: free people
 		            count: 2
 		            filter: choose(side(free people))
+		            shuffle: true
+		            showAll: true
 		        }
 		    }
 		]

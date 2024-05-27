@@ -171,6 +171,7 @@
 				{
 				    type: putCardsFromDeckOnTopOfDeck
                     filter: memory(setAsideCards)
+                    reveal: true
 				}
 			]
 		}
@@ -234,6 +235,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(culture(elven),artifact)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

@@ -1,9 +1,10 @@
 package com.gempukku.lotro.cards.official.set11;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -94,7 +95,7 @@ public class Card_11_235_Tests
 		//Not Listening is a response event, it shouldn't show up
 		//Clever Hobbits is a skirmish event, also shouldn't show
 		//Smeagol and Don't Look At Them are valid.  Fishing Boat would theoretically be valid if Smeagol were in play.
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+        assertEquals(2, scn.FreepsGetSelectableCount());
 
 		assertEquals(Zone.DECK, dontlook.getZone());
 		assertEquals(Zone.DECK, smeagol.getZone());

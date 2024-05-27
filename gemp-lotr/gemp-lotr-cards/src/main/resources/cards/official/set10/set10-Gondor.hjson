@@ -253,9 +253,9 @@
 		            {
 		                type: putCardsFromDeckIntoHand
 		                filter: choose(culture(gondor))
-		            }
-		            {
-		                type: shuffleDeck
+                        reveal: true
+                        shuffle: true
+                        showAll: true
 		            }
 		            {
 		                type: optional

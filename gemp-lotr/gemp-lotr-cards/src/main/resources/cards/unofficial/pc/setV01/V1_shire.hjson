@@ -28,11 +28,15 @@
 						type: playCardFromDrawDeck
 						filter: choose(item)
 						on: culture(shire),companion
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDrawDeck
 						filter: choose(item)
 						on: culture(shire),companion
+                        showAll: true
+                        shuffle: true
 					}
 				]
 			}
@@ -108,11 +112,8 @@
 						filter: memory(chosenMinion)
 					}
 					effect: {
-					    type: addModifier
-					    modifier: {
-					        type: cantBeAssignedToSkirmish
-					        filter: memory(chosenMinion)
-					    }
+        		        type: disableSkirmishAssignment
+                        filter: memory(chosenMinion)
 						until: regroup
 					}
 				}

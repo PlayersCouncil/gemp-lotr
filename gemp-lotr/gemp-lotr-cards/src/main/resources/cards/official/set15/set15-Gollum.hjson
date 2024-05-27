@@ -693,6 +693,8 @@
 				    type: playCardFromDrawDeck
 				    filter: choose(condition)
 				    memorize: playedCondition
+                    showAll: true
+                    shuffle: true
 				}
 				{
 				    type: conditional
@@ -757,6 +759,8 @@
 				    type: playCardFromDrawDeck
 				    filter: choose(minion)
 				    memorize: playedMinion
+                    showAll: true
+                    shuffle: true
 				}
 				{
 				    type: conditional
@@ -768,6 +772,8 @@
 				    effect: {
 				        type: playCardFromDrawDeck
 				        filter: choose(or(possession,condition))
+                        showAll: true
+                        shuffle: true
 				    }
 				}
 			]

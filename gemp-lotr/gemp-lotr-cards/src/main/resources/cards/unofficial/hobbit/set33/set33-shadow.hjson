@@ -568,6 +568,8 @@
 						{
 							type: playCardFromDrawDeck
 							filter: choose(culture(mirkwood),condition)
+                            showAll: true
+                            shuffle: true
 						}
 						{
 							type: playCardFromDiscard

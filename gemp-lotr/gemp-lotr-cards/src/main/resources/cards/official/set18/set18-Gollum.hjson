@@ -240,8 +240,9 @@
 		            {
 		                type: putCardsFromDeckIntoHand
 		                filter: choose(culture(gollum))
-		                reveal: true
-		                shuffle: true
+                        reveal: true
+                        shuffle: true
+                        showAll: true
 		            }
 		            {
 		                type: discardFromHand

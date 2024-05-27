@@ -647,6 +647,8 @@
 				    type: playCardFromDrawDeck
 				    filter: choose(culture(dwarven),possession)
 				    on: culture(dwarven),companion,minResistance(5)
+                    showAll: true
+                    shuffle: true
 				}
 			]
 		}

@@ -188,6 +188,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(tale)
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -645,11 +647,8 @@
 					filter: choose(minion)
 				}
 				{
-					type: addModifier
-					modifier: {
-					    type: doesNotAddToArcheryTotal
-					    filter: self
-					}
+				    type: disableArcheryTotalContribution
+				    filter: self
 				}
 			]
 		}

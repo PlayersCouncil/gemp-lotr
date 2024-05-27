@@ -242,6 +242,8 @@
 		            type: playCardFromDrawDeck
 		            filter: choose(possession)
 		            on: self
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

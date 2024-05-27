@@ -18,6 +18,8 @@
 						{
 							type: playCardFromDrawDeck
 							filter: choose(culture(wraith),item)
+                            showAll: true
+                            shuffle: true
 						}
 						{
 							type: playCardFromDiscard

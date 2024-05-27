@@ -241,9 +241,8 @@
                     {
                         type: playCardFromDrawDeck
                         filter: choose(memory(revealedCards),knight)
-                    }
-                    {
-                        type: shuffleDeck
+                        showAll: false
+                        shuffle: true
                     }
                 ]
 		    }

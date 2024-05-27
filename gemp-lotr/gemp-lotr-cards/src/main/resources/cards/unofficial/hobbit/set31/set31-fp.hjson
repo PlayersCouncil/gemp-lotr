@@ -72,6 +72,8 @@
 						effect: {
 							type: playCardFromDrawDeck
 							filter: choose(culture(dwarven),not(event))
+                            showAll: true
+                            shuffle: true
 						}
 					}
 				}
@@ -288,6 +290,7 @@
 							filter: choose(culture(dwarven),event)
 							where: self
 							shuffle: true
+							showAll: true
 						}
 					]
 				}
@@ -534,6 +537,8 @@
 						{
 							type: playCardFromDrawDeck
 							filter: choose(culture(gandalf),follower)
+                            showAll: true
+                            shuffle: true
 						}
 						{
 							type: playCardFromDiscard
@@ -692,6 +697,9 @@
 			effect: {
 				type: putCardsFromDeckIntoHand
 				filter: choose(culture(gandalf),spell)
+                reveal: true
+                shuffle: true
+                showAll: true
 			}
 		}
 	}
@@ -853,6 +861,9 @@
             {
               type: putCardsFromDeckIntoHand
               filter: choose(side(free people),not(or(culture(gandalf),culture(elven))))
+                reveal: true
+                shuffle: true
+                showAll: true
             }
             {
               type: putCardsFromDiscardIntoHand

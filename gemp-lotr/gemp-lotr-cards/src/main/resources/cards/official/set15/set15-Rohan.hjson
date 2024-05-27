@@ -727,6 +727,8 @@
 				{
 				    type: playCardFromDrawDeck
 				    filter: choose(culture(rohan),or(companion,follower))
+                    showAll: true
+                    shuffle: true
 				}
 			]
 		}

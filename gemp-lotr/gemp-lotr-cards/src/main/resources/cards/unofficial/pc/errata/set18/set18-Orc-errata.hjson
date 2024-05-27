@@ -103,17 +103,14 @@
 						player: freeps
 					}
 					{
-						type: LookAtDrawDeck
-						deck: freeps
-					}
-					{
 						type: DiscardCardsFromDrawDeck
 						filter: choose(side(freeps))
 						player: you
 						deck: freeps
 						count: 2
+                        showAll: true
+                        shuffle: true
 					}
-
 				]
 			}
 		]

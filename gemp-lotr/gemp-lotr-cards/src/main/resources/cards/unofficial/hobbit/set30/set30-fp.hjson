@@ -349,11 +349,8 @@
 					filter: choose(minion)
 				}
 				{
-					type: addModifier
-					modifier: {
-					    type: doesNotAddToArcheryTotal
-					    filter: self
-					}
+				    type: disableArcheryTotalContribution
+				    filter: self
 				}
 			]
 		}
@@ -703,6 +700,8 @@
 					{
 						type: playCardFromDrawDeck
 						filter: choose(or(name(Gandalf),and(ally,not(dwarf))))
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDiscard
@@ -793,6 +792,8 @@
 				effect: {
 					type: playCardFromDrawDeck
 					filter: choose(dwarf)
+                    showAll: true
+                    shuffle: true
 				}
 			}
 			{
@@ -914,6 +915,8 @@
 	          {
               type: playCardFromDrawDeck
               filter: choose(or(artifact,and(dwarf,companion)))
+                showAll: true
+                shuffle: true
             }
             {
               type: playCardFromDiscard
@@ -961,6 +964,8 @@
         effect: {
           type: playCardFromDrawDeck
           filter: choose(dwarf,companion)
+            showAll: true
+            shuffle: true
         }
       }
     ]

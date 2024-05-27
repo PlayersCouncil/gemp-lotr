@@ -211,6 +211,8 @@
 					{
 						type: playCardFromDrawDeck
 						filter: choose(culture(sauron),minion)
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDiscard
@@ -779,11 +781,8 @@
 					filter: choose(unbound,companion)
 				}
 				{
-					type: addModifier
-					modifier: {
-					    type: doesNotAddToArcheryTotal
-					    filter: self
-					}
+				    type: disableArcheryTotalContribution
+				    filter: self
 				}
 			]
 		}

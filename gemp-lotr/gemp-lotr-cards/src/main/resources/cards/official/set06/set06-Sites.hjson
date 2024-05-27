@@ -80,6 +80,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(companion,signet(Aragorn))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

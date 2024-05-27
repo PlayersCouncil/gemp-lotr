@@ -484,11 +484,15 @@
 				{
 					type: putCardsFromDeckIntoHand
 					filter: all(memory(cardsOnTop),culture(shire))
+					reveal: true
 					shuffle: false
+					showAll: false
 				}
 				{
 					type: discardCardsFromDrawDeck
 					filter: all(memory(cardsOnTop),zone(deck))
+                    showAll: false
+                    shuffle: false
 				}
 			]
 		}
@@ -718,6 +722,8 @@
 				effect: {
 					type: playCardFromDrawDeck
 					filter: choose(name(Bill the Pony))
+                    showAll: true
+                    shuffle: true
 				}
 			}
 			{

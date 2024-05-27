@@ -21,6 +21,8 @@
 				effect: {
 					type: playCardFromDrawDeck
 					filter: choose(ring)
+                    showAll: true
+                    shuffle: true
 				}
 			}
 			{
@@ -278,11 +280,15 @@
 					{
 						type: putCardsFromDeckIntoHand
 						filter: all(memory(revealedCards),side(free people))
-						shuffle: false
+                        reveal: true
+                        shuffle: false
+                        showAll: false
 					}
 					{
 						type: discardCardsFromDrawDeck
 						filter: all(memory(revealedCards),not(side(free people)))
+                        showAll: false
+                        shuffle: false
 					}
 					{
 						type: discard
@@ -899,7 +905,9 @@
 							effect: {
 								type: putCardsFromDeckIntoHand
 								filter: memory(revealedCards)
-								shuffle: false
+                                reveal: true
+                                shuffle: false
+                                showAll: false
 							}
 						}
 					}

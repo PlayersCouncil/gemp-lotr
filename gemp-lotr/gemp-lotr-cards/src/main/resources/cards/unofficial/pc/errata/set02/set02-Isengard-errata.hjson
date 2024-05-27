@@ -158,6 +158,7 @@
 					filter: choose(minion)
 					count: 1
 					memorize: chosenCard
+					showAll: true
 				}
 				{
 					type: preventable
@@ -172,6 +173,9 @@
 					effect: {
 						type: PutCardsFromDeckIntoHand
 						filter: memory(chosenCard)
+                        reveal: true
+                        shuffle: false
+                        showAll: false
 					}
 				}
 			]	

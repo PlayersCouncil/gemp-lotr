@@ -148,11 +148,9 @@
 				filter: choose(fellowship,companion)
 			}
 			effect: {
-				type: forEachShadowPlayer
-				effect: {
-					type: discard
-					filter: choose(your,side(shadow))
-				}
+                type: discard
+                player: shadow
+                filter: choose(your,side(shadow))
 			}
 		}
 	}
@@ -270,11 +268,8 @@
 					filter: choose(minion)
 				}
 				{
-					type: addModifier
-					modifier: {
-					    type: doesNotAddToArcheryTotal
-					    filter: self
-					}
+                    type: disableArcheryTotalContribution
+                    filter: self
 				}
 			]
 		}

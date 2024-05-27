@@ -476,12 +476,15 @@
 					type: PutCardsFromDeckIntoHand
 					count: 2
 					filter: choose(memory(cardsOnTop))
+					reveal: true
 					shuffle: false
-					reveal: false
+					showAll: false
 				}
 				{
 					type: DiscardCardsFromDrawDeck
 					filter: all(memory(cardsOnTop),zone(deck))
+                    showAll: false
+                    shuffle: false
 				}
 			]
 		}
@@ -517,12 +520,15 @@
 					type: PutCardsFromDeckIntoHand
 					count: 1
 					filter: choose(memory(cardsOnTop))
+					reveal: true
 					shuffle: false
-					reveal: false
+					showAll: false
 				}
 				{
 					type: DiscardCardsFromDrawDeck
 					filter: all(memory(cardsOnTop),zone(deck))
+                    showAll: false
+                    shuffle: false
 				}
 			]
 		}
@@ -627,6 +633,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(culture(gandalf),character)
+                showAll: true
+                shuffle: true
 			}
 		}
 	}

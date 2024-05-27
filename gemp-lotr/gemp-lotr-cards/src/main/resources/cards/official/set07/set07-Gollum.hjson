@@ -38,6 +38,8 @@
 				    {
 				        type: playCardFromDrawDeck
 				        filter: choose(name(Gollum))
+                        showAll: true
+                        shuffle: true
 				    }
 				    {
 				        type: playCardFromDiscard

@@ -241,6 +241,8 @@
 		                        cost: {
 		                            type: discardCardsFromDrawDeck
 		                            filter: memory(revealedCard)
+                                    showAll: false
+                                    shuffle: false
 		                        }
 		                        effect: {
 		                            type: wound

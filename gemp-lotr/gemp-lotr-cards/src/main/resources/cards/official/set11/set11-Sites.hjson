@@ -131,6 +131,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(culture(dwarven),possession)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -397,9 +399,11 @@
 			}
 			optional: true
 			effect: {
-					type: playCardFromDrawDeck
-					filter: choose(culture(gollum),side(free peoples))
-				}
+                type: playCardFromDrawDeck
+                filter: choose(culture(gollum),side(free peoples))
+                showAll: true
+                shuffle: true
+		    }
 		}
 		gametext: <b>Marsh</b>. At the start of your fellowship phase, you may play a [gollum] Free Peoples card from your draw deck.
 		lore: ""
@@ -743,6 +747,8 @@
                 effect: {
                     type: playCardFromDrawDeck
                     filter: choose(hobbit)
+                    showAll: true
+                    shuffle: true
                 }
 		    }
 		]
@@ -1449,6 +1455,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(ranger)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -1591,6 +1599,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(culture(rohan),mount)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

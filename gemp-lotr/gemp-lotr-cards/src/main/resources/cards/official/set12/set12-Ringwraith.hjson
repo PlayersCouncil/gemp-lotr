@@ -191,6 +191,8 @@
 				    type: playCardFromDrawDeck
 				    filter: choose(mount)
 				    on: nazgul
+                    showAll: true
+                    shuffle: true
 				}
 			]
 		}

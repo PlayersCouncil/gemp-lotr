@@ -189,6 +189,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(hunter,companion)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

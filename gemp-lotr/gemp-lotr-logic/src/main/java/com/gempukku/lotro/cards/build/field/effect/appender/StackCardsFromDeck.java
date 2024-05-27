@@ -23,19 +23,20 @@ import java.util.List;
 public class StackCardsFromDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "where", "count", "shuffle");
+        FieldUtils.validateAllowedFields(effectObject, "filter", "where", "count", "shuffle", "showAll");
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
         final String where = FieldUtils.getString(effectObject.get("where"), "where");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle", false);
+        final boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
+        boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
                 CardResolver.resolveCard(where, "_temp1", "you", "Choose card to stack on", environment));
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeck(filter, valueSource, "_temp2", "you", "Choose cards to stack", environment));
+                CardResolver.resolveCardsInDeck(filter, null, valueSource, "_temp2", "you", "you", showAll, "Choose cards to stack", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
             @Override
@@ -57,11 +58,11 @@ public class StackCardsFromDeck implements EffectAppenderProducer {
         if (shuffle)
             result.addEffectAppender(
                     new DelayedAppender() {
-                @Override
-                protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                    return new ShuffleDeckEffect(actionContext.getPerformingPlayer());
-                }
-            });
+                        @Override
+                        protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                            return new ShuffleDeckEffect(actionContext.getPerformingPlayer());
+                        }
+                    });
 
         return result;
     }

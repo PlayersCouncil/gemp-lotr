@@ -136,11 +136,8 @@
 				    until: regroup
 				}
 				{
-				    type: addModifier
-				    modifier: {
-				        type: cantTakeWounds
-				        filter: memory(chosenCompanion)
-				    }
+				    type: disableWounds
+                    filter: memory(chosenCompanion)
 				    until: regroup
 				}
 			]

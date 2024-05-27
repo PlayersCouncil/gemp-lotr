@@ -132,10 +132,15 @@
 		            {
 		                type: putCardsFromDeckIntoHand
 		                filter: all(memory(revealedCards),culture(gandalf))
+                        reveal: true
+                        shuffle: false
+                        showAll: false
 		            }
 		            {
 		                type: discardCardsFromDrawDeck
 		                filter: all(memory(revealedCards),not(culture(gandalf)))
+                        showAll: false
+                        shuffle: false
 		            }
 		        ]
 		    }
@@ -203,6 +208,8 @@
                             type: playCardFromDrawDeck
                             filter: choose(culture(gandalf),possession)
                             on: self
+                            showAll: true
+                            shuffle: true
 		                }
 		                {
                             type: playCardFromDiscard
@@ -457,6 +464,8 @@
 		        effect: {
 		            type: discardCardsFromDrawDeck
 		            filter: choose(culture(gandalf))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		    {
@@ -610,10 +619,15 @@
     		                true: {
     		                    type: putCardsFromDeckIntoHand
     		                    filter: memory(revealedCards)
+                                reveal: true
+                                shuffle: false
+                                showAll: false
     		                }
     		                false: {
     		                    type: discardCardsFromDrawDeck
     		                    filter: memory(revealedCards)
+                                showAll: false
+                                shuffle: false
     		                }
 		                }
 		                false: {
@@ -627,10 +641,15 @@
     		                true: {
     		                    type: putCardsFromDeckIntoHand
     		                    filter: memory(revealedCards)
+                                reveal: true
+                                shuffle: false
+                                showAll: false
     		                }
     		                false: {
     		                    type: discardCardsFromDrawDeck
     		                    filter: memory(revealedCards)
+                                showAll: false
+                                shuffle: false
     		                }
 		                }
 		            }

@@ -113,11 +113,15 @@
                     {
                         type: putCardsFromDeckIntoHand
                         filter: all(memory(revealedCards),culture(sauron))
+                        reveal: true
                         shuffle: false
+                        showAll: false
                     }
                     {
                         type: discardCardsFromDrawDeck
                         filter: all(memory(revealedCards),not(culture(sauron)))
+                        showAll: false
+                        shuffle: false
                     }
                     {
                         type: conditional

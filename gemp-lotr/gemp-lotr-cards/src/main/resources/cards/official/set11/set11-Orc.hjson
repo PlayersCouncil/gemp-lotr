@@ -51,6 +51,8 @@
 				            {
 				                type: playCardFromDrawDeck
 				                filter: choose(culture(orc),possession)
+                                showAll: true
+                                shuffle: true
 				            }
 				        ]
 				    }

@@ -75,6 +75,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(culture(dwarven),or(possession,follower))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -110,6 +112,9 @@
 				effect: {
 					type: putCardsFromDeckIntoHand
 					filter: choose(culture(dwarven),skirmish,event)
+					reveal: true
+					shuffle: true
+					showAll: true
 				}
 			}
 		]
@@ -137,6 +142,8 @@
 					{
 						type: playCardFromDrawDeck
 						filter: choose(name(Balin))
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: putCardsFromDiscardOnBottomOfDeck
@@ -404,6 +411,8 @@
           effect: {
             type: playCardFromDrawDeck
             filter: choose(name(Ori))
+            showAll: true
+            shuffle: true
           }
         }
       }
@@ -456,6 +465,9 @@
           type: putCardsFromDeckIntoHand
           count: 3
           filter: choose(culture(dwarven))
+            reveal: true
+            shuffle: true
+            showAll: true
         }
       }
     ]
@@ -504,6 +516,8 @@
             {
               type: playCardFromDrawDeck
               filter: choose(name(Glamdring))
+                showAll: true
+                shuffle: true
             }
             {
               type: playCardFromDiscard
@@ -601,6 +615,9 @@
           {
             type: putCardsFromDeckIntoHand
             filter: choose(or(culture(elven),culture(mirkwood)))
+            reveal: true
+            shuffle: true
+            showAll: true
           }
         ]
       }
@@ -794,6 +811,8 @@
           {
             type: playCardFromDrawDeck
             filter: choose(name(Glamdring))
+            showAll: true
+            shuffle: true
           }
           {
             type: playCardFromDiscard

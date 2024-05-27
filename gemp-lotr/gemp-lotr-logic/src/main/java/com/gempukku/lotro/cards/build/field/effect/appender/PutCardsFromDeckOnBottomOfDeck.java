@@ -27,13 +27,12 @@ public class PutCardsFromDeckOnBottomOfDeck implements EffectAppenderProducer {
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
-        // TODO - changed the default - have to go through all cards to check which should be revealed
-        final boolean reveal = FieldUtils.getBoolean(effectObject.get("reveal"), "reveal", false);
+        final boolean reveal = FieldUtils.getBoolean(effectObject.get("reveal"), "reveal");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeck(filter, valueSource, "_temp", "you", "Choose cards from deck", environment));
+                CardResolver.resolveCardsInDeck(filter, null, valueSource, "_temp", "you", "you", false, "Choose cards from deck", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

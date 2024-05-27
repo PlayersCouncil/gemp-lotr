@@ -386,6 +386,8 @@
 		                    effect: {
 		                        type: discardCardsFromDrawDeck
 		                        filter: memory(revealedCard)
+								showAll: false
+								shuffle: false
 		                    }
 		                }
 		            }
@@ -524,6 +526,8 @@
 				        {
 				            type: discardCardsFromDrawDeck
 				            filter: memory(revealedCard)
+                            showAll: false
+                            shuffle: false
 				        }
 				        {
 				            type: multiple
@@ -531,7 +535,9 @@
 				        {
 				            type: putCardsFromDeckIntoHand
 				            filter: memory(revealedCard)
-				            reveal: true
+                            reveal: true
+                            shuffle: false
+                            showAll: false
 				        }
 				    ]
 				}
@@ -592,6 +598,8 @@
 				    effect: {
 				        type: discardCardsFromDrawDeck
 				        filter: memory(revealedCard)
+                        showAll: false
+                        shuffle: false
 				    }
 				}
 			]

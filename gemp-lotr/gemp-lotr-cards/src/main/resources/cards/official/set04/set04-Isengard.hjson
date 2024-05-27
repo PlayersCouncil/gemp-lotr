@@ -846,11 +846,8 @@
 		                filter: choose(unbound,companion)
 		            }
 		            {
-		                type: addModifier
-		                modifier: {
-		                    type: doesNotAddToArcheryTotal
-		                    filter: self
-		                }
+                        type: disableArcheryTotalContribution
+                        filter: self
 		            }
 		        ]
 		    }
@@ -943,17 +940,8 @@
 			type: event
 			effect: [
 			    {
-			        type: chooseActiveCards
-			        text: Choose tracker to prevent it being assigned to a skirmish
+			        type: disableSkirmishAssignment
 			        filter: choose(culture(isengard),tracker)
-			        memorize: chosenTracker
-			    }
-				{
-					type: addModifier
-					modifier: {
-					    type: cantBeAssignedToSkirmish
-					    filter: memory(chosenTracker)
-					}
 				}
 			]
 		}
@@ -1397,17 +1385,8 @@
 		        }
 		        effect: [
 		            {
-		                type: chooseActiveCards
-		                text: Choose tracker
+		                type: disableWounds
 		                filter: choose(culture(isengard),tracker)
-		                memorize: chosenTracker
-		            }
-                    {
-                        type: addModifier
-                        modifier: {
-                            type: cantTakeWounds
-                            filter: memory(chosenTracker)
-                        }
                     }
                 ]
 		    }
@@ -1748,6 +1727,7 @@
                                         effect: {
                                             type: putCardsFromDeckOnBottomOfDeck
                                             filter: memory(revealedCard)
+                                            reveal: true
                                         }
                                     }
                                 ]
@@ -1766,6 +1746,7 @@
                                         effect: {
                                             type: putCardsFromDeckOnBottomOfDeck
                                             filter: memory(revealedCard)
+                                            reveal: true
                                         }
                                     }
                                 ]
@@ -1933,11 +1914,8 @@
 		                filter: choose(unbound,companion)
 		            }
 		            {
-		                type: addModifier
-		                modifier: {
-		                    type: doesNotAddToArcheryTotal
-		                    filter: self
-		                }
+                        type: disableArcheryTotalContribution
+                        filter: self
 		            }
 		        ]
 		    }
@@ -2050,11 +2028,15 @@
                         type: discardCardsFromDrawDeck
                         deck: fp
                         filter: choose(side(shadow),memory(revealedCards))
+                        showAll: false
+                        shuffle: false
                     }
                     {
                         type: discardCardsFromDrawDeck
                         deck: fp
                         filter: choose(side(free),memory(revealedCards))
+                        showAll: false
+                        shuffle: false
                     }
                     {
                         type: shuffleDeck
@@ -2820,11 +2802,8 @@
 		                filter: choose(unbound,companion)
 		            }
 		            {
-		                type: addModifier
-		                modifier: {
-		                    type: doesNotAddToArcheryTotal
-		                    filter: self
-		                }
+                        type: disableArcheryTotalContribution
+                        filter: self
 		            }
 		        ]
 		    }

@@ -16,6 +16,7 @@
 				filter: choose(culture(elven),ally)
 				memorize: chosenAlly
 				text: Choose an [Elven] ally to reveal from your draw deck.
+                showAll: true
 			}
 			effect: {
 				type: optional
@@ -33,6 +34,9 @@
 						type: putcardsfromdeckintohand
 						count: 1
 						filter: memory(chosenAlly)
+                        reveal: true
+                        shuffle: false
+                        showAll: false
 					}
 				}
 			}

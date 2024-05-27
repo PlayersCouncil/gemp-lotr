@@ -43,11 +43,8 @@
                         until: regroup
                     }
                     {
-                        type: addModifier
-                        modifier: {
-                            type: cantTakeWounds
-                            filter: self
-                        }
+                        type: disableWounds
+                        filter: self
                         until: regroup
                     }
                     {
@@ -120,11 +117,8 @@
                         until: regroup
                     }
                     {
-                        type: addModifier
-                        modifier: {
-                            type: cantTakeWounds
-                            filter: self
-                        }
+                        type: disableWounds
+                        filter: self
                         until: regroup
                     }
                     {
@@ -192,11 +186,8 @@
                         until: regroup
                     }
                     {
-                        type: addModifier
-                        modifier: {
-                            type: cantTakeWounds
-                            filter: self
-                        }
+                        type: disableWounds
+                        filter: self
                         until: regroup
                     }
                     {

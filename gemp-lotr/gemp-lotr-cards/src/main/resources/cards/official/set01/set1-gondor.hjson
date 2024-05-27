@@ -76,11 +76,8 @@
 						filter: choose(minion)
 					}
 					{
-                        type: addModifier
-                        modifier: {
-                            type: doesNotAddToArcheryTotal
-                            filter: bearer
-                        }
+                        type: disableArcheryTotalContribution
+                        filter: bearer
 					}
 				]
 			}
@@ -751,12 +748,9 @@
 					memorize: chosenAragorn
 				}
 				{
-				    type: addModifier
-				    modifier: {
-                        type: cantTakeMoreWoundsThan
-    					filter: memory(chosenAragorn)
-    					phase: skirmish
-				    }
+				    type: disableWoundsOver
+                    filter: memory(chosenAragorn)
+                    phase: skirmish
 					until: regroup
 				}
 			]

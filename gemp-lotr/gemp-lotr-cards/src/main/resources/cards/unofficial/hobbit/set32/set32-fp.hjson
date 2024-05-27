@@ -173,6 +173,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(culture(dwarven),follower)
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -252,6 +254,8 @@
 						{
 							type: playCardFromDrawDeck
 							filter: choose(culture(dwarven),ally)
+                            showAll: true
+                            shuffle: true
 						}
 						{
 							type: EnableParticipationInSkirmishes
@@ -297,6 +301,8 @@
 					type: playCardFromDrawDeck
 					filter: choose(culture(dwarven),or(possession,artifact))
 					on: bearer
+                    showAll: true
+                    shuffle: true
 				}
 			}
 		]
@@ -323,6 +329,8 @@
 					{
 						type: playCardFromDrawDeck
 						filter: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDiscard
@@ -525,6 +533,9 @@
 				effect: {
 					type: putCardsFromDeckIntoHand
 					filter: choose(culture(gandalf),spell)
+					reveal: true
+					shuffle: true
+					showAll: true
 				}
 			}
 		]

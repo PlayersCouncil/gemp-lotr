@@ -32,6 +32,8 @@
 				{
 				    type: playCardFromDrawDeck
 				    filter: choose(culture(shire),follower)
+                    showAll: true
+                    shuffle: true
 				}
 			]
 		}

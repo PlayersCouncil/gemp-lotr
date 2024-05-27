@@ -127,21 +127,11 @@
 				where: choose(culture(dwarven),support area,condition)
 				count: 3
 			}
-			effect: [
-                {
-                    type: chooseActiveCards
-                    text: Choose a dwarf to protect
-                    filter: choose(dwarf)
-                    memorize: chosenDwarf
-                }
-                {
-                    type: addModifier
-                    modifier: {
-                        type: cantTakeMoreWoundsThan
-                        filter: memory(chosenDwarf)
-                    }
-                }
-            ]
+			effect: {
+				type: DisableWoundsOver
+				filter: choose(dwarf)
+				wounds: 1
+			}
 		}
 	}
 	40_7: {

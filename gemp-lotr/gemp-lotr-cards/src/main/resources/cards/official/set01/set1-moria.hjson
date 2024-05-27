@@ -190,7 +190,9 @@
 				{
 					type: putCardsFromDeckIntoHand
 					filter: memory(revealedCards)
+					reveal: true
 					shuffle: false
+					showAll: false
 				}
 			]
 		}
@@ -948,11 +950,15 @@
 				{
 					type: putCardsFromDeckIntoHand
 					filter: all(memory(revealedCards),culture(moria),orc)
+					reveal: true
 					shuffle: false
+					showAll: false
 				}
 				{
 					type: discardCardsFromDrawDeck
 					filter: all(memory(revealedCards),zone(deck))
+                    showAll: false
+                    shuffle: false
 				}
 			]
 		}

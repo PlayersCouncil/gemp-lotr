@@ -496,6 +496,7 @@
                     {
                         type: putCardsFromDeckOnBottomOfDeck
                         filter: memory(revealedCard)
+                        reveal: true
                     }
                 ]
 		    }

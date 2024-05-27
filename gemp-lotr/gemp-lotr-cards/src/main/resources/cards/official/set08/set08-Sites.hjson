@@ -37,6 +37,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(enduring,companion)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -92,6 +94,8 @@
 		                {
 		                    type: playCardFromDrawDeck
 		                    filter: choose(enduring,minion)
+                            showAll: true
+                            shuffle: true
 		                }
 		                {
 		                    type: playCardFromDiscard

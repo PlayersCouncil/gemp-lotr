@@ -277,6 +277,8 @@
 		            type: playCardFromDrawDeck
 		            filter: choose(culture(wraith),mount)
 		            on: your,culture(wraith),minion
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

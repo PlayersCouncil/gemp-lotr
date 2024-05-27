@@ -132,6 +132,9 @@
 								type: PutCardsFromDeckIntoHand
 								filter: choose(culture(isengard),weather)
 								count: 1
+                                reveal: true
+                                shuffle: true
+                                showAll: true
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
@@ -332,6 +335,9 @@
 								type: PutCardsFromDeckIntoHand
 								filter: choose(culture(isengard),item)
 								count: 1
+                                reveal: true
+                                shuffle: true
+                                showAll: true
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
@@ -499,6 +505,8 @@
 								filter: Crow
 								multiplier: -1
 							}
+                            showAll: true
+                            shuffle: true
 						}
 						{
 							type: PlayCardFromDiscard
@@ -657,6 +665,9 @@
 								type: PutCardsFromDeckIntoHand
 								filter: choose(culture(isengard),condition)
 								count: 1
+                                reveal: true
+                                shuffle: true
+                                showAll: true
 							}
 							{
 								type: PutCardsFromDiscardIntoHand

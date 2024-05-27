@@ -158,6 +158,8 @@
 		            type: playCardFromDrawDeck
 		            filter: choose(culture(gondor),possession,maxTwilight(1))
 		            on: self
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -757,16 +759,8 @@
 		            }
 		            effect: [
                         {
-                            type: spot
+                            type: disableSkirmishAssignment
                             filter: choose(minion)
-                            memorize: spottedMinion
-                        }
-                        {
-                            type: addModifier
-                            modifier: {
-                                type: cantBeAssignedToSkirmish
-                                filter: memory(spottedMinion)
-                            }
                             until: regroup
                         }
                     ]

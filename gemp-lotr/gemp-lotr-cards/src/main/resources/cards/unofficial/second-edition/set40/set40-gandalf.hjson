@@ -684,6 +684,9 @@
 					{
 						type: putCardsFromDeckIntoHand
 						filter: choose(culture(Gandalf))
+                        reveal: true
+                        shuffle: true
+                        showAll: true
 					}
 					{
 						type: discard
@@ -1025,6 +1028,9 @@
       effect: {
         type: putCardsFromDeckIntoHand
         filter: choose(cultureFromMemory(exertedCompanion))
+        reveal: true
+        shuffle: true
+        showAll: true
       }
     }
   }
@@ -1041,6 +1047,8 @@
       effect: {
         type: playCardFromDrawDeck
         filter: choose(culture(gandalf),character)
+        showAll: true
+        shuffle: true
       }
     }
   }

@@ -433,6 +433,8 @@
 				effect: {
 					type: playCardFromDrawDeck
 					filter: choose(pipeweed,possession)
+                    showAll: true
+                    shuffle: true
 				}
 			}
 		]

@@ -133,11 +133,8 @@
 							amount: 2
 						}
 						effect: {
-						    type: addModifier
-						    modifier: {
-						        type: cantBeAssignedToSkirmish
-						        filter: memory(chosenMinion)
-						    }
+                            type: disableSkirmishAssignment
+                            filter: memory(chosenMinion)
 							until: regroup
 						}
 					}

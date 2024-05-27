@@ -49,19 +49,9 @@
 							}
 							effect: [
 								{
-									type: ChooseActiveCards
-									count: 1
+								    type: disableWounds
 									filter: choose(culture(isengard),minion)
-									memorize: chosenMinion
-									text: Choose an ISENGARD minion to make unwoundable
-								}
-								{
-									type: AddModifier
-									until: start(regroup)
-									modifier: {
-										type: CantTakeWounds
-										filter: memory(chosenMinion)
-									}
+									until: regroup
 								}
 							]
 						}

@@ -1039,6 +1039,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(culture(men),or(condition,possession))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

@@ -421,16 +421,24 @@
 				    true: {
 				        type: putCardsFromDeckIntoHand
 				        filter: choose(culture(gandalf),companion)
+                        reveal: true
+                        shuffle: true
+                        showAll: true
 				    }
 				    false: [
                         {
                             type: putCardsFromDeckIntoHand
                             filter: choose(culture(gandalf),companion)
-                            shuffle: false
+                            reveal: true
+                            shuffle: true
+                            showAll: true
                         }
                         {
                             type: putCardsFromDeckIntoHand
                             filter: choose(culture(gandalf),condition)
+                            reveal: true
+                            shuffle: true
+                            showAll: true
                         }
                     ]
 				}
@@ -692,6 +700,8 @@
                             effect: {
                                 type: playCardFromDrawDeck
                                 filter: memory(revealedCard)
+                                showAll: false
+                                shuffle: false
                             }
                         }
                     }

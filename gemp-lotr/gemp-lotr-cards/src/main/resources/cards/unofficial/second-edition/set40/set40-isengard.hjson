@@ -514,6 +514,8 @@
 					{
 						type: playCardFromDrawDeck
 						filter: choose(name(Saruman))
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDiscard

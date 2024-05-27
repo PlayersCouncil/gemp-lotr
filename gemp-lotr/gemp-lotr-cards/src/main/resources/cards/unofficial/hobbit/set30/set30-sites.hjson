@@ -42,6 +42,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(hand weapon)
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -76,6 +78,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(name(The One Ring))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -119,6 +123,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(or(culture(esgaroth),culture(dwarven)),ally)
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -174,6 +180,8 @@
 					{
 						type: playCardFromDrawDeck
 						filter: choose(name(Smaug))
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDiscard
@@ -230,6 +238,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(culture(dwarven),follower)
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -264,6 +274,8 @@
 						effect: {
 							type: playCardFromDrawDeck
 							filter: choose(hand weapon)
+                            showAll: true
+                            shuffle: true
 						}
 					}
 				]
@@ -288,6 +300,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(condition)
+                showAll: true
+                shuffle: true
 			}
 		}
 	}

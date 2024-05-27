@@ -33,6 +33,8 @@
                 effect: {
                     type: playCardFromDrawDeck
                     filter: choose(culture(dwarven),condition)
+                    showAll: true
+                    shuffle: true
                 }
                 limitPerTurn: 1
 		    }

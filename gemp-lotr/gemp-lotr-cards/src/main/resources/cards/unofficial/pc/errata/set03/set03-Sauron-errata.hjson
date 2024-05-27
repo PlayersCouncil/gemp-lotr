@@ -46,6 +46,7 @@
 					filter: choose(minion,MaxTwilight(memory(revealedCard)))
 					memorize: chosenCard
 					text: Choose a minion to take into hand from your draw deck
+					showAll: true
 				}
 				{
 					type: preventable
@@ -64,6 +65,9 @@
 					effect: {
 						type: PutCardsFromDeckIntoHand
 						filter: memory(chosenCard)
+                        reveal: true
+                        shuffle: false
+                        showAll: false
 					}
 				}
 			]
@@ -352,6 +356,8 @@
 								player: freeps
 								deck: freeps
 								filter: all(side(freeps),memory(cardsOnTop))
+                                showAll: false
+                                shuffle: false
 							}
 							text: Discard all revealed Free Peoples cards to prevent exerting {chosenComp}?
 							effect: {

@@ -368,6 +368,8 @@
                 effect: {
                     type: playCardFromDrawDeck
                     filter: choose(tentacle)
+                    showAll: true
+                    shuffle: true
                 }
             }
             {
@@ -571,6 +573,8 @@
                 effect: {
                     type: playCardFromDrawDeck
                     filter: choose(name(Watcher in the Water))
+                    showAll: true
+                    shuffle: true
                 }
             }
             {

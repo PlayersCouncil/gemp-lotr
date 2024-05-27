@@ -639,10 +639,14 @@
                     {
                         type: playCardFromDrawDeck
                         filter: choose(culture(wraith),minion)
+                        showAll: true
+                        shuffle: false
                     }
                     {
                         type: playCardFromDrawDeck
                         filter: choose(culture(wraith),minion)
+                        showAll: true
+                        shuffle: false
                     }
                     {
                         type: shuffleDeck

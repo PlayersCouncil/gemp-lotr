@@ -141,6 +141,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(name(The Gaffer))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -177,6 +179,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(or(name(Merry),name(Pippin)))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -197,6 +201,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(name(Sam))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -232,6 +238,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(name(Aragorn))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -252,6 +260,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(name(Gandalf's Cart))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -853,6 +863,8 @@
 				{
 					type: playCardFromDrawDeck
 					filter: choose(weather)
+                    showAll: true
+                    shuffle: true
 				}
 			]
 		}
@@ -879,6 +891,8 @@
 						type: playCardFromDrawDeck
 						filter: choose(name(The Balrog))
 						cost: -6
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: play
@@ -1132,8 +1146,7 @@
 			effect: {
 				type: addModifier
 				modifier: {
-					type: modifyMoveLimit
-					amount: -1000
+					type: cantMove
 				}
 				until: endOfTurn
 			}

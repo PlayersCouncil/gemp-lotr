@@ -132,6 +132,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(name(Legolas))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -247,6 +249,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(name(Gimli))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -296,6 +300,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(name(Aragorn))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -507,6 +513,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(name(Treebeard))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -858,6 +866,8 @@
                     {
                         type: playCardFromDrawDeck
                         filter: choose(culture(rohan),mount)
+                        showAll: true
+                        shuffle: true
                     }
                 ]
 		    }
@@ -950,6 +960,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(name(Théoden))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -1302,6 +1314,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(name(Saruman))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

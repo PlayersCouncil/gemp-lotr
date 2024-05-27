@@ -301,6 +301,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(culture(uruk-hai),hunter,minion)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -1506,6 +1508,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(culture(orc),mount)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

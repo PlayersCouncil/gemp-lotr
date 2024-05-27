@@ -52,6 +52,8 @@
 					effect: {
 						type: DiscardCardsFromDrawDeck
 						filter: memory(revealedCard)
+                        showAll: false
+                        shuffle: false
 					}
 				}
 			]

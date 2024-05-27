@@ -312,11 +312,8 @@ public class CardResolver {
         throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
     }
 
-    public static EffectAppender resolveCardsInDeck(String type, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        return resolveCardsInDeck(type, null, countSource, memory, choicePlayer, choicePlayer, choiceText, environment);
-    }
-
-    public static EffectAppender resolveCardsInDeck(String type, FilterableSource choiceFilter, ValueSource countSource, String memory, String choicePlayer, String targetDeck, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public static EffectAppender resolveCardsInDeck(String type, FilterableSource choiceFilter, ValueSource countSource, String memory, String choicePlayer, String targetDeck,
+                                                    boolean showAll, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
         final PlayerSource deckSource = PlayerResolver.resolvePlayer(targetDeck, environment);
 
@@ -333,7 +330,7 @@ public class CardResolver {
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
                 String choicePlayerId = playerSource.getPlayer(actionContext);
                 String targetDeckId = deckSource.getPlayer(actionContext);
-                return new ChooseCardsFromDeckEffect(choicePlayerId, targetDeckId, min, max, Filters.in(possibleCards)) {
+                return new ChooseCardsFromDeckEffect(choicePlayerId, targetDeckId, showAll, min, max, Filters.in(possibleCards)) {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
                         actionContext.setCardMemory(memory, cards);

@@ -20,6 +20,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(culture(shire),condition)
+                showAll: true
+                shuffle: true
 			}
 		}
 	}

@@ -717,10 +717,14 @@
 		            {
 		                type: putCardsFromDeckIntoHand
 		                filter: memory(chosenCard)
+                        reveal: true
+                        shuffle: false
+                        showAll: false
 		            }
 		            {
 		                type: putCardsFromDeckOnBottomOfDeck
 		                filter: memory(cards)
+                        reveal: true
 		            }
 		        ]
 		    }

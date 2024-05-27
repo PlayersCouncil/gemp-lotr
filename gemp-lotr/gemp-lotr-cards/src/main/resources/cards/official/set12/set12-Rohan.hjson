@@ -391,6 +391,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(culture(rohan),companion)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]
@@ -668,6 +670,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(culture(rohan),skirmish,event)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

@@ -168,6 +168,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(follower)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		    {

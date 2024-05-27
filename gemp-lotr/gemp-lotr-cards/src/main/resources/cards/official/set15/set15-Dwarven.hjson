@@ -77,10 +77,15 @@
 		                true: {
 		                    type: putCardsFromDeckIntoHand
 		                    filter: memory(revealedCard)
+                            reveal: true
+                            shuffle: false
+                            showAll: false
 		                }
 		                false: {
 		                    type: discardCardsFromDrawDeck
 		                    filter: memory(revealedCard)
+                            showAll: false
+                            shuffle: false
 		                }
 		            }
 		        ]

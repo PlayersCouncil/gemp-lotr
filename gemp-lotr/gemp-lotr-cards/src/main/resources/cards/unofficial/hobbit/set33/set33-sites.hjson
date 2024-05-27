@@ -23,6 +23,9 @@
 			effect: {
 				type: putCardsFromDeckIntoHand
 				filter: choose(or(culture(gandalf),culture(shire)))
+                reveal: true
+                shuffle: true
+                showAll: true
 			}
 		}
 	}
@@ -47,6 +50,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(or(possession,artifact))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -63,6 +68,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(ally,allyHome(hobbit,3))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}

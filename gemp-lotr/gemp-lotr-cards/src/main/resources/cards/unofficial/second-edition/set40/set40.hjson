@@ -168,6 +168,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(name(Gandalf))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -225,6 +227,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(name(Aragorn))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -247,6 +251,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(or(pipe,and(pipeweed,possession)))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -554,6 +560,8 @@
 						type: playCardFromDrawDeck
 						filter: choose(name(The Balrog))
 						cost: -6
+                        showAll: true
+                        shuffle: true
 					}
 				]
 			}
@@ -657,6 +665,8 @@
 						type: playCardFromDrawDeck
 						filter: choose(name(Saruman))
 						cost: -2
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDiscard
@@ -910,6 +920,8 @@
 						type: playCardFromDrawDeck
 						filter: choose(name(The Witch-King))
 						cost: -4
+                        showAll: true
+                        shuffle: true
 					}
 				]
 			}
@@ -1030,6 +1042,8 @@
               type: playCardFromDrawDeck
               filter: choose(name(The Great Eye))
               cost: -3
+                showAll: true
+                shuffle: true
             }
             {
               type: playCardFromDiscard

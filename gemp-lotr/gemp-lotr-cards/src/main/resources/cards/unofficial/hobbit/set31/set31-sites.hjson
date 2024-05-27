@@ -22,6 +22,8 @@
 					{
 						type: playCardFromDrawDeck
 						filter: choose(culture(gandalf),staff)
+                        showAll: true
+                        shuffle: true
 					}
 				]
 			}
@@ -69,6 +71,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				filter: choose(or(and(side(shadow),condition),name(The One Ring)))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -91,17 +95,8 @@
 			}
 			effect: [
                 {
-                    type: chooseActiveCards
-                    text: Choose characters that you want to make unable to be assigned to skirmish
+                    type: disableSkirmishAssignment
                     filter: choose(or(name(Gandalf),and(culture(elven),ally)))
-                    memorize: chosenCharacter
-                }
-                {
-                    type: addModifier
-                    modifier: {
-                        type: cantBeAssignedToSkirmish
-                        filter: memory(chosenCharacter)
-                    }
                 }
             ]
 		}

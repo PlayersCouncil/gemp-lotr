@@ -4,7 +4,6 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -75,7 +74,7 @@ public class Card_01_087_Tests
 		assertEquals(Zone.DECK, bb.getZone());
 
 		scn.FreepsPlayCard(late);
-		assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
+        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		assertEquals(2, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(gandalf);
 
@@ -101,7 +100,7 @@ public class Card_01_087_Tests
 		assertEquals(Zone.DECK, bb.getZone());
 
 		scn.FreepsPlayCard(late);
-		assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
+        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		assertEquals(2, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(bb);
 

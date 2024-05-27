@@ -335,18 +335,9 @@
 		        }
 		        effect: [
 		            {
-		                type: chooseActiveCards
+        		        type: disableSkirmishAssignment
 		                filter: choose(companion)
-		                text: Choose companion to prevent assigning to skirmishes
-		                memorize: chosenCompanion
-		            }
-                    {
-                        type: addModifier
-                        modifier: {
-                            type: cantBeAssignedToSkirmish
-                            filter: memory(chosenCompanion)
-                        }
-                        until: endOfTurn
+		                until: endOfTurn
                     }
                 ]
 		    }

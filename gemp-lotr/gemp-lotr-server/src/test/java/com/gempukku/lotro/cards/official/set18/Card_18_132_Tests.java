@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set18;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -183,7 +182,7 @@ public class Card_18_132_Tests
 
         scn.ShadowChoose("5");
 
-        assertEquals(2, scn.ShadowGetCardChoices().size()); // orc + cantea, but not TWK
+        assertEquals(2, scn.ShadowGetSelectableCount()); // orc + cantea, but not TWK
         scn.ShadowChooseCardBPFromSelection(orc);
 
         assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());

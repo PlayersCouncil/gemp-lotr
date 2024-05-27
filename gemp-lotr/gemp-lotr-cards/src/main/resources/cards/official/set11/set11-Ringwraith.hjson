@@ -1005,7 +1005,10 @@
                     }
                     {
                         type: putCardsFromDeckIntoHand
-                        filter: all(memory(spottedCompanion),culture(wraith))
+                        filter: all(memory(revealedCards),culture(wraith))
+                        reveal: true
+                        shuffle: false
+                        showAll: false
                     }
                 ]
 		    }

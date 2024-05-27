@@ -45,6 +45,8 @@
 				effect: {
 					type: playCardFromDrawDeck
 					filter: choose(side(shadow),condition)
+                    showAll: true
+                    shuffle: true
 				}
 			}
 		]
@@ -382,6 +384,8 @@
 					{
 						type: playCardFromDrawDeck
 						filter: choose(culture(moria),not(response))
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDiscard
@@ -502,6 +506,8 @@
 						{
 							type: playCardFromDrawDeck
 							filter: choose(culture(sauron),not(and(response,event)))
+                            showAll: true
+                            shuffle: true
 						}
 						{
 							type: playCardFromDiscard
@@ -1028,6 +1034,8 @@
               filter: choose(name(Smaug))
               cost: -8
               memorize: playedSmaug
+                showAll: true
+                shuffle: true
             }
             {
               type: playCardFromDiscard
@@ -1139,6 +1147,8 @@
         effect: {
           type: playCardFromDrawDeck
           filter: choose(side(shadow),condition)
+            showAll: true
+            shuffle: true
         }
       }
       {
@@ -1160,6 +1170,8 @@
               type: playCardFromDrawDeck
               filter: choose(name(Smaug))
               cost: -6
+                showAll: true
+                shuffle: true
             }
             {
               type: playCardFromDiscard
@@ -1260,6 +1272,8 @@
             {
               type: playCardFromDrawDeck
               filter: choose(culture(wraith),not(response,event))
+                showAll: true
+                shuffle: true
             }
             {
               type: playCardFromDiscard

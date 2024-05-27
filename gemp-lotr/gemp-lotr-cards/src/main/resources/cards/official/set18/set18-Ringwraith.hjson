@@ -55,6 +55,8 @@
 					{
 						type: playCardFromDrawDeck
 						filter: choose(culture(wraith),minion,minTwilight(memory(X)),maxTwilight(memory(X)))
+                        showAll: true
+                        shuffle: true
 					}
 				]
 			}

@@ -1563,8 +1563,10 @@
 			},
 			effect: [
 				{
-					 type: playCardFromDrawDeck
-					 filter: choose(culture(rohan),or(character,possession))
+					type: playCardFromDrawDeck
+					filter: choose(culture(rohan),or(character,possession))
+                    showAll: true
+                    shuffle: true
 				}
 			]
 		}

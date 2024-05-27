@@ -435,6 +435,7 @@
                     {
                         type: putCardsFromDeckOnBottomOfDeck
                         filter: memory(revealedCards)
+                        reveal: true
                     }
                 ]
 		    }
@@ -497,11 +498,8 @@
 		                amount: 2
 		            }
 		            {
-		                type: addModifier
-		                modifier: {
-		                    type: cantTakeWounds
-		                    filter: self
-		                }
+		                type: disableWounds
+                        filter: self
 		            }
 		        ]
 		    }
@@ -562,6 +560,8 @@
 			                {
 			                    type: playCardFromDrawDeck
 			                    filter: choose(name(Gollum))
+                                showAll: true
+                                shuffle: true
 			                }
 			                {
 			                    type: playCardFromDiscard

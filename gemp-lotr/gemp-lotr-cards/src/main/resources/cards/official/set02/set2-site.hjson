@@ -16,6 +16,8 @@
             effect: {
                 type: playCardFromDrawDeck
                 filter: choose(name(Bilbo))
+                showAll: true
+                shuffle: true
             }
         }
     }

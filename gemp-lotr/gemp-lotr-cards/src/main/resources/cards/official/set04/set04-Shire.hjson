@@ -991,6 +991,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(name(Sam's Pack))
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 			{
@@ -1327,22 +1329,11 @@
 			            type: cancelSkirmish
 			            filter: hobbit
 			        }
-			        false: [
-			            {
-			                type: chooseActiveCards
-			                text: Choose a hobbit to protect
-			                filter: choose(hobbit)
-			                memorize: chosenHobbit
-			            }
-                        {
-                            type: addModifier
-                            modifier: {
-                                type: cantTakeMoreWoundsThan
-                                filter: memory(chosenHobbit)
-                                phase: skirmish
-                            }
-                        }
-                    ]
+			        false: {
+			            type: disableWoundsOver
+			            filter: choose(hobbit)
+			            wounds: 1
+			        }
 			    }
 			]
 		}

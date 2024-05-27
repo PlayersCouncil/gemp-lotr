@@ -133,12 +133,9 @@
                 filter: hobbit
             }
             effect: {
-                type: addModifier
-                modifier: {
-                    type: modifySiteNumber
-                    filter: site
-                    amount: -2
-                }
+                type: modifySiteNumber
+                filter: all(site)
+                amount: -2
                 until: endOfTurn
             }
         }
@@ -285,6 +282,8 @@
             effect: {
                 type: playCardFromDrawDeck
                 filter: choose(name(Farmer Maggot))
+                showAll: true
+                shuffle: true
             }
         }
     }
@@ -529,6 +528,8 @@
             effect: {
                 type: playCardFromDrawDeck
                 filter: choose(hobbit)
+                showAll: true
+                shuffle: true
             }
         }
     }

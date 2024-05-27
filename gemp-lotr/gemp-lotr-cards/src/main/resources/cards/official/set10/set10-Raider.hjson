@@ -100,6 +100,8 @@
 		        effect: {
 		            type: playCardFromDrawDeck
 		            filter: choose(support area,possession)
+                    showAll: true
+                    shuffle: true
 		        }
 		    }
 		]

@@ -633,10 +633,15 @@
 		            {
 		                type: putCardsFromDeckIntoHand
 		                filter: all(memory(revealedCards),side(free people))
+                        reveal: true
+                        shuffle: false
+                        showAll: false
 		            }
 		            {
 		                type: discardCardsFromDrawDeck
 		                filter: all(memory(revealedCards),not(side(free people)))
+                        showAll: false
+                        shuffle: false
 		            }
 		        ]
 		    }

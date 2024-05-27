@@ -223,6 +223,8 @@
 				effect: {
 					type: playCardFromDrawDeck
 					filter: choose(culture(wraith),wraith)
+                    showAll: true
+                    shuffle: true
 				}
 			}
 		]

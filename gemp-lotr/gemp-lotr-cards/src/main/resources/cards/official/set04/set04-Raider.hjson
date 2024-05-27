@@ -243,11 +243,8 @@
 		                filter: choose(companion,not(ringBearer))
 		            }
 		            {
-		                type: addModifier
-		                modifier: {
-		                    type: doesNotAddToArcheryTotal
-		                    filter: self
-		                }
+                        type: disableArcheryTotalContribution
+                        filter: self
 		            }
 		        ]
 		    }
@@ -1059,11 +1056,8 @@
 		                filter: choose(companion,not(ringBearer))
 		            }
 		            {
-		                type: addModifier
-		                modifier: {
-		                    type: doesNotAddToArcheryTotal
-		                    filter: self
-		                }
+                        type: disableArcheryTotalContribution
+                        filter: self
 		            }
 		        ]
 		    }
@@ -1996,11 +1990,8 @@
 		                filter: choose(companion,not(ringBearer))
 		            }
 		            {
-		                type: addModifier
-		                modifier: {
-		                    type: doesNotAddToArcheryTotal
-		                    filter: self
-		                }
+                        type: disableArcheryTotalContribution
+                        filter: self
 		            }
 		        ]
 		    }

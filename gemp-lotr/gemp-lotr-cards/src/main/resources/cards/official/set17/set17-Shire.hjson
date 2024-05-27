@@ -299,6 +299,8 @@
                 effect: {
                     type: playCardFromDrawDeck
                     filter: choose(pipeweed)
+                    showAll: true
+                    shuffle: true
                 }
             }
 		]
