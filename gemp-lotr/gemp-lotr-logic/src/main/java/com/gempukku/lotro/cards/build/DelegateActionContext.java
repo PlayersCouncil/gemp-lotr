@@ -36,6 +36,11 @@ public class DelegateActionContext implements ActionContext {
     }
 
     @Override
+    public String getValueFromMemory(String memory, String defaultValue) {
+        return delegate.getValueFromMemory(memory, defaultValue);
+    }
+
+    @Override
     public void setCardMemory(String memory, PhysicalCard card) {
         delegate.setCardMemory(memory, card);
     }

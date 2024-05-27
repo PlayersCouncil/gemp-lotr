@@ -8,10 +8,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 public class RemoveKeywordModifier extends AbstractModifier implements KeywordAffectingModifier {
     private final Keyword _keyword;
 
-    public RemoveKeywordModifier(PhysicalCard physicalCard, Filterable affectFilter, Keyword keyword) {
-        this(physicalCard, affectFilter, null, keyword);
-    }
-
     public RemoveKeywordModifier(PhysicalCard physicalCard, Filterable affectFilter, Condition condition, Keyword keyword) {
         super(physicalCard, "Loses " + keyword.getHumanReadable() + " keyword(s)", affectFilter, condition, ModifierEffect.REMOVE_KEYWORD_MODIFIER);
         _keyword = keyword;

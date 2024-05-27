@@ -49,6 +49,17 @@ public class DefaultActionContext implements ActionContext {
     }
 
     @Override
+    public String getValueFromMemory(String memory, String defaultValue) {
+        if (memory != null) {
+            memory = memory.toLowerCase();
+        }
+        final String result = valueMemory.get(memory);
+        if (result == null)
+            return defaultValue;
+        return result;
+    }
+
+    @Override
     public void setCardMemory(String memory, PhysicalCard card) {
         if(memory != null) {
             memory = memory.toLowerCase();

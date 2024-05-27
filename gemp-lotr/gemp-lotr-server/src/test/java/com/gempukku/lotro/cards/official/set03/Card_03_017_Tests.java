@@ -179,7 +179,7 @@ public class Card_03_017_Tests
 		var shadowSite2 = scn.GetShadowSite("site2");
 
 		//cheating to ensure site 2 qualifies
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("West Road"), Keyword.FOREST));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("West Road"), null, Keyword.FOREST));
 
 		scn.StartGame();
 

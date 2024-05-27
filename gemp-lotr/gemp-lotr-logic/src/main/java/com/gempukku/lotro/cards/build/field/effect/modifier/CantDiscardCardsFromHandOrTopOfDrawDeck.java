@@ -18,7 +18,7 @@ public class CantDiscardCardsFromHandOrTopOfDrawDeck implements ModifierSourcePr
 
         return actionContext ->
                 new CantDiscardCardsFromHandOrTopOfDeckModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext),
+                        RequirementCondition.createCondition(requirements, actionContext),
                         actionContext.getPerformingPlayer(),
                         filterableSource.getFilterable(actionContext));
     }

@@ -144,7 +144,7 @@ public class Card_01_031_Tests
 		scn.FreepsMoveCardToHand(asfaloth);
 
 		//cheating to ensure site 2 qualifies
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.PLAINS));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.PLAINS));
 
 		scn.StartGame();
 
@@ -170,7 +170,7 @@ public class Card_01_031_Tests
 		scn.FreepsMoveCardToHand(asfaloth);
 
 		//cheating to ensure site 2 qualifies
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
 
 		scn.StartGame();
 

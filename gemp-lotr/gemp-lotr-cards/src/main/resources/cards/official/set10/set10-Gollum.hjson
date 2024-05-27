@@ -249,13 +249,14 @@
 		                }
 		                {
 		                    type: assignFpCharacterToSkirmish
-		                    against: choose(name(Gollum))
+		                    fpCharacter: choose(any)
+		                    minion: choose(name(Gollum))
 		                }
 		            ]
 		            effect: {
 		                type: assignFpCharacterToSkirmish
 		                fpCharacter: choose(companion,hasAttached(artifact))
-		                against: choose(name(Gollum))
+		                minion: choose(name(Gollum))
 		            }
 		        }
 		    }

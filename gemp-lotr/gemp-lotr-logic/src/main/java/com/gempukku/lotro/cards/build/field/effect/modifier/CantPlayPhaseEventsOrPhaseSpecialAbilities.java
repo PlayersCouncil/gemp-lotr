@@ -27,7 +27,7 @@ public class CantPlayPhaseEventsOrPhaseSpecialAbilities implements ModifierSourc
             public Modifier getModifier(ActionContext actionContext) {
                 String bannedPlayer = playerSource != null ? playerSource.getPlayer(actionContext) : null;
                 return new CantPlayPhaseEventsOrphaseSpecialAbilitiesModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext), phase, bannedPlayer);
+                        RequirementCondition.createCondition(requirements, actionContext), phase, bannedPlayer);
             }
         };
     }

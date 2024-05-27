@@ -24,10 +24,10 @@ public class CantUseSpecialAbilities implements ModifierSourceProducer {
             if (playerSource != null) {
                 return new PlayerCantUseCardSpecialAbilitiesModifier(actionContext.getSource(),
                         playerSource.getPlayer(actionContext),
-                        new RequirementCondition(requirements, actionContext), filterableSource.getFilterable(actionContext));
+                        RequirementCondition.createCondition(requirements, actionContext), filterableSource.getFilterable(actionContext));
             } else {
                 return new PlayersCantUseCardSpecialAbilitiesModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext), filterableSource.getFilterable(actionContext));
+                        RequirementCondition.createCondition(requirements, actionContext), filterableSource.getFilterable(actionContext));
             }
         };
     }

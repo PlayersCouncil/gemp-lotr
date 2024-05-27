@@ -191,26 +191,11 @@
 					}
 					{
 						type: costToEffect
-						requires: {
-							type: IsGreaterThanOrEqual
-							firstNumber: {
-								type: forEachToken
-								culture: raider
-							}
-							secondNumber: 2
-						}
 						cost: [
 							{
-								type: ChooseAndRemoveTokens
+								type: removeTokensCumulative
 								culture: raider
-								filter: choose(any)
-								limit: 1
-							}
-							{
-								type: ChooseAndRemoveTokens
-								culture: raider
-								filter: choose(any)
-								limit: 1
+								count: 2
 							}
 						]
 						effect: {

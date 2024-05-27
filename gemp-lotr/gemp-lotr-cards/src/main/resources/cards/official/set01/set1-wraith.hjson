@@ -688,7 +688,7 @@
 				{
 					type: assignFpCharacterToSkirmish
 					fpCharacter: choose(ring bearer)
-					against: choose(nazgul)
+					minion: choose(nazgul)
 				}
 				{
 					type: addTrigger
@@ -1081,7 +1081,7 @@
 			effect: {
 				type: assignFpCharacterToSkirmish
 				fpCharacter: choose(companion,not(ring bearer))
-				against: self
+				minion: self
 			}
 		}
 	}

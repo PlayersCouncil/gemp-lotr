@@ -90,7 +90,7 @@
 		            type: assignFpCharacterToSkirmish
 		            player: free people
 		            fpCharacter: choose(unwounded,companion)
-		            against: self
+		            minion: self
 		        }
 		    }
 		]
@@ -652,7 +652,7 @@
 		        effect: {
 		            type: assignFpCharacterToSkirmish
 		            fpCharacter: choose(companion,maxResistance(2))
-		            against: choose(culture(uruk-hai),minion)
+		            minion: choose(culture(uruk-hai),minion)
 		        }
 		    }
 		]

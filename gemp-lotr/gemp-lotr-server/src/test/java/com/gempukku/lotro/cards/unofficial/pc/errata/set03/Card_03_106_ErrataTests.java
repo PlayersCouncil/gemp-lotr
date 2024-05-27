@@ -104,7 +104,7 @@ public class Card_03_106_ErrataTests
 
         scn.FreepsMoveCardToHand(bill, sam);
 
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
 
         scn.StartGame();
 

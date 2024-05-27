@@ -1,9 +1,6 @@
 package com.gempukku.lotro.at.effects;
 
 import com.gempukku.lotro.at.AbstractAtTest;
-import com.gempukku.lotro.logic.timing.TriggerConditions;
-import com.gempukku.lotro.logic.effects.NegateWoundEffect;
-import com.gempukku.lotro.logic.effects.PreventCardEffect;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -11,11 +8,14 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.effects.NegateWoundEffect;
+import com.gempukku.lotro.logic.effects.PreventCardEffect;
 import com.gempukku.lotro.logic.effects.WoundCharactersEffect;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.modifiers.SpecialFlagModifier;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.TriggerConditions;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -163,7 +163,7 @@ public class WoundEffectAtTest extends AbstractAtTest {
         final AtomicInteger negateCount = new AtomicInteger(0);
 
         _game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                new SpecialFlagModifier(null, ModifierFlag.CANT_PREVENT_WOUNDS));
+                new SpecialFlagModifier(null, null, ModifierFlag.CANT_PREVENT_WOUNDS));
 
         _game.getActionsEnvironment().addUntilEndOfTurnActionProxy(
                 new AbstractActionProxy() {
@@ -217,7 +217,7 @@ public class WoundEffectAtTest extends AbstractAtTest {
         final AtomicInteger preventCount = new AtomicInteger(0);
 
         _game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                new SpecialFlagModifier(null, ModifierFlag.CANT_PREVENT_WOUNDS));
+                new SpecialFlagModifier(null, null, ModifierFlag.CANT_PREVENT_WOUNDS));
 
         _game.getActionsEnvironment().addUntilEndOfTurnActionProxy(
                 new AbstractActionProxy() {

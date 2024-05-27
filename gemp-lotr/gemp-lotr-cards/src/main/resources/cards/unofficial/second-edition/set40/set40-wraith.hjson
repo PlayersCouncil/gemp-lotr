@@ -832,7 +832,7 @@
       effect: {
         type: assignFpCharacterToSkirmish
         fpCharacter: choose(companion,maxResistance(2),not(ring bearer))
-        against: self
+        minion: self
       }
     }
   }

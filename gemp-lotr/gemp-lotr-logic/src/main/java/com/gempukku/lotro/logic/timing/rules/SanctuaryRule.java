@@ -26,7 +26,7 @@ public class SanctuaryRule {
 
     public void applyRule() {
         _modifiersLogic.addAlwaysOnModifier(
-                new AddKeywordModifier(null, Filters.and(CardType.SITE, Filters.or(Filters.siteNumber(3), Filters.siteNumber(6))), Keyword.SANCTUARY));
+                new AddKeywordModifier(null, Filters.and(CardType.SITE, Filters.or(Filters.siteNumber(3), Filters.siteNumber(6))), null, Keyword.SANCTUARY));
 
         _actionsEnvironment.addAlwaysOnActionProxy(
                 new AbstractActionProxy() {

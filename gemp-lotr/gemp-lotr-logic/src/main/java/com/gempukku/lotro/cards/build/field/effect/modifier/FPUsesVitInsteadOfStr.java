@@ -19,6 +19,6 @@ public class FPUsesVitInsteadOfStr implements ModifierSourceProducer {
         return (actionContext) ->
                 new FPSkirmishVitalityStrengthOverrideModifier(actionContext.getSource(),
                         filterableSource.getFilterable(actionContext),
-                        new RequirementCondition(requirements, actionContext));
+                        RequirementCondition.createCondition(requirements, actionContext));
     }
 }

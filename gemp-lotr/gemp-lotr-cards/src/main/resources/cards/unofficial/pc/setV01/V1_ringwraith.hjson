@@ -61,7 +61,7 @@
 					type: assignFpCharacterToSkirmish
 					player: fp
 					fpCharacter: choose(companion,minStrength(5))
-					against: self
+					minion: self
 				}
 			}
 		]

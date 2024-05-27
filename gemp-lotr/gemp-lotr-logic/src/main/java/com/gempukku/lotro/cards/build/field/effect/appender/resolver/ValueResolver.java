@@ -47,7 +47,7 @@ public class ValueResolver {
                 return new RangeEvaluator(0, Integer.MAX_VALUE);
             } else if (stringValue.startsWith("memory(") && stringValue.endsWith(")")) {
                 String memory = stringValue.substring("memory(".length(), stringValue.length() - 1);
-                return actionContext -> new ConstantEvaluator(Integer.parseInt(actionContext.getValueFromMemory(memory)));
+                return actionContext -> new ConstantEvaluator(Integer.parseInt(actionContext.getValueFromMemory(memory, "0")));
             } else {
                 try {
                     int v = Integer.parseInt(stringValue);
@@ -247,7 +247,7 @@ public class ValueResolver {
                 FieldUtils.validateAllowedFields(object, "limit", "amount");
                 ValueSource limitSource = resolveEvaluator(object.get("limit"), 0, environment);
                 ValueSource valueSource = resolveEvaluator(object.get("amount"), 0, environment);
-                return (actionContext) -> new CardPhaseLimitEvaluator(actionContext.getGame(), actionContext.getSource(),
+                return (actionContext) -> new CardPhaseLimitEvaluator(actionContext.getSource(),
                         actionContext.getGame().getGameState().getCurrentPhase(), limitSource.getEvaluator(actionContext),
                         valueSource.getEvaluator(actionContext));
             } else if (type.equalsIgnoreCase("forEachStacked")) {

@@ -9,7 +9,7 @@ import org.json.simple.JSONObject;
 public class CantBear implements ModifierSourceProducer {
     @Override
     public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(object, "filter", "cardFilter");
+        FieldUtils.validateAllowedFields(object, "filter", "cardFilter", "requires");
 
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
         final String cardFilter = FieldUtils.getString(object.get("cardFilter"), "cardFilter", "any");
@@ -17,11 +17,14 @@ public class CantBear implements ModifierSourceProducer {
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource cardFilterSource = environment.getFilterFactory().generateFilter(cardFilter, environment);
 
+        final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
+        final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
+
         return new ModifierSource() {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
-                return new MayNotBearModifier(actionContext.getSource(),
-                        filterableSource.getFilterable(actionContext),
+                return new MayNotBearModifier(actionContext.getSource(), filterableSource.getFilterable(actionContext),
+                        RequirementCondition.createCondition(requirements, actionContext),
                         cardFilterSource.getFilterable(actionContext));
             }
         };

@@ -671,7 +671,7 @@
 		            effect: {
 		                type: assignFpCharacterToSkirmish
 		                fpCharacter: choose(hasAttached(name(Slow-kindled Courage)))
-		                against: self
+		                minion: self
 		            }
 		        }
 		    }

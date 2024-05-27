@@ -25,6 +25,6 @@ public class RoamingRule {
         });
 
         _modifiersLogic.addAlwaysOnModifier(
-                new AddKeywordModifier(null, roamingFilter, Keyword.ROAMING));
+                new AddKeywordModifier(null, roamingFilter, null, Keyword.ROAMING));
     }
 }

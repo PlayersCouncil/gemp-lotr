@@ -25,7 +25,7 @@ public class AddKeywordFromCards implements ModifierSourceProducer {
             public Modifier getModifier(ActionContext actionContext) {
                 return new AddKeywordFromModifier(actionContext.getSource(),
                         filterableSource.getFilterable(actionContext),
-                        new RequirementCondition(requirements, actionContext), fromSource.getFilterable(actionContext), terrainOnly);
+                        RequirementCondition.createCondition(requirements, actionContext), fromSource.getFilterable(actionContext), terrainOnly);
             }
         };
     }

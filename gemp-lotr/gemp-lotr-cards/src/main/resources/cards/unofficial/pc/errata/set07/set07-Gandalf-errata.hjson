@@ -31,7 +31,7 @@
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(name(gandalf))
-						against: self
+						minion: self
 					}
 				}
 			}

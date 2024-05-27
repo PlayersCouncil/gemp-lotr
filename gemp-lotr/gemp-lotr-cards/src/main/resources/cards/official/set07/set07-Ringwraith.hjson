@@ -34,7 +34,7 @@
                     {
                         type: assignFPCharacterToSkirmish
                         fpCharacter: choose(companion,not(ringBearer))
-                        against: choose(nazgul)
+                        minion: choose(nazgul)
                         memorizeFPCharacter: assignedCompanion
                     }
                     {

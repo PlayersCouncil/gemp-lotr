@@ -28,10 +28,19 @@
                 type: canSpot
                 filter: nazgul
             }
-			cost: {
-				type: chooseAndRemoveTwilight
-				memorize: X
-			}
+			cost: [
+			    {
+			        type: chooseANumber
+			        text: How much twilight do you wish to remove
+			        from: 0
+			        to: twilightCount
+			        memorize: X
+			    }
+                {
+                    type: removeTwilight
+                    amount: memory(X)
+                }
+            ]
 			effect: {
 				type: choice
 				texts: [
@@ -99,7 +108,7 @@
 				        {
 				            type: assignFPCharacterToSkirmish
 				            fpCharacter: choose(companion,maxResistance(0))
-				            against: choose(culture(wraith),minion)
+				            minion: choose(culture(wraith),minion)
 				        }
 				        {
 				            type: multiple

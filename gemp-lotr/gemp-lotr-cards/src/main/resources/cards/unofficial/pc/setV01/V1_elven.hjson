@@ -339,16 +339,13 @@
 						}
 					}
 					{
-						type: chooseAndHeal
-						filter: companion
-						count: {
-						    type: range
-						    from: 0
-						    to: {
-                                type: fromMemory
-                                memory: stackedCultures
-                            }
-						}
+					    type: repeat
+					    times: memory(stackedCultures)
+					    effect: {
+					        type: heal
+					        filter: choose(companion)
+					        count: 0-1
+					    }
 					}
 					{
 						type: discard

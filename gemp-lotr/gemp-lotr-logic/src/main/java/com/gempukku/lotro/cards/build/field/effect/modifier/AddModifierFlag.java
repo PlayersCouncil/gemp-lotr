@@ -25,7 +25,7 @@ public class AddModifierFlag implements ModifierSourceProducer {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
                 return new SpecialFlagModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext), modifierFlag);
+                        RequirementCondition.createCondition(requirements, actionContext), modifierFlag);
             }
         };
     }

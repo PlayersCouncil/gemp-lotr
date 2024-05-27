@@ -320,7 +320,6 @@
 					{
 						type: chooseANumber
 						from: 0
-						to: 99
 						text: Choose how many times to discard 5 cards from draw deck
 						memorize: chosenNumber
 					}

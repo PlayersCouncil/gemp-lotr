@@ -180,10 +180,6 @@ public class PlayConditions {
         return game.getGameState().getThreats() >= count && game.getModifiersQuerying().canRemoveThreat(game, card);
     }
 
-    public static boolean canAddBurdens(LotroGame game, String performingPlayer, PhysicalCard card) {
-        return game.getModifiersQuerying().canAddBurden(game, performingPlayer, card);
-    }
-
     public static boolean canWound(final PhysicalCard source, final LotroGame game, final int times, final int count, Filterable... filters) {
         final Filter filter = Filters.and(filters, Filters.character);
         return Filters.countActive(game, filter,

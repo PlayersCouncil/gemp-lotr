@@ -13,12 +13,6 @@ public class CantBeAssignedAgainstModifier extends AbstractModifier {
     private final Side _side;
     private final Filter _minionFilter;
 
-    public CantBeAssignedAgainstModifier(PhysicalCard source, Side side, Filterable characterFilter, Filterable minionFilter) {
-        super(source, "Is affected by assignment restriction", characterFilter, ModifierEffect.ASSIGNMENT_MODIFIER);
-        _side = side;
-        _minionFilter = Filters.changeToFilter(minionFilter);
-    }
-
     public CantBeAssignedAgainstModifier(PhysicalCard source, Side side, Filterable characterFilter, Condition condition, Filterable minionFilter) {
         super(source, "Is affected by assignment restriction", characterFilter, condition, ModifierEffect.ASSIGNMENT_MODIFIER);
         _side = side;

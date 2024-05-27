@@ -122,7 +122,7 @@ public class PlaySiteEffect extends AbstractEffect {
                                 if (gameState.getCurrentSiteNumber() == siteNumber
                                         && !_playerId.equals(gameState.getCurrentPlayerId()))
                                     game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                                            new SpecialFlagModifier(null, ModifierFlag.SHADOW_PLAYER_REPLACED_CURRENT_SITE));
+                                            new SpecialFlagModifier(null, null, ModifierFlag.SHADOW_PLAYER_REPLACED_CURRENT_SITE));
 
                                 game.getActionsEnvironment().emitEffectResult(new ReplaceSiteResult(_playerId, siteNumber));
                             }

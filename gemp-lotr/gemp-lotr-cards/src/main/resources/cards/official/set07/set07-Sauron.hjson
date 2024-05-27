@@ -1417,7 +1417,7 @@
                 effect: {
                     type: assignFpCharacterToSkirmish
                     fpCharacter: choose(ringBearer)
-                    against: self
+                    minion: self
                     ignoreUnassigned: true
                 }
 		    }

@@ -187,7 +187,7 @@
 		            effect: {
 		                type: assignFpCharacterToSkirmish
 		                fpCharacter: choose(companion,hasAttached(artifact))
-		                against: self
+		                minion: self
 		            }
 		        }
 		    }
@@ -812,7 +812,7 @@
 		        effect: {
 		            type: assignFpCharacterToSkirmish
 		            fpCharacter: choose(unbound,companion,maxResistance(4))
-		            against: self
+		            minion: self
 		        }
 		    }
 		]
@@ -1970,7 +1970,7 @@
 				{
 				    type: assignFpCharacterToSkirmish
 				    fpCharacter: choose(companion,not(ringBearer))
-				    against: choose(culture(orc),minion)
+				    minion: choose(culture(orc),minion)
 				}
 			]
 		}

@@ -22,7 +22,7 @@ public class ArcheryTotal implements ModifierSourceProducer {
                     @Override
                     public Modifier getModifier(ActionContext actionContext) {
                         return new ArcheryTotalModifier(actionContext.getSource(), side,
-                                new RequirementCondition(requirements, actionContext),
+                                RequirementCondition.createCondition(requirements, actionContext),
                                 amount);
                     }
         };

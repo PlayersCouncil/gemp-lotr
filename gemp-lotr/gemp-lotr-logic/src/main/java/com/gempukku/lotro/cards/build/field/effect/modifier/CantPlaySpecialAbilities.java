@@ -29,7 +29,7 @@ public class CantPlaySpecialAbilities implements ModifierSourceProducer {
                 String bannedPlayer = (playerSource != null) ? playerSource.getPlayer(actionContext) : null;
 
                 return new CantUseSpecialAbilitiesModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext), phase, bannedPlayer, filterableSource.getFilterable(actionContext));
+                        RequirementCondition.createCondition(requirements, actionContext), phase, bannedPlayer, filterableSource.getFilterable(actionContext));
             }
         };
     }

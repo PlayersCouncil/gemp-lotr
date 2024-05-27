@@ -307,7 +307,7 @@
 		            {
 		                type: assignFPCharacterToSkirmish
 		                fpCharacter: bearer
-		                against: choose(culture(isengard),minion,strengthLessThanFilter(bearer))
+		                minion: choose(culture(isengard),minion,strengthLessThanFilter(bearer))
 		            }
 		        ]
 		    }

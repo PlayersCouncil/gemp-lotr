@@ -16,6 +16,6 @@ public class AllyMayNotParticipateInArcheryFireOrSkirmishes implements ModifierS
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
-        return actionContext -> new AllyMayNotParticipateInArcheryFireAndSkirmishesModifier(actionContext.getSource(), new RequirementCondition(requirements, actionContext), filterableSource.getFilterable(actionContext));
+        return actionContext -> new AllyMayNotParticipateInArcheryFireAndSkirmishesModifier(actionContext.getSource(), RequirementCondition.createCondition(requirements, actionContext), filterableSource.getFilterable(actionContext));
     }
 }

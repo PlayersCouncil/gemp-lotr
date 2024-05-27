@@ -43,7 +43,7 @@ public class AssignmentCost implements EffectProcessor {
                     public Modifier getModifier(ActionContext actionContext) {
                         return new FreePeoplePlayerMayNotAssignCharacterModifier(actionContext.getSource(),
                                 new AndCondition(
-                                        new RequirementCondition(requirements, actionContext),
+                                        RequirementCondition.createCondition(requirements, actionContext),
                                         new Condition() {
                                             @Override
                                             public boolean isFullfilled(LotroGame game) {

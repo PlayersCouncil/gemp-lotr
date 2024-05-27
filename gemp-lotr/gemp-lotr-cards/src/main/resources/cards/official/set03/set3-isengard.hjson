@@ -681,7 +681,7 @@
                             effect: {
                                 type: assignFpCharacterToSkirmish
                                 fpCharacter: memory(assignedCompanion)
-                                against: memory(assignedMinion)
+                                minion: memory(assignedMinion)
                             }
                         }
                     }

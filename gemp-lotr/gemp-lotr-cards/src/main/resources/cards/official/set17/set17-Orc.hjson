@@ -466,7 +466,7 @@
 		        effect: {
 		            type: assignFPCharacterToSkirmish
 		            fpCharacter: choose(companion,minStrength(9))
-		            against: self
+		            minion: self
 		        }
 		    }
 		]

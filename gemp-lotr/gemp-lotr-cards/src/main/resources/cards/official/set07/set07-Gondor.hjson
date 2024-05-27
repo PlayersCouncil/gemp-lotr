@@ -2892,7 +2892,7 @@
 		            effect: {
 		                type: assignFpCharacterToSkirmish
 		                fpCharacter: choose(hasAttached(name(Unexpected Visitor)))
-		                against: self
+		                minion: self
 		            }
 		        }
 		    }

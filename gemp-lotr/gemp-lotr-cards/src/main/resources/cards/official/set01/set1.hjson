@@ -563,7 +563,7 @@
 					}
 				}
 				effect: {
-					type: appendCardIdsToWhileInZone
+					type: storeWhileInZone
 					memory: playedNazgul
 				}
 			}
@@ -571,20 +571,6 @@
 				type: trigger
 				trigger: {
 					type: endOfTurn
-				}
-				effect: {
-					type: resetWhileInZoneData
-				}
-			}
-			{
-				type: trigger
-				trigger: {
-					type: movesFrom
-					filter: self
-				}
-				requires: {
-					type: phase
-					phase: regroup
 				}
 				effect: {
 					type: resetWhileInZoneData

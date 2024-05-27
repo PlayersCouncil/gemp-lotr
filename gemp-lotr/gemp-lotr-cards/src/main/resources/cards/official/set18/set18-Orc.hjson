@@ -789,7 +789,7 @@
                     {
                         type: assignFPCharacterToSkirmish
                         fpCharacter: choose(not(culture(shire)),ringBearer)
-                        against: self
+                        minion: self
                     }
                     {
                         type: optional

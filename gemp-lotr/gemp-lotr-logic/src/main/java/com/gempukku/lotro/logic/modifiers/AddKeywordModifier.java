@@ -11,12 +11,8 @@ public class AddKeywordModifier extends AbstractModifier implements KeywordAffec
     private final Keyword _keyword;
     private final Evaluator _evaluator;
 
-    public AddKeywordModifier(PhysicalCard physicalCard, Filterable affectFilter, Keyword keyword) {
-        this(physicalCard, affectFilter, keyword, 1);
-    }
-
-    public AddKeywordModifier(PhysicalCard physicalCard, Filterable affectFilter, Keyword keyword, int count) {
-        this(physicalCard, affectFilter, null, keyword, count);
+    public AddKeywordModifier(PhysicalCard physicalCard, Filterable affectFilter, Condition condition, Keyword keyword) {
+        this(physicalCard, affectFilter, condition, keyword, 1);
     }
 
     public AddKeywordModifier(PhysicalCard physicalCard, Filterable affectFilter, Condition condition, Keyword keyword, int count) {

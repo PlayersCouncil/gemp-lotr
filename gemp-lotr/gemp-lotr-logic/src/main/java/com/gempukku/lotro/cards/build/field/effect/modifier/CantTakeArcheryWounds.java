@@ -17,6 +17,6 @@ public class CantTakeArcheryWounds implements ModifierSourceProducer {
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return actionContext -> new CantTakeArcheryWoundsModifier(actionContext.getSource(),
-                new RequirementCondition(requirements, actionContext), filterableSource.getFilterable(actionContext));
+                RequirementCondition.createCondition(requirements, actionContext), filterableSource.getFilterable(actionContext));
     }
 }

@@ -629,7 +629,7 @@
 		        effect: {
 		            type: assignFpCharacterToSkirmish
 		            fpCharacter: choose(unbound,companion,hasAttached(hand weapon))
-		            against: self
+		            minion: self
 		        }
 		    }
 		]

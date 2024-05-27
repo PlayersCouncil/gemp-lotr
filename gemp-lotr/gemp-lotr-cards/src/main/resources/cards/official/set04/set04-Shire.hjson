@@ -1327,11 +1327,22 @@
 			            type: cancelSkirmish
 			            filter: hobbit
 			        }
-			        false: {
-			            type: disableWoundsOver
-			            filter: choose(hobbit)
-			            wounds: 1
-			        }
+			        false: [
+			            {
+			                type: chooseActiveCards
+			                text: Choose a hobbit to protect
+			                filter: choose(hobbit)
+			                memorize: chosenHobbit
+			            }
+                        {
+                            type: addModifier
+                            modifier: {
+                                type: cantTakeMoreWoundsThan
+                                filter: memory(chosenHobbit)
+                                phase: skirmish
+                            }
+                        }
+                    ]
 			    }
 			]
 		}

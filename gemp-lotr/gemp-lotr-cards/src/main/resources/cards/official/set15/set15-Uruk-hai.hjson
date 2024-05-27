@@ -549,7 +549,7 @@
 		        effect: {
 		            type: assignFpCharacterToSkirmish
 		            fpCharacter: choose(not(hunter),character,not(ringBearer))
-		            against: self
+		            minion: self
 		        }
 		    }
 		]

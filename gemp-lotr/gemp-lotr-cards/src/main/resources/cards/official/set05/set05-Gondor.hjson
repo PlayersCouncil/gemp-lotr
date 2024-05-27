@@ -46,7 +46,7 @@
 		        cost: {
 		            type: assignFpCharacterToSkirmish
 		            fpCharacter: self
-		            against: choose(minion,hasAttached(culture(gondor),fortification))
+		            minion: choose(minion,hasAttached(culture(gondor),fortification))
 		        }
 		        effect: {
 		            type: heal

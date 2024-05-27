@@ -15,11 +15,6 @@ public class CountStackedEvaluator implements Evaluator {
         _stackedCard = stackedCard;
     }
 
-    public CountStackedEvaluator(int limit, Filterable stackedOn, Filterable... stackedCard) {
-        this(stackedOn, stackedCard);
-        _limit = limit;
-    }
-
     @Override
     public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {
         int count = 0;

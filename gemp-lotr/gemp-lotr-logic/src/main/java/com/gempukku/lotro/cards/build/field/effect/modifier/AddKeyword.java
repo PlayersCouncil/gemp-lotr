@@ -37,7 +37,7 @@ public class AddKeyword implements ModifierSourceProducer {
                         final Evaluator evaluator = amount.getEvaluator(actionContext);
                         return new AddKeywordModifier(actionContext.getSource(),
                                 filterableSource.getFilterable(actionContext),
-                                new RequirementCondition(requirements, actionContext), keyword, evaluator);
+                                RequirementCondition.createCondition(requirements, actionContext), keyword, evaluator);
                     }
         };
     }

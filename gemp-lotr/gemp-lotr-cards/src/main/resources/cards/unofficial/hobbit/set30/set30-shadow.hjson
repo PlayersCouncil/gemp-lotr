@@ -233,7 +233,7 @@
 				{
 					type: assignFpCharacterToSkirmish
 					fpCharacter: choose(name(Bilbo))
-					against: self
+					minion: self
 				}
 				{
 					type: optional

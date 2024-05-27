@@ -9,7 +9,15 @@ public class RequirementCondition implements Condition {
     private final Requirement[] requirements;
     private final ActionContext actionContext;
 
-    public RequirementCondition(Requirement[] requirements, ActionContext actionContext) {
+    public static Condition createCondition(Requirement[] requirements, ActionContext actionContext) {
+        if (requirements == null || requirements.length == 0) {
+            return null;
+        } else {
+            return new RequirementCondition(requirements, actionContext);
+        }
+    }
+
+    private RequirementCondition(Requirement[] requirements, ActionContext actionContext) {
         this.requirements = requirements;
         this.actionContext = actionContext;
     }

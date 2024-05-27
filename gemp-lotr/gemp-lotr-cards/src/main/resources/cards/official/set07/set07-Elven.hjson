@@ -33,7 +33,7 @@
 		            effect: {
 		                type: assignFpCharacterToSkirmish
 		                fpCharacter: choose(hasAttached(name(Reckless Pride)))
-		                against: self
+		                minion: self
 		            }
 		        }
 		    }

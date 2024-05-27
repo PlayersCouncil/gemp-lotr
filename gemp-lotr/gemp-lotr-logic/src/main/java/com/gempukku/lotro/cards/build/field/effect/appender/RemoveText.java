@@ -40,7 +40,7 @@ public class RemoveText implements EffectAppenderProducer {
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
                         return new AddUntilModifierEffect(
-                                new RemoveGameTextModifier(actionContext.getSource(), Filters.in(cardsFromMemory)), time);
+                                new RemoveGameTextModifier(actionContext.getSource(), null, Filters.in(cardsFromMemory)), time);
                     }
                 });
 

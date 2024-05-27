@@ -23,7 +23,7 @@ public class ModifyRoamingPenalty implements ModifierSourceProducer {
                     public Modifier getModifier(ActionContext actionContext) {
                         return new RoamingPenaltyModifier(actionContext.getSource(),
                                 filterableSource.getFilterable(actionContext),
-                                new RequirementCondition(requirements, actionContext), amount);
+                                RequirementCondition.createCondition(requirements, actionContext), amount);
                     }
         };
     }

@@ -5,8 +5,8 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
 public class AllyParticipatesInArcheryFireModifier extends AbstractModifier {
-    public AllyParticipatesInArcheryFireModifier(PhysicalCard source, Filterable affectFilter) {
-        super(source, "Can participate in archery fire", affectFilter, ModifierEffect.PRESENCE_MODIFIER);
+    public AllyParticipatesInArcheryFireModifier(PhysicalCard source, Filterable affectFilter, Condition condition) {
+        super(source, "Can participate in archery fire", affectFilter, condition, ModifierEffect.PRESENCE_MODIFIER);
     }
 
     @Override

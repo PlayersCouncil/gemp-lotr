@@ -444,7 +444,7 @@
 				    true: {
 				        type: assignFPCharacterToSkirmish
 				        fpCharacter: memory(chosenCompanion)
-				        against: memory(exertedTracker)
+				        minion: memory(exertedTracker)
 				    }
 				    false: {
                         type: preventable
@@ -458,7 +458,7 @@
                         effect: {
                             type: assignFPCharacterToSkirmish
                             fpCharacter: memory(chosenCompanion)
-                            against: memory(exertedTracker)
+                            minion: memory(exertedTracker)
                         }
 				    }
 				}
@@ -1341,7 +1341,7 @@
                     effect: {
                         type: assignFPCharacterToSkirmish
                         fpCharacter: bearer
-                        against: memory(chosenTracker)
+                        minion: memory(chosenTracker)
                     }
                 }
 		    }
@@ -1630,7 +1630,7 @@
                         effect: {
                             type: assignFPCharacterToSkirmish
                             fpCharacter: memory(chosenCompanion)
-                            against: self
+                            minion: self
                         }
                     }
                 ]

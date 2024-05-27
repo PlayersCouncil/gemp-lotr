@@ -22,7 +22,7 @@ public class FPCantAssignToSkirmish implements ModifierSourceProducer {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
                 return new FreePeoplePlayerMayNotAssignCharacterModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext),
+                        RequirementCondition.createCondition(requirements, actionContext),
                         filterableSource.getFilterable(actionContext));
             }
         };

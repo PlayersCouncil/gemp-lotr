@@ -69,7 +69,7 @@ public class Card_02_121_ErrataTests
 
         scn.StartGame();
 
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
 
         scn.FreepsPassCurrentPhaseAction();
 
@@ -105,7 +105,7 @@ public class Card_02_121_ErrataTests
 
         assertEquals(6, scn.GetStrength(gimli));
 
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
 
         scn.FreepsPassCurrentPhaseAction();
 

@@ -43,10 +43,20 @@
 				phase: regroup
 				cost: [
 					{
-						type: chooseandremovetokens
-						culture: sauron
-						filter: self
-						memorize: numberOfTokens
+					    type: chooseANumber
+					    text: Choose how many {sauron} tokens to remove
+					    from: 0
+					    to: {
+					        type: forEachToken
+					        culture: sauron
+					        filter: self
+					    }
+					    memorize: numberOfTokens
+					}
+					{
+					    type: removeTokens
+					    filter: self
+					    count: memory(numberOfTokens)
 					}
 					{
 						type: discard

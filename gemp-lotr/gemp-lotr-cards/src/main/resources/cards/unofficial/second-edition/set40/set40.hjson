@@ -384,7 +384,7 @@
 					}
 				}
 				effect: {
-					type: appendCardIdsToWhileInZone
+					type: storeWhileInZone
 					memory: playedNazgul
 				}
 			}
@@ -593,7 +593,7 @@
 					memorize: playedUrukHai
 				}
 				effect: {
-					type: appendCardIdsToWhileInZone
+					type: storeWhileInZone
 					memory: playedUrukHai
 				}
 			}

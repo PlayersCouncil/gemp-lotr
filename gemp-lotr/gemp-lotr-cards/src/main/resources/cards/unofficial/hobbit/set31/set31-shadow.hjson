@@ -95,7 +95,7 @@
 					{
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(name(Bilbo))
-						against: self
+						minion: self
 					}
 					{
 						type: modifyStrength
@@ -354,7 +354,7 @@
 				effect: {
 					type: assignFpCharacterToSkirmish
 					fpCharacter: choose(name(Thorin))
-					against: choose(bearer)
+					minion: choose(bearer)
 				}
 			}
 		]

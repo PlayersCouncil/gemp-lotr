@@ -5,10 +5,6 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
 public class LoseAllKeywordsModifier extends AbstractModifier {
-    public LoseAllKeywordsModifier(PhysicalCard source, Filterable affectFilter) {
-        this(source, affectFilter, null);
-    }
-
     public LoseAllKeywordsModifier(PhysicalCard source, Filterable affectFilter, Condition condition) {
         super(source, "Loses all keywords", affectFilter, condition, ModifierEffect.LOSE_ALL_KEYWORDS_MODIFIER);
     }

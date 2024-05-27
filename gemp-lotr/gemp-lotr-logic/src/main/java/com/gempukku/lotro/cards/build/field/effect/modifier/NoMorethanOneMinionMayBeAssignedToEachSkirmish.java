@@ -26,9 +26,9 @@ public class NoMorethanOneMinionMayBeAssignedToEachSkirmish implements ModifierS
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return (actionContext) -> {
-            RequirementCondition requirementCondition = new RequirementCondition(requirements, actionContext);
 
-            return new AbstractModifier(actionContext.getSource(), "No more than one minion may be assigned to each skirmish", null, requirementCondition, ModifierEffect.ASSIGNMENT_MODIFIER) {
+            return new AbstractModifier(actionContext.getSource(), "No more than one minion may be assigned to each skirmish", null,
+                    RequirementCondition.createCondition(requirements, actionContext), ModifierEffect.ASSIGNMENT_MODIFIER) {
                 @Override
                 public boolean isValidAssignments(LotroGame game, Side side, Map<PhysicalCard, Set<PhysicalCard>> assignments) {
                     for (Map.Entry<PhysicalCard, Set<PhysicalCard>> minionsAssignedToCharacter : assignments.entrySet()) {

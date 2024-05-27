@@ -21,7 +21,7 @@ public class EndPhase implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new AddUntilEndOfPhaseModifierEffect(
-                        new PlayersCantPlayPhaseEventsOrPhaseSpecialAbilitiesModifier(actionContext.getSource(), actionContext.getGame().getGameState().getCurrentPhase()));
+                        new PlayersCantPlayPhaseEventsOrPhaseSpecialAbilitiesModifier(actionContext.getSource(), null, actionContext.getGame().getGameState().getCurrentPhase()));
             }
         };
     }

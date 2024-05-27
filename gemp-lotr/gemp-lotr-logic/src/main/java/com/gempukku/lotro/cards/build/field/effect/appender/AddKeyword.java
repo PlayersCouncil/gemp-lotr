@@ -66,7 +66,7 @@ public class AddKeyword implements EffectAppenderProducer {
                         for (PhysicalCard physicalCard : cardsFromMemory) {
                             final int keywordCount = amount.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), physicalCard);
                             result.add(new AddUntilModifierEffect(
-                                    new AddKeywordModifier(actionContext.getSource(), physicalCard, keywordFunction.apply(actionContext), keywordCount), until));
+                                    new AddKeywordModifier(actionContext.getSource(), physicalCard, null, keywordFunction.apply(actionContext), keywordCount), until));
                         }
 
                         actionContext.getGame().getGameState().sendMessage(

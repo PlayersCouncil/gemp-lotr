@@ -37,7 +37,7 @@ public class SetupExtraAssignmentAndSkirmishes implements EffectAppenderProducer
                 List<Effect> effects = new ArrayList<>();
                 effects.add(
                         new AddUntilEndOfPhaseModifierEffect(
-                                new CantBeAssignedToSkirmishModifier(action.getActionSource(), Filters.and(CardType.MINION, Filters.not(filterableSource.getFilterable(actionContext)))), Phase.ASSIGNMENT));
+                                new CantBeAssignedToSkirmishModifier(action.getActionSource(), null, Filters.and(CardType.MINION, Filters.not(filterableSource.getFilterable(actionContext)))), Phase.ASSIGNMENT));
                 action.appendEffect(
                         new UnrespondableEffect() {
                             @Override

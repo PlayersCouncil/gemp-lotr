@@ -9,31 +9,31 @@ import com.gempukku.lotro.logic.modifiers.ModifiersEnvironment;
 import com.gempukku.lotro.logic.modifiers.ModifiersQuerying;
 
 public interface LotroGame {
-    public GameState getGameState();
+    GameState getGameState();
 
-    public LotroCardBlueprintLibrary getLotroCardBlueprintLibrary();
+    LotroCardBlueprintLibrary getLotroCardBlueprintLibrary();
 
-    public ModifiersEnvironment getModifiersEnvironment();
+    ModifiersEnvironment getModifiersEnvironment();
 
-    public ModifiersQuerying getModifiersQuerying();
+    ModifiersQuerying getModifiersQuerying();
 
-    public ActionsEnvironment getActionsEnvironment();
+    ActionsEnvironment getActionsEnvironment();
 
-    public UserFeedback getUserFeedback();
+    UserFeedback getUserFeedback();
 
-    public void checkRingBearerCorruption();
+    void checkRingBearerCorruption();
 
-    public void checkRingBearerAlive();
+    void checkRingBearerAlive();
 
-    public void playerWon(String currentPlayerId, String reason);
+    void playerWon(String currentPlayerId, String reason);
 
-    public void playerLost(String currentPlayerId, String reason);
+    void playerLost(String currentPlayerId, String reason);
 
-    public String getWinnerPlayerId();
+    String getWinnerPlayerId();
 
-    public LotroFormat getFormat();
+    LotroFormat getFormat();
 
-    public boolean shouldAutoPass(String playerId, Phase phase);
+    boolean shouldAutoPass(String playerId, Phase phase);
 
-    public boolean isSolo();
+    boolean isSolo();
 }

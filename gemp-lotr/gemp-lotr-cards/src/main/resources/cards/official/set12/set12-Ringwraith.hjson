@@ -576,7 +576,7 @@
 		            type: assignFpCharacterToSkirmish
 		            player: free people
 		            fpCharacter: choose(unbound,companion,hasAttached(culture(wraith),condition))
-		            against: bearer
+		            minion: bearer
 		        }
 		    }
 		]
@@ -742,7 +742,7 @@
 		        effect: {
 		            type: assignFpCharacterToSkirmish
 		            fpCharacter: choose(companion,maxResistance(0))
-		            against: self
+		            minion: self
 		        }
 		    }
 		    {

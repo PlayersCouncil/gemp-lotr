@@ -21,7 +21,7 @@ public class SkipPhase implements ModifierSourceProducer {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
                 return new ShouldSkipPhaseModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext), phase);
+                        RequirementCondition.createCondition(requirements, actionContext), phase);
             }
         };
     }

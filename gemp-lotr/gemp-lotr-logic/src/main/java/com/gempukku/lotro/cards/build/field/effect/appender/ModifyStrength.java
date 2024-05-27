@@ -59,13 +59,13 @@ public class ModifyStrength implements EffectAppenderProducer {
                             for (PhysicalCard affectedCard : cardsFromMemory) {
                                 int incrementedBy = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(action.getActionSource(), affectedCard.getCardId() + "-", game.getGameState().getCurrentPhase()).incrementToLimit(limit, absAmount);
                                 if (incrementedBy > 0) {
-                                    modifiers.add(new StrengthModifier(actionContext.getSource(), affectedCard, multiplier * incrementedBy));
+                                    modifiers.add(new StrengthModifier(actionContext.getSource(), affectedCard, null, multiplier * incrementedBy));
                                 }
                             }
                             return new AddUntilModifierEffect(modifiers, time);
                         } else {
                             return new AddUntilModifierEffect(
-                                    new StrengthModifier(actionContext.getSource(), Filters.in(cardsFromMemory), amount), time);
+                                    new StrengthModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, amount), time);
                         }
                     }
                 });

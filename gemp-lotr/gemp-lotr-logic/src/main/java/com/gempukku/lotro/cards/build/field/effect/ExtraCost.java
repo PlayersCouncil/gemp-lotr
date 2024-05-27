@@ -29,7 +29,7 @@ public class ExtraCost implements EffectProcessor {
 
         blueprint.appendExtraPlayCost(
                 (actionContext) -> new ExtraPlayCost() {
-                    private RequirementCondition condition = new RequirementCondition(requirements, actionContext);
+                    private Condition condition = RequirementCondition.createCondition(requirements, actionContext);
 
                     @Override
                     public void appendExtraCosts(LotroGame game, CostToEffectAction action, PhysicalCard card) {

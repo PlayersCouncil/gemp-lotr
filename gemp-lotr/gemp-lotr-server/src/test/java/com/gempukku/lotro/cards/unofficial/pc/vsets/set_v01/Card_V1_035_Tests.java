@@ -71,7 +71,7 @@ public class Card_V1_035_Tests
 		scn.ShadowMoveCardToHand(darkness, balrog, whip, spear);
 
 		//so the balrog doesn't self-discard
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
 
 		scn.StartGame();
 		scn.SetTwilight(17);

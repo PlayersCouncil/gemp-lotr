@@ -34,7 +34,7 @@
 				{
 					type: assignFpCharacterToSkirmish
 					fpCharacter: choose(unbound,companion)
-					against: memory(exertedMinion)
+					minion: memory(exertedMinion)
 				}
 			]
 		}

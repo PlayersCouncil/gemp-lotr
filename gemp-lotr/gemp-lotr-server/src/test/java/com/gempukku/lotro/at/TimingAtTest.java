@@ -282,7 +282,7 @@ public class TimingAtTest extends AbstractAtTest {
                     @Override
                     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
                         return Collections.singletonList(
-                                new SpecialFlagModifier(self, ModifierFlag.RING_TEXT_INACTIVE));
+                                new SpecialFlagModifier(self, null, ModifierFlag.RING_TEXT_INACTIVE));
                     }
                 });
         moveFromSite.setSiteNumber(1);
@@ -291,7 +291,7 @@ public class TimingAtTest extends AbstractAtTest {
                     @Override
                     public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
                         return Collections.singletonList(
-                                new SpecialFlagModifier(self, ModifierFlag.CANT_PREVENT_WOUNDS));
+                                new SpecialFlagModifier(self, null, ModifierFlag.CANT_PREVENT_WOUNDS));
                     }
                 });
         moveToSite.setSiteNumber(2);

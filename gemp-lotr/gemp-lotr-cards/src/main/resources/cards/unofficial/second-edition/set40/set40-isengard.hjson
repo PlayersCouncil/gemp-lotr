@@ -977,8 +977,15 @@
           filter: choose(uruk-hai)
         }
         {
-          type: chooseAndRemoveTwilight
-          memorize: twilightRemoved
+            type: chooseANumber
+            text: How much twilight do you wish to remove
+            from: 0
+            to: twilightCount
+            memorize: twilightRemoved
+        }
+        {
+            type: removeTwilight
+            amount: memory(twilightRemoved)
         }
       ]
       effect: {

@@ -25,7 +25,7 @@ public class CantReplaceSite implements ModifierSourceProducer {
             public Modifier getModifier(ActionContext actionContext) {
                 String bannedPlayer = playerSource != null ? playerSource.getPlayer(actionContext) : null;
                 return new CantReplaceSiteModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext), bannedPlayer,
+                        RequirementCondition.createCondition(requirements, actionContext), bannedPlayer,
                         filterableSource.getFilterable(actionContext));
             }
         };

@@ -353,9 +353,12 @@
 				memorize: unboundCompanion
 			}
 			effect: {
-				type: DisableSkirmishAssignment
-				until: start(regroup)
-				filter: memory(unboundCompanion)
+			    type: addModifier
+			    modifier: {
+			        type: cantBeAssignedToSkirmish
+			        filter: memory(unboundCompanion)
+			    }
+				until: regroup
 			}
 		}
 	}

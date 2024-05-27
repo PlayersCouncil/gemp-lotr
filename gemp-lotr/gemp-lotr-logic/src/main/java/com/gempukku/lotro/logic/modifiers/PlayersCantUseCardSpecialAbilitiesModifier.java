@@ -10,10 +10,6 @@ import com.gempukku.lotro.logic.timing.Action;
 public class PlayersCantUseCardSpecialAbilitiesModifier extends AbstractModifier {
     private final Filter _sourceFilters;
 
-    public PlayersCantUseCardSpecialAbilitiesModifier(PhysicalCard source, Filterable... sourceFilters) {
-        this(source, null, sourceFilters);
-    }
-
     public PlayersCantUseCardSpecialAbilitiesModifier(PhysicalCard source, Condition condition, Filterable... sourceFilters) {
         super(source, null, null, condition, ModifierEffect.ACTION_MODIFIER);
         _sourceFilters = Filters.and(sourceFilters);

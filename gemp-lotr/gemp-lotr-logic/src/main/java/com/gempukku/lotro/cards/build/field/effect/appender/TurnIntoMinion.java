@@ -70,15 +70,15 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                                     new TransferToShadowEffect(card) {
                                         @Override
                                         protected void cardTransferredCallback() {
-                                            addModifier(action, new StrengthModifier(card, card, strengthValue), until);
-                                            addModifier(action, new VitalityModifier(card, card, vitalityValue), until);
-                                            addModifier(action, new IsAdditionalCardTypeModifier(card, card, CardType.MINION), until);
+                                            addModifier(action, new StrengthModifier(card, card, null, strengthValue), until);
+                                            addModifier(action, new VitalityModifier(card, card, null, vitalityValue), until);
+                                            addModifier(action, new IsAdditionalCardTypeModifier(card, card, null, CardType.MINION), until);
                                             if (keywords != null) {
                                                 for (Keyword keyword : keywordsList) {
-                                                    addModifier(action, new AddKeywordModifier(card, card, keyword), until);
+                                                    addModifier(action, new AddKeywordModifier(card, card, null, keyword), until);
                                                 }
                                             }
-                                            addModifier(action, new MayNotBearModifier(card, card, Filters.any), until);
+                                            addModifier(action, new MayNotBearModifier(card, card, null, Filters.any), until);
                                         }
                                     });
                             Effect cleanupEffect = createCleanupEffect(card, until);

@@ -29,9 +29,9 @@ public class ExtraCostToPlay implements ModifierSourceProducer {
 
         return (actionContext) -> {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
-            final RequirementCondition condition = new RequirementCondition(requirements, actionContext);
 
-            return new AbstractExtraPlayCostModifier(actionContext.getSource(), "Cost to play is modified", filterable, condition) {
+            return new AbstractExtraPlayCostModifier(actionContext.getSource(), "Cost to play is modified", filterable,
+                    RequirementCondition.createCondition(requirements, actionContext)) {
                 @Override
                 public void appendExtraCosts(LotroGame game, CostToEffectAction action, PhysicalCard card) {
                     if (!requiresRanger || (requiresRanger && action instanceof PlayEventAction playEventAction && playEventAction.isRequiresRanger())) {

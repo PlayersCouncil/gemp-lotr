@@ -6,10 +6,10 @@ import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
+import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.AddBurdenEffect;
 import com.gempukku.lotro.logic.timing.Effect;
-import com.gempukku.lotro.logic.timing.PlayConditions;
 import org.json.simple.JSONObject;
 
 public class AddBurdens implements EffectAppenderProducer {
@@ -36,8 +36,8 @@ public class AddBurdens implements EffectAppenderProducer {
 
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
-                final String playerAddingBurden = playerSource.getPlayer(actionContext);
-                return PlayConditions.canAddBurdens(actionContext.getGame(), playerAddingBurden, actionContext.getSource());
+                LotroGame game = actionContext.getGame();
+                return game.getModifiersQuerying().canAddBurden(game, playerSource.getPlayer(actionContext), actionContext.getSource());
             }
         };
     }

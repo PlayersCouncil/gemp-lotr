@@ -23,7 +23,7 @@ public class ModifyVitality implements ModifierSourceProducer {
             final Evaluator evaluator = valueSource.getEvaluator(actionContext);
             return new VitalityModifier(actionContext.getSource(),
                     filterableSource.getFilterable(actionContext),
-                    new RequirementCondition(requirements, actionContext), evaluator, false);
+                    RequirementCondition.createCondition(requirements, actionContext), evaluator);
         };
     }
 }

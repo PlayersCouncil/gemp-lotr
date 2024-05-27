@@ -25,7 +25,7 @@ public class CantPlaySite implements ModifierSourceProducer {
             public Modifier getModifier(ActionContext actionContext) {
                 String bannedPlayer = playerSource.getPlayer(actionContext);
                 return new CantPlaySiteModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext), bannedPlayer);
+                        RequirementCondition.createCondition(requirements, actionContext), bannedPlayer);
             }
         };
     }

@@ -29,10 +29,9 @@ public class ModifyPlayOnCost implements ModifierSourceProducer {
         return actionContext -> {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
             final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-            final RequirementCondition requirementCondition = new RequirementCondition(conditions, actionContext);
             final Evaluator evaluator = amountSource.getEvaluator(actionContext);
             return new AbstractModifier(actionContext.getSource(), "Cost to play on is modified", filterable,
-                    requirementCondition, ModifierEffect.TWILIGHT_COST_MODIFIER) {
+                    RequirementCondition.createCondition(conditions, actionContext), ModifierEffect.TWILIGHT_COST_MODIFIER) {
                 @Override
                 public int getTwilightCostModifier(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, boolean ignoreRoamingPenalty) {
                     if (target != null && Filters.accepts(game, onFilterable, target))

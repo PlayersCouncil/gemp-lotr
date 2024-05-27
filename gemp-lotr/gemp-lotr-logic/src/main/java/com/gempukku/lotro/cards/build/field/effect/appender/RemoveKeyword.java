@@ -42,7 +42,7 @@ public class RemoveKeyword implements EffectAppenderProducer {
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
                         return new AddUntilModifierEffect(
-                                new RemoveKeywordModifier(actionContext.getSource(), Filters.in(cardsFromMemory), keyword), until);
+                                new RemoveKeywordModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, keyword), until);
                     }
                 });
 

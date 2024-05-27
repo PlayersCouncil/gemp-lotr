@@ -114,8 +114,8 @@ public class Card_02_075_ErrataTests
         scn.FreepsMoveCharToTable(sam);
 
         //Make ferny fierce and strength +5 just to make things easier to test
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("Bill Ferny"), Keyword.FIERCE));
-        scn.ApplyAdHocModifier(new StrengthModifier(null, Filters.name("Bill Ferny"), 5));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("Bill Ferny"), null, Keyword.FIERCE));
+        scn.ApplyAdHocModifier(new StrengthModifier(null, Filters.name("Bill Ferny"), null, 5));
 
         scn.StartGame();
 
@@ -160,7 +160,7 @@ public class Card_02_075_ErrataTests
 
         scn.ShadowMoveCharToTable(ferny);
 
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
 
         scn.StartGame();
 

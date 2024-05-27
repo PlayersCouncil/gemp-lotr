@@ -8,10 +8,6 @@ import com.gempukku.lotro.logic.timing.Action;
 public class PlayersCantPlayPhaseEventsOrPhaseSpecialAbilitiesModifier extends AbstractModifier {
     private final Phase _phase;
 
-    public PlayersCantPlayPhaseEventsOrPhaseSpecialAbilitiesModifier(PhysicalCard source, Phase phase) {
-        this(source, null, phase);
-    }
-
     public PlayersCantPlayPhaseEventsOrPhaseSpecialAbilitiesModifier(PhysicalCard source, Condition condition, Phase phase) {
         super(source, null, null, condition, ModifierEffect.ACTION_MODIFIER);
         _phase = phase;

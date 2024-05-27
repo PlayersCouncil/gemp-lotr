@@ -1111,7 +1111,7 @@
 		            effect: {
 		                type: assignFpCharacterToSkirmish
 		                fpCharacter: choose(hasAttached(name(Steadfast Champion)))
-		                against: self
+		                minion: self
 		            }
 		        }
 		    }

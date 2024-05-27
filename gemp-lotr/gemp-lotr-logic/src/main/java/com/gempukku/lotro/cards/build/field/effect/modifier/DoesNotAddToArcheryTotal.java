@@ -17,6 +17,6 @@ public class DoesNotAddToArcheryTotal implements ModifierSourceProducer {
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return (actionContext) -> new DoesNotAddToArcheryTotalModifier(actionContext.getSource(),
-                filterableSource.getFilterable(actionContext), new RequirementCondition(requirements, actionContext));
+                filterableSource.getFilterable(actionContext), RequirementCondition.createCondition(requirements, actionContext));
     }
 }

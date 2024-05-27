@@ -1154,7 +1154,7 @@
 		            {
 		                type: assignFPCharacterToSkirmish
 		                fpCharacter: self
-		                against: choose(minion)
+		                minion: choose(minion)
 		                memorizeMinion: assignedMinion
 		            }
 		            {
@@ -1506,7 +1506,7 @@
                     effect: {
                         type: assignFpCharacterToSkirmish
                         fpCharacter: choose(name(Sméagol))
-                        against: self
+                        minion: self
                     }
                 }
             }

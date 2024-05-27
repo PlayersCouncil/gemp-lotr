@@ -644,7 +644,7 @@
 				    {
 				        type: assignFPCharacterToSkirmish
 				        fpCharacter: memory(chosenAlly)
-				        against: self
+				        minion: self
 				    }
 				]
 			}
@@ -786,7 +786,7 @@
 				    {
 				        type: assignFPCharacterToSkirmish
 				        fpCharacter: memory(chosenAlly)
-				        against: self
+				        minion: self
 				    }
 				]
 			}
@@ -1483,7 +1483,7 @@
 		        effect: {
 		            type: assignFPCharacterToSkirmish
 		            fpCharacter: choose(unbound,companion)
-		            against: choose(culture(dunland),man)
+		            minion: choose(culture(dunland),man)
 		        }
 		    }
 		]

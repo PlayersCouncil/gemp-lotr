@@ -25,7 +25,7 @@ public class RemoveAllKeywords implements ModifierSourceProducer {
             public Modifier getModifier(ActionContext actionContext) {
                 return new LoseAllKeywordsModifier(actionContext.getSource(),
                         filterableSource.getFilterable(actionContext),
-                        new RequirementCondition(requirements, actionContext));
+                        RequirementCondition.createCondition(requirements, actionContext));
             }
         };
     }

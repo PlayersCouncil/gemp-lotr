@@ -416,9 +416,9 @@
                         type: takeOffRing
                     }
                     {
-                        type: cancelSkirmishBetween
-                        fp: ringBearer
-                        shadow: nazgul
+                        type: cancelSkirmish
+                        filter: ringBearer
+                        involving: nazgul
                     }
                 ]
             }

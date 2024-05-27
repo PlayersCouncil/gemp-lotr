@@ -23,11 +23,11 @@ import java.util.List;
 public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "against", "memorizeMinion", "memorizeFPCharacter", "ignoreUnassigned");
+        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "minion", "memorizeMinion", "memorizeFPCharacter", "ignoreUnassigned");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String fpCharacter = FieldUtils.getString(effectObject.get("fpCharacter"), "fpCharacter", "choose(any)");
-        final String against = FieldUtils.getString(effectObject.get("against"), "against", "choose(any)");
+        final String minion = FieldUtils.getString(effectObject.get("minion"), "minion", "choose(any)");
 
         final String minionMemory = FieldUtils.getString(effectObject.get("memorizeMinion"), "memorizeMinion", "_tempMinion");
         final String fpCharacterMemory = FieldUtils.getString(effectObject.get("memorizeFPCharacter"), "memorizeFPCharacter", "_tempFpCharacter");
@@ -35,7 +35,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
 
-        final FilterableSource minionFilter = getSource(against, environment);
+        final FilterableSource minionFilter = getSource(minion, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
@@ -48,7 +48,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                             return Filters.assignableToSkirmishAgainst(assigningSide, filter, ignoreUnassigned, false);
                         }, fpCharacterMemory, player, "Choose character to assign to skirmish", environment));
         result.addEffectAppender(
-                CardResolver.resolveCard(against,
+                CardResolver.resolveCard(minion,
                         (actionContext) -> {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);

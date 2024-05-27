@@ -10,10 +10,6 @@ public class MinionSiteNumberModifier extends AbstractModifier {
     private final Evaluator evaluator;
     private final boolean nonCardTextModifier;
 
-    public MinionSiteNumberModifier(PhysicalCard source, Filterable affectFilter, int modifier) {
-        this(source, affectFilter, null, modifier);
-    }
-
     public MinionSiteNumberModifier(PhysicalCard source, Filterable affectFilter, Condition condition, int modifier) {
         this(source, affectFilter, condition, new ConstantEvaluator(modifier));
     }

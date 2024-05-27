@@ -19,7 +19,7 @@ public class CantPlayCardsOn implements ModifierSourceProducer {
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return (actionContext) -> new MayNotBePlayedOnModifier(actionContext.getSource(),
-                new RequirementCondition(requirements, actionContext),
+                RequirementCondition.createCondition(requirements, actionContext),
                 onFilterableSource.getFilterable(actionContext), filterableSource.getFilterable(actionContext));
     }
 }

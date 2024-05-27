@@ -28,7 +28,7 @@ public class CancelKeywordBonus implements ModifierSourceProducer {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
                 return new CancelKeywordBonusTargetModifier(actionContext.getSource(), keyword,
-                        new RequirementCondition(requirements, actionContext),
+                        RequirementCondition.createCondition(requirements, actionContext),
                         filterableSource.getFilterable(actionContext),
                         fromFilterableSource.getFilterable(actionContext));
             }

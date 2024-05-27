@@ -25,7 +25,7 @@ public class RemoveKeyword implements ModifierSourceProducer {
             public Modifier getModifier(ActionContext actionContext) {
                 return new RemoveKeywordModifier(actionContext.getSource(),
                         filterableSource.getFilterable(actionContext),
-                        new RequirementCondition(requirements, actionContext), keyword);
+                        RequirementCondition.createCondition(requirements, actionContext), keyword);
             }
         };
     }

@@ -151,7 +151,7 @@
 				type: assignFpCharacterToSkirmish
 				player: fp
 				fpCharacter: choose(ring bearer)
-				against: choose(any)
+				minion: choose(any)
 			}
 		}
 	}
@@ -206,7 +206,7 @@
 			effect: {
 				type: assignFpCharacterToSkirmish
 				fpCharacter: choose(exhausted,companion,not(ring bearer))
-				against: choose(culture(moria),orc)
+				minion: choose(culture(moria),orc)
 			}
 		}
 	}

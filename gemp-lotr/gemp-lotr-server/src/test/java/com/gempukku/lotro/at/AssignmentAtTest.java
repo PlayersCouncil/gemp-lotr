@@ -229,7 +229,7 @@ public class AssignmentAtTest extends AbstractAtTest {
 
         // Merry gets Defender +1
         _game.getModifiersEnvironment().addUntilEndOfPhaseModifier(
-                new AddKeywordModifier(null, merry, Keyword.DEFENDER, 1), Phase.ASSIGNMENT);
+                new AddKeywordModifier(null, merry, null, Keyword.DEFENDER, 1), Phase.ASSIGNMENT);
 
         // End assignment phase
         playerDecided(P1, "");

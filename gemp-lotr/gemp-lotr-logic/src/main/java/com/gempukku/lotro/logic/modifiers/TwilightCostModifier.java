@@ -3,19 +3,10 @@ package com.gempukku.lotro.logic.modifiers;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
-import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 
 public class TwilightCostModifier extends AbstractModifier {
     private final Evaluator _evaluator;
-
-    public TwilightCostModifier(PhysicalCard source, Filterable affectFilter, int twilightCostModifier) {
-        this(source, affectFilter, null, twilightCostModifier);
-    }
-
-    public TwilightCostModifier(PhysicalCard source, Filterable affectFilter, Condition condition, int twilightCostModifier) {
-        this(source, affectFilter, condition, new ConstantEvaluator(twilightCostModifier));
-    }
 
     public TwilightCostModifier(PhysicalCard source, Filterable affectFilter, Condition condition, Evaluator evaluator) {
         super(source, null, affectFilter, condition, ModifierEffect.TWILIGHT_COST_MODIFIER);

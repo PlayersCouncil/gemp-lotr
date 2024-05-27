@@ -908,7 +908,7 @@
             effect: {
               type: assignFpCharacterToSkirmish
               fpCharacter: choose(memory(chosenCompanion))
-              against: choose(memory(chosenMinion))
+              minion: choose(memory(chosenMinion))
             }
           }
         ]

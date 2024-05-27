@@ -82,7 +82,7 @@ public class Card_V1_031_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(8);
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.MARSH));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowPlayCard(purpose);
 		scn.ShadowPlayCard(ftentacle1);
@@ -126,7 +126,7 @@ public class Card_V1_031_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(4);
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.MARSH));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowPlayCard(htentacle);
 		scn.ShadowDeclineOptionalTrigger();
@@ -160,7 +160,7 @@ public class Card_V1_031_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(4);
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.MARSH));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowPlayCard(htentacle);
 		scn.ShadowDeclineOptionalTrigger();

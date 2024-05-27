@@ -89,7 +89,7 @@ public class TriggersAtTest extends AbstractAtTest {
         _game.getGameState().addCardToZone(_game, dervorin, Zone.FREE_CHARACTERS);
         _game.getGameState().addCardToZone(_game, boromir, Zone.FREE_CHARACTERS);
         _game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                new AddKeywordModifier(dervorin, dervorin, Keyword.MUSTER));
+                new AddKeywordModifier(dervorin, dervorin, null, Keyword.MUSTER));
 
         _game.getGameState().addCardToZone(_game, cardInHand1, Zone.HAND);
         _game.getGameState().addCardToZone(_game, cardInHand2, Zone.HAND);
@@ -131,7 +131,7 @@ public class TriggersAtTest extends AbstractAtTest {
         _game.getGameState().addCardToZone(_game, dervorin, Zone.FREE_CHARACTERS);
         _game.getGameState().addCardToZone(_game, boromir, Zone.FREE_CHARACTERS);
         _game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                new AddKeywordModifier(dervorin, dervorin, Keyword.MUSTER));
+                new AddKeywordModifier(dervorin, dervorin, null, Keyword.MUSTER));
 
         _game.getGameState().addCardToZone(_game, cardInHand1, Zone.HAND);
         _game.getGameState().addCardToZone(_game, cardInHand2, Zone.HAND);
@@ -175,7 +175,7 @@ public class TriggersAtTest extends AbstractAtTest {
         _game.getGameState().addCardToZone(_game, dervorin, Zone.FREE_CHARACTERS);
         _game.getGameState().addCardToZone(_game, boromir, Zone.FREE_CHARACTERS);
         _game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                new AddKeywordModifier(dervorin, dervorin, Keyword.MUSTER));
+                new AddKeywordModifier(dervorin, dervorin, null, Keyword.MUSTER));
 
         _game.getGameState().addCardToZone(_game, cardInHand1, Zone.HAND);
         _game.getGameState().addCardToZone(_game, cardInHand2, Zone.HAND);

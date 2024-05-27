@@ -19,6 +19,6 @@ public class FPUsesResInsteadOfStr implements ModifierSourceProducer {
         return (actionContext) ->
                 new FPSkirmishResistanceStrengthOverrideModifier(actionContext.getSource(),
                         filterableSource.getFilterable(actionContext),
-                        new RequirementCondition(requirements, actionContext));
+                        RequirementCondition.createCondition(requirements, actionContext));
     }
 }

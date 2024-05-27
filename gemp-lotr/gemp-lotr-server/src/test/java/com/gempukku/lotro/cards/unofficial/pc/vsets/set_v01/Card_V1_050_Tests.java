@@ -118,7 +118,7 @@ public class Card_V1_050_Tests
 		scn.FreepsMoveCharToTable(sam);
 
 		//Cheat the sanctuary so we don't have to move and swap
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(1), Keyword.SANCTUARY));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(1), null, Keyword.SANCTUARY));
 
 		scn.StartGame();
 

@@ -15,10 +15,10 @@ public class RingRelatedRule {
 
     public void applyRule() {
         _modifiersLogic.addAlwaysOnModifier(
-                new AddKeywordModifier(null, Filters.or(Filters.frodo, Filters.sam), Keyword.RING_BOUND));
+                new AddKeywordModifier(null, Filters.or(Filters.frodo, Filters.sam), null, Keyword.RING_BOUND));
         _modifiersLogic.addAlwaysOnModifier(
-                new CantPlayCardsModifier(null, Filters.frodo, Keyword.CAN_START_WITH_RING));
+                new CantPlayCardsModifier(null, null, Filters.frodo, Keyword.CAN_START_WITH_RING));
         _modifiersLogic.addAlwaysOnModifier(
-                new AddKeywordModifier(null, Filters.ringBearer, Keyword.RING_BOUND));
+                new AddKeywordModifier(null, Filters.ringBearer, null, Keyword.RING_BOUND));
     }
 }

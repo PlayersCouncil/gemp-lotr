@@ -2072,7 +2072,7 @@
                     effect: {
                         type: assignFpCharacterToSkirmish
                         fpCharacter: choose(ringBearer)
-                        against: self
+                        minion: self
                     }
                 }
 
@@ -2459,7 +2459,7 @@
 		            effect: {
 		                type: assignFpCharacterToSkirmish
 		                fpCharacter: choose(ringBearer)
-		                against: self
+		                minion: self
 		            }
 		        }
 		    }
@@ -2595,7 +2595,7 @@
 		            effect: {
 		                type: assignFpCharacterToSkirmish
 		                fpCharacter: choose(ringBearer)
-		                against: self
+		                minion: self
 		            }
 		        }
 
@@ -2654,7 +2654,7 @@
 				    effect: {
 				        type: assignFpCharacterToSkirmish
 				        fpCharacter: choose(ringBearer)
-				        against: memory(chosenEasterling)
+				        minion: memory(chosenEasterling)
 				    }
 				}
 			]

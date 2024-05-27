@@ -349,8 +349,11 @@
 					filter: choose(minion)
 				}
 				{
-					type: DisableArcheryTotalContribution
-					filter: self
+					type: addModifier
+					modifier: {
+					    type: doesNotAddToArcheryTotal
+					    filter: self
+					}
 				}
 			]
 		}

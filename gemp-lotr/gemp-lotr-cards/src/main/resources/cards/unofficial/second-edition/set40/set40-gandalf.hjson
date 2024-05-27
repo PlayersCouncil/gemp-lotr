@@ -141,13 +141,16 @@
 				memorize: unboundCompanion
 			}
 			effect: {
-				type: sidePlayerCantPlayPhaseEventsOrUsePhaseSpecialAbilities
-				requires: {
-					type: canSpot
-					filter: memory(unboundCompanion),inSkirmish
+				type: addModifier
+				modifier: {
+				    type: cantPlayPhaseEventsOrPhaseSpecialAbilities
+                    requires: {
+                        type: canSpot
+                        filter: memory(unboundCompanion),inSkirmish
+                    }
+				    player: shadow
+				    phase: skirmish
 				}
-				side: shadow
-				phase: skirmish
 			}
 		}
 	}

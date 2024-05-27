@@ -89,10 +89,21 @@
 				type: exert
 				filter: choose(your,orc)
 			}
-			effect: {
-				type: DisableSkirmishAssignment
-				filter: choose(or(name(Gandalf),and(culture(elven),ally)))
-			}
+			effect: [
+                {
+                    type: chooseActiveCards
+                    text: Choose characters that you want to make unable to be assigned to skirmish
+                    filter: choose(or(name(Gandalf),and(culture(elven),ally)))
+                    memorize: chosenCharacter
+                }
+                {
+                    type: addModifier
+                    modifier: {
+                        type: cantBeAssignedToSkirmish
+                        filter: memory(chosenCharacter)
+                    }
+                }
+            ]
 		}
 	}
 	31_47: {

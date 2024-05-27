@@ -270,8 +270,11 @@
 					filter: choose(minion)
 				}
 				{
-					type: DisableArcheryTotalContribution
-					filter: self
+					type: addModifier
+					modifier: {
+					    type: doesNotAddToArcheryTotal
+					    filter: self
+					}
 				}
 			]
 		}
@@ -644,7 +647,7 @@
 						effect: {
 							type: assignFpCharacterToSkirmish
 							fpCharacter: memory(chosenCompanion)
-							against: choose(name(Grima))
+							minion: choose(name(Grima))
 						}
 					}
 				]

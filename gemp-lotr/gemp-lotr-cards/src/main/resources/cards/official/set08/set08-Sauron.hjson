@@ -175,7 +175,7 @@
 		        effect: {
 		            type: assignFpCharacterToSkirmish
 		            fpCharacter: choose(unbound,companion)
-		            against: self
+		            minion: self
 		        }
 		    }
 		]

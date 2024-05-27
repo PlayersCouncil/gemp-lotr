@@ -356,7 +356,7 @@
 								type: assignFpCharacterToSkirmish
 								player: fp
 								fpCharacter: choose(companion)
-								against: choose(memory(chosenMinion))
+								minion: choose(memory(chosenMinion))
 							}
 						]
 					}
@@ -372,13 +372,13 @@
 								type: assignFpCharacterToSkirmish
 								player: shadowPlayer
 								fpCharacter: choose(companion)
-								against: choose(memory(chosenMinion))
+								minion: choose(memory(chosenMinion))
 							}
 						]
 						effect: {
 							type: assignFpCharacterToSkirmish
 							fpCharacter: choose(name(Bilbo))
-							against: choose(memory(chosenMinion))
+							minion: choose(memory(chosenMinion))
 						}
 					}
 				]

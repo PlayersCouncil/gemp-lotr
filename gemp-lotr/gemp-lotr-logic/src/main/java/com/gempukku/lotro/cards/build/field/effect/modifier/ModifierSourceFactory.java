@@ -80,7 +80,6 @@ public class ModifierSourceFactory {
         modifierProducers.put("modifystrength", new ModifyStrength());
         modifierProducers.put("modifyvitality", new ModifyVitality());
         modifierProducers.put("nomorethanoneminionmaybeassignedtoeachskirmish", new NoMorethanOneMinionMayBeAssignedToEachSkirmish());
-        modifierProducers.put("opponentmaynotdiscard", new OpponentMayNotDiscard());
         modifierProducers.put("removeallkeywords", new RemoveAllKeywords());
         modifierProducers.put("removecardsgoingtodiscard", new AddModifierFlag(ModifierFlag.REMOVE_CARDS_GOING_TO_DISCARD));
         modifierProducers.put("removekeyword", new RemoveKeyword());

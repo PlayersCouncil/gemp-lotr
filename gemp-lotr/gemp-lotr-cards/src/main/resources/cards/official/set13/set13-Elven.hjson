@@ -305,7 +305,7 @@
                     {
                         type: assignFpCharacterToSkirmish
                         fpCharacter: choose(culture(elven),companion)
-                        against: choose(minion)
+                        minion: choose(minion)
                         memorizeFPCharacter: assignedCompanion
                         memorizeMinion: assignedMinion
                     }

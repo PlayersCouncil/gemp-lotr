@@ -40,7 +40,7 @@ public class AlterOverwhelmMultiplier implements EffectAppenderProducer {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
 
                         return new AddUntilModifierEffect(
-                                new OverwhelmedByMultiplierModifier(actionContext.getSource(), Filters.in(cardsFromMemory), multiplier), until);
+                                new OverwhelmedByMultiplierModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, multiplier), until);
                     }
                 });
 

@@ -27,7 +27,7 @@ public class CantPlayPhaseEvents implements ModifierSourceProducer {
             public Modifier getModifier(ActionContext actionContext) {
                 String bannedPlayer = playerSource != null ? playerSource.getPlayer(actionContext) : null;
                 return new CantPlayPhaseEventsModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext), phase, bannedPlayer);
+                        RequirementCondition.createCondition(requirements, actionContext), phase, bannedPlayer);
             }
         };
     }

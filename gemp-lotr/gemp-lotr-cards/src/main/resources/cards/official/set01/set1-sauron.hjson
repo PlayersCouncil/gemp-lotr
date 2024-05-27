@@ -697,7 +697,7 @@
 					type: assignFpCharacterToSkirmish
 					player: fp
 					fpCharacter: choose(hobbit)
-					against: self
+					minion: self
 				}
 			}
 		]

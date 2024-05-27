@@ -237,7 +237,7 @@
                     {
                         type: assignFPCharacterToSkirmish
                         fpCharacter: choose(ringBearer)
-                        against: choose(minion)
+                        minion: choose(minion)
                         memorizeMinion: chosenMinion
                     }
                 ]
@@ -508,7 +508,7 @@
 		        cost: {
 		            type: assignFPCharacterToSkirmish
 		            fpCharacter: choose(name(Frodo))
-		            against: choose(minion)
+		            minion: choose(minion)
 		            memorizeMinion: chosenMinion
 		        }
 		        effect: {

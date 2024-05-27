@@ -10,10 +10,6 @@ public class CantDiscardFromPlayModifier extends AbstractModifier {
     private final String bannedPlayer;
     private final Filter _sourceFilter;
 
-    public CantDiscardFromPlayModifier(PhysicalCard source, String text, String bannedPlayer, Filterable affectFilter, Filterable sourceFilter) {
-        this(source, text, null, bannedPlayer, affectFilter, sourceFilter);
-    }
-
     public CantDiscardFromPlayModifier(PhysicalCard source, String text, Condition condition, String bannedPlayer, Filterable affectFilter, Filterable sourceFilter) {
         super(source, text, affectFilter, condition, ModifierEffect.DISCARD_FROM_PLAY_MODIFIER);
         this.bannedPlayer = bannedPlayer;

@@ -17,7 +17,7 @@ public class FPCultureSpot implements ModifierSourceProducer {
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return actionContext -> new FPCulturesSpotCountModifier(actionContext.getSource(),
-                new RequirementCondition(requirements, actionContext),
+                RequirementCondition.createCondition(requirements, actionContext),
                 amount.getEvaluator(actionContext));
     }
 }

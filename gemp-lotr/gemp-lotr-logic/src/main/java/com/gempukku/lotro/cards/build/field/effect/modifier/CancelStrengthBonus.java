@@ -23,7 +23,7 @@ public class CancelStrengthBonus implements ModifierSourceProducer {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
                 return new CancelStrengthBonusTargetModifier(actionContext.getSource(),
-                        new RequirementCondition(requirements, actionContext),
+                        RequirementCondition.createCondition(requirements, actionContext),
                         filterableSource.getFilterable(actionContext),
                         fromFilterableSource.getFilterable(actionContext));
             }

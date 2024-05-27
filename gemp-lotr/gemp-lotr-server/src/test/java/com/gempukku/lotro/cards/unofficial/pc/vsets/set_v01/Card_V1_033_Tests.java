@@ -78,7 +78,7 @@ public class Card_V1_033_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(3);
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.MARSH));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowPlayCard(ttent);
 
@@ -117,7 +117,7 @@ public class Card_V1_033_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(16);
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), Keyword.MARSH));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(ftentacle1);

@@ -7,11 +7,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 
 public abstract class AbstractExtraPlayCostModifier extends AbstractModifier implements ExtraPlayCost {
-
-    public AbstractExtraPlayCostModifier(PhysicalCard source, String text, Filterable affectFilter) {
-        super(source, text, affectFilter, ModifierEffect.EXTRA_COST_MODIFIER);
-    }
-
     public AbstractExtraPlayCostModifier(PhysicalCard source, String text, Filterable affectFilter, Condition condition) {
         super(source, text, affectFilter, condition, ModifierEffect.EXTRA_COST_MODIFIER);
     }
