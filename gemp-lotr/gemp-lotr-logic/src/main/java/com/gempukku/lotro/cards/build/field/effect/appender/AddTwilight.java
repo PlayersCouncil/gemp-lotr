@@ -14,6 +14,7 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.decisions.IntegerAwaitingDecision;
 import com.gempukku.lotro.logic.effects.AddTwilightEffect;
 import com.gempukku.lotro.logic.effects.PlayoutDecisionEffect;
+import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import org.json.simple.JSONObject;
@@ -31,8 +32,9 @@ public class AddTwilight implements EffectAppenderProducer {
                 new DelayedAppender() {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                        final int min = valueSource.getMinimum(actionContext);
-                        final int max = valueSource.getMaximum(actionContext);
+                        Evaluator evaluator = valueSource.getEvaluator(actionContext);
+                        final int min = evaluator.getMinimum(actionContext.getGame(), null);
+                        final int max = evaluator.getMaximum(actionContext.getGame(), null);
                         if (min != max) {
                             return new PlayoutDecisionEffect(
                                     actionContext.getPerformingPlayer(),

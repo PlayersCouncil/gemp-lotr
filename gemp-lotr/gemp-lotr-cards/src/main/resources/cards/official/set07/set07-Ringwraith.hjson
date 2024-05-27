@@ -452,31 +452,8 @@
 		        skipValidate: true
 		        cost: [
                     {
-                        type: chooseANumber
-                        text: Choose how many threats to add
-                        from: 0
-                        to: {
-                            type: min
-                            firstNumber: {
-                                type: subtract
-                                firstNumber: {
-                                    type: forEachYouCanSpot
-                                    filter: companion
-                                }
-                                secondNumber: {
-                                    type: forEachThreat
-                                }
-                            }
-                            secondNumber: 3
-                        }
-                        memorize: threatCount
-                    }
-                    {
                         type: addThreats
-                        amount: {
-                            type: fromMemory
-                            memory: threatCount
-                        }
+                        amount: 0-3
                     }
                 ]
 		    }

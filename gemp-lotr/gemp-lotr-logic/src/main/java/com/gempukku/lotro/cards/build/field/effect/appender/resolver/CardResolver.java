@@ -13,6 +13,7 @@ import com.gempukku.lotro.logic.effects.ChooseActiveCardsEffect;
 import com.gempukku.lotro.logic.effects.ChooseArbitraryCardsEffect;
 import com.gempukku.lotro.logic.effects.choose.*;
 import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
+import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
@@ -349,7 +350,7 @@ public class CardResolver {
     }
 
     public static EffectAppender resolveCard(String type, FilterableSource additionalFilter, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        return resolveCards(type, additionalFilter, new ConstantEvaluator(1), memory, choicePlayer, choiceText, environment);
+        return resolveCards(type, additionalFilter, actionContext -> new ConstantEvaluator(1), memory, choicePlayer, choiceText, environment);
     }
 
     public static EffectAppender resolveCard(String type, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
@@ -374,24 +375,24 @@ public class CardResolver {
             return new DelayedAppender() {
                 @Override
                 public boolean isPlayableInFull(ActionContext actionContext) {
-                    int min = countSource.getMinimum(actionContext);
+                    int min = countSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null);
                     return filterCards(actionContext, playabilityFilter).size() >= min;
                 }
 
                 @Override
                 protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                     Collection<PhysicalCard> result = filterCards(actionContext, additionalFilter);
+                    Evaluator evaluator = countSource.getEvaluator(actionContext);
                     return new AbstractEffect() {
                         @Override
                         public boolean isPlayableInFull(LotroGame game) {
-                            int min = countSource.getMinimum(actionContext);
-                            return result.size() >= min;
+                            return true;
                         }
 
                         @Override
                         protected FullEffectResult playEffectReturningResult(LotroGame game) {
                             actionContext.setCardMemory(memory, result);
-                            int min = countSource.getMinimum(actionContext);
+                            int min = evaluator.getMinimum(game, null);
                             if (result.size() >= min) {
                                 return new FullEffectResult(true);
                             } else {
@@ -441,24 +442,24 @@ public class CardResolver {
         return new DelayedAppender() {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
-                int min = countSource.getMinimum(actionContext);
+                int min = countSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null);
                 return filterCards(actionContext, playabilityFilter).size() >= min;
             }
 
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                Evaluator evaluator = countSource.getEvaluator(actionContext);
                 Collection<PhysicalCard> result = filterCards(actionContext, choiceFilter);
                 return new AbstractEffect() {
                     @Override
                     public boolean isPlayableInFull(LotroGame game) {
-                        int min = countSource.getMinimum(actionContext);
-                        return result.size() >= min;
+                        return true;
                     }
 
                     @Override
                     protected FullEffectResult playEffectReturningResult(LotroGame game) {
                         actionContext.setCardMemory(memory, result);
-                        int min = countSource.getMinimum(actionContext);
+                        int min = evaluator.getMinimum(game, null);
                         if (result.size() >= min) {
                             return new FullEffectResult(true);
                         } else {
@@ -489,7 +490,7 @@ public class CardResolver {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 if (playabilityFilter != null) {
-                    int min = countSource.getMinimum(actionContext);
+                    int min = countSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null);
                     return filterCards(actionContext, playabilityFilter).size() >= min;
                 } else {
                     return true;
@@ -498,18 +499,18 @@ public class CardResolver {
 
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                Evaluator evaluator = countSource.getEvaluator(actionContext);
                 Collection<PhysicalCard> result = filterCards(actionContext, choiceFilter);
                 return new AbstractEffect() {
                     @Override
                     public boolean isPlayableInFull(LotroGame game) {
-                        int min = countSource.getMinimum(actionContext);
-                        return result.size() >= min;
+                        return true;
                     }
 
                     @Override
                     protected FullEffectResult playEffectReturningResult(LotroGame game) {
                         actionContext.setCardMemory(memory, result);
-                        int min = countSource.getMinimum(actionContext);
+                        int min = evaluator.getMinimum(game, null);
                         if (result.size() >= min) {
                             return new FullEffectResult(true);
                         } else {
@@ -537,14 +538,15 @@ public class CardResolver {
         return new DelayedAppender() {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
-                int min = countSource.getMinimum(actionContext);
+                int min = countSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null);
                 return filterCards(actionContext, playabilityFilter).size() >= min;
             }
 
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                int min = countSource.getMinimum(actionContext);
-                int max = countSource.getMaximum(actionContext);
+                Evaluator evaluator = countSource.getEvaluator(actionContext);
+                int min = evaluator.getMinimum(actionContext.getGame(), null);
+                int max = evaluator.getMaximum(actionContext.getGame(), null);
                 return effectSource.createEffect(filterCards(actionContext, choiceFilter), action, actionContext, min, max);
             }
 

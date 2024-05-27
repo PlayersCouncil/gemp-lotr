@@ -41,7 +41,7 @@ public class AddKeyword implements EffectAppenderProducer {
         if (keywordString.startsWith("fromMemory(") && keywordString.endsWith(")")) {
             String keywordMemory = keywordString.substring(keywordString.indexOf("(") + 1, keywordString.lastIndexOf(")"));
             keywordFunction = actionContext -> Keyword.valueOf(actionContext.getValueFromMemory(keywordMemory));
-            amount = new ConstantEvaluator(1);
+            amount = actionContext -> new ConstantEvaluator(1);
         } else {
             final String[] keywordSplit = keywordString.split("\\+");
             Keyword keyword = FieldUtils.getEnum(Keyword.class, keywordSplit[0], "keyword");

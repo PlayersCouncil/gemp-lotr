@@ -33,9 +33,9 @@
 				    type: modifyStrength
 				    filter: choose(character,inSkirmishAgainst(culture(orc),orc))
 				    amount: {
-				        type: multiply
+				        type: fromMemory
+				        memory: spotCount
 				        multiplier: -1
-				        source: memory(spotCount)
 				    }
 				}
 			]

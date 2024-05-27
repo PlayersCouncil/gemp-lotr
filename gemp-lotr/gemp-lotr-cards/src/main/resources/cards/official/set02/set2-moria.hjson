@@ -693,12 +693,9 @@
                 type: play
                 filter: choose(name(The Balrog))
                 cost: {
-                    type: multiply
+                    type: forEachInMemory
+                    memory: revealedCards
                     multiplier: -2
-                    source: {
-                        type: forEachInMemory
-                        memory: revealedCards
-                    }
                 }
             }
         }

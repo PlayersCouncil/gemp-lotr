@@ -352,12 +352,9 @@
 				filter: dwarf
 				keyword: damage
 				amount: {
-					type: limit
-					limit: 2
-					value: {
-						type: forEachStacked
-						on: self
-					}
+                    type: forEachStacked
+                    on: self
+                    limit: 2
 				}
 			}
 		}
@@ -966,12 +963,9 @@
         type: modifyArcheryTotal
         side: shadow
         amount: {
-          type: multiply
-          source: {
             type: forEachInMemory
             memory: stackedCards
-          }
-          multiplier: -1
+            multiplier: -1
         }
       }
     }

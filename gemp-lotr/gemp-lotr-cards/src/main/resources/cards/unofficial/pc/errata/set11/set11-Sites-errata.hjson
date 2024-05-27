@@ -28,15 +28,12 @@
 					type: modifyArcheryTotal
 					side: shadow
 					amount: {
-						type: multiply
-						source: {
-							type: forEachYouCanSpot
-							filter: companion
-							over: 5
-						}
-						multiplier: {
-							type: regionNumber
-						}
+                        type: forEachYouCanSpot
+                        filter: companion
+                        over: 5
+                        multiplier: {
+                            type: regionNumber
+                        }
 					}
 				}
 			}

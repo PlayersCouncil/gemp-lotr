@@ -24,14 +24,6 @@ import java.util.concurrent.Semaphore;
 public class LotroCardBlueprintLibrary {
     private static final Logger logger = LogManager.getLogger(LotroCardBlueprintLibrary.class);
 
-    private final String[] _packageNames =
-            new String[]{
-                    "", ".dwarven", ".dunland", ".elven", ".fallenRealms", ".gandalf", ".gollum", ".gondor", ".isengard", ".men", ".orc",
-                    ".raider", ".rohan", ".moria", ".wraith", ".sauron", ".shire", ".site", ".uruk_hai",
-
-                    //Additional Hobbit Draft packages
-                    ".esgaroth", ".gundabad", ".smaug", ".spider", ".troll"
-            };
     private final Map<String, LotroCardBlueprint> _blueprints = new HashMap<>();
     private final Map<String, String> _blueprintMapping = new HashMap<>();
     private final Map<String, Set<String>> _fullBlueprintMapping = new HashMap<>();

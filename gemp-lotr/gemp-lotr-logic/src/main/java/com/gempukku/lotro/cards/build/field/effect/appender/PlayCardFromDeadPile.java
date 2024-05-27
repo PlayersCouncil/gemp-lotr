@@ -59,7 +59,7 @@ public class PlayCardFromDeadPile implements EffectAppenderProducer {
 
                             return Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, true, true);
                         },
-                        new ConstantEvaluator(1), memorize, "you", "Choose card to play", environment));
+                        actionContext -> new ConstantEvaluator(1), memorize, "you", "Choose card to play", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

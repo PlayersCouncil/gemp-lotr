@@ -30,7 +30,7 @@ public class RemoveCharacterFromSkirmish implements EffectAppenderProducer {
         result.addEffectAppender(
                 CardResolver.resolveCards(filter,
                         (actionContext) -> Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource()),
-                        new ConstantEvaluator(1), memory, player, "Choose characters to remove from skirmish", environment));
+                        actionContext -> new ConstantEvaluator(1), memory, player, "Choose characters to remove from skirmish", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

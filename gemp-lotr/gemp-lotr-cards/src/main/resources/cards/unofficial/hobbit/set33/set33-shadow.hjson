@@ -1227,13 +1227,10 @@
 					type: modifyStrength
 					filter: choose(orc)
 					 amount: {
-						type: multiply
+                        type: forEachMatchingInMemory
+                        memory: shuffledOrcs
+                        filter: orc
 						multiplier: 3
-						source: {
-							type: forEachMatchingInMemory
-							memory: shuffledOrcs
-							filter: orc
-						}
 					}
 				}
 			]

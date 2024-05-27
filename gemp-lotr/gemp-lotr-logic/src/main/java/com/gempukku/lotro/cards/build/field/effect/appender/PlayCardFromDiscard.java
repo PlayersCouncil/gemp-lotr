@@ -68,7 +68,7 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
 
                             return Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, false, true);
                         },
-                        countEvaluator, memorize, "you", "Choose card to play", environment));
+                        actionContext -> countEvaluator, memorize, "you", "Choose card to play", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

@@ -50,7 +50,7 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                             }
                             return Filters.playable(game, removedTwilight, costModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
                         },
-                        new ConstantEvaluator(1), memorize, "you", "you", "Choose card to play from hand", false, environment));
+                        actionContext -> new ConstantEvaluator(1), memorize, "you", "you", "Choose card to play from hand", false, environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

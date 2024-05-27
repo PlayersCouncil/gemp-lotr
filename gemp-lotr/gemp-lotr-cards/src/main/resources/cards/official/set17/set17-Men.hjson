@@ -903,11 +903,8 @@
                     type: playCardFromDiscard
                     filter: choose(culture(men),minion)
                     cost: {
-                        type: multiply
-                        source: {
-                            type: forEachInMemory
-                            memory: discardedMinions
-                        }
+                        type: forEachInMemory
+                        memory: discardedMinions
                         multiplier: -1
                     }
                 }
@@ -1266,18 +1263,13 @@
 		        phase: maneuver
 		        cost: [
 		            {
-		                type: memorizeNumber
-		                memory: maxCount
-		                amount: {
+		                type: chooseANumber
+		                from: 0
+		                to: {
                             type: forEachStacked
                             filter: culture(men),minion
                             on: culture(men),possession
-		                }
-		            }
-		            {
-		                type: chooseANumber
-		                from: 0
-		                to: memory(maxCount)
+                        }
 		                text: Choose how many {men} minions to spot
 		                memorize: spotCount
 		            }

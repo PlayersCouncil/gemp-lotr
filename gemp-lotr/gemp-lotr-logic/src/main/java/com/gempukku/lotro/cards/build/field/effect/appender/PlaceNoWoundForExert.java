@@ -33,7 +33,7 @@ public class PlaceNoWoundForExert implements EffectAppenderProducer {
                         (actionContext) -> {
                             final ExertCharactersEffect exertEffect = (ExertCharactersEffect) actionContext.getEffect();
                             return Filters.in(exertEffect.getAffectedCardsMinusPrevented(actionContext.getGame()));
-                        }, new ConstantEvaluator(1), "_temp", "you", "Choose characters to not place wound on", environment));
+                        }, actionContext -> new ConstantEvaluator(1), "_temp", "you", "Choose characters to not place wound on", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

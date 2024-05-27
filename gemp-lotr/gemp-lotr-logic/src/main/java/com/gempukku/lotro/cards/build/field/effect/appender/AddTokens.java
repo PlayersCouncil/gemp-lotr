@@ -40,7 +40,7 @@ public class AddTokens implements EffectAppenderProducer {
 
         result.addEffectAppender(
                 CardResolver.resolveCards(filter,
-                        new ConstantEvaluator(1), memory, "you", "Choose card to put tokens on", environment));
+                        actionContext -> new ConstantEvaluator(1), memory, "you", "Choose card to put tokens on", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

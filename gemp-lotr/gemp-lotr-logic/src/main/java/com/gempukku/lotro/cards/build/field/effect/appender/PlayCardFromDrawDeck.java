@@ -35,8 +35,6 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
         boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
         boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
 
-        // Even if you have the matching card in deck, you can choose not to play it
-        ValueSource countSource = new RangeEvaluator(0, 1);
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
@@ -54,7 +52,9 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
                             }
                             return Filters.playable(actionContext.getGame(), costModifier, false, false, true);
                         },
-                        countSource, memorize, "you", "you", showAll, "Choose card to play", environment));
+                        // Even if you have the matching card in deck, you can choose not to play it
+                        actionContext -> new RangeEvaluator(0, 1),
+                        memorize, "you", "you", showAll, "Choose card to play", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

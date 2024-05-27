@@ -13,6 +13,7 @@ import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.effects.PlayoutDecisionEffect;
+import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
@@ -45,8 +46,9 @@ public class ChooseArbitraryCards implements EffectAppenderProducer {
                 Collection<? extends PhysicalCard> cards = actionContext.getCardsFromMemory(fromMemory);
                 Collection<PhysicalCard> selectableCards = Filters.filter(cards, actionContext.getGame(), filterableSource.getFilterable(actionContext));
 
-                int minimum = Math.min(selectableCards.size(), valueSource.getMinimum(actionContext));
-                int maximum = Math.min(selectableCards.size(), valueSource.getMaximum(actionContext));
+                Evaluator evaluator = valueSource.getEvaluator(actionContext);
+                int minimum = Math.min(selectableCards.size(), evaluator.getMinimum(actionContext.getGame(), null));
+                int maximum = Math.min(selectableCards.size(), evaluator.getMaximum(actionContext.getGame(), null));
 
                 String choosingPlayer = playerSource.getPlayer(actionContext);
 

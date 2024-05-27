@@ -32,7 +32,7 @@ public class TransferFromDiscard implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDiscard(filter, new ConstantEvaluator(1), "_temp1", "you", "Choose card to transfer", environment));
+                CardResolver.resolveCardsInDiscard(filter, actionContext -> new ConstantEvaluator(1), "_temp1", "you", "Choose card to transfer", environment));
         result.addEffectAppender(
                 CardResolver.resolveCards(where,
                         actionContext -> (Filter) (game, physicalCard) -> {

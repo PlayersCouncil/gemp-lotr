@@ -32,7 +32,7 @@ public class PreventExert implements EffectAppenderProducer {
                         (actionContext) -> {
                             final PreventableCardEffect preventableEffect = (PreventableCardEffect) actionContext.getEffect();
                             return Filters.in(preventableEffect.getAffectedCardsMinusPrevented(actionContext.getGame()));
-                        }, new ConstantEvaluator(1), "_temp", "you", "Choose characters to prevent effect to", environment));
+                        }, actionContext -> new ConstantEvaluator(1), "_temp", "you", "Choose characters to prevent effect to", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

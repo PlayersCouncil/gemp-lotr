@@ -32,7 +32,7 @@ public class NegateWound implements EffectAppenderProducer {
                         (actionContext) -> {
                             final WoundCharactersEffect woundEffect = (WoundCharactersEffect) actionContext.getEffect();
                             return Filters.in(woundEffect.getAffectedCardsMinusPrevented(actionContext.getGame()));
-                        }, new ConstantEvaluator(1), "_temp", "you", "Choose characters to negate wound to", environment));
+                        }, actionContext -> new ConstantEvaluator(1), "_temp", "you", "Choose characters to negate wound to", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

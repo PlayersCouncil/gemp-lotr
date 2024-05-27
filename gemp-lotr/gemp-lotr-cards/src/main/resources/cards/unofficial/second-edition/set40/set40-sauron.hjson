@@ -100,12 +100,9 @@
 				type: modifyStrength
 				filter: choose(character,inSkirmishAgainst(culture(sauron),orc))
 				amount: {
-					type: multiply
+                    type: fromMemory
+                    memory: spottedBurdens
 					multiplier: -1
-					source: {
-						type: fromMemory
-						memory: spottedBurdens
-					}
 				}
 			}
 		}

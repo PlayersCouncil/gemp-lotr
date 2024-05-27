@@ -464,16 +464,13 @@
 					type: modifyStrength
 					filter: choose(culture(dwarven),character)
 					amount: {
-						type: multiply
-						multiplier: -1
-						source: {
-							type: cardAffectedLimitPerPhase
-							limit: 3
-							source: {
-								type: forEachYouCanSpot
-								filter: culture(elven),ally
-							}
-						}
+                        type: cardAffectedLimitPerPhase
+                        limit: 3
+                        source: {
+                            type: forEachYouCanSpot
+                            filter: culture(elven),ally
+                        }
+                        multiplier: -1
 					}
 				}
 			}

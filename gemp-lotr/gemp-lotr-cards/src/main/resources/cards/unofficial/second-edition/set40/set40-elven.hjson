@@ -255,12 +255,9 @@
 			{
 				type: modifyOwnCost
 				amount: {
-					type: multiply
+                    type: forEachYouCanSpot
+                    filter: unwounded,culture(elven),archer,companion
 					multiplier: -1
-					source: {
-						type: forEachYouCanSpot
-						filter: unwounded,culture(elven),archer,companion
-					}
 				}
 			}
 			{

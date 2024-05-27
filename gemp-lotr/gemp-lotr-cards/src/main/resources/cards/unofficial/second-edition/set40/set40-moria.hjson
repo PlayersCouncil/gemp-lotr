@@ -294,13 +294,10 @@
 		effects: {
 			type: modifyOwnCost
 			amount: {
-				type: multiply
+                type: forEachStacked
+                on: culture(moria),condition
+                filter: goblin
 				multiplier: -1
-				source: {
-					type: forEachStacked
-					on: culture(moria),condition
-					filter: goblin
-				}
 			}
 		}
 	}

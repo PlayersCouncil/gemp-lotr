@@ -41,9 +41,9 @@
 				    type: modifyStrength
 				    filter: choose(elf)
 				    amount: {
-				        type: multiply
+				        type: fromMemory
+				        memory: cardCount
 				        multiplier: 2
-				        source: memory(cardCount)
 				    }
 				}
 				{

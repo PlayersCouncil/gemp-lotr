@@ -163,7 +163,11 @@ public class PlayConditions {
     }
 
     public static boolean canAddThreat(LotroGame game, PhysicalCard card, int count) {
-        return Filters.countActive(game, CardType.COMPANION) - game.getGameState().getThreats() >= count;
+        return getMaxAddThreatCount(game) >= count;
+    }
+
+    public static int getMaxAddThreatCount(LotroGame game) {
+        return Filters.countActive(game, CardType.COMPANION) - game.getGameState().getThreats();
     }
 
     public static boolean canPlayFromDiscard(String playerId, LotroGame game, Filterable... filters) {

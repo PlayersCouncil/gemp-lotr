@@ -78,18 +78,8 @@
 		        }
 		        effect: [
                     {
-                        type: chooseANumber
-                        from: 0
-                        to: 2
-                        text: Choose number of burdens to remove
-                        memorize: number
-                    }
-                    {
                         type: removeBurdens
-                        amount: {
-                            type: fromMemory
-                            memory: number
-                        }
+                        amount: 0-2
                     }
                 ]
 		    }

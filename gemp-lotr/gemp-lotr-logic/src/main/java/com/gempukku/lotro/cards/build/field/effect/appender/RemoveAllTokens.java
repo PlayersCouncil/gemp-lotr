@@ -33,7 +33,7 @@ public class RemoveAllTokens implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
         result.addEffectAppender(
                 CardResolver.resolveCards(filter,
-                        new ConstantEvaluator(1), memory, "you", "Choose card to remove tokens from", environment));
+                        actionContext -> new ConstantEvaluator(1), memory, "you", "Choose card to remove tokens from", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

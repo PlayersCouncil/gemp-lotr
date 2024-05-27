@@ -327,12 +327,9 @@
 						type: discardTopCardsFromDeck
 						forced: false
 						count: {
-							type: multiply
+                            type: fromMemory
+                            memory: chosenNumber
 							multiplier: 5
-							source: {
-								type: fromMemory
-								memory: chosenNumber
-							}
 						}
 					}
 				]

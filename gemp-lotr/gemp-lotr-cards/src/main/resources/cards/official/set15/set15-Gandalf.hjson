@@ -36,6 +36,7 @@
                 }
                 {
                     type: chooseANumber
+                    text: Choose how many times to exert your companion
                     from: 0
                     to: {
                         type: subtract

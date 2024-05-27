@@ -1,14 +1,17 @@
 package com.gempukku.lotro.logic.modifiers.evaluator;
 
-import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
 public class RangeEvaluator implements Evaluator {
-    private final int _min;
-    private final int _max;
+    private final Evaluator _min;
+    private final Evaluator _max;
 
     public RangeEvaluator(int min, int max) {
+        this(new ConstantEvaluator(min), new ConstantEvaluator(max));
+    }
+
+    public RangeEvaluator(Evaluator min, Evaluator max) {
         _min = min;
         _max = max;
     }
@@ -19,12 +22,12 @@ public class RangeEvaluator implements Evaluator {
     }
 
     @Override
-    public int getMaximum(ActionContext actionContext) {
-        return _max;
+    public int getMinimum(LotroGame game, PhysicalCard cardAffected) {
+        return _min.evaluateExpression(game, cardAffected);
     }
 
     @Override
-    public int getMinimum(ActionContext actionContext) {
-        return _min;
+    public int getMaximum(LotroGame game, PhysicalCard cardAffected) {
+        return _max.evaluateExpression(game, cardAffected);
     }
 }

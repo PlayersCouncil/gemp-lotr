@@ -30,7 +30,7 @@ public class DisableSkirmishAssignment implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, new ConstantEvaluator(1), "_temp", "you", "Choose characters that you want to make unable to be assigned to skirmish", environment));
+                CardResolver.resolveCards(filter, actionContext -> new ConstantEvaluator(1), "_temp", "you", "Choose characters that you want to make unable to be assigned to skirmish", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

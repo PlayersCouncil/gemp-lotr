@@ -642,13 +642,10 @@
 					type: modifyCost
 					filter: culture(isengard),event
 					amount: {
-						type: multiply
+                        type: forEachStacked
+                        on: self
+                        filter: minion
 						multiplier: -1
-						source: {
-							type: forEachStacked
-							on: self
-							filter: minion
-						}
 					}
 				}
 			}
@@ -866,13 +863,10 @@
         player: fp
         filter: choose(companion)
         count: {
-          type: limit
-          limit: 3
-          value: {
             type: forEachStacked
             on: culture(isengard),artifact
             filter: culture(isengard),spell
-          }
+            limit: 3
         }
       }
     }
@@ -979,15 +973,9 @@
           filter: choose(uruk-hai)
         }
         {
-            type: chooseANumber
-            text: How much twilight do you wish to remove
-            from: 0
-            to: twilightCount
-            memorize: twilightRemoved
-        }
-        {
             type: removeTwilight
-            amount: memory(twilightRemoved)
+            amount: any
+            memorize: twilightRemoved
         }
       ]
       effect: {

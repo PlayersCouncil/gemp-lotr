@@ -29,16 +29,10 @@
                 filter: nazgul
             }
 			cost: [
-			    {
-			        type: chooseANumber
-			        text: How much twilight do you wish to remove
-			        from: 0
-			        to: twilightCount
-			        memorize: X
-			    }
                 {
                     type: removeTwilight
-                    amount: memory(X)
+                    amount: any
+                    memorize: X
                 }
             ]
 			effect: {

@@ -48,7 +48,7 @@ public class PlayCardFromStacked implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             return Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, false, true);
                         },
-                        new ConstantEvaluator(1), onFilterableSource, memory, "you", "Choose card to play", environment));
+                        actionContext -> new ConstantEvaluator(1), onFilterableSource, memory, "you", "Choose card to play", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

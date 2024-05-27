@@ -36,7 +36,7 @@ public class DisableWounds implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, new ConstantEvaluator(1), memory, "you", "Choose cards to make take no wounds", environment));
+                CardResolver.resolveCards(filter, actionContext -> new ConstantEvaluator(1), memory, "you", "Choose cards to make take no wounds", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

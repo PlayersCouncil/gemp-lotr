@@ -1329,13 +1329,10 @@
 		                type: modifyStrength
 		                filter: choose(minion,inSkirmishAgainst(elf))
 		                amount: {
-		                    type: multiply
-		                    source: {
-                                type: forEachToken
-                                culture: elven
-                                filter: self
-                                limit: 3
-                            }
+                            type: forEachToken
+                            culture: elven
+                            filter: self
+                            limit: 3
                             multiplier: -1
 		                }
 		            }

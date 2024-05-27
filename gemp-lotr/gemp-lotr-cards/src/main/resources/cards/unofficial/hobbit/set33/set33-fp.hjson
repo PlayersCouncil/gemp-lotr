@@ -376,16 +376,12 @@
           type: modifyStrength
           filter: choose(culture(dwarven),companion)
           amount: {
-            type: multiply
-            multiplier: 1
-            source: {
               type: cardAffectedLimitPerPhase
               limit: 4
               source: {
                 type: forEachInDiscard
                 filter: event,skirmish,maxTwilight(0)
               }
-            }
           }
         }
       }

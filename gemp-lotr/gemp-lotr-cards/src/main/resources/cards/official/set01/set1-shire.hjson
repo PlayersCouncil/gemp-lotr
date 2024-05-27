@@ -258,14 +258,9 @@
 			type: event
 			cost: [
                 {
-                    type: chooseANumber
-                    text: How much twilight do you wish to add
-                    from: 0
-                    memorize: addedTwilight
-                }
-                {
                     type: addTwilight
-                    amount: memory(addedTwilight)
+                    amount: any
+                    memorize: addedTwilight
                 }
             ]
 			effect: {

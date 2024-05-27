@@ -50,7 +50,7 @@ public class RemoveTokens implements EffectAppenderProducer {
                             else
                                 return Filters.hasAnyCultureTokens(tokenCount);
                         },
-                        new ConstantEvaluator(1), memory, "you", "Choose card to remove tokens from", environment));
+                        actionContext -> new ConstantEvaluator(1), memory, "you", "Choose card to remove tokens from", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

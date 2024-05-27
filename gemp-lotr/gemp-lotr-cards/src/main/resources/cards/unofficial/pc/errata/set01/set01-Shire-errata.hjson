@@ -223,7 +223,6 @@
 							type: forEachMatchingInMemory
 							memory: revealedCards
 							filter: orc
-							limit: 2
 						}
 					}
 				}
