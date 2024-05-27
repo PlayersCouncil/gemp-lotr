@@ -173,6 +173,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("revealtopcardsofdrawdeck", new RevealTopCardsOfDrawDeck());
         effectAppenderProducers.put("sendmessage", new SendMessage());
         effectAppenderProducers.put("setfpstrengthoverride", new SetFPStrengthOverride());
+        effectAppenderProducers.put("setshadowstrengthoverride", new SetShadowStrengthOverride());
         effectAppenderProducers.put("setupextraassignmentandskirmishes", new SetupExtraAssignmentAndSkirmishes());
         effectAppenderProducers.put("shadowcanthaveinitiative", new ShadowCantHaveInitiative());
         effectAppenderProducers.put("shufflecardsfromdiscardintodrawdeck", new ShuffleCardsFromDiscardIntoDrawDeck());

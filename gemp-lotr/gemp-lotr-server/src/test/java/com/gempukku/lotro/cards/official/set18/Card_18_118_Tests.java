@@ -92,7 +92,7 @@ public class Card_18_118_Tests
         assertTrue(scn.FreepsAnyDecisionsAvailable());
         scn.FreepsAcceptOptionalTrigger();
         assertTrue(scn.FreepsAnyDecisionsAvailable());
-        assertEquals("Exert - Aragorn, Ranger of the North", scn.FreepsGetADParamAsList("results").toArray()[0]);
+        assertEquals("Exert - <div class='cardHint' value='1_89'>·Aragorn, Ranger of the North</div>", scn.FreepsGetADParamAsList("results").toArray()[0]);
         assertEquals("Add 1 burden", scn.FreepsGetADParamAsList("results").toArray()[1]);
     }
 
