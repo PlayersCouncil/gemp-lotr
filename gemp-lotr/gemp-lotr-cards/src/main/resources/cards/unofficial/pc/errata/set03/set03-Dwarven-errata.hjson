@@ -37,7 +37,7 @@
 				phase: skirmish
 				requires: {
 					type: CanSpot
-					filter: culture(dwarven),companion,InSkirmishAgainst(minion,StrengthMoreThan(9))
+					filter: culture(dwarven),companion,InSkirmishAgainst(minion,minStrength(10))
 				}
 				cost: {
 					type: exert
@@ -45,7 +45,7 @@
 				}
 				effect: {
 					type: ModifyStrength
-					filter: choose(culture(dwarven),companion,InSkirmishAgainst(minion,StrengthMoreThan(9)))
+					filter: choose(culture(dwarven),companion,InSkirmishAgainst(minion,minStrength(10)))
 					amount: 2
 				}
 			}

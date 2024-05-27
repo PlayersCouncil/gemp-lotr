@@ -33,7 +33,7 @@
                     }
                     {
                         type: spot
-                        filter: choose(companion,not(ringBearer),vitalityLessThanOrEqual(burdenCount))
+                        filter: choose(companion,not(ringBearer),maxVitality(burdenCount))
                         memorize: chosenCompanion
                     }
                     {

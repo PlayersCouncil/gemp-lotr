@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.modifiers.cost;
 
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -8,7 +9,6 @@ import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.choose.ChooseAndExertCharactersEffect;
 import com.gempukku.lotro.logic.modifiers.AbstractExtraPlayCostModifier;
 import com.gempukku.lotro.logic.modifiers.Condition;
-import com.gempukku.lotro.logic.timing.PlayConditions;
 
 public class ExertExtraPlayCostModifier extends AbstractExtraPlayCostModifier {
     private final int count;
@@ -26,7 +26,8 @@ public class ExertExtraPlayCostModifier extends AbstractExtraPlayCostModifier {
 
     @Override
     public boolean canPayExtraCostsToPlay(LotroGame game, PhysicalCard card) {
-        return PlayConditions.canExert(card, game, 1, count, exerting);
+        final Filter filter = Filters.and(exerting, Filters.character);
+        return Filters.countActive(game, filter, Filters.canExert(card, 1)) >= count;
     }
 
     @Override

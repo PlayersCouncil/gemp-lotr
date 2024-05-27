@@ -10,7 +10,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.PlayUtils;
-import com.gempukku.lotro.logic.modifiers.Condition;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 
@@ -107,47 +106,6 @@ public class Filters {
 
     // Filters available
 
-    public static Filter conditionFilter(final Filterable defaultFilters, final Condition condition, final Filterable conditionMetFilter) {
-        final Filter filter1 = changeToFilter(defaultFilters);
-        final Filter filter2 = changeToFilter(conditionMetFilter);
-        return new Filter() {
-            @Override
-            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                if (condition.isFullfilled(game))
-                    return filter2.accepts(game, physicalCard);
-                else
-                    return filter1.accepts(game, physicalCard);
-            }
-        };
-    }
-
-    public static Filter canSpotCompanionWithStrengthAtLeast(final int strength) {
-        return new Filter() {
-            @Override
-            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return Filters.canSpot(game, CardType.COMPANION, Filters.not(Filters.lessStrengthThan(strength)));
-            }
-        };
-    }
-
-    public static Filter lessVitalityThan(final int vitality) {
-        return new Filter() {
-            @Override
-            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return game.getModifiersQuerying().getVitality(game, physicalCard) < vitality;
-            }
-        };
-    }
-
-    public static Filter moreVitalityThan(final int vitality) {
-        return new Filter() {
-            @Override
-            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return game.getModifiersQuerying().getVitality(game, physicalCard) > vitality;
-            }
-        };
-    }
-
     public static Filter maxResistance(final int resistance) {
         return new Filter() {
             @Override
@@ -171,6 +129,15 @@ public class Filters {
             @Override
             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                 return game.getModifiersQuerying().getVitality(game, physicalCard) >= vitality;
+            }
+        };
+    }
+
+    public static Filter maxVitality(final int vitality) {
+        return new Filter() {
+            @Override
+            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
+                return game.getModifiersQuerying().getVitality(game, physicalCard) <= vitality;
             }
         };
     }

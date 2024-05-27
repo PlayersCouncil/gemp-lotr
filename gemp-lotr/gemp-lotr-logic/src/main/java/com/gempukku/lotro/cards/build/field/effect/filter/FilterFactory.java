@@ -490,7 +490,14 @@ public class FilterFactory {
                 });
         parameterFilters.put("race",
                 (parameter, environment) -> {
-                    if (parameter.equals("stored")) {
+                    if (parameter.startsWith("memory(") && parameter.endsWith(")")) {
+                        return actionContext -> (Filter) (game, physicalCard) -> {
+                            String memory = parameter.substring(parameter.indexOf("(") + 1, parameter.lastIndexOf(")"));
+                            Set<Race> races = actionContext.getCardsFromMemory(memory).stream().map(
+                                    (Function<PhysicalCard, Race>) cardFromMemory -> cardFromMemory.getBlueprint().getRace()).filter(Predicates.notNull()).collect(Collectors.toSet());
+                            return races.contains(physicalCard.getBlueprint().getRace());
+                        };
+                    } else if (parameter.equals("stored")) {
                         return actionContext -> (Filter) (game, physicalCard) -> {
                             final PhysicalCard.WhileInZoneData value = actionContext.getSource().getWhileInZoneData();
                             if (value != null)
@@ -507,12 +514,6 @@ public class FilterFactory {
                     }
                     throw new InvalidCardDefinitionException("Unknown race definition in filter: " + parameter
                             + ".  Do not use race() for races; instead just list the race by itself.");
-                });
-        parameterFilters.put("raceinmemory",
-                (parameter, environment) -> actionContext -> {
-                    Set<Race> races = actionContext.getCardsFromMemory(parameter).stream().map(
-                            (Function<PhysicalCard, Race>) physicalCard -> physicalCard.getBlueprint().getRace()).filter(Predicates.notNull()).collect(Collectors.toSet());
-                    return (Filter) (game, physicalCard) -> races.contains(physicalCard.getBlueprint().getRace());
                 });
         parameterFilters.put("regionnumber",
                 (parameter, environment) -> {
@@ -543,23 +544,6 @@ public class FilterFactory {
                                 return Filters.countActive(game, filterable, Filters.maxResistance(resistance - 1)) > 0;
                             }
                         };
-                    };
-                });
-        parameterFilters.put("resistancelessthan",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.maxResistance(amount - 1);
-                    };
-                });
-        parameterFilters.put("resistancemorethan",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.minResistance(amount + 1);
                     };
                 });
         parameterFilters.put("maxresistance",
@@ -651,46 +635,21 @@ public class FilterFactory {
                         return Filters.lessStrengthThan(amount);
                     };
                 });
-        parameterFilters.put("strengthmorethan",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.moreStrengthThan(amount);
-                    };
-                });
         parameterFilters.put("title", parameterFilters.get("name"));
-        parameterFilters.put("vitalitylessthan",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.lessVitalityThan(amount);
-                    };
-                });
-        parameterFilters.put("vitalitylessthanorequal",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.lessVitalityThan(amount + 1);
-                    };
-                });
         parameterFilters.put("minvitality",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
                     return (actionContext) -> {
                         int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.moreVitalityThan(amount - 1);
+                        return Filters.minVitality(amount);
                     };
                 });
-        parameterFilters.put("vitalitymorethan",
+        parameterFilters.put("maxvitality",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
                     return (actionContext) -> {
                         int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.moreVitalityThan(amount);
+                        return Filters.maxVitality(amount);
                     };
                 });
         parameterFilters.put("zone",

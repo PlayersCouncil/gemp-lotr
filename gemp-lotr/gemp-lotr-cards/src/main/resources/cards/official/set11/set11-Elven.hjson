@@ -239,7 +239,7 @@
 			effect: [
 				{
 				    type: heal
-				    filter: all(companion,resistanceMoreThan(4))
+				    filter: all(companion,minResistance(5))
 				}
 			]
 		}
@@ -566,7 +566,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(elf,resistanceMoreThan(3))
+			    filter: choose(elf,minResistance(4))
 			},
 			effect: [
 				{

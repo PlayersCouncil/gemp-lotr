@@ -180,7 +180,7 @@
 					requires: {
 						type: memoryMatches
 						memory: unboundCompanion
-						filter: resistanceLessThan(4)
+						filter: maxResistance(3)
 					}
 					true: 2
 					false: 3
@@ -1116,7 +1116,7 @@
           requires: {
             type: memoryMatches
             memory: chosenMinion
-            filter: inSkirmishAgainst(companion,not(resistanceLessThan(5)))
+            filter: inSkirmishAgainst(companion,not(maxResistance(4)))
           }
           true: -3
           false: -2

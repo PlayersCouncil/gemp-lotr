@@ -47,10 +47,6 @@
 				}
 				effect: [
 					{
-						type: ChooseOpponent
-						memorize: opp
-					}
-					{
 						type: Repeat
 						times: {
 							type: ForEachWound
@@ -58,7 +54,7 @@
 						}
 						effect: {
 							type: Wound
-							player: FromMemory(opp)
+							player: shadow
 							filter: choose(minion)
 						}
 					}

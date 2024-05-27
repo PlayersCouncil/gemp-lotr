@@ -49,7 +49,7 @@
 			type: modifier
 			modifier: {
 				type: modifyStrength
-				filter: bearer,inSkirmishAgainst(companion,resistanceLessThan(4))
+				filter: bearer,inSkirmishAgainst(companion,maxResistance(3))
 				amount: 2
 			}
 		}
@@ -158,7 +158,7 @@
 			type: event
             requires: {
                 type: canSpot
-                filter: companion,resistanceLessThan(4)
+                filter: companion,maxResistance(3)
             }
 			cost: {
 				type: discard
@@ -170,7 +170,7 @@
 					type: requires
 					requires: {
 						type: canSpot
-						filter: companion,resistanceLessThan(1)
+						filter: companion,maxResistance(0)
 					}
 					true: 2
 					false: 1
@@ -615,7 +615,7 @@
 			trigger: {
 				type: winsSkirmish
 				filter: nazgul
-				against: companion,resistanceLessThan(1)
+				against: companion,maxResistance(0)
 				memorize: winner
 				memorizeInvolving: involved
 			}
@@ -626,7 +626,7 @@
 			}
 			effect: {
 				type: kill
-				filter: choose(memory(involved),companion,resistanceLessThan(1))
+				filter: choose(memory(involved),companion,maxResistance(0))
 			}
 		}
 	}
@@ -801,7 +801,7 @@
 			}
 			requires: {
 				type: canSpot
-				filter: companion,resistanceLessThan(4)
+				filter: companion,maxResistance(3)
 			}
 			effect: {
 				type: playCardFromDrawDeck
@@ -827,11 +827,11 @@
 			phase: assignment
 			requires: {
 				type: canSpot
-	      filter: companion,resistanceLessThan(3),not(ring bearer)
+	      filter: companion,maxResistance(2),not(ring bearer)
       }
       effect: {
         type: assignFpCharacterToSkirmish
-        fpCharacter: choose(companion,resistanceLessThan(3),not(ring bearer))
+        fpCharacter: choose(companion,maxResistance(2),not(ring bearer))
         against: self
       }
     }
@@ -916,7 +916,7 @@
       }
       effect: {
         type: exert
-        filter: choose(companion,resistanceLessThan(4))
+        filter: choose(companion,maxResistance(3))
       }
     }
   }

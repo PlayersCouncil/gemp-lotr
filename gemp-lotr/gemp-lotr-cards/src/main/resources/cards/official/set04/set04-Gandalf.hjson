@@ -541,7 +541,7 @@
 			effect: [
 				{
 					type: wound
-					filter: all(minion,strengthLessThan(7))
+					filter: all(minion,maxStrength(6))
 				}
 			]
 		}

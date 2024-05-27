@@ -5,14 +5,12 @@ import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 
 public class PlayConditions {
     public static boolean canPayForShadowCard(LotroGame game, PhysicalCard self, Filterable validTargetFilter, int withTwilightRemoved, int twilightModifier, boolean ignoreRoamingPenalty) {
@@ -83,10 +81,6 @@ public class PlayConditions {
         return false;
     }
 
-    public static boolean canDiscardCardsFromHandToPlay(PhysicalCard source, LotroGame game, String playerId, int count, Filterable... cardFilter) {
-        return Filters.filter(game.getGameState().getHand(playerId), game, Filters.and(cardFilter, Filters.not(source))).size() >= count;
-    }
-
     public static boolean hasCardInAdventureDeck(LotroGame game, String playerId, int count, Filterable... cardFilters) {
         return Filters.filter(game.getGameState().getAdventureDeck(playerId), game, cardFilters).size() >= count;
     }
@@ -97,15 +91,6 @@ public class PlayConditions {
 
     public static boolean hasCardInRemoved(LotroGame game, String playerId, int count, Filterable... cardFilters) {
         return Filters.filter(game.getGameState().getRemoved(playerId), game, cardFilters).size() >= count;
-    }
-
-    public static boolean canUseFPCardDuringPhase(LotroGame game, Phase phase, PhysicalCard self) {
-        return (phase == null || game.getGameState().getCurrentPhase() == phase) && (self.getZone() == Zone.SUPPORT || self.getZone() == Zone.FREE_CHARACTERS || self.getZone() == Zone.ATTACHED);
-    }
-
-    public static boolean canUseShadowCardDuringPhase(LotroGame game, Phase phase, PhysicalCard self, int twilightCost) {
-        return (phase == null || game.getGameState().getCurrentPhase() == phase) && (self.getZone() == Zone.SUPPORT || self.getZone() == Zone.SHADOW_CHARACTERS || self.getZone() == Zone.ATTACHED)
-                && twilightCost <= game.getGameState().getTwilightPool();
     }
 
     public static boolean isPhase(LotroGame game, Phase phase) {
@@ -149,38 +134,6 @@ public class PlayConditions {
             return !isRingBearerFrodo;
         }
         return true;
-    }
-
-    public static boolean canSelfExert(PhysicalCard self, LotroGame game) {
-        return canExert(self, game, 1, 1, self);
-    }
-
-    public static boolean canSelfExert(PhysicalCard self, int times, LotroGame game) {
-        return canExert(self, game, times, 1, self);
-    }
-
-    public static boolean canExert(PhysicalCard source, LotroGame game, Filterable... filters) {
-        return canExert(source, game, 1, 1, filters);
-    }
-
-    public static boolean canExert(PhysicalCard source, LotroGame game, int times, Filterable... filters) {
-        return canExert(source, game, times, 1, filters);
-    }
-
-    public static boolean canExert(final PhysicalCard source, final LotroGame game, final int times, final int count, Filterable... filters) {
-        final Filter filter = Filters.and(filters, Filters.character);
-        return Filters.countActive(game, filter,
-                new Filter() {
-                    @Override
-                    public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                        return (game.getModifiersQuerying().getVitality(game, physicalCard) > times)
-                                && game.getModifiersQuerying().canBeExerted(game, source, physicalCard);
-                    }
-                }) >= count;
-    }
-
-    public static boolean canSpot(LotroGame game, Filterable... filters) {
-        return canSpot(game, 1, filters);
     }
 
     public static boolean isActive(LotroGame game, Filterable... filters) {
@@ -231,10 +184,6 @@ public class PlayConditions {
         return game.getModifiersQuerying().canAddBurden(game, performingPlayer, card);
     }
 
-    public static boolean canRemoveBurdens(LotroGame game, PhysicalCard card, int count) {
-        return game.getGameState().getBurdens() >= count && game.getModifiersQuerying().canRemoveBurden(game, card);
-    }
-
     public static boolean canWound(final PhysicalCard source, final LotroGame game, final int times, final int count, Filterable... filters) {
         final Filter filter = Filters.and(filters, Filters.character);
         return Filters.countActive(game, filter,
@@ -245,20 +194,6 @@ public class PlayConditions {
                                 && game.getModifiersQuerying().canTakeWounds(game, (source != null) ? Collections.singleton(source) : Collections.emptySet(), physicalCard, times);
                     }
                 }) >= count;
-    }
-
-    public static boolean canHeal(PhysicalCard source, LotroGame game, final int count, Filterable... filters) {
-        return Filters.countActive(game, Filters.wounded, Filters.and(filters),
-                new Filter() {
-                    @Override
-                    public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                        return game.getGameState().getWounds(physicalCard) >= count && game.getModifiersQuerying().canBeHealed(game, physicalCard);
-                    }
-                }) >= 1;
-    }
-
-    public static boolean canPlayFromHand(String playerId, LotroGame game, int twilightModifier, Filterable... filters) {
-        return Filters.filter(game.getGameState().getHand(playerId), game, Filters.and(filters, Filters.playable(game, twilightModifier))).size() > 0;
     }
 
     public static boolean canPlayFromDiscard(String playerId, LotroGame game, Filterable... filters) {
@@ -273,20 +208,6 @@ public class PlayConditions {
         return Filters.filter(game.getGameState().getDiscard(playerId), game, Filters.and(filters, Filters.playable(game, modifier))).size() > 0;
     }
 
-    public static boolean canPlayFromDiscard(String playerId, LotroGame game, int withTwilightRemoved, int modifier, Filterable... filters) {
-        if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK))
-            return false;
-        return Filters.filter(game.getGameState().getDiscard(playerId), game, Filters.and(filters, Filters.playable(game, withTwilightRemoved, modifier, false, false, false))).size() > 0;
-    }
-
-    public static boolean canDiscardFromPlay(final PhysicalCard source, LotroGame game, final PhysicalCard card) {
-        return game.getModifiersQuerying().canBeDiscardedFromPlay(game, source.getOwner(), card, source);
-    }
-
-    public static boolean canSelfDiscard(PhysicalCard source, LotroGame game) {
-        return canDiscardFromPlay(source, game, source);
-    }
-
     public static boolean canDiscardFromPlay(final PhysicalCard source, LotroGame game, int count, final Filterable... filters) {
         return Filters.countActive(game, Filters.and(filters,
                 new Filter() {
@@ -297,10 +218,6 @@ public class PlayConditions {
                 })) >= count;
     }
 
-    public static boolean canDiscardFromPlay(final PhysicalCard source, LotroGame game, final Filterable... filters) {
-        return canDiscardFromPlay(source, game, 1, filters);
-    }
-
     public static boolean controlsSite(LotroGame game, String playerId) {
         return Filters.findFirstActive(game, Filters.siteControlled(playerId)) != null;
     }
@@ -308,42 +225,6 @@ public class PlayConditions {
     public static boolean canMove(LotroGame game) {
         return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_MOVE)
                 && game.getGameState().getMoveCount() < game.getModifiersQuerying().getMoveLimit(game, 2);
-    }
-
-    public static boolean canRemoveTokens(LotroGame game, PhysicalCard from, Token token) {
-        return canRemoveTokens(game, from, token, 1);
-    }
-
-    public static boolean canRemoveTokens(LotroGame game, PhysicalCard from, Token token, int count) {
-        return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS)
-                && game.getGameState().getTokenCount(from, token) >= count;
-    }
-
-    public static boolean canRemoveTokens(LotroGame game, Token token, int count, Filterable... fromFilters) {
-        return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS)
-                && Filters.filterActive(game, Filters.and(fromFilters, Filters.hasToken(token, count))).size() > 0;
-    }
-
-    public static boolean canRemoveTokensFromAnything(LotroGame game, Token token, int count) {
-        if (count <= 0)
-            return true;
-
-        GameState gameState = game.getGameState();
-        if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS))
-            return false;
-
-        int total = 0;
-        for (PhysicalCard physicalCard : Filters.filterActive(game, Filters.hasAnyCultureTokens(1))) {
-            for (Map.Entry<Token, Integer> tokenCountEntry : gameState.getTokens(physicalCard).entrySet()) {
-                if (tokenCountEntry.getKey() == token) {
-                    total += tokenCountEntry.getValue();
-                    if (total >= count)
-                        return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     public static boolean checkTurnLimit(LotroGame game, PhysicalCard card, int max) {

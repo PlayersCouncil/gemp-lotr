@@ -54,13 +54,13 @@
 				phase: assignment
 				requires: {
 					type: canSpot
-					filter: companion,strengthMoreThan(4)
+					filter: companion,minStrength(5)
 					count: 1
 				}
 				effect: {
 					type: assignFpCharacterToSkirmish
 					player: fp
-					fpCharacter: choose(companion,strengthMoreThan(4))
+					fpCharacter: choose(companion,minStrength(5))
 					against: self
 				}
 			}

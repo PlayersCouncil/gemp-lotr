@@ -593,12 +593,12 @@
 			type: responseEvent
 			trigger: {
 				type: aboutToTakeWound
-				filter: dwarf,resistanceMoreThan(2)
+				filter: dwarf,minResistance(3)
 			}
 			effect: [
 				{
 				    type: preventWound
-				    filter: choose(dwarf,resistanceMoreThan(2))
+				    filter: choose(dwarf,minResistance(3))
 				}
 			]
 		}
@@ -646,7 +646,7 @@
 				{
 				    type: playCardFromDrawDeck
 				    filter: choose(culture(dwarven),possession)
-				    on: culture(dwarven),companion,resistanceMoreThan(4)
+				    on: culture(dwarven),companion,minResistance(5)
 				}
 			]
 		}

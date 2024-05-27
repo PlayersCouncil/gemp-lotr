@@ -56,7 +56,7 @@
 						requires: {
 							type: memorymatches
 							memory: chosenMinion
-							filter: strengthLessThan(7)
+							filter: maxStrength(6)
 						}
 						effect: {
 							type: removeCardsInDiscardFromGame

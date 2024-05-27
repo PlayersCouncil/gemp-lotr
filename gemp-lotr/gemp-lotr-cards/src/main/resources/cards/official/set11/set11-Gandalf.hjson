@@ -265,7 +265,7 @@
 		                type: canSpot
 		                filter: culture(gandalf),wizard
 		            }
-		            filter: companion,resistanceMoreThan(5)
+		            filter: companion,minResistance(6)
 		            amount: 1
 		        }
 		    }
@@ -677,7 +677,7 @@
 			}
 			requires: {
 			    type: canSpot
-			    filter: companion,resistanceMoreThan(6)
+			    filter: companion,minResistance(7)
 			    count: 2
 			}
 			effect: [

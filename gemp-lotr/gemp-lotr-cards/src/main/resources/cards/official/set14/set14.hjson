@@ -344,7 +344,7 @@
 				type: modifyOwnCost
 				requires: {
 					type: canSpot
-					filter: ring bearer,resistanceMoreThan(8)
+					filter: ring bearer,minResistance(9)
 				}
 				amount: -1
 			}

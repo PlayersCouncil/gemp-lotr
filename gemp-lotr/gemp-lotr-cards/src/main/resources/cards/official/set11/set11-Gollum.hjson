@@ -27,7 +27,7 @@
 			requires: [
                 {
                     type: canSpot
-                    filter: minion,inSkirmishAgainst(side(free people),character,resistanceLessThan(3))
+                    filter: minion,inSkirmishAgainst(side(free people),character,maxResistance(2))
                 }
                 {
                     type: canSpot
@@ -37,7 +37,7 @@
 			effect: [
 				{
 				    type: wound
-				    filter: choose(side(free people),character,resistanceLessThan(3),inSkirmishAgainst(minion))
+				    filter: choose(side(free people),character,maxResistance(2),inSkirmishAgainst(minion))
 				    times: 2
 				}
 			]
@@ -137,7 +137,7 @@
 			effect: [
 				{
 				    type: wound
-				    filter: choose(unbound,companion,resistanceLessThan(7))
+				    filter: choose(unbound,companion,maxResistance(6))
 				}
 			]
 		}
@@ -300,7 +300,7 @@
 				    filter: choose(name(Sméagol))
 				    amount: {
 				        type: forEachYouCanSpot
-				        filter: companion,resistanceMoreThan(4)
+				        filter: companion,minResistance(5)
 				    }
 				}
 			]

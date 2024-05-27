@@ -474,7 +474,7 @@
 							type: conditional
 							requires: {
 								type: canSpot
-								filter: culture(gondor),man,vitalityMoreThan(2)
+								filter: culture(gondor),man,minVitality(3)
 							}
 						}
 						{
@@ -546,7 +546,7 @@
 							type: conditional
 							requires: {
 								type: canSpot
-								filter: culture(gondor),man,vitalityMoreThan(2)
+								filter: culture(gondor),man,minVitality(3)
 							}
 						}
 						{

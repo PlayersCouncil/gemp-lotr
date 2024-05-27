@@ -37,7 +37,7 @@
 				}
 				{
 				    type: discard
-				    filter: all(minion,not(raceInMemory(chosenMinion)))
+				    filter: all(minion,not(race(memory(chosenMinion))))
 				}
 			]
 		}

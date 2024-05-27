@@ -42,7 +42,7 @@
 				phase: skirmish
 				requires: {
 					type: CanSpot
-					filter: another,wounded,companion,ResistanceMoreThan(4)
+					filter: another,wounded,companion,minResistance(5)
 				}
 				cost: {
 					type: exert
@@ -51,7 +51,7 @@
 				effect: [
 					{
 						type: heal
-						filter: choose(another,wounded,companion,ResistanceMoreThan(4))
+						filter: choose(another,wounded,companion,minResistance(5))
 					}
 				]
 			}

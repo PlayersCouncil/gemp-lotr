@@ -260,11 +260,11 @@
 				effect: [
 					{
 						type: heal
-						filter: all(character,ResistanceMoreThan(4))
+						filter: all(character,minResistance(5))
 					}
 					{
 						type: exert
-						filter: all(character,ResistanceLessThan(5))
+						filter: all(character,not(minResistance(5)))
 					}
 				]
 			}
