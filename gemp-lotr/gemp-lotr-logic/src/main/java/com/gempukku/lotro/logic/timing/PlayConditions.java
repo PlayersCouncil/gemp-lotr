@@ -12,7 +12,6 @@ import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public class PlayConditions {
@@ -30,14 +29,6 @@ public class PlayConditions {
         return minimumCost <= game.getGameState().getTwilightPool() - withTwilightRemoved;
     }
 
-    private static boolean containsPhase(Phase[] phases, Phase phase) {
-        for (Phase phase1 : phases) {
-            if (phase1 == phase)
-                return true;
-        }
-        return false;
-    }
-
     public static boolean isAhead(LotroGame game) {
         String currentPlayer = game.getGameState().getCurrentPlayerId();
         int currentPosition = game.getGameState().getCurrentSiteNumber();
@@ -47,10 +38,6 @@ public class PlayConditions {
                     return false;
         }
         return true;
-    }
-
-    public static boolean canLiberateASite(LotroGame game, String performingPlayer, PhysicalCard source) {
-        return canLiberateASite(game, performingPlayer, source, null);
     }
 
     public static boolean canLiberateASite(LotroGame game, String performingPlayer, PhysicalCard source, String controlledByPlayerId) {
@@ -100,10 +87,6 @@ public class PlayConditions {
         return Filters.filter(game.getGameState().getHand(playerId), game, Filters.and(cardFilter, Filters.not(source))).size() >= count;
     }
 
-    public static boolean canRemoveFromDiscard(PhysicalCard source, LotroGame game, String playerId, int count, Filterable... cardFilters) {
-        return hasCardInDiscard(game, playerId, count, cardFilters);
-    }
-
     public static boolean hasCardInAdventureDeck(LotroGame game, String playerId, int count, Filterable... cardFilters) {
         return Filters.filter(game.getGameState().getAdventureDeck(playerId), game, cardFilters).size() >= count;
     }
@@ -116,28 +99,8 @@ public class PlayConditions {
         return Filters.filter(game.getGameState().getRemoved(playerId), game, cardFilters).size() >= count;
     }
 
-    public static boolean canRemoveFromDiscardToPlay(PhysicalCard source, LotroGame game, String playerId, int count, Filterable... cardFilter) {
-        return Filters.filter(game.getGameState().getDiscard(playerId), game, Filters.and(cardFilter, Filters.not(source))).size() >= count;
-    }
-
-    public static boolean canPlayCardDuringPhase(LotroGame game, Phase phase, PhysicalCard self) {
-        return (phase == null || game.getGameState().getCurrentPhase() == phase)
-                && self.getZone() == Zone.HAND
-                && (!self.getBlueprint().isUnique() || Filters.countActive(game, Filters.name(self.getBlueprint().getSanitizedTitle())) == 0);
-    }
-
-    public static boolean canPlayCardFromHandDuringPhase(LotroGame game, Phase[] phases, PhysicalCard self) {
-        return (phases == null || containsPhase(phases, game.getGameState().getCurrentPhase()))
-                && self.getZone() == Zone.HAND
-                && (!self.getBlueprint().isUnique() || Filters.countActive(game, Filters.name(self.getBlueprint().getSanitizedTitle())) == 0);
-    }
-
     public static boolean canUseFPCardDuringPhase(LotroGame game, Phase phase, PhysicalCard self) {
         return (phase == null || game.getGameState().getCurrentPhase() == phase) && (self.getZone() == Zone.SUPPORT || self.getZone() == Zone.FREE_CHARACTERS || self.getZone() == Zone.ATTACHED);
-    }
-
-    public static boolean canUseStackedFPCardDuringPhase(LotroGame game, Phase phase, PhysicalCard self) {
-        return (phase == null || game.getGameState().getCurrentPhase() == phase) && self.getZone() == Zone.STACKED;
     }
 
     public static boolean canUseShadowCardDuringPhase(LotroGame game, Phase phase, PhysicalCard self, int twilightCost) {
@@ -145,25 +108,12 @@ public class PlayConditions {
                 && twilightCost <= game.getGameState().getTwilightPool();
     }
 
-    public static boolean canUseStackedShadowCardDuringPhase(LotroGame game, Phase phase, PhysicalCard self, int twilightCost) {
-        return (phase == null || game.getGameState().getCurrentPhase() == phase) && self.getZone() == Zone.STACKED
-                && twilightCost <= game.getGameState().getTwilightPool();
-    }
-
     public static boolean isPhase(LotroGame game, Phase phase) {
         return (game.getGameState().getCurrentPhase() == phase);
     }
 
-    public static boolean canUseSiteDuringPhase(LotroGame game, Phase phase, PhysicalCard self) {
-        return game.getGameState().getCurrentPhase() == phase;
-    }
-
     public static boolean location(LotroGame game, Filterable... filters) {
         return Filters.and(filters).accepts(game, game.getGameState().getCurrentSite());
-    }
-
-    public static boolean isStackedOn(PhysicalCard card, LotroGame game, Filterable... filters) {
-        return Filters.and(filters).accepts(game, card.getStackedOn());
     }
 
     public static boolean checkUniqueness(LotroGame game, PhysicalCard self, boolean ignoreCheckingDeadPile) {
@@ -229,28 +179,6 @@ public class PlayConditions {
                 }) >= count;
     }
 
-    public static boolean canStackCardFromHand(PhysicalCard source, LotroGame game, String playerId, int cardCount, Filterable onto, Filterable... card) {
-        Filter cardFilter = Filters.and(card);
-        List<? extends PhysicalCard> hand = game.getGameState().getHand(playerId);
-        int count = 0;
-        for (PhysicalCard cardInHand : hand) {
-            if (cardFilter.accepts(game, cardInHand))
-                count++;
-        }
-
-        return count >= cardCount
-                && canSpot(game, onto);
-    }
-
-    public static boolean canStackDeckTopCards(PhysicalCard source, LotroGame game, String deckId, int cardCount, Filterable... onto) {
-        return game.getGameState().getDeck(deckId).size() >= cardCount
-                && canSpot(game, onto);
-    }
-
-    public static boolean canDiscardFromStacked(PhysicalCard source, LotroGame game, String playerId, final int cardCount, Filterable from, Filterable... stackedFilter) {
-        return Filters.canSpot(game, Filters.and(from, Filters.hasStacked(cardCount, stackedFilter)));
-    }
-
     public static boolean canSpot(LotroGame game, Filterable... filters) {
         return canSpot(game, 1, filters);
     }
@@ -275,11 +203,6 @@ public class PlayConditions {
         return game.getGameState().getBurdens() >= count;
     }
 
-    // "If you can spot X [elven] tokens..."
-    public static boolean canSpotCultureTokensInPlay(LotroGame game, Token token, int count) {
-        return GameUtils.getSpottableTokensTotal(game, token) >= count;
-    }
-
     // "If you can spot X [elven] tokens on conditions..."
     public static boolean canSpotCultureTokensOnCards(LotroGame game, Token token, int count, Filterable... filters) {
         return GameUtils.getSpottableCultureTokensOfType(game, token, filters) >= count;
@@ -290,10 +213,6 @@ public class PlayConditions {
     // that did not match their own native culture.
     public static boolean canSpotAllCultureTokensOnCards(LotroGame game, int count, Filterable... filters) {
         return GameUtils.getAllSpottableCultureTokens(game, filters) >= count;
-    }
-
-    public static boolean canSpotFPCultures(LotroGame game, int count, String playerId) {
-        return GameUtils.getSpottableFPCulturesCount(game, playerId) >= count;
     }
 
     public static boolean hasInitiative(LotroGame game, Side side) {
@@ -338,68 +257,8 @@ public class PlayConditions {
                 }) >= 1;
     }
 
-    public static boolean canHeal(PhysicalCard source, LotroGame game, Filterable... filters) {
-        return canHeal(source, game, 1, filters);
-    }
-
-    public static boolean canPlayFromDeck(String playerId, LotroGame game, Filterable... filters) {
-        if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK))
-            return false;
-        return true;
-    }
-
-    public static boolean canPlayFromHand(String playerId, LotroGame game, Filterable... filters) {
-        return Filters.filter(game.getGameState().getHand(playerId), game, Filters.and(filters, Filters.playable(game))).size() > 0;
-    }
-
     public static boolean canPlayFromHand(String playerId, LotroGame game, int twilightModifier, Filterable... filters) {
         return Filters.filter(game.getGameState().getHand(playerId), game, Filters.and(filters, Filters.playable(game, twilightModifier))).size() > 0;
-    }
-
-    public static boolean canPlayFromHand(String playerId, LotroGame game, int twilightModifier, boolean ignoreRoamingPenalty, Filterable... filters) {
-        return Filters.filter(game.getGameState().getHand(playerId), game, Filters.and(filters, Filters.playable(game, twilightModifier, ignoreRoamingPenalty))).size() > 0;
-    }
-
-    public static boolean canPlayFromHand(String playerId, LotroGame game, int twilightModifier, boolean ignoreRoamingPenalty, boolean ignoreCheckingDeadPile, Filterable... filters) {
-        return Filters.filter(game.getGameState().getHand(playerId), game, Filters.and(filters, Filters.playable(game, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile))).size() > 0;
-    }
-
-    public static boolean canPlayFromHand(String playerId, LotroGame game, int withTwilightRemoved, int twilightModifier, boolean ignoreRoamingPenalty, boolean ignoreCheckingDeadPile, Filterable... filters) {
-        return Filters.filter(game.getGameState().getHand(playerId), game, Filters.and(filters, Filters.playable(game, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, false))).size() > 0;
-    }
-
-    public static boolean canPlayFromDeadPile(String playerId, LotroGame game, Filterable... filters) {
-        return Filters.filter(game.getGameState().getDeadPile(playerId), game, Filters.and(filters, Filters.playable(game, 0, false, true))).size() > 0;
-    }
-
-    public static boolean canPlayFromStacked(String playerId, LotroGame game, Filterable stackedOn, Filterable... filters) {
-        final Collection<PhysicalCard> matchingStackedOn = Filters.filterActive(game, stackedOn);
-        for (PhysicalCard stackedOnCard : matchingStackedOn) {
-            if (Filters.filter(game.getGameState().getStackedCards(stackedOnCard), game, Filters.and(filters, Filters.playable(game))).size() > 0)
-                return true;
-        }
-
-        return false;
-    }
-
-    public static boolean canPlayFromStacked(String playerId, LotroGame game, int withTwilightRemoved, Filterable stackedOn, Filterable... filters) {
-        final Collection<PhysicalCard> matchingStackedOn = Filters.filterActive(game, stackedOn);
-        for (PhysicalCard stackedOnCard : matchingStackedOn) {
-            if (Filters.filter(game.getGameState().getStackedCards(stackedOnCard), game, Filters.and(filters, Filters.playable(game, withTwilightRemoved, 0, false, false, false))).size() > 0)
-                return true;
-        }
-
-        return false;
-    }
-
-    public static boolean canPlayFromStacked(String playerId, LotroGame game, int withTwilightRemoved, int twilightModifier, Filterable stackedOn, Filterable... filters) {
-        final Collection<PhysicalCard> matchingStackedOn = Filters.filterActive(game, stackedOn);
-        for (PhysicalCard stackedOnCard : matchingStackedOn) {
-            if (Filters.filter(game.getGameState().getStackedCards(stackedOnCard), game, Filters.and(filters, Filters.playable(game, withTwilightRemoved, twilightModifier, false, false, false))).size() > 0)
-                return true;
-        }
-
-        return false;
     }
 
     public static boolean canPlayFromDiscard(String playerId, LotroGame game, Filterable... filters) {
@@ -451,11 +310,6 @@ public class PlayConditions {
                 && game.getGameState().getMoveCount() < game.getModifiersQuerying().getMoveLimit(game, 2);
     }
 
-    public static boolean canRemoveAnyCultureTokens(LotroGame game, int count, Filterable... fromFilters) {
-        return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS)
-                && Filters.countActive(game, Filters.and(fromFilters, Filters.hasAnyCultureTokens(count))) > 0;
-    }
-
     public static boolean canRemoveTokens(LotroGame game, PhysicalCard from, Token token) {
         return canRemoveTokens(game, from, token, 1);
     }
@@ -496,16 +350,8 @@ public class PlayConditions {
         return game.getModifiersQuerying().getUntilEndOfTurnLimitCounter(card).getUsedLimit() < max;
     }
 
-    public static boolean checkPhaseLimit(LotroGame game, PhysicalCard card, int max) {
-        return checkPhaseLimit(game, card, null, "", max);
-    }
-
     public static boolean checkPhaseLimit(LotroGame game, PhysicalCard card, Phase phase, int max) {
         return checkPhaseLimit(game, card, phase, "", max);
-    }
-
-    public static boolean checkPhaseLimit(LotroGame game, PhysicalCard card, String prefix, int max) {
-        return checkPhaseLimit(game, card, null, prefix, max);
     }
 
     public static boolean checkPhaseLimit(LotroGame game, PhysicalCard card, Phase phase, String prefix, int max) {

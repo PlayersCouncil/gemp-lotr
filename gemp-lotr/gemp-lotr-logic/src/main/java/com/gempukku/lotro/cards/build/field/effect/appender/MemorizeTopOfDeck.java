@@ -11,6 +11,7 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolv
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
+import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import org.json.simple.JSONObject;
@@ -33,11 +34,13 @@ public class MemorizeTopOfDeck implements EffectAppenderProducer {
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                Evaluator evaluator = countSource.getEvaluator(actionContext);
+                String performingPlayer = actionContext.getPerformingPlayer();
                 return new UnrespondableEffect() {
                     @Override
                     protected void doPlayEffect(LotroGame game) {
-                        int count = countSource.getEvaluator(actionContext).evaluateExpression(game, null);
-                        Collection<? extends PhysicalCard> deck = game.getGameState().getDeck(actionContext.getPerformingPlayer());
+                        int count = evaluator.evaluateExpression(game, null);
+                        Collection<? extends PhysicalCard> deck = game.getGameState().getDeck(performingPlayer);
                         List<PhysicalCard> cards = new ArrayList<>();
                         for (PhysicalCard card : deck) {
                             cards.add(card);

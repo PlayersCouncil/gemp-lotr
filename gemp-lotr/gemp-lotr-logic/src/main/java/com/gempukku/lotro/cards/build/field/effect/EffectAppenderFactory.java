@@ -46,7 +46,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("choosehowmanyburdenstospot", new ChooseHowManyBurdensToSpot());
         effectAppenderProducers.put("choosehowmanyfpculturestospot", new ChooseHowManyFPCulturesToSpot());
         effectAppenderProducers.put("choosehowmanytospot", new ChooseHowManyToSpot());
-        effectAppenderProducers.put("choosehowmanythreatstospot", new ChooseHowManyBurdensToSpot());
+        effectAppenderProducers.put("choosehowmanythreatstospot", new ChooseHowManyThreatsToSpot());
         effectAppenderProducers.put("choosehowmanytwilighttokenstospot", new ChooseHowManyTwilightTokensToSpot());
         effectAppenderProducers.put("chooseopponent", new ChooseOpponent());
         effectAppenderProducers.put("chooseyesorno", new ChooseYesOrNo());
@@ -133,7 +133,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("putcardsfromhandonbottomofdeck", new PutCardsFromHandOnBottomOfDeck());
         effectAppenderProducers.put("putcardsfromhandontopofdeck", new PutCardsFromHandOnTopOfDeck());
         effectAppenderProducers.put("putcardsfromplayonbottomofdeck", new PutCardsFromPlayOnBottomOfDeck());
-        effectAppenderProducers.put("putcardsfromplayontopofdeck", new PutCardsFromPlayOnBottomOfDeck());
+        effectAppenderProducers.put("putcardsfromplayontopofdeck", new PutCardsFromPlayOnTopOfDeck());
         effectAppenderProducers.put("putonring", new PutOnRing());
         effectAppenderProducers.put("putplayedeventintohand", new PutPlayedEventIntoHand());
         effectAppenderProducers.put("putplayedeventonbottomofdrawdeck", new PutPlayedEventOnBottomOfDrawDeck());

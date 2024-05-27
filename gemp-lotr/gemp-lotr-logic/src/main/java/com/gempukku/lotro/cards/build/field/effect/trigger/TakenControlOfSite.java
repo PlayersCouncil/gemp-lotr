@@ -6,7 +6,8 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
-import com.gempukku.lotro.logic.timing.TriggerConditions;
+import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.results.TakeControlOfSiteResult;
 import org.json.simple.JSONObject;
 
 public class TakenControlOfSite implements TriggerCheckerProducer {
@@ -21,7 +22,12 @@ public class TakenControlOfSite implements TriggerCheckerProducer {
             @Override
             public boolean accepts(ActionContext actionContext) {
                 String playerId = playerSource.getPlayer(actionContext);
-                return TriggerConditions.takenControlOfASite(actionContext.getEffectResult(), playerId);
+                EffectResult effectResult = actionContext.getEffectResult();
+                if (effectResult.getType() == EffectResult.Type.TAKE_CONTROL_OF_SITE) {
+                    TakeControlOfSiteResult takeResult = (TakeControlOfSiteResult) effectResult;
+                    return takeResult.getPlayerId().equals(playerId);
+                }
+                return false;
             }
 
             @Override

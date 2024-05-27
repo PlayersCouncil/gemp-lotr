@@ -1102,6 +1102,15 @@ public class Filters {
         return changeToFilter(filterable).accepts(game, physicalCard);
     }
 
+    public static boolean acceptsAny(LotroGame game, Filterable filterable, Iterable<PhysicalCard> cards) {
+        Filter filter = changeToFilter(filterable);
+        for (PhysicalCard card : cards) {
+            if (filter.accepts(game, card))
+                return true;
+        }
+        return false;
+    }
+
     private static Filter orInternal(final Filter... filters) {
         return new Filter() {
             @Override

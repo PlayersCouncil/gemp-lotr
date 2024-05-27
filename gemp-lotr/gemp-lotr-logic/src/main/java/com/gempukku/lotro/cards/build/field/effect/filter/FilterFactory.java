@@ -67,6 +67,7 @@ public class FilterFactory {
                             @Override
                             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                                 Culture culture = physicalCard.getBlueprint().getCulture();
+                                // TODO - replace all Filters.filter(...).size() > 0 with Filters.acceptsAny - much faster
                                 return Filters.filter(deadPile, game, culture).size() > 0;
                             }
                         };

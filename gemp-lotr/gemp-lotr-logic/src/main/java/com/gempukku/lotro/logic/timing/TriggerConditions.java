@@ -13,23 +13,6 @@ import com.gempukku.lotro.logic.timing.results.*;
 import java.util.Objects;
 
 public class TriggerConditions {
-    public static boolean losesInitiative(EffectResult effectResult, Side side) {
-        if (effectResult.getType() == EffectResult.Type.INITIATIVE_CHANGE) {
-            InitiativeChangeResult initiativeChangeResult = (InitiativeChangeResult) effectResult;
-            if (initiativeChangeResult.getSide() != side)
-                return true;
-        }
-        return false;
-    }
-
-    public static boolean takenControlOfASite(EffectResult effectResult, String playerId) {
-        if (effectResult.getType() == EffectResult.Type.TAKE_CONTROL_OF_SITE) {
-            TakeControlOfSiteResult takeResult = (TakeControlOfSiteResult) effectResult;
-            return takeResult.getPlayerId().equals(playerId);
-        }
-        return false;
-    }
-
     public static boolean startOfPhase(LotroGame game, EffectResult effectResult, Phase phase) {
         return (effectResult.getType() == EffectResult.Type.START_OF_PHASE
                 && game.getGameState().getCurrentPhase() == phase);
@@ -48,23 +31,10 @@ public class TriggerConditions {
         return effectResult.getType() == EffectResult.Type.END_OF_TURN;
     }
 
-    public static boolean reconciles(LotroGame game, EffectResult effectResult, String playerId) {
-        return effectResult.getType() == EffectResult.Type.RECONCILE && (playerId == null || ((ReconcileResult) effectResult).getPlayerId().equals(playerId));
-    }
-
     public static boolean winsSkirmish(LotroGame game, EffectResult effectResult, Filterable... filters) {
         if (effectResult.getType() == EffectResult.Type.CHARACTER_WON_SKIRMISH) {
             CharacterWonSkirmishResult wonResult = (CharacterWonSkirmishResult) effectResult;
             return Filters.and(filters).accepts(game, wonResult.getWinner());
-        }
-        return false;
-    }
-
-    public static boolean winsSkirmishInvolving(LotroGame game, EffectResult effectResult, Filterable winnerFilter, Filterable involvingFilter) {
-        if (effectResult.getType() == EffectResult.Type.CHARACTER_WON_SKIRMISH) {
-            CharacterWonSkirmishResult wonResult = (CharacterWonSkirmishResult) effectResult;
-            return Filters.accepts(game, winnerFilter, wonResult.getWinner())
-                    && Filters.filter(wonResult.getInvolving(), game, involvingFilter).size() > 0;
         }
         return false;
     }
