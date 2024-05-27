@@ -1,0 +1,137 @@
+{
+
+	18_132: {
+		cardInfo: {
+			imagePath: decipher/LOTR18132.jpg
+			javaClass: true
+			//parentId: 18_132
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18U132
+			rarity: U
+			setNum: "18"
+			cardNum: 132
+			style: Standard
+		}
+		title: All Life Flees
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Event
+		keywords: Shadow
+		effects: {
+			type: event
+            requires: {
+                type: canSpot
+                filter: nazgul
+            }
+			cost: {
+				type: chooseAndRemoveTwilight
+				memorize: X
+			}
+			effect: {
+				type: choice
+				texts: [
+					Discard a follower from play with a twilight cost of {X}
+					Play a {wraith} minion from your draw deck with a twilight cost of {X}
+				]
+				effects: [
+					{
+						type: discard
+						filter: choose(follower,minTwilight(memory(X)),maxTwilight(memory(X)))
+					}
+					{
+						type: playCardFromDrawDeck
+						filter: choose(culture(wraith),minion,minTwilight(memory(X)),maxTwilight(memory(X)))
+					}
+				]
+			}
+		}
+		gametext: To play, spot a Nazgûl.<br>Remove (X) to choose one: discard a follower from play that has a twilight cost of X; or play from deck a [wraith] minion that has a twilight cost of X.
+		lore: A sudden unreasoning fear of discovery laid hold of Frodo, and he thought of his Ring.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_133: {
+		cardInfo: {
+			imagePath: decipher/LOTR18133.jpg
+			javaClass: true
+			//parentId: 18_133
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18R133
+			rarity: R
+			setNum: "18"
+			cardNum: 133
+			style: Standard
+		}
+		title: Pull of the Ring
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		keywords: Assignment
+		effects: {
+			type: event
+			cost: {
+			    type: removeBurdens
+			}
+			effect: [
+				{
+				    type: choice
+				    texts: [
+				        Assign a {wraith} minion to a companion who has resistance 0
+				        Have a {wraith} minion lose fierce and gain huner 2 until the regroup phase
+				    ]
+				    effects: [
+				        {
+				            type: assignFPCharacterToSkirmish
+				            fpCharacter: choose(companion,maxResistance(0))
+				            against: choose(culture(wraith),minion)
+				        }
+				        {
+				            type: multiple
+				            effects: [
+				                {
+				                    type: removeKeyword
+				                    filter: choose(culture(wraith),minion)
+				                    keyword: fierce
+				                    until: regroup
+				                    memorize: chosenMinion
+				                }
+				                {
+				                    type: addKeyword
+				                    filter: memory(chosenMinion)
+				                    keyword: hunter
+				                    amount: 2
+				                    until: regroup
+				                }
+				            ]
+				        }
+				    ]
+				}
+			]
+		}
+		gametext: Remove a burden to choose one: assign a [wraith] minion to a companion who has resistance 0; or have a [wraith] minion lose <b>fierce</b> and gain <b>hunter 2</b> until the regroup phase.
+		lore: I'm naked in the dark. There's nothing, no veil between me and the Wheel of Fire. I can see him with my waking eyes!
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}
