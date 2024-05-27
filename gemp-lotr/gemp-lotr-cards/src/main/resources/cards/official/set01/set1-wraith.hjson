@@ -487,6 +487,7 @@
 							type: transfer
 							filter: choose(name(Blade Tip),zone(support))
 							where: choose(companion,inSkirmishAgainst(memory(bearer)),not(hasAttached(name(Blade Tip))))
+							fromSupport: true
 						}
 						{
 							type: transferFromDiscard

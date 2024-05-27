@@ -133,6 +133,7 @@
 					type: transfer
 					filter: self
 					where: choose(another,culture(rohan),man)
+					checkTarget: true
 				}
 			}
 			{
