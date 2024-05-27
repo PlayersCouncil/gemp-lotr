@@ -17,7 +17,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -65,12 +64,11 @@ public class LotroCardBlueprintLibrary {
         loadSets();
         loadMappings();
         loadCards(_cardPath, true);
-        cacheAllJavaBlueprints();
         collectionReady.release();
     }
 
     public boolean SubscribeToRefreshes(ICallback callback) {
-        if(_refreshCallbacks.contains(callback))
+        if (_refreshCallbacks.contains(callback))
             return false;
 
         _refreshCallbacks.add(callback);
@@ -79,7 +77,7 @@ public class LotroCardBlueprintLibrary {
     }
 
     public boolean UnsubscribeFromRefreshes(ICallback callback) {
-        if(!_refreshCallbacks.contains(callback))
+        if (!_refreshCallbacks.contains(callback))
             return false;
 
         _refreshCallbacks.remove(callback);
@@ -106,7 +104,7 @@ public class LotroCardBlueprintLibrary {
         errataMappings = null;
         getErrata();
 
-        for(var callback : _refreshCallbacks) {
+        for (var callback : _refreshCallbacks) {
             callback.Invoke();
         }
     }
@@ -190,38 +188,47 @@ public class LotroCardBlueprintLibrary {
     private void loadCards(File path, boolean initial) {
         if (path.isFile()) {
             loadCardsFromFile(path, initial);
-        }
-        else if (path.isDirectory()) {
+        } else if (path.isDirectory()) {
             for (File file : path.listFiles()) {
                 loadCards(file, initial);
             }
         }
     }
 
-    private void loadCardsFromFile(File file, boolean validateNew) {
-        if (!JsonUtils.IsValidHjsonFile(file))
-            return;
-
+    public static Map<String, LotroCardBlueprint> loadCardsFromFile(LotroCardBlueprintBuilder cardBlueprintBuilder, InputStream inputStream) throws Exception {
+        Map<String, LotroCardBlueprint> result = new HashMap<>();
         JSONParser parser = new JSONParser();
-        try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+        try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
             //This will read both json and hjson, producing standard json
             String json = JsonValue.readHjson(reader).toString();
             final JSONObject cardsFile = (JSONObject) parser.parse(json);
             final Set<Map.Entry<String, JSONObject>> cardsInFile = cardsFile.entrySet();
             for (Map.Entry<String, JSONObject> cardEntry : cardsInFile) {
                 String blueprintId = cardEntry.getKey();
-                if (validateNew && _blueprints.containsKey(blueprintId)) {
-                    logger.error(blueprintId + " from " +
-                            file.getAbsolutePath() + " - Replacing existing card definition!");
-                }
                 final JSONObject cardDefinition = cardEntry.getValue();
                 try {
                     final var lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(blueprintId, cardDefinition);
-                    _blueprints.put(blueprintId, lotroCardBlueprint);
+                    result.put(blueprintId, lotroCardBlueprint);
                 } catch (InvalidCardDefinitionException exp) {
-                    logger.error("Unable to load card " + blueprintId +
-                            " from " + file.getAbsolutePath(), exp);
+                    logger.error("Unable to load card " + blueprintId, exp);
                 }
+            }
+        }
+        return result;
+    }
+
+    private void loadCardsFromFile(File file, boolean validateNew) {
+        if (!JsonUtils.IsValidHjsonFile(file))
+            return;
+
+        try {
+            Map<String, LotroCardBlueprint> loadedCards = loadCardsFromFile(cardBlueprintBuilder, new FileInputStream(file));
+            for (Map.Entry<String, LotroCardBlueprint> cardBlueprintEntry : loadedCards.entrySet()) {
+                String blueprintId = cardBlueprintEntry.getKey();
+                if (validateNew && _blueprints.containsKey(blueprintId))
+                    logger.error(blueprintId + " from " +
+                            file.getAbsolutePath() + " - Replacing existing card definition!");
+                _blueprints.put(blueprintId, cardBlueprintEntry.getValue());
             }
         } catch (FileNotFoundException exp) {
             logger.error("Failed to find file " + file.getAbsolutePath(), exp);
@@ -229,35 +236,10 @@ public class LotroCardBlueprintLibrary {
             logger.error("Error while loading file " + file.getAbsolutePath(), exp);
         } catch (ParseException exp) {
             logger.error("Failed to parse file " + file.getAbsolutePath(), exp);
-        }
-        catch (Exception exp) {
+        } catch (Exception exp) {
             logger.error("Unexpected error while parsing file " + file.getAbsolutePath(), exp);
         }
         logger.debug("Loaded JSON card file " + file.getName());
-    }
-
-    private void cacheAllJavaBlueprints() {
-        for (var setDef : _allSets.values()) {
-            if(!setDef.NeedsLoading())
-                continue;
-
-            logger.debug("Loading Java cards for set " + setDef.getSetId());
-            final Set<String> allCards = setDef.getAllCards();
-            for (String blueprintId : allCards) {
-                if (getBaseBlueprintId(blueprintId).equals(blueprintId)) {
-                    if (!_blueprints.containsKey(blueprintId)) {
-                        try {
-                            // Ensure it's loaded
-                            LotroCardBlueprint blueprint = findJavaBlueprint(blueprintId);
-                            blueprint.setId(blueprintId);
-                            _blueprints.put(blueprintId, blueprint);
-                        } catch (CardNotFoundException exp) {
-                            throw new RuntimeException("Unable to start the server, due to invalid (missing) card definition - " + blueprintId);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public String getBaseBlueprintId(String blueprintId) {
@@ -312,9 +294,10 @@ public class LotroCardBlueprintLibrary {
     }
 
     private Map<String, JSONDefs.ErrataInfo> errataMappings = null;
+
     public Map<String, JSONDefs.ErrataInfo> getErrata() {
         try {
-            if(errataMappings == null) {
+            if (errataMappings == null) {
                 collectionReady.acquire();
                 errataMappings = new HashMap<>();
                 for (String id : _blueprints.keySet()) {
@@ -323,28 +306,24 @@ public class LotroCardBlueprintLibrary {
                     String cardID = parts[1];
                     JSONDefs.ErrataInfo card = null;
                     String base = id;
-                    if(setID >= 50 && setID <= 69) {
+                    if (setID >= 50 && setID <= 69) {
                         base = "" + (setID - 50) + "_" + cardID;
-                    }
-                    else if(setID >= 70 && setID <= 89) {
+                    } else if (setID >= 70 && setID <= 89) {
                         base = "" + (setID - 70) + "_" + cardID;
-                    }
-                    else if(setID >= 150 && setID <= 199) {
+                    } else if (setID >= 150 && setID <= 199) {
                         base = "" + (setID - 50) + "_" + cardID;
-                    }
-                    else
+                    } else
                         continue;
 
-                    if(errataMappings.containsKey(base)) {
+                    if (errataMappings.containsKey(base)) {
                         card = errataMappings.get(base);
-                    }
-                    else {
+                    } else {
                         var basecard = _blueprints.get(base);
 
                         //This should only really happen when errata IDs are made
                         //that do not line up with their official counterparts, such
                         //as when making multiple errata candidates.
-                        if(basecard == null)
+                        if (basecard == null)
                             continue;
                         card = new JSONDefs.ErrataInfo();
                         card.BaseID = base;
@@ -386,7 +365,7 @@ public class LotroCardBlueprintLibrary {
     public LotroCardBlueprint getLotroCardBlueprint(String blueprintId) throws CardNotFoundException {
         blueprintId = stripBlueprintModifiers(blueprintId);
         LotroCardBlueprint bp = null;
-        
+
         try {
             collectionReady.acquire();
             if (_blueprints.containsKey(blueprintId)) {
@@ -394,10 +373,10 @@ public class LotroCardBlueprintLibrary {
             }
             collectionReady.release();
 
-            if(bp != null)
-                return bp;
+            if (bp == null)
+                throw new CardNotFoundException(blueprintId);
 
-            return findJavaBlueprint(blueprintId);
+            return bp;
         } catch (InterruptedException exp) {
             throw new RuntimeException("LotroCardBlueprintLibrary.getLotroCardBlueprint() interrupted: ", exp);
         }
@@ -409,49 +388,6 @@ public class LotroCardBlueprintLibrary {
         if (blueprintId.endsWith("T"))
             blueprintId = blueprintId.substring(0, blueprintId.length() - 1);
         return blueprintId;
-    }
-
-    private LotroCardBlueprint findJavaBlueprint(String blueprintId) throws CardNotFoundException {
-        if (_blueprintMapping.containsKey(blueprintId))
-            return getLotroCardBlueprint(_blueprintMapping.get(blueprintId));
-
-        String[] blueprintParts = blueprintId.split("_");
-
-        String setNumber = blueprintParts[0];
-        String cardNumber = blueprintParts[1];
-
-        for (String packageName : _packageNames) {
-            LotroCardBlueprint blueprint;
-            try {
-                blueprint = tryLoadingFromPackage(packageName, setNumber, cardNumber);
-            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException e) {
-                throw new CardNotFoundException(blueprintId);
-            }
-            if (blueprint != null)
-                return blueprint;
-        }
-
-        throw new CardNotFoundException(blueprintId);
-    }
-
-    private LotroCardBlueprint tryLoadingFromPackage(String packageName, String setNumber, String cardNumber) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
-        try {
-            Class clazz = Class.forName("com.gempukku.lotro.cards.set" + setNumber + packageName + ".Card" + setNumber + "_" + normalizeId(cardNumber));
-            return (LotroCardBlueprint) clazz.getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException | InvocationTargetException e) {
-            // Ignore
-            return null;
-        }
-    }
-
-    private String normalizeId(String blueprintPart) {
-        int id = Integer.parseInt(blueprintPart);
-        if (id < 10)
-            return "00" + id;
-        else if (id < 100)
-            return "0" + id;
-        else
-            return String.valueOf(id);
     }
 
     private void readSetRarityFile(DefaultSetDefinition rarity, String setNo, String rarityFile) throws IOException {

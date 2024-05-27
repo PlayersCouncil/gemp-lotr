@@ -21,10 +21,6 @@ public abstract class ChooseCardsFromDiscardEffect extends AbstractEffect {
     private final int _maximum;
     private final Filter _filter;
 
-    public ChooseCardsFromDiscardEffect(String playerId, int minimum, int maximum, Filterable... filters) {
-        this(playerId, playerId, minimum, maximum, filters);
-    }
-
     public ChooseCardsFromDiscardEffect(String playerId, String targetPlayerDiscardId, int minimum, int maximum, Filterable... filters) {
         _playerId = playerId;
         _targetPlayerDiscardId = targetPlayerDiscardId;

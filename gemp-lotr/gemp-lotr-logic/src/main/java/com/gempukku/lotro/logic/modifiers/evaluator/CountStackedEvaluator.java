@@ -8,7 +8,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 public class CountStackedEvaluator implements Evaluator {
     private final Filterable _stackedOn;
     private final Filterable[] _stackedCard;
-    private Integer _limit;
 
     public CountStackedEvaluator(Filterable stackedOn, Filterable... stackedCard) {
         _stackedOn = stackedOn;
@@ -21,8 +20,6 @@ public class CountStackedEvaluator implements Evaluator {
         for (PhysicalCard card : Filters.filterActive(game, _stackedOn)) {
             count += Filters.filter(game.getGameState().getStackedCards(card), game, _stackedCard).size();
         }
-        if (_limit != null)
-            return Math.min(_limit, count);
         return count;
     }
 }

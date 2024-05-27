@@ -34,21 +34,12 @@ public class ChooseAndDiscardCardsFromPlayEffect extends ChooseActiveCardsEffect
     @Override
     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
         _resultSubAction = new SubAction(_action);
-        _resultSubAction.appendEffect(new DiscardCardsFromPlayEffect(_playerId, _action.getActionSource(), Filters.in(cards)) {
-            @Override
-            protected void forEachDiscardedByEffectCallback(Collection<PhysicalCard> discardedCards) {
-                ChooseAndDiscardCardsFromPlayEffect.this.forEachDiscardedByEffectCallback(discardedCards);
-            }
-        });
+        _resultSubAction.appendEffect(new DiscardCardsFromPlayEffect(_playerId, _action.getActionSource(), Filters.in(cards)));
         game.getActionsEnvironment().addActionToStack(_resultSubAction);
         cardsToBeDiscardedCallback(cards);
     }
 
     protected void cardsToBeDiscardedCallback(Collection<PhysicalCard> cards) {
-
-    }
-
-    protected void forEachDiscardedByEffectCallback(Collection<PhysicalCard> cards) {
 
     }
 

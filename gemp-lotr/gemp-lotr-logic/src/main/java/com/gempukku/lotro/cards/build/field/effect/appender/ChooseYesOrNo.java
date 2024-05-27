@@ -32,15 +32,15 @@ public class ChooseYesOrNo implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new PlayoutDecisionEffect(playerSource.getPlayer(actionContext),
-                        new YesNoDecision(GameUtils.SubstituteText(text, actionContext)) {
+                        new YesNoDecision(GameUtils.substituteText(text, actionContext)) {
                             @Override
                             protected void yes() {
-                                actionContext.setValueToMemory(memorize, GameUtils.SubstituteText(yesAnswer, actionContext));
+                                actionContext.setValueToMemory(memorize, GameUtils.substituteText(yesAnswer, actionContext));
                             }
 
                             @Override
                             protected void no() {
-                                actionContext.setValueToMemory(memorize, GameUtils.SubstituteText(noAnswer, actionContext));
+                                actionContext.setValueToMemory(memorize, GameUtils.substituteText(noAnswer, actionContext));
                             }
                         });
             }

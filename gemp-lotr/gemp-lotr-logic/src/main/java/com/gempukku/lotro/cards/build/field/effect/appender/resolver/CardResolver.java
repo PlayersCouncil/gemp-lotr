@@ -44,12 +44,12 @@ public class CardResolver {
                     @Override
                     protected void cardsChosen(LotroGame game, Collection<PhysicalCard> stackedCards) {
                         actionContext.setCardMemory(memory, stackedCards);
-                        game.getGameState().sendMessage(GameUtils.SubstituteText("{you} chooses {" + memory + "}.", actionContext));
+                        game.getGameState().sendMessage(GameUtils.substituteText("{you} chooses {" + memory + "}.", actionContext));
                     }
 
                     @Override
                     public String getText(LotroGame game) {
-                        return GameUtils.SubstituteText(choiceText, actionContext);
+                        return GameUtils.substituteText(choiceText, actionContext);
                     }
                 };
             };
@@ -88,12 +88,12 @@ public class CardResolver {
                     @Override
                     protected void cardsChosen(LotroGame game, Collection<PhysicalCard> stackedCards) {
                         actionContext.setCardMemory(memory, stackedCards);
-                        game.getGameState().sendMessage(GameUtils.SubstituteText("{you} chooses {" + memory + "}.", actionContext));
+                        game.getGameState().sendMessage(GameUtils.substituteText("{you} chooses {" + memory + "}.", actionContext));
                     }
 
                     @Override
                     public String getText(LotroGame game) {
-                        return GameUtils.SubstituteText(choiceText, actionContext);
+                        return GameUtils.substituteText(choiceText, actionContext);
                     }
                 };
             };
@@ -160,12 +160,12 @@ public class CardResolver {
 
                         @Override
                         public String getText(LotroGame game) {
-                            return GameUtils.SubstituteText(choiceText, actionContext);
+                            return GameUtils.substituteText(choiceText, actionContext);
                         }
                     };
                 } else {
                     List<? extends PhysicalCard> cardsInHand = actionContext.getGame().getGameState().getHand(handId);
-                    return new ChooseArbitraryCardsEffect(choicePlayerId, GameUtils.SubstituteText(choiceText, actionContext), cardsInHand, Filters.in(possibleCards), min, max, showMatchingOnly) {
+                    return new ChooseArbitraryCardsEffect(choicePlayerId, GameUtils.substituteText(choiceText, actionContext), cardsInHand, Filters.in(possibleCards), min, max, showMatchingOnly) {
                         @Override
                         protected void cardsSelected(LotroGame game, Collection<PhysicalCard> selectedCards) {
                             actionContext.setCardMemory(memory, selectedCards);
@@ -261,12 +261,12 @@ public class CardResolver {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
                         actionContext.setCardMemory(memory, cards);
-                        game.getGameState().sendMessage(GameUtils.SubstituteText("{you} chooses {" + memory + "}.", actionContext));
+                        game.getGameState().sendMessage(GameUtils.substituteText("{you} chooses {" + memory + "}.", actionContext));
                     }
 
                     @Override
                     public String getText(LotroGame game) {
-                        return GameUtils.SubstituteText(choiceText, actionContext);
+                        return GameUtils.substituteText(choiceText, actionContext);
                     }
                 };
             };
@@ -297,12 +297,12 @@ public class CardResolver {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
                         actionContext.setCardMemory(memory, cards);
-                        game.getGameState().sendMessage(GameUtils.SubstituteText("{you} chooses {" + memory + "}.", actionContext));
+                        game.getGameState().sendMessage(GameUtils.substituteText("{you} chooses {" + memory + "}.", actionContext));
                     }
 
                     @Override
                     public String getText(LotroGame game) {
-                        return GameUtils.SubstituteText(choiceText, actionContext);
+                        return GameUtils.substituteText(choiceText, actionContext);
                     }
                 };
             };
@@ -338,7 +338,7 @@ public class CardResolver {
 
                     @Override
                     public String getText(LotroGame game) {
-                        return GameUtils.SubstituteText(choiceText, actionContext);
+                        return GameUtils.substituteText(choiceText, actionContext);
                     }
                 };
             };
@@ -421,11 +421,11 @@ public class CardResolver {
             final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
                 String choicePlayerId = playerSource.getPlayer(actionContext);
-                return new ChooseActiveCardsEffect(actionContext.getSource(), choicePlayerId, GameUtils.SubstituteText(choiceText, actionContext), min, max, Filters.in(possibleCards)) {
+                return new ChooseActiveCardsEffect(actionContext.getSource(), choicePlayerId, GameUtils.substituteText(choiceText, actionContext), min, max, Filters.in(possibleCards)) {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
                         actionContext.setCardMemory(memory, cards);
-                        game.getGameState().sendMessage(GameUtils.SubstituteText("{you} chooses {" + memory + "}.", actionContext));
+                        game.getGameState().sendMessage(GameUtils.substituteText("{you} chooses {" + memory + "}.", actionContext));
                     }
                 };
             };

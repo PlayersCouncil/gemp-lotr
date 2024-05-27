@@ -169,16 +169,6 @@ public class Filters {
         };
     }
 
-    public static Filter lessStrengthThan(final PhysicalCard card) {
-        return new Filter() {
-            @Override
-            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return game.getModifiersQuerying().getStrength(game, physicalCard) < game.getModifiersQuerying().getStrength(game, card);
-            }
-        };
-    }
-
-
     private static Filter possessionClass(final PossessionClass possessionClass) {
         return new Filter() {
             @Override
@@ -250,23 +240,6 @@ public class Filters {
 
     public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter) {
         return assignableToSkirmishAgainst(assignedBySide, againstFilter, false, false);
-    }
-
-    public static Filter notPreventedByEffectToAssign(final Side assignedBySide, final PhysicalCard againstCard) {
-        return new Filter() {
-            @Override
-            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                if (againstCard.getBlueprint().getSide() == Side.FREE_PEOPLE) {
-                    Map<PhysicalCard, Set<PhysicalCard>> assignment = new HashMap<>();
-                    assignment.put(againstCard, Collections.singleton(physicalCard));
-                    return game.getModifiersQuerying().isValidAssignments(game, assignedBySide, assignment);
-                } else {
-                    Map<PhysicalCard, Set<PhysicalCard>> assignment = new HashMap<>();
-                    assignment.put(physicalCard, Collections.singleton(againstCard));
-                    return game.getModifiersQuerying().isValidAssignments(game, assignedBySide, assignment);
-                }
-            }
-        };
     }
 
     public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter, final boolean ignoreUnassigned, final boolean allowAllyToSkirmish) {
@@ -360,25 +333,8 @@ public class Filters {
             }
         };
     }
-
-    public static final Filter saruman = Filters.name("Saruman");
-    public static final Filter witchKing = Filters.name(Names.witchKing);
-    public static final Filter balrog = Filters.name("The Balrog");
-
-    public static final Filter gollum = Filters.name("Gollum");
-    public static final Filter smeagol = Filters.name("Smeagol");
-    public static final Filter gollumOrSmeagol = Filters.or(gollum, smeagol);
-
-    public static final Filter aragorn = Filters.name("Aragorn");
-    public static final Filter gandalf = Filters.name("Gandalf");
-    public static final Filter gimli = Filters.name("Gimli");
-    public static final Filter arwen = Filters.name("Arwen");
-    public static final Filter legolas = Filters.name("Legolas");
-    public static final Filter boromir = Filters.name("Boromir");
     public static final Filter frodo = Filters.name("Frodo");
     public static final Filter sam = Filters.name("Sam");
-
-    public static final Filter galadriel = Filters.name("Galadriel");
 
     public static final Filter weapon = Filters.or(PossessionClass.HAND_WEAPON, PossessionClass.RANGED_WEAPON);
     public static final Filter item = Filters.or(CardType.ARTIFACT, CardType.POSSESSION);
@@ -434,24 +390,6 @@ public class Filters {
             @Override
             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                 return game.getModifiersQuerying().canTakeWounds(game, (woundSource != null) ? Collections.singleton(woundSource) : Collections.emptySet(), physicalCard, count) && game.getModifiersQuerying().getVitality(game, physicalCard) >= count;
-            }
-        };
-    }
-
-    public static Filter canTakeWounds(final Collection<PhysicalCard> woundSources, final int count) {
-        return new Filter() {
-            @Override
-            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return game.getModifiersQuerying().canTakeWounds(game, woundSources, physicalCard, count) && game.getModifiersQuerying().getVitality(game, physicalCard) >= count;
-            }
-        };
-    }
-
-    public static Filter canBeDiscarded(final PhysicalCard source) {
-        return new Filter() {
-            @Override
-            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return game.getModifiersQuerying().canBeDiscardedFromPlay(game, source.getOwner(), physicalCard, source);
             }
         };
     }
@@ -677,17 +615,6 @@ public class Filters {
                 });
     }
 
-    public static Filter isAllyInCurrentRegion() {
-        return Filters.and(
-                CardType.ALLY,
-                new Filter() {
-                    @Override
-                    public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                        return RuleUtils.isAllyInRegion(physicalCard, GameUtils.getRegion(game), game.getGameState().getCurrentSiteBlock());
-                    }
-                });
-    }
-
     public static final Filter allyAtHome = Filters.and(
             CardType.ALLY,
             new Filter() {
@@ -729,13 +656,6 @@ public class Filters {
         @Override
         public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
             return game.getGameState().getSite(game.getGameState().getCurrentSiteNumber() + 1) == physicalCard;
-        }
-    };
-
-    public static final Filter currentRegion = new Filter() {
-        @Override
-        public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-            return GameUtils.getRegion(game) == GameUtils.getRegion(physicalCard.getSiteNumber());
         }
     };
 
@@ -930,13 +850,6 @@ public class Filters {
         };
     }
 
-    public static Filter siteControlledByAnyPlayer = new Filter() {
-        @Override
-        public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-            return physicalCard.getBlueprint().getCardType() == CardType.SITE && physicalCard.getCardController() != null;
-        }
-    };
-
     public static Filter siteControlled(final String playerId) {
         return new Filter() {
             @Override
@@ -1093,7 +1006,6 @@ public class Filters {
 
     public static final Filter ringBoundCompanion = Filters.and(CardType.COMPANION, Keyword.RING_BOUND);
     public static final Filter unboundCompanion = Filters.and(CardType.COMPANION, Filters.not(Keyword.RING_BOUND));
-    public static final Filter roamingMinion = Filters.and(CardType.MINION, Keyword.ROAMING);
     public static final Filter mounted = Filters.or(Filters.hasAttached(PossessionClass.MOUNT), Keyword.MOUNTED);
 
     public static Filter spottable = (game, physicalCard) -> true;

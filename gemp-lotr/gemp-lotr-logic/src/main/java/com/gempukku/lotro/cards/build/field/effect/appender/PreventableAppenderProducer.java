@@ -43,7 +43,7 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
                 if (areCostsPlayable(actionContext)) {
                     final String preventingPlayer = preventingPlayerSource.getPlayer(actionContext);
 
-                    String textToUse = GameUtils.SubstituteText(text, actionContext);
+                    String textToUse = GameUtils.substituteText(text, actionContext);
 
                     SubAction subAction = new SubAction(action);
                     subAction.appendEffect(
@@ -51,7 +51,7 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
                                     new YesNoDecision(textToUse) {
                                         @Override
                                         protected void yes() {
-                                            actionContext.getGame().getGameState().sendMessage(GameUtils.SubstituteText("{" + player + "} chooses to prevent.", actionContext));
+                                            actionContext.getGame().getGameState().sendMessage(GameUtils.substituteText("{" + player + "} chooses to prevent.", actionContext));
                                             DelegateActionContext delegate = new DelegateActionContext(actionContext,
                                                     preventingPlayer, actionContext.getGame(), actionContext.getSource(), actionContext.getEffectResult(),
                                                     actionContext.getEffect());
@@ -64,7 +64,7 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
                                                         protected void doPlayEffect(LotroGame game) {
                                                             // If the prevention was not carried out, need to do the original action anyway
                                                             if (!subAction.wasCarriedOut()) {
-                                                                game.getGameState().sendMessage(GameUtils.SubstituteText("{" + player + "} attempted to prevent, but could not carry it out.", actionContext));
+                                                                game.getGameState().sendMessage(GameUtils.substituteText("{" + player + "} attempted to prevent, but could not carry it out.", actionContext));
                                                                 for (EffectAppender effectAppender : effectAppenders)
                                                                     effectAppender.appendEffect(false, subAction, actionContext);
                                                             } else {
@@ -87,7 +87,7 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
 
                                         @Override
                                         protected void no() {
-                                            actionContext.getGame().getGameState().sendMessage(GameUtils.SubstituteText("{" + player + "} decides not to prevent.", actionContext));
+                                            actionContext.getGame().getGameState().sendMessage(GameUtils.substituteText("{" + player + "} decides not to prevent.", actionContext));
                                             for (EffectAppender effectAppender : effectAppenders)
                                                 effectAppender.appendEffect(false, subAction, actionContext);
                                         }

@@ -36,7 +36,7 @@ public class Optional implements EffectAppenderProducer {
                 SubAction subAction = new SubAction(action);
                 subAction.appendCost(
                         new PlayoutDecisionEffect(choosingPlayer,
-                        new YesNoDecision(GameUtils.SubstituteText(text, actionContext)) {
+                                new YesNoDecision(GameUtils.substituteText(text, actionContext)) {
                             @Override
                             protected void yes() {
                                 ActionContext delegate = new DelegateActionContext(actionContext,

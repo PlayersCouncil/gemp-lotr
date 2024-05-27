@@ -37,7 +37,7 @@ public class ChooseHowManyToSpot implements EffectAppenderProducer {
                 final Filterable filterable = filterableSource.getFilterable(actionContext);
                 final int count = Filters.countSpottable(actionContext.getGame(), filterable);
                 return new PlayoutDecisionEffect(actionContext.getPerformingPlayer(),
-                        new IntegerAwaitingDecision(1, GameUtils.SubstituteText(text, actionContext), 0, count, count) {
+                        new IntegerAwaitingDecision(1, GameUtils.substituteText(text, actionContext), 0, count, count) {
                             @Override
                             public void decisionMade(String result) throws DecisionResultInvalidException {
                                 final int spotCount = getValidatedResult(result);

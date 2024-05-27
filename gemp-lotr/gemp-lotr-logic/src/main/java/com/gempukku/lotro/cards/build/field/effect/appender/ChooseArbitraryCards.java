@@ -51,7 +51,7 @@ public class ChooseArbitraryCards implements EffectAppenderProducer {
                 String choosingPlayer = playerSource.getPlayer(actionContext);
 
                 return new PlayoutDecisionEffect(choosingPlayer,
-                        new ArbitraryCardsSelectionDecision(1, GameUtils.SubstituteText(text, actionContext),
+                        new ArbitraryCardsSelectionDecision(1, GameUtils.substituteText(text, actionContext),
                                 cards, selectableCards, minimum, maximum) {
                             @Override
                             public void decisionMade(String result) throws DecisionResultInvalidException {

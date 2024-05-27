@@ -38,7 +38,7 @@ public class ChooseANumber implements EffectAppenderProducer {
                 int min = fromSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
                 Integer max = toSource != null ? toSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null) : null;
                 return new PlayoutDecisionEffect(playerSource.getPlayer(actionContext),
-                        new IntegerAwaitingDecision(1, GameUtils.SubstituteText(displayText, actionContext),
+                        new IntegerAwaitingDecision(1, GameUtils.substituteText(displayText, actionContext),
                                 min, max) {
                             @Override
                             public void decisionMade(String result) throws DecisionResultInvalidException {

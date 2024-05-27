@@ -1,0 +1,28 @@
+{
+    0_1234: {
+        title: Emyn Muil
+        twilight: 9
+        type: site
+        site: 9
+        block: fellowship
+        effects: {
+            type: modifier
+            modifier: {
+                type: ringTextIsInactive
+            }
+        }
+    }
+    0_1235: {
+        title: Emyn Muil
+        twilight: 9
+        type: site
+        site: 9
+        block: fellowship
+        effects: {
+            type: modifier
+            modifier: {
+                type: cantPreventWounds
+            }
+        }
+    }
+}

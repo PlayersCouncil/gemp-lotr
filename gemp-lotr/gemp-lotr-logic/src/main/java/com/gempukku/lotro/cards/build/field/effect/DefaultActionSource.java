@@ -64,7 +64,7 @@ public class DefaultActionSource implements ActionSource {
     @Override
     public void createAction(CostToEffectAction action, ActionContext actionContext) {
         if (text != null)
-            action.setText(GameUtils.SubstituteText(text, actionContext));
+            action.setText(GameUtils.substituteText(text, actionContext));
 
         for (EffectAppender cost : costs)
             cost.appendEffect(true, action, actionContext);

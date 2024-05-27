@@ -27,7 +27,6 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
     private boolean _discountResolved;
     private boolean _discountApplied;
 
-    private boolean _skipShuffling;
     private final Zone _fromZone;
     private final Zone _toZone;
     private PhysicalCard _playedFromCard;
@@ -46,10 +45,6 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
 
         _fromZone = card.getZone();
         _toZone = zone;
-    }
-
-    public void skipShufflingDeck() {
-        _skipShuffling = true;
     }
 
     @Override
@@ -78,10 +73,6 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
                 game.getGameState().addCardToZone(game, _permanentPlayed, Zone.VOID_FROM_HAND);
             else
                 game.getGameState().addCardToZone(game, _permanentPlayed, Zone.VOID);
-            if (playedFromZone == Zone.DECK && !_skipShuffling) {
-                game.getGameState().sendMessage(_permanentPlayed.getOwner() + " shuffles their deck");
-                game.getGameState().shuffleDeck(_permanentPlayed.getOwner());
-            }
         }
 
         if (!_discountResolved) {

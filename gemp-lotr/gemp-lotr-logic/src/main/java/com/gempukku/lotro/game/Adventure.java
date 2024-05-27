@@ -11,21 +11,21 @@ import com.gempukku.lotro.logic.timing.processes.GameProcess;
 import java.util.Set;
 
 public interface Adventure {
-    public void applyAdventureRules(LotroGame game, DefaultActionsEnvironment actionsEnvironment, ModifiersLogic modifiersLogic);
+    void applyAdventureRules(LotroGame game, DefaultActionsEnvironment actionsEnvironment, ModifiersLogic modifiersLogic);
 
-    public GameProcess getStartingGameProcess(Set<String> players, PlayerOrderFeedback playerOrderFeedback, PregameSetupFeedback pregameSetupFeedback);
+    GameProcess getStartingGameProcess(Set<String> players, PlayerOrderFeedback playerOrderFeedback, PregameSetupFeedback pregameSetupFeedback);
 
-    public GameProcess getAfterFellowshipPhaseGameProcess();
+    GameProcess getAfterFellowshipPhaseGameProcess();
 
-    public void appendNextSiteAction(SystemQueueAction action);
+    void appendNextSiteAction(SystemQueueAction action);
 
-    public GameProcess getAfterFellowshipArcheryGameProcess(int fellowshipArcheryTotal, GameProcess followingProcess);
+    GameProcess getAfterFellowshipArcheryGameProcess(int fellowshipArcheryTotal, GameProcess followingProcess);
 
-    public GameProcess getAfterFellowshipAssignmentGameProcess(Set<PhysicalCard> leftoverMinions, GameProcess followingProcess);
+    GameProcess getAfterFellowshipAssignmentGameProcess(Set<PhysicalCard> leftoverMinions, GameProcess followingProcess);
 
-    public GameProcess getBeforeFellowshipChooseToMoveGameProcess(GameProcess followingProcess);
+    GameProcess getBeforeFellowshipChooseToMoveGameProcess(GameProcess followingProcess);
 
-    public GameProcess getPlayerStaysGameProcess(LotroGame game, GameProcess followingProcess);
+    GameProcess getPlayerStaysGameProcess(LotroGame game, GameProcess followingProcess);
 
-    public boolean isSolo();
+    boolean isSolo();
 }

@@ -6,10 +6,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 
 public class CantBeOverwhelmedModifier extends AbstractModifier {
 
-    public CantBeOverwhelmedModifier(PhysicalCard source, Filterable affectFilter) {
-        this(source, affectFilter, null);
-    }
-
     public CantBeOverwhelmedModifier(PhysicalCard source, Filterable affectFilter, Condition condition) {
         super(source, "Cannot be overwhelmed", affectFilter, condition, ModifierEffect.OVERWHELM_MODIFIER);
     }

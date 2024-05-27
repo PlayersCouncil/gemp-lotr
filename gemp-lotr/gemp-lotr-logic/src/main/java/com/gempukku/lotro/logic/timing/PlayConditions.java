@@ -10,7 +10,6 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 
 import java.util.Collection;
-import java.util.Collections;
 
 public class PlayConditions {
     public static boolean canPayForShadowCard(LotroGame game, PhysicalCard self, Filterable validTargetFilter, int withTwilightRemoved, int twilightModifier, boolean ignoreRoamingPenalty) {
@@ -63,11 +62,6 @@ public class PlayConditions {
         return null;
     }
 
-
-    public static boolean canDiscardFromHand(LotroGame game, String playerId, int count, Filterable... cardFilter) {
-        return hasCardInHand(game, playerId, count, cardFilter);
-    }
-
     public static boolean hasCardInHand(LotroGame game, String playerId, int count, Filterable... cardFilter) {
         return Filters.filter(game.getGameState().getHand(playerId), game, cardFilter).size() >= count;
     }
@@ -95,10 +89,6 @@ public class PlayConditions {
 
     public static boolean isPhase(LotroGame game, Phase phase) {
         return (game.getGameState().getCurrentPhase() == phase);
-    }
-
-    public static boolean location(LotroGame game, Filterable... filters) {
-        return Filters.and(filters).accepts(game, game.getGameState().getCurrentSite());
     }
 
     public static boolean checkUniqueness(LotroGame game, PhysicalCard self, boolean ignoreCheckingDeadPile) {
@@ -174,22 +164,6 @@ public class PlayConditions {
 
     public static boolean canAddThreat(LotroGame game, PhysicalCard card, int count) {
         return Filters.countActive(game, CardType.COMPANION) - game.getGameState().getThreats() >= count;
-    }
-
-    public static boolean canRemoveThreat(LotroGame game, PhysicalCard card, int count) {
-        return game.getGameState().getThreats() >= count && game.getModifiersQuerying().canRemoveThreat(game, card);
-    }
-
-    public static boolean canWound(final PhysicalCard source, final LotroGame game, final int times, final int count, Filterable... filters) {
-        final Filter filter = Filters.and(filters, Filters.character);
-        return Filters.countActive(game, filter,
-                new Filter() {
-                    @Override
-                    public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                        return game.getModifiersQuerying().getVitality(game, physicalCard) >= times
-                                && game.getModifiersQuerying().canTakeWounds(game, (source != null) ? Collections.singleton(source) : Collections.emptySet(), physicalCard, times);
-                    }
-                }) >= count;
     }
 
     public static boolean canPlayFromDiscard(String playerId, LotroGame game, Filterable... filters) {

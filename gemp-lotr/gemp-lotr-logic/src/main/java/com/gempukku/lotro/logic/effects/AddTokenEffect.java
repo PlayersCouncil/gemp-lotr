@@ -14,10 +14,6 @@ public class AddTokenEffect extends AbstractEffect {
     private final Token _token;
     private final int _count;
 
-    public AddTokenEffect(PhysicalCard source, PhysicalCard target, Token token) {
-        this(source, target, token, 1);
-    }
-
     public AddTokenEffect(PhysicalCard source, PhysicalCard target, Token token, int count) {
         _source = source;
         _target = target;

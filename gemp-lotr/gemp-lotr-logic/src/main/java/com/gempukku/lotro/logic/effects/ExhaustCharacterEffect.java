@@ -18,10 +18,6 @@ public class ExhaustCharacterEffect extends AbstractSubActionEffect {
     private final Action _action;
     private final Filterable[] _filters;
 
-    public ExhaustCharacterEffect(PhysicalCard source, Action action, PhysicalCard physicalCard) {
-        this(source, action, Filters.sameCard(physicalCard));
-    }
-
     public ExhaustCharacterEffect(PhysicalCard source, Action action, Filterable... filters) {
         _source = source;
         _action = action;

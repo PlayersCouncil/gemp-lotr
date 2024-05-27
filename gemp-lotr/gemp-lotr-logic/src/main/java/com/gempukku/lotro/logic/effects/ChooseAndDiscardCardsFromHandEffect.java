@@ -39,18 +39,6 @@ public class ChooseAndDiscardCardsFromHandEffect extends AbstractSubActionEffect
         this(action, playerId, forced, new ConstantEvaluator(minimum), new ConstantEvaluator(maximum), filters);
     }
 
-    public ChooseAndDiscardCardsFromHandEffect(Action action, String playerId, boolean forced, int count, Filterable... filters) {
-        this(action, playerId, forced, count, count, filters);
-    }
-
-    public ChooseAndDiscardCardsFromHandEffect(Action action, String playerId, boolean forced, int count) {
-        this(action, playerId, forced, count, Filters.any);
-    }
-
-    public ChooseAndDiscardCardsFromHandEffect(Action action, String playerId, boolean forced) {
-        this(action, playerId, forced, 1);
-    }
-
     public void setText(String text) {
         _text = text;
     }
