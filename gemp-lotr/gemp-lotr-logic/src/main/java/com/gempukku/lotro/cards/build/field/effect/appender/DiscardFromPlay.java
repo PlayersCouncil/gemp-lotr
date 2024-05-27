@@ -27,6 +27,8 @@ public class DiscardFromPlay implements EffectAppenderProducer {
         final PlayerSource discardingPlayer = PlayerResolver.resolvePlayer(player, environment);
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        if (filter == null)
+            throw new InvalidCardDefinitionException("Filter is required");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String stackedCardsMemory = FieldUtils.getString(effectObject.get("memorizeStackedCards"), "memorizeStackedCards");
 

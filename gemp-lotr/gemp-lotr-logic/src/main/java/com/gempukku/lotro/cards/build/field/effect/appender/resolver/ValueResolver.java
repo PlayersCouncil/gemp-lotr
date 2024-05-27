@@ -368,13 +368,14 @@ public class ValueResolver {
                         (Evaluator) (game, cardAffected) -> Filters.filter(game.getGameState().getHand(player.getPlayer(actionContext)),
                                 game, filterableSource.getFilterable(actionContext)).size();
             } else if (type.equalsIgnoreCase("forEachInDeadPile")) {
-                FieldUtils.validateAllowedFields(object, "filter", "multiplier");
+                FieldUtils.validateAllowedFields(object, "filter", "limit", "over", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
-                final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
-                return actionContext ->
-                        (Evaluator) (game, cardAffected) -> multiplier * Filters.filter(game.getGameState().getDeadPile(game.getGameState().getCurrentPlayerId()),
-                                game, filterableSource.getFilterable(actionContext)).size();
+                return new SmartValueSource(environment, object,
+                        actionContext -> {
+                            Filterable filterable = filterableSource.getFilterable(actionContext);
+                            return (game, cardAffected) -> Filters.filter(game.getGameState().getDeadPile(game.getGameState().getCurrentPlayerId()), game, filterable).size();
+                        });
             } else if (type.equalsIgnoreCase("fromMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "limit", "over", "multiplier", "divider");
                 String memory = FieldUtils.getString(object.get("memory"), "memory");
