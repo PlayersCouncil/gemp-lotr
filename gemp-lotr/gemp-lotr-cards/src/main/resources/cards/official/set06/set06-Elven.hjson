@@ -169,7 +169,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: winsSkirmish
 		            filter: bearer

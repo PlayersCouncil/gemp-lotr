@@ -78,7 +78,7 @@
 		keywords: Plains
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: your,mounted,minion

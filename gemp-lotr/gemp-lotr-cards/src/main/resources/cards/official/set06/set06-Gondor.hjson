@@ -230,7 +230,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        text: Discard to liberate a site
 		        trigger: {
 		            type: winsSkirmish

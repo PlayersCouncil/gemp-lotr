@@ -125,7 +125,7 @@
 				}
 			}
 			{
-				type: ActivatedTrigger
+				type: Response
 				trigger: {
 					type: AboutToDiscard
 					filter: self

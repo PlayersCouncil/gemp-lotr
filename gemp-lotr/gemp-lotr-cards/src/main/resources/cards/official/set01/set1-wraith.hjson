@@ -212,7 +212,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: winsSkirmish
 					filter: nazgul
@@ -602,7 +602,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: winsSkirmish
 					filter: bearer

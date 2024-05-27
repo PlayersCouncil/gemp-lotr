@@ -833,8 +833,7 @@
 		        }
 		    }
 			{
-				type: ActivatedTrigger
-				optional: true
+				type: Response
 				trigger: {
 					type: killed
 					filter: name(Frodo),ring bearer

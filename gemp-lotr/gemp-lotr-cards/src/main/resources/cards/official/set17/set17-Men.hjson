@@ -117,7 +117,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: culture(men),minion
@@ -333,7 +333,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: played
 		            filter: skirmish,event

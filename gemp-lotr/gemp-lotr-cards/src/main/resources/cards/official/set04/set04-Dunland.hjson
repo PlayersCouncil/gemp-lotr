@@ -834,7 +834,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: culture(dunland),man
@@ -1953,7 +1953,7 @@
 		keyword: fierce
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: winsSkirmish
 		            filter: another,culture(dunland),man

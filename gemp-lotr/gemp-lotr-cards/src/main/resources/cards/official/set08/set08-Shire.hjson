@@ -290,7 +290,7 @@
 		target: or(title(Frodo),title(Sam))
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: skirmishAboutToEnd
 		            involving: bearer

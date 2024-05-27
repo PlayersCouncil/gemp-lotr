@@ -40,7 +40,7 @@
 		keyword: support area
 		effects: [
 			{
-			type: activatedTrigger
+			type: Response
 				trigger: {
 					type: abouttodiscard
 					filter: culture(sauron),condition

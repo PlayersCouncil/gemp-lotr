@@ -579,7 +579,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToDiscard
 					filter: another,condition,or(culture(gundabad),culture(mirkwood))
@@ -1187,7 +1187,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: orc

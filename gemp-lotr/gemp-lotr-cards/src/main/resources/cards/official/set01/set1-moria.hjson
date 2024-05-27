@@ -253,7 +253,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: culture(moria),orc
@@ -475,7 +475,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: winsSkirmish
 					filter: your,culture(moria),orc,inSkirmish
@@ -777,7 +777,7 @@
 		type: condition
 		keyword: support area
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: discarded
 				filter: your,culture(moria),weapon

@@ -23,7 +23,7 @@
 		resistance: 2
 		effects: [
 			{
-				type: activatedTrigger
+				type: Response
 				requires: {
 					type: ringIsActive
 				}
@@ -131,7 +131,7 @@
 				]
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: bearer

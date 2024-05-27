@@ -183,7 +183,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: [
 					{
 						type: exerts
@@ -611,7 +611,7 @@
             }
         }
       {
-        type: activatedTrigger
+        type: Response
         trigger: {
           type: winsSkirmish
           filter: your,orc,inSkirmish
@@ -659,7 +659,7 @@
         }
       }
       {
-        type: activatedTrigger
+        type: Response
         trigger: {
           type: aboutToTakeWound
           filter: orc

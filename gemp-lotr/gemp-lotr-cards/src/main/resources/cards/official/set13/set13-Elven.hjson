@@ -940,7 +940,7 @@
 		resistance: 6
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
                     type: played
                     filter: your,event

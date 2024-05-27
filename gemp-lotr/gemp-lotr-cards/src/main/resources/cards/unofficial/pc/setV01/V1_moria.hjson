@@ -8,7 +8,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: winsskirmish
 					filter: your,tentacle,inSkirmish
@@ -184,7 +184,7 @@
 				}
 			}
 			{
-				type: activatedtrigger
+				type: Response
 				trigger: {
 					type: abouttodiscard
 					filter: self

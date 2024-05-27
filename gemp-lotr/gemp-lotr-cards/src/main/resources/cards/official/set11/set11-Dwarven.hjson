@@ -417,7 +417,7 @@
 		resistance: 7
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: culture(dwarven),companion

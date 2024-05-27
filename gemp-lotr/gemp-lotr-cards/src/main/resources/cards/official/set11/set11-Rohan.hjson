@@ -41,7 +41,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: played
 		            filter: minion
@@ -286,7 +286,7 @@
 		resistance: 6
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: culture(rohan),companion,minResistance(4)
@@ -803,7 +803,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: exertsForSpecialAbility
 		            filter: minion
@@ -860,7 +860,7 @@
 		keywords: Support Area
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
                     type: discarded
                     filter: culture(rohan),possession

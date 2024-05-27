@@ -361,7 +361,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: bearer
@@ -393,7 +393,7 @@
                 }
 		    }
             {
-                type: activatedTrigger
+                type: Response
                 trigger: {
                     type: aboutToTakeWound
                     filter: culture(gondor),man
@@ -745,7 +745,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: reconciles
 				}
@@ -781,7 +781,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: reconciles
 				}
@@ -814,7 +814,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: reconciles
 				}
@@ -843,7 +843,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: winsSkirmish
 					filter: bearer

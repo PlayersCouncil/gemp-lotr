@@ -293,7 +293,7 @@
 		keywords: Valiant
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: or(and(hunter,companion),and(valiant,man))

@@ -196,7 +196,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: culture(moria),goblin
@@ -493,7 +493,7 @@
 		vitality: 2
 		site: 4
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: aboutToTakeWound
 				filter: culture(moria),goblin
@@ -563,7 +563,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: winsSkirmish
 					filter: culture(moria),goblin,inSkirmish
@@ -668,7 +668,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: discardFromHand
 					filter: goblin

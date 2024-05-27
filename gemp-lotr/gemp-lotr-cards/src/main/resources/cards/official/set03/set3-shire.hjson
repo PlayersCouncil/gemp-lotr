@@ -131,7 +131,7 @@
         allyHome: Fellowship,1
         keyword: Support Area
         effects: {
-            type: activatedTrigger
+            type: Response
             trigger: {
                 type: aboutToAddBurden
                 filter: side(shadow)
@@ -240,7 +240,7 @@
             Tale
         ]
         effects: {
-            type: activatedTrigger
+            type: Response
             trigger: {
                 type: aboutToAddTwilight
                 filter: side(shadow)

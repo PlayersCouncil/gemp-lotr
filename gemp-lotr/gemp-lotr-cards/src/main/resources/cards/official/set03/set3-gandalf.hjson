@@ -260,7 +260,7 @@
         type: condition
         keyword: Support Area
         effects: {
-            type: activatedTrigger
+            type: Response
             trigger: {
                 type: aboutToTakeWound
                 filter: companion

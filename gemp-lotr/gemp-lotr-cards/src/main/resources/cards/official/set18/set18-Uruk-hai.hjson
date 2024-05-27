@@ -869,7 +869,7 @@
 		keywords: Damage+1
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: culture(uruk-hai),minion

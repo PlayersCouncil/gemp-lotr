@@ -962,7 +962,7 @@
 		keywords: Lurker
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: another,culture(orc),minion

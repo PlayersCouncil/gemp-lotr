@@ -270,7 +270,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: reconciles
 		        }
@@ -342,7 +342,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: reconciles
 		        }

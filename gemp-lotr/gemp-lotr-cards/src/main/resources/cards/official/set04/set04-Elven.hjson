@@ -266,7 +266,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToDiscard
 		            filter: another,possession,attachedTo(bearer)

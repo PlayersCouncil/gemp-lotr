@@ -796,7 +796,7 @@
 		keyword: unhasty
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
                     type: aboutToDiscard
                     filter: unbound,hobbit
@@ -1015,7 +1015,7 @@
                 type: exertTargetExtraCost
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: killed
 		            filter: culture(isengard),minion

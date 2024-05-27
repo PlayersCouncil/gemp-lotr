@@ -645,7 +645,7 @@
 		keywords: Support Area
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: played
 		            filter: your,culture(shire),event
@@ -809,7 +809,7 @@
 		resistance: 8
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToAddBurden
 		            filter: side(shadow)

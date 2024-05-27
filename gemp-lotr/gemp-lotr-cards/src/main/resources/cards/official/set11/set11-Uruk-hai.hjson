@@ -125,7 +125,7 @@
 		keywords: Damage+1
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: usesSpecialAbility
 		            filter: companion,maxResistance(5)
@@ -463,7 +463,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: culture(uruk-hai),minion
@@ -1298,7 +1298,7 @@
 		]
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: culture(uruk-hai),minion

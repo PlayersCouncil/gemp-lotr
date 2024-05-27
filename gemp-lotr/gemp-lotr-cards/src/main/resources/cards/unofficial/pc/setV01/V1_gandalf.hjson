@@ -254,7 +254,7 @@
 		type: condition
 		keyword: support area
 		effects: {
-			type: activatedtrigger
+			type: Response
 			trigger: {
 				type: aboutToTakeWound
 				filter: minion

@@ -38,7 +38,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: uruk-hai
@@ -287,7 +287,7 @@
                 }
 		    }
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: played
 					filter: spell,event
@@ -481,7 +481,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: bearer
@@ -878,7 +878,7 @@
     type: condition
     keyword: support area
     effects: {
-      type: activatedTrigger
+      type: Response
       trigger: {
         type: played
         filter: side(free people),event

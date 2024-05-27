@@ -201,7 +201,7 @@
 		keywords: Support Area
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: discarded
 		            filter: culture(men),possession
@@ -976,7 +976,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: culture(men),minion

@@ -697,7 +697,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: another,culture(esgaroth),ally
@@ -840,7 +840,7 @@
         }
       }
       {
-        type: activatedTrigger
+        type: Response
         trigger: {
           type: aboutToDiscard
           filter: bearer

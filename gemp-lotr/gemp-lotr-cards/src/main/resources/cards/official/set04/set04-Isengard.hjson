@@ -2964,7 +2964,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: killed
 		            filter: unbound,hobbit
@@ -3105,7 +3105,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: killed
 		            filter: unbound,hobbit
@@ -3247,7 +3247,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: killed
 		            filter: unbound,hobbit

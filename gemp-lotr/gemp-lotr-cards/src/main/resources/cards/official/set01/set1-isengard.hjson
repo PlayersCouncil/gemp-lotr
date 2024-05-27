@@ -749,7 +749,7 @@
 		type: condition
 		keyword: support area
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: winsSkirmish
 				filter: your,uruk-hai
@@ -1026,7 +1026,7 @@
 		vitality: 2
 		site: 5
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: putsOnRing
 			}
@@ -1131,7 +1131,7 @@
                 }
 		    }
             {
-                type: activatedTrigger
+                type: Response
                 trigger: {
                     type: winsSkirmish
                     filter: uruk-hai

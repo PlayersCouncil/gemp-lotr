@@ -755,7 +755,7 @@
 				}
 			}
 			{
-				type: activatedtrigger
+				type: Response
 				trigger: {
 					type: movesFrom
 					filter: site,hasAttached(weather,condition)

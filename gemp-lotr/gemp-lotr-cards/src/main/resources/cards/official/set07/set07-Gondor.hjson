@@ -897,7 +897,7 @@
 		target: culture(gondor),man
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToBeOverwhelmed
 		            filter: bearer
@@ -1737,7 +1737,7 @@
 		resistance: 6
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: played
 		            filter: not(your),or(possession,engine)
@@ -2641,7 +2641,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeControlOfSite
 		        }

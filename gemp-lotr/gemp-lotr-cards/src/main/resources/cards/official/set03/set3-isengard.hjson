@@ -262,7 +262,7 @@
         vitality: 2
         site: 4
         effects: {
-            type: activatedTrigger
+            type: Response
             trigger: {
                 type: aboutToTakeWound
                 filter: culture(isengard),orc
@@ -583,7 +583,7 @@
                 }
             }
             {
-                type: activatedTrigger
+                type: Response
                 trigger: {
                     type: aboutToTakeWound
                     filter: urukHai

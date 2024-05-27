@@ -570,7 +570,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
                     type: usesSpecialAbility
                     filter: minion

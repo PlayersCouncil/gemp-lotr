@@ -335,7 +335,7 @@
         ]
         twilight: 1
         effects: {
-            type: activatedTrigger
+            type: Response
             trigger: {
                 type: aboutToTakeWound
                 filter: hobbit
@@ -619,8 +619,7 @@
                 }
             }
             {
-				type: ActivatedTrigger
-				optional: true
+				type: Response
 				trigger: {
 					type: killed
 					filter: name(Frodo),ring bearer

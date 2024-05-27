@@ -160,7 +160,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: bearer
@@ -277,7 +277,7 @@
 		resistance: 6
 		keyword: damage+1
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: aboutToTakeWound
 				filter: culture(dwarven),companion

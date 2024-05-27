@@ -395,7 +395,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToDiscard
 		            filter: culture(shire),or(condition,possession)

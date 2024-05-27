@@ -110,7 +110,7 @@
 		vitality: 2
 		site: 4
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: aboutToTakeWound
 				filter: another,orc
@@ -1536,7 +1536,7 @@
         }
       }
       {
-        type: activatedTrigger
+        type: Response
         trigger: {
           type: discarded
           player: fp

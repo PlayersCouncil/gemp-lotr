@@ -519,7 +519,7 @@
 		keywords: Lurker
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
                     type: aboutToTakeWound
                     filter: culture(men),minion

@@ -81,7 +81,7 @@
       keyword: Support Area
       twilight: 2
       effects: {
-        type: activatedTrigger
+        type: Response
         trigger: {
             type: aboutToTakeWound
             filter: twilight,nazgul

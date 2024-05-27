@@ -175,7 +175,7 @@
 		target: name(Sam)
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: usesSpecialAbility
 		            phase: regroup
@@ -248,8 +248,7 @@
 		        }
 		    }
 			{
-				type: ActivatedTrigger
-				optional: true
+				type: Response
 				trigger: {
 					type: killed
 					filter: name(Frodo),ring bearer

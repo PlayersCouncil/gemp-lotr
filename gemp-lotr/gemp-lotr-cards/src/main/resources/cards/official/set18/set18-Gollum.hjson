@@ -73,7 +73,7 @@
 		keywords: Support Area
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToDiscard
 		            opponent: true

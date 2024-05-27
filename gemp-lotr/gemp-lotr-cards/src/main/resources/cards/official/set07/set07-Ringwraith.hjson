@@ -1959,7 +1959,7 @@
 		keywords: Support Area
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: winsSkirmish
 		            filter: your,culture(wraith),minion

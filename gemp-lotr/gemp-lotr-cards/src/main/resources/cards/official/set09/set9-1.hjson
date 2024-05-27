@@ -387,7 +387,7 @@
 		vitality: 1
 		target: dwarf
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: winsSkirmish
 				filter: bearer
@@ -1004,7 +1004,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: self

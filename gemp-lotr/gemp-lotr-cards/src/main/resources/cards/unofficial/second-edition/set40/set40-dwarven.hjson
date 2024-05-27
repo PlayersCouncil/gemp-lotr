@@ -26,7 +26,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToDiscard
 					source: shadow
@@ -270,7 +270,7 @@
 		]
 		lore: Dwarven-smiths forge bracers for fit and agility.
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: aboutToTakeWound
 				filter: bearer

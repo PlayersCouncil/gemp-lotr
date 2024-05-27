@@ -173,7 +173,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: bearer
@@ -525,7 +525,7 @@
 		keywords: Support Area
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToAddBurden
 		            filter: side(shadow)
@@ -616,8 +616,7 @@
 		        }
 		    }
 			{
-				type: ActivatedTrigger
-				optional: true
+				type: Response
 				trigger: {
 					type: killed
 					filter: name(Frodo),ring bearer

@@ -268,7 +268,7 @@
 		direction: Left
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: your,minion

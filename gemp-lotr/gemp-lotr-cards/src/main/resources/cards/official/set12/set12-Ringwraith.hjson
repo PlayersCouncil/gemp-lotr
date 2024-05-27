@@ -810,7 +810,7 @@
 		]
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
                 trigger: {
                     type: beforeToil
                     filter: culture(wraith),event,toil

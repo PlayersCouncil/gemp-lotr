@@ -706,7 +706,7 @@
 		keywords: Support Area
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: losesSkirmish
 		            filter: companion

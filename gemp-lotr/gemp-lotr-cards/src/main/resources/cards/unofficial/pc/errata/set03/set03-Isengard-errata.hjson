@@ -237,7 +237,7 @@
 	# 			}
 	# 		}
 	# 		{
-	# 			type: activatedTrigger
+	# 			type: Response
 	# 			trigger: {
 	# 				type: aboutToTakeWound
 	# 				filter: uruk-hai
@@ -334,7 +334,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: uruk-hai

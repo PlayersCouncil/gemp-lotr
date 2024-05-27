@@ -188,7 +188,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: abouttodiscard
 					source: side(shadow)

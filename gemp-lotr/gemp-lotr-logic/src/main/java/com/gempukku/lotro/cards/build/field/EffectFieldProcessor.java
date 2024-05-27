@@ -17,9 +17,8 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("activated", new ActivatedEffectProcessor());
         effectProcessors.put("activatedfromstacked", new ActivatedFromStackedEffectProcessor());
         effectProcessors.put("activatedindiscard", new ActivatedInDiscardEffectProcessor());
-        effectProcessors.put("activatedtrigger", new ActivatedTriggerEffectProcessor());
-        effectProcessors.put("assignmentcost", new AssignmentCost());
         effectProcessors.put("aidcost", new AidCost());
+        effectProcessors.put("assignmentcost", new AssignmentCost());
         effectProcessors.put("copycard", new CopyCard());
         effectProcessors.put("deckbuildingrestriction", new DeckBuildingRestrictionGameTextProcessor());
         effectProcessors.put("displayableinformation", new DisplayableInformationEffectProcessor());
@@ -37,6 +36,7 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("permanentsitemodifier", new PermanentSiteModifier());
         effectProcessors.put("modifyowncost", new ModifyOwnCost());
         effectProcessors.put("playedinotherphase", new PlayedInOtherPhase());
+        effectProcessors.put("response", new ResponseEffectProcessor());
         effectProcessors.put("responseevent", new ResponseEventEffectProcessor());
         effectProcessors.put("trigger", new TriggerEffectProcessor());
         effectProcessors.put("toplay", new ToPlay());

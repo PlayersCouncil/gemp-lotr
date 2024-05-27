@@ -46,7 +46,7 @@
 		vitality: 3
 		site: 6
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: winsSkirmish
 				filter: self
@@ -645,7 +645,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: played
 					filter: side(free people),regroup,event
@@ -1047,7 +1047,7 @@
 			support area
 		]
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: played
 				filter: stealth,event

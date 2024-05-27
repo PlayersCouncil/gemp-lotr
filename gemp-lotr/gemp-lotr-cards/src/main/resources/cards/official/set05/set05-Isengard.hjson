@@ -1009,7 +1009,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: usesSpecialAbility
 		            phase: skirmish
@@ -1078,7 +1078,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToDiscard
 		            opponent: true
@@ -1286,7 +1286,7 @@
 		target: warg-rider
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: usesSpecialAbility
 		            phase: skirmish
@@ -1342,7 +1342,7 @@
 		target: warg-rider
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: usesSpecialAbility
 		            phase: skirmish

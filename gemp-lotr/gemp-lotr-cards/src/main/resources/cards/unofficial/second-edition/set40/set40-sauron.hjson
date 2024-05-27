@@ -405,7 +405,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: played
 					filter: side(free people),regroup,event
@@ -475,7 +475,7 @@
                 }
 		    }
             {
-                type: activatedTrigger
+                type: Response
                 trigger: {
                     type: aboutToBeKilled
                     filter: self

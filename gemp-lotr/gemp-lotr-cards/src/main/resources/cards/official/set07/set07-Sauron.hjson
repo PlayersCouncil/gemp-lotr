@@ -1013,7 +1013,7 @@
 		keywords: Besieger
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: aboutToTakeWound
 		            filter: besieger
@@ -1371,7 +1371,7 @@
 		site: 6
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: beforeThreatWounds
 		            killedFilter: companion
@@ -3083,7 +3083,7 @@
 		keywords: Support Area
 		effects: [
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: winsSkirmish
 		            filter: your,culture(sauron),minion

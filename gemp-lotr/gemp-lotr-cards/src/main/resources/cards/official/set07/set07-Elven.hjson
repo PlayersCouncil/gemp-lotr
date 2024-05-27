@@ -419,7 +419,7 @@
 		        }
 		    }
 		    {
-		        type: activatedTrigger
+		        type: Response
 		        trigger: {
 		            type: played
 		            filter: culture(elven),skirmish,event

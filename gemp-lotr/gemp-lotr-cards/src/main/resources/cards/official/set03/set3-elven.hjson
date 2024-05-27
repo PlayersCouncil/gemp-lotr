@@ -14,7 +14,7 @@
         resistance: 6
         keyword: Ranger
         effects: {
-            type: activatedTrigger
+            type: Response
             trigger: {
                 type: aboutToTakeWound
                 filter: ringBearer
@@ -249,7 +249,7 @@
                 }
 		    }
             {
-                type: activatedTrigger
+                type: Response
                 trigger: {
                     type: aboutToTakeWound
                     filter: elf

@@ -15,7 +15,7 @@ import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 import org.json.simple.JSONObject;
 
-public class ActivatedTriggerEffectProcessor implements EffectProcessor {
+public class ResponseEffectProcessor implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(value, "trigger", "requires", "cost", "effect", "text", "limitPerPhase", "phase");

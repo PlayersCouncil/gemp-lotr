@@ -377,7 +377,7 @@
 		vitality: 2
 		site: 4
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: played
 				filter: side(free people),event

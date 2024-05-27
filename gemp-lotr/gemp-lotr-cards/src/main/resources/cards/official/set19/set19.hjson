@@ -287,7 +287,7 @@
 		resistance: 7
 		keyword: fellowship
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: played
 				filter: event
@@ -1230,8 +1230,7 @@
 				}
 			}
 			{
-				type: ActivatedTrigger
-				optional: true
+				type: Response
 				trigger: {
 					type: killed
 					filter: name(Frodo),ring bearer
@@ -1259,7 +1258,7 @@
 		]
 		effects: [
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: self
@@ -1287,7 +1286,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToExert
 					filter: self
