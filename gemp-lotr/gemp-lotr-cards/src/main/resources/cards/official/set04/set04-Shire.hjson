@@ -986,7 +986,7 @@
 		        }
 		    }
 			{
-				type: trigger
+				type: ActivatedTrigger
 				optional: true
 				trigger: {
 					type: killed
@@ -1056,7 +1056,7 @@
 		        }
 		    }
             {
-                type: trigger
+                type: ActivatedTrigger
                 optional: true
                 trigger: {
                     type: killed
