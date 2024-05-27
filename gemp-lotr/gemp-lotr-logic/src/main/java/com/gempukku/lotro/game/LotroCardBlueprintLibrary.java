@@ -45,7 +45,7 @@ public class LotroCardBlueprintLibrary {
     private final File _setDefsPath;
     private final File _raritiesFolder;
 
-    private final List<ICallback> _refreshCallbacks = new ArrayList<>();
+    private final Set<Runnable> refreshCallbacks = new HashSet<>();
 
     public LotroCardBlueprintLibrary() {
         this(AppConfig.getCardsPath(), AppConfig.getMappingsPath(), AppConfig.getSetDefinitionsPath(), AppConfig.getResourceFile("rarities"));
@@ -67,22 +67,12 @@ public class LotroCardBlueprintLibrary {
         collectionReady.release();
     }
 
-    public boolean SubscribeToRefreshes(ICallback callback) {
-        if (_refreshCallbacks.contains(callback))
-            return false;
-
-        _refreshCallbacks.add(callback);
-
-        return true;
+    public boolean subscribeToRefreshes(Runnable callback) {
+        return refreshCallbacks.add(callback);
     }
 
-    public boolean UnsubscribeFromRefreshes(ICallback callback) {
-        if (!_refreshCallbacks.contains(callback))
-            return false;
-
-        _refreshCallbacks.remove(callback);
-
-        return true;
+    public boolean unsubscribeFromRefreshes(Runnable callback) {
+        return refreshCallbacks.remove(callback);
     }
 
     public Map<String, SetDefinition> getSetDefinitions() {
@@ -104,8 +94,8 @@ public class LotroCardBlueprintLibrary {
         errataMappings = null;
         getErrata();
 
-        for (var callback : _refreshCallbacks) {
-            callback.Invoke();
+        for (var callback : refreshCallbacks) {
+            callback.run();
         }
     }
 

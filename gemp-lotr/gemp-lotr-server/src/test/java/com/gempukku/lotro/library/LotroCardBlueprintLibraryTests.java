@@ -4,7 +4,6 @@ import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary2;
 import com.gempukku.lotro.logic.GameUtils;
 import org.junit.Test;
 
@@ -13,7 +12,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class LotroCardBlueprintLibraryTests extends AbstractAtTest {
     @Test

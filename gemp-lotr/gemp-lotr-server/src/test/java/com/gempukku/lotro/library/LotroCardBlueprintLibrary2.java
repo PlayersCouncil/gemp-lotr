@@ -1,9 +1,11 @@
-package com.gempukku.lotro.game;
+package com.gempukku.lotro.library;
 
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.common.JSONDefs;
+import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.packs.DefaultSetDefinition;
 import com.gempukku.lotro.game.packs.SetDefinition;
 import com.gempukku.lotro.logic.GameUtils;
@@ -49,7 +51,7 @@ public class LotroCardBlueprintLibrary2 {
     private final File _setDefsPath;
     private final File _raritiesFolder;
 
-    private final List<ICallback> _refreshCallbacks = new ArrayList<>();
+    private final List<Runnable> _refreshCallbacks = new ArrayList<>();
 
     public LotroCardBlueprintLibrary2() {
         this(AppConfig.getCardsPath(), AppConfig.getMappingsPath(), AppConfig.getSetDefinitionsPath(), AppConfig.getResourceFile("rarities"));
@@ -72,16 +74,11 @@ public class LotroCardBlueprintLibrary2 {
         collectionReady.release();
     }
 
-    public boolean SubscribeToRefreshes(ICallback callback) {
-        if(_refreshCallbacks.contains(callback))
-            return false;
-
-        _refreshCallbacks.add(callback);
-
-        return true;
+    public boolean SubscribeToRefreshes(Runnable callback) {
+        return _refreshCallbacks.add(callback);
     }
 
-    public boolean UnsubscribeFromRefreshes(ICallback callback) {
+    public boolean UnsubscribeFromRefreshes(Runnable callback) {
         if(!_refreshCallbacks.contains(callback))
             return false;
 
@@ -110,7 +107,7 @@ public class LotroCardBlueprintLibrary2 {
         getErrata();
 
         for(var callback : _refreshCallbacks) {
-            callback.Invoke();
+            callback.run();
         }
     }
 
