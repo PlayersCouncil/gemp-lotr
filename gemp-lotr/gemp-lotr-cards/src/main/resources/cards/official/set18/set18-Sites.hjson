@@ -23,6 +23,27 @@
 		direction: Right
 		keywords: Mountain
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: wound
+		                player: free people
+		                filter: choose(side(free people),character)
+		                count: 2
+		            }
+		            {
+		                type: wound
+		                player: shadow
+		                filter: choose(side(shadow),character)
+		                count: 2
+		            }
+		        ]
+		    }
 		]
 		gametext: <b>Mountain</b>. When the fellowship moves to this site, each player wounds two of his or her characters.
 		lore: ""
@@ -58,6 +79,12 @@
 		direction: Left
 		keywords: Mountain
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: removeCardsGoingToDiscard
+		        }
+		    }
 		]
 		gametext: <b>Mountain</b>. Each card that is about to be placed into the discard pile is removed from the game instead.
 		lore: ""
@@ -93,6 +120,25 @@
 		direction: Left
 		keywords: River
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: heal
+		                player: free people
+		                filter: all(side(free people),character)
+		            }
+		            {
+		                type: heal
+		                player: shadow
+		                filter: all(side(shadow),character)
+		            }
+		        ]
+		    }
 		]
 		gametext: <b>River</b>. When the fellowship moves to this site, each player heals each of his or her characters.
 		lore: ""
@@ -131,6 +177,33 @@
 			Plains
 		]
 		effects: [
+		    {
+		        type: trigger
+		        trigger: {
+		            type: movesTo
+		            filter: self
+		        }
+		        effect: [
+		            {
+		                type: optional
+		                text: Would you like to reinforce a culture token
+		                player: free people
+		                effect: {
+		                    type: reinforceTokens
+		                    player: free people
+		                }
+		            }
+		            {
+		                type: optional
+		                text: Would you like to reinforce a culture token
+		                player: shadow
+		                effect: {
+		                    type: reinforceTokens
+		                    player: shadow
+		                }
+		            }
+		        ]
+		    }
 		]
 		gametext: <b>Battleground</b>. <b>Plains</b>. When the fellowship moves to this site, each player may reinforce a culture token.
 		lore: ""
@@ -165,8 +238,6 @@
 		block: Shadows
 		direction: Right
 		keywords: River
-		effects: [
-		]
 		gametext: <b>River</b>.
 		lore: ""
 		promotext: ""
@@ -200,6 +271,25 @@
 		block: Shadows
 		direction: Right
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantPreventWounds
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantHeal
+		            filter: any
+		        }
+		    }
+		    {
+		        type: modifier
+		        modifier: {
+                    type: cantRemoveBurdens
+		        }
+		    }
 		]
 		gametext: Wounds cannot be prevented or healed. Burdens cannot be removed.
 		lore: ""
@@ -235,6 +325,13 @@
 		direction: Left
 		keywords: Dwelling
 		effects: [
+		    {
+		        type: modifier
+		        modifier: {
+		            type: cantBeTransferred
+		            filter: follower
+		        }
+		    }
 		]
 		gametext: <b>Dwelling</b>. While the fellowship is at this site, followers cannot be transferred to a character.
 		lore: ""
