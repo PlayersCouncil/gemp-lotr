@@ -108,7 +108,7 @@
 						}
 						{
 							type: discard
-							filter: self
+							select: self
 						}
 					]
 				}
@@ -138,7 +138,7 @@
 				}
 				effect: {
 					type: PreventDiscard
-					filter: self
+					select: self
 				}
 			}
 		]

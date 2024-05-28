@@ -33,7 +33,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: orc
-		            filter: self
+		            select: self
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: culture(orc),condition
@@ -52,18 +52,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: orc
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(lurker)
+		            select: choose(lurker)
 		            amount: 2
 		        }
 		    }
@@ -195,7 +195,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(your,culture(orc),lurker)
+                        select: choose(your,culture(orc),lurker)
                         amount: 2
                     }
                 ]
@@ -240,12 +240,12 @@
 		        phase: regroup
 		        cost: {
 		            type: spot
-		            filter: choose(culture(orc),lurker,minion)
+		            select: choose(culture(orc),lurker,minion)
 		            memorize: spottedMinion
 		        }
 		        effect: {
 		            type: stackCards
-		            filter: memory(spottedMinion)
+		            select: memory(spottedMinion)
 		            where: self
 		        }
 		    }
@@ -257,7 +257,7 @@
 		        }
 		        effect: {
 		            type: playCardFromStacked
-		            filter: choose(lurker,minion)
+		            select: choose(lurker,minion)
 		            on: self
 		            cost: -3
 		        }
@@ -311,12 +311,12 @@
 			}
 			cost: {
 			    type: discard
-			    filter: choose(your,culture(orc),condition)
+			    select: choose(your,culture(orc),condition)
 			},
 			effect: [
 				{
 				    type: playCardFromDiscard
-				    filter: choose(culture(orc),minion)
+				    select: choose(culture(orc),minion)
 				}
 			]
 		}
@@ -369,7 +369,7 @@
 		            {
 		                type: discard
 		                player: free people
-		                filter: choose(another,culture(orc),condition)
+		                select: choose(another,culture(orc),condition)
 		            }
 		            {
 		                type: removeTwilight
@@ -385,7 +385,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -437,7 +437,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 2
 		            until: regroup
 		        }
@@ -485,11 +485,11 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(orc),troll)
+		            select: choose(culture(orc),troll)
 		        }
 		    }
 		]
@@ -530,14 +530,14 @@
 			type: event
 			cost: {
 			    type: discard
-			    filter: choose(your,culture(orc),minion)
+			    select: choose(your,culture(orc),minion)
 			    count: any
 			    memorize: discardedMinions
 			}
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(orc),minion)
+				    select: choose(culture(orc),minion)
 				    amount: {
 				        type: forEachInMemory
 				        memory: discardedMinions
@@ -606,7 +606,7 @@
 		        }
 		        cost: {
 		            type: revealCards
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addBurdens
@@ -668,7 +668,7 @@
                 ]
                 effect: {
                     type: addKeyword
-                    filter: self
+                    select: self
                     keyword: fierce
                     until: regroup
                 }
@@ -724,7 +724,7 @@
                         effects: [
                             {
                                 type: discard
-                                filter: self
+                                select: self
                             }
                             {
                                 type: conditional
@@ -734,20 +734,20 @@
                                 }
                                 effect: {
                                     type: exert
-                                    filter: self
+                                    select: self
                                 }
                             }
                         ]
                     }
                     {
                         type: spot
-                        filter: choose(another,culture(orc),minion)
+                        select: choose(another,culture(orc),minion)
                         memorize: spottedMinion
                     }
                 ]
                 effect: {
                     type: returnToHand
-                    filter: memory(spottedMinion)
+                    select: memory(spottedMinion)
                 }
 		    }
 		]
@@ -803,12 +803,12 @@
 		        }
 		        cost: {
 		            type: spot
-		            filter: choose(side(free people),condition)
+		            select: choose(side(free people),condition)
 		            memorize: chosenCondition
 		        }
 		        effect: {
 		            type: discard
-		            filter: all(nameFromMemory(chosenCondition),not(memory(chosenCondition)))
+		            select: all(nameFromMemory(chosenCondition),not(memory(chosenCondition)))
 		        }
 		    }
 		]
@@ -915,11 +915,11 @@
 		        phase: shadow
 		        cost: {
 		            type: discard
-		            filter: choose(culture(orc),condition)
+		            select: choose(culture(orc),condition)
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -969,11 +969,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(another,culture(orc),minion)
+		            select: choose(another,culture(orc),minion)
 		        }
 		    }
 		]
@@ -1078,7 +1078,7 @@
 		        phase: shadow
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -1147,7 +1147,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(orc),orc)
+				    select: choose(culture(orc),orc)
 				    amount: {
 				        type: condition
 				        condition: {

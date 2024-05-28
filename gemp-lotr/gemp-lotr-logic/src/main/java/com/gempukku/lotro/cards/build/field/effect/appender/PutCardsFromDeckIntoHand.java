@@ -23,10 +23,10 @@ import java.util.List;
 public class PutCardsFromDeckIntoHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "shuffle", "reveal", "showAll");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "shuffle", "reveal", "showAll");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
         final boolean reveal = FieldUtils.getBoolean(effectObject.get("reveal"), "reveal");
         boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
@@ -34,7 +34,7 @@ public class PutCardsFromDeckIntoHand implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeck(filter, null, valueSource, "_temp", "you", "you", showAll, "Choose cards from deck to put into hand", environment));
+                CardResolver.resolveCardsInDeck(select, null, valueSource, "_temp", "you", "you", showAll, "Choose cards from deck to put into hand", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

@@ -72,7 +72,7 @@
 				}
 				effect: {
 					type: discard
-					filter: all(another,minion)
+					select: all(another,minion)
 				}
 			}
 			{
@@ -96,7 +96,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -139,7 +139,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -148,7 +148,7 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
 						type: removeTwilight
@@ -157,7 +157,7 @@
 				]
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(culture(moria),orc)
+					select: choose(culture(moria),orc)
 					removedTwilight: 2
 				}
 			}
@@ -217,7 +217,7 @@
 				optional: true
 				effect: {
 					type: wound
-					filter: choose(archer,companion)
+					select: choose(archer,companion)
 				}
 			}
 		]
@@ -245,7 +245,7 @@
                 }
                 effect: {
                     type: exert
-                    filter: all(name(Gandalf))
+                    select: all(name(Gandalf))
                 }
             }
         ]
@@ -277,7 +277,7 @@
 					{
 						type: chooseActiveCards
 						text: Choose opponent's site
-						filter: choose(not(your),site)
+						select: choose(not(your),site)
 						memorize: chosenSite
 					}
 					{
@@ -317,11 +317,11 @@
             phase: maneuver
             cost: {
               type: exert
-              filter: choose(name(The Balrog))
+              select: choose(name(The Balrog))
             }
             effect: {
               type: discard
-              filter: choose(rangedweapon)
+              select: choose(rangedweapon)
             }
           }
         ]
@@ -341,7 +341,7 @@
             }
             effect: {
                 type: wound
-                filter: choose(companion,inskirmish)
+                select: choose(companion,inskirmish)
                 times: 2
             }
         }
@@ -367,7 +367,7 @@
                 }
                 effect: {
                     type: playCardFromDrawDeck
-                    filter: choose(tentacle)
+                    select: choose(tentacle)
                     showAll: true
                     shuffle: true
                 }
@@ -391,7 +391,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: self
+                    select: self
                 }
             }
         ]
@@ -407,7 +407,7 @@
             type: event
             effect: {
                 type: playCardFromDiscard
-                filter: choose(culture(moria),minion)
+                select: choose(culture(moria),minion)
             }
         }
     }
@@ -492,7 +492,7 @@
             }
             effect: {
                 type: heal
-                filter: choose(culture(moria),minion)
+                select: choose(culture(moria),minion)
             }
         }
     }
@@ -515,7 +515,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: choose(culture(elven),condition)
+                    select: choose(culture(elven),condition)
                 }
             }
             {
@@ -572,7 +572,7 @@
                 }
                 effect: {
                     type: playCardFromDrawDeck
-                    filter: choose(name(Watcher in the Water))
+                    select: choose(name(Watcher in the Water))
                     showAll: true
                     shuffle: true
                 }
@@ -596,7 +596,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: self
+                    select: self
                 }
             }
         ]
@@ -636,7 +636,7 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(name(The Balrog))
+                select: choose(name(The Balrog))
             }
             effect: {
                 type: addBurdens
@@ -655,7 +655,7 @@
             type: event
             effect: {
                 type: modifyStrength
-                filter: choose(or(Elf,Dwarf))
+                select: choose(or(Elf,Dwarf))
                 amount: {
                     type: requires
                     requires: [
@@ -686,12 +686,12 @@
             cost: {
                 type: revealCardsFromHand
                 count: any
-                filter: choose(culture(moria),orc)
+                select: choose(culture(moria),orc)
                 memorize: revealedCards
             }
             effect: {
                 type: play
-                filter: choose(name(The Balrog))
+                select: choose(name(The Balrog))
                 cost: {
                     type: forEachInMemory
                     memory: revealedCards
@@ -736,7 +736,7 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(culture(moria),minion)
+                select: choose(culture(moria),minion)
             }
             effect: {
                 type: addTwilight
@@ -775,7 +775,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: all(another,minion,not(Tentacle))
+                    select: all(another,minion,not(Tentacle))
                 }
             }
             {
@@ -813,7 +813,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: self
+                    select: self
                 }
             }
         ]
@@ -833,11 +833,11 @@
             phase: Skirmish
             cost: {
                 type: exert
-                filter: bearer
+                select: bearer
             }
             effect: {
                 type: discard
-                filter: choose(or(helm,shield,armor),attachedTo(inSkirmishAgainst(bearer)))
+                select: choose(or(helm,shield,armor),attachedTo(inSkirmishAgainst(bearer)))
             }
         }
     }

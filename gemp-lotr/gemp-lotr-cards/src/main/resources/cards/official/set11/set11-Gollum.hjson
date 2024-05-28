@@ -37,7 +37,7 @@
 			effect: [
 				{
 				    type: wound
-				    filter: choose(side(free people),character,maxResistance(2),inSkirmishAgainst(minion))
+				    select: choose(side(free people),character,maxResistance(2),inSkirmishAgainst(minion))
 				    times: 2
 				}
 			]
@@ -85,12 +85,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(another,minion)
+		            select: choose(another,minion)
 		            amount: 2
 		        }
 		    }
@@ -132,12 +132,12 @@
 			type: event
 			cost: {
 			    type: discard
-			    filter: choose(name(Gollum))
+			    select: choose(name(Gollum))
 			}
 			effect: [
 				{
 				    type: wound
-				    filter: choose(unbound,companion,maxResistance(6))
+				    select: choose(unbound,companion,maxResistance(6))
 				}
 			]
 		}
@@ -184,11 +184,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(name(Gollum))
+		            select: choose(name(Gollum))
 		        }
 		        effect: {
                     type: putCardsFromDiscardIntoHand
-                    filter: choose(culture(gollum))
+                    select: choose(culture(gollum))
 		        }
 		    }
 		]
@@ -239,7 +239,7 @@
 				{
 				    type: chooseActiveCards
 				    text: Choose our site to replace
-				    filter: choose(your,site,zone(adventure path))
+				    select: choose(your,site,zone(adventure path))
 				    memorize: chosenSite
 				}
 				{
@@ -297,7 +297,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(name(Sméagol))
+				    select: choose(name(Sméagol))
 				    amount: {
 				        type: forEachYouCanSpot
 				        filter: companion,minResistance(5)
@@ -342,13 +342,13 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(name(Gollum))
+			    select: choose(name(Gollum))
 			    memorize: gollum
 			},
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(not(memory(gollum)),minion)
+				    select: choose(not(memory(gollum)),minion)
 				    amount: {
 				        type: condition
 				        condition: {
@@ -407,7 +407,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(name(Gollum))
+		            select: choose(name(Gollum))
 		        }
 		        effect: {
 		            type: addBurdens
@@ -535,7 +535,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(or(name(Gollum),name(Sméagol)))
+		            select: choose(or(name(Gollum),name(Sméagol)))
 		        }
 		        effect: {
 		            type: removeTwilight
@@ -611,7 +611,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: cancelSkirmish
@@ -667,7 +667,7 @@
 			effect: [
 				{
 				    type: playCardFromDiscard
-				    filter: choose(minion)
+				    select: choose(minion)
 				}
 			]
 		}

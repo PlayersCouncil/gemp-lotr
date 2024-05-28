@@ -32,7 +32,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
@@ -42,7 +42,7 @@
                     }
                     {
                         type: modifyStrength
-                        filter: choose(minion,inSkirmishAgainst(culture(elven),companion))
+                        select: choose(minion,inSkirmishAgainst(culture(elven),companion))
                         amount: {
                             type: fromMemory
                             memory: spotCount
@@ -113,7 +113,7 @@
 		                }
 		                effect: {
 		                    type: modifyStrength
-		                    filter: all(minion,inSkirmishAgainst(self))
+		                    select: all(minion,inSkirmishAgainst(self))
 		                    amount: -3
 		                }
 		            }
@@ -240,13 +240,13 @@
 		                        type: costToEffect
 		                        cost: {
 		                            type: discardCardsFromDrawDeck
-		                            filter: memory(revealedCard)
+		                            select: memory(revealedCard)
                                     showAll: false
                                     shuffle: false
 		                        }
 		                        effect: {
 		                            type: wound
-		                            filter: all(minion,inSkirmish)
+		                            select: all(minion,inSkirmish)
 		                        }
 		                    }
 		                }
@@ -305,11 +305,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		            amount: {
 		                type: forEachInDiscard
 		                filter: your,culture(elven),event
@@ -388,7 +388,7 @@
 		                }
 		                effect: {
 		                    type: heal
-		                    filter: choose(another,elf)
+		                    select: choose(another,elf)
 		                    count: 0-1
 		                }
 		            }
@@ -433,7 +433,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(minion,inSkirmishAgainst(elf))
+				    select: choose(minion,inSkirmishAgainst(elf))
 				    amount: -2
 				}
 				{
@@ -503,11 +503,11 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(elven),event)
+		            select: choose(culture(elven),event)
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(side(shadow),or(condition,possession))
+		            select: choose(side(shadow),or(condition,possession))
 		        }
 		    }
 		]
@@ -561,7 +561,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion)
+		            select: choose(minion)
 		            amount: -4
 		            until: regroup
 		        }
@@ -608,12 +608,12 @@
 		        effect: [
 		            {
 		                type: removeText
-		                filter: choose(minion,inSkirmishAgainst(bearer))
+		                select: choose(minion,inSkirmishAgainst(bearer))
 		                until: regroup
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }

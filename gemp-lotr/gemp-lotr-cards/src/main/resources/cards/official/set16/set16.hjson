@@ -33,7 +33,7 @@
 				}
 				effect: {
 					type: play
-					filter: choose(culture(wraith),wraith)
+					select: choose(culture(wraith),wraith)
 					cost: -2
 				}
 			}
@@ -69,7 +69,7 @@
 			}
 			effect: {
 				type: wound
-				filter: memory(assignedToCompanion)
+				select: memory(assignedToCompanion)
 			}
 		}
 	}
@@ -135,7 +135,7 @@
 			}
 			effect: {
 				type: discard
-				filter: choose(condition)
+				select: choose(condition)
 			}
 		}
 	}
@@ -178,11 +178,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(another,culture(wraith),wraith)
+					select: choose(another,culture(wraith),wraith)
 					amount: 1
 				}
 			}
@@ -217,12 +217,12 @@
 				phase: shadow
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
 					type: playCardFromDrawDeck
-					filter: choose(culture(wraith),wraith)
+					select: choose(culture(wraith),wraith)
                     showAll: true
                     shuffle: true
 				}

@@ -38,12 +38,12 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: modifyStrength
-						filter: choose(minion,inSkirmishAgainst(self))
+						select: choose(minion,inSkirmishAgainst(self))
 						memorize: chosenMinion
 						amount: {
 							type: forEachInDiscard
@@ -61,7 +61,7 @@
 						effect: {
 							type: removeCardsInDiscardFromGame
 							count: 3
-							filter: choose(culture(elven),event)
+							select: choose(culture(elven),event)
 						}
 					}
 				]
@@ -122,11 +122,11 @@
 	# 				type: discardFromHand
 	# 				count: 1
 	# 				forced: false
-	# 				filter: choose(culture(elven),event)
+	# 				select: choose(culture(elven),event)
 	# 			}
 	# 			effect: {
 	# 				type: discard
-	# 				filter: choose(side(shadow),or(condition,possession))
+	# 				select: choose(side(shadow),or(condition,possession))
 	# 			}
 	# 		}
 	# 	]
@@ -190,12 +190,12 @@
 	# 					type: discardFromHand
 	# 					count: 1
 	# 					forced: false
-	# 					filter: choose(culture(elven),event)
+	# 					select: choose(culture(elven),event)
 	# 				}
 	# 			]
 	# 			effect: {
 	# 				type: discard
-	# 				filter: choose(side(shadow),or(condition,possession))
+	# 				select: choose(side(shadow),or(condition,possession))
 	# 			}
 	# 		}
 	# 	]
@@ -255,13 +255,13 @@
 						type: discardFromHand
 						count: 1
 						forced: false
-						filter: choose(culture(elven),event)
+						select: choose(culture(elven),event)
 					}
 				]
 				effect: [
 					{
 						type: discard
-						filter: choose(side(shadow),or(condition,possession))
+						select: choose(side(shadow),or(condition,possession))
 					}
 					{
 						type: incrementPerPhaseLimit
@@ -327,7 +327,7 @@
                     }
                     {
                         type: modifyStrength
-                        filter: choose(minion)
+                        select: choose(minion)
                         amount: -3
                         until: start(regroup)
                     }

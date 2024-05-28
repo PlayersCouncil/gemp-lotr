@@ -26,12 +26,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf)
+				select: choose(dwarf)
 			},
 			effect: [
 			    {
 			        type: wound
-			        filter: choose(minion)
+			        select: choose(minion)
 			    }
 			    {
 			        type: canPlayNextAction
@@ -90,7 +90,7 @@
 			            }
 			            {
 			                type: playCardFromDiscard
-			                filter: choose(culture(dwarven),condition)
+			                select: choose(culture(dwarven),condition)
 			            }
 			        ]
 			    }
@@ -144,7 +144,7 @@
 			}
 			effect: {
 				type: wound
-				filter: choose(minion,assignedToSkirmish(unbound,companion))
+				select: choose(minion,assignedToSkirmish(unbound,companion))
 			}
 		}
 		gametext: <b>Damage +1</b>.<br>Each time Gimli wins a skirmish, you may wound a minion assigned to skirmish an unbound companion.
@@ -186,7 +186,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: choose(dwarf,companion)
+		            select: choose(dwarf,companion)
 		        }
 		        effect: {
 		            type: addModifier
@@ -261,62 +261,13 @@
 		        }
 		        effect: {
 		            type: putStackedCardsIntoHand
-		            filter: choose(side(free people))
+		            select: choose(side(free people))
 		            on: self
 		        }
 		    }
 		]
 		gametext: Plays to your support area.<br><b>Maneuver:</b> Stack the top card from your draw deck here (limit once per phase).<br><b>Maneuver:</b> Spot a Dwarf and discard a card stacked on a [dwarven] condition to take a Free Peoples card stacked here into hand.
 		lore: This country has tough bones.'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	5_123: {
-		cardInfo: {
-			imagePath: decipher/LOTR05123.jpg
-			javaClass: true
-			//parentId: 5_123
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 5R123
-			rarity: R
-			setNum: "5"
-			cardNum: 123
-			style: Standard
-		}
-		title: Baruk Khazâd
-		unique: false
-		side: Free Peoples
-		culture: Dwarven
-		twilight: 0
-		type: Event
-		keywords: Maneuver
-		effects: {
-			type: event
-			cost: {
-				type: exert
-				filter: choose(dwarf)
-			},
-			effect: [
-			    {
-			        type: wound
-			        filter: choose(minion)
-			    }
-			    {
-			        type: canPlayNextAction
-			    }
-			]
-		}
-		gametext: <b>Maneuver:</b> Exert a Dwarf to wound a minion. You may take the next maneuver action.
-		lore: Axes of the Dwarves! cried Gimli in the secret tongue of his kin.
 		promotext: ""
 		alts: {
 			promos: {

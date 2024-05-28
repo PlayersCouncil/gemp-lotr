@@ -40,7 +40,7 @@
 		        }
 		        effect: {
 		            type: modifySiteNumber
-		            filter: choose(minion)
+		            select: choose(minion)
 		            amount: 3
 		            until: regroup
 		        }
@@ -140,11 +140,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: elven
-		            filter: choose(any)
+		            select: choose(any)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		            amount: -3
 		        }
 		    }
@@ -155,11 +155,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: dwarven
-		            filter: choose(any)
+		            select: choose(any)
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(dwarf)
+		            select: choose(dwarf)
 		        }
 		    }
 		    {
@@ -172,11 +172,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: rohan
-		            filter: choose(any)
+		            select: choose(any)
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion)
+		            select: choose(minion)
 		            times: 2
 		        }
 		    }
@@ -226,7 +226,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(not(bearer),culture(gondor),companion)
+		            select: choose(not(bearer),culture(gondor),companion)
 		        }
 		    }
 		    {
@@ -238,7 +238,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: liberateSite
@@ -296,7 +296,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: gondor
-		            filter: self
+		            select: self
 		            count: 2
 		        }
 		    }
@@ -312,18 +312,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
-		                    filter: self
+		                    select: self
 		                    culture: gondor
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(gondor),man)
+		            select: choose(culture(gondor),man)
 		            amount: 1
 		        }
 		    }
@@ -366,7 +366,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(gondor),man)
+					select: choose(culture(gondor),man)
 					amount: 2
 				}
 				{
@@ -377,7 +377,7 @@
 				    }
 				    effect: {
 				        type: exert
-				        filter: choose(minion)
+				        select: choose(minion)
 				    }
 				}
 			]
@@ -420,7 +420,7 @@
 			requiresRanger: true
 			cost: {
 				type: exert
-				filter: choose(ranger)
+				select: choose(ranger)
 				count: 2
 			},
 			effect: [
@@ -433,11 +433,11 @@
 					effects: [
 					    {
 					        type: discard
-					        filter: choose(minion)
+					        select: choose(minion)
 					    }
 					    {
 					        type: discard
-					        filter: choose(culture(wraith),minion)
+					        select: choose(culture(wraith),minion)
 					        count: 2
 					    }
 					]
@@ -487,7 +487,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(companion,cultureWithTokens)
+		            select: choose(companion,cultureWithTokens)
 		        }
 		    }
 		]
@@ -529,7 +529,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(gondor),man)
+					select: choose(culture(gondor),man)
 					amount: 2
 				}
 				{
@@ -540,7 +540,7 @@
 				    }
 				    effect: {
 				        type: heal
-				        filter: choose(companion)
+				        select: choose(companion)
 				    }
 				}
 			]
@@ -601,64 +601,16 @@
 		        phase: fellowship
 		        cost: {
 		            type: play
-		            filter: choose(ranger)
+		            select: choose(ranger)
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(ringBound,companion)
+		            select: choose(ringBound,companion)
 		        }
 		    }
 		]
 		gametext: <b>Ring-bound</b>. <b>Ranger</b>.<br>If Faramir is in your starting fellowship, his twilight cost is -1.<br><b>Fellowship:</b> Play a ranger to heal a Ring-bound companion.
 		lore: Not while Faramir is Captain... his life is charmed, or fate spares him for some other end.'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	6_126: {
-		cardInfo: {
-			imagePath: decipher/LOTR06126.jpg
-			javaClass: true
-			//parentId: 6_126
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 6R126
-			rarity: R
-			setNum: "6"
-			cardNum: 126
-			style: Standard
-		}
-		title: Ancient Roads
-		unique: false
-		side: Free Peoples
-		culture: Gondor
-		twilight: 1
-		type: Condition
-		keywords: Support Area
-		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifySiteNumber
-		            requires: {
-		                type: canSpot
-		                filter: ranger
-		                count: 3
-		            }
-		            filter: minion,inSkirmishAgainst(ranger)
-		            amount: 2
-		        }
-		    }
-		]
-		gametext: Plays to your support area.<br>While you can spot 3 rangers, the site number of each minion skirmishing a ranger is +2.
-		lore: Presently the noise of fighting broke out near at hand, just above their hiding-place.
 		promotext: ""
 		alts: {
 			promos: {

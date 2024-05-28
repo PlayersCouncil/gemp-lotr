@@ -9,11 +9,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf,character)
+				select: choose(dwarf,character)
 			}
 			effect: {
 				type: discard
-				filter: choose(condition)
+				select: choose(condition)
 				count: {
 					type: requires
 					requires: {
@@ -43,11 +43,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: shuffleCardsFromDiscardIntoDrawDeck
-				filter: choose(side(free people),event)
+				select: choose(side(free people),event)
 			}
 		}
 	}
@@ -61,7 +61,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(dwarf,character)
+				select: choose(dwarf,character)
 				memorize: chosenDwarf
 				amount: {
 					type: requires
@@ -86,7 +86,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf,character)
+				select: choose(dwarf,character)
 			}
 			effect: {
 				type: choice
@@ -97,12 +97,12 @@
 				effects: [
 					{
 						type: wound
-						filter: choose(orc)
+						select: choose(orc)
 						count: 2
 					}
 					{
 						type: wound
-						filter: choose(orc)
+						select: choose(orc)
 						times: 2
 					}
 				]
@@ -123,7 +123,7 @@
 				type: aidCost
 				cost: {
 					type: exert
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			}
 			{
@@ -138,7 +138,7 @@
 				}
 				effect: {
 					type: discard
-					filter: choose(condition)
+					select: choose(condition)
 				}
 			}
 		]
@@ -173,12 +173,12 @@
 					}
 					{
 						type: transferToSupport
-						filter: self
+						select: self
 					}
 				]
 				effect: {
 					type: preventWound
-					filter: choose(memory(bearer))
+					select: choose(memory(bearer))
 				}
 			}
 		]
@@ -197,7 +197,7 @@
 				type: aidCost
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 			}
 			{
@@ -224,7 +224,7 @@
 				type: aidCost
 				cost: {
 					type: exert
-					filter: choose(name(Bilbo))
+					select: choose(name(Bilbo))
 				}
 			}
 			{
@@ -254,11 +254,11 @@
 			phase: maneuver
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: addKeyword
-				filter: self
+				select: self
 				keyword: defender+1
 				until: start(regroup)
 			}
@@ -285,7 +285,7 @@
 			cost: [
 				{
 					type: exert
-					filter: self
+					select: self
 				}
 				{
 					type: addTwilight
@@ -294,7 +294,7 @@
 			]
 			effect: {
 				type: preventWound
-				filter: choose(culture(dwarven),companion)
+				select: choose(culture(dwarven),companion)
 			}
 		}
 	}
@@ -315,11 +315,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: modifyStrength
-				filter: self
+				select: self
 				amount: 3
 			}
 		}
@@ -341,16 +341,16 @@
 			phase: archery
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: [
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 				}
 				{
 				    type: disableArcheryTotalContribution
-				    filter: self
+				    select: self
 				}
 			]
 		}
@@ -372,7 +372,7 @@
 				effects: [
 					{
 						type: heal
-						 filter: choose(companion)
+						 select: choose(companion)
 					}
 					{
 						type: conditional
@@ -382,7 +382,7 @@
 						}
 						effect: {
 							type: heal
-							filter: choose(companion,dwarf)
+							select: choose(companion,dwarf)
 							count: 2
 						}
 					}
@@ -400,11 +400,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(companion,not(name(Bilbo)))
+				select: choose(companion,not(name(Bilbo)))
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(name(Bilbo))
+				select: choose(name(Bilbo))
 				amount: 3
 			}
 		}
@@ -426,17 +426,17 @@
 			cost: [
 				{
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				{
 					type: discard
-					filter: choose(culture(dwarven),follower)
+					select: choose(culture(dwarven),follower)
 				}
 			]
 			effect: {
 				type: discard
-				filter: choose(possession)
+				select: choose(possession)
 			}
 		}
 	}
@@ -455,7 +455,7 @@
 				cost: {
 					type: discardFromHand
 					forced: false
-					filter: choose(culture(dwarven))
+					select: choose(culture(dwarven))
 				}
 			}
 			{
@@ -467,7 +467,7 @@
 				}
 				effect: {
 					type: heal
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
@@ -499,7 +499,7 @@
 				}
 				effect: {
 					type: wound
-					filter: choose(orc)
+					select: choose(orc)
 				}
 			}
 		]
@@ -519,7 +519,7 @@
 				cost: {
 					type: discardFromHand
 					forced: false
-					filter: choose(culture(dwarven))
+					select: choose(culture(dwarven))
 				}
 			}
 			{
@@ -566,11 +566,11 @@
 				phase: fellowship
 				cost: {
 					type: discard
-					filter: choose(culture(dwarven),follower)
+					select: choose(culture(dwarven),follower)
 				}
 				effect: {
 					type: putCardsFromDiscardOnBottomOfDeck
-					filter: choose(culture(dwarven),artifact)
+					select: choose(culture(dwarven),artifact)
 				}
 			}
 		]
@@ -585,7 +585,7 @@
 			type: event
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(dwarven),follower)
+				select: choose(culture(dwarven),follower)
 			}
 		}
 	}
@@ -617,11 +617,11 @@
 					effects: [
 						{
 							type: heal
-							filter: choose(wise,ally)
+							select: choose(wise,ally)
 						}
 						{
 							type: heal
-							filter: self
+							select: self
 							times: 2
 						}
 					]
@@ -632,12 +632,12 @@
 				phase: regroup
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
 					type: heal
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			}
 		]
@@ -659,12 +659,12 @@
 			phase: regroup
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: [
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 					memorize: chosenMinion
 				}
 				{
@@ -676,7 +676,7 @@
 					}
 					effect: {
 						type: wound
-						filter: memory(chosenMinion)
+						select: memory(chosenMinion)
 					}
 				}
 			]
@@ -699,13 +699,13 @@
 				effects: [
 					{
 						type: playCardFromDrawDeck
-						filter: choose(or(name(Gandalf),and(ally,not(dwarf))))
+						select: choose(or(name(Gandalf),and(ally,not(dwarf))))
                         showAll: true
                         shuffle: true
 					}
 					{
 						type: playCardFromDiscard
-						filter: choose(or(name(Gandalf),and(ally,not(dwarf))))
+						select: choose(or(name(Gandalf),and(ally,not(dwarf))))
 					}
 				]
 			}
@@ -724,7 +724,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 				times: 2
 			}
 			effect: {
@@ -736,11 +736,11 @@
 				effects: [
 					{
 						type: discard
-						filter: choose(troll)
+						select: choose(troll)
 					}
 					{
 						type: wound
-						filter: choose(minion)
+						select: choose(minion)
 						times: 2
 					}
 				]
@@ -782,7 +782,7 @@
 				cost: [
 					{
 						type: play
-						filter: choose(culture(gandalf),skirmish,event)
+						select: choose(culture(gandalf),skirmish,event)
 					}
 					{
 						type: addBurdens
@@ -791,7 +791,7 @@
 				]
 				effect: {
 					type: playCardFromDrawDeck
-					filter: choose(dwarf)
+					select: choose(dwarf)
                     showAll: true
                     shuffle: true
 				}
@@ -802,11 +802,11 @@
 				text: Play a [DWARVEN] skirmish event
 				cost: {
 					type: play
-					filter: choose(culture(dwarven),skirmish,event)
+					select: choose(culture(dwarven),skirmish,event)
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(orc,inSkirmishAgainst(name(Bilbo)))
+					select: choose(orc,inSkirmishAgainst(name(Bilbo)))
 					amount: -2
 				}
 			}
@@ -856,7 +856,7 @@
 				cost: [
 					{
 						type: discard
-						filter: choose(culture(dwarven),follower)
+						select: choose(culture(dwarven),follower)
 					}
 					{
 						type: addBurdens
@@ -895,7 +895,7 @@
 				}
 				effect: {
 					type: wound
-					filter: choose(minion,not(name(Smaug)))
+					select: choose(minion,not(name(Smaug)))
 				}
 			}
 			{
@@ -914,13 +914,13 @@
 					effects: [
 	          {
               type: playCardFromDrawDeck
-              filter: choose(or(artifact,and(dwarf,companion)))
+              select: choose(or(artifact,and(dwarf,companion)))
                 showAll: true
                 shuffle: true
             }
             {
               type: playCardFromDiscard
-              filter: choose(or(artifact,and(dwarf,companion)))
+              select: choose(or(artifact,and(dwarf,companion)))
             }
           ]
         }
@@ -963,7 +963,7 @@
         }
         effect: {
           type: playCardFromDrawDeck
-          filter: choose(dwarf,companion)
+          select: choose(dwarf,companion)
             showAll: true
             shuffle: true
         }
@@ -1020,11 +1020,11 @@
             cost: [
               {
                 type: exert
-                filter: choose(name(Gandalf))
+                select: choose(name(Gandalf))
               }
               {
                 type: exert
-                filter: choose(culture(elven),wise,ally)
+                select: choose(culture(elven),wise,ally)
               }
             ]
             effect: {
@@ -1053,7 +1053,7 @@
       }
       effect: {
         type: modifyStrength
-        filter: choose(minion)
+        select: choose(minion)
         amount: -3
       }
     }
@@ -1091,11 +1091,11 @@
         phase: fellowship
         cost: {
           type: discard
-          filter: choose(culture(dwarven),follower)
+          select: choose(culture(dwarven),follower)
         }
         effect: {
           type: modifyStrength
-          filter: self
+          select: self
           amount: {
             type: requires
             requires: {
@@ -1113,11 +1113,11 @@
         phase: skirmish
         cost: {
           type: discard
-          filter: choose(culture(dwarven),follower)
+          select: choose(culture(dwarven),follower)
         }
         effect: {
           type: modifyStrength
-          filter: self
+          select: self
           amount: {
             type: requires
             requires: {
@@ -1173,7 +1173,7 @@
         }
         effect: {
           type: modifyStrength
-          filter: self
+          select: self
           amount: {
             type: cardAffectedLimitPerPhase
             limit: 3
@@ -1253,7 +1253,7 @@
         phase: skirmish
         cost: {
           type: play
-          filter: choose(culture(dwarven),skirmish,event)
+          select: choose(culture(dwarven),skirmish,event)
         }
         effect: {
           type: drawCards
@@ -1292,7 +1292,7 @@
       }
       effect: {
         type: discard
-        filter: choose(condition)
+        select: choose(condition)
       }
     }
   }
@@ -1344,7 +1344,7 @@
         effect: [
           {
             type: negateWound
-            filter: all(bearer)
+            select: all(bearer)
           }
           {
             type: addBurdens

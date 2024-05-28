@@ -20,20 +20,20 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: [
 					{
 						type: playCardFromDrawDeck
-						filter: choose(item)
+						select: choose(item)
 						on: culture(shire),companion
                         showAll: true
                         shuffle: true
 					}
 					{
 						type: playCardFromDrawDeck
-						filter: choose(item)
+						select: choose(item)
 						on: culture(shire),companion
                         showAll: true
                         shuffle: true
@@ -93,13 +93,13 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 						times: 3
 					}
 					{
 						type: chooseActiveCards
 						text: Choose minion to prevent from skirmishing
-						filter: choose(minion)
+						select: choose(minion)
 						memorize: chosenMinion
 					}
 				]
@@ -109,11 +109,11 @@
 					text: Would you like to exhaust {chosenMinion} to permit it to skirmish?
 					cost: {
 						type: exhaust
-						filter: memory(chosenMinion)
+						select: memory(chosenMinion)
 					}
 					effect: {
         		        type: disableSkirmishAssignment
-                        filter: memory(chosenMinion)
+                        select: memory(chosenMinion)
 						until: regroup
 					}
 				}
@@ -139,12 +139,12 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: AlterOverwhelmMultiplier
-						filter: choose(culture(shire),companion,inSkirmish)
+						select: choose(culture(shire),companion,inSkirmish)
 						memorize: shireCompanion
 					}
 					{
@@ -156,7 +156,7 @@
 						}
 						effect: {
 							type: modifyStrength
-							filter: choose(memory(shireCompanion))
+							select: choose(memory(shireCompanion))
 							amount: 1
 						}
 					}
@@ -195,7 +195,7 @@
 					effects: [
 						{
 							type: exert
-							filter: self
+							select: self
 						}
 						{
 							type: addBurdens
@@ -205,7 +205,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(memory(winner))
+					select: choose(memory(winner))
 				}
 			}
 			{
@@ -231,12 +231,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(companion,signet(frodo),inSkirmish)
+				select: choose(companion,signet(frodo),inSkirmish)
 				memorize: exertedCompanion
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(memory(exertedCompanion))
+				select: choose(memory(exertedCompanion))
 				amount: {
 					type: forEachYouCanSpot
 					filter: companion,signet(frodo)
@@ -267,7 +267,7 @@
 			effect: {
 				type: heal
 				count: 2
-				filter: choose(companion,signet(frodo))
+				select: choose(companion,signet(frodo))
 			}
 		}
 	}

@@ -28,7 +28,7 @@
 		        phase: fellowship
 		        cost: {
 		            type: play
-		            filter: choose(companion,signet(Frodo))
+		            select: choose(companion,signet(Frodo))
 		        }
 		        effect: {
 		            type: removeBurdens
@@ -74,12 +74,12 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: choose(name(Aragorn))
+		            select: choose(name(Aragorn))
 		            times: 2
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(companion,signet(Aragorn))
+		            select: choose(companion,signet(Aragorn))
                     showAll: true
                     shuffle: true
 		        }
@@ -125,12 +125,12 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: choose(companion,signet(Gandalf))
+		            select: choose(companion,signet(Gandalf))
 		            count: 3
 		        }
 		        effect: {
 		            type: playCardFromDeadPile
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		        }
 		    }
 		]
@@ -179,7 +179,7 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: all(any)
+		            select: all(any)
 		        }
 		        effect: {
 		            type: drawCards
@@ -229,7 +229,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: all(ally)
+		            select: all(ally)
 		        }
 		    }
 		]
@@ -280,7 +280,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(your,minion)
+		            select: choose(your,minion)
 		        }
 		    }
 		]

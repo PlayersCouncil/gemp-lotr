@@ -271,7 +271,7 @@ public class AssignmentAtTest extends AbstractAtTest {
         PhysicalCardImpl merry = new PhysicalCardImpl(100, "1_303", P1, _cardLibrary.getLotroCardBlueprint("1_303"));
         PhysicalCardImpl pippin = new PhysicalCardImpl(101, "1_306", P1, _cardLibrary.getLotroCardBlueprint("1_306"));
         PhysicalCardImpl urukHaiRaidingParty = new PhysicalCardImpl(102, "1_158", P2, _cardLibrary.getLotroCardBlueprint("1_158"));
-        PhysicalCardImpl gateTroll = new PhysicalCardImpl(103, "6_128", P2, _cardLibrary.getLotroCardBlueprint("6_128"));
+        PhysicalCardImpl gateTroll = new PhysicalCardImpl(103, "6_103", P2, _cardLibrary.getLotroCardBlueprint("6_103"));
 
         _game.getGameState().addCardToZone(_game, merry, Zone.FREE_CHARACTERS);
         _game.getGameState().addCardToZone(_game, pippin, Zone.FREE_CHARACTERS);

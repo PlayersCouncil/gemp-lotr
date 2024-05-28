@@ -17,16 +17,16 @@
 			cost: [
 				{
 					type: exert
-					filter: self
+					select: self
 				}
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 			]
 			effect: {
 				type: discard
-				filter: choose(side(shadow),condition)
+				select: choose(side(shadow),condition)
 			}
 		}
 	}
@@ -44,7 +44,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -58,7 +58,7 @@
 					type: fromMemory
 					memory: numberOfPipes
 				}
-				filter: choose(tale)
+				select: choose(tale)
 			}
 		}
 	}
@@ -75,7 +75,7 @@
 			}
 			effect: {
 				type: wound
-				filter: all(minion,inSkirmishAgainst(ring bearer))
+				select: all(minion,inSkirmishAgainst(ring bearer))
 			}
 		}
 	}
@@ -105,11 +105,11 @@
                 phase: skirmish
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: AlterOverwhelmMultiplier
-                    filter: choose(hobbit)
+                    select: choose(hobbit)
                     multiplier: 3
                 }
             }
@@ -132,11 +132,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: heal
-				filter: choose(or(name(Merry),name(Pippin)))
+				select: choose(or(name(Merry),name(Pippin)))
 			}
 		}
 	}
@@ -161,7 +161,7 @@
 			}
 			effect: {
 				type: heal
-				filter: all(name(Frodo))
+				select: all(name(Frodo))
 			}
 		}
 	}
@@ -194,22 +194,22 @@
 						type: costToEffect
 						cost: {
 							type: exert
-							filter: self
+							select: self
 						}
 						effect: {
 							type: heal
-							filter: choose(companion,not(culture(shire)))
+							select: choose(companion,not(culture(shire)))
 						}
 					}
 					{
 						type: costToEffect
 						cost: {
 							type: exert
-							filter: choose(companion,not(culture(shire)))
+							select: choose(companion,not(culture(shire)))
 						}
 						effect: {
 							type: heal
-							filter: self
+							select: self
 						}
 					}
 				]
@@ -230,7 +230,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -244,7 +244,7 @@
 					type: fromMemory
 					memory: numberOfPipes
 				}
-				filter: choose(companion,hasAttached(pipe))
+				select: choose(companion,hasAttached(pipe))
 			}
 			limitPerPhase: 1
 		}
@@ -263,7 +263,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -297,11 +297,11 @@
 			phase: fellowship
 			cost: {
 				type: play
-				filter: choose(hobbit,ally)
+				select: choose(hobbit,ally)
 			}
 			effect: {
 				type: heal
-				filter: choose(hobbit,companion)
+				select: choose(hobbit,companion)
 			}
 		}
 	}
@@ -323,7 +323,7 @@
 				}
 				effect: {
 					type: heal
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -331,11 +331,11 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: heal
-					filter: choose(not(self),shire,ally)
+					select: choose(not(self),shire,ally)
 				}
 			}
 		]
@@ -368,11 +368,11 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(hobbit,companion)
+				select: choose(hobbit,companion)
 			}
 			effect: {
 				type: heal
-				filter: choose(shire,ally)
+				select: choose(shire,ally)
 			}
 		}
 	}
@@ -427,12 +427,12 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(name(Merry))
+					select: choose(name(Merry))
 					times: 2
 				}
 				effect: {
 					type: playCardFromDrawDeck
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
                     showAll: true
                     shuffle: true
 				}
@@ -452,11 +452,11 @@
 			phase: fellowship
 			cost: {
 				type: discard
-				filter: choose(pipeweed,possession)
+				select: choose(pipeweed,possession)
 			}
 			effect: {
 				type: heal
-				filter: all(companion,hasAttached(pipe))
+				select: all(companion,hasAttached(pipe))
 			}
 			limitPerPhase: 1
 		}
@@ -499,7 +499,7 @@
 					}
 					{
 						type: modifyStrength
-						filter: choose(hobbit)
+						select: choose(hobbit)
 						amount: 2
 					}
 				]
@@ -599,7 +599,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -672,7 +672,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: cancelSkirmish
@@ -688,12 +688,12 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
 					amount: 3
-					filter: choose(hobbit)
+					select: choose(hobbit)
 				}
 			}
 		]
@@ -716,11 +716,11 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: heal
-					filter: choose(name(Sam))
+					select: choose(name(Sam))
 				}
 			}
 			{
@@ -728,11 +728,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(name(Sam))
+					select: choose(name(Sam))
 					amount: 2
 				}
 			}
@@ -764,12 +764,12 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
 					type: discard
-					filter: choose(side(shadow),condition,attachedTo(companion))
+					select: choose(side(shadow),condition,attachedTo(companion))
 				}
 			}
 			{
@@ -814,7 +814,7 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(name(Sam))
+					select: choose(name(Sam))
 				}
 				effect: {
 					type: removeBurdens
@@ -847,7 +847,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -876,7 +876,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(hobbit)
+					select: choose(hobbit)
 					amount: 1
 					memorize: chosenHobbit
 				}
@@ -918,7 +918,7 @@
       }
       effect: {
         type: heal
-        filter: choose(hobbit)
+        select: choose(hobbit)
       }
     }
   }
@@ -966,12 +966,12 @@
         ]
         cost: {
           type: discard
-          filter: self
+          select: self
         }
         effect: {
           type: modifyStrength
           until: start(regroup)
-          filter: all(hobbit,companion)
+          select: all(hobbit,companion)
           amount: 2
         }
       }
@@ -990,13 +990,13 @@
           }
           {
             type: discard
-            filter: self
+            select: self
           }
         ]
         effect: [
           {
             type: heal
-            filter: memory(bearer)
+            select: memory(bearer)
           }
           {
             type: removeBurdens
@@ -1022,7 +1022,7 @@
         effects: [
           {
             type: AlterOverwhelmMultiplier
-            filter: choose(hobbit)
+            select: choose(hobbit)
           }
           {
             type: conditional

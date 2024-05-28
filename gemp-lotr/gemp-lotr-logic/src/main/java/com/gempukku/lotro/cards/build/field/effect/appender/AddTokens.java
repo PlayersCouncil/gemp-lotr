@@ -27,19 +27,19 @@ import java.util.List;
 public class AddTokens implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "culture", "filter", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "count", "culture", "select", "memorize");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final Culture culture = FieldUtils.getEnum(Culture.class, effectObject.get("culture"), "culture");
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
-        if (filter == null)
-            throw new InvalidCardDefinitionException("Filter needs to be defined");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
+        if (select == null)
+            throw new InvalidCardDefinitionException("select needs to be defined");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter,
+                CardResolver.resolveCards(select,
                         actionContext -> new ConstantEvaluator(1), memory, "you", "Choose card to put tokens on", environment));
         result.addEffectAppender(
                 new DelayedAppender() {

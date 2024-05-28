@@ -77,7 +77,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(dwarf)
+				    select: choose(dwarf)
 				    memorize: chosenDwarf
 				    amount: {
 				        type: forEachWound
@@ -87,7 +87,7 @@
 				}
 				{
 				    type: addKeyword
-				    filter: memory(chosenDwarf)
+				    select: memory(chosenDwarf)
 				    keyword: damage
 				    amount: {
 				        type: forEachWound
@@ -153,7 +153,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -195,18 +195,18 @@
 			cost: [
                 {
                     type: exert
-                    filter: choose(ringBearer)
+                    select: choose(ringBearer)
                 }
                 {
                     type: exert
-                    filter: choose(dwarf)
+                    select: choose(dwarf)
                     memorize: exertedDwarf
                 }
 			]
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: memory(exertedDwarf)
+				    select: memory(exertedDwarf)
 				    amount: {
 				        type: forEachResistance
 				        filter: memory(exertedDwarf)
@@ -370,11 +370,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(bearer,name(Gimli))
+		            select: choose(bearer,name(Gimli))
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(bearer))
+		            select: choose(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		]
@@ -428,12 +428,12 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: choose(culture(dwarven),not(character))
+		            select: choose(culture(dwarven),not(character))
 		            count: 2
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(culture(dwarven),companion)
+		            select: choose(culture(dwarven),companion)
 		        }
 		    }
 		]
@@ -496,8 +496,8 @@
 		        }
 		        effect: {
 		            type: exchangeCardsInHandWithCardsStacked
-		            filterInHand: all(any)
-		            filterInStacked: self
+		            selectInHand: all(any)
+		            selectInStacked: self
 		        }
 		    }
 		]
@@ -598,7 +598,7 @@
 			effect: [
 				{
 				    type: preventWound
-				    filter: choose(dwarf,minResistance(3))
+				    select: choose(dwarf,minResistance(3))
 				}
 			]
 		}
@@ -640,12 +640,12 @@
 			cost: {
 			    type: discardFromHand
 			    forced: false
-			    filter: choose(culture(dwarven))
+			    select: choose(culture(dwarven))
 			},
 			effect: [
 				{
 				    type: playCardFromDrawDeck
-				    filter: choose(culture(dwarven),possession)
+				    select: choose(culture(dwarven),possession)
 				    on: culture(dwarven),companion,minResistance(5)
                     showAll: true
                     shuffle: true

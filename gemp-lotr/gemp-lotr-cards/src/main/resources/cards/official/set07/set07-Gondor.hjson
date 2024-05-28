@@ -35,7 +35,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: all(another,weapon,attachedTo(bearer))
+                    select: all(another,weapon,attachedTo(bearer))
                 }
             }
             {
@@ -176,7 +176,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(another,culture(gondor),companion)
+		            select: choose(another,culture(gondor),companion)
 		        }
 		    }
 		]
@@ -280,7 +280,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(gondor),man)
+					select: choose(culture(gondor),man)
 					amount: 2
 					memorize: chosenMan
 				}
@@ -305,7 +305,7 @@
                             }
                             effect: {
                                 type: discard
-                                filter: choose(memory(sauronMinions))
+                                select: choose(memory(sauronMinions))
                             }
                         }
                     ]
@@ -350,13 +350,13 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(or(culture(gondor),culture(shire)),companion,hasAttached(hand weapon))
+					select: choose(or(culture(gondor),culture(shire)),companion,hasAttached(hand weapon))
 					amount: 2
 					memorize: chosenCompanion
 				}
 				{
 				    type: addKeyword
-				    filter: memory(chosenCompanion)
+				    select: memory(chosenCompanion)
 				    keyword: damage
 				    amount: 1
 				}
@@ -406,7 +406,7 @@
 		        phase: fellowship
 		        effect: {
 		            type: play
-		            filter: choose(culture(gondor),knight)
+		            select: choose(culture(gondor),knight)
 		            cost: -2
 		        }
 		    }
@@ -532,11 +532,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(engine,machine,possession)
+		            select: choose(engine,machine,possession)
 		        }
 		    }
 		]
@@ -599,7 +599,7 @@
                 ]
                 effect: {
                     type: discard
-                    filter: choose(minion)
+                    select: choose(minion)
                 }
 		    }
 		]
@@ -645,7 +645,7 @@
 			effect: [
 				{
 					type: heal
-					filter: all(culture(gondor),companion)
+					select: all(culture(gondor),companion)
 				}
 			]
 		}
@@ -707,11 +707,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(memory(losers),fierce,minion)
+		            select: choose(memory(losers),fierce,minion)
 		        }
 		    }
 		]
@@ -760,11 +760,11 @@
 		        phase: fellowship
 		        cost: {
 		            type: play
-		            filter: choose(culture(rohan),man)
+		            select: choose(culture(rohan),man)
 		        }
 		        effect: {
 		            type: heal
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -773,11 +773,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(unbound,hobbit)
+		            select: choose(unbound,hobbit)
 		            amount: 2
 		        }
 		    }
@@ -787,11 +787,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(name(Gandalf))
+		            select: choose(name(Gandalf))
 		        }
 		        effect: {
 		            type: preventAllWounds
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -845,7 +845,7 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(culture(gondor),man)
+		                    select: choose(culture(gondor),man)
 		                }
 		                {
 		                    type: spot
@@ -855,7 +855,7 @@
 		        }
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
 		            fromSupport: true
 		            where: choose(minion)
 		        }
@@ -911,7 +911,7 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: choose(culture(gondor),fortification)
+		                    select: choose(culture(gondor),fortification)
 		                }
 		                {
 		                    type: discardFromHand
@@ -921,7 +921,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: bearer
+		            select: bearer
 		            amount: 2
 		        }
 		    }
@@ -974,11 +974,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(bearer),hasAttached(fortification))
+		            select: choose(minion,inSkirmishAgainst(bearer),hasAttached(fortification))
 		        }
 		    }
 		]
@@ -1036,7 +1036,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		    {
@@ -1044,11 +1044,11 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: putCardsFromDiscardOnTopOfDeck
-		            filter: choose(culture(gondor),fortification)
+		            select: choose(culture(gondor),fortification)
 		        }
 		    }
 		]
@@ -1095,7 +1095,7 @@
 		        phase: fellowship
 		        cost: {
 		            type: discard
-		            filter: choose(fortification)
+		            select: choose(fortification)
 		        }
 		        effect: {
 		            type: removeThreats
@@ -1153,7 +1153,7 @@
 		        }
 		        effect: {
 		            type: modifySiteNumber
-		            filter: choose(minion)
+		            select: choose(minion)
 		            amount: 2
 		            until: regroup
 		        }
@@ -1205,7 +1205,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: bearer
+		            select: bearer
 		            keyword: damage
 		            amount: 1
 		        }
@@ -1249,7 +1249,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(gondor),companion)
+					select: choose(culture(gondor),companion)
 					amount: 2
 					memorize: chosenCompanion
 				}
@@ -1262,7 +1262,7 @@
 				    }
 				    effect: {
 				        type: exert
-				        filter: choose(minion,inSkirmishAgainst(memory(chosenCompanion)))
+				        select: choose(minion,inSkirmishAgainst(memory(chosenCompanion)))
 				    }
 				}
 			]
@@ -1309,7 +1309,7 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(culture(gondor),man)
+				select: choose(culture(gondor),man)
 			},
 			effect: [
 				{
@@ -1378,7 +1378,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -1388,7 +1388,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: choice
@@ -1399,11 +1399,11 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: choose(minion)
+		                    select: choose(minion)
 		                }
 		                {
 		                    type: discard
-		                    filter: all(roaming,minion)
+		                    select: all(roaming,minion)
 		                }
 		            ]
 		        }
@@ -1468,7 +1468,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(gondor),fortification)
+		            select: choose(culture(gondor),fortification)
 		        }
 		    }
 		]
@@ -1590,7 +1590,7 @@
 				    effect: {
 				        type: addTokens
 				        culture: gondor
-				        filter: choose(your,condition,hasToken(gondor))
+				        select: choose(your,condition,hasToken(gondor))
 				    }
 				}
 				{
@@ -1690,11 +1690,11 @@
 		        phase: fellowship
 		        cost: {
 		            type: discard
-		            filter: choose(fortification)
+		            select: choose(fortification)
 		        }
 		        effect: {
 		            type: heal
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		    }
@@ -1746,7 +1746,7 @@
 		        cost: {
 		            type: removeTokens
 		            culture: gondor
-		            filter: choose(your,condition)
+		            select: choose(your,condition)
 		        }
 		        effect: {
 		            type: if
@@ -1757,7 +1757,7 @@
 		            true: {
 		                type: discard
 		                player: shadow
-		                filter: memory(playedCard)
+		                select: memory(playedCard)
 		            }
 		            false: {
 		                type: removeTwilight
@@ -1817,7 +1817,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: bearer
+		            select: bearer
 		            amount: 1
 		        }
 		    }
@@ -1868,12 +1868,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(culture(gondor),man)
+		            select: choose(culture(gondor),man)
 		            memorize: exertedMan
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(memory(exertedMan)))
+		            select: choose(minion,inSkirmishAgainst(memory(exertedMan)))
 		        }
 		    }
 		    {
@@ -1884,7 +1884,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -1941,7 +1941,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(roaming,minion,inSkirmishAgainst(self))
+		            select: choose(roaming,minion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -2031,7 +2031,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: gondor
-		            filter: self
+		            select: self
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: or(name(Aragorn),name(Boromir),name(Denethor),name(Faramir))
@@ -2051,24 +2051,24 @@
 		                {
                             type: removeTokens
                             culture: gondor
-                            filter: self
+                            select: self
                         }
                         {
                             type: discard
-                            filter: self
+                            select: self
                         }
                     ]
 		        }
 		        effect: [
                     {
                         type: modifyStrength
-                        filter: choose(culture(gondor),companion)
+                        select: choose(culture(gondor),companion)
                         amount: 1
                         memorize: chosenCompanion
                     }
                     {
                         type: addKeyword
-                        filter: memory(chosenCompanion)
+                        select: memory(chosenCompanion)
                         keyword: damage
                         amount: 1
                     }
@@ -2168,7 +2168,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		            times: 2
 		        }
 		        effect: [
@@ -2180,7 +2180,7 @@
 		            }
                     {
                         type: modifyStrength
-                        filter: bearer
+                        select: bearer
                         amount: {
                             type: fromMemory
                             memory: spotCount
@@ -2293,7 +2293,7 @@
 		        }
 		        effect: {
 		            type: exhaust
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -2346,7 +2346,7 @@
 				    }
 				    {
 				        type: exert
-				        filter: choose(culture(gondor),man)
+				        select: choose(culture(gondor),man)
 				        count: 2
 				    }
 				]
@@ -2421,7 +2421,7 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(culture(gondor),man)
+		                    select: choose(culture(gondor),man)
 		                }
 		                {
 		                    type: spot
@@ -2431,7 +2431,7 @@
 		        }
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
                     fromSupport: true
 		            where: choose(minion)
 		        }
@@ -2481,12 +2481,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(culture(gondor),man)
+		            select: choose(culture(gondor),man)
 		            count: 3
 		        }
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
                     fromSupport: true
 		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
 		        }
@@ -2539,7 +2539,7 @@
 			effect: [
 				{
 					type: wound
-					filter: choose(roaming,minion,inSkirmishAgainst(culture(gondor),man))
+					select: choose(roaming,minion,inSkirmishAgainst(culture(gondor),man))
 					times: 2
 				}
 			]
@@ -2585,7 +2585,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(gondor),man)
+					select: choose(culture(gondor),man)
 					amount: 3
 				}
 			]
@@ -2647,7 +2647,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: choose(culture(gondor),fortification)
+		            select: choose(culture(gondor),fortification)
 		            count: 2
 		        }
 		        effect: {
@@ -2695,12 +2695,12 @@
 		        phase: fellowship
 		        cost: {
 		            type: play
-		            filter: choose(culture(gondor),man)
+		            select: choose(culture(gondor),man)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: gondor
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -2710,7 +2710,7 @@
 		        effect: [
 		            {
 		                type: play
-		                filter: choose(culture(gondor),companion)
+		                select: choose(culture(gondor),companion)
 		                cost: {
 		                    type: forEachToken
 		                    culture: gondor
@@ -2720,7 +2720,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -2777,7 +2777,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(man,inSkirmishAgainst(self))
+		            select: choose(man,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -2831,7 +2831,7 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(culture(gondor),man)
+		                    select: choose(culture(gondor),man)
 		                }
 		                {
 		                    type: spot
@@ -2842,7 +2842,7 @@
 		        }
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
                     fromSupport: true
 		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
 		        }
@@ -2901,12 +2901,12 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: discard
-		                filter: choose(minion)
+		                select: choose(minion)
 		            }
 		            {
 		                type: removeTwilight
@@ -2976,12 +2976,12 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(culture(gondor),man)
+		                    select: choose(culture(gondor),man)
 		                    count: 3
 		                }
 		                {
 		                    type: exert
-		                    filter: choose(knight)
+		                    select: choose(knight)
 		                    count: 2
 		                }
 		            ]
@@ -3029,7 +3029,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(roaming,minion,inSkirmishAgainst(culture(gondor),man))
+					select: choose(roaming,minion,inSkirmishAgainst(culture(gondor),man))
 					amount: -3
 				}
 			]
@@ -3095,7 +3095,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {

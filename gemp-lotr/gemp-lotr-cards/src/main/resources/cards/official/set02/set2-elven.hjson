@@ -37,7 +37,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -60,7 +60,7 @@
 				effect: {
 					type: discard
 					player: shadowPlayer
-					filter: choose(minion)
+					select: choose(minion)
 				}
 				text: Would you like to remove (3) to prevent discarding a minion?
 				cost: {
@@ -100,11 +100,11 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: preventWound
-					filter: choose(elf)
+					select: choose(elf)
 				}
 			}
 		]
@@ -119,11 +119,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: {
 				type: wound
-				filter: all(nazgul)
+				select: all(nazgul)
 				times: {
 					type: requires
 					requires: {
@@ -146,7 +146,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf,ally)
+				select: choose(elf,ally)
 			}
 			effect: [
 				{
@@ -170,7 +170,7 @@
 				}
 				{
 					type: discard
-					filter: choose(condition)
+					select: choose(condition)
 					count: {
 						type: range
 						from: 1

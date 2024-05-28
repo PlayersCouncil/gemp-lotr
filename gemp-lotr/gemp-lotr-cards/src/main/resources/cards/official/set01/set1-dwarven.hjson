@@ -9,7 +9,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				memorize: chosenDwarf
 				amount: {
 					type: requires
@@ -33,18 +33,18 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				memorize: exertedDwarf
 			}
 			effect: [
 				{
 					type: modifyStrength
-					filter: memory(exertedDwarf)
+					select: memory(exertedDwarf)
 					amount: 3
 				}
 				{
 					type: addKeyword
-					filter: memory(exertedDwarf)
+					select: memory(exertedDwarf)
 					keyword: damage+1
 				}
 			]
@@ -61,13 +61,13 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					amount: 2
 					memorize: chosenDwarf
 				}
 				{
 					type: addKeyword
-					filter: memory(chosenDwarf)
+					select: memory(chosenDwarf)
 					keyword: damage+1
 				}
 			]
@@ -83,7 +83,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf,companion)
+				select: choose(dwarf,companion)
 			}
 			effect: {
 				type: drawCards
@@ -178,7 +178,7 @@
 						text: Would you like to heal bearer?
 						effect: {
 							type: heal
-							filter: bearer
+							select: bearer
 						}
 					}
 					{
@@ -186,7 +186,7 @@
 						text: Would you like to heal bearer?
 						effect: {
 							type: heal
-							filter: bearer
+							select: bearer
 						}
 					}
 				]
@@ -198,7 +198,7 @@
 				}
 				effect: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
@@ -279,11 +279,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: modifyStrength
-				filter: self
+				select: self
 				amount: 2
 			}
 		}
@@ -315,7 +315,7 @@
 				}
 				effect: {
 					type: wound
-					filter: choose(orc)
+					select: choose(orc)
 				}
 			}
 		]
@@ -348,7 +348,7 @@
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 				effect: {
@@ -359,7 +359,7 @@
 					}
 					effect: {
 						type: preventWound
-						filter: choose(memory(bearer))
+						select: choose(memory(bearer))
 					}
 				}
 			}
@@ -380,7 +380,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(dwarf)
+					select: choose(dwarf)
 				}
 			}
 			{
@@ -414,11 +414,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: shuffleCardsFromDiscardIntoDrawDeck
-				filter: choose(culture(dwarven),event)
+				select: choose(culture(dwarven),event)
 			}
 		}
 	}
@@ -432,7 +432,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf)
+				select: choose(dwarf)
 			}
 			effect: [
 				{
@@ -470,7 +470,7 @@
 							text: Would you like to discard 1 Shadow card revealed?
 							effect: {
 								type: discardCardsFromDrawDeck
-								filter: choose(side(shadow),memory(revealedFreepsCards))
+								select: choose(side(shadow),memory(revealedFreepsCards))
 								showAll: false
 								shuffle: false
 							}
@@ -501,7 +501,7 @@
 							effect: {
 								type: discardCardsFromDrawDeck
 								deck: shadow
-								filter: choose(side(shadow),memory(revealedShadowCards))
+								select: choose(side(shadow),memory(revealedShadowCards))
 								showAll: false
 								shuffle: false
 							}
@@ -531,7 +531,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf)
+				select: choose(dwarf)
 			}
 			effect: [
 				{
@@ -544,19 +544,19 @@
 						{
 							type: wound
 							count: 2
-							filter: choose(orc)
+							select: choose(orc)
 						}
 						{
 							type: chooseActiveCards
 							memorize: chosenOrc
-							filter: choose(orc)
+							select: choose(orc)
 							text: Choose an Orc to wound twice
 						}
 					]
 				}
 				{
 					type: wound
-					filter: memory(chosenOrc)
+					select: memory(chosenOrc)
 					times: 2
 				}
 			]
@@ -578,7 +578,7 @@
 				}
 				effect: {
 					type: discard
-					filter: all(orc,memory(involvedCharacters))
+					select: all(orc,memory(involvedCharacters))
 				}
 			}
 			{
@@ -589,7 +589,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -619,7 +619,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf)
+				select: choose(dwarf)
 			}
 			effect: [
 				{
@@ -688,7 +688,7 @@
 				}
 				{
 					type: putCardsFromDiscardIntoHand
-					filter: memory(discardedCard)
+					select: memory(discardedCard)
 				}
 			]
 		}
@@ -746,7 +746,7 @@
 			}
 			effect: {
 				type: heal
-				filter: choose(memory(winner))
+				select: choose(memory(winner))
 			}
 		}
 	}
@@ -760,7 +760,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				amount: {
 					type: requires
 					requires: {
@@ -789,11 +789,11 @@
 			phase: maneuver
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: EnableParticipationInArcheryFireAndSkirmishes
-				filter: self
+				select: self
 				until: start(regroup)
 			}
 		}
@@ -818,14 +818,14 @@
 				}
 				{
 					type: putCardsFromDeckIntoHand
-					filter: all(memory(revealedCards),side(free people))
+					select: all(memory(revealedCards),side(free people))
 					reveal: true
 					shuffle: false
 					showAll: false
 				}
 				{
 					type: discardCardsFromDrawDeck
-					filter: all(memory(revealedCards),not(side(free people)))
+					select: all(memory(revealedCards),not(side(free people)))
 					showAll: false
 					shuffle: false
 				}

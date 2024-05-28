@@ -79,7 +79,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: all(ally)
+		            select: all(ally)
 		        }
 		    }
 		]
@@ -126,11 +126,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(dwarf)
+		            select: choose(dwarf)
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(culture(dwarven),possession)
+		            select: choose(culture(dwarven),possession)
                     showAll: true
                     shuffle: true
 		        }
@@ -175,12 +175,12 @@
 		        phase: shadow
 		        cost: {
 		            type: play
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		        }
 		        effect:
 		        {
 		            type: discard
-		            filter: choose(condition)
+		            select: choose(condition)
 		        }
 		    }
 		]
@@ -354,7 +354,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: all(companion)
+		            select: all(companion)
 		        }
 		    }
 		]
@@ -400,7 +400,7 @@
 			optional: true
 			effect: {
                 type: playCardFromDrawDeck
-                filter: choose(culture(gollum),side(free peoples))
+                select: choose(culture(gollum),side(free peoples))
                 showAll: true
                 shuffle: true
 		    }
@@ -487,12 +487,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(your,character,not(enduring))
+		            select: choose(your,character,not(enduring))
 		            memorize: exertedCharacter
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: memory(exertedCharacter)
+		            select: memory(exertedCharacter)
 		            amount: 2
 		        }
 		    }
@@ -550,7 +550,7 @@
                 }
                 effect: {
                     type: play
-                    filter: choose(minion)
+                    select: choose(minion)
                     cost: -3
                 }
 		    }
@@ -741,12 +741,12 @@
 		        }
                 cost: {
                     type: exert
-                    filter: choose(hobbit)
+                    select: choose(hobbit)
                     count: 2
                 }
                 effect: {
                     type: playCardFromDrawDeck
-                    filter: choose(hobbit)
+                    select: choose(hobbit)
                     showAll: true
                     shuffle: true
                 }
@@ -866,7 +866,7 @@
 		        effect:
 		        {
 		            type: discard
-		            filter: choose(condition)
+		            select: choose(condition)
 		        }
 		    }
 		]
@@ -952,7 +952,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(your,or(name(Gollum),name(Sméagol)))
+		            select: choose(your,or(name(Gollum),name(Sméagol)))
 		        }
 		        effect: {
 		            type: playNextSite
@@ -1098,11 +1098,11 @@
 		        effect: [
 		            {
 		                type: heal
-		                filter: all(character,minResistance(5))
+		                select: all(character,minResistance(5))
 		            }
 		            {
 		                type: exert
-		                filter: all(character,maxResistance(4))
+		                select: all(character,maxResistance(4))
 		            }
 		        ]
 		    }
@@ -1194,7 +1194,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(elf)
+		            select: choose(elf)
 		            count: 2
 		        }
 		    }
@@ -1398,12 +1398,12 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(companion)
+		            select: choose(companion)
 		            count: 3
 		        }
 		        effect: {
 		            type: playCardFromDeadPile
-		            filter: choose(wizard)
+		            select: choose(wizard)
 		        }
 		    }
 		]
@@ -1454,7 +1454,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(ranger)
+		            select: choose(ranger)
                     showAll: true
                     shuffle: true
 		        }
@@ -1594,11 +1594,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(culture(rohan),man)
+		            select: choose(culture(rohan),man)
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(culture(rohan),mount)
+		            select: choose(culture(rohan),mount)
                     showAll: true
                     shuffle: true
 		        }
@@ -1698,7 +1698,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: all(hobbit,companion)
+		            select: all(hobbit,companion)
 		        }
 		    }
 		]
@@ -1741,7 +1741,7 @@
 		        phase: maneuver
 		        cost: {
                     type: exert
-                    filter: choose(your,culture(orc),minion)
+                    select: choose(your,culture(orc),minion)
 		        }
 		        effect: {
 		            type: discardCardAtRandomFromHand
@@ -1845,7 +1845,7 @@
 		            }
 		            effect: {
 		                type: wound
-		                filter: choose(companion)
+		                select: choose(companion)
 		            }
 		        }
 		    }
@@ -1936,7 +1936,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		        }
 		    }
 		]

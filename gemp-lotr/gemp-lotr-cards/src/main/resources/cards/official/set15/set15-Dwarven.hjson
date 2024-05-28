@@ -37,7 +37,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: dwarven
-		            filter: self
+		            select: self
 		            count: 2
 		        }
 		    }
@@ -53,12 +53,12 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: dwarven
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -76,14 +76,14 @@
 		                }
 		                true: {
 		                    type: putCardsFromDeckIntoHand
-		                    filter: memory(revealedCard)
+		                    select: memory(revealedCard)
                             reveal: true
                             shuffle: false
                             showAll: false
 		                }
 		                false: {
 		                    type: discardCardsFromDrawDeck
-		                    filter: memory(revealedCard)
+		                    select: memory(revealedCard)
                             showAll: false
                             shuffle: false
 		                }
@@ -128,13 +128,13 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(dwarf)
+			    select: choose(dwarf)
 			}
 			effect: [
 				{
 				    type: chooseActiveCards
 				    text: Choose {dwarven} condition to shuffle into deck
-				    filter: choose(culture(dwarven),condition,hasToken(dwarven))
+				    select: choose(culture(dwarven),condition,hasToken(dwarven))
 				    memorize: chosenCondition
 				}
 				{
@@ -148,14 +148,14 @@
 				}
 				{
 				    type: shuffleCardsFromPlayIntoDrawDeck
-				    filter: memory(chosenCondition)
+				    select: memory(chosenCondition)
 				}
 				{
 				    type: repeat
 				    times: memory(tokenCount)
 				    effect: {
 				        type: wound
-				        filter: choose(minion)
+				        select: choose(minion)
 				    }
 				}
 			]
@@ -263,11 +263,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: dwarven
-		            filter: choose(any)
+		            select: choose(any)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 2
 		        }
 		    }
@@ -322,11 +322,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: dwarven
-		            filter: choose(any)
+		            select: choose(any)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: bearer
+		            select: bearer
 		            amount: 1
 		        }
 		    }
@@ -369,7 +369,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(dwarf)
+				    select: choose(dwarf)
 				    amount: {
 				        type: condition
 				        condition: {
@@ -392,7 +392,7 @@
 				    }
 				    effect: {
                         type: addKeyword
-                        filter: memory(chosenDwarf)
+                        select: memory(chosenDwarf)
                         keyword: damage
                         amount: {
                             type: forEachYouCanSpot
@@ -455,11 +455,11 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(dwarven))
+		            select: choose(culture(dwarven))
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: bearer
+		            select: bearer
 		            keyword: damage
 		            amount: 1
 		        }
@@ -508,7 +508,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(hunter,or(culture(gondor),culture(elven)),companion)
+		            select: choose(hunter,or(culture(gondor),culture(elven)),companion)
 		            keyword: damage
 		            amount: 1
 		            until: regroup
@@ -519,11 +519,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(dwarven),companion)
+		            select: choose(culture(dwarven),companion)
 		            amount: 2
 		        }
 		    }
@@ -569,16 +569,16 @@
 		        cost: [
                     {
                         type: exert
-                        filter: choose(name(Legolas))
+                        select: choose(name(Legolas))
                     }
                     {
                         type: exert
-                        filter: choose(name(Aragorn))
+                        select: choose(name(Aragorn))
                     }
                 ]
                 effect: {
                     type: wound
-                    filter: choose(minion)
+                    select: choose(minion)
                 }
 		    }
 		    {
@@ -586,7 +586,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(name(Aragorn))
+		            select: choose(name(Aragorn))
 		        }
 		        requires: {
 		            type: canSpot
@@ -594,7 +594,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion)
+		            select: choose(minion)
 		            amount: {
 		                type: condition
 		                condition: [
@@ -617,7 +617,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(name(Gimli))
+		            select: choose(name(Gimli))
 		        }
 		        requires: {
 		            type: canSpot

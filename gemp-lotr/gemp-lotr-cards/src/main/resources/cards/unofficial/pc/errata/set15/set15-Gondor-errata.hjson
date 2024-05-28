@@ -40,12 +40,12 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 					times: 2
 				}
 				effect: {
 					type: wound
-					filter: choose(minion,roaming)
+					select: choose(minion,roaming)
 					times: 2
 				}
 			}
@@ -115,7 +115,7 @@
 					}
 					effect: {
 						type: modifySiteNumber
-						filter: choose(minion)
+						select: choose(minion)
 						count: 1
 						amount: 1
 						until: start(regroup)

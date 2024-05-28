@@ -23,16 +23,16 @@ import java.util.*;
 public class PutCardsFromPlayOnBottomOfDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "filter", "count");
+        FieldUtils.validateAllowedFields(effectObject, "player", "select", "count");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, valueSource, "_temp", player, "Choose cards in play", environment));
+                CardResolver.resolveCards(select, valueSource, "_temp", player, "Choose cards in play", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

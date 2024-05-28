@@ -30,12 +30,12 @@
 			}
 			cost: {
 				type: discard
-				filter: choose(culture(rohan),possession)
+				select: choose(culture(rohan),possession)
 			},
 			effect: [
 				{
 				    type: playCardFromDiscard
-				    filter: choose(culture(rohan),possession)
+				    select: choose(culture(rohan),possession)
 				}
 			]
 		}
@@ -79,17 +79,17 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(culture(rohan),companion)
+		                select: choose(culture(rohan),companion)
 		            }
 		            {
 		                type: exert
-		                filter: choose(or(and(culture(gondor),man),and(culture(shire),companion)))
+		                select: choose(or(and(culture(gondor),man),and(culture(shire),companion)))
 		            }
 		        ]
 		        effect: {
 		            type: addTokens
 		            culture: rohan
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -98,11 +98,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: rohan
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(minion,inSkirmishAgainst(companion))
+		            select: choose(minion,inSkirmishAgainst(companion))
 		        }
 		    }
 		]
@@ -168,7 +168,7 @@
                     }
                     {
                         type: playCardFromDrawDeck
-                        filter: choose(memory(revealedCards),culture(rohan),possession)
+                        select: choose(memory(revealedCards),culture(rohan),possession)
                         showAll: false
                         shuffle: false
                     }
@@ -234,12 +234,12 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		        effect: {
 		            type: discard
-		            filter: choose(hand weapon,attachedTo(minion,inSkirmishAgainst(name(Éowyn))))
+		            select: choose(hand weapon,attachedTo(minion,inSkirmishAgainst(name(Éowyn))))
 		        }
 		    }
 		]
@@ -281,7 +281,7 @@
 			effect: [
 			    {
 			        type: exert
-			        filter: choose(minion,inSkirmishAgainst(mounted,culture(rohan),man))
+			        select: choose(minion,inSkirmishAgainst(mounted,culture(rohan),man))
 			    }
 			]
 		}
@@ -322,7 +322,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(name(Théoden))
+			    select: choose(name(Théoden))
 			},
 			effect: [
 			    {
@@ -333,7 +333,7 @@
 			        }
 			        effect: {
 			            type: exert
-			            filter: choose(minion)
+			            select: choose(minion)
 			            count: 0-1
 			        }
 			    }
@@ -397,7 +397,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -461,11 +461,11 @@
 		            effects: [
 		                {
 		                    type: playCardFromDiscard
-		                    filter: choose(culture(rohan),companion)
+		                    select: choose(culture(rohan),companion)
 		                }
 		                {
 		                    type: playCardFromDrawDeck
-		                    filter: choose(culture(rohan),companion)
+		                    select: choose(culture(rohan),companion)
                             showAll: true
                             shuffle: true
 		                }

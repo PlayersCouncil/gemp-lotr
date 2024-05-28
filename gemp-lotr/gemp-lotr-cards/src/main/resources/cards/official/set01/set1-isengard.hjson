@@ -10,7 +10,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(uruk-hai)
+					select: choose(uruk-hai)
 				}
 			}
 			{
@@ -45,7 +45,7 @@
 							hand: fp
 							player: you
 							forced: true
-							filter: choose(memory(revealedCards))
+							select: choose(memory(revealedCards))
 						}
 					}
 				]
@@ -62,12 +62,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(uruk-hai)
+				select: choose(uruk-hai)
 				memorize: exertedUrukHai
 			}
 			effect: {
 				type: modifyStrength
-				filter: memory(exertedUrukHai)
+				select: memory(exertedUrukHai)
 				amount: 3
 			}
 		}
@@ -87,7 +87,7 @@
 			}
 			effect: {
 				type: putCardsFromDiscardOnBottomOfDeck
-				filter: all(nameFromMemory(playedUrukHai))
+				select: all(nameFromMemory(playedUrukHai))
 			}
 		}
 	}
@@ -110,11 +110,11 @@
             }
 			cost: {
 				type: exert
-				filter: choose(culture(isengard),minion)
+				select: choose(culture(isengard),minion)
 			}
 			effect: {
 				type: discard
-				filter: choose(exhausted,companion,not(ring bearer))
+				select: choose(exhausted,companion,not(ring bearer))
 			}
 		}
 	}
@@ -132,7 +132,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(isengard),minion)
+				select: choose(culture(isengard),minion)
 			}
 			effect: {
 				type: choice
@@ -144,7 +144,7 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(ring bearer)
+						select: choose(ring bearer)
 					}
 					{
 						type: addBurdens
@@ -181,7 +181,7 @@
                 }
                 effect: {
                     type: wound
-                    filter: choose(companion,not(ring bearer))
+                    select: choose(companion,not(ring bearer))
                 }
             }
         ]
@@ -196,7 +196,7 @@
 			type: event
 			effect: {
 				type: addKeyword
-				filter: choose(uruk-hai)
+				select: choose(uruk-hai)
 				keyword: fierce
 				until: start(regroup)
 			}
@@ -226,7 +226,7 @@
 			}
 			effect: {
 				type: addKeyword
-				filter: self
+				select: self
 				keyword: fierce
 				until: start(regroup)
 			}
@@ -243,13 +243,13 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(uruk-hai)
+					select: choose(uruk-hai)
 					amount: -1
 					memorize: chosenUrukHai
 				}
 				{
 					type: addKeyword
-					filter: memory(chosenUrukHai)
+					select: memory(chosenUrukHai)
 					keyword: damage+1
 				}
 			]
@@ -266,7 +266,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(uruk-hai)
+					select: choose(uruk-hai)
 				}
 			}
 			{
@@ -297,7 +297,7 @@
 			}
 			effect: {
 				type: exert
-				filter: choose(culture(gandalf),or(companion,ally))
+				select: choose(culture(gandalf),or(companion,ally))
 			}
 		}
 	}
@@ -331,7 +331,7 @@
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(possession)
+					select: choose(possession)
 					text: Choose possession to cancel strength bonuses from
 					memorize: chosenPossession
 				}
@@ -367,11 +367,11 @@
 				phase: skirmish
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(uruk-hai)
+					select: choose(uruk-hai)
 					amount: 2
 				}
 			}
@@ -392,7 +392,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(isengard),minion)
+					select: choose(culture(isengard),minion)
 				}
 			}
 			{
@@ -403,7 +403,7 @@
 				}
 				effect: {
 					type: exert
-					filter: all(hobbit,companion)
+					select: all(hobbit,companion)
 				}
 			}
 			{
@@ -413,7 +413,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -433,7 +433,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(isengard),minion)
+					select: choose(culture(isengard),minion)
 				}
 			}
 			{
@@ -455,7 +455,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -473,11 +473,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(isengard),minion)
+				select: choose(culture(isengard),minion)
 			}
 			effect: {
 				type: discard
-				filter: all(condition)
+				select: all(condition)
 			}
 		}
 	}
@@ -494,7 +494,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(uruk-hai)
+				select: choose(uruk-hai)
 			}
 			effect: {
 				type: choice
@@ -506,7 +506,7 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(companion)
+						select: choose(companion)
 						count: 2
 					}
 					{
@@ -531,7 +531,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(isengard),minion)
+					select: choose(culture(isengard),minion)
 				}
 			}
 			{
@@ -552,7 +552,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -574,7 +574,7 @@
 				effects: [
 					{
 						type: modifyStrength
-						filter: choose(uruk-hai)
+						select: choose(uruk-hai)
 						amount: 2
 					}
 					{
@@ -587,14 +587,14 @@
 						effect: [
 							{
 								type: modifyStrength
-								filter: choose(uruk-hai)
+								select: choose(uruk-hai)
 								amount: 4
 								until: start(regroup)
 								memorize: chosenUrukHai
 							}
 							{
 								type: addKeyword
-								filter: memory(chosenUrukHai)
+								select: memory(chosenUrukHai)
 								keyword: fierce
 								until: start(regroup)
 							}
@@ -615,7 +615,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(isengard),minion)
+					select: choose(culture(isengard),minion)
 				}
 			}
 			{
@@ -636,7 +636,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -760,7 +760,7 @@
 			}
 			effect: {
 				type: heal
-				filter: memory(winner)
+				select: memory(winner)
 			}
 		}
 	}
@@ -789,7 +789,7 @@
 				}
 				{
 					type: modifyStrength
-					filter: self
+					select: self
 					amount: {
 						type: fromMemory
 						memory: spottedUrukHai
@@ -818,7 +818,7 @@
 			}
 			effect: {
 				type: addKeyword
-				filter: self
+				select: self
 				keyword: fierce
 				until: start(regroup)
 			}
@@ -839,12 +839,12 @@
 			phase: assignment
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: [
 				{
 					type: spot
-					filter: choose(companion)
+					select: choose(companion)
 					text: Choose companion that should not be able to be assigned against this minion
 					memorize: chosenCompanion
 				}
@@ -959,7 +959,7 @@
 			}
 			effect: {
 				type: heal
-				filter: choose(uruk-hai)
+				select: choose(uruk-hai)
 			}
 		}
 	}
@@ -981,7 +981,7 @@
 			}
 			effect: {
 				type: modifyStrength
-				filter: self
+				select: self
 				amount: {
 					type: cardAffectedLimitPerPhase
 					prefix: str-
@@ -1032,7 +1032,7 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: [
 				{
@@ -1080,7 +1080,7 @@
 			}
 			effect: {
 				type: addKeyword
-				filter: self
+				select: self
 				keyword: fierce
 				until: start(regroup)
 			}
@@ -1143,7 +1143,7 @@
                 }
                 effect: {
                     type: addKeyword
-                    filter: memory(winner)
+                    select: memory(winner)
                     keyword: fierce
                     until: start(regroup)
                 }
@@ -1196,11 +1196,11 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(your,uruk-hai)
+						select: choose(your,uruk-hai)
 					}
 					{
 						type: discard
-						filter: choose(your,uruk-hai)
+						select: choose(your,uruk-hai)
 					}
 				]
 			}
@@ -1221,7 +1221,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(uruk-hai)
+					select: choose(uruk-hai)
 				}
 			}
 			{
@@ -1241,7 +1241,7 @@
 					effects: [
 						{
 							type: exert
-							filter: choose(ring bearer)
+							select: choose(ring bearer)
 						}
 						{
 							type: addBurdens

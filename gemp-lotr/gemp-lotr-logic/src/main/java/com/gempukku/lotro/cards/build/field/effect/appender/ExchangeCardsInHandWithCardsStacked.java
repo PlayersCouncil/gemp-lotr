@@ -26,20 +26,20 @@ import java.util.Set;
 public class ExchangeCardsInHandWithCardsStacked implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filterInHand", "filterInStacked", "countInHand", "countInStacked");
+        FieldUtils.validateAllowedFields(effectObject, "selectInHand", "selectInStacked", "countInHand", "countInStacked");
 
-        final String filterHand = FieldUtils.getString(effectObject.get("filterInHand"), "filterInHand");
+        final String selectInHand = FieldUtils.getString(effectObject.get("selectInHand"), "selectInHand");
         final ValueSource countHand = ValueResolver.resolveEvaluator(effectObject.get("countInHand"), 1, environment);
-        final String filterStacked = FieldUtils.getString(effectObject.get("filterInStacked"), "filterInDiscard");
+        final String selectInStacked = FieldUtils.getString(effectObject.get("selectInStacked"), "selectInStacked");
 
         final ValueSource stackedCardCount = ValueResolver.resolveEvaluator("1", environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInHand(filterHand, countHand, "_tempHand", "you", "you", "Choose cards to exchange in hand", environment));
+                CardResolver.resolveCardsInHand(selectInHand, countHand, "_tempHand", "you", "you", "Choose cards to exchange in hand", environment));
         result.addEffectAppender(
-                CardResolver.resolveCards(filterStacked, stackedCardCount, "_tempStacked", "you", "Choose card to exchange stacked cards from", environment));
+                CardResolver.resolveCards(selectInStacked, stackedCardCount, "_tempStacked", "you", "Choose card to exchange stacked cards from", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

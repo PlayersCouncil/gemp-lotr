@@ -126,12 +126,12 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		            count: 2
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(name(Legolas))
+		            select: choose(name(Legolas))
                     showAll: true
                     shuffle: true
 		        }
@@ -243,12 +243,12 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		            count: 2
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(name(Gimli))
+		            select: choose(name(Gimli))
                     showAll: true
                     shuffle: true
 		        }
@@ -294,12 +294,12 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		            count: 2
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(name(Aragorn))
+		            select: choose(name(Aragorn))
                     showAll: true
                     shuffle: true
 		        }
@@ -347,7 +347,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(ringBound,companion)
+		            select: all(ringBound,companion)
 		        }
 		    }
 		]
@@ -512,7 +512,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(name(Treebeard))
+		            select: choose(name(Treebeard))
                     showAll: true
                     shuffle: true
 		        }
@@ -566,7 +566,7 @@
 		            effect: {
 		                type: heal
 		                count: 0-1
-		                filter: choose(companion)
+		                select: choose(companion)
 		            }
 		        }
 		    }
@@ -664,7 +664,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: memory(playedUrukHai)
+		            select: memory(playedUrukHai)
 		        }
 		    }
 		]
@@ -756,7 +756,7 @@
 		        effect: [
 		            {
 		                type: putCardsFromHandOnBottomOfDeck
-		                filter: all(any)
+		                select: all(any)
 		            }
 		            {
 		                type: drawCards
@@ -808,7 +808,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: all(side(free),weapon)
+		            select: all(side(free),weapon)
 		        }
 		    }
 		]
@@ -856,7 +856,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(culture(rohan),man)
+		            select: choose(culture(rohan),man)
 		        }
 		        effect: [
 		            {
@@ -865,7 +865,7 @@
 		            }
                     {
                         type: playCardFromDrawDeck
-                        filter: choose(culture(rohan),mount)
+                        select: choose(culture(rohan),mount)
                         showAll: true
                         shuffle: true
                     }
@@ -959,7 +959,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(name(Théoden))
+		            select: choose(name(Théoden))
                     showAll: true
                     shuffle: true
 		        }
@@ -1102,7 +1102,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: all(mounted,or(companion,ally))
+		            select: all(mounted,or(companion,ally))
 		        }
 		    }
 		]
@@ -1157,11 +1157,11 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(name(Théoden))
+		                    select: choose(name(Théoden))
 		                }
 		                {
 		                    type: exert
-		                    filter: choose(companion)
+		                    select: choose(companion)
 		                    count: 2
 		                }
 		            ]
@@ -1313,7 +1313,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(name(Saruman))
+		            select: choose(name(Saruman))
                     showAll: true
                     shuffle: true
 		        }
@@ -1514,7 +1514,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(your,urukHai)
+		            select: choose(your,urukHai)
 		            keyword: fierce
 		            until: regroup
 		        }
@@ -1607,7 +1607,7 @@
 		        phase: fellowship
 		        cost: {
 		            type: play
-		            filter: choose(possession)
+		            select: choose(possession)
 		        }
 		        effect: {
 		            type: drawCards
@@ -1752,7 +1752,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(unbound,companion)
+		            select: all(unbound,companion)
 		        }
 		    }
 		]
@@ -1795,7 +1795,7 @@
 		        phase: shadow
 		        cost: {
 		            type: play
-		            filter: choose(culture(dunland),minion)
+		            select: choose(culture(dunland),minion)
 		        }
 		        effect: {
 		            type: drawCards
@@ -1957,7 +1957,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(name(Saruman))
+		            select: choose(name(Saruman))
 		            cost: -2
 		        }
 		    }
@@ -2057,7 +2057,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]

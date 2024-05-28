@@ -119,7 +119,7 @@
 		        effect: {
 		            type: discard
 		            player: shadow
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -174,7 +174,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(shire),event)
+		            select: choose(culture(shire),event)
 		        }
 		    }
 		]
@@ -217,11 +217,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(hobbit)
+		            select: choose(hobbit)
 		            memorize: chosenHobbit
 		            amount: {
 		                type: sum
@@ -308,16 +308,16 @@
                 phase: skirmish
                 cost: {
                     type: removeCardsInDiscardFromGame
-                    filter: choose(other,culture(shire))
+                    select: choose(other,culture(shire))
                     count: 4
                 }
                 effect:
                 {
                    type: playCardFromDiscard
-                   filter: self
+                   select: self
                    extraEffects: {
                        type: removeFromTheGame
-                       filter: self
+                       select: self
                    }
                 }
 		    }
@@ -330,7 +330,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(your,hobbit)
+                        select: choose(your,hobbit)
                         amount: 3
                     }
                 ]
@@ -379,7 +379,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: shire
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -398,17 +398,17 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(culture(shire),companion)
+		            select: choose(culture(shire),companion)
 		        }
 		    }
 		]
@@ -456,7 +456,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(not(memory(winner)),hobbit)
+		            select: choose(not(memory(winner)),hobbit)
 		            times: {
 		                type: condition
 		                condition: {
@@ -537,7 +537,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: replaceInSkirmish
@@ -657,7 +657,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: bearer
+		            select: bearer
 		            times: {
 		                type: condition
 		                condition: {
@@ -721,7 +721,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: shire
-		            filter: self
+		            select: self
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: or(forest,dwelling),site,zone(adventure path)
@@ -740,11 +740,11 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
-		                    filter: self
+		                    select: self
 		                    count: 3
 		                }
 		            ]
@@ -804,11 +804,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: removeKeyword
-		            filter: all(minion,inSkirmishAgainst(bearer))
+		            select: all(minion,inSkirmishAgainst(bearer))
 		            keyword: fierce
 		            until: regroup
 		        }
@@ -865,7 +865,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(companion)
+		            select: choose(companion)
 		            memorize: chosenCompanion
 		            times: {
 		                type: condition
@@ -1013,16 +1013,16 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: transferToSupport
-                        filter: choose(follower,attachedTo(self))
+                        select: choose(follower,attachedTo(self))
                     }
                 ]
                 effect: {
                     type: discard
-                    filter: choose(minion)
+                    select: choose(minion)
                 }
 		    }
 		]

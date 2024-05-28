@@ -57,7 +57,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -106,11 +106,11 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: choose(Nazgul,not(enduring))
+					select: choose(Nazgul,not(enduring))
 				}
 				effect: {
 					type: Transfer
-					filter: self
+					select: self
 					where: choose(companion,ring-bound)
 				}
 			}
@@ -147,12 +147,12 @@
 						}
 						effect: {
 							type: RevealCardsFromHand
-							filter: choose(Nazgul)
+							select: choose(Nazgul)
 						}
 					}
 					{
 						type: Transfer
-						filter: self
+						select: self
 						where: choose(companion,ring-bound)
 					}
 				]

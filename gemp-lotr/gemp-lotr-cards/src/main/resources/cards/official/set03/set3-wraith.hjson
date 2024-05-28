@@ -23,7 +23,7 @@
                 effect: {
                     type: exert
                     player: fp
-                    filter: choose(companion)
+                    select: choose(companion)
                 }
             }
         ]
@@ -43,7 +43,7 @@
             }
             effect: {
                 type: addKeyword
-                filter: choose(nazgul)
+                select: choose(nazgul)
                 keyword: damage
                 amount: 1
             }
@@ -85,11 +85,11 @@
                     effects: [
                         {
                             type: exert
-                            filter: choose(nazgul)
+                            select: choose(nazgul)
                         }
                         {
                             type: discard
-                            filter: self
+                            select: self
                         }
                     ]
                 }
@@ -118,7 +118,7 @@
                 }
                 {
                     type: exert
-                    filter: choose(companion,hasAttached(ranged weapon))
+                    select: choose(companion,hasAttached(ranged weapon))
                     times: {
                         type: twilightCostInMemory
                         memory: revealedCard
@@ -149,12 +149,12 @@
                     forced: false
                     hand: fp
                     player: fp
-                    filter: choose(culture(gandalf))
+                    select: choose(culture(gandalf))
                     count: 2
                 }
                 effect: {
                     type: wound
-                    filter: choose(name(Gandalf))
+                    select: choose(name(Gandalf))
                     times: 2
                 }
             }
@@ -182,11 +182,11 @@
             }
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: transfer
-                filter: choose(name(Blade Tip),zone(support))
+                select: choose(name(Blade Tip),zone(support))
                 where: choose(ringBearer)
             }
         }

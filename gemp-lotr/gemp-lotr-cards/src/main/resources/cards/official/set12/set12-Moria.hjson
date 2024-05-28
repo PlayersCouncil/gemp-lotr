@@ -124,7 +124,7 @@
                         type: discardFromHand
                         forced: true
                         hand: free people
-                        filter: all(memory(revealedCards),side(free people),maxTwilight(1))
+                        select: all(memory(revealedCards),side(free people),maxTwilight(1))
                     }
                 ]
             }

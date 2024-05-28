@@ -22,9 +22,9 @@ import java.util.Collection;
 public class PlayCardFromStacked implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "removedTwilight", "assumePlayable", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "on", "cost", "removedTwilight", "assumePlayable", "memorize");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
         final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("cost"), 0, environment);
         final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
@@ -37,7 +37,7 @@ public class PlayCardFromStacked implements EffectAppenderProducer {
         result.setPlayabilityCheckedForEffect(true);
 
         result.addEffectAppender(
-                CardResolver.resolveStackedCards(filter,
+                CardResolver.resolveStackedCards(select,
                         actionContext -> {
                             LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());

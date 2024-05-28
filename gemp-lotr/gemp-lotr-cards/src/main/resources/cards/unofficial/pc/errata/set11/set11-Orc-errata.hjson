@@ -91,7 +91,7 @@
 			}
 			effect: {
 				type: shuffleCardsFromDiscardIntoDrawDeck
-				filter: choose(culture(orc),condition)
+				select: choose(culture(orc),condition)
 				count: 0-2
 			}
 		}

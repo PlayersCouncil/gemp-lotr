@@ -40,7 +40,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(easterling)
+		            select: choose(easterling)
 		            amount: 1
 		        }
 		    }
@@ -54,7 +54,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(easterling)
+		            select: choose(easterling)
 		            amount: 2
 		        }
 		    }
@@ -68,7 +68,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(easterling)
+		            select: choose(easterling)
 		            amount: 3
 		        }
 		    }
@@ -248,7 +248,7 @@
 		        }
 		        effect:{
 		            type: playCardFromDiscard
-		            filter: choose(minion,ambush)
+		            select: choose(minion,ambush)
 		        }
 		    }
 		]
@@ -302,7 +302,7 @@
 					}
 					effect: {
 					    type: discard
-					    filter: choose(companion,not(ringBearer))
+					    select: choose(companion,not(ringBearer))
 					}
 				}
 			]

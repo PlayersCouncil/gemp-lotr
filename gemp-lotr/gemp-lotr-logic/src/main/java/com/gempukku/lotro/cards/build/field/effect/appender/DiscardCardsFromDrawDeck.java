@@ -23,9 +23,9 @@ import java.util.List;
 public class DiscardCardsFromDrawDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "memorize", "player", "deck", "showAll", "shuffle");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize", "player", "deck", "showAll", "shuffle");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String deck = FieldUtils.getString(effectObject.get("deck"), "deck", "you");
@@ -37,7 +37,7 @@ public class DiscardCardsFromDrawDeck implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeck(filter, null, countSource, memorize, player, deck, showAll, "Choose cards to discard", environment));
+                CardResolver.resolveCardsInDeck(select, null, countSource, memorize, player, deck, showAll, "Choose cards to discard", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

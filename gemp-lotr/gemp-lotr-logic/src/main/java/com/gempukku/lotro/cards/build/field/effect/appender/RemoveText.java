@@ -23,17 +23,17 @@ import java.util.Collection;
 public class RemoveText implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "until", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "until", "memorize");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final TimeResolver.Time time = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, valueSource, memory, "you", "Choose cards to remove text from", environment));
+                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to remove text from", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

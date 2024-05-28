@@ -21,7 +21,7 @@
 	# 			}
 	# 			effect: {
 	# 				type: putCardsFromDeckIntoHand
-	# 				filter: choose(culture(elven),ally,maxTwilight(2))
+	# 				select: choose(culture(elven),ally,maxTwilight(2))
 	# 			}
 	# 		}
 	# 		{
@@ -30,7 +30,7 @@
 	# 			cost: {
 	# 				type: discardFromHand
 	# 				forced: false
-	# 				filter: choose(culture(elven),skirmish,event)
+	# 				select: choose(culture(elven),skirmish,event)
 	# 			}
 	# 			effect: {
 	# 				type: modifyStrength
@@ -76,7 +76,7 @@
 				}
 				effect: {
 					type: putCardsFromDeckIntoHand
-					filter: choose(elf,maxTwilight(2))
+					select: choose(elf,maxTwilight(2))
 					reveal: true
 					shuffle: true
 					showAll: true
@@ -88,7 +88,7 @@
 				cost: {
 					type: discardFromHand
 					forced: false
-					filter: choose(culture(elven))
+					select: choose(culture(elven))
 				}
 				effect: {
 					type: Choice
@@ -100,20 +100,20 @@
 					effects: [
 						{
 							type: AddKeyword
-							filter: self
+							select: self
 							keyword: damage
 							amount: 1
 							until: start(regroup)
 						}
 						{
 							type: AddKeyword
-							filter: self
+							select: self
 							keyword: archer
 							until: start(regroup)
 						}
 						{
 							type: ModifyStrength
-							filter: self
+							select: self
 							amount: 2
 							until: start(regroup)
 						}
@@ -165,7 +165,7 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(another,companion,signet(aragorn))
+					select: choose(another,companion,signet(aragorn))
 				}
 				effect: {
 					type: addModifier
@@ -227,7 +227,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(name(aragorn))
+					select: choose(name(aragorn))
 				}
 			}
 			{
@@ -239,7 +239,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 
@@ -248,7 +248,7 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: choose(companion,signet(aragorn))
+					select: choose(companion,signet(aragorn))
 				}
 				effect: [
 					{
@@ -264,11 +264,11 @@
 						effects: [
 							{
 								type: exert
-								filter: choose(name(Aragorn))
+								select: choose(name(Aragorn))
 							}
 							{
 								type: discard
-								filter: self
+								select: self
 							}
 						]
 					}
@@ -334,7 +334,7 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(companion,signet(aragorn),inSkirmish)
+					select: choose(companion,signet(aragorn),inSkirmish)
 					amount: {
 						type: forEachInMemory
 						memory: discardedCards
@@ -375,11 +375,11 @@
                     effects: [
                         {
                             type: exert
-                            filter: choose(name(Aragorn))
+                            select: choose(name(Aragorn))
                         }
                         {
                             type: discard
-                            filter: self
+                            select: self
                         }
                     ]
                 }

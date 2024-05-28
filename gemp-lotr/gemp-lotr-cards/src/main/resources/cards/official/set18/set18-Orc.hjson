@@ -58,7 +58,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: all(currentSite)
+		            select: all(currentSite)
 		            keyword: battleground
 		            until: regroup
 		        }
@@ -188,12 +188,12 @@
 		        effect: [
 		            {
 		                type: playCardFromDiscard
-		                filter: choose(culture(orc),minion)
+		                select: choose(culture(orc),minion)
 		                memorize: playedMinion
 		            }
 		            {
 		                type: exhaust
-		                filter: memory(playedMinion)
+		                select: memory(playedMinion)
 		            }
 		        ]
 		    }
@@ -309,13 +309,13 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: removeCardsInDeckFromGame
 		            deck: free people
 		            count: 2
-		            filter: choose(side(free people))
+		            select: choose(side(free people))
 		            shuffle: true
 		            showAll: true
 		        }
@@ -359,7 +359,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(companion,inSkirmishAgainst(culture(orc),minion))
+				    select: choose(companion,inSkirmishAgainst(culture(orc),minion))
 				    memorize: chosenCompanion
 				    amount: {
 				        type: condition
@@ -571,11 +571,11 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: play
-		            filter: choose(culture(uruk-hai),hunter)
+		            select: choose(culture(uruk-hai),hunter)
 		            cost: -2
 		        }
 		    }
@@ -734,12 +734,12 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -812,7 +812,7 @@
                                     }
                                     {
                                         type: exert
-                                        filter: choose(ringBearer)
+                                        select: choose(ringBearer)
                                         times: 2
                                     }
                                 ]
@@ -820,7 +820,7 @@
                             effect: {
                                 type: discard
                                 player: free people
-                                filter: self
+                                select: self
                             }
                         }
                     }

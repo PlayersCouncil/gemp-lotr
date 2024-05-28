@@ -10,7 +10,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(elf)
+					select: choose(elf)
 					amount: 1
 					memorize: chosenElf
 				}
@@ -98,7 +98,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -113,7 +113,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(elf)
+				select: choose(elf)
 				memorize: chosenElf
 				amount: {
 					type: requires
@@ -145,7 +145,7 @@
 			}
 			effect: {
 				type: wound
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}
@@ -165,11 +165,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: heal
-				filter: choose(culture(elven),ally)
+				select: choose(culture(elven),ally)
 			}
 		}
 	}
@@ -187,7 +187,7 @@
             }
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(tale)
+				select: choose(tale)
                 showAll: true
                 shuffle: true
 			}
@@ -203,7 +203,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: [
 				{
@@ -247,7 +247,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(elf)
+				select: choose(elf)
 				memorize: chosenElf
 				amount: {
 					type: requires
@@ -323,7 +323,7 @@
 				}
 				effect: {
 					type: heal
-					filter: all(ally,allyHome(fellowship,3))
+					select: all(ally,allyHome(fellowship,3))
 				}
 			}
 			{
@@ -331,7 +331,7 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: drawCards
@@ -411,7 +411,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: [
 				{
@@ -436,7 +436,7 @@
 								hand: shadowPlayer
 								forced: true
 								player: you
-								filter: choose(memory(revealedCards),culture(isengard),minion)
+								select: choose(memory(revealedCards),culture(isengard),minion)
 							}
 							effect: {
 								type: drawCards
@@ -467,7 +467,7 @@
 				}
 				effect: {
 					type: heal
-					filter: all(ally,allyHome(fellowship,6))
+					select: all(ally,allyHome(fellowship,6))
 				}
 			}
 			{
@@ -475,11 +475,11 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: play
-					filter: choose(elf)
+					select: choose(elf)
 					cost: -1000
 				}
 			}
@@ -497,7 +497,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(elf,ally)
+					select: choose(elf,ally)
 				}
 			}
 			{
@@ -551,7 +551,7 @@
 					effects: [
 						{
 							type: exert
-							filter: bearer
+							select: bearer
 						}
 						{
 							type: discardFromHand
@@ -562,7 +562,7 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: bearer
+					select: bearer
 					amount: 1
 				}
 			}
@@ -639,16 +639,16 @@
 			phase: archery
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: [
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 				}
 				{
 				    type: disableArcheryTotalContribution
-				    filter: self
+				    select: self
 				}
 			]
 		}
@@ -723,12 +723,12 @@
 			effect: [
 				{
 					type: revealCardsFromHand
-					filter: choose(culture(elven))
+					select: choose(culture(elven))
 					memorize: revealedCards
 				}
 				{
 					type: putCardsFromHandOnBottomOfDeck
-					filter: memory(revealedCards)
+					select: memory(revealedCards)
 				}
 			]
 		}
@@ -759,7 +759,7 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(name(Galadriel))
+					select: choose(name(Galadriel))
 				}
 				effect: [
 					{
@@ -771,7 +771,7 @@
 					{
 						type: discardFromHand
 						forced: true
-						filter: choose(memory(seenCards))
+						select: choose(memory(seenCards))
 						player: freeps
 						hand: shadow
 					}
@@ -796,11 +796,11 @@
 			phase: archery
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: wound
-				filter: choose(uruk-hai)
+				select: choose(uruk-hai)
 			}
 		}
 	}
@@ -821,11 +821,11 @@
 			phase: archery
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: wound
-				filter: choose(orc)
+				select: choose(orc)
 			}
 		}
 	}
@@ -840,11 +840,11 @@
 			cost: {
 				type: exert
 				count: 2
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: {
 				type: discard
-				filter: choose(condition)
+				select: choose(condition)
 			}
 		}
 	}
@@ -865,7 +865,7 @@
 				}
 				{
 					type: exert
-					filter: choose(or(dwarf,elf))
+					select: choose(or(dwarf,elf))
 					memorize: exerter
 				}
 			]
@@ -879,7 +879,7 @@
 					}
 					effect: {
 						type: heal
-						filter: choose(elf)
+						select: choose(elf)
 					}
 				}
 				{
@@ -891,7 +891,7 @@
 					}
 					effect: {
 						type: heal
-						filter: choose(dwarf)
+						select: choose(dwarf)
 					}
 				}
 			]
@@ -948,7 +948,7 @@
 			}
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: {
 				type: modifyArcheryTotal
@@ -967,11 +967,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: {
 				type: discard
-				filter: choose(culture(sauron),or(minion,condition,possession))
+				select: choose(culture(sauron),or(minion,condition,possession))
 			}
 		}
 	}
@@ -985,19 +985,19 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf,ally,allyHome(fellowship,3))
+				select: choose(elf,ally,allyHome(fellowship,3))
 				memorize: exertedAlly
 			}
 			effect: [
 				{
 					type: modifyStrength
-					filter: memory(exertedAlly)
+					select: memory(exertedAlly)
 					amount: 3
 					until: start(regroup)
 				}
 				{
 					type: EnableParticipationInArcheryFireAndSkirmishes
-					filter: memory(exertedAlly)
+					select: memory(exertedAlly)
 					until: start(regroup)
 				}
 			]
@@ -1013,19 +1013,19 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf,ally,allyHome(fellowship,6))
+				select: choose(elf,ally,allyHome(fellowship,6))
 				memorize: exertedAlly
 			}
 			effect: [
 				{
 					type: modifyStrength
-					filter: memory(exertedAlly)
+					select: memory(exertedAlly)
 					amount: 3
 					until: start(regroup)
 				}
 				{
 					type: EnableParticipationInArcheryFireAndSkirmishes
-					filter: memory(exertedAlly)
+					select: memory(exertedAlly)
 					until: start(regroup)
 				}
 			]
@@ -1051,12 +1051,12 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {
 				type: modifyStrength
-				filter: memory(bearer)
+				select: memory(bearer)
 				amount: 2
 			}
 		}
@@ -1093,7 +1093,7 @@
 			}
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: {
 				type: discardCardAtRandomFromHand

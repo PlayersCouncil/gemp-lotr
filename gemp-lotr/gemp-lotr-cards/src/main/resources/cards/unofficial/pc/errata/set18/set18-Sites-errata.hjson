@@ -34,13 +34,13 @@
 						type: wound
 						player: freeps
 						count: 2
-						filter: choose(side(freeps),character)
+						select: choose(side(freeps),character)
 					}
 					{
 						type: wound
 						player: shadow
 						count: 2
-						filter: choose(side(shadow),character)
+						select: choose(side(shadow),character)
 					}
 				]
 			}
@@ -98,7 +98,7 @@
 				effect: [
 					{
 						type: heal
-						filter: all(character)
+						select: all(character)
 					}
 				]
 			}

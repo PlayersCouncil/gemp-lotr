@@ -43,7 +43,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion)
+		            select: choose(minion)
 		            memorize: chosenMinion
 		            times: {
 		                type: condition
@@ -102,7 +102,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: dwarven
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -117,18 +117,18 @@
                     effects: [
                         {
                             type: discard
-                            filter: self
+                            select: self
                         }
                         {
                             type: removeTokens
                             culture: dwarven
-                            filter: self
+                            select: self
                         }
                     ]
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(culture(dwarven),companion)
+		            select: choose(culture(dwarven),companion)
 		            keyword: hunter
 		            amount: 1
 		        }
@@ -176,11 +176,11 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: choose(culture(dwarven),companion)
+		            select: choose(culture(dwarven),companion)
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(currentSite)
+		            select: choose(currentSite)
 		            keyword: mountain
 		            until: regroup
 		        }

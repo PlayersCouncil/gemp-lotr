@@ -36,7 +36,7 @@
 		        effect: [
                     {
                         type: turnIntoMinion
-                        filter: self
+                        select: self
                         strength: 11
                         vitality: 1
                         keywords: fierce
@@ -44,7 +44,7 @@
                     }
                     {
                         type: disableWounds
-                        filter: self
+                        select: self
                         until: regroup
                     }
                     {
@@ -101,7 +101,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(wizard)
+		            select: choose(wizard)
 		        }
 		        requires: {
 		            type: canSpot
@@ -110,7 +110,7 @@
 		        effect: [
                     {
                         type: turnIntoMinion
-                        filter: self
+                        select: self
                         strength: 10
                         vitality: 1
                         keywords: fierce
@@ -118,7 +118,7 @@
                     }
                     {
                         type: disableWounds
-                        filter: self
+                        select: self
                         until: regroup
                     }
                     {
@@ -179,7 +179,7 @@
 		        effect: [
                     {
                         type: turnIntoMinion
-                        filter: self
+                        select: self
                         strength: 12
                         vitality: 1
                         keywords: fierce
@@ -187,7 +187,7 @@
                     }
                     {
                         type: disableWounds
-                        filter: self
+                        select: self
                         until: regroup
                     }
                     {
@@ -254,11 +254,11 @@
 		        ]
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: returnToHand
-		            filter: choose(name(Saruman))
+		            select: choose(name(Saruman))
 		        }
 		    }
 		]

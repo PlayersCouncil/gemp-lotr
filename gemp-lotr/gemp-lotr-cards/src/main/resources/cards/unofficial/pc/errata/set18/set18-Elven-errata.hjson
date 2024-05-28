@@ -61,7 +61,7 @@
 				cost: {
 					type: exert
 					count: 1
-					filter: choose(title(Galadriel))
+					select: choose(title(Galadriel))
 				}
 				effect: {
 					type: ReinforceTokens
@@ -124,7 +124,7 @@
 				}
 				effect: {
 					type: putcardsfromdiscardintohand
-					filter: choose(culture(elven),event,skirmish)
+					select: choose(culture(elven),event,skirmish)
 					count: 1
 				}
 			}
@@ -133,13 +133,13 @@
 				phase: regroup
 				cost: {
 					type: removetokens
-					filter: choose(any)
+					select: choose(any)
 					count: 1
 					culture: elven
 				}
 				effect: {
 					type: putcardsfromdiscardintohand
-					filter: choose(culture(elven),condition)
+					select: choose(culture(elven),condition)
 					count: 1
 				}
 			}

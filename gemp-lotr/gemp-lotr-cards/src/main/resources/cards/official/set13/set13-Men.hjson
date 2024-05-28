@@ -26,13 +26,13 @@
 			type: event
 			cost: {
 			    type: spot
-			    filter: choose(companion)
+			    select: choose(companion)
 			    memorize: spottedCompanion
 			}
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(men),minion)
+				    select: choose(culture(men),minion)
 				    amount: {
 				        type: forEachWound
 				        filter: memory(spottedCompanion)
@@ -109,7 +109,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession)
+		            select: choose(possession)
 		        }
 		    }
 		]
@@ -162,12 +162,12 @@
 		        }
 		        cost: {
 		            type: revealCards
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: exert
 		            player: free people
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		    {
@@ -229,11 +229,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(another,culture(men),minion)
+		            select: choose(another,culture(men),minion)
 		            keyword: fierce
 		            until: regroup
 		        }
@@ -335,11 +335,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(culture(men),minion)
+		            select: choose(culture(men),minion)
 		            memorize: chosenMinion
 		            keyword: damage
 		            amount: {
@@ -492,7 +492,7 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(men))
+		            select: choose(culture(men))
 		        }
 		        effect: {
 		            type: assignFpCharacterToSkirmish
@@ -548,11 +548,11 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: removeTokens
-                        filter: choose(any)
+                        select: choose(any)
                     }
                 ]
                 effect: {
@@ -608,7 +608,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(your,culture(men),minion)
+                        select: choose(your,culture(men),minion)
                         amount: 2
                     }
                 ]
@@ -666,7 +666,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(companion)
+		            select: all(companion)
 		        }
 		    }
 		]
@@ -716,7 +716,7 @@
 		        effect: {
 		            type: transfer
 		            fromSupport: true
-		            filter: self
+		            select: self
 		            where: choose(memory(loser),not(hasAttached(name(Harmless))))
 		        }
 		    }
@@ -776,7 +776,7 @@
 		            }
 		            {
 		                type: addTokens
-		                filter: self
+		                select: self
 		                culture: men
 		                count: memory(spotCount)
 		            }
@@ -798,12 +798,12 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: men
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -853,7 +853,7 @@
 		        phase: skirmish
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
 		            fromSupport: true
 		            where: choose(your,culture(men),minion,not(hasAttached(name(Lying in Wait))))
 		        }
@@ -877,7 +877,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: bearer
+		            select: bearer
 		            amount: 1
 		            until: regroup
 		        }
@@ -987,11 +987,11 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: spot
-                        filter: choose(side(free people),condition)
+                        select: choose(side(free people),condition)
                         memorize: spottedCondition
                     }
                 ]
@@ -1110,7 +1110,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: men
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -1125,18 +1125,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: men
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(men),minion)
+		            select: choose(culture(men),minion)
 		            amount: {
 		                type: forEachYouCanSpot
 		                filter: culture(men),minion,notAssignedToSkirmish
@@ -1191,11 +1191,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(another,culture(men),minion)
+		            select: choose(another,culture(men),minion)
 		            keyword: damage
 		            amount: 1
 		        }

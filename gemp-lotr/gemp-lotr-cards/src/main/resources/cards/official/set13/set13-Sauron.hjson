@@ -106,7 +106,7 @@
 		            }
 		            effect: {
 		                type: wound
-		                filter: choose(companion,not(inSkirmish))
+		                select: choose(companion,not(inSkirmish))
 		            }
 		        }
 		    }

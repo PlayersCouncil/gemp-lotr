@@ -17,14 +17,14 @@ import org.json.simple.JSONObject;
 public class ReplaceInAssignment implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "with");
+        FieldUtils.validateAllowedFields(effectObject, "select", "with");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String with = FieldUtils.getString(effectObject.get("with"), "with");
 
         MultiEffectAppender result = new MultiEffectAppender();
         result.addEffectAppender(
-                CardResolver.resolveCard(filter, "_oldAssignee", "you", "Choose assigned character to replace", environment));
+                CardResolver.resolveCard(select, "_oldAssignee", "you", "Choose assigned character to replace", environment));
         result.addEffectAppender(
                 CardResolver.resolveCard(with, "_newAssignee", "you", "Choose character to replace with in assignment", environment));
         result.addEffectAppender(

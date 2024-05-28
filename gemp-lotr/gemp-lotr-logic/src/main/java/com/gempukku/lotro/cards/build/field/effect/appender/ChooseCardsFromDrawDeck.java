@@ -13,18 +13,18 @@ import org.json.simple.JSONObject;
 public class ChooseCardsFromDrawDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "deck", "count", "filter", "memorize", "text", "showAll");
+        FieldUtils.validateAllowedFields(effectObject, "player", "deck", "count", "select", "memorize", "text", "showAll");
 
         String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         String deck = FieldUtils.getString(effectObject.get("deck"), "deck", player);
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
         if (memorize == null)
             throw new InvalidCardDefinitionException("You need to define what memory to use to store chosen cards");
         final String text = FieldUtils.getString(effectObject.get("text"), "text", "Choose cards from deck.");
         boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
 
-        return CardResolver.resolveCardsInDeck(filter, null, valueSource, memorize, player, deck, showAll, text, environment);
+        return CardResolver.resolveCardsInDeck(select, null, valueSource, memorize, player, deck, showAll, text, environment);
     }
 }

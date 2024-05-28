@@ -96,11 +96,11 @@
 				phase: skirmish
 				cost: {
 				    type: discard
-				    filter: self
+				    select: self
 				}
 				effect: {
 				    type: modifyStrength
-				    filter: choose(unique,culture(moria),minion)
+				    select: choose(unique,culture(moria),minion)
 				    amount: 3
 				}
 			}

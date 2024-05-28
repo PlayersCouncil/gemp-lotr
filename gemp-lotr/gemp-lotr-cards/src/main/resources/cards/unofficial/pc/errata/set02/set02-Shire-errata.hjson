@@ -30,7 +30,7 @@
 			cost: [
 				{
 					type: exert
-					filter: choose(hobbit,companion,not(ring bearer),infierceskirmish)
+					select: choose(hobbit,companion,not(ring bearer),infierceskirmish)
 					times: 2
 					memorize: exertedHobbit
 				}
@@ -85,7 +85,7 @@
                 phase: fellowship
                 cost: {
                     type: discard
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: addModifier
@@ -142,7 +142,7 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {

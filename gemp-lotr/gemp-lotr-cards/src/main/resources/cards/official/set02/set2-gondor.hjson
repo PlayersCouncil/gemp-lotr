@@ -11,7 +11,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(gondor),companion)
+					select: choose(culture(gondor),companion)
 				}
 			}
 			{
@@ -23,7 +23,7 @@
 				}
 				effect: {
 					type: exhaust
-					filter: memory(playedOrc)
+					select: memory(playedOrc)
 				}
 			}
 			{
@@ -41,7 +41,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -93,7 +93,7 @@
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(exhausted,orc)
+					select: choose(exhausted,orc)
 					memorize: chosenOrc
 					text: Choose exhausted Orc
 				}
@@ -107,7 +107,7 @@
 					text: Remove (3) to prevent discarding exhausted {chosenOrc}
 					effect: {
 						type: discard
-						filter: memory(chosenOrc)
+						select: memory(chosenOrc)
 					}
 				}
 			]
@@ -128,11 +128,11 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(culture(gondor),companion)
+				select: choose(culture(gondor),companion)
 			}
 			effect: {
 				type: preventWound
-				filter: choose(companion)
+				select: choose(companion)
 			}
 		}
 	}
@@ -176,11 +176,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Aragorn))
+				select: choose(name(Aragorn))
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(companion,not(name(Aragorn)))
+				select: choose(companion,not(name(Aragorn)))
 				memorize: chosenCompanion
 				amount: {
 					type: requires
@@ -206,7 +206,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(gondor),companion)
+				select: choose(culture(gondor),companion)
 				memorize: chosenCompanion
 				amount: {
 					type: requires

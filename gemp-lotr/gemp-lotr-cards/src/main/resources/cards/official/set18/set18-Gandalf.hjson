@@ -35,7 +35,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(gandalf))
+		            select: choose(culture(gandalf))
 		        }
 		    }
 		]
@@ -84,7 +84,7 @@
 			effect: [
 				{
 				    type: chooseActiveCards
-				    filter: choose(minion)
+				    select: choose(minion)
 				    text: Choose minion to lose all strength bonuses from possessions
 				    memorize: chosenMinion
 				}
@@ -148,7 +148,7 @@
 			            }
 			            effect: {
 			                type: exert
-			                filter: choose(ent)
+			                select: choose(ent)
 			                count: 2
 			            }
 			        }
@@ -174,7 +174,7 @@
                     }
                     effect: {
                         type: addKeyword
-                        filter: choose(ent)
+                        select: choose(ent)
                         keyword: defender
                         amount: 1
                         until: regroup
@@ -231,13 +231,13 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: choose(culture(gandalf),man)
+		            select: choose(culture(gandalf),man)
 		        }
 		        effect: {
 		            type: addTokens
 		            count: 2
 		            culture: gandalf
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -247,11 +247,11 @@
 		            type: removeTokens
 		            count: 3
 		            culture: gandalf
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(companion)
+		            select: choose(companion)
 		            amount: 3
 		        }
 		    }
@@ -312,7 +312,7 @@
 		        phase: regroup
 		        cost: {
                     type: discard
-                    filter: choose(follower)
+                    select: choose(follower)
 		        }
 		        effect: {
 		            type: choice
@@ -326,7 +326,7 @@
 		                }
                         {
                             type: putCardsFromDiscardIntoHand
-                            filter: choose(culture(gandalf),skirmish,event)
+                            select: choose(culture(gandalf),skirmish,event)
                         }
 		            ]
 		        }
@@ -426,7 +426,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(name(Gandalf))
+		            select: choose(name(Gandalf))
 		        }
 		    }
 		    {
@@ -454,7 +454,7 @@
 		            }
 		            {
 		                type: removeFromTheGame
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -503,7 +503,7 @@
                     }
                     {
                         type: spot
-                        filter: choose(minion)
+                        select: choose(minion)
                         memorize: spottedMinion
                     }
                 ]
@@ -567,11 +567,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -632,14 +632,14 @@
 		            }
 		            {
 		                type: putCardsFromDeckIntoHand
-		                filter: all(memory(revealedCards),side(free people))
+		                select: all(memory(revealedCards),side(free people))
                         reveal: true
                         shuffle: false
                         showAll: false
 		            }
 		            {
 		                type: discardCardsFromDrawDeck
-		                filter: all(memory(revealedCards),not(side(free people)))
+		                select: all(memory(revealedCards),not(side(free people)))
                         showAll: false
                         shuffle: false
 		            }

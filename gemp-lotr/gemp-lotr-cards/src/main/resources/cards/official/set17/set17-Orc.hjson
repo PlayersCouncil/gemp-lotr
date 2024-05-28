@@ -27,7 +27,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(your,mounted,culture(orc),orc)
+		            select: choose(your,mounted,culture(orc),orc)
 		        }
 		    }
 		    {
@@ -50,7 +50,7 @@
 		                {
 		                    type: exert
 		                    player: free people
-		                    filter: memory(chosenCompanion)
+		                    select: memory(chosenCompanion)
 		                }
 		                {
 		                    type: addTwilight
@@ -171,7 +171,7 @@
 		            {
 		                type: putCardsFromHandOnBottomOfDeck
 		                player: free people
-		                filter: choose(memory(revealedCards),side(free people))
+		                select: choose(memory(revealedCards),side(free people))
 		                count: 2
 		            }
 		        ]
@@ -215,7 +215,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(orc),minion)
+				    select: choose(culture(orc),minion)
 				    memorize: chosenMinion
 				    amount: {
 				        type: condition
@@ -295,12 +295,12 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(culture(uruk-hai),hunter,minion)
+		            select: choose(culture(uruk-hai),hunter,minion)
                     showAll: true
                     shuffle: true
 		        }
@@ -401,7 +401,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(culture(orc),minion)
+		            select: choose(culture(orc),minion)
 		        }
 		    }
 		]
@@ -462,7 +462,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
@@ -528,7 +528,7 @@
 		            }
 		            effect: {
                         type: exert
-                        filter: choose(companion)
+                        select: choose(companion)
 		            }
 		        }
 		    }
@@ -657,7 +657,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		    {
@@ -665,7 +665,7 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: choose(culture(orc),minion)
+		            select: choose(culture(orc),minion)
 		            count: 3
 		        }
 		        requires: {
@@ -674,7 +674,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(condition)
+		            select: choose(condition)
 		        }
 		    }
 		]
@@ -772,17 +772,17 @@
 		        }
 		        cost: {
 		            type: revealCardsFromHand
-		            filter: choose(culture(orc),condition)
+		            select: choose(culture(orc),condition)
 		        }
 		        effect: [
                     {
                         type: wound
-                        filter: choose(companion,inSkirmishAgainst(self))
+                        select: choose(companion,inSkirmishAgainst(self))
                         times: 2
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		    }
@@ -834,11 +834,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		        }
 		    }
 		]
@@ -943,11 +943,11 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(orc))
+		            select: choose(culture(orc))
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(orc),mount)
+		            select: choose(culture(orc),mount)
 		        }
 		    }
 		]
@@ -993,7 +993,7 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -1049,7 +1049,7 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addTwilight
@@ -1114,7 +1114,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(mounted,culture(orc),orc)
+		            select: choose(mounted,culture(orc),orc)
 		            amount: 2
 		        }
 		    }
@@ -1173,12 +1173,12 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
 		            player: free people
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -1239,11 +1239,11 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(orc),mount)
+		            select: choose(culture(orc),mount)
 		        }
 		    }
 		]
@@ -1307,7 +1307,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -1365,7 +1365,7 @@
 		        effect: [
 		            {
 		                type: chooseActiveCards
-		                filter: choose(character,hasRace)
+		                select: choose(character,hasRace)
 		                text: Spot a race
 		                memorize: chosenCharacter
 		            }
@@ -1507,7 +1507,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(culture(orc),mount)
+		            select: choose(culture(orc),mount)
                     showAll: true
                     shuffle: true
 		        }

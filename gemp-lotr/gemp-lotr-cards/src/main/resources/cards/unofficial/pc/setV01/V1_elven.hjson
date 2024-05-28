@@ -16,12 +16,12 @@
             }
 			cost: {
 				type: discard
-				filter: choose(your,culture(elven),tale)
+				select: choose(your,culture(elven),tale)
 			}
 			effect: [
 				{
 					type: wound
-					filter: choose(minion,inSkirmishAgainst(elf))
+					select: choose(minion,inSkirmishAgainst(elf))
 					count: 1
 				}
 			]
@@ -48,7 +48,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(elf)
+					select: choose(elf)
 				}
 			}
 			{
@@ -88,7 +88,7 @@
 				]
 				effect: {
 					type: heal
-					filter: bearer
+					select: bearer
 				}
 			}
 			{
@@ -100,7 +100,7 @@
 				}
 				effect: {
 					type: discard
-					filter: choose(condition,attachedTo(bearer))
+					select: choose(condition,attachedTo(bearer))
 				}
 			}
 		]
@@ -199,7 +199,7 @@
 			effect: {
 				type: ModifyStrength
 				amount: 1
-				filter: self
+				select: self
 				until: start(regroup)
 			}
 		}
@@ -228,7 +228,7 @@
 			cost: [
 				{
 					type: exert
-					filter: bearer
+					select: bearer
 					count: 1
 				}
 			]
@@ -276,7 +276,7 @@
 
 				cost: {
 					type: stackcards
-					filter: choose(your,or(tale,artifact),not(self))
+					select: choose(your,or(tale,artifact),not(self))
 					where: self
 				}
 				effect: {
@@ -289,7 +289,7 @@
 				phase: fellowship
 				cost: {
 					type: stackcardsfromhand
-					filter: choose(your,or(tale,artifact),not(self))
+					select: choose(your,or(tale,artifact),not(self))
 					where: self
 				}
 				effect: {
@@ -304,7 +304,7 @@
 				cost: [
 					{
 						type: exert
-						filter: choose(culture(elven),ally)
+						select: choose(culture(elven),ally)
 					}
 				]
 				effect: [
@@ -332,7 +332,7 @@
 					}
 					{
 						type: exert
-						filter: choose(minion)
+						select: choose(minion)
 						count: {
 							type: fromMemory
 							memory: stackedCultures
@@ -343,13 +343,13 @@
 					    times: memory(stackedCultures)
 					    effect: {
 					        type: heal
-					        filter: choose(companion)
+					        select: choose(companion)
 					        count: 0-1
 					    }
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
@@ -383,7 +383,7 @@
 				effect: [
 					{
 						type: putCardsFromHandOnBottomOfDeck
-						filter: choose(any)
+						select: choose(any)
 					}
 					{
 						type: drawCards
@@ -405,7 +405,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(companion)
+					select: choose(companion)
 					times: 1
 				}
 			}

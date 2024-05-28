@@ -19,7 +19,7 @@
 				}
 				effect: {
 					type: exert
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 			}
 			{
@@ -27,11 +27,11 @@
 				phase: maneuver
 				cost: {
 					type: heal
-					filter: choose(culture(esgaroth),ally)
+					select: choose(culture(esgaroth),ally)
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -39,12 +39,12 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
 					type: playCardFromDrawDeck
-					filter: choose(side(shadow),condition)
+					select: choose(side(shadow),condition)
                     showAll: true
                     shuffle: true
 				}
@@ -78,7 +78,7 @@
 				phase: maneuver
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: [
 					{
@@ -89,12 +89,12 @@
 						}
 						effect: {
 							type: discard
-							filter: choose(culture(dwarven),possession)
+							select: choose(culture(dwarven),possession)
 						}
 					}
 					{
 						type: wound
-						filter: choose(culture(dwarven),ally)
+						select: choose(culture(dwarven),ally)
 					}
 				]
 			}
@@ -121,11 +121,11 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: preventWound
-				filter: choose(another,orc)
+				select: choose(another,orc)
 			}
 		}
 	}
@@ -146,7 +146,7 @@
 			phase: maneuver
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			requires: {
 				type: location
@@ -154,7 +154,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),minion)
+				select: choose(culture(moria),minion)
 				cost: -2
 			}
 		}
@@ -182,7 +182,7 @@
 				phase: shadow
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 					times: 2
 				}
 				effect: {
@@ -194,7 +194,7 @@
 					}
 					effect: {
 						type: playCardFromDiscard
-						filter: choose(orc)
+						select: choose(orc)
 					}
 				}
 			}
@@ -214,7 +214,7 @@
 			phase: shadow
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: preventable
@@ -253,11 +253,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(moria),minion)
+				select: choose(culture(moria),minion)
 				amount: {
 					type: cardAffectedLimitPerPhase
 					limit: 2
@@ -320,7 +320,7 @@
 				effect: {
 					type: addTokens
 					culture: moria
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -342,7 +342,7 @@
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 				effect: {
@@ -383,13 +383,13 @@
 				effects: [
 					{
 						type: playCardFromDrawDeck
-						filter: choose(culture(moria),not(response))
+						select: choose(culture(moria),not(response))
                         showAll: true
                         shuffle: true
 					}
 					{
 						type: playCardFromDiscard
-						filter: choose(culture(moria),not(response))
+						select: choose(culture(moria),not(response))
 					}
 				]
 			}
@@ -417,11 +417,11 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: discard
-					filter: choose(possession,attachedTo(culture(dwarven),companion))
+					select: choose(possession,attachedTo(culture(dwarven),companion))
 				}
 			}
 			{
@@ -434,7 +434,7 @@
 				}
 				effect: {
 					type: addKeyword
-					filter: self
+					select: self
 					keyword: fierce
 					until: start(regroup)
 				}
@@ -471,11 +471,11 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(orc)
+					select: choose(orc)
 					cost: -2
 				}
 			}
@@ -505,13 +505,13 @@
 					effects: [
 						{
 							type: playCardFromDrawDeck
-							filter: choose(culture(sauron),not(and(response,event)))
+							select: choose(culture(sauron),not(and(response,event)))
                             showAll: true
                             shuffle: true
 						}
 						{
 							type: playCardFromDiscard
-							filter: choose(culture(sauron),not(and(response,event)))
+							select: choose(culture(sauron),not(and(response,event)))
 						}
 					]
 				}
@@ -531,13 +531,13 @@
 						}
 						{
 							type: exert
-							filter: choose(name(Sauron))
+							select: choose(name(Sauron))
 						}
 					]
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(orc)
+					select: choose(orc)
 					amount: {
 						type: cardAffectedLimitPerPhase
 						limit: 3
@@ -562,7 +562,7 @@
 			effect: [
 				{
 					type: playCardFromDiscard
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 				{
 					type: conditional
@@ -572,7 +572,7 @@
 					}
 					effect: {
 						type: playCardFromDiscard
-						filter: choose(culture(sauron),orc)
+						select: choose(culture(sauron),orc)
 					}
 				}
 			]
@@ -590,13 +590,13 @@
 				phase: regroup
 				cost: {
 					type: discard
-					filter: choose(minion)
+					select: choose(minion)
 				}
 				effect: [
 					{
 						type: chooseActiveCards
 						text: Choose a Wise character
-						filter: choose(wise,character)
+						select: choose(wise,character)
 						memorize: wiseCharacter
 					}
 					{
@@ -605,12 +605,12 @@
 						text: Would you like to exert a Wise character twice to prevent putting {wiseCharacter} in prison
 						cost: {
 							type: exert
-							filter: choose(wise,character)
+							select: choose(wise,character)
 							times: 2
 						}
 						effect: {
 							type: stackCards
-							filter: memory(wiseCharacter)
+							select: memory(wiseCharacter)
 							where: self
 						}
 					}
@@ -645,7 +645,7 @@
 				}
 				effect: {
 					type: heal
-					filter: all(orc)
+					select: all(orc)
 					times: 2
 				}
 			}
@@ -658,12 +658,12 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: wound
 					player: fp
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			}
 		]
@@ -696,7 +696,7 @@
           {
             type: chooseActiveCards
             text: Choose card to discard
-            filter: choose(culture(dwarven),weapon)
+            select: choose(culture(dwarven),weapon)
             memorize: chosenWeapon
           }
           {
@@ -710,11 +710,11 @@
             player: fp
             cost: {
               type: exert
-              filter: choose(memory(bearer))
+              select: choose(memory(bearer))
             }
             effect: {
               type: discard
-              filter: memory(chosenWeapon)
+              select: memory(chosenWeapon)
             }
           }
         ]
@@ -740,7 +740,7 @@
         }
         cost: {
           type: exert
-          filter: self
+          select: self
           times: 2
         }
         effect: {
@@ -756,12 +756,12 @@
         }
         cost: {
           type: exert
-          filter: self
+          select: self
         }
         effect: {
           type: wound
           player: fp
-          filter: choose(companion)
+          select: choose(companion)
         }
       }
     ]
@@ -793,12 +793,12 @@
         phase: regroup
         cost: {
           type: discard
-          filter: choose(orc)
+          select: choose(orc)
         }
         effect: {
           type: wound
           player: fp
-          filter: choose(companion)
+          select: choose(companion)
         }
       }
     ]
@@ -831,7 +831,7 @@
         }
         effect: {
           type: addKeyword
-          filter: choose(or(name(Sauron),and(culture(wraith),minion)))
+          select: choose(or(name(Sauron),and(culture(wraith),minion)))
           keyword: damage
           amount: {
             type: cardAffectedLimitPerPhase
@@ -875,18 +875,18 @@
         phase: assignment
         cost: {
           type: exert
-          filter: self
+          select: self
         }
         effect: [
           {
             type: chooseActiveCards
-            filter: choose(minion,or(culture(gundabad),culture(wraith)),assignableToSkirmishAgainst(companion,not(name(Bilbo))))
+            select: choose(minion,or(culture(gundabad),culture(wraith)),assignableToSkirmishAgainst(companion,not(name(Bilbo))))
             text: Choose minion to assign to a companion
             memorize: chosenMinion
           }
           {
             type: chooseActiveCards
-            filter: choose(companion,not(name(Bilbo)),assignableToSkirmishAgainst(memory(chosenMinion)))
+            select: choose(companion,not(name(Bilbo)),assignableToSkirmishAgainst(memory(chosenMinion)))
             text: Choose companion
             memorize: chosenCompanion
           }
@@ -907,7 +907,7 @@
                 }
                 {
                   type: exert
-                  filter: choose(memory(chosenCompanion))
+                  select: choose(memory(chosenCompanion))
                 }
               ]
             }
@@ -933,12 +933,12 @@
         phase: skirmish
         cost: {
           type: exert
-          filter: choose(name(Smaug))
+          select: choose(name(Smaug))
           times: 2
         }
         effect: {
           type: playCardFromDiscard
-          filter: self
+          select: self
         }
       }
       {
@@ -949,7 +949,7 @@
         }
         effect: {
           type: modifyStrength
-          filter: choose(culture(dwarven),companion)
+          select: choose(culture(dwarven),companion)
           amount: {
             type: fromMemory
             memory: burdenCount
@@ -1031,7 +1031,7 @@
           effects: [
             {
               type: playCardFromDrawDeck
-              filter: choose(name(Smaug))
+              select: choose(name(Smaug))
               cost: -8
               memorize: playedSmaug
                 showAll: true
@@ -1039,7 +1039,7 @@
             }
             {
               type: playCardFromDiscard
-              filter: choose(name(Smaug))
+              select: choose(name(Smaug))
               cost: -8
               memorize: playedSmaug
             }
@@ -1047,13 +1047,13 @@
         }
         {
           type: modifyStrength
-          filter: memory(playedSmaug)
+          select: memory(playedSmaug)
           amount: -4
           until: start(regroup)
         }
         {
           type: addKeyword
-          filter: memory(playedSmaug)
+          select: memory(playedSmaug)
           keyword: damage
           amount: -1
           until: start(regroup)
@@ -1065,7 +1065,7 @@
             type: costToEffect
             cost: {
               type: discard
-              filter: choose(orc)
+              select: choose(orc)
               count: 2
             }
             effect: {
@@ -1094,7 +1094,7 @@
         effect: [
           {
             type: discard
-            filter: choose(weapon)
+            select: choose(weapon)
           }
           {
             type: conditional
@@ -1104,7 +1104,7 @@
             }
             effect: {
               type: exert
-              filter: all(ally)
+              select: all(ally)
             }
           }
         ]
@@ -1115,7 +1115,7 @@
         cost: [
           {
             type: discard
-            filter: choose(minion)
+            select: choose(minion)
           }
           {
             type: removeTwilight
@@ -1124,7 +1124,7 @@
         ]
         effect: {
           type: discard
-          filter: choose(man,ally)
+          select: choose(man,ally)
         }
       }
     ]
@@ -1146,7 +1146,7 @@
         }
         effect: {
           type: playCardFromDrawDeck
-          filter: choose(side(shadow),condition)
+          select: choose(side(shadow),condition)
             showAll: true
             shuffle: true
         }
@@ -1156,7 +1156,7 @@
         phase: shadow
         cost: {
           type: discard
-          filter: choose(orc)
+          select: choose(orc)
           count: 3
         }
         effect: {
@@ -1168,14 +1168,14 @@
           effects: [
             {
               type: playCardFromDrawDeck
-              filter: choose(name(Smaug))
+              select: choose(name(Smaug))
               cost: -6
                 showAll: true
                 shuffle: true
             }
             {
               type: playCardFromDiscard
-              filter: choose(name(Smaug))
+              select: choose(name(Smaug))
               cost: -6
             }
           ]
@@ -1204,7 +1204,7 @@
         }
         effect: {
           type: playCardFromDiscard
-          filter: choose(orc)
+          select: choose(orc)
         }
       }
       {
@@ -1219,18 +1219,18 @@
           effects: [
             {
               type: discard
-              filter: self
+              select: self
             }
             {
               type: exert
-              filter: choose(name(Smaug))
+              select: choose(name(Smaug))
               times: 2
             }
           ]
         }
         effect: {
           type: playCardFromDiscard
-          filter: choose(side(shadow),condition)
+          select: choose(side(shadow),condition)
         }
       }
     ]
@@ -1260,7 +1260,7 @@
         phase: maneuver
         cost: {
           type: discard
-          filter: choose(orc)
+          select: choose(orc)
         }
         effect: {
           type: choice
@@ -1271,13 +1271,13 @@
           effects: [
             {
               type: playCardFromDrawDeck
-              filter: choose(culture(wraith),not(response,event))
+              select: choose(culture(wraith),not(response,event))
                 showAll: true
                 shuffle: true
             }
             {
               type: playCardFromDiscard
-              filter: choose(culture(wraith),not(response,event))
+              select: choose(culture(wraith),not(response,event))
             }
           ]
         }
@@ -1300,7 +1300,7 @@
         }
         {
           type: putCardsFromDiscardIntoHand
-          filter: choose(minion)
+          select: choose(minion)
           count: {
             type: fromMemory
             memory: countOfCharacters
@@ -1336,11 +1336,11 @@
         cost: {
           type: discardFromHand
           forced: false
-          filter: choose(orc)
+          select: choose(orc)
         }
         effect: {
           type: playCardFromDiscard
-          filter: choose(culture(wraith),minion)
+          select: choose(culture(wraith),minion)
         }
       }
     ]
@@ -1376,7 +1376,7 @@
         }
         effect: {
           type: modifyStrength
-          filter: choose(another,culture(wraith),minion)
+          select: choose(another,culture(wraith),minion)
           amount: {
             type: cardAffectedLimitPerPhase
             limit: 3
@@ -1408,11 +1408,11 @@
       }
       cost: {
         type: exert
-        filter: self
+        select: self
       }
       effect: {
         type: discard
-        filter: choose(weapon)
+        select: choose(weapon)
       }
     }
   }
@@ -1448,7 +1448,7 @@
         }
         effect: {
           type: exert
-          filter: choose(companion)
+          select: choose(companion)
         }
       }
     ]
@@ -1484,7 +1484,7 @@
         }
         effect: {
           type: discard
-          filter: choose(ally)
+          select: choose(ally)
         }
       }
     ]
@@ -1544,11 +1544,11 @@
         }
         cost: {
           type: exert
-          filter: self
+          select: self
         }
         effect: {
           type: playCardFromDiscard
-          filter: choose(culture(wraith),minion)
+          select: choose(culture(wraith),minion)
           cost: -8
         }
       }
@@ -1620,7 +1620,7 @@
         }
         effect: {
           type: modifyStrength
-          filter: choose(culture(wraith),minion)
+          select: choose(culture(wraith),minion)
           amount: {
             type: cardAffectedLimitPerPhase
             limit: 4
@@ -1661,7 +1661,7 @@
         }
         effect: {
           type: addKeyword
-          filter: choose(culture(wraith),minion)
+          select: choose(culture(wraith),minion)
           keyword: damage+1
         }
       }

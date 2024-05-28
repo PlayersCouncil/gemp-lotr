@@ -41,7 +41,7 @@
 		        ]
 		        effect: {
 		            type: wound
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		        }
 		    }
 		]
@@ -95,11 +95,11 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(support area,possession)
+		            select: choose(support area,possession)
                     showAll: true
                     shuffle: true
 		        }
@@ -156,12 +156,12 @@
 		        }
 		        cost: {
 		            type: removeTokens
-		            filter: choose(any)
+		            select: choose(any)
 		            culture: raider
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(companion,inSkirmishAgainst(self))
+		            select: choose(companion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -222,7 +222,7 @@
                 effect: {
                     type: addTokens
                     culture: raider
-                    filter: choose(hasToken(raider))
+                    select: choose(hasToken(raider))
                     count: 2
                 }
 		    }
@@ -290,12 +290,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: wound
-		            filter: choose(other,culture(raider),man)
+		            select: choose(other,culture(raider),man)
 		            count: 2
 		        }
 		        effect: {
 		            type: heal
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -430,7 +430,7 @@
                 ]
                 effect: {
                     type: discard
-                    filter: choose(unbound,companion,inSkirmishAgainst(self))
+                    select: choose(unbound,companion,inSkirmishAgainst(self))
                 }
 		    }
 		]
@@ -488,12 +488,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(your,southron)
+		            select: choose(your,southron)
 		            memorize: exertedSouthron
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: memory(exertedSouthron)
+		            select: memory(exertedSouthron)
 		            amount: 1
 		        }
 		    }
@@ -542,7 +542,7 @@
 				    }
 				    effect: {
 				        type: preventWound
-				        filter: all(southron)
+				        select: all(southron)
 				    }
 				    until: end(assignment)
 				}
@@ -595,7 +595,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(mount)
+		            select: choose(mount)
 		            on: self
 		            cost: -2
 		        }
@@ -638,12 +638,12 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(culture(raider),man)
+			    select: choose(culture(raider),man)
 			},
 			effect: [
 				{
 				    type: discard
-				    filter: choose(side(free people),condition)
+				    select: choose(side(free people),condition)
 				    count: {
 				        type: condition
 				        condition: {
@@ -713,7 +713,7 @@
                     }
                     {
                         type: play
-                        filter: choose(southron)
+                        select: choose(southron)
                         removedTwilight: 1
                     }
                 ]
@@ -773,7 +773,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(raider),condition)
+		            select: choose(culture(raider),condition)
 		        }
 		    }
 		]
@@ -825,7 +825,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: memory(assignedMan)
+		            select: memory(assignedMan)
 		        }
 		    }
 		]
@@ -959,7 +959,7 @@
 			effect: [
 				{
 				    type: discard
-				    filter: memory(playedPossession)
+				    select: memory(playedPossession)
 				}
 				{
 				    type: conditional
@@ -970,7 +970,7 @@
 				    }
 				    effect: {
 				        type: wound
-				        filter: choose(unbound,man)
+				        select: choose(unbound,man)
 				    }
 				}
 			]
@@ -1024,7 +1024,7 @@
 		        ]
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: reconcileHand
@@ -1035,11 +1035,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(raider),man)
+		            select: choose(culture(raider),man)
 		            amount: 2
 		        }
 		    }

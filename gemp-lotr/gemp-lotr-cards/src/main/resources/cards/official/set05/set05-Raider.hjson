@@ -37,7 +37,7 @@
 		        effect: {
 		            type: playCardFromDiscard
 		            removedTwilight: 3
-		            filter: choose(culture(raider),mount)
+		            select: choose(culture(raider),mount)
 		        }
 		    }
 		]
@@ -146,7 +146,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpotFPCultures
@@ -154,7 +154,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(companion)
+		            select: all(companion)
 		        }
 		    }
 		]
@@ -368,7 +368,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(southron)
+		            select: choose(southron)
 		        }
 		    }
 		]
@@ -418,7 +418,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
@@ -498,58 +498,6 @@
 		]
 		gametext: Bearer must be a Southron.<br>Bearer is <b>fierce</b>.<br>Each time bearer overwhelms a character, you may add (5).
 		lore: Big as a house, much bigger than a house, it looked to him, a grey-clad moving hill.'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	5_126: {
-		cardInfo: {
-			imagePath: decipher/LOTR05126.jpg
-			javaClass: true
-			//parentId: 5_126
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 5R126
-			rarity: R
-			setNum: "5"
-			cardNum: 126
-			style: Standard
-		}
-		title: Army of Haradrim
-		unique: true
-		side: Shadow
-		culture: Raider
-		twilight: 7
-		type: Minion
-		race: Man
-		strength: 14
-		vitality: 4
-		site: 4
-		keywords: Southron
-		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            removedTwilight: 3
-		            filter: choose(culture(raider),mount)
-		        }
-		    }
-		]
-		gametext: <b>Southron</b>.<br><b>Skirmish:</b> Remove (3) to play a [raider] mount from your discard pile.
-		lore: Lacking shields and armor, Southron forces rely on speed and numbers.
 		promotext: ""
 		alts: {
 			promos: {

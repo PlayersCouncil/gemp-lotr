@@ -32,7 +32,7 @@
 		        }
                 effect: {
                     type: playCardFromDrawDeck
-                    filter: choose(culture(dwarven),condition)
+                    select: choose(culture(dwarven),condition)
                     showAll: true
                     shuffle: true
                 }
@@ -178,7 +178,7 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: choose(elf)
+		            select: choose(elf)
 		        }
 		        effect: {
 		            type: addModifier
@@ -495,7 +495,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -652,7 +652,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(your,minion)
+		            select: choose(your,minion)
 		            amount: 2
 		        }
 		    }
@@ -704,7 +704,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(your,minion)
+		            select: choose(your,minion)
 		            keyword: damage
 		            amount: 1
 		        }
@@ -872,7 +872,7 @@
 		                {
 		                    type: discardFromHand
 		                    forced: false
-		                    filter: all(any)
+		                    select: all(any)
 		                }
 		                {
 		                    type: addBurdens
@@ -930,7 +930,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(name(Gandalf))
+		            select: choose(name(Gandalf))
 		            times: 3
 		        }
 		    }
@@ -982,7 +982,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: all(companion)
+		            select: all(companion)
 		        }
 		    }
 		]
@@ -1033,7 +1033,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: all(culture(rohan),companion)
+		            select: all(culture(rohan),companion)
 		        }
 		    }
 		]
@@ -1084,7 +1084,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: all(culture(dwarven),companion)
+		            select: all(culture(dwarven),companion)
 		        }
 		    }
 		]
@@ -1135,7 +1135,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: all(culture(elven),companion)
+		            select: all(culture(elven),companion)
 		        }
 		    }
 		]
@@ -1186,7 +1186,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: all(culture(gondor),companion)
+		            select: all(culture(gondor),companion)
 		        }
 		    }
 		]
@@ -1237,7 +1237,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: all(hobbit,companion)
+		            select: all(hobbit,companion)
 		        }
 		    }
 		]
@@ -1281,7 +1281,7 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: choose(minion)
+		            select: choose(minion)
 		            count: 2
 		        }
 		        requires: {
@@ -1335,7 +1335,7 @@
                 phase: shadow
                 cost: {
                     type: exert
-                    filter: choose(minion)
+                    select: choose(minion)
                 }
                 requires: {
                     type: canSpot
@@ -1505,7 +1505,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(your,culture(sauron),minion)
+		            select: choose(your,culture(sauron),minion)
 		            amount: 3
 		        }
 		    }
@@ -1553,7 +1553,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		            cost: -2
 		        }
 		    }
@@ -1602,7 +1602,7 @@
                     }
                     {
                         type: playCardFromDiscard
-                        filter: choose(name(Gollum))
+                        select: choose(name(Gollum))
                     }
                 ]
                 effect: {

@@ -20,9 +20,9 @@ import java.util.Collection;
 public class RevealCards implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
@@ -30,7 +30,7 @@ public class RevealCards implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, countSource, memorize, "you", "Choose cards to reveal", environment));
+                CardResolver.resolveCards(select, countSource, memorize, "you", "Choose cards to reveal", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

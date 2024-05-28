@@ -42,12 +42,12 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: discard
-		                filter: choose(minion)
+		                select: choose(minion)
 		            }
 		            {
 		                type: reconcileHand
@@ -149,11 +149,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion,inSkirmishAgainst(bearer))
+		            select: choose(minion,inSkirmishAgainst(bearer))
 		            amount: -2
 		        }
 		    }
@@ -208,7 +208,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		]
@@ -300,7 +300,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(elf)
+					select: choose(elf)
 					memorize: chosenElf
 					amount: {
 					    type: condition
@@ -368,11 +368,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(character,hasAttached(artifact))
+		            select: choose(character,hasAttached(artifact))
 		        }
 		    }
 		]
@@ -426,7 +426,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: drawCards
@@ -473,7 +473,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(elf)
+		            select: choose(elf)
 		        }
 		        effect: [
                     {
@@ -495,7 +495,7 @@
                     }
                     {
                         type: putCardsFromDeckOnBottomOfDeck
-                        filter: memory(revealedCard)
+                        select: memory(revealedCard)
                         reveal: true
                     }
                 ]
@@ -561,7 +561,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -571,7 +571,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: choice
@@ -582,7 +582,7 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: choose(condition)
+		                    select: choose(condition)
 		                }
 		                {
 		                    type: drawCards
@@ -646,7 +646,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -747,7 +747,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(elven),companion)
+				select: choose(culture(elven),companion)
 				count: 2
 			},
 			effect: [
@@ -825,7 +825,7 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: discardFromHand
@@ -835,7 +835,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(elf)
+		            select: choose(elf)
 		        }
 		    }
 		]
@@ -877,7 +877,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(elf)
+					select: choose(elf)
 					amount: 2
 				}
 				{
@@ -927,7 +927,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(elf)
+					select: choose(elf)
 					amount: 2
 				}
 				{

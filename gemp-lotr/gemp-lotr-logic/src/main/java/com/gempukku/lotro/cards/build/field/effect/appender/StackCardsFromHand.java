@@ -22,9 +22,9 @@ import java.util.List;
 public class StackCardsFromHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "where", "count", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "where", "count", "memorize");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String where = FieldUtils.getString(effectObject.get("where"), "where");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp2");
@@ -34,7 +34,7 @@ public class StackCardsFromHand implements EffectAppenderProducer {
         result.addEffectAppender(
                 CardResolver.resolveCard(where, "_temp1", "you", "Choose card to stack on", environment));
         result.addEffectAppender(
-                CardResolver.resolveCardsInHand(filter, valueSource, memorize, "you", "you", "Choose cards to stack", environment));
+                CardResolver.resolveCardsInHand(select, valueSource, memorize, "you", "you", "Choose cards to stack", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

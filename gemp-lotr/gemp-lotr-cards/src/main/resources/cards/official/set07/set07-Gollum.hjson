@@ -37,13 +37,13 @@
 				effects: [
 				    {
 				        type: playCardFromDrawDeck
-				        filter: choose(name(Gollum))
+				        select: choose(name(Gollum))
                         showAll: true
                         shuffle: true
 				    }
 				    {
 				        type: playCardFromDiscard
-				        filter: choose(name(Gollum))
+				        select: choose(name(Gollum))
 				    }
 				]
 			},
@@ -91,13 +91,13 @@
 			effect: [
 				{
 					type: discard
-					filter: choose(culture(gollum),condition)
+					select: choose(culture(gollum),condition)
 					count: any
 					memorize: discardedCards
 				}
 				{
 				    type: modifyStrength
-				    filter: choose(name(Sméagol))
+				    select: choose(name(Sméagol))
 				    amount: {
 				        type: forEachInMemory
 				        memory: discardedCards
@@ -107,7 +107,7 @@
 				}
 				{
 				    type: addKeyword
-				    filter: memory(chosenSmeagol)
+				    select: memory(chosenSmeagol)
 				    keyword: damage
 				    amount: {
 				        type: forEachInMemory
@@ -160,7 +160,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(name(Sméagol))
+		            select: choose(name(Sméagol))
 		        }
 		    }
 		]
@@ -211,7 +211,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		]
@@ -264,11 +264,11 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: returnToHand
-		            filter: choose(name(Gollum))
+		            select: choose(name(Gollum))
 		        }
 		    }
 		]
@@ -323,7 +323,7 @@
                 ]
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -376,7 +376,7 @@
 		            effects: [
 		                {
                             type: exert
-                            filter: self
+                            select: self
                             times: 2
 		                }
 		                {
@@ -386,7 +386,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 2
 		        }
 		    }
@@ -431,7 +431,7 @@
 		        cost: [
                     {
                         type: discard
-                        filter: choose(name(Gollum))
+                        select: choose(name(Gollum))
                     }
                     {
                         type: removeThreats
@@ -485,7 +485,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(or(nazgul,and(culture(sauron),minion),and(culture(gollum),minion)))
+                        select: choose(or(nazgul,and(culture(sauron),minion),and(culture(gollum),minion)))
                         amount: 2
                     }
                 ]
@@ -504,7 +504,7 @@
                 ]
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: self
+		            select: self
 		            extraEffects: {
 		                type: putPlayedEventOnBottomOfDrawDeck
 		            }
@@ -554,7 +554,7 @@
 		            }
 		            {
 		                type: exert
-		                filter: choose(name(Gollum))
+		                select: choose(name(Gollum))
 		            }
 		        ]
 		        effect: [
@@ -572,7 +572,7 @@
                         }
                         effect: {
                             type: putCardsFromDiscardIntoHand
-                            filter: memory(discardedCard)
+                            select: memory(discardedCard)
                         }
                     }
                 ]
@@ -642,7 +642,7 @@
                 ]
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -690,7 +690,7 @@
 				}
 				{
 				    type: modifyStrength
-				    filter: choose(name(Sméagol))
+				    select: choose(name(Sméagol))
 				    amount: {
 				        type: fromMemory
 				        memory: spotCount
@@ -744,7 +744,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: choose(name(Sméagol))
+		            select: choose(name(Sméagol))
 		        }
 		        effect: {
 		            type: removeThreats
@@ -789,7 +789,7 @@
 			type: event
 			cost: {
     		    type: exert
-    		    filter: choose(name(Sméagol))
+    		    select: choose(name(Sméagol))
 			},
 			effect: [
 				{
@@ -877,7 +877,7 @@
 		        effect: [
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: removeThreats
@@ -944,7 +944,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -954,7 +954,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: discard
-		            filter: choose(name(Sméagol))
+		            select: choose(name(Sméagol))
 		        }
 		        effect: {
 		            type: preventable
@@ -963,12 +963,12 @@
 		            cost: {
 		                type: exert
 		                player: shadow
-		                filter: choose(minion)
+		                select: choose(minion)
 		                times: 2
 		            }
 		            effect: {
 		                type: discard
-		                filter: choose(minion)
+		                select: choose(minion)
 		            }
 		        }
 		    }
@@ -1035,7 +1035,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -1076,12 +1076,12 @@
 			type: event
 			cost: {
 				type: discard
-				filter: choose(name(Sméagol))
+				select: choose(name(Sméagol))
 			},
 			effect: [
 				{
 					type: playCardFromDiscard
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			]
 		}
@@ -1147,7 +1147,7 @@
 		        ]
 		        effect: {
 		            type: exhaust
-		            filter: memory(assignedMinion)
+		            select: memory(assignedMinion)
 		        }
 		    }
 		]
@@ -1210,7 +1210,7 @@
 		        }
 		        effect: {
 		            type: alterOverwhelmMultiplier
-		            filter: self
+		            select: self
 		            multiplier: 3
 		        }
 		    }
@@ -1269,7 +1269,7 @@
 					}
 					false: {
 					    type: heal
-					    filter: choose(name(Sméagol))
+					    select: choose(name(Sméagol))
 					}
 					true: {
 					    type: cancelSkirmish
@@ -1315,7 +1315,7 @@
 			type: event
 			cost: {
 				type: playCardFromDiscard
-				filter: choose(name(Gollum))
+				select: choose(name(Gollum))
 			},
 			effect: [
 				{
@@ -1377,7 +1377,7 @@
 			effect: [
 				{
 					type: preventWound
-					filter: choose(minion)
+					select: choose(minion)
 				}
 			]
 		}
@@ -1418,7 +1418,7 @@
 			type: event
 			cost: {
 				type: playCardFromDiscard
-				filter: choose(name(Sméagol))
+				select: choose(name(Sméagol))
 			}
 			effect: [
 				{
@@ -1498,16 +1498,16 @@
                 phase: regroup
                 cost: {
                     type: discard
-                    filter: self
+                    select: self
                 }
                 effect: [
                     {
                         type: discard
-                        filter: choose(minion)
+                        select: choose(minion)
                     }
                     {
                         type: playCardFromDiscard
-                        filter: choose(companion)
+                        select: choose(companion)
                     }
                 ]
             }
@@ -1560,7 +1560,7 @@
 			effect: [
 				{
 					type: wound
-					filter: choose(minion,inSkirmishAgainst(name(Sméagol)))
+					select: choose(minion,inSkirmishAgainst(name(Sméagol)))
 					times: 2
 				}
 			]

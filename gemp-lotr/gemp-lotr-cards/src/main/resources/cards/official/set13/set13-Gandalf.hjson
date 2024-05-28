@@ -108,7 +108,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(gandalf),event)
+		            select: choose(culture(gandalf),event)
 		        }
 		    }
 		]
@@ -155,7 +155,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: gandalf
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -170,18 +170,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: gandalf
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(culture(gandalf),companion)
+		            select: choose(culture(gandalf),companion)
 		            keyword: muster
 		            until: endOfTurn
 		        }
@@ -233,7 +233,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(minion,inSkirmishAgainst(companion))
+				    select: choose(minion,inSkirmishAgainst(companion))
 				    amount: -3
 				}
 			]
@@ -279,7 +279,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(gandalf),companion)
+				    select: choose(culture(gandalf),companion)
 				    memorize: chosenCompanion
 				    amount: {
 				        type: condition
@@ -363,7 +363,7 @@
 		                    effect: {
 		                        type: discardFromHand
 		                        forced: false
-		                        filter: choose(culture(gandalf))
+		                        select: choose(culture(gandalf))
 		                        count: 2
 		                    }
 		                }
@@ -410,15 +410,15 @@
                 phase: skirmish
                 cost: {
                     type: removeCardsInDiscardFromGame
-                    filter: choose(other,culture(gandalf))
+                    select: choose(other,culture(gandalf))
                     count: 4
                 }
                 effect: {
                    type: playCardFromDiscard
-                   filter: self
+                   select: self
                    extraEffects: {
                        type: removeFromTheGame
-                       filter: self
+                       select: self
                    }
                 }
 		    }
@@ -431,7 +431,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(your,culture(gandalf),companion)
+                        select: choose(your,culture(gandalf),companion)
                         amount: 3
                     }
                 ]
@@ -474,12 +474,12 @@
 			type: event
 			cost: {
 			    type: discard
-			    filter: choose(your,culture(gandalf),condition)
+			    select: choose(your,culture(gandalf),condition)
 			}
 			effect: [
 				{
 				    type: discard
-				    filter: choose(condition)
+				    select: choose(condition)
 				}
 				{
 				    type: drawCards
@@ -530,7 +530,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: choose(name(The Palantír of Orthanc))
+		            select: choose(name(The Palantír of Orthanc))
 		        }
 		    }
 		    {
@@ -554,7 +554,7 @@
                         forced: true
                         hand: shadow
                         player: shadow
-                        filter: choose(memory(revealedCards),minion)
+                        select: choose(memory(revealedCards),minion)
                     }
                 ]
 		    }
@@ -610,7 +610,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		            times: 2
 		        }
 		    }
@@ -623,7 +623,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(condition)
+		            select: choose(condition)
 		        }
 		    }
 		]
@@ -721,13 +721,13 @@
 			cost: {
 			    type: discardFromHand
 			    forced: false
-			    filter: choose(side(shadow))
+			    select: choose(side(shadow))
 			    count: 2
 			}
 			effect: [
 				{
 				    type: putCardsFromDiscardIntoHand
-				    filter: choose(culture(gandalf),event)
+				    select: choose(culture(gandalf),event)
 				}
 			]
 		}
@@ -790,7 +790,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(bearer))
+		            select: choose(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		]
@@ -895,7 +895,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: gandalf
-		            filter: self
+		            select: self
 		            count: {
 		                type: regionNumber
 		            }
@@ -913,19 +913,19 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: gandalf
-		                    filter: self
+		                    select: self
 		                    count: 2
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(side(shadow),condition)
+		            select: choose(side(shadow),condition)
 		        }
 		    }
 		]
@@ -969,7 +969,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: choose(your,culture(gandalf),companion)
+                        select: choose(your,culture(gandalf),companion)
                         memorize: exertedCompanion
                     }
                     {
@@ -978,7 +978,7 @@
                 ]
                 effect: {
                     type: addKeyword
-                    filter: memory(exertedCompanion)
+                    select: memory(exertedCompanion)
                     keyword: damage
                     amount: 1
                 }

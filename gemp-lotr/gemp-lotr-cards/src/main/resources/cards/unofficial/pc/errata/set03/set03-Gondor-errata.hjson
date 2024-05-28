@@ -83,11 +83,11 @@
 				cost: [
 					{
 						type: Exert
-						filter: choose(culture(gondor),companion)
+						select: choose(culture(gondor),companion)
 					}
 					{
 						type: Discard
-						filter: self
+						select: self
 					}
 				]
 				effect: {
@@ -135,17 +135,17 @@
 			cost: [
 				{
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: [
 				{
 					type: spot
-					filter: choose(ally)
+					select: choose(ally)
 					memorize: chosenAlly
 				}
 				{
@@ -159,7 +159,7 @@
 				}
 				{
 					type: EnableParticipationInArcheryFireAndSkirmishes
-					filter: memory(chosenAlly)
+					select: memory(chosenAlly)
 					until: start(regroup)
 				}
 			]

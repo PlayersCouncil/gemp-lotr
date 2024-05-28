@@ -51,7 +51,7 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 					times: 2
 				}
 				effect: {
@@ -101,22 +101,22 @@
                 phase: fellowship
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: [
                     {
                         type: chooseCardsFromDiscard
-                        filter: choose(side(free people))
+                        select: choose(side(free people))
                         memorize: chosenCard
                         text: Choose card to reveal and put beneath your deck
                     }
                     {
                         type: revealCards
-                        filter: memory(chosenCard)
+                        select: memory(chosenCard)
                     }
                     {
                         type: putCardsFromDiscardOnBottomOfDeck
-                        filter: memory(chosenCard)
+                        select: memory(chosenCard)
                     }
                 ]
             }
@@ -199,17 +199,17 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(staff,attachedTo(name(Gandalf)))
+					select: choose(staff,attachedTo(name(Gandalf)))
 				}
 				{
 					type: exert
 					times: 2
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 				}
 			]
 			effect: {
 				type: discard
-				filter: choose(minion,inSkirmishAgainst(name(Gandalf)))
+				select: choose(minion,inSkirmishAgainst(name(Gandalf)))
 			}
 		}
 	}
@@ -239,7 +239,7 @@
 				effect: {
 					type: addKeyword
 					until: start(regroup)
-					filter: choose(companion)
+					select: choose(companion)
 					keyword: defender+1
 				}
 			}
@@ -259,11 +259,11 @@
 			cost: {
 				type: exert
 				times: 2
-				filter: bearer
+				select: bearer
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(minion)
+				select: choose(minion)
 				amount: -3
 			}
 		}
@@ -287,7 +287,7 @@
 				type: removeKeyword
 				keyword: fierce
 				until: start(regroup)
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}

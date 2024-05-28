@@ -26,19 +26,19 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gimli))
+				select: choose(name(Gimli))
 				times: 2
 			},
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(name(Gimli))
+					select: choose(name(Gimli))
 					amount: 3
 					until: regroup
 				}
 				{
 					type: modifyStrength
-					filter: all(elf,companion)
+					select: all(elf,companion)
 					amount: 3
 					until: regroup
 				}
@@ -92,7 +92,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: dwarven
-		            filter: self
+		            select: self
 		            count: 2
 		        }
 		    }
@@ -108,11 +108,11 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
-		                    filter: self
+		                    select: self
 		                    culture: dwarven
 		                }
 		            ]
@@ -201,11 +201,11 @@
                                 effects: [
                                     {
                                         type: putCardsFromHandOnTopOfDeck
-                                        filter: choose(culture(dwarven))
+                                        select: choose(culture(dwarven))
                                     }
                                     {
                                         type: putCardsFromhandOnBottomOfDeck
-                                        filter: choose(culture(dwarven))
+                                        select: choose(culture(dwarven))
                                     }
                                 ]
                             }

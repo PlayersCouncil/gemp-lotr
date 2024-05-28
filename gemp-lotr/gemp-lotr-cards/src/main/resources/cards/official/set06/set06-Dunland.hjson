@@ -38,7 +38,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: dunland
-		            filter: self
+		            select: self
 		            count: 2
 		        }
 		    }
@@ -57,18 +57,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: dunland
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(culture(dunland),man)
+		            select: choose(culture(dunland),man)
 		        }
 		    }
 		]
@@ -354,18 +354,18 @@
 		        effect: [
                     {
                         type: play
-                        filter: choose(culture(dunland),man)
+                        select: choose(culture(dunland),man)
                         memorize: playedMan
                     }
                     {
                         type: addKeyword
-                        filter: memory(playedMan)
+                        select: memory(playedMan)
                         keyword: fierce
                         until: regroup
                     }
                     {
                         type: addKeyword
-                        filter: memory(playedMan)
+                        select: memory(playedMan)
                         keyword: damage
                         amount: 1
                         until: regroup
@@ -422,7 +422,7 @@
 		        effect: {
 		            type: playCardFromDiscard
 		            removedTwilight: 2
-		            filter: choose(culture(dunland),man)
+		            select: choose(culture(dunland),man)
 		        }
 		    }
 		]
@@ -468,7 +468,7 @@
 			effect: [
 				{
 					type: discard
-					filter: all(condition)
+					select: all(condition)
 				}
 			]
 		}

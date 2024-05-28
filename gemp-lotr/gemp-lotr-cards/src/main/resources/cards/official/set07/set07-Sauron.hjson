@@ -33,7 +33,7 @@
 				effects: [
 				    {
 				        type: playCardFromStacked
-				        filter: choose(besieger)
+				        select: choose(besieger)
 				        on: controlledSite
 				    }
 				    {
@@ -44,7 +44,7 @@
 			effect: [
 				{
 					type: playCardFromDiscard
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			]
 		}
@@ -90,7 +90,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(character,inSkirmishAgainst(culture(moria),orc))
+					select: choose(character,inSkirmishAgainst(culture(moria),orc))
 					amount: -3
 				}
 			]
@@ -137,7 +137,7 @@
 		        phase: shadow
 		        cost: {
 		            type: discard
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		        }
 		        effect: {
 		            type: addThreats
@@ -151,7 +151,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 1
 		        }
 		    }
@@ -161,11 +161,11 @@
 		        cost: [
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                     {
                         type: discard
-                        filter: choose(other,culture(sauron),orc)
+                        select: choose(other,culture(sauron),orc)
                         count: any
                         memorize: discardedOrcs
                     }
@@ -276,7 +276,7 @@
 				{
 					type: kill
 					player: free people
-                    filter: choose(companion)
+                    select: choose(companion)
 				}
 			]
 		}
@@ -348,7 +348,7 @@
                             true: {
                                 type: modifyStrength
                                 until: regroup
-                                filter: all(besieger)
+                                select: all(besieger)
                                 amount: 3
                             }
                         }
@@ -408,7 +408,7 @@
 		        phase: regroup
 		        cost: {
 		            type: spot
-		            filter: choose(culture(sauron),minion)
+		            select: choose(culture(sauron),minion)
 		            memorize: spottedMinion
 		        }
 		        effect: [
@@ -427,7 +427,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -587,11 +587,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(sauron),minion)
+		            select: choose(culture(sauron),minion)
 		            amount: {
 		                type: forEachYouCanSpot
 		                filter: controlledSite
@@ -708,7 +708,7 @@
                 }
 		        effect: {
 		            type: stackCards
-		            filter: choose(culture(sauron),orc,besieger)
+		            select: choose(culture(sauron),orc,besieger)
 		            where: choose(controlledSite)
 		        }
 		    }
@@ -723,7 +723,7 @@
                 }
 		        effect: {
 		            type: stackCards
-		            filter: choose(culture(sauron),orc,not(besieger))
+		            select: choose(culture(sauron),orc,not(besieger))
 		            where: choose(controlledSite)
 		        }
 		    }
@@ -777,19 +777,19 @@
 		        effect: [
                     {
                         type: playCardFromStacked
-                        filter: choose(culture(sauron),orc)
+                        select: choose(culture(sauron),orc)
                         on: controlledSite
                         memorize: playedOrc
                     }
                     {
                         type: modifyStrength
-                        filter: memory(playedOrc)
+                        select: memory(playedOrc)
                         amount: 6
                         until: regroup
                     }
                     {
                         type: addKeyword
-                        filter: memory(playedOrc)
+                        select: memory(playedOrc)
                         keyword: fierce
                         until: regroup
                     }
@@ -887,12 +887,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: discardStackedCards
-		            filter: self
+		            select: self
 		            on: controlledSite
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		            amount: {
 		                type: condition
 		                condition: {
@@ -954,7 +954,7 @@
                 }
 		        effect: {
 		            type: playCardFromStacked
-		            filter: choose(culture(sauron),orc,besieger)
+		            select: choose(culture(sauron),orc,besieger)
 		            on: controlledSite
 		        }
 		    }
@@ -969,7 +969,7 @@
                 }
 		        effect: {
 		            type: playCardFromStacked
-		            filter: choose(culture(sauron),orc,not(besieger))
+		            select: choose(culture(sauron),orc,not(besieger))
 		            on: controlledSite
 		        }
 		    }
@@ -1025,7 +1025,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(besieger)
+		            select: choose(besieger)
 		        }
 		    }
 		]
@@ -1072,12 +1072,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: stackCards
-		            filter: choose(besieger)
+		            select: choose(besieger)
 		            where: choose(controlledSite)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 2
 		        }
 		    }
@@ -1128,11 +1128,11 @@
 		        phase: maneuver
 		        cost: {
 		            type: discard
-		            filter: choose(engine)
+		            select: choose(engine)
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(condition,side(free people),zone(support))
+		            select: choose(condition,side(free people),zone(support))
 		        }
 		    }
 		]
@@ -1178,11 +1178,11 @@
 		        phase: shadow
 		        cost: {
 		            type: play
-		            filter: choose(besieger)
+		            select: choose(besieger)
 		        }
 		        effect: {
 		            type: addTokens
-		            filter: self
+		            select: self
 		            culture: sauron
 		        }
 		    }
@@ -1191,12 +1191,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: removeTokens
-		            filter: choose(condition)
+		            select: choose(condition)
 		            culture: sauron
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		            amount: 1
 		            limitPerCardThisPhase: 2
 		        }
@@ -1310,7 +1310,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: all(minion)
+		            select: all(minion)
 		            keyword: fierce
 		            until: regroup
 		        }
@@ -1324,7 +1324,7 @@
 		        effect: [
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: removeThreats
@@ -1441,7 +1441,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -1547,7 +1547,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		            count: 3
 		        }
 		        effect: {
@@ -1606,7 +1606,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -1659,7 +1659,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -1715,7 +1715,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 4
 		        }
 		    }
@@ -1766,7 +1766,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		            amount: 6
 		        }
 		    }
@@ -1817,7 +1817,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(sauron),minion)
+		            select: choose(culture(sauron),minion)
 		            amount: 8
 		        }
 		    }
@@ -1868,7 +1868,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(companion,inSkirmishAgainst(self))
+		            select: choose(companion,inSkirmishAgainst(self))
 		            amount: -1
 		            limitPerCardThisPhase: 3
 		        }
@@ -1984,11 +1984,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(another,culture(sauron),orc)
+		            select: choose(another,culture(sauron),orc)
 		            amount: 6
 		        }
 		    }
@@ -2040,7 +2040,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 3
 		        }
 		    }
@@ -2249,11 +2249,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(another,culture(sauron),orc)
+		            select: choose(another,culture(sauron),orc)
 		            amount: 3
 		        }
 		    }
@@ -2461,11 +2461,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(another,culture(sauron),orc)
+		            select: choose(another,culture(sauron),orc)
 		            amount: 4
 		        }
 		    }
@@ -2722,7 +2722,7 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(culture(sauron),orc)
+		                select: choose(culture(sauron),orc)
 		            }
 		            {
 		                type: removeThreats
@@ -2730,7 +2730,7 @@
 		        ]
 		        effect: {
 		            type: shuffleCardsFromPlayIntoDrawDeck
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		        }
 		    }
 		]
@@ -2804,7 +2804,7 @@
                     }
                     effect: {
                         type: modifyStrength
-                        filter: choose(culture(sauron),orc)
+                        select: choose(culture(sauron),orc)
                         amount: 2
                     }
 				}
@@ -2859,7 +2859,7 @@
 		        }
 		        effect: {
 		            type: play
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		            ignoreRoamingPenalty: true
 		        }
 		    }
@@ -2927,7 +2927,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(besieger)
+		            select: choose(besieger)
 		            keyword: fierce
 		            until: regroup
 		        }
@@ -2975,7 +2975,7 @@
 			effect: [
 				{
 					type: addKeyword
-					filter: all(your,culture(sauron),orc)
+					select: all(your,culture(sauron),orc)
 					keyword: fierce
 					until: regroup
 				}
@@ -3027,12 +3027,12 @@
 		        phase: regroup
 		        cost: {
 		            type: play
-		            filter: choose(culture(sauron),condition)
+		            select: choose(culture(sauron),condition)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: sauron
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -3091,7 +3091,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: sauron
-		            filter: self
+		            select: self
 		        }
 		        limitPerPhase: 1
 		        phase: regroup
@@ -3111,7 +3111,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -3176,7 +3176,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		            count: 3
 		        }
 		        effect: [
@@ -3185,7 +3185,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -3251,7 +3251,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: choose(besieger)
+		            select: choose(besieger)
 		        }
 		        effect: [
 		            {
@@ -3259,7 +3259,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }

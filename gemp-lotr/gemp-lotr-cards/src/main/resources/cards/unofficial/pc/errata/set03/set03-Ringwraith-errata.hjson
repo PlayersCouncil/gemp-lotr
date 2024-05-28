@@ -32,11 +32,11 @@
 							type: costToEffect
 							cost: {
 								type: Exert
-								filter: choose(culture(isengard),minion)
+								select: choose(culture(isengard),minion)
 							}
 							effect: {
 								type: addKeyword
-								filter: choose(Nazgul)
+								select: choose(Nazgul)
 								keyword: damage+1
 								until: start(regroup)
 							}
@@ -45,12 +45,12 @@
 							type: costToEffect
 							cost: {
 								type: Exert
-								filter: choose(Nazgul)
+								select: choose(Nazgul)
 							}
 							effect: [
 								{
 								    type: disableWounds
-									filter: choose(culture(isengard),minion)
+									select: choose(culture(isengard),minion)
 									until: regroup
 								}
 							]
@@ -96,7 +96,7 @@
 				type: ExtraCost
 				cost: {
 					type: exert
-					filter: choose(culture(ringwraith), minion)
+					select: choose(culture(ringwraith), minion)
 				}
 			}
 			{
@@ -141,11 +141,11 @@
 									hand: freeps
 									forced: false
 									count: 1
-									filter: choose(CultureFromMemory(bearer))
+									select: choose(CultureFromMemory(bearer))
 								}
 								effect: {
 									type: Discard
-									filter: self
+									select: self
 								}
 							}
 						}

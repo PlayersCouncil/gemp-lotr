@@ -23,7 +23,7 @@
 					}
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: all(bearer)
 					}
 					{
 						type: addBurdens
@@ -48,7 +48,7 @@
 				effect: [
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: all(bearer)
 					}
 					{
 						type: addBurdens
@@ -87,7 +87,7 @@
 				effect: [
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: bearer
 					}
 					{
 						type: addBurdens
@@ -115,7 +115,7 @@
 					}
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: bearer
 					}
 					{
 						type: addBurdens
@@ -136,11 +136,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: choose(hobbit)
+				select: choose(hobbit)
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(name(The Gaffer))
+				select: choose(name(The Gaffer))
                 showAll: true
                 shuffle: true
 			}
@@ -174,11 +174,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: choose(hobbit)
+				select: choose(hobbit)
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(or(name(Merry),name(Pippin)))
+				select: choose(or(name(Merry),name(Pippin)))
                 showAll: true
                 shuffle: true
 			}
@@ -196,11 +196,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: choose(hobbit)
+				select: choose(hobbit)
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(name(Sam))
+				select: choose(name(Sam))
                 showAll: true
                 shuffle: true
 			}
@@ -237,7 +237,7 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(name(Aragorn))
+				select: choose(name(Aragorn))
                 showAll: true
                 shuffle: true
 			}
@@ -259,7 +259,7 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(name(Gandalf's Cart))
+				select: choose(name(Gandalf's Cart))
                 showAll: true
                 shuffle: true
 			}
@@ -277,11 +277,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: choose(hobbit)
+				select: choose(hobbit)
 			}
 			effect: {
 				type: play
-				filter: choose(or(companion,ally))
+				select: choose(or(companion,ally))
 				cost: -1
 			}
 		}
@@ -400,12 +400,12 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: choose(your,or(companion,minion))
+				select: choose(your,or(companion,minion))
 				memorize: exertedCharacter
 			}
 			effect: {
 				type: modifyStrength
-				filter: memory(exertedCharacter)
+				select: memory(exertedCharacter)
 				amount: 2
 			}
 		}
@@ -430,7 +430,7 @@
 			}
 			effect: {
 				type: exert
-				filter: all(hobbit,companion)
+				select: all(hobbit,companion)
 			}
 		}
 	}
@@ -601,7 +601,7 @@
 			phase: fellowship
 			cost: {
 				type: play
-				filter: choose(hobbit)
+				select: choose(hobbit)
 			}
 			effect: {
 				type: drawCards
@@ -622,7 +622,7 @@
 			phase: fellowship
 			cost: {
 				type: play
-				filter: choose(man)
+				select: choose(man)
 			}
 			effect: {
 				type: drawCards
@@ -643,7 +643,7 @@
 			phase: fellowship
 			cost: {
 				type: play
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: {
 				type: drawCards
@@ -711,18 +711,18 @@
 				effects: [
 					{
 						type: discard
-						filter: choose(your,tale)
+						select: choose(your,tale)
 					}
 					{
 						type: discardFromHand
 						forced: false
-						filter: choose(tale)
+						select: choose(tale)
 					}
 				]
 			}
 			effect: {
 				type: heal
-				filter: choose(your,companion)
+				select: choose(your,companion)
 			}
 		}
 	}
@@ -750,12 +750,12 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(name(Gimli))
+						select: choose(name(Gimli))
 					}
 					{
 						type: exert
 						count: 2
-						filter: choose(not(name(Gimli)),companion)
+						select: choose(not(name(Gimli)),companion)
 					}
 				]
 			}
@@ -778,7 +778,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(side(shadow),weapon)
+				select: choose(side(shadow),weapon)
 			}
 		}
 	}
@@ -806,12 +806,12 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(name(Frodo))
+						select: choose(name(Frodo))
 					}
 					{
 						type: exert
 						count: 2
-						filter: choose(not(name(Frodo)),companion)
+						select: choose(not(name(Frodo)),companion)
 					}
 				]
 			}
@@ -862,7 +862,7 @@
 				}
 				{
 					type: playCardFromDrawDeck
-					filter: choose(weather)
+					select: choose(weather)
                     showAll: true
                     shuffle: true
 				}
@@ -889,14 +889,14 @@
 				effects: [
 					{
 						type: playCardFromDrawDeck
-						filter: choose(name(The Balrog))
+						select: choose(name(The Balrog))
 						cost: -6
                         showAll: true
                         shuffle: true
 					}
 					{
 						type: play
-						filter: choose(name(The Balrog))
+						select: choose(name(The Balrog))
 						cost: -6
 					}
 				]
@@ -971,7 +971,7 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: {
 				type: lookAtHand
@@ -1015,7 +1015,7 @@
 			}
 			effect: {
 				type: discard
-				filter: all(ally)
+				select: all(ally)
 			}
 		}
 	}
@@ -1058,7 +1058,7 @@
 			}
 			effect: {
 				type: exert
-				filter: all(companion)
+				select: all(companion)
 			}
 		}
 	}
@@ -1119,11 +1119,11 @@
 			cost: {
 				type: discardFromHand
 				forced: false
-				filter: choose(culture(gondor))
+				select: choose(culture(gondor))
 			}
 			effect: {
 				type: heal
-				filter: choose(culture(gondor),companion)
+				select: choose(culture(gondor),companion)
 			}
 		}
 	}
@@ -1163,12 +1163,12 @@
 			phase: maneuver
 			cost: {
 				type: exert
-				filter: choose(your,minion)
+				select: choose(your,minion)
 				memorize: exertedMinion
 			}
 			effect: {
 				type: addKeyword
-				filter: memory(exertedMinion)
+				select: memory(exertedMinion)
 				keyword: fierce
 				until: start(regroup)
 			}
@@ -1230,7 +1230,7 @@
 					times: 3
 					effect: {
 						type: playCardFromDiscard
-						filter: choose(tracker)
+						select: choose(tracker)
 					}
 				}
 				{

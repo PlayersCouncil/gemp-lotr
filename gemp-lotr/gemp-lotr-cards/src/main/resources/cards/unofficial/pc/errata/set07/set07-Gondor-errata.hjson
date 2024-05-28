@@ -28,7 +28,7 @@
 			phase: maneuver
 			cost: {
 				type: discard
-				filter: choose(fortification)
+				select: choose(fortification)
 			}
 			effect: {
 				type: removeThreats

@@ -31,7 +31,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(minion)
+				    select: choose(minion)
 				    amount: {
 				        type: forEachThreat
 				    }
@@ -84,7 +84,7 @@
 		        }
 		        effect: {
 		            type: preventDiscard
-		            filter: choose(your,other,culture(gollum),condition)
+		            select: choose(your,other,culture(gollum),condition)
 		        }
 		    }
 		]
@@ -125,7 +125,7 @@
 			type: event
 			cost: {
 			    type: heal
-			    filter: choose(ringBound,companion)
+			    select: choose(ringBound,companion)
 			}
 			effect: [
 				{
@@ -183,12 +183,12 @@
 				    effects: [
 				        {
 				            type: play
-				            filter: choose(not(roaming),minion)
+				            select: choose(not(roaming),minion)
 				            cost: -1
 				        }
 				        {
 				            type: play
-				            filter: choose(roaming,minion)
+				            select: choose(roaming,minion)
 				            cost: -3
 				        }
 				    ]
@@ -239,7 +239,7 @@
 		        effect: [
 		            {
 		                type: putCardsFromDeckIntoHand
-		                filter: choose(culture(gollum))
+		                select: choose(culture(gollum))
                         reveal: true
                         shuffle: true
                         showAll: true
@@ -247,7 +247,7 @@
 		            {
 		                type: discardFromHand
     		            forced: false
-		                filter: random(1)
+		                select: random(1)
 		            }
 		        ]
 		    }
@@ -257,11 +257,11 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(gollum))
+		            select: choose(culture(gollum))
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(gollum),minion)
+		            select: choose(culture(gollum),minion)
 		            amount: 2
 		        }
 		    }
@@ -309,7 +309,7 @@
 			effect: [
 				{
 				    type: returnToHand
-				    filter: choose(follower)
+				    select: choose(follower)
 				}
 			]
 		}
@@ -378,18 +378,18 @@
 		        effect: [
                     {
                         type: playCardFromDiscard
-                        filter: choose(name(Gollum))
+                        select: choose(name(Gollum))
                         memorize: playedGollum
                     }
                     {
                         type: modifyStrength
-                        filter: memory(playedGollum)
+                        select: memory(playedGollum)
                         amount: 3
                         until: endOfTurn
                     }
                     {
                         type: addKeyword
-                        filter: memory(playedGollum)
+                        select: memory(playedGollum)
                         keyword: fierce
                         until: endOfTurn
                     }
@@ -439,12 +439,12 @@
 				{
 				    type: kill
 				    player: free people
-				    filter: choose(companion,not(ringBearer))
+				    select: choose(companion,not(ringBearer))
 				}
 				{
 				    type: returnToHand
 				    player: free people
-				    filter: choose(companion,not(ringBearer))
+				    select: choose(companion,not(ringBearer))
 				}
 			]
 		}

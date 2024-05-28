@@ -42,7 +42,7 @@
 				}
 				effect: {
 					type: discard
-					filter: choose(minion)
+					select: choose(minion)
 					count: 0-1
 				}
 			}

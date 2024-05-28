@@ -28,11 +28,11 @@ public class Card_03_013_ErrataTests
 	}
 
 	@Test
-	public void ElrondBStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ElrondStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 3
-		 * Name: Elrond B, Herald to Gil-galad
+		 * Name: Elrond, Herald to Gil-galad
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Elven

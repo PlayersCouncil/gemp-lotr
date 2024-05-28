@@ -45,7 +45,7 @@
 	# 				}
 	# 				{
 	# 					type: exert
-	# 					filter: choose(another,companion)
+	# 					select: choose(another,companion)
 	# 				}
 	# 			]
 	# 			effect: {
@@ -112,11 +112,11 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
 						type: exert
-						filter: choose(another,companion)
+						select: choose(another,companion)
 					}
 				]
 				effect: [
@@ -146,7 +146,7 @@
 						}
 						effect: {
 							type: exert
-							filter: self
+							select: self
 						}
 					}
 				]
@@ -203,7 +203,7 @@
 			]
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: [
 				{
@@ -317,7 +317,7 @@
 	# 			type: ExtraCost
 	# 			cost: {
 	# 				type: exert
-	# 				filter: choose(or(title(Merry),title(Pippin)))
+	# 				select: choose(or(title(Merry),title(Pippin)))
 	# 			}
 	# 		}
 	# 		{

@@ -37,7 +37,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(another,companion)
+		            select: choose(another,companion)
 		        }
 		    }
 		    {
@@ -49,12 +49,12 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(companion)
+		            select: choose(companion)
 		            memorize: exertedCompanion
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(companion,not(cultureFromMemory(exertedCompanion)))
+		            select: choose(companion,not(cultureFromMemory(exertedCompanion)))
 		        }
 		    }
 		]
@@ -110,7 +110,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		    }
@@ -123,11 +123,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(another,culture(gondor),wraith)
+		            select: choose(another,culture(gondor),wraith)
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: self
+		            select: self
 		            keyword: defender
 		            amount: 1
 		            until: regroup
@@ -186,7 +186,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		    }
@@ -247,12 +247,12 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: putCardsFromDeckIntoHand
-		                filter: choose(culture(gondor))
+		                select: choose(culture(gondor))
                         reveal: true
                         shuffle: true
                         showAll: true
@@ -325,7 +325,7 @@
 				    forced: true
 				    hand: shadow
 				    player: you
-				    filter: memory(revealedCards)
+				    select: memory(revealedCards)
 				}
 				{
 				    type: drawCards
@@ -370,10 +370,10 @@
 			type: event
 			effect: [
 				{
-                    type: modifyStrength
-                    filter: choose(exhausted,culture(gondor),companion)
-                    amount: 2
-                    memorize: exhaustedMan
+					type: modifyStrength
+					select: choose(exhausted,culture(gondor),companion)
+					amount: 2
+					memorize: exhaustedMan
 				}
 				{
 					type: addtrigger
@@ -391,11 +391,11 @@
 						effects: [
 							{
 								type: heal
-								filter: memory(exhaustedMan)
+								select: memory(exhaustedMan)
 							}
 							{
 								type: addKeyword
-								filter: memory(exhaustedMan)
+								select: memory(exhaustedMan)
 								keyword: damage+1
 							}
 						]
@@ -452,11 +452,11 @@
 				    effects: [
 				        {
 				            type: discardStackedCards
-				            filter: choose(side(shadow))
+				            select: choose(side(shadow))
 				        }
 				        {
 				            type: wound
-				            filter: choose(minion,hasAttached(fortification))
+				            select: choose(minion,hasAttached(fortification))
 				        }
 				    ]
 				}
@@ -523,7 +523,7 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(culture(gondor),man)
+		                    select: choose(culture(gondor),man)
 		                    count: 2
 		                }
 		                {
@@ -535,7 +535,7 @@
 		        }
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
 		            where: choose(minion)
 		        }
 		    }
@@ -591,7 +591,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]

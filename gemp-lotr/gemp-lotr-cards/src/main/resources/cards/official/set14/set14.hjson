@@ -28,11 +28,11 @@
 				}
 				cost: {
 					type: discard
-					filter: choose(or(culture(dwarven),culture(gandalf)),condition)
+					select: choose(or(culture(dwarven),culture(gandalf)),condition)
 				}
 				effect: {
 					type: discard
-					filter: choose(minion)
+					select: choose(minion)
 				}
 			}
 		]
@@ -103,7 +103,7 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: all(minion,inSkirmish)
+					select: all(minion,inSkirmish)
 					amount: -2
 				}
 			}
@@ -139,7 +139,7 @@
 			}
 			effect: {
 				type: addKeyword
-				filter: all(companion)
+				select: all(companion)
 				keyword: archer
 			}
 		}
@@ -214,7 +214,7 @@
 				}
 				effect: {
 					type: heal
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -227,19 +227,19 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 						times: 2
 					}
 					{
 						type: discardFromHand
 						forced: false
-						filter: choose(minion)
+						select: choose(minion)
 						memorize: discardedCard
 					}
 				]
 				effect: {
 					type: modifyStrength
-					filter: self
+					select: self
 					amount: {
 						type: printedStrengthFromMemory
 						memory: discardedCard
@@ -318,11 +318,11 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: discard
-					filter: choose(minion,strengthLessThan(8))
+					select: choose(minion,strengthLessThan(8))
 				}
 			}
 		]
@@ -357,12 +357,12 @@
 				}
 				cost: {
 					type: discardFromHand
-					filter: choose(culture(gondor))
+					select: choose(culture(gondor))
 					forced: false
 				}
 				effect: {
 					type: heal
-					filter: choose(culture(gondor),companion)
+					select: choose(culture(gondor),companion)
 				}
 			}
 		]
@@ -388,7 +388,7 @@
 			}
 			cost: {
 				type: discard
-				filter: self
+				select: self
 			}
 			effect: {
 				type: cancelEvent
@@ -464,7 +464,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(orc),orc)
+				select: choose(culture(orc),orc)
 				removedTwilight: 2
 			}
 		}
@@ -509,7 +509,7 @@
 				type: repeat
 				effect: {
 					type: heal
-					filter: choose(uruk-hai)
+					select: choose(uruk-hai)
 					count: 0-1
 				}
 				times: {
@@ -547,25 +547,25 @@
 					effects: [
 						{
 							type: addKeyword
-							filter: choose(currentSite)
+							select: choose(currentSite)
 							keyword: battleground
 							until: endOfTurn
 						}
 						{
 							type: addKeyword
-							filter: choose(currentSite)
+							select: choose(currentSite)
 							keyword: mountain
 							until: endOfTurn
 						}
 						{
 							type: addKeyword
-							filter: choose(currentSite)
+							select: choose(currentSite)
 							keyword: plains
 							until: endOfTurn
 						}
 						{
 							type: addKeyword
-							filter: choose(currentSite)
+							select: choose(currentSite)
 							keyword: underground
 							until: endOfTurn
 						}

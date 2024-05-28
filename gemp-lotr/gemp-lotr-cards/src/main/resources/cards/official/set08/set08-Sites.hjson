@@ -36,7 +36,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(enduring,companion)
+		            select: choose(enduring,companion)
                     showAll: true
                     shuffle: true
 		        }
@@ -93,13 +93,13 @@
 		            effects: [
 		                {
 		                    type: playCardFromDrawDeck
-		                    filter: choose(enduring,minion)
+		                    select: choose(enduring,minion)
                             showAll: true
                             shuffle: true
 		                }
 		                {
 		                    type: playCardFromDiscard
-		                    filter: choose(enduring,minion)
+		                    select: choose(enduring,minion)
 		                }
 		            ]
 		        }

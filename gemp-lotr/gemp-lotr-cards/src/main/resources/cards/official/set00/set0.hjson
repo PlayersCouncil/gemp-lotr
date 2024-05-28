@@ -79,11 +79,11 @@
 			phase: skirmish
 			cost: {
 				type: play
-				filter: choose(culture(gondor),skirmish,event)
+				select: choose(culture(gondor),skirmish,event)
 			}
 			effect: {
 				type: modifyStrength
-				filter: all(minion,inSkirmishAgainst(self))
+				select: all(minion,inSkirmishAgainst(self))
 				amount: {
 					type: forEachVitality
 					filter: self
@@ -121,7 +121,7 @@
 				}
 				effect: {
 					type: discard
-					filter: choose(side(shadow),possession)
+					select: choose(side(shadow),possession)
 				}
 			}
 		]
@@ -157,7 +157,7 @@
 				effect: {
 					type: addTokens
 					culture: shire
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -165,7 +165,7 @@
 				phase: fellowship
 				cost: {
 					type: removeTokens
-					filter: self
+					select: self
 					count: 2
 					culture: shire
 				}
@@ -205,11 +205,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(minion,inSkirmishAgainst(elf))
+				select: choose(minion,inSkirmishAgainst(elf))
 				amount: -2
 			}
 		}

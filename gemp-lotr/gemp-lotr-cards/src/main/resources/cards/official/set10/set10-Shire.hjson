@@ -52,7 +52,7 @@
 		            }
 		            {
 		                type: putCardsFromDiscardIntoHand
-		                filter: memory(cardToReturn)
+		                select: memory(cardToReturn)
 		            }
 		        ]
 		    }
@@ -94,7 +94,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(hobbit,companion,notAssignedToSkirmish)
+			    select: choose(hobbit,companion,notAssignedToSkirmish)
 			    memorize: exertedHobbit
 			},
 			effect: [
@@ -148,7 +148,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(hobbit)
+				    select: choose(hobbit)
 				    amount: {
 				        type: forEachYouCanSpot
 				        filter: hobbit
@@ -210,7 +210,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(bearer))
+		            select: choose(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		]
@@ -305,7 +305,7 @@
 			type: event
 			cost: {
 			    type: returnToHand
-			    filter: choose(culture(shire),companion)
+			    select: choose(culture(shire),companion)
 			},
 			effect: [
 				{
@@ -322,7 +322,7 @@
 				        }
 				        {
 				            type: discard
-				            filter: choose(minion)
+				            select: choose(minion)
 				        }
 				    ]
 				}
@@ -365,13 +365,13 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(hobbit)
+			    select: choose(hobbit)
 			    memorize: exertedHobbit
 			},
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(hobbit,not(memory(exertedHobbit)))
+				    select: choose(hobbit,not(memory(exertedHobbit)))
 				    amount: 3
 				}
 			]
@@ -420,7 +420,7 @@
 				{
 				    type: discard
 				    player: shadow
-				    filter: choose(minion)
+				    select: choose(minion)
 				    count: {
 				        type: condition
 				        condition: {
@@ -474,7 +474,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(culture(shire),character)
+			    select: choose(culture(shire),character)
 			}
 			effect: [
 				{
@@ -591,11 +591,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(hobbit,companion)
+		            select: choose(hobbit,companion)
 		        }
 		        effect: {
 		            type: exert
-		            filter: memory(playedMinion)
+		            select: memory(playedMinion)
 		        }
 		        limitPerTurn: 1
 		    }
@@ -667,7 +667,7 @@
                         }
                         {
                             type: addKeyword
-                            filter: memory(minionsInSkirmish)
+                            select: memory(minionsInSkirmish)
                             keyword: fierce
                             until: regroup
                         }
@@ -718,7 +718,7 @@
 		        effect: [
 		            {
 		                type: chooseActiveCards
-		                filter: choose(hobbit)
+		                select: choose(hobbit)
 		                text: Choose a Hobbit
 		                memorize: chosenHobbit
 		            }
@@ -738,7 +738,7 @@
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		    }

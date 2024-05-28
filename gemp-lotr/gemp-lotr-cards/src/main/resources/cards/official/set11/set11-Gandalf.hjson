@@ -36,7 +36,7 @@
 		        phase: regroup
 		        effect: {
 		            type: stackCardsFromHand
-		            filter: choose(spell)
+		            select: choose(spell)
 		            where: self
 		        }
 		    }
@@ -46,7 +46,7 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(gandalf))
+		            select: choose(culture(gandalf))
 		        }
 		        effect: {
 		            type: putStackedCardsIntoHand
@@ -91,7 +91,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(culture(gandalf),wizard)
+			    select: choose(culture(gandalf),wizard)
 			},
 			effect: [
 			    {
@@ -158,11 +158,11 @@
 		        phase: skirmish
 		        cost: {
                     type: exert
-                    filter: self
+                    select: self
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(gandalf),skirmish,event)
+		            select: choose(culture(gandalf),skirmish,event)
 		        }
 		    }
 		]
@@ -204,7 +204,7 @@
 			cost: [
                 {
                     type: exert
-                    filter: choose(culture(gandalf),wizard)
+                    select: choose(culture(gandalf),wizard)
                 }
                 {
                     type: discardFromHand
@@ -215,11 +215,11 @@
 			effect: [
 			    {
 			        type: putCardsFromDiscardIntoHand
-			        filter: choose(side(free people))
+			        select: choose(side(free people))
 			    }
 			    {
 			        type: putCardsFromDiscardIntoHand
-			        filter: choose(side(shadow))
+			        select: choose(side(shadow))
 			    }
 			]
 		}
@@ -399,7 +399,7 @@
 		        effect: {
 		            type: wound
 		            player: shadow
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -498,7 +498,7 @@
 			    }
 			    {
 			        type: modifyStrength
-			        filter: choose(minion)
+			        select: choose(minion)
 			        amount: {
 			            type: forEachMatchingInMemory
 			            memory: revealedCards
@@ -577,7 +577,7 @@
                 }
                 cost: {
                     type: discard
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: cancelSpecialAbility
@@ -630,7 +630,7 @@
 			effect: [
 			    {
 			        type: discard
-			        filter: choose(condition)
+			        select: choose(condition)
 			        count: 2
 			    }
 			]
@@ -672,7 +672,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(culture(gandalf),wizard)
+			    select: choose(culture(gandalf),wizard)
 			    memorize: exertedWizard
 			}
 			requires: {
@@ -683,7 +683,7 @@
 			effect: [
 			    {
 			        type: wound
-			        filter: choose(minion,inSkirmishAgainst(memory(exertedWizard)))
+			        select: choose(minion,inSkirmishAgainst(memory(exertedWizard)))
 			        times: 2
 			    }
 			]
@@ -737,7 +737,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(name(Gandalf))
+		            select: choose(name(Gandalf))
 		        }
 		    }
 		]

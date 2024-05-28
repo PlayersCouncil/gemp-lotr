@@ -55,7 +55,7 @@
 	# 			phase: maneuver
 	# 			cost: {
 	# 				type: exert
-	# 				filter: choose(Dwarf,companion)
+	# 				select: choose(Dwarf,companion)
 	# 			}
 	# 			effect: {
 	# 				type: addModifier

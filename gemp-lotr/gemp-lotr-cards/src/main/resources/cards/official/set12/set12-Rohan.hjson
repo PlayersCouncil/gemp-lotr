@@ -40,7 +40,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
+		            select: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
 		        }
 		    }
 		]
@@ -91,11 +91,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		    {
@@ -108,11 +108,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: returnToHand
-		            filter: choose(exhausted,minion)
+		            select: choose(exhausted,minion)
 		        }
 		    }
 		]
@@ -154,7 +154,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(rohan),companion)
+				    select: choose(culture(rohan),companion)
 				    memorize: chosenCompanion
 				    amount: {
 				        type: condition
@@ -211,11 +211,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(rohan),companion)
+		            select: choose(culture(rohan),companion)
 		            memorize: chosenCompanion
 		            amount: {
 		                type: sum
@@ -306,7 +306,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: preventEffect
@@ -320,7 +320,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -386,11 +386,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(culture(rohan),companion)
+		            select: choose(culture(rohan),companion)
                     showAll: true
                     shuffle: true
 		        }
@@ -489,7 +489,7 @@
                 effect: [
                     {
                         type: discard
-                        filter: choose(possession)
+                        select: choose(possession)
                     }
                 ]
             }
@@ -498,7 +498,7 @@
                 phase: maneuver
                 cost: {
                     type: exert
-                    filter: choose(culture(rohan),man,minResistance(3))
+                    select: choose(culture(rohan),man,minResistance(3))
                 }
             }
         ]
@@ -552,7 +552,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -609,11 +609,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 1
 		        }
 		    }
@@ -665,11 +665,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(culture(rohan),skirmish,event)
+		            select: choose(culture(rohan),skirmish,event)
                     showAll: true
                     shuffle: true
 		        }

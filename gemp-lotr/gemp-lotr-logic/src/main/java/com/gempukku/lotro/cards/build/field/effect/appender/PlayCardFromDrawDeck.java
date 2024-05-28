@@ -26,9 +26,9 @@ import java.util.Collection;
 public class PlayCardFromDrawDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "memorize", "shuffle", "showAll");
+        FieldUtils.validateAllowedFields(effectObject, "select", "on", "cost", "memorize", "shuffle", "showAll");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
         final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("cost"), 0, environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
@@ -42,7 +42,7 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
         result.setPlayabilityCheckedForEffect(true);
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeck(filter,
+                CardResolver.resolveCardsInDeck(select,
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());

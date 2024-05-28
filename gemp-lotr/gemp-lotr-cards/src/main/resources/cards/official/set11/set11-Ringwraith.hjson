@@ -81,11 +81,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(side(free people),condition)
+		            select: choose(side(free people),condition)
 		        }
 		    }
 		]
@@ -185,7 +185,7 @@
 		        }
 		        effect: {
 		            type: shuffleCardsFromDiscardIntoDrawDeck
-		            filter: choose(culture(wraith))
+		            select: choose(culture(wraith))
 		        }
 		    }
 		]
@@ -276,7 +276,7 @@
 		        phase: skirmish
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
 		            where: choose(companion,inSkirmishAgainst(your,nazgul),not(hasAttached(name(Lost in the Woods))))
 		            fromSupport: true
 		        }
@@ -336,13 +336,13 @@
 		        }
 		        cost: {
 		            type: revealCardsFromHand
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		            memorize: revealedCard
 		        }
 		        effect: [
 		            {
 		                type: putCardsFromHandOnBottomOfDeck
-		                filter: memory(revealedCard)
+		                select: memory(revealedCard)
 		            }
 		            {
 		                type: drawCards
@@ -396,7 +396,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: addBurdens
@@ -445,7 +445,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(wraith),minion)
+				    select: choose(culture(wraith),minion)
 				    amount: {
 				        type: forEachMatchingInMemory
 				        memory: revealedCards
@@ -501,7 +501,7 @@
 		        }
 		        effect: {
                     type: turnIntoMinion
-                    filter: self
+                    select: self
                     strength: 10
                     vitality: 3
                     keywords: fierce
@@ -516,7 +516,7 @@
 		        }
 		        effect: {
 		            type: removeAllTokens
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -559,7 +559,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		        }
 		        effect: {
 		            type: preventable
@@ -568,12 +568,12 @@
 		            cost: {
 		                type: returnToHand
 		                player: free people
-		                filter: choose(companion)
+		                select: choose(companion)
 		            }
 		            effect: {
 		                type: addTokens
 		                culture: wraith
-		                filter: self
+		                select: self
 		            }
 		        }
 		    }
@@ -654,7 +654,7 @@
 		            }
 		            effect: {
 		                type: exhaust
-		                filter: memory(playedCompanion)
+		                select: memory(playedCompanion)
 		            }
 		        }
 		    }
@@ -708,7 +708,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
                     type: addBurdens
@@ -869,7 +869,7 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-    		        filter: self
+    		        select: self
 		        }
 		        effect: {
 		            type: playSite
@@ -991,7 +991,7 @@
 		        }
 		        cost: {
 		            type: spot
-		            filter: choose(companion,wounded)
+		            select: choose(companion,wounded)
 		            memorize: spottedCompanion
 		        }
 		        effect: [
@@ -1005,7 +1005,7 @@
                     }
                     {
                         type: putCardsFromDeckIntoHand
-                        filter: all(memory(revealedCards),culture(wraith))
+                        select: all(memory(revealedCards),culture(wraith))
                         reveal: true
                         shuffle: false
                         showAll: false

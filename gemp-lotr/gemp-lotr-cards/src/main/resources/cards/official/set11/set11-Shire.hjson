@@ -27,7 +27,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(hobbit)
+				    select: choose(hobbit)
 				    amount: {
 				        type: forEachYouCanSpot
 				        filter: or(dwelling,forest),zone(adventure path)
@@ -190,11 +190,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: self
+		            select: self
 		            keyword: muster
 		        }
 		    }
@@ -321,7 +321,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(hobbit)
+			    select: choose(hobbit)
 			    count: 2
 			}
 			effect: [
@@ -337,7 +337,7 @@
 				    }
 				    false: {
 				        type: modifyStrength
-				        filter: choose(hobbit)
+				        select: choose(hobbit)
 				        amount: 3
 				    }
 				}
@@ -543,7 +543,7 @@
 		        phase: fellowship
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: removeBurdens
@@ -564,12 +564,12 @@
 		            }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		        effect: {
 		            type: alterOverwhelmMultiplier
-		            filter: memory(bearer)
+		            select: memory(bearer)
 		            multiplier: 3
 		        }
 		    }
@@ -668,11 +668,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: modifyResistance
-		            filter: choose(not(bearer),companion)
+		            select: choose(not(bearer),companion)
 		            amount: 2
 		            until: regroup
 		        }
@@ -727,7 +727,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(hobbit)
+				    select: choose(hobbit)
 				    amount: {
 				        type: forEachYouCanSpot
 				        filter: companion,minResistance(7)
@@ -778,7 +778,7 @@
 				}
 				{
 				    type: modifyResistance
-				    filter: choose(unbound,hobbit)
+				    select: choose(unbound,hobbit)
 				    amount: memory(spotCount)
 				}
 			]
@@ -827,7 +827,7 @@
 				    }
 				    effect: {
 				        type: heal
-				        filter: choose(hobbit)
+				        select: choose(hobbit)
 				        count: 0-1
 				    }
 				}

@@ -30,12 +30,12 @@
 				phase: shadow
 				cost: {
 					type: play
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 				}
 				effect: {
 					type: addTokens
 					culture: sauron
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -55,17 +55,17 @@
 					}
 					{
 					    type: removeTokens
-					    filter: self
+					    select: self
 					    count: memory(numberOfTokens)
 					}
 					{
 						type: discard
-						filter: choose(and(culture(sauron),minion))
+						select: choose(and(culture(sauron),minion))
 					}
 					{
 						type: chooseActiveCards
 						text: Choose a card for GROND to SMASH
-						filter: choose(side(free people),not(companion),minTwilight(memory(numberOfTokens)),maxTwilight(memory(numberOfTokens)))
+						select: choose(side(free people),not(companion),minTwilight(memory(numberOfTokens)),maxTwilight(memory(numberOfTokens)))
 						memorize: chosenCard
 					}
 				]
@@ -81,12 +81,12 @@
 						]
 						effect: {
 							type: discard
-							filter: self
+							select: self
 						}
 					}
 					{
 						type: discard
-						filter: memory(chosenCard)
+						select: memory(chosenCard)
 					}
 				]
 			}
@@ -154,11 +154,11 @@
 				]
 				cost: {
 					type: discard
-					filter: choose(engine)
+					select: choose(engine)
 				}
 				effect: {
 					type: discard
-					filter: choose(condition,side(free people))
+					select: choose(condition,side(free people))
 				}
 			}
 		]

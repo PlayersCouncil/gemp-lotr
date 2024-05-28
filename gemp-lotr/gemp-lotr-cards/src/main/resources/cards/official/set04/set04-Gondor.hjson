@@ -60,13 +60,13 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(ringBound,man)
+				select: choose(ringBound,man)
 				count: 2
 			}
 			effect: [
 				{
 					type: wound
-					filter: all(roaming,minion)
+					select: all(roaming,minion)
 				}
 			]
 		}
@@ -107,11 +107,11 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(gondor))
+		            select: choose(culture(gondor))
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(ringBound,man)
+		            select: choose(ringBound,man)
 		            amount: 1
 		        }
 		    }
@@ -152,7 +152,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: preventable
@@ -202,7 +202,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(ringBound,man)
+				select: choose(ringBound,man)
 			},
 			effect: [
 				{
@@ -261,11 +261,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: exhaust
-		            filter: choose(man,inSkirmishAgainst(self))
+		            select: choose(man,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -302,12 +302,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(gondor),man)
+				select: choose(culture(gondor),man)
 			},
 			effect: [
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 					memorize: chosenMinion
 					times: {
 					    type: condition
@@ -482,11 +482,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(inSkirmishAgainst(bearer),or(man,and(roaming,minion)))
+		            select: choose(inSkirmishAgainst(bearer),or(man,and(roaming,minion)))
 		        }
 		    }
 		]
@@ -583,12 +583,12 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		        effect: {
 		            type: heal
-		            filter: choose(ringBound,man)
+		            select: choose(ringBound,man)
 		        }
 		    }
 		]
@@ -640,11 +640,11 @@
 		        cost: [
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                     {
                         type: exert
-                        filter: choose(ringBound,man)
+                        select: choose(ringBound,man)
                     }
                 ]
 		        effect: {
@@ -736,7 +736,7 @@
 			effect: [
 				{
 					type: heal
-					filter: choose(companion,signet(Aragorn))
+					select: choose(companion,signet(Aragorn))
 					times: 2
 				}
 			]
@@ -776,7 +776,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(or(and(unbound,culture(gondor),man),and(culture(rohan),companion)))
+		            select: choose(or(and(unbound,culture(gondor),man),and(culture(rohan),companion)))
 		            memorize: exertedCompanion
 		        }
 		        effect: {
@@ -788,12 +788,12 @@
 		            }
 		            true: {
 		                type: modifyStrength
-		                filter: choose(culture(rohan),companion)
+		                select: choose(culture(rohan),companion)
 		                amount: 2
 		            }
 		            false: {
 		                type: modifyStrength
-		                filter: choose(unbound,culture(gondor),man)
+		                select: choose(unbound,culture(gondor),man)
 		                amount: 2
 		            }
 		        }
@@ -850,11 +850,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(roaming,minion)
+		            select: choose(roaming,minion)
 		        }
 		    }
 		]
@@ -898,7 +898,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: gondor
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -907,7 +907,7 @@
 		        effect: [
                     {
                         type: exert
-                        filter: choose(minion)
+                        select: choose(minion)
                         count: {
                             type: forEachToken
                             filter: self
@@ -917,7 +917,7 @@
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		    }
@@ -972,11 +972,11 @@
 		        phase: skirmish
 		        cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: exhaust
-                    filter: choose(minion,inSkirmishAgainst(self))
+                    select: choose(minion,inSkirmishAgainst(self))
                 }
 		    }
 		]
@@ -1018,7 +1018,7 @@
 			effect: [
 				{
 					type: modifySiteNumber
-					filter: choose(minion)
+					select: choose(minion)
 					amount: 2
 					memorize: chosenMinion
 				}
@@ -1031,7 +1031,7 @@
 					}
 					effect: {
 					    type: wound
-					    filter: choose(minion)
+					    select: choose(minion)
 					}
 				}
 			]
@@ -1175,11 +1175,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(inSkirmishAgainst(bearer),or(man,and(roaming,minion)))
+		            select: choose(inSkirmishAgainst(bearer),or(man,and(roaming,minion)))
 		        }
 		    }
 		]
@@ -1277,11 +1277,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(not(your),man)
+		            select: choose(not(your),man)
 		        }
 		    }
 		]
@@ -1361,7 +1361,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(gondor),man)
+					select: choose(culture(gondor),man)
 					memorize: chosenMan
 					amount: {
 					    type: condition
@@ -1381,7 +1381,7 @@
 				    }
 				    effect: {
 				        type: addKeyword
-				        filter: memory(chosenMan)
+				        select: memory(chosenMan)
 				        keyword: damage
 				        amount: 1
 				    }
@@ -1438,7 +1438,7 @@
                     }
                     {
                         type: wound
-                        filter: choose(minion)
+                        select: choose(minion)
                         count: {
                             type: fromMemory
                             memory: hobbitCount

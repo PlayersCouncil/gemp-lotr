@@ -49,11 +49,11 @@
 		            effects: [
 		                {
 		                    type: wound
-		                    filter: choose(companion)
+		                    select: choose(companion)
 		                }
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -108,7 +108,7 @@
 				}
 				{
 				    type: playCardFromDrawDeck
-				    filter: choose(memory(revealedCards),minion)
+				    select: choose(memory(revealedCards),minion)
 				    cost: -2
                     showAll: false
                     shuffle: false
@@ -159,11 +159,11 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(gollum),event)
+		            select: choose(culture(gollum),event)
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -221,7 +221,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: playSite

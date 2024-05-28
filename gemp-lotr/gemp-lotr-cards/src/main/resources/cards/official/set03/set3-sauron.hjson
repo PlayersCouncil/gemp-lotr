@@ -10,7 +10,7 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(culture(sauron),minion)
+                select: choose(culture(sauron),minion)
             }
             effect: [
                 {
@@ -83,7 +83,7 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(culture(sauron),orc)
+                select: choose(culture(sauron),orc)
             }
             requires: {
                 type: canSpot
@@ -106,7 +106,7 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(culture(sauron),minion)
+                select: choose(culture(sauron),minion)
             }
             effect: {
                 type: discardFromHand
@@ -129,7 +129,7 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: choose(culture(sauron),minion)
+                select: choose(culture(sauron),minion)
             }
             effect: {
                 type: discardTopCardsFromDeck
@@ -150,7 +150,7 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(culture(sauron),minion)
+                select: choose(culture(sauron),minion)
             }
             effect: {
                 type: discardTopCardsFromDeck
@@ -178,11 +178,11 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: wound
-                filter: choose(companion,not(ringBearer))
+                select: choose(companion,not(ringBearer))
             }
         }
     }
@@ -224,16 +224,16 @@
             cost: [
                 {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 {
                     type: discard
-                    filter: choose(your,culture(sauron),condition)
+                    select: choose(your,culture(sauron),condition)
                 }
             ]
             effect: {
                 type: discard
-                filter: choose(side(free),condition)
+                select: choose(side(free),condition)
             }
         }
     }
@@ -275,11 +275,11 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: wound
-                filter: choose(companion,not(ringBearer))
+                select: choose(companion,not(ringBearer))
             }
         }
     }
@@ -339,7 +339,7 @@
             phase: skirmish
             cost: {
                 type: discard
-                filter: choose(your,culture(sauron),condition)
+                select: choose(your,culture(sauron),condition)
             }
             effect: {
                 type: addModifier
@@ -367,11 +367,11 @@
             cost: [
                 {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 {
                     type: discard
-                    filter: choose(your,culture(sauron),condition)
+                    select: choose(your,culture(sauron),condition)
                 }
             ]
             effect: {
@@ -395,7 +395,7 @@
                 type: extraCost
                 cost: {
                     type: exert
-                    filter: choose(culture(sauron),minion)
+                    select: choose(culture(sauron),minion)
                 }
             }
             {
@@ -432,12 +432,12 @@
                 player: fp
                 cost: {
                     type: discard
-                    filter: choose(elf)
+                    select: choose(elf)
                     count: 2
                 }
                 effect: {
                     type: wound
-                    filter: choose(name(Galadriel))
+                    select: choose(name(Galadriel))
                     times: 3
                 }
             }
@@ -456,7 +456,7 @@
                 type: extraCost
                 cost: {
                     type: exert
-                    filter: choose(culture(sauron),minion)
+                    select: choose(culture(sauron),minion)
                 }
             }
             {
@@ -492,12 +492,12 @@
                 player: fp
                 cost: {
                     type: discard
-                    filter: choose(side(free),condition)
+                    select: choose(side(free),condition)
                     count: 2
                 }
                 effect: {
                     type: discard
-                    filter: choose(name(Bilbo))
+                    select: choose(name(Bilbo))
                 }
             }
         }

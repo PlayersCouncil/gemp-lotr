@@ -43,7 +43,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
@@ -55,7 +55,7 @@
 						effect: {
 							type: Wound
 							player: shadow
-							filter: choose(minion)
+							select: choose(minion)
 						}
 					}
 					{

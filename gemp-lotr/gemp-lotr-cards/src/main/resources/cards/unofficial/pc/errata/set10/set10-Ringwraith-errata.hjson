@@ -53,7 +53,7 @@
 					}
 					{
 						type: heal
-						filter: self
+						select: self
 					}
 				]
 				effect: {

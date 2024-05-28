@@ -34,7 +34,7 @@
 						type: PutCardsFromDiscardIntoHand
 						player: freeps
 						discard: shadow
-						filter: choose(minion)
+						select: choose(minion)
 						count: 2
 						memorize: chosenMinions
 					}
@@ -59,7 +59,7 @@
 								hand: shadowPlayer
 								forced: true
 								player: you
-								filter: choose(memory(revealedCards),minion)
+								select: choose(memory(revealedCards),minion)
 							}
 						]
 					}
@@ -114,7 +114,7 @@
 				}
 				effect: {
 					type: Discard
-					filter: all(attachedTo(bearer),or(possession,weapon),another)
+					select: all(attachedTo(bearer),or(possession,weapon),another)
 				}
 			}
 			{
@@ -134,7 +134,7 @@
 				cost: [
 					{
 						type: exert
-						filter: bearer
+						select: bearer
 						times: 1				
 					}
 					{

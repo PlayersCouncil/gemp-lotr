@@ -23,7 +23,7 @@
 				effect: [
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: all(bearer)
 					}
 					{
 						type: addBurdens
@@ -51,7 +51,7 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: bearer
+					select: bearer
 					amount: 3
 				}
 			}
@@ -108,7 +108,7 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					where: choose(culture(dwarven),companion)
 				}
 			}
@@ -126,7 +126,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -145,12 +145,12 @@
             }
 			cost: {
 				type: exert
-				filter: choose(fellowship,companion)
+				select: choose(fellowship,companion)
 			}
 			effect: {
                 type: discard
                 player: shadow
-                filter: choose(your,side(shadow))
+                select: choose(your,side(shadow))
 			}
 		}
 	}
@@ -171,7 +171,7 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					where: choose(culture(elven),companion)
 				}
 			}
@@ -190,11 +190,11 @@
 					effects: [
 						{
 							type: exert
-							filter: bearer
+							select: bearer
 						}
 						{
 							type: returnToHand
-							filter: self
+							select: self
 						}
 					]
 				}
@@ -265,11 +265,11 @@
 			effect: [
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 				}
 				{
-                    type: disableArcheryTotalContribution
-                    filter: self
+					type: disableArcheryTotalContribution
+					select: self
 				}
 			]
 		}
@@ -294,7 +294,7 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 				times: 2
 			}
 			effect: {
@@ -326,7 +326,7 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					where: choose(companion)
 				}
 			}
@@ -337,7 +337,7 @@
 				}
 				effect: {
 					type: returnToHand
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -406,7 +406,7 @@
 				effect: {
 					type: shuffleCardsFromDiscardIntoDrawDeck
 					count: 0-2
-					filter: choose(culture(gollum))
+					select: choose(culture(gollum))
 				}
 			}
 			{
@@ -414,11 +414,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: choose(ring-bound,companion)
+					select: choose(ring-bound,companion)
 				}
 				effect: {
 					type: modifyStrength
-					filter: self
+					select: self
 					amount: 2
 				}
 			}
@@ -512,11 +512,11 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(unbound,hobbit)
+					select: choose(unbound,hobbit)
 				}
 				effect: {
 					type: discard
-					filter: all(minion,inSkirmish)
+					select: all(minion,inSkirmish)
 				}
 			}
 		]
@@ -538,7 +538,7 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					where: choose(culture(gondor),man)
 				}
 			}
@@ -553,7 +553,7 @@
 				}
 				effect: {
 					type: returnToHand
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -604,7 +604,7 @@
 				effect: [
 					{
 						type: exert
-						filter: choose(unbound,companion)
+						select: choose(unbound,companion)
 						memorize: exertedCompanion
 					}
 					{
@@ -622,13 +622,13 @@
 				phase: assignment
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: chooseActiveCards
 						text: Choose unbound companion to assign Grima to
-						filter: choose(unbound,companion,assignableToSkirmishAgainst(name(Grima)))
+						select: choose(unbound,companion,assignableToSkirmishAgainst(name(Grima)))
 						memorize: chosenCompanion
 					}
 					{
@@ -637,7 +637,7 @@
 						text: Would you like to exert {chosenCompanion} to prevent Grima assigning to it
 						cost: {
 							type: exert
-							filter: memory(chosenCompanion)
+							select: memory(chosenCompanion)
 						}
 						effect: {
 							type: assignFpCharacterToSkirmish
@@ -678,11 +678,11 @@
 				phase: skirmish
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(not(culture(wraith)),minion)
+					select: choose(not(culture(wraith)),minion)
 					amount: 1
 				}
 			}
@@ -770,7 +770,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -816,7 +816,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -855,7 +855,7 @@
 				}
 				effect: {
 					type: discard
-					filter: all(minion,not(self),not(tentacle))
+					select: all(minion,not(self),not(tentacle))
 				}
 			}
 			{
@@ -879,7 +879,7 @@
 				phase: shadow
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(tentacle)
+					select: choose(tentacle)
 				}
 			}
 		]
@@ -914,7 +914,7 @@
 					text: Would you like to exert the Ring-bearer to prevent adding 2 threats?
 					cost: {
 						type: exert
-						filter: choose(ring bearer)
+						select: choose(ring bearer)
 					}
 					effect: {
 						type: addThreats
@@ -951,7 +951,7 @@
                 }
                 effect: {
                     type: modifyStrength
-                    filter: choose(culture(orc),minion)
+                    select: choose(culture(orc),minion)
                     amount: 2
                 }
             }
@@ -974,7 +974,7 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					where: choose(culture(rohan),man)
 				}
 			}
@@ -992,7 +992,7 @@
 				}
 				effect: {
 					type: returnToHand
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -1039,7 +1039,7 @@
 			phase: fellowship
 			effect: {
 				type: play
-				filter: choose(culture(rohan),companion,minTwilight(3))
+				select: choose(culture(rohan),companion,minTwilight(3))
 				cost: -1
 			}
 		}
@@ -1054,7 +1054,7 @@
 			type: event
 			cost: {
 				type: removeTokens
-				filter: choose(side(free people))
+				select: choose(side(free people))
 			}
 			effect: [
 				{
@@ -1128,11 +1128,11 @@
 			cost: {
 				type: removeCardsInDiscardFromGame
 				count: 2
-				filter: choose(culture(shire))
+				select: choose(culture(shire))
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(companion)
+				select: choose(companion)
 				amount: 2
 			}
 		}
@@ -1177,7 +1177,7 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					where: choose(fellowship,companion)
 				}
 			}
@@ -1190,7 +1190,7 @@
 				}
 				effect: {
 					type: heal
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
@@ -1276,13 +1276,13 @@
 						}
 						{
 							type: exert
-							filter: choose(another,uruk-hai)
+							select: choose(another,uruk-hai)
 						}
 					]
 				}
 				effect: {
 					type: preventWound
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -1304,13 +1304,13 @@
 						}
 						{
 							type: exert
-							filter: choose(another,uruk-hai)
+							select: choose(another,uruk-hai)
 						}
 					]
 				}
 				effect: {
 					type: preventExert
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -1343,7 +1343,7 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					where: choose(culture(wraith),minion)
 				}
 			}
@@ -1403,11 +1403,11 @@
 			cost: {
 				type: discardFromHand
 				forced: false
-				filter: choose(nazgul)
+				select: choose(nazgul)
 			}
 			effect: {
 				type: wound
-				filter: choose(unbound,companion)
+				select: choose(unbound,companion)
 			}
 		}
 	}
@@ -1532,12 +1532,12 @@
 			cost: {
 				type: discardFromHand
 				forced: false
-				filter: choose(nazgul)
+				select: choose(nazgul)
 				memorize: discardedNazgul
 			}
 			effect: {
 				type: modifyStrength
-				filter: self
+				select: self
 				amount: {
 					type: requires
 					requires: {

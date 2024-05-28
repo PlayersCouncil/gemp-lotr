@@ -32,7 +32,7 @@
 		        effect: [
                     {
                         type: negateWound
-                        filter: choose(bearer,exhausted)
+                        select: choose(bearer,exhausted)
                     }
                     {
                         type: addBurdens
@@ -58,7 +58,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -115,7 +115,7 @@
 				}
 				{
 				    type: wound
-				    filter: choose(minion)
+				    select: choose(minion)
 				    times: {
 				        type: forEachCultureInMemory
 				        memory: revealedCards
@@ -166,7 +166,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: shire
-		            filter: self
+		            select: self
 		            count: 2
 		        }
 		    }
@@ -185,18 +185,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: shire
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(unbound,hobbit)
+		            select: choose(unbound,hobbit)
 		        }
 		    }
 		]
@@ -237,13 +237,13 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(unbound,hobbit)
+				select: choose(unbound,hobbit)
 				memorize: exertedHobbit
 			},
 			effect: [
 				{
 					type: modifyStrength
-					filter: memory(exertedHobbit)
+					select: memory(exertedHobbit)
 					amount: {
 					    type: forEachYouCanSpot
 					    filter: culture(gandalf),companion
@@ -251,7 +251,7 @@
 				}
 				{
 					type: addKeyword
-					filter: memory(exertedHobbit)
+					select: memory(exertedHobbit)
 					keyword: damage
 					amount: {
 					    type: forEachYouCanSpot
@@ -304,11 +304,11 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(culture(gandalf),companion)
+		            select: choose(culture(gandalf),companion)
 		        }
 		    }
 		]
@@ -356,12 +356,12 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
 		            player: shadow
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]

@@ -36,7 +36,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: rohan
-		            filter: self
+		            select: self
 		            count: 3
 		        }
 		    }
@@ -60,18 +60,18 @@
 		            effects: [
 		                {
                             type: discard
-                            filter: self
+                            select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: rohan
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: exert
-		            filter: memory(playedMinion)
+		            select: memory(playedMinion)
 		        }
 		    }
 		]
@@ -129,12 +129,12 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect:
 		        {
 		            type: returnToHand
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -184,7 +184,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: all(other,culture(rohan),man)
+		            select: all(other,culture(rohan),man)
 		            amount: 1
 		            until: regroup
 		        }
@@ -240,7 +240,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(possession)
+		            select: choose(possession)
 		            on: self
                     showAll: true
                     shuffle: true
@@ -293,11 +293,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(culture(rohan),companion,minResistance(4))
+		            select: choose(culture(rohan),companion,minResistance(4))
 		        }
 		    }
 		]
@@ -341,11 +341,11 @@
 		        phase: assignment
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: bearer
+		            select: bearer
 		            keyword: defender
 		            amount: 1
 		        }
@@ -389,7 +389,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(rohan),man,minResistance(4))
+				    select: choose(culture(rohan),man,minResistance(4))
 				    memorize: chosenMan
 				    amount: {
 				        type: forEachWound
@@ -440,7 +440,7 @@
 		        phase: archery
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyArcheryTotal
@@ -502,7 +502,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: all(culture(rohan),companion)
+		            select: all(culture(rohan),companion)
 		            amount: 2
 		            until: regroup
 		        }
@@ -612,7 +612,7 @@
 		        }
 		        effect: {
 		            type: exhaust
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -654,7 +654,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(culture(rohan),man)
+		            select: choose(culture(rohan),man)
 		        }
 		    }
 		    {
@@ -732,7 +732,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(minion,inSkirmish)
+		            select: all(minion,inSkirmish)
 		        }
 		    }
 		    {
@@ -799,7 +799,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		    {
@@ -812,7 +812,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
@@ -820,7 +820,7 @@
                     }
                     {
                         type: returnToHand
-                        filter: memory(exertedMinion)
+                        select: memory(exertedMinion)
                     }
                 ]
 		    }
@@ -877,7 +877,7 @@
 		        }
 		        effect: {
 		            type: stackCardsFromDiscard
-		            filter: memory(discardedPossession)
+		            select: memory(discardedPossession)
 		            where: self
 		        }
 		    }
@@ -889,7 +889,7 @@
 		        }
 		        effect: {
 		            type: playCardFromStacked
-		            filter: choose(possession)
+		            select: choose(possession)
 		            on: self
 		        }
 		    }
@@ -994,13 +994,13 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(culture(rohan),companion)
+			    select: choose(culture(rohan),companion)
 			    memorize: exertedCompanion
 			},
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: memory(exertedCompanion)
+				    select: memory(exertedCompanion)
 				    amount: 3
 				}
 				{
@@ -1012,7 +1012,7 @@
 				    }
 				    effect: {
 				        type: addKeyword
-				        filter: memory(exertedCompanion)
+				        select: memory(exertedCompanion)
 				        keyword: damage
 				        amount: 1
 				    }

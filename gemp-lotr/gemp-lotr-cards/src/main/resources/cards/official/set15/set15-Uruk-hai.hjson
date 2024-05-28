@@ -270,7 +270,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(culture(uruk-hai),minion)
+		            select: choose(culture(uruk-hai),minion)
 		            times: {
 		                type: condition
 		                condition: {
@@ -332,7 +332,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion,notAssignedToSkirmish)
+		            select: choose(companion,notAssignedToSkirmish)
 		        }
 		    }
 		]
@@ -435,7 +435,7 @@
 		        effect: {
 		            type: exert
 		            player: free people
-		            filter: choose(companion)
+		            select: choose(companion)
 		            count: {
 		                type: regionNumber
 		            }
@@ -544,7 +544,7 @@
 		        phase: assignment
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: assignFpCharacterToSkirmish
@@ -596,7 +596,7 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
@@ -605,7 +605,7 @@
 		            }
 		            {
 		                type: exert
-		                filter: choose(companion)
+		                select: choose(companion)
 		                count: {
 		                    type: fromMemory
 		                    memory: spotCount
@@ -667,7 +667,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: uruk-hai
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -677,7 +677,7 @@
 		            type: removeTokens
 		            culture: uruk-hai
 		            count: 2
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: takeControlOfSite
@@ -1008,7 +1008,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(not(hunter),character,inSkirmishAgainst(self))
+		            select: all(not(hunter),character,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -1124,19 +1124,19 @@
 		        cost: [
 		            {
 		                type: spot
-		                filter: choose(not(your),site,zone(adventure path))
+		                select: choose(not(your),site,zone(adventure path))
 		                memorize: spottedSite
 		            }
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		                times: 2
 		            }
 		        ]
 		        effect: {
 		            type: exchangeSite
-		            filter1: memory(spottedSite)
-		            filter2: choose(controlledSite)
+		            selector1: memory(spottedSite)
+		            selector2: choose(controlledSite)
 		        }
 		    }
 		]
@@ -1202,12 +1202,12 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(culture(uruk-hai),minion)
+		                    select: choose(culture(uruk-hai),minion)
 		                    count: 4
 		                }
 		                {
 		                    type: discard
-		                    filter: choose(culture(uruk-hai),minion)
+		                    select: choose(culture(uruk-hai),minion)
 		                    count: 3
 		                }
 		            ]
@@ -1283,7 +1283,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: choose(follower)
+		                    select: choose(follower)
 		                }
 		            ]
 		        }
@@ -1461,7 +1461,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(uruk-hai),minion)
+				    select: choose(culture(uruk-hai),minion)
 				    amount: 2
 				    memorize: chosenMinion
 				}
@@ -1474,7 +1474,7 @@
 				    }
 				    effect: {
 				        type: addKeyword
-				        filter: memory(chosenMinion)
+				        select: memory(chosenMinion)
 				        keyword: damage
 				        amount: 1
 				    }
@@ -1536,11 +1536,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: choose(memory(woundedMinion),your,hunter,minion)
+		            select: choose(memory(woundedMinion),your,hunter,minion)
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(not(hunter),companion)
+		            select: choose(not(hunter),companion)
 		        }
 		    }
 		]

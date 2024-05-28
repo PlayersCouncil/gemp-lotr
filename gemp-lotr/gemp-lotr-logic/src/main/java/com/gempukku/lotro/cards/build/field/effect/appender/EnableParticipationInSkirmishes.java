@@ -23,17 +23,17 @@ import java.util.Collection;
 public class EnableParticipationInSkirmishes implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "until", "count", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "until", "count", "memorize");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, valueSource, memory, "you", "Choose cards to make participate in skirmishes", environment));
+                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to make participate in skirmishes", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

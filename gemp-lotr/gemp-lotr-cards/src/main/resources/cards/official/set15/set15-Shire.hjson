@@ -31,7 +31,7 @@
 			effect: [
 				{
 				    type: playCardFromDrawDeck
-				    filter: choose(culture(shire),follower)
+				    select: choose(culture(shire),follower)
                     showAll: true
                     shuffle: true
 				}
@@ -186,12 +186,12 @@
 		            }
 		            {
 		                type: transferToSupport
-		                filter: self
+		                select: self
 		            }
 		        ]
 		        effect: {
 		            type: preventWound
-		            filter: memory(bearer)
+		            select: memory(bearer)
 		        }
 		    }
 		]
@@ -374,7 +374,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 2
 		        }
 		    }
@@ -416,7 +416,7 @@
 			type: event
 			cost: {
 			    type: transferToSupport
-			    filter: choose(follower,attachedTo(hobbit))
+			    select: choose(follower,attachedTo(hobbit))
 			    memorizeBearer: bearer
 			}
 			effect: [
@@ -481,11 +481,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(ringBearer)
+		            select: choose(ringBearer)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 2
 		        }
 		    }
@@ -534,11 +534,11 @@
 		        cost: [
 		            {
 		                type: discard
-		                filter: choose(culture(shire),follower)
+		                select: choose(culture(shire),follower)
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		        effect: [
@@ -547,7 +547,7 @@
                     }
                     {
                         type: discard
-                        filter: memory(cardAddingBurdens)
+                        select: memory(cardAddingBurdens)
                     }
                 ]
 		    }
@@ -608,11 +608,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(another,hobbit)
+		            select: choose(another,hobbit)
 		        }
 		    }
 			{
@@ -667,13 +667,13 @@
 			    }
 			    {
 			        type: exert
-			        filter: choose(ringBearer)
+			        select: choose(ringBearer)
 			    }
 			]
 			effect: [
 				{
 				    type: wound
-				    filter: all(not(hunter),minion,inSkirmishAgainst(your,culture(shire),ringBearer))
+				    select: all(not(hunter),minion,inSkirmishAgainst(your,culture(shire),ringBearer))
 				}
 			]
 		}

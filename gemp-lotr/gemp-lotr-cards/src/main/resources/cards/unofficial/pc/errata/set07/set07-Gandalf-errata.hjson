@@ -44,16 +44,16 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: discard
-						filter: choose(minion)
+						select: choose(minion)
 					}
 					{
 						type: heal
-						filter: choose(companion)
+						select: choose(companion)
 						times: 3
 					}
 				]

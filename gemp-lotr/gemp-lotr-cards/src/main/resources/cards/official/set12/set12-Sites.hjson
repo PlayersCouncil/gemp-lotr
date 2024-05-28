@@ -29,7 +29,7 @@
 		        phase: shadow
 		        cost: {
 		            type: play
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		        }
 		        effect: {
 		            type: drawCards
@@ -144,12 +144,12 @@
 		            }
 		            {
 		                type: exert
-		                filter: choose(your,minion,not(fierce))
+		                select: choose(your,minion,not(fierce))
 		                memorize: exertedMinion
 		            }
 		            {
 		                type: addKeyword
-		                filter: memory(exertedMinion)
+		                select: memory(exertedMinion)
 		                keyword: fierce
 		                until: regroup
 		            }
@@ -259,7 +259,7 @@
                 }
                 effect: {
                     type: wound
-                    filter: all(minion,not(lurker))
+                    select: all(minion,not(lurker))
                 }
 		    }
 		]
@@ -305,7 +305,7 @@
 		        phase: shadow
 		        effect: {
 		            type: removeKeyword
-		            filter: choose(your,lurker,minion)
+		            select: choose(your,lurker,minion)
 		            keyword: lurker
 		            until: regroup
 		        }
@@ -407,7 +407,7 @@
                     {
                         type: discardFromHand
                         forced: false
-                        filter: choose(side(free people))
+                        select: choose(side(free people))
                         count: 2
                     }
                 ]
@@ -501,12 +501,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(your,man,not(enduring))
+		            select: choose(your,man,not(enduring))
 		            memorize: exertedMan
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: memory(exertedMan)
+		            select: memory(exertedMan)
 		            keyword: damage
 		            amount: 1
 		        }

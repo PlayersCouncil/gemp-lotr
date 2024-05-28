@@ -33,11 +33,11 @@
 					}
 					true: {
 					    type: heal
-					    filter: choose(name(Gandalf))
+					    select: choose(name(Gandalf))
 					}
 					false: {
     					type: alterOverwhelmMultiplier
-    					filter: choose(hobbit)
+    					select: choose(hobbit)
     					multiplier: 3
 					}
 				}
@@ -128,7 +128,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(name(Gandalf))
+			    select: choose(name(Gandalf))
 			},
 			effect: [
 			    {
@@ -138,7 +138,7 @@
 			    }
 				{
 					type: modifyStrength
-					filter: choose(minion,inSkirmishAgainst(unbound,companion))
+					select: choose(minion,inSkirmishAgainst(unbound,companion))
 					amount: {
 					    type: fromMemory
 					    memory: spotCount
@@ -199,7 +199,7 @@
 			        }
 			        {
 			            type: exert
-			            filter: choose(name(Gandalf))
+			            select: choose(name(Gandalf))
 			        }
 			    ]
 			},
@@ -251,17 +251,17 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(name(Gandalf))
+		                select: choose(name(Gandalf))
 		            }
 		            {
 		                type: exert
-		                filter: choose(or(culture(elven),culture(shire)),companion)
+		                select: choose(or(culture(elven),culture(shire)),companion)
 		            }
 		        ]
 		        effect: {
 		            type: addTokens
 		            culture: gandalf
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -270,11 +270,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: gandalf
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion,inSkirmishAgainst(unbound,companion))
+		            select: choose(minion,inSkirmishAgainst(unbound,companion))
 		            amount: -2
 		        }
 		    }
@@ -320,13 +320,13 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(companion)
+				select: choose(companion)
 				memorize: exertedCompanion
 			}
 			effect: [
 				{
 					type: putCardsFromDiscardOnTopOfDeck
-					filter: choose(cultureFromMemory(exertedCompanion))
+					select: choose(cultureFromMemory(exertedCompanion))
 				}
 			]
 		}
@@ -371,13 +371,13 @@
 			}
 			cost: {
 				type: kill
-				filter: choose(companion,not(ringBearer))
+				select: choose(companion,not(ringBearer))
 				memorize: killedCompanion
 			},
 			effect: [
 				{
 				    type: putCardsFromDeckIntoHand
-				    filter: choose(cultureFromMemory(killedCompanion))
+				    select: choose(cultureFromMemory(killedCompanion))
 				    count: 0-3
 					reveal: true
 					shuffle: true
@@ -436,7 +436,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(minion,inSkirmishAgainst(bearer))
+		            select: all(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		    {
@@ -447,7 +447,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: bearer
+		            select: bearer
 		            amount: 1
 		        }
 		    }

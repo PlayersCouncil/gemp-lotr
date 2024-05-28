@@ -12,11 +12,11 @@
             cost: {
                 type: discardFromHand
                 forced: false
-                filter: choose(culture(gondor),tale)
+                select: choose(culture(gondor),tale)
             }
             effect: {
                 type: modifyStrength
-                filter: choose(culture(gondor),companion)
+                select: choose(culture(gondor),companion)
                 amount: 2
             }
         }
@@ -65,19 +65,19 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(culture(gondor),companion)
+                select: choose(culture(gondor),companion)
                 memorize: exertedCompanion
             }
             effect: [
                 {
                     type: modifyStrength
-                    filter: memory(exertedCompanion)
+                    select: memory(exertedCompanion)
                     amount: 3
                     until: start(regroup)
                 }
                 {
                     type: addKeyword
-                    filter: memory(exertedCompanion)
+                    select: memory(exertedCompanion)
                     keyword: defender
                     amount: 1
                     until: start(regroup)
@@ -107,7 +107,7 @@
             }
             effect: {
                 type: heal
-                filter: choose(companion)
+                select: choose(companion)
             }
         }
     }
@@ -128,11 +128,11 @@
             cost: [
                 {
                     type: exert
-                    filter: choose(culture(gondor),companion)
+                    select: choose(culture(gondor),companion)
                 }
                 {
                     type: discard
-                    filter: self
+                    select: self
                 }
             ]
             effect: {
@@ -155,24 +155,24 @@
             phase: maneuver
             cost: {
                 type: exert
-                filter: bearer
+                select: bearer
             }
             effect: [
                 {
                     type: chooseActiveCards
-                    filter: choose(ally)
+                    select: choose(ally)
                     text: Choose ally to have it participate in archery and skirmishes
                     memorize: chosenAlly
                 }
                 {
                     type: modifyStrength
-                    filter: memory(chosenAlly)
+                    select: memory(chosenAlly)
                     amount: 3
                     until: start(regroup)
                 }
                 {
                     type: enableParticipationInArcheryFireAndSkirmishes
-                    filter: memory(chosenAlly)
+                    select: memory(chosenAlly)
                     until: regroup
                 }
             ]
@@ -205,7 +205,7 @@
                 }
                 {
                     type: heal
-                    filter: choose(companion)
+                    select: choose(companion)
                     count: {
                         type: twilightCostInMemory
                         memory: revealedCard
@@ -229,7 +229,7 @@
                 text: Stack a GONDOR card from hand here
                 effect: {
                     type: stackCardsFromHand
-                    filter: choose(culture(gondor))
+                    select: choose(culture(gondor))
                     where: self
                 }
             }
@@ -291,18 +291,18 @@
             effect: [
                 {
                     type: chooseActiveCards
-                    filter: choose(culture(gondor),companion)
+                    select: choose(culture(gondor),companion)
                     text: Choose GONDOR companion to strengthen
                     memorize: chosenCompanion
                 }
                 {
                     type: modifyStrength
-                    filter: memory(chosenCompanion)
+                    select: memory(chosenCompanion)
                     amount: 3
                 }
                 {
                     type: addKeyword
-                    filter: memory(chosenCompanion)
+                    select: memory(chosenCompanion)
                     keyword: damage
                     amount: 1
                 }
@@ -320,11 +320,11 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(name(Aragorn))
+                select: choose(name(Aragorn))
             }
             effect: {
                 type: addKeyword
-                filter: all(companion,signet(Aragorn))
+                select: all(companion,signet(Aragorn))
                 keyword: damage
                 amount: 1
                 until: start(regroup)
@@ -349,7 +349,7 @@
             }
             cost: {
                 type: exert
-                filter: choose(culture(gondor),companion)
+                select: choose(culture(gondor),companion)
             }
             effect: {
                 type: addModifier
@@ -385,7 +385,7 @@
             }
             effect: {
                 type: heal
-                filter: self
+                select: self
             }
         }
     }

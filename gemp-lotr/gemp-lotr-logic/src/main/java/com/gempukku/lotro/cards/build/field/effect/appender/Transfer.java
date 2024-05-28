@@ -23,9 +23,9 @@ import java.util.Collection;
 public class Transfer implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "where", "checkTarget", "fromSupport", "memorizeTransferred", "memorizeTarget");
+        FieldUtils.validateAllowedFields(effectObject, "select", "where", "checkTarget", "fromSupport", "memorizeTransferred", "memorizeTarget");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String where = FieldUtils.getString(effectObject.get("where"), "where");
         final boolean checkTarget = FieldUtils.getBoolean(effectObject.get("checkTarget"), "checkTarget", false);
         final String memorizeTransferred = FieldUtils.getString(effectObject.get("memorizeTransferred"), "memorizeTransferred", "_temp1");
@@ -35,7 +35,7 @@ public class Transfer implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCard(filter, memorizeTransferred, "you", "Choose card to transfer", environment));
+                CardResolver.resolveCard(select, memorizeTransferred, "you", "Choose card to transfer", environment));
         result.addEffectAppender(
                 CardResolver.resolveCards(where,
                         actionContext -> (Filter) (game, physicalCard) -> {
@@ -46,7 +46,7 @@ public class Transfer implements EffectAppenderProducer {
                             // Can't be transferred to card it's already attached to
                             if (transferredCard.getAttachedTo() == physicalCard)
                                 return false;
-                            // Optionally check target against original target filter
+                            // Optionally check target against original target select
                             if (checkTarget && !RuleUtils.getFullValidTargetFilter(transferredCard.getOwner(), game, transferredCard).accepts(game, physicalCard))
                                 return false;
 

@@ -35,7 +35,7 @@
             }
 			effect: {
 				type: wound
-				filter: choose(elf)
+				select: choose(elf)
 			}
 		}
 	}
@@ -100,7 +100,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(moria),orc)
+				select: choose(culture(moria),orc)
 				memorize: chosenOrc
 				amount: {
 					type: forEachYouCanSpot
@@ -120,7 +120,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(moria),orc)
+				select: choose(culture(moria),orc)
 				memorize: chosenOrc
 				amount: {
 					type: requires
@@ -189,7 +189,7 @@
 				}
 				{
 					type: putCardsFromDeckIntoHand
-					filter: memory(revealedCards)
+					select: memory(revealedCards)
 					reveal: true
 					shuffle: false
 					showAll: false
@@ -260,11 +260,11 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: preventWound
-					filter: choose(culture(moria),orc)
+					select: choose(culture(moria),orc)
 				}
 			}
 		]
@@ -321,7 +321,7 @@
                 }
                 effect: {
                     type: exhaust
-                    filter: memory(playedCompanion)
+                    select: memory(playedCompanion)
                 }
             }
         ]
@@ -386,7 +386,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(weapon)
+				select: choose(weapon)
 				on: your,culture(moria),orc
 			}
 		}
@@ -429,7 +429,7 @@
 			}
 			effect: {
 				type: putCardsFromDiscardOnBottomOfDeck
-				filter: choose(culture(moria),orc)
+				select: choose(culture(moria),orc)
 			}
 		}
 	}
@@ -482,7 +482,7 @@
 				}
 				effect: {
 					type: stackCards
-					filter: choose(your,culture(moria),orc,inSkirmish)
+					select: choose(your,culture(moria),orc,inSkirmish)
 					where: self
 				}
 			}
@@ -499,7 +499,7 @@
 				effect: [
 					{
 						type: ChooseCardsFromSingleStack
-						filter: choose(orc,playable)
+						select: choose(orc,playable)
 						count: 1
 						on: self
 						memorize: chosenOrc
@@ -507,7 +507,7 @@
 					}
 					{
 						type: PlayCardFromStacked
-						filter: memory(chosenOrc)
+						select: memory(chosenOrc)
 						on: self
 						assumePlayable: true
 					}
@@ -569,7 +569,7 @@
 			}
 			effect: {
 				type: discard
-				filter: choose(culture(dwarven),or(ally,condition))
+				select: choose(culture(dwarven),or(ally,condition))
 			}
 		}
 	}
@@ -592,7 +592,7 @@
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(moria),orc)
+				select: choose(culture(moria),orc)
 				amount: 2
 			}
 		}
@@ -607,7 +607,7 @@
 			type: event
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),orc)
+				select: choose(culture(moria),orc)
 			}
 		}
 	}
@@ -639,11 +639,11 @@
 				phase: skirmish
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(culture(moria),orc)
+					select: choose(culture(moria),orc)
 					amount: 2
 				}
 			}
@@ -716,11 +716,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: {
 					type: modifyStrength
-					filter: bearer
+					select: bearer
 					amount: 2
 				}
 			}
@@ -785,7 +785,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(memory(discardedWeapon),your,culture(moria),weapon)
+				select: choose(memory(discardedWeapon),your,culture(moria),weapon)
 				cost: -1
 			}
 		}
@@ -831,7 +831,7 @@
 			effect: {
 				type: playCardFromDiscard
 				removedTwilight: 2
-				filter: choose(culture(moria),possession)
+				select: choose(culture(moria),possession)
 			}
 		}
 	}
@@ -852,7 +852,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),orc,not(memory(discardedCards)))
+				select: choose(culture(moria),orc,not(memory(discardedCards)))
 			}
 		}
 	}
@@ -866,7 +866,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(your,culture(moria),orc)
+				select: choose(your,culture(moria),orc)
 			}
 			effect: {
 				type: drawCards
@@ -888,7 +888,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(moria),minion)
+					select: choose(culture(moria),minion)
 				}
 			}
 			{
@@ -949,14 +949,14 @@
 				}
 				{
 					type: putCardsFromDeckIntoHand
-					filter: all(memory(revealedCards),culture(moria),orc)
+					select: all(memory(revealedCards),culture(moria),orc)
 					reveal: true
 					shuffle: false
 					showAll: false
 				}
 				{
 					type: discardCardsFromDrawDeck
-					filter: all(memory(revealedCards),zone(deck))
+					select: all(memory(revealedCards),zone(deck))
                     showAll: false
                     shuffle: false
 				}
@@ -973,7 +973,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(moria),orc)
+				select: choose(culture(moria),orc)
 				memorize: chosenOrc
 				amount: {
 					type: requires
@@ -1002,7 +1002,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(moria),orc)
+					select: choose(culture(moria),orc)
 				}
 			}
 			{

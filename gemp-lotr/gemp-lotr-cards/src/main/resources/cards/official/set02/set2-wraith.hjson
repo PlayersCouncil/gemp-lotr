@@ -38,7 +38,7 @@
             }
             effect: {
                 type: discard
-                filter: self
+                select: self
             }
         }
       ]
@@ -92,7 +92,7 @@
         }
         effect: {
             type: preventWound
-            filter: choose(twilight,nazgul)
+            select: choose(twilight,nazgul)
         }
       }
     }
@@ -126,12 +126,12 @@
         type: event
         cost: {
             type: exert
-            filter: choose(twilight,nazgul)
+            select: choose(twilight,nazgul)
         }
         effect: [
             {
                 type: exert
-                filter: choose(ringBearer)
+                select: choose(ringBearer)
                 memorize: ringBearer
             }
             {
@@ -158,11 +158,11 @@
         type: event
         cost: {
             type: exert
-            filter: choose(name(The Witch-king))
+            select: choose(name(The Witch-king))
         }
         effect: {
             type: discard
-            filter: choose(or(tale,weapon))
+            select: choose(or(tale,weapon))
         }
       }
     }
@@ -179,14 +179,14 @@
             {
                 type: exert
                 count: 2
-                filter: choose(nazgul)
+                select: choose(nazgul)
             }
             {
                 type: exert
                 count: {
                     type: forEachBurden
                 }
-                filter: choose(companion)
+                select: choose(companion)
             }
         ]
       }
@@ -213,7 +213,7 @@
         }
         effect: {
             type: wound
-            filter: choose(ally)
+            select: choose(ally)
         }
       }
     }
@@ -239,11 +239,11 @@
         }
         cost: {
             type: exert
-            filter: self
+            select: self
         }
         effect: {
             type: wound
-            filter: choose(ringBearer)
+            select: choose(ringBearer)
             times: {
                 type: condition
                 condition: {
@@ -347,11 +347,11 @@
             }
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: wound
-                filter: choose(ringBearer)
+                select: choose(ringBearer)
                 times: 2
             }
         }

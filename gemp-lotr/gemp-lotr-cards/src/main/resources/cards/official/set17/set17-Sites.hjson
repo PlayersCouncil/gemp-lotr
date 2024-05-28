@@ -28,7 +28,7 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(your,minion)
+		                select: choose(your,minion)
 		            }
 		            {
 		                type: removeThreats
@@ -37,7 +37,7 @@
 		        effect: {
 		            type: discard
 		            player: free people
-		            filter: choose(side(free people),condition)
+		            select: choose(side(free people),condition)
 		        }
 		    }
 		]

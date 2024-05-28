@@ -31,11 +31,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion)
+		            select: choose(minion)
 		            amount: 2
 		        }
 		    }
@@ -82,11 +82,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion)
+		            select: choose(minion)
 		            amount: 1
 		        }
 		    }
@@ -142,11 +142,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: choose(culture(orc),condition)
+		            select: choose(culture(orc),condition)
 		        }
 		        effect: {
 		            type: play
-		            filter: choose(culture(orc),minion)
+		            select: choose(culture(orc),minion)
 		            cost: {
 		                type: condition
 		                condition: {
@@ -202,11 +202,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(companion,inSkirmishAgainst(self))
+		            select: choose(companion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -328,7 +328,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(character,inSkirmishAgainst(self))
+		            select: choose(character,inSkirmishAgainst(self))
 		            amount: -2
 		        }
 		    }
@@ -447,7 +447,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		        }
 		    }
 		]
@@ -741,7 +741,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: choose(culture(orc),condition)
+		                    select: choose(culture(orc),condition)
 		                    count: 2
 		                }
 		            ]
@@ -794,7 +794,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(fortification)
+		            select: choose(fortification)
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: culture(orc),or(possession,artifact)
@@ -960,7 +960,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
@@ -975,7 +975,7 @@
 		            }
 		            {
 		                type: modifyStrength
-		                filter: self
+		                select: self
 		                amount: {
 		                    type: twilightCostInMemory
 		                    memory: revealedCard
@@ -1064,7 +1064,7 @@
 					{
 						type: playCardFromDiscard
 						removedTwilight: 2
-						filter: choose(culture(orc), orc)
+						select: choose(culture(orc), orc)
 						memorize: PlayedOrc
 						cost: -2
 					}
@@ -1123,7 +1123,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: choose(culture(orc),minion)
+                        select: choose(culture(orc),minion)
                     }
                     {
                         type: removeTwilight
@@ -1144,14 +1144,14 @@
                         }
                         true: {
                             type: putCardsFromDeckIntoHand
-                            filter: memory(revealedCard)
+                            select: memory(revealedCard)
                             reveal: true
                             shuffle: false
                             showAll: false
                         }
                         false: {
                             type: discardCardsFromDrawDeck
-                            filter: memory(revealedCard)
+                            select: memory(revealedCard)
                             showAll: false
                             shuffle: false
                         }
@@ -1245,7 +1245,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(culture(orc),minion)
+		            select: choose(culture(orc),minion)
 		        }
 		    }
 		    {
@@ -1310,11 +1310,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(companion,inSkirmishAgainst(self))
+		            select: choose(companion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -1373,7 +1373,7 @@
 		        phase: assignment
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
@@ -1389,7 +1389,7 @@
 		                text: Would you like to exert a companion to prevent assigning Tower Troll to skirmish?
 		                cost: {
 		                    type: exert
-		                    filter: choose(companion)
+		                    select: choose(companion)
 		                }
                         effect: {
                             type: assignFPCharacterToSkirmish
@@ -1460,7 +1460,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: choose(culture(orc),orc)
+		                select: choose(culture(orc),orc)
 		                count: 3
 		            }
 		        ]
@@ -1468,11 +1468,11 @@
 		            {
 		                type: kill
 		                player: free people
-		                filter: choose(companion)
+		                select: choose(companion)
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -1532,7 +1532,7 @@
 				    }
 				    effect: {
 				        type: discard
-				        filter: choose(side(free people),condition)
+				        select: choose(side(free people),condition)
 				    }
 				}
 			]
@@ -1579,11 +1579,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(companion,inSkirmishAgainst(self))
+		            select: choose(companion,inSkirmishAgainst(self))
 		        }
 		    }
 		]

@@ -37,7 +37,7 @@
 					{
 						type: exert
 						player: freeps
-						filter: choose(companion)
+						select: choose(companion)
 					}
 					{
 						type: discardFromHand

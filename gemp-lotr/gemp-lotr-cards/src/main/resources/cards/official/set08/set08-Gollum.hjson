@@ -41,16 +41,16 @@
 		        }
 		        effect: [
 		            {
-		                type: playCardFromDiscard
-		                filter: choose(name(Gollum))
+									type: playCardFromDiscard
+									select: choose(name(Gollum))
 		            }
 		            {
-		                type: exert
-		                filter: choose(companion)
+									type: exert
+									select: choose(companion)
 		            }
 		            {
-                        type: putCardsFromPlayOnTopOfDeck
-                        filter: self
+									type: putCardsFromPlayOnTopOfDeck
+									select: self
 		            }
 		        ]
 		    }
@@ -102,12 +102,12 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(orc)
+		            select: choose(orc)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: gollum
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -116,11 +116,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: gollum
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(name(Shelob))
+		            select: choose(name(Shelob))
 		            amount: 3
 		            limitPerCardThisPhase: 6
 		        }
@@ -172,7 +172,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -224,7 +224,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(culture(gollum),possession)
+		            select: choose(culture(gollum),possession)
                     showAll: true
                     shuffle: true
 		        }
@@ -356,7 +356,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -364,11 +364,11 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(gollum),minion)
+		            select: choose(culture(gollum),minion)
 		        }
 		    }
 		]
@@ -426,7 +426,7 @@
 		        }
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
 		            where: choose(companion,inSkirmishAgainst(name(Shelob)))
 		        }
 		    }
@@ -438,7 +438,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		]
@@ -554,7 +554,7 @@
 		        ]
 		        effect: {
 		            type: stackCards
-		            filter: choose(your,or(orc,and(culture(gollum),minion)))
+		            select: choose(your,or(orc,and(culture(gollum),minion)))
 		            where: self
 		        }
 		    }
@@ -563,7 +563,7 @@
 		        phase: shadow
 		        cost: {
 		            type: playCardFromStacked
-		            filter: choose(culture(gollum),minion)
+		            select: choose(culture(gollum),minion)
 		            on: self
 		        }
 		    }

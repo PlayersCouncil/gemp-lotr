@@ -89,7 +89,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(your,mounted,minion)
+		            select: choose(your,mounted,minion)
 		        }
 		    }
 		]

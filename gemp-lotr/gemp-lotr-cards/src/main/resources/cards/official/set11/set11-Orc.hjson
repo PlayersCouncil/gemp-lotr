@@ -46,11 +46,11 @@
 				        effects: [
 				            {
 				                type: playCardFromDiscard
-				                filter: choose(culture(orc),possession)
+				                select: choose(culture(orc),possession)
 				            }
 				            {
 				                type: playCardFromDrawDeck
-				                filter: choose(culture(orc),possession)
+				                select: choose(culture(orc),possession)
                                 showAll: true
                                 shuffle: true
 				            }
@@ -58,7 +58,7 @@
 				    }
 				    false: {
                         type: playCardFromDiscard
-                        filter: choose(culture(orc),possession)
+                        select: choose(culture(orc),possession)
 				    }
 				}
 			]
@@ -105,11 +105,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(another,culture(orc),minion)
+		            select: choose(another,culture(orc),minion)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: {
 		                type: condition
 		                condition: {
@@ -175,7 +175,7 @@
 		        phase: assignment
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventable
@@ -184,7 +184,7 @@
 		            cost: {
 		                type: discard
 		                player: free people
-		                filter: choose(artifact)
+		                select: choose(artifact)
 		            }
 		            effect: {
 		                type: assignFpCharacterToSkirmish
@@ -242,11 +242,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(orc),minion)
+		            select: choose(culture(orc),minion)
 		            amount: 2
 		        }
 		    }
@@ -309,7 +309,7 @@
 				            forced: false
 				            hand: free people
 				            player: free people
-				            filter: choose(memory(revealedCards),side(free people),event)
+				            select: choose(memory(revealedCards),side(free people),event)
 				        }
 				        {
 				            type: addBurdens
@@ -393,7 +393,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(orc),minion)
+				    select: choose(culture(orc),minion)
 				    amount: {
 				        type: forEachYouCanSpot
 				        filter: underground,site
@@ -716,7 +716,7 @@
 				    }
 				    effect: {
 				        type: discard
-				        filter: choose(condition)
+				        select: choose(condition)
 				    }
 				}
 			]
@@ -991,7 +991,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(orc),minion)
+		            select: choose(culture(orc),minion)
 		        }
 		    }
 		]
@@ -1041,7 +1041,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: all(companion,maxResistance(4))
+		            select: all(companion,maxResistance(4))
 		        }
 		    }
 		]
@@ -1091,7 +1091,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(orc),minion)
+		            select: choose(culture(orc),minion)
 		        }
 		    }
 		]
@@ -1143,7 +1143,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -1199,7 +1199,7 @@
 		                forced: false
 		                player: free people
 		                hand: free people
-		                filter: choose(side(free people),event)
+		                select: choose(side(free people),event)
 		            }
 		            effect: {
 		                type: addBurdens
@@ -1254,7 +1254,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(memory(companion),companion)
+		            select: choose(memory(companion),companion)
 		        }
 		    }
 		]
@@ -1306,7 +1306,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(memory(companion),companion,maxResistance(5))
+		            select: choose(memory(companion),companion,maxResistance(5))
 		        }
 		    }
 		]
@@ -1355,7 +1355,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -1408,7 +1408,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addBurdens
@@ -1461,7 +1461,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(orc),condition)
+		            select: choose(culture(orc),condition)
 		        }
 		    }
 		]
@@ -1593,7 +1593,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromPlayOnTopOfDeck
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -1658,7 +1658,7 @@
 		            cost: {
 		                type: revealCardsFromHand
 		                hand: free people
-		                filter: choose(side(free people),event)
+		                select: choose(side(free people),event)
 		            }
 		            effect: {
 		                type: addBurdens
@@ -1713,7 +1713,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(orc),minion)
+		            select: choose(culture(orc),minion)
 		            amount: 1
 		        }
 		    }
@@ -1862,7 +1862,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(culture(orc),minion)
+		            select: choose(culture(orc),minion)
 		        }
 		    }
 		    {
@@ -1915,7 +1915,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(orc),minion)
+				    select: choose(culture(orc),minion)
 				    memorize: chosenMinion
 				    amount: {
 				        type: condition
@@ -2022,11 +2022,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion,inSkirmishAgainst(self))
+		            select: choose(companion,inSkirmishAgainst(self))
 		        }
 		    }
 		]

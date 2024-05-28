@@ -29,11 +29,11 @@
                 phase: maneuver
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: discard
-                    filter: choose(or(culture(isengard),culture(moria)),condition)
+                    select: choose(or(culture(isengard),culture(moria)),condition)
                 }
             }
         ]
@@ -54,7 +54,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 					memorize: chosenGandalf
 					amount: 1
 				}
@@ -106,11 +106,11 @@
                 ]
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: heal
-                    filter: choose(companion)
+                    select: choose(companion)
                 }
             }
         ]
@@ -137,7 +137,7 @@
             }
 			cost: {
 				type: spot
-				filter: choose(not(name(Gandalf)),unbound,companion)
+				select: choose(not(name(Gandalf)),unbound,companion)
 				memorize: unboundCompanion
 			}
 			effect: {
@@ -176,7 +176,7 @@
             }
 			effect: {
 				type: modifyStrength
-				filter: choose(unbound,companion)
+				select: choose(unbound,companion)
 				memorize: unboundCompanion
 				amount: {
 					type: requires
@@ -210,7 +210,7 @@
 			cost: [
 				{
 					type: exert
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 				}
 				{
 					type: addTwilight
@@ -222,7 +222,7 @@
 				{
 					type: discard
 					count: 0-1
-					filter: choose(side(shadow),condition,maxTwilight(memory(addedTwilight)))
+					select: choose(side(shadow),condition,maxTwilight(memory(addedTwilight)))
 					memorize: discardedCondition
 				}
 				{
@@ -243,7 +243,7 @@
 				{
 					type: discard
 					count: 0-1
-					filter: choose(side(shadow),condition,maxTwilight(memory(remainingTwilight)))
+					select: choose(side(shadow),condition,maxTwilight(memory(remainingTwilight)))
 				}
 			]
 		}
@@ -317,7 +317,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -369,12 +369,12 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 					times: 2
 				}
 				effect: {
 					type: discard
-					filter: choose(side(shadow),condition)
+					select: choose(side(shadow),condition)
 				}
 			}
 		]
@@ -447,11 +447,11 @@
 				effect: [
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 					{
 						type: wound
-						filter: choose(name(Gandalf))
+						select: choose(name(Gandalf))
 					}
 				]
 			}
@@ -490,19 +490,19 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 					times: 2
 				}
 				effect: [
 					{
 						type: modifyStrength
-						filter: self
+						select: self
 						amount: 3
 						until: endOfTurn
 					}
 					{
 						type: EnableParticipationInArcheryFireAndSkirmishes
-						filter: self
+						select: self
 						until: endOfTurn
 					}
 				]
@@ -516,7 +516,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
@@ -544,11 +544,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			}
 			effect: {
 				type: putCardsFromDiscardIntoHand
-				filter: choose(culture(Gandalf))
+				select: choose(culture(Gandalf))
 			}
 		}
 	}
@@ -572,7 +572,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 				}
 			}
 			{
@@ -585,7 +585,7 @@
 					type: discardFromHand
 					forced: false
 					count: 2
-					filter: choose(culture(Gandalf))
+					select: choose(culture(Gandalf))
 				}
 				effect: {
 					type: removeBurdens
@@ -629,7 +629,7 @@
 					}
 					effect: {
 						type: heal
-						filter: choose(companion)
+						select: choose(companion)
 					}
 				}
 				{
@@ -641,7 +641,7 @@
 					}
 					effect: {
 						type: exert
-						filter: choose(minion)
+						select: choose(minion)
 					}
 				}
 			]
@@ -678,19 +678,19 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 				}
 				effect: [
 					{
 						type: putCardsFromDeckIntoHand
-						filter: choose(culture(Gandalf))
+						select: choose(culture(Gandalf))
                         reveal: true
                         shuffle: true
                         showAll: true
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
@@ -713,7 +713,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 				}
 			}
 			{
@@ -742,7 +742,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -780,11 +780,11 @@
         effect: [
           {
             type: discard
-            filter: self
+            select: self
           }
           {
             type: modifyStrength
-            filter: all(name(Gandalf))
+            select: all(name(Gandalf))
             amount: -2
             until: start(regroup)
           }
@@ -827,11 +827,11 @@
             type: discardFromHand
             forced: false
             count: 2
-            filter: choose(culture(gandalf))
+            select: choose(culture(gandalf))
           }
           effect: {
             type: preventWound
-            filter: bearer
+            select: bearer
           }
         }
     ]
@@ -860,7 +860,7 @@
         }
       cost: {
         type: exert
-        filter: choose(name(Gandalf))
+        select: choose(name(Gandalf))
         times: 2
       }
       effect: [
@@ -902,7 +902,7 @@
       type: event
       effect: {
         type: modifyStrength
-        filter: choose(name(Gandalf))
+        select: choose(name(Gandalf))
         amount: {
           type: requires
           requires: {
@@ -927,7 +927,7 @@
       type: event
       cost: {
         type: spot
-        filter: choose(name(Gandalf),notAssignedToSkirmish)
+        select: choose(name(Gandalf),notAssignedToSkirmish)
         memorize: gandalf
       }
       effect: [
@@ -938,7 +938,7 @@
         }
         {
           type: modifyStrength
-          filter: memory(gandalf)
+          select: memory(gandalf)
           amount: 2
         }
       ]
@@ -963,7 +963,7 @@
         }
       effect: {
         type: discard
-        filter: choose(side(shadow),or(possession,artifact))
+        select: choose(side(shadow),or(possession,artifact))
       }
     }
   }
@@ -1022,12 +1022,12 @@
         }
       cost: {
         type: exert
-        filter: choose(companion,not(culture(gandalf)))
+        select: choose(companion,not(culture(gandalf)))
         memorize: exertedCompanion
       }
       effect: {
         type: putCardsFromDeckIntoHand
-        filter: choose(cultureFromMemory(exertedCompanion))
+        select: choose(cultureFromMemory(exertedCompanion))
         reveal: true
         shuffle: true
         showAll: true
@@ -1046,7 +1046,7 @@
       type: event
       effect: {
         type: playCardFromDrawDeck
-        filter: choose(culture(gandalf),character)
+        select: choose(culture(gandalf),character)
         showAll: true
         shuffle: true
       }
@@ -1070,11 +1070,11 @@
       phase: skirmish
       cost: {
         type: exert
-        filter: bearer
+        select: bearer
       }
       effect: {
         type: modifyStrength
-        filter: choose(minion)
+        select: choose(minion)
         amount: -3
       }
     }
@@ -1120,7 +1120,7 @@
         }
       effect: {
         type: modifyStrength
-        filter: choose(minion)
+        select: choose(minion)
         memorize: chosenMinion
         amount: {
           type: requires

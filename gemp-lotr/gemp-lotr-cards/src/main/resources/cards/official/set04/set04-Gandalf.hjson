@@ -29,7 +29,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: gandalf
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -38,7 +38,7 @@
 		        effect: [
 		            {
 		                type: wound
-		                filter: choose(minion,inSkirmishAgainst(name(Gandalf)))
+		                select: choose(minion,inSkirmishAgainst(name(Gandalf)))
 		                times: {
 		                    type: forEachToken
 		                    filter: self
@@ -47,7 +47,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -100,7 +100,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(side(free),character)
+		            select: choose(side(free),character)
 		        }
 		    }
 		]
@@ -240,7 +240,7 @@
 			effect: [
 				{
 					type: discard
-					filter: all(condition)
+					select: all(condition)
 				}
 			]
 		}
@@ -282,7 +282,7 @@
 			effect: [
 				{
 					type: heal
-					filter: choose(unbound,companion)
+					select: choose(unbound,companion)
 					times: 2
 				}
 			]
@@ -335,7 +335,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: all(side(shadow),condition,attachedTo(bearer))
+		            select: all(side(shadow),condition,attachedTo(bearer))
 		        }
 		    }
 		    {
@@ -387,7 +387,7 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 				times: 2
 			},
 			effect: [
@@ -441,7 +441,7 @@
 			effect: [
 				{
 					type: preventAllWounds
-					filter: choose(companion,signet(Gandalf))
+					select: choose(companion,signet(Gandalf))
 				}
 			]
 		}
@@ -491,11 +491,11 @@
     				cost: {
     				    type: wound
     				    player: fp
-    				    filter: choose(minion)
+    				    select: choose(minion)
     				}
     				effect: {
                         type: preventAllWounds
-                        filter: all(name(Gandalf))
+                        select: all(name(Gandalf))
     				}
 				}
 			]
@@ -536,12 +536,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			},
 			effect: [
 				{
 					type: wound
-					filter: all(minion,maxStrength(6))
+					select: all(minion,maxStrength(6))
 				}
 			]
 		}
@@ -586,7 +586,7 @@
 			effect: [
 				{
 					type: discard
-					filter: choose(side(shadow),or(possession,artifact))
+					select: choose(side(shadow),or(possession,artifact))
 				}
 			]
 		}
@@ -630,7 +630,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: all(hand weapon,attachedTo(bearer))
+		            select: all(hand weapon,attachedTo(bearer))
 		        }
 		    }
 		    {
@@ -653,7 +653,7 @@
                 }
                 effect: {
                     type: exert
-                    filter: all(minion,inSkirmishAgainst(bearer))
+                    select: all(minion,inSkirmishAgainst(bearer))
                 }
 		    }
 		]
@@ -701,7 +701,7 @@
 			effect: [
 				{
 					type: addKeyword
-					filter: choose(ent,ally)
+					select: choose(ent,ally)
 					memorize: chosenEnt
 					keyword: damage
 					amount: 2
@@ -709,7 +709,7 @@
 				}
 				{
 				    type: enableParticipationInArcheryFireAndSkirmishes
-				    filter: memory(chosenEnt)
+				    select: memory(chosenEnt)
 					until: regroup
 				}
 			]
@@ -750,12 +750,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			},
 			effect: [
 				{
 					type: discard
-					filter: choose(wounded,minion)
+					select: choose(wounded,minion)
 					count: 0-2
 				}
 			]
@@ -803,7 +803,7 @@
                 }
                 effect: {
                     type: stackCards
-                    filter: choose(unbound,hobbit,gettingDiscarded)
+                    select: choose(unbound,hobbit,gettingDiscarded)
                     where: self
                 }
 		    }
@@ -813,7 +813,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: addTwilight
@@ -822,7 +822,7 @@
                 ]
                 effect: {
                     type: playCardFromStacked
-                    filter: choose(unbound,hobbit)
+                    select: choose(unbound,hobbit)
                     on: self
                 }
 		    }
@@ -868,17 +868,17 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: discardFromHand
                         forced: false
-                        filter: choose(unbound,companion)
+                        select: choose(unbound,companion)
                     }
                 ]
                 effect: {
                     type: heal
-                    filter: choose(unbound,companion)
+                    select: choose(unbound,companion)
                 }
 		    }
 		]
@@ -920,7 +920,7 @@
 			    }
 				{
 					type: modifyStrength
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 					amount: {
 					    type: fromMemory
 					    memory: twilightCount
@@ -977,7 +977,7 @@
 			effect: [
 				{
 					type: playCardFromDeadPile
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 				}
 			]
 		}
@@ -1022,7 +1022,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
@@ -1034,14 +1034,14 @@
                     {
                         type: discardCardsFromDrawDeck
                         deck: shadow
-                        filter: choose(side(shadow),memory(revealedCards))
+                        select: choose(side(shadow),memory(revealedCards))
                         showAll: false
                         shuffle: false
                     }
                     {
                         type: discardCardsFromDrawDeck
                         deck: shadow
-                        filter: choose(side(free),memory(revealedCards))
+                        select: choose(side(free),memory(revealedCards))
                         showAll: false
                         shuffle: false
                     }
@@ -1096,13 +1096,13 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			}
 			effect: [
 				{
 					type: discard
 					player: shadow
-					filter: choose(minion)
+					select: choose(minion)
 				}
 			]
 		}

@@ -44,11 +44,11 @@
 				effects: [
 					{
 						type: discard
-						filter: choose(follower,minTwilight(memory(X)),maxTwilight(memory(X)))
+						select: choose(follower,minTwilight(memory(X)),maxTwilight(memory(X)))
 					}
 					{
 						type: playCardFromDrawDeck
-						filter: choose(culture(wraith),minion,minTwilight(memory(X)),maxTwilight(memory(X)))
+						select: choose(culture(wraith),minion,minTwilight(memory(X)),maxTwilight(memory(X)))
                         showAll: true
                         shuffle: true
 					}
@@ -111,14 +111,14 @@
 				            effects: [
 				                {
 				                    type: removeKeyword
-				                    filter: choose(culture(wraith),minion)
+				                    select: choose(culture(wraith),minion)
 				                    keyword: fierce
 				                    until: regroup
 				                    memorize: chosenMinion
 				                }
 				                {
 				                    type: addKeyword
-				                    filter: memory(chosenMinion)
+				                    select: memory(chosenMinion)
 				                    keyword: hunter
 				                    amount: 2
 				                    until: regroup

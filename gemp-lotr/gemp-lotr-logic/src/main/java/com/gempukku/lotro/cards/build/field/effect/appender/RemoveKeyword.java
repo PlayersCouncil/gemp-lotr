@@ -24,10 +24,10 @@ import java.util.Collection;
 public class RemoveKeyword implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "memorize", "keyword", "until");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize", "keyword", "until");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         Keyword keyword = FieldUtils.getEnum(Keyword.class, effectObject.get("keyword"), "keyword");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
@@ -35,7 +35,7 @@ public class RemoveKeyword implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, valueSource, memory, "you", "Choose cards to remove keyword from", environment));
+                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to remove keyword from", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

@@ -59,11 +59,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(hunter,minion)
+		            select: choose(hunter,minion)
 		        }
 		    }
 		]
@@ -117,7 +117,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -168,7 +168,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(minion)
+		            select: choose(minion)
 		            keyword: fierce
 		            until: regroup
 		        }

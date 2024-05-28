@@ -77,7 +77,7 @@
 			effect: [
 				{
 				    type: play
-				    filter: choose(nazgul)
+				    select: choose(nazgul)
 				    cost: {
 				        type: forEachYouCanSpot
 				        filter: forest,site
@@ -130,7 +130,7 @@
 		        }
 		        cost: {
 		            type: heal
-		            filter: choose(ringBearer)
+		            select: choose(ringBearer)
 		            times: 2
 		        }
 		        effect: {
@@ -189,7 +189,7 @@
 			effect: [
 				{
 				    type: playCardFromDrawDeck
-				    filter: choose(mount)
+				    select: choose(mount)
 				    on: nazgul
                     showAll: true
                     shuffle: true
@@ -246,7 +246,7 @@
 				    effects: [
 				        {
 				            type: exert
-				            filter: choose(ringBearer)
+				            select: choose(ringBearer)
 				        }
 				        {
 				            type: addBurdens
@@ -294,7 +294,7 @@
 		        phase: skirmish
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
 		            where: choose(character,inSkirmishAgainst(nazgul))
 		            fromSupport: true
 		        }
@@ -355,7 +355,7 @@
 			effect: [
 				{
 				    type: discard
-				    filter: choose(side(free people),condition)
+				    select: choose(side(free people),condition)
 				}
 			]
 		}
@@ -447,7 +447,7 @@
 		        phase: skirmish
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
 		            where: choose(character,inSkirmishAgainst(nazgul))
 		            fromSupport: true
 		        }
@@ -689,12 +689,12 @@
 		            {
 		                type: discardFromHand
 		                forced: false
-		                filter: choose(culture(wraith))
+		                select: choose(culture(wraith))
 		            }
 		        ]
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 3
 		        }
 		    }
@@ -763,7 +763,7 @@
 		        ]
 		        effect: {
 		            type: kill
-		            filter: choose(companion,inSkirmishAgainst(self))
+		            select: choose(companion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -817,7 +817,7 @@
                 }
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: incrementToil
@@ -871,7 +871,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(wraith),mount)
+		            select: choose(culture(wraith),mount)
 		        }
 		    }
 		]
@@ -1041,17 +1041,17 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: discardFromHand
 		                forced: false
-		                filter: choose(culture(wraith),condition)
+		                select: choose(culture(wraith),condition)
 		            }
 		        ]
 		        effect: {
 		            type: discard
-		            filter: choose(side(free people),condition)
+		            select: choose(side(free people),condition)
 		        }
 		    }
 		]
@@ -1103,11 +1103,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(wraith),event)
+		            select: choose(culture(wraith),event)
 		        }
 		    }
 		]
@@ -1163,11 +1163,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		        }
 		    }
 		]
@@ -1210,11 +1210,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		            memorize: chosenNazgul
 		            amount: {
 		                type: sum
@@ -1315,11 +1315,11 @@
 		        }
 		        cost: {
                     type: revealCardsFromHand
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: exert
-                    filter: choose(ringBearer)
+                    select: choose(ringBearer)
                 }
 		    }
 		]
@@ -1372,7 +1372,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		            times: 2
 		        }
 		        effect: {

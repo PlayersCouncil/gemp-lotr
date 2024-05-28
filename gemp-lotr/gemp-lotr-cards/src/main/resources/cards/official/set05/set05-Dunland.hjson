@@ -47,7 +47,7 @@
 		                }
 		                effect: {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            }
 		        }
@@ -111,7 +111,7 @@
 		                }
 		                effect: {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            }
 		        }
@@ -248,7 +248,7 @@
 		                }
 		                effect: {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            }
 		        }

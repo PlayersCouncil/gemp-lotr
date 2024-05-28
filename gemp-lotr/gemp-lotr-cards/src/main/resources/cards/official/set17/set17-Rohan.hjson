@@ -98,11 +98,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: choose(culture(rohan),possession)
+		            select: choose(culture(rohan),possession)
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession)
+		            select: choose(possession)
 		        }
 		    }
 		]
@@ -166,11 +166,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: self
+		            select: self
 		            keyword: defender
 		            amount: 1
 		            until: endOfTurn
@@ -232,7 +232,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: assignFPCharacterToSkirmish
@@ -302,12 +302,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(culture(rohan),companion)
+		            select: choose(culture(rohan),companion)
 		            memorize: exertedCompanion
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: memory(exertedCompanion)
+		            select: memory(exertedCompanion)
 		            keyword: hunter
 		            amount: 1
 		            until: regroup
@@ -382,7 +382,7 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(culture(rohan),man)
+		                select: choose(culture(rohan),man)
 		                memorize: exertedMan
 		            }
 		            {
@@ -392,7 +392,7 @@
 		        ]
 		        effect: {
 		            type: preventWound
-		            filter: choose(culture(rohan),man,not(memory(exertedMan)))
+		            select: choose(culture(rohan),man,not(memory(exertedMan)))
 		        }
 		    }
 		]
@@ -631,7 +631,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: liberateSite
@@ -675,13 +675,13 @@
 			type: event
 			cost: {
 			    type: spot
-			    filter: choose(culture(rohan),companion)
+			    select: choose(culture(rohan),companion)
 			    memorize: spottedCompanion
 			}
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(name(Frodo))
+				    select: choose(name(Frodo))
 				    amount: 5
 				    memorize: frodo
 				}
@@ -693,7 +693,7 @@
 				    }
 				    effect: {
 				        type: discard
-				        filter: memory(spottedCompanion)
+				        select: memory(spottedCompanion)
 				    }
 				}
 			]
@@ -747,7 +747,7 @@
 		        phase: fellowship
 		        cost: {
 		            type: play
-		            filter: choose(possession)
+		            select: choose(possession)
 		            on: self
 		        }
 		        effect: {

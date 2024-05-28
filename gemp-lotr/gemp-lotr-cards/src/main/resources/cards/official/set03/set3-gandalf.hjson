@@ -28,11 +28,11 @@
                 phase: maneuver
                 cost: {
                     type: exert
-                    filter: choose(name(Gandalf))
+                    select: choose(name(Gandalf))
                 }
                 effect: {
                     type: wound
-                    filter: choose(name(Saruman))
+                    select: choose(name(Saruman))
                     times: 2
                 }
             }
@@ -63,7 +63,7 @@
             ]
             effect: {
                 type: discard
-                filter: all(shadow,condition)
+                select: all(shadow,condition)
             }
         }
     }
@@ -108,7 +108,7 @@
                     }
                     effect: {
                         type: modifyStrength
-                        filter: choose(hobbit)
+                        select: choose(hobbit)
                         amount: 3
                     }
                 }
@@ -141,12 +141,12 @@
                 effects: [
                     {
                         type: shuffleCardsFromDiscardIntoDrawDeck
-                        filter: choose(culture(gandalf))
+                        select: choose(culture(gandalf))
                         count: 0-2
                     }
                     {
                         type: shuffleCardsFromDiscardIntoDrawDeck
-                        filter: choose(culture(shire))
+                        select: choose(culture(shire))
                         count: 0-2
                     }
                 ]
@@ -193,7 +193,7 @@
                             }
                             {
                                 type: discard
-                                filter: memory(revealedCard)
+                                select: memory(revealedCard)
                             }
                         ]
                     }
@@ -239,11 +239,11 @@
             phase: skirmish
             cost: {
                 type: exert
-                filter: choose(name(Gandalf))
+                select: choose(name(Gandalf))
             }
             effect: {
                 type: modifyStrength
-                filter: choose(companion)
+                select: choose(companion)
                 amount: {
                     type: forEachYouCanSpot
                     filter: companion,signet(Gandalf)
@@ -271,11 +271,11 @@
             }
             cost: {
                 type: exert
-                filter: choose(name(Gandalf))
+                select: choose(name(Gandalf))
             }
             effect: {
                 type: preventWound
-                filter: choose(companion)
+                select: choose(companion)
             }
         }
     }

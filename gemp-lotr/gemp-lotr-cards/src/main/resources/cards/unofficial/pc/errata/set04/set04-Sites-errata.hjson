@@ -53,7 +53,7 @@
 										type: CostToEffect
 										cost: {
 											type: exert
-											filter: choose(your,character,InSkirmish)
+											select: choose(your,character,InSkirmish)
 										}
 										effect: [
 											{

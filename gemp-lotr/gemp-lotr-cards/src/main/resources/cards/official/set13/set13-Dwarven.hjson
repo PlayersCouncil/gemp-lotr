@@ -55,7 +55,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(bearer)
+		            select: choose(bearer)
 		        }
 		    }
 		]
@@ -97,7 +97,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(dwarf)
+				    select: choose(dwarf)
 				    memorize: chosenDwarf
 				    amount: {
 				        type: condition
@@ -117,7 +117,7 @@
 				    }
 				    effect: {
 				        type: addKeyword
-				        filter: memory(chosenDwarf)
+				        select: memory(chosenDwarf)
 				        keyword: damage
 				        amount: 1
 				    }
@@ -173,7 +173,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(dwarf,notAssignedToSkirmish)
+		            select: choose(dwarf,notAssignedToSkirmish)
 		        }
 		        effect: {
 		            type: choice
@@ -184,12 +184,12 @@
 		            effects: [
 		                {
 		                    type: wound
-		                    filter: choose(orc)
+		                    select: choose(orc)
 		                    count: 2
 		                }
 		                {
 		                    type: wound
-		                    filter: choose(orc)
+		                    select: choose(orc)
 		                    times: 2
 		                }
 		            ]
@@ -205,7 +205,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -248,16 +248,16 @@
                 phase: skirmish
                 cost: {
                     type: removeCardsInDiscardFromGame
-                    filter: choose(other,culture(dwarven))
+                    select: choose(other,culture(dwarven))
                     count: 4
                 }
                 effect:
                 {
                    type: playCardFromDiscard
-                   filter: self
+                   select: self
                    extraEffects: {
                        type: removeFromTheGame
-                       filter: self
+                       select: self
                    }
                 }
             }
@@ -266,7 +266,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(dwarf,hasAttached(hand weapon))
+                        select: choose(dwarf,hasAttached(hand weapon))
                         amount: 3
                     }
                 ]
@@ -328,17 +328,17 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: spot
-                        filter: choose(minion,lurker)
+                        select: choose(minion,lurker)
                         memorize: spottedLurker
                     }
                 ]
 		        effect: {
 		            type: removeKeyword
-		            filter: memory(spottedLurker)
+		            select: memory(spottedLurker)
 		            until: regroup
 		        }
 		    }
@@ -388,7 +388,7 @@
 			effect: [
 				{
 				    type: playCardFromDiscard
-				    filter: choose(culture(dwarven),possession)
+				    select: choose(culture(dwarven),possession)
 				}
 				{
 				    type: optional
@@ -438,12 +438,12 @@
 			cost: {
 			    type: removeTokens
 			    culture: dwarven
-			    filter: choose(any)
+			    select: choose(any)
 			},
 			effect: [
 				{
 				    type: heal
-				    filter: choose(dwarf)
+				    select: choose(dwarf)
 				}
 			]
 		}
@@ -485,7 +485,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(dwarf)
+		            select: choose(dwarf)
 		            count: 2
 		        }
 		    }
@@ -498,7 +498,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: dwarven
-		            filter: self
+		            select: self
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: or(mountain,underground),zone(adventure path)
@@ -517,13 +517,13 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: dwarven
 		                    count: 2
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }

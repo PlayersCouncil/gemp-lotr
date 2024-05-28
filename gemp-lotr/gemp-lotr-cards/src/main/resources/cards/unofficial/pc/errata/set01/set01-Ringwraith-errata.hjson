@@ -78,7 +78,7 @@
 								}
 								{
 									type: playCardFromDiscard
-									filter: choose(unique,culture(wraith),minion)
+									select: choose(unique,culture(wraith),minion)
 								}
 							]
 						}

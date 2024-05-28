@@ -49,7 +49,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(companion,not(ringBearer))
+		            select: choose(companion,not(ringBearer))
 		        }
 		    }
 		    {
@@ -60,7 +60,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -280,7 +280,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(character,assignedToSkirmish(self))
+		            select: choose(character,assignedToSkirmish(self))
 		        }
 		    }
 		]
@@ -339,7 +339,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(character,assignedToSkirmish(self))
+		            select: choose(character,assignedToSkirmish(self))
 		        }
 		    }
 		]
@@ -398,7 +398,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(character,assignedToSkirmish(self))
+		            select: choose(character,assignedToSkirmish(self))
 		        }
 		    }
 		]
@@ -457,7 +457,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(or(companion,ally),inSkirmishAgainst(self))
+		            select: choose(or(companion,ally),inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -516,7 +516,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(or(companion,ally),inSkirmishAgainst(self))
+		            select: choose(or(companion,ally),inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -639,7 +639,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(another,easterling)
+		            select: choose(another,easterling)
 		        }
 		    }
 		]
@@ -690,12 +690,12 @@
 		            }
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		            }
 		        ]
 		        effect: {
 		            type: heal
-		            filter: choose(another,easterling)
+		            select: choose(another,easterling)
 		            count: {
 		                type: condition
 		                condition: {
@@ -751,11 +751,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: self
+		            select: self
 		            keyword: damage
 		            amount: 1
 		        }
@@ -804,11 +804,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: self
+		            select: self
 		            keyword: damage
 		            amount: 1
 		        }
@@ -920,11 +920,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: self
+		            select: self
 		            keyword: damage
 		            amount: 1
 		        }
@@ -1042,7 +1042,7 @@
                 ]
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: addBurdens
@@ -1096,7 +1096,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(another,easterling)
+		            select: choose(another,easterling)
 		        }
 		    }
 		]
@@ -1143,7 +1143,7 @@
 			effect: [
 				{
 					type: discard
-					filter: choose(companion,not(ringBearer))
+					select: choose(companion,not(ringBearer))
 				}
 			]
 		}
@@ -1265,7 +1265,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: raider
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -1409,7 +1409,7 @@
 		        }
 		        effect: {
 		            type: kill
-		            filter: choose(companion,inSkirmishAgainst(self))
+		            select: choose(companion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -1500,7 +1500,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(raider),man)
+					select: choose(culture(raider),man)
 					amount: {
 					    type: condition
 					    condition: {
@@ -1607,7 +1607,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: addTwilight
@@ -1652,13 +1652,13 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(raider),man)
+				select: choose(culture(raider),man)
 				memorize: exertedMan
 			},
 			effect: [
 				{
 					type: wound
-					filter: choose(companion,inSkirmishAgainst(memory(exertedMan)))
+					select: choose(companion,inSkirmishAgainst(memory(exertedMan)))
 					times: 2
 				}
 			]
@@ -1716,7 +1716,7 @@
 		        effect: {
 		            type: exert
 		            player: fp
-		            filter: choose(companion)
+		            select: choose(companion)
 		            count: 2
 		        }
 		    }
@@ -1767,7 +1767,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(easterling)
+		            select: choose(easterling)
 		        }
 		        effect: {
 		            type: addBurdens
@@ -1778,11 +1778,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(easterling)
+		            select: choose(easterling)
 		            amount: 2
 		        }
 		    }
@@ -1830,7 +1830,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventable
@@ -1898,7 +1898,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(culture(raider),man)
+		            select: choose(culture(raider),man)
 		            keyword: damage
 		            amount: 1
 		            until: regroup
@@ -2218,7 +2218,7 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeThreats
@@ -2227,7 +2227,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(companion,not(ringBearer))
+		            select: choose(companion,not(ringBearer))
 		        }
 		    }
 		]
@@ -2286,7 +2286,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: removeThreats
@@ -2356,7 +2356,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -2400,11 +2400,11 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(easterling)
+		                select: choose(easterling)
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		        effect: {
@@ -2430,11 +2430,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(easterling)
+		            select: choose(easterling)
 		        }
 		    }
 		]
@@ -2558,7 +2558,7 @@
 				{
 					type: exert
 					player: fp
-					filter: choose(companion)
+					select: choose(companion)
 					count: {
 					    type: fromMemory
 					    memory: spotCount

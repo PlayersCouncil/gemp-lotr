@@ -93,12 +93,12 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: choose(urukHai)
+		            select: choose(urukHai)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: sauron
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -113,12 +113,12 @@
 		        effect: [
 		            {
 		                type: modifyStrength
-		                filter: choose(urukHai)
+		                select: choose(urukHai)
 		                amount: 3
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -168,7 +168,7 @@
 		        effect: {
                     type: exert
                     player: fp
-                    filter: choose(companion)
+                    select: choose(companion)
                     count: {
                         type: forEachYouCanSpot
                         filter: controlledByOtherPlayer
@@ -236,11 +236,11 @@
 		            {
 		                type: removeTokens
 		                culture: isengard
-		                filter: choose(machine)
+		                select: choose(machine)
 		            }
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		                times: 2
 		            }
 		        ]
@@ -252,7 +252,7 @@
 		            }
 		            effect: {
 		                type: preventWound
-		                filter: all(urukHai)
+		                select: all(urukHai)
 		            }
 		            until: assignment
 		        }
@@ -349,13 +349,13 @@
 			type: event
 			cost: {
 				type: discard
-				filter: choose(culture(isengard),orc)
+				select: choose(culture(isengard),orc)
 				count: 4
 			},
 			effect: [
 				{
 					type: wound
-					filter: choose(companion,not(ringBearer))
+					select: choose(companion,not(ringBearer))
 					count: 4
 				}
 			]
@@ -410,7 +410,7 @@
 		        text: Stack {discardedCard} on this
 		        effect: {
 		            type: stackCardsFromDiscard
-		            filter: memory(discardedCard)
+		            select: memory(discardedCard)
 		            where: self
 		        }
 		    }
@@ -431,7 +431,7 @@
                 effect: {
                     type: playCardFromDiscard
                     removedTwilight: 1
-                    filter: choose(culture(isengard),orc)
+                    select: choose(culture(isengard),orc)
                 }
 		    }
 		]
@@ -485,7 +485,7 @@
 		        text: Stack {discardedCard} on this
 		        effect: {
 		            type: stackCardsFromDiscard
-		            filter: memory(discardedCard)
+		            select: memory(discardedCard)
 		            where: self
 		        }
 		    }
@@ -505,7 +505,7 @@
                 ]
                 effect: {
                     type: discard
-                    filter: choose(side(free),possession)
+                    select: choose(side(free),possession)
                 }
 		    }
 		]
@@ -551,12 +551,12 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: choose(culture(isengard),orc)
+		            select: choose(culture(isengard),orc)
 		        }
 		        effect: {
 		            type: wound
 		            player: fp
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -603,7 +603,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discardStackedCards
-		            filter: self
+		            select: self
 		            on: culture(isengard)
 		        }
 		        effect: {
@@ -654,12 +654,12 @@
 		        phase: regroup
 		        cost: {
                     type: discard
-                    filter: choose(culture(isengard),orc)
+                    select: choose(culture(isengard),orc)
                 }
                 effect: {
                     type: wound
                     player: fp
-                    filter: choose(companion)
+                    select: choose(companion)
                 }
 		    }
 		]
@@ -705,12 +705,12 @@
                 phase: regroup
                 cost: {
                     type: discard
-                    filter: choose(culture(isengard),orc)
+                    select: choose(culture(isengard),orc)
                 }
                 effect: {
                     type: wound
                     player: fp
-                    filter: choose(companion)
+                    select: choose(companion)
                     count: {
                         type: condition
                         condition: {
@@ -733,7 +733,7 @@
 		        }
 		        cost: {
 		            type: discardStackedCards
-		            filter: self
+		            select: self
 		            on: culture(isengard)
 		        }
 		        effect: {
@@ -784,12 +784,12 @@
 		        phase: regroup
 		        cost: {
                     type: discard
-                    filter: choose(culture(isengard),orc)
+                    select: choose(culture(isengard),orc)
                 }
                 effect: {
                     type: wound
                     player: fp
-                    filter: choose(companion)
+                    select: choose(companion)
                 }
 		    }
 		]
@@ -837,7 +837,7 @@
 		        cost: [
 		            {
 		                type: discardStackedCards
-		                filter: self
+		                select: self
 		                on: culture(isengard)
 		            }
 		            {
@@ -847,7 +847,7 @@
 		        ]
 		        effect: {
 		            type: exhaust
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -893,12 +893,12 @@
 		        phase: regroup
 		        cost: {
                     type: discard
-                    filter: choose(culture(isengard),orc)
+                    select: choose(culture(isengard),orc)
                 }
                 effect: {
                     type: wound
                     player: fp
-                    filter: choose(companion)
+                    select: choose(companion)
                 }
 		    }
 		]
@@ -1002,7 +1002,7 @@
 		        text: Stack {discardedCard} on this
 		        effect: {
 		            type: stackCardsFromDiscard
-		            filter: memory(discardedCard)
+		            select: memory(discardedCard)
 		            where: self
 		        }
 		    }
@@ -1019,7 +1019,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(culture(isengard),orc)
+		            select: choose(culture(isengard),orc)
 		        }
 		    }
 		]
@@ -1075,7 +1075,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addTwilight
@@ -1127,92 +1127,13 @@
 		        }
 		        effect: {
 		            type: stackCards
-		            filter: choose(possession)
+		            select: choose(possession)
 		            where: self
 		        }
 		    }
 		]
 		gametext: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving an [isengard] Man, you may spot a possession to stack that possession here.
 		lore: Too long have you sat in the shadows....'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	6_127: {
-		cardInfo: {
-			imagePath: decipher/LOTR06127.jpg
-			javaClass: true
-			//parentId: 6_127
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 6R127
-			rarity: R
-			setNum: "6"
-			cardNum: 127
-			style: Standard
-		}
-		title: Isengard Mechanics
-		unique: false
-		side: Shadow
-		culture: Isengard
-		twilight: 6
-		type: Minion
-		race: Orc
-		strength: 11
-		vitality: 4
-		site: 4
-		effects: [
-		    {
-                type: activated
-                phase: regroup
-                cost: {
-                    type: discard
-                    filter: choose(culture(isengard),orc)
-                }
-                effect: {
-                    type: wound
-                    player: fp
-                    filter: choose(companion)
-                    count: {
-                        type: condition
-                        condition: {
-                            type: canSpot
-                            filter: companion
-                            count: 6
-                        }
-                        true: 2
-                        false: 1
-                    }
-                }
-		    }
-		    {
-		        type: activatedFromStacked
-		        phase: regroup
-		        stackedOn: culture(isengard)
-		        requires: {
-		            type: canSpot
-		            filter: culture(isengard),orc
-		        }
-		        cost: {
-		            type: discardStackedCards
-		            filter: self
-		            on: culture(isengard)
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 3
-		        }
-		    }
-		]
-		gametext: <b>Regroup:</b> Discard an [isengard] Orc to make the Free Peoples player wound a companion (or 2 companions if you spot 6 companions).<br><b>Regroup:</b> If this minion is stacked on an [isengard] card, spot an [isengard] Orc and discard this minion to add (3).
-		lore: ""
 		promotext: ""
 		alts: {
 			promos: {

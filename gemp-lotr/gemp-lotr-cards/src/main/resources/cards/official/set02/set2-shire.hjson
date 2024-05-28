@@ -18,16 +18,16 @@
             cost: [
                 {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 {
                     type: discard
-                    filter: choose(tale)
+                    select: choose(tale)
                 }
             ]
             effect: {
                 type: discard
-                filter: choose(shadow,condition,zone(support))
+                select: choose(shadow,condition,zone(support))
             }
         }
     }
@@ -69,11 +69,11 @@
                     effects: [
                         {
                             type: exert
-                            filter: choose(name(Bilbo))
+                            select: choose(name(Bilbo))
                         }
                         {
                             type: discard
-                            filter: self
+                            select: self
                         }
                     ]
                 }
@@ -95,12 +95,12 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(companion)
+                select: choose(companion)
                 memorize: exertedCompanion
             }
             effect: {
                 type: putCardsFromDiscardOnBottomOfDeck
-                filter: choose(side(free))
+                select: choose(side(free))
                 count: {
                     type: condition
                     condition: {
@@ -134,7 +134,7 @@
             }
             effect: {
                 type: modifySiteNumber
-                filter: all(site)
+                select: all(site)
                 amount: -2
                 until: endOfTurn
             }
@@ -156,7 +156,7 @@
                 type: extraCost
                 cost: {
                     type: exert
-                    filter: choose(hobbit)
+                    select: choose(hobbit)
                     count: 2
                 }
             }
@@ -188,7 +188,7 @@
             phase: skirmish
             cost: {
                 type: exert
-                filter: choose(hobbit,companion)
+                select: choose(hobbit,companion)
                 times: 2
                 memorize: exertedHobbit
             }
@@ -234,12 +234,12 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(hobbit,hasAttached(weapon))
+                select: choose(hobbit,hasAttached(weapon))
             }
             effect: [
                 {
 					type: chooseActiveCards
-					filter: choose(minion)
+					select: choose(minion)
 					memorize: chosenMinion
 					text: Choose minion to wound
 				}
@@ -253,7 +253,7 @@
                     }
                     effect: {
                         type: wound
-                        filter: memory(chosenMinion)
+                        select: memory(chosenMinion)
                     }
                 }
             ]
@@ -277,11 +277,11 @@
             phase: fellowship
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: playCardFromDrawDeck
-                filter: choose(name(Farmer Maggot))
+                select: choose(name(Farmer Maggot))
                 showAll: true
                 shuffle: true
             }
@@ -342,11 +342,11 @@
             }
             cost: {
                 type: discard
-                filter: self
+                select: self
             }
             effect: {
                 type: preventWound
-                filter: choose(hobbit)
+                select: choose(hobbit)
             }
         }
     }
@@ -382,7 +382,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: self
+                    select: self
                 }
             }
         ]
@@ -402,7 +402,7 @@
             phase: skirmish
             cost: {
                 type: discard
-                filter: self
+                select: self
             }
             effect: {
                 type: choice
@@ -435,7 +435,7 @@
             cost: [
                 {
                     type: chooseActiveCards
-                    filter: choose(hasAttached(or(name(Sting),name(Glamdring))),canExert)
+                    select: choose(hasAttached(or(name(Sting),name(Glamdring))),canExert)
                     text: Choose Sting or Glamdring bearer to exert
                     memorize: weaponBearer
                 }
@@ -455,7 +455,7 @@
                 }
                 {
                     type: exert
-                    filter: memory(weaponBearer)
+                    select: memory(weaponBearer)
                     times: {
                         type: fromMemory
                         memory: exertCount
@@ -471,7 +471,7 @@
                 effects: [
                     {
                         type: wound
-                        filter: choose(orc)
+                        select: choose(orc)
                         count: {
                             type: fromMemory
                             memory: exertCount
@@ -479,7 +479,7 @@
                     }
                     {
                         type: wound
-                        filter: choose(uruk_hai)
+                        select: choose(uruk_hai)
                         count: {
                             type: fromMemory
                             memory: exertCount
@@ -507,7 +507,7 @@
             phase: fellowship
             effect: {
                 type: play
-                filter: choose(or(name(Gandalf),name(Aragorn)))
+                select: choose(or(name(Gandalf),name(Aragorn)))
                 cost: -2
             }
         }
@@ -523,11 +523,11 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(name(Bilbo))
+                select: choose(name(Bilbo))
             }
             effect: {
                 type: playCardFromDrawDeck
-                filter: choose(hobbit)
+                select: choose(hobbit)
                 showAll: true
                 shuffle: true
             }
@@ -607,12 +607,12 @@
                 phase: maneuver
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                     times: 2
                 }
                 effect: {
                     type: addKeyword
-                    filter: self
+                    select: self
                     keyword: defender
                     amount: 1
                     until: start(Regroup)

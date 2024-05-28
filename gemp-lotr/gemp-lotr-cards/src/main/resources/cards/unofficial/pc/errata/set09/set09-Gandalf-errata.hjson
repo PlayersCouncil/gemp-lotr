@@ -165,22 +165,22 @@
 				phase: skirmish
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: chooseActiveCards
 						text: Choose Wizard to put in dead pile
-						filter: choose(your,wizard,inSkirmish)
+						select: choose(your,wizard,inSkirmish)
 						memorize: chosenWizard
 					}
 					{
 						type: discard
-						filter: all(minion,inSkirmishAgainst(memory(chosenWizard)))
+						select: all(minion,inSkirmishAgainst(memory(chosenWizard)))
 					}
 					{
 						type: kill
-						filter: memory(chosenWizard)
+						select: memory(chosenWizard)
 					}
 				]
 			}
@@ -191,7 +191,7 @@
 				]
 				effect: {
 					type: play
-					filter: choose(wizard)
+					select: choose(wizard)
 					ignoreInDeadPile: true
 				}
 			}

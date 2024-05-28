@@ -21,10 +21,10 @@ import java.util.Collection;
 public class EnableParticipationInArcheryFireAndSkirmishes implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "until", "count", "requires");
+        FieldUtils.validateAllowedFields(effectObject, "select", "until", "count", "requires");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
 
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(effectObject.get("requires"), "requires");
@@ -34,7 +34,7 @@ public class EnableParticipationInArcheryFireAndSkirmishes implements EffectAppe
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, valueSource, "_temp", "you", "Choose cards to make participate in archery fire and skirmishes", environment));
+                CardResolver.resolveCards(select, valueSource, "_temp", "you", "Choose cards to make participate in archery fire and skirmishes", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

@@ -18,10 +18,10 @@ import java.util.Collection;
 public class RemoveCardsInDiscardFromGame implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "player");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "player");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
 
         PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
@@ -29,7 +29,7 @@ public class RemoveCardsInDiscardFromGame implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDiscard(filter, valueSource, "_temp", player, "Choose cards from discard", environment));
+                CardResolver.resolveCardsInDiscard(select, valueSource, "_temp", player, "Choose cards from discard", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

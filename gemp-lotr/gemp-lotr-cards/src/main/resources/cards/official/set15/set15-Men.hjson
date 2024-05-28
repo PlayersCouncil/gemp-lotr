@@ -45,7 +45,7 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        requires: {
@@ -104,17 +104,17 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
                         type: playCardFromDiscard
-                        filter: choose(culture(men),minion)
+                        select: choose(culture(men),minion)
                         memorize: playedMinion
                     }
                     {
                         type: addKeyword
-                        filter: memory(playedMinion)
+                        select: memory(playedMinion)
                         keyword: fierce
                         until: regroup
                     }
@@ -173,7 +173,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(men),man)
+		            select: choose(culture(men),man)
 		            amount: 2
 		        }
 		    }
@@ -192,7 +192,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(men),man)
+		            select: choose(culture(men),man)
 		            amount: 3
 		        }
 		    }
@@ -211,7 +211,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(men),man)
+		            select: choose(culture(men),man)
 		            amount: 4
 		        }
 		    }
@@ -262,17 +262,17 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
                         type: playCardFromDiscard
-                        filter: choose(culture(men),minion)
+                        select: choose(culture(men),minion)
                         memorize: playedMinion
                     }
                     {
                         type: addKeyword
-                        filter: memory(playedMinion)
+                        select: memory(playedMinion)
                         keyword: fierce
                         until: regroup
                     }
@@ -329,7 +329,7 @@
                         type: revealCardsFromAdventureDeck
                         player: free people
                         memorize: revealedCard
-                        filter: random(1)
+                        select: random(1)
                     }
                     {
                         type: memorizeTitle
@@ -400,17 +400,17 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
                         type: playCardFromDiscard
-                        filter: choose(culture(men),minion)
+                        select: choose(culture(men),minion)
                         memorize: playedMinion
                     }
                     {
                         type: addKeyword
-                        filter: memory(playedMinion)
+                        select: memory(playedMinion)
                         keyword: fierce
                         until: regroup
                     }
@@ -671,7 +671,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -823,13 +823,13 @@
 			type: event
 			cost: {
 			    type: wound
-			    filter: choose(culture(men),archer)
+			    select: choose(culture(men),archer)
 			    count: 3
 			}
 			effect: [
 				{
 				    type: exhaust
-				    filter: choose(companion)
+				    select: choose(companion)
 				}
 			]
 		}
@@ -871,11 +871,11 @@
 			cost: [
 			    {
 			        type: exert
-			        filter: choose(your,culture(men),man)
+			        select: choose(your,culture(men),man)
 			    }
 			    {
 			        type: spot
-			        filter: choose(unbound,companion,hasAttachedCount(3,any))
+			        select: choose(unbound,companion,hasAttachedCount(3,any))
 			        memorize: chosenCompanion
 			    }
 			]
@@ -889,11 +889,11 @@
 				    }
 				    effect: {
 				        type: returnToHand
-				        filter: all(side(free people),attachedTo(memory(chosenCompanion)))
+				        select: all(side(free people),attachedTo(memory(chosenCompanion)))
 				    }
 				    instead: {
 				        type: discard
-				        filter: all(side(free people),attachedTo(memory(chosenCompanion)))
+				        select: all(side(free people),attachedTo(memory(chosenCompanion)))
 				    }
 				}
 			]
@@ -941,12 +941,12 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion,not(ringBearer))
+		            select: choose(companion,not(ringBearer))
 		            times: 2
 		        }
 		    }
@@ -1123,7 +1123,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		        }
 		    }
 		]
@@ -1193,7 +1193,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: takeControlOfSite
@@ -1259,12 +1259,12 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(culture(men),man)
+		            select: choose(culture(men),man)
 		            count: 2
 		        }
 		        effect: {
                     type: discard
-                    filter: choose(follower)
+                    select: choose(follower)
 		        }
 		    }
 		]
@@ -1315,14 +1315,14 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(culture(men),man)
+		            select: choose(culture(men),man)
 		            count: 2
 		        }
 		        effect: [
                     {
                         type: revealCardsFromAdventureDeck
                         player: free people
-                        filter: random(1)
+                        select: random(1)
                         memorize: revealedSite
                     }
                     {

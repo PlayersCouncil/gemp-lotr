@@ -33,13 +33,13 @@
 		            {
 		                type: wound
 		                player: free people
-		                filter: choose(side(free people),character)
+		                select: choose(side(free people),character)
 		                count: 2
 		            }
 		            {
 		                type: wound
 		                player: shadow
-		                filter: choose(side(shadow),character)
+		                select: choose(side(shadow),character)
 		                count: 2
 		            }
 		        ]
@@ -130,12 +130,12 @@
 		            {
 		                type: heal
 		                player: free people
-		                filter: all(side(free people),character)
+		                select: all(side(free people),character)
 		            }
 		            {
 		                type: heal
 		                player: shadow
-		                filter: all(side(shadow),character)
+		                select: all(side(shadow),character)
 		            }
 		        ]
 		    }

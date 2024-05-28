@@ -34,7 +34,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: rohan
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -44,18 +44,18 @@
 		            type: removeTokens
 		            count: 3
 		            culture: rohan
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
                         type: modifyStrength
-                        filter: choose(culture(rohan),companion)
+                        select: choose(culture(rohan),companion)
                         amount: 1
                         memorize: chosenCompanion
                     }
                     {
                         type: addKeyword
-                        filter: memory(chosenCompanion)
+                        select: memory(chosenCompanion)
                         keyword: damage
                         amount: 1
                     }
@@ -114,12 +114,12 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: exert
 		            player: shadow
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -163,11 +163,11 @@
 		        text: Play follower from your draw deck
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(follower)
+		            select: choose(follower)
                     showAll: true
                     shuffle: true
 		        }
@@ -178,11 +178,11 @@
 		        text: Discard a follower from player to enhance bearer
 		        cost: {
 		            type: discard
-		            filter: choose(follower)
+		            select: choose(follower)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: bearer
+		            select: bearer
 		            amount: {
 		                type: condition
 		                condition: {
@@ -267,11 +267,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(culture(rohan),man)
+		            select: choose(culture(rohan),man)
 		        }
 		    }
 		]
@@ -316,12 +316,12 @@
 			}
 			cost: {
 			    type: exert
-			    filter: choose(culture(rohan),companion)
+			    select: choose(culture(rohan),companion)
 			}
 			effect: [
 				{
 				    type: returnToHand
-				    filter: choose(minion)
+				    select: choose(minion)
 				}
 			]
 		}
@@ -369,7 +369,7 @@
 		        phase: skirmish
 		        effect: {
 		            type: transfer
-		            filter: choose(culture(rohan),possession)
+		            select: choose(culture(rohan),possession)
 		            where: self
 		        }
 		    }
@@ -413,12 +413,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: choose(follower)
+		            select: choose(follower)
 		        }
 		        effect: [
                     {
                         type: modifyStrength
-                        filter: bearer
+                        select: bearer
                         amount: 4
                     }
                     {
@@ -431,12 +431,12 @@
                             type: costToEffect
                             cost: {
                                 type: spot
-                                filter: choose(not(bearer),companion)
+                                select: choose(not(bearer),companion)
                                 memorize: spottedCompanion
                             }
                             effect: {
                                 type: modifyStrength
-                                filter: memory(spottedCompanion)
+                                select: memory(spottedCompanion)
                                 amount: 4
                                 until: regroup
                             }
@@ -482,7 +482,7 @@
 			type: event
 			cost: {
 			    type: discard
-			    filter: choose(culture(rohan),possession)
+			    select: choose(culture(rohan),possession)
 			}
 			effect: [
 				{
@@ -495,15 +495,15 @@
 				    effects: [
 				        {
 				            type: wound
-				            filter: choose(unwounded,minion)
+				            select: choose(unwounded,minion)
 				        }
 				        {
 				            type: exert
-				            filter: choose(minion)
+				            select: choose(minion)
 				        }
 				        {
 				            type: discard
-				            filter: choose(side(shadow),attachedTo(ringBearer))
+				            select: choose(side(shadow),attachedTo(ringBearer))
 				        }
 				    ]
 				}
@@ -556,18 +556,18 @@
 		        cost: [
 		            {
 		                type: spot
-		                filter: choose(culture(rohan),man,hasAttached(possession))
+		                select: choose(culture(rohan),man,hasAttached(possession))
 		                memorize: spottedMan
 		            }
 		            {
 		                type: discardFromHand
 		                forced: false
-		                filter: choose(culture(rohan),possession)
+		                select: choose(culture(rohan),possession)
 		            }
 		        ]
 		        effect: {
 		            type: modifyStrength
-		            filter: memory(spottedMan)
+		            select: memory(spottedMan)
 		            amount: 2
 		        }
 		    }
@@ -669,7 +669,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession,attachedTo(character))
+		            select: choose(possession,attachedTo(character))
 		        }
 		    }
 		    {
@@ -681,7 +681,7 @@
 		        }
 		        effect: {
 		            type: transfer
-		            filter: choose(culture(rohan),possession,attachedTo(companion))
+		            select: choose(culture(rohan),possession,attachedTo(companion))
 		            where: choose(any)
 		            checkTarget: true
 		        }

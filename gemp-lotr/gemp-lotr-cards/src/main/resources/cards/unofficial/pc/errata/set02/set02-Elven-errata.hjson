@@ -24,14 +24,14 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(Elf,ally)
+				select: choose(Elf,ally)
 				memorize: firstAlly
 			}
 			effect: [
 				{
 					type: Discard
 					count: 1
-					filter: choose(condition)
+					select: choose(condition)
 				}
 				{
 					type: conditional
@@ -54,12 +54,12 @@
 							type: CostToEffect
 							cost: {
 								type: exert
-								filter: choose(Elf,ally,not(memory(firstAlly)))
+								select: choose(Elf,ally,not(memory(firstAlly)))
 							}
 							effect: {
 								type: Discard
 								count: 1
-								filter: choose(condition)
+								select: choose(condition)
 							}
 						}
 					}

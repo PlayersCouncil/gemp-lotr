@@ -36,7 +36,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		    {
@@ -44,11 +44,11 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(other,culture(dwarven),possession)
+		            select: choose(other,culture(dwarven),possession)
 		            count: 2
 		        }
 		    }
@@ -97,7 +97,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: dwarven
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -120,7 +120,7 @@
 		            cost: {
 		                type: removeCardsInDiscardFromGame
 		                player: shadow
-		                filter: choose(culture(orc))
+		                select: choose(culture(orc))
 		            }
 		        }
 		    }
@@ -129,7 +129,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: repeat
@@ -139,7 +139,7 @@
 		            }
 		            effect: {
 		                type: exert
-		                filter: choose(minion)
+		                select: choose(minion)
 		            }
 		        }
 		    }
@@ -199,7 +199,7 @@
 				            }
 				            effect: {
 				                type: exert
-				                filter: choose(minion)
+				                select: choose(minion)
 				            }
 				        }
 				        {
@@ -278,11 +278,11 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(not(event),culture(dwarven))
+		            select: choose(not(event),culture(dwarven))
 		        }
 		    }
 		]
@@ -324,7 +324,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(dwarf)
+				    select: choose(dwarf)
 				    amount: {
 				        type: condition
 				        condition: {

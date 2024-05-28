@@ -105,7 +105,7 @@
 	# 									type: CostToEffect
 	# 									cost: {
 	# 										type: exert
-	# 										filter: choose(your,character,InSkirmish)
+	# 										select: choose(your,character,InSkirmish)
 	# 									}
 	# 									effect: [
 	# 										{
@@ -189,7 +189,7 @@
 										type: CostToEffect
 										cost: {
 											type: exert
-											filter: choose(your,character,InSkirmish)
+											select: choose(your,character,InSkirmish)
 										}
 										effect: [
 											{
@@ -257,11 +257,11 @@
 				effect: [
 					{
 						type: heal
-						filter: all(character,minResistance(5))
+						select: all(character,minResistance(5))
 					}
 					{
 						type: exert
-						filter: all(character,not(minResistance(5)))
+						select: all(character,not(minResistance(5)))
 					}
 				]
 			}

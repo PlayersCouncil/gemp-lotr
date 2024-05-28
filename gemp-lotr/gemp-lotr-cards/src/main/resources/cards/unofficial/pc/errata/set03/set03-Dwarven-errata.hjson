@@ -25,11 +25,11 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 				effect: {
 					type: heal
-					filter: choose(culture(dwarven),ally)
+					select: choose(culture(dwarven),ally)
 				}
 			}
 			{
@@ -41,11 +41,11 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),ally)
+					select: choose(culture(dwarven),ally)
 				}
 				effect: {
 					type: ModifyStrength
-					filter: choose(culture(dwarven),companion,InSkirmishAgainst(minion,minStrength(10)))
+					select: choose(culture(dwarven),companion,InSkirmishAgainst(minion,minStrength(10)))
 					amount: 2
 				}
 			}
@@ -54,11 +54,11 @@
 				phase: regroup
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),ally)
+					select: choose(culture(dwarven),ally)
 				}
 				effect: {
 					type: heal
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 			}
 		]

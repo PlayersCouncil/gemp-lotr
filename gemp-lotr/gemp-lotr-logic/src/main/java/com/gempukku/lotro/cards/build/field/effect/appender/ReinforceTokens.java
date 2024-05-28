@@ -29,11 +29,11 @@ import java.util.Map;
 public class ReinforceTokens implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "culture", "filter", "memorize", "times", "player");
+        FieldUtils.validateAllowedFields(effectObject, "culture", "select", "memorize", "times", "player");
 
         final Culture culture = FieldUtils.getEnum(Culture.class, effectObject.get("culture"), "culture");
         final Token token = Token.findTokenForCulture(culture);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "self");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "self");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("times"), 1, environment);
         String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
@@ -43,7 +43,7 @@ public class ReinforceTokens implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCard(filter, (actionContext) -> tokenFilter,
+                CardResolver.resolveCard(select, (actionContext) -> tokenFilter,
                         memory, player, "Choose card to reinforce tokens on", environment));
         result.addEffectAppender(
                 new DelayedAppender() {

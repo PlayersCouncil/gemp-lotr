@@ -24,7 +24,7 @@
 			cost: [
 				{
 					type: exert
-					filter: choose(culture(gandalf),wizard)
+					select: choose(culture(gandalf),wizard)
 				}
 				{
 					type: discardFromHand
@@ -33,7 +33,7 @@
 			]
 			effect: {
 				type: putCardsFromDiscardIntoHand
-				filter: choose(side(shadow))
+				select: choose(side(shadow))
 			}
 		}
 		gametext: To play, exert a [gandalf] Wizard.<br>Discard a card from hand to take a Shadow card from your discard pile into hand.

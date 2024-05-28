@@ -34,7 +34,7 @@
 			effect: [
 				{
 					type: discard
-					filter: choose(minion)
+					select: choose(minion)
 				}
 			]
 		}
@@ -86,7 +86,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(name(Sméagol)))
+		            select: choose(minion,inSkirmishAgainst(name(Sméagol)))
 		            memorize: chosenMinion
 		            times: {
 		                type: condition
@@ -147,7 +147,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: {
 		                type: condition
 		                condition: {
@@ -197,13 +197,13 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gollum))
+				select: choose(name(Gollum))
 				times: 3
 			},
 			effect: [
 				{
 					type: wound
-					filter: all(companion)
+					select: all(companion)
 				}
 				{
 				    type: addModifier
@@ -303,7 +303,7 @@
 			effect: [
 				{
 					type: heal
-					filter: memory(winner)
+					select: memory(winner)
 				}
 				{
 				    type: removeBurdens
@@ -349,19 +349,19 @@
 			cost: [
                 {
                     type: exert
-                    filter: choose(name(Sméagol))
+                    select: choose(name(Sméagol))
                     times: 3
                     memorize: smeagol
                 }
                 {
                     type: discard
-                    filter: memory(smeagol)
+                    select: memory(smeagol)
                 }
             ]
 			effect: [
 				{
 					type: wound
-					filter: all(minion)
+					select: all(minion)
 				}
 				{
 				    type: addModifier
@@ -379,7 +379,7 @@
 				    effect: {
 				        type: putCardsFromDiscardIntoHand
 				        player: shadow
-				        filter: choose(side(shadow))
+				        select: choose(side(shadow))
 				        count: 0-3
 				    }
 				}
@@ -439,7 +439,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 1
 		        }
 		    }
@@ -492,7 +492,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(companion,inSkirmishAgainst(name(Gollum)))
+		            select: choose(companion,inSkirmishAgainst(name(Gollum)))
 		            memorize: chosenCompanion
 		            times: {
 		                type: condition
@@ -549,75 +549,12 @@
 			effect: [
 				{
 					type: wound
-					filter: choose(companion,not(ringBearer))
+					select: choose(companion,not(ringBearer))
 				}
 			]
 		}
 		gametext: <b>Response:</b> If Gollum wins a skirmish, wound a companion (except the Ring- bearer).
 		lore: No, sweet one. See, my precious: if we has it, then we can escape, even from Him, eh?'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	6_125: {
-		cardInfo: {
-			imagePath: decipher/LOTR06125.jpg
-			javaClass: true
-			//parentId: 6_125
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 6R125
-			rarity: R
-			setNum: "6"
-			cardNum: 125
-			style: Standard
-		}
-		title: Don't Look at Them
-		unique: false
-		side: Free Peoples
-		culture: Gollum
-		twilight: 1
-		type: Condition
-		keywords: Support Area
-		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: name(Sméagol)
-		        }
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            count: 3
-		        }
-		        effect: {
-		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(name(Sméagol)))
-		            memorize: chosenMinion
-		            times: {
-		                type: condition
-		                condition: {
-		                    type: memoryMatches
-		                    memory: chosenMinion
-		                    filter: culture(wraith),minion
-		                }
-		                true: 2
-		                false: 1
-		            }
-		        }
-		    }
-		]
-		gametext: Plays to your support area.<br><b>Skirmish:</b> Spot Sméagol and discard 3 cards from hand to wound a minion Sméagol is skirmishing once (or twice if that minion is a [wraith] minion).
-		lore: There was a faint hiss, a noisome smell went up, the lights flickered and danced and swirled.'
 		promotext: ""
 		alts: {
 			promos: {

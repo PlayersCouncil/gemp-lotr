@@ -31,13 +31,13 @@
 			}
 			cost: {
 			    type: exert
-			    filter: choose(dwarf,damage)
+			    select: choose(dwarf,damage)
 			    memorize: exertedDwarf
 			}
 			effect: [
 				{
 				    type: exert
-				    filter: memory(playedMinion)
+				    select: memory(playedMinion)
 				    times: {
 				        type: forEachKeyword
 				        filter: memory(exertedDwarf)
@@ -110,11 +110,11 @@
 		            effects: [
 		                {
 		                    type: play
-		                    filter: choose(culture(dwarven),condition)
+		                    select: choose(culture(dwarven),condition)
 		                }
 		                {
 		                    type: playCardFromDiscard
-		                    filter: choose(culture(dwarven),condition)
+		                    select: choose(culture(dwarven),condition)
 		                }
 		            ]
 		        }
@@ -175,7 +175,7 @@
 					}
 					effect: {
 					    type: wound
-					    filter: choose(minion,notAssignedToSkirmish)
+					    select: choose(minion,notAssignedToSkirmish)
 					}
 				}
 			]

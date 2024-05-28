@@ -34,7 +34,7 @@
 				cost: {
 					type: ChooseActiveCards
 					count: 0-1
-					filter: choose(ally,allyHome(fellowship,3),wounded)
+					select: choose(ally,allyHome(fellowship,3),wounded)
 					memorize: chosenAlly
 					text: Choose a home 3 ally to heal
 				}
@@ -60,7 +60,7 @@
 							type: FromMemory
 							memory: heals
 						}
-						filter: memory(chosenAlly)
+						select: memory(chosenAlly)
 					}
 					{
 						type: AddTwilight
@@ -77,12 +77,12 @@
 				cost: {
 					type: exert
 					times: 2
-					filter: self
+					select: self
 				}
 				effect: {
 					type: heal
 					count: 1
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			}
 		]
@@ -136,7 +136,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(another,elf)
+					select: choose(another,elf)
 				}
 			}
 			{
@@ -152,7 +152,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: playSite
@@ -200,7 +200,7 @@
 				type: ExtraCost
 				cost: {
 					type: exert
-					filter: choose(Elf)
+					select: choose(Elf)
 				}
 			}
 			{
@@ -257,13 +257,13 @@
 	# 			effect: [
 	# 				{
 	# 					type: ChooseActiveCards
-	# 					filter: choose(condition,side(shadow))
+	# 					select: choose(condition,side(shadow))
 	# 					memorize: chosenShadowCondition
 	# 					text: Choose a Shadow condition to return to its owner's hand.
 	# 				}
 	# 				{
 	# 					type: ReturnToHand
-	# 					filter: memory(chosenShadowCondition)
+	# 					select: memory(chosenShadowCondition)
 	# 				}
 	# 				{
 	# 					type: optional
@@ -329,19 +329,19 @@
 				}
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 					times: 2
 				}
 				effect: [
 					{
 						type: ChooseActiveCards
-						filter: choose(condition,side(shadow))
+						select: choose(condition,side(shadow))
 						memorize: chosenShadowCondition
 						text: Choose a Shadow condition to return to its owner's hand.
 					}
 					{
 						type: ReturnToHand
-						filter: memory(chosenShadowCondition)
+						select: memory(chosenShadowCondition)
 					}
 					{
 						type: optional

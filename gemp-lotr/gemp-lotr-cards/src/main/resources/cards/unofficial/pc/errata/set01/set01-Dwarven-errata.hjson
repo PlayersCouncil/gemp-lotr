@@ -88,7 +88,7 @@
 	# 			effects: [
 	# 				{
 	# 					type: exert
-	# 					filter: choose(your,minion)
+	# 					select: choose(your,minion)
 	# 				}
 	# 				{
 	# 					type: discardBottomCardsFromDeck
@@ -154,7 +154,7 @@
 					effect: [
 						{
 							type: ChooseActiveCards
-							filter: choose(minion)
+							select: choose(minion)
 							memorize: chosenMinion
 							count: 0-1
 							text: Choose a minion to make strength -1 until regroup
@@ -172,7 +172,7 @@
 							effect: {
 								type: ModifyStrength
 								amount: -1
-								filter: memory(chosenMinion)
+								select: memory(chosenMinion)
 								until: start(regroup)
 							}
 						}
@@ -329,7 +329,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(dwarf)
+					select: choose(dwarf)
 				}
 			}
 			{
@@ -347,7 +347,7 @@
 				effect: [
 					{
 						type: chooseCardsFromDiscard
-						filter: choose(culture(dwarven))
+						select: choose(culture(dwarven))
 						memorize: chosenCard
 						count: 0-1
 						text: Choose a Dwarven card from your discard pile to take into hand
@@ -364,7 +364,7 @@
 						}
 						effect: {
 							type: putCardsFromDiscardIntoHand
-							filter: memory(chosenCard)
+							select: memory(chosenCard)
 						}
 					}
 					{
@@ -415,7 +415,7 @@
 			cost: [
 				{
 					type: exert
-					filter: self
+					select: self
 				}
 				{
 					type: discardTopCardsFromDeck
@@ -426,7 +426,7 @@
 			]
 			effect: {
 				type: PutCardsFromDiscardOnTopOfDeck
-				filter: choose(culture(dwarven),event)
+				select: choose(culture(dwarven),event)
 				count: 1
 			}
 		}
@@ -469,7 +469,7 @@
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(side(shadow))
+					select: choose(side(shadow))
 					memorize: chosenCard
 					text: Choose a Shadow card to discard
 				}
@@ -485,7 +485,7 @@
 					}
 					effect: {
 						type: discard
-						filter: memory(chosenCard)
+						select: memory(chosenCard)
 					}
 				}
 			]

@@ -32,7 +32,7 @@
 		        phase: archery
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -96,7 +96,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		    {
@@ -111,7 +111,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(minion,inSkirmishAgainst(bearer))
+		            select: all(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		]
@@ -161,11 +161,11 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: exert
-		                filter: choose(villager)
+		                select: choose(villager)
 		            }
 		        ]
 		        effect: {
@@ -282,7 +282,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(culture(rohan),ally)
+		            select: choose(culture(rohan),ally)
 		        }
 		    }
 		]
@@ -438,7 +438,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(minion)
+		            select: all(minion)
 		        }
 		    }
 		]
@@ -491,7 +491,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: addTwilight
@@ -500,7 +500,7 @@
                 ]
 		        effect: {
 		            type: preventWound
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		        }
 		    }
 		]
@@ -567,7 +567,7 @@
                 }
                 effect: {
                     type: preventWound
-                    filter: self
+                    select: self
                 }
 		    }
 		]
@@ -659,7 +659,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(rohan),man)
+					select: choose(culture(rohan),man)
 					amount: {
 					    type: condition
 					    condition: {
@@ -728,7 +728,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(minion,inSkirmishAgainst(bearer))
+		            select: all(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		]
@@ -769,12 +769,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Théoden))
+				select: choose(name(Théoden))
 			},
 			effect: [
 				{
 					type: addKeyword
-					filter: choose(companion,signet(Théoden))
+					select: choose(companion,signet(Théoden))
 					keyword: defender
 					amount: 1
 					until: regroup
@@ -825,7 +825,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: rohan
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -834,7 +834,7 @@
 		        effect: [
 		            {
 		                type: discard
-		                filter: choose(side(shadow),condition)
+		                select: choose(side(shadow),condition)
 		                count: {
 		                    type: forEachToken
 		                    filter: self
@@ -843,7 +843,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -898,7 +898,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: self
+                    select: self
                 }
             }
             {
@@ -906,11 +906,11 @@
                 phase: fellowship
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: heal
-                    filter: choose(culture(rohan),man)
+                    select: choose(culture(rohan),man)
                 }
             }
 		]
@@ -1114,7 +1114,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: self
+                    select: self
                 }
             }
 		    {
@@ -1122,11 +1122,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(rohan),man)
+		            select: choose(culture(rohan),man)
 		            amount: 2
 		        }
 		    }
@@ -1175,7 +1175,7 @@
 			    }
 				{
 					type: modifyStrength
-					filter: choose(unbound,companion)
+					select: choose(unbound,companion)
 					amount: {
 					    type: fromMemory
 					    memory: spotCount
@@ -1238,7 +1238,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(minion,inSkirmishAgainst(bearer))
+		            select: all(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		]
@@ -1344,7 +1344,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: self
+                    select: self
                 }
             }
             {
@@ -1352,11 +1352,11 @@
                 phase: skirmish
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: modifyStrength
-                    filter: choose(mounted,companion)
+                    select: choose(mounted,companion)
                     amount: 2
                 }
             }
@@ -1407,11 +1407,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(minion,inSkirmishAgainst(unbound,companion))
+		            select: choose(minion,inSkirmishAgainst(unbound,companion))
 		        }
 		    }
 		]
@@ -1462,7 +1462,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(minion,inSkirmishAgainst(bearer))
+		            select: all(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		]
@@ -1564,7 +1564,7 @@
 			effect: [
 				{
 					type: playCardFromDrawDeck
-					filter: choose(culture(rohan),or(character,possession))
+					select: choose(culture(rohan),or(character,possession))
                     showAll: true
                     shuffle: true
 				}
@@ -1614,12 +1614,12 @@
 		            }
 		            {
 		                type: putCardsFromHandOnBottomOfDeck
-		                filter: choose(villager)
+		                select: choose(villager)
 		            }
 		        ]
 		        effect: {
 		            type: heal
-		            filter: choose(ally)
+		            select: choose(ally)
 		        }
 		    }
 		]
@@ -1717,7 +1717,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: liberateSite
@@ -1772,7 +1772,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: memory(playedMinion)
+		            select: memory(playedMinion)
 		        }
 		    }
 		]
@@ -1815,11 +1815,11 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: choose(culture(rohan),man)
+		            select: choose(culture(rohan),man)
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(hand weapon)
+		            select: choose(hand weapon)
 		        }
 		    }
 		]
@@ -1873,7 +1873,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: self
+                    select: self
                 }
             }
 		    {
@@ -1881,11 +1881,11 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(mounted,companion)
+		            select: choose(mounted,companion)
 		        }
 		    }
 		]
@@ -1932,7 +1932,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(villager)
+		            select: choose(villager)
 		        }
 		    }
 		]
@@ -1974,7 +1974,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(rohan),man)
+					select: choose(culture(rohan),man)
 					amount: 2
 					memorize: chosenMan
 				}
@@ -1987,7 +1987,7 @@
 				    }
 				    effect: {
 				        type: addKeyword
-				        filter: memory(chosenMan)
+				        select: memory(chosenMan)
 				        keyword: damage
 				        amount: 2
 				    }
@@ -2038,13 +2038,13 @@
 		        phase: fellowship
 		        cost: {
 		            type: play
-		            filter: choose(culture(rohan),possession)
+		            select: choose(culture(rohan),possession)
 		            on: culture(rohan),companion
 		            memorize: playedCard
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(hasAttached(memory(playedCard)))
+		            select: choose(hasAttached(memory(playedCard)))
 		        }
 		        limitPerTurn: 1
 		    }

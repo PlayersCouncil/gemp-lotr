@@ -14,7 +14,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 			}
 			{
@@ -39,16 +39,16 @@
 				cost: [
 					{
 						type: exert
-						filter: choose(name(Balin))
+						select: choose(name(Balin))
 					}
 					{
 						type: discard
-						filter: choose(culture(dwarven),fortification)
+						select: choose(culture(dwarven),fortification)
 					}
 				]
 				effect: {
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 					times: 2
 				}
 			}
@@ -65,7 +65,7 @@
 			cost: [
 				{
 					type: exert
-					filter: choose(name(Bilbo))
+					select: choose(name(Bilbo))
 				}
 				{
 					type: addBurdens
@@ -74,7 +74,7 @@
 			]
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(culture(dwarven),or(possession,follower))
+				select: choose(culture(dwarven),or(possession,follower))
                 showAll: true
                 shuffle: true
 			}
@@ -99,7 +99,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(name(Balin))
+					select: choose(name(Balin))
 				}
 			}
 			{
@@ -107,11 +107,11 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: choose(name(Balin))
+					select: choose(name(Balin))
 				}
 				effect: {
 					type: putCardsFromDeckIntoHand
-					filter: choose(culture(dwarven),skirmish,event)
+					select: choose(culture(dwarven),skirmish,event)
 					reveal: true
 					shuffle: true
 					showAll: true
@@ -141,7 +141,7 @@
 					}
 					{
 						type: playCardFromDrawDeck
-						filter: choose(name(Balin))
+						select: choose(name(Balin))
                         showAll: true
                         shuffle: true
 					}
@@ -171,7 +171,7 @@
 				effect: {
 					type: addTokens
 					culture: dwarven
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -183,12 +183,12 @@
 				cost: {
 					type: removeTokens
 					culture: dwarven
-					filter: self
+					select: self
 				}
         limitPerPhase: 1
         effect: {
           type: putCardsFromDiscardIntoHand
-          filter: choose(culture(dwarven),event,minTwilight(1),maxTwilight(1))
+          select: choose(culture(dwarven),event,minTwilight(1),maxTwilight(1))
         }
       }
     ]
@@ -245,7 +245,7 @@
       }
       effect: {
         type: transfer
-        filter: choose(culture(dwarven),follower,zone(support))
+        select: choose(culture(dwarven),follower,zone(support))
         where: choose(bearer)
       }
     }
@@ -273,7 +273,7 @@
       }
       cost: {
         type: spot
-        filter: choose(culture(dwarven),follower)
+        select: choose(culture(dwarven),follower)
         memorize: spottedFollower
       }
       effect: [
@@ -286,7 +286,7 @@
         }
         {
           type: discard
-          filter: choose(minion,not(name(Smaug)))
+          select: choose(minion,not(name(Smaug)))
           count: {
             type: range
             from: 0
@@ -335,7 +335,7 @@
         phase: fellowship
         cost: {
           type: discard
-          filter: choose(culture(dwarven),fortification)
+          select: choose(culture(dwarven),fortification)
         }
         effect: {
           type: drawCards
@@ -362,7 +362,7 @@
         }
         effect: {
           type: heal
-          filter: choose(name(Balin))
+          select: choose(name(Balin))
         }
       }
       {
@@ -370,11 +370,11 @@
         phase: skirmish
         cost: {
           type: exert
-          filter: choose(name(Balin))
+          select: choose(name(Balin))
         }
         effect: {
           type: modifyStrength
-          filter: choose(culture(dwarven),companion)
+          select: choose(culture(dwarven),companion)
           amount: {
               type: cardAffectedLimitPerPhase
               limit: 4
@@ -406,7 +406,7 @@
           text: Would you like to play Ori from your draw deck?
           effect: {
             type: playCardFromDrawDeck
-            filter: choose(name(Ori))
+            select: choose(name(Ori))
             showAll: true
             shuffle: true
           }
@@ -417,11 +417,11 @@
         phase: archery
         cost: {
           type: discard
-          filter: choose(name(Ori))
+          select: choose(name(Ori))
         }
         effect: {
           type: modifyStrength
-          filter: choose(minion)
+          select: choose(minion)
           amount: -3
           until: start(regroup)
         }
@@ -446,7 +446,7 @@
         }
         effect: {
           type: kill
-          filter: self
+          select: self
         }
       }
       {
@@ -455,12 +455,12 @@
         cost: {
           type: kill
           count: 2
-          filter: choose(culture(dwarven),companion)
+          select: choose(culture(dwarven),companion)
         }
         effect: {
           type: putCardsFromDeckIntoHand
           count: 3
-          filter: choose(culture(dwarven))
+          select: choose(culture(dwarven))
             reveal: true
             shuffle: true
             showAll: true
@@ -500,7 +500,7 @@
         phase: fellowship
         cost: {
           type: discard
-          filter: self
+          select: self
         }
         effect: {
           type: choice
@@ -511,13 +511,13 @@
           effects: [
             {
               type: playCardFromDrawDeck
-              filter: choose(name(Glamdring))
+              select: choose(name(Glamdring))
                 showAll: true
                 shuffle: true
             }
             {
               type: playCardFromDiscard
-              filter: choose(name(Glamdring))
+              select: choose(name(Glamdring))
             }
           ]
         }
@@ -544,7 +544,7 @@
         }
         effect: {
           type: heal
-          filter: choose(culture(elven),ally)
+          select: choose(culture(elven),ally)
         }
       }
       {
@@ -552,12 +552,12 @@
         phase: fellowship
         cost: {
           type: exert
-          filter: self
+          select: self
           times: 2
         }
         effect: {
           type: putCardsFromDiscardIntoHand
-          filter: choose(or(and(culture(elven),event),name(Lore of Imladris)))
+          select: choose(or(and(culture(elven),event),name(Lore of Imladris)))
         }
       }
     ]
@@ -585,7 +585,7 @@
             }
             effect: {
               type: exert
-              filter: choose(dwarf,companion)
+              select: choose(dwarf,companion)
             }
           }
           {
@@ -606,11 +606,11 @@
         effects: [
           {
             type: putCardsFromDiscardIntoHand
-            filter: choose(or(culture(elven),culture(mirkwood)))
+            select: choose(or(culture(elven),culture(mirkwood)))
           }
           {
             type: putCardsFromDeckIntoHand
-            filter: choose(or(culture(elven),culture(mirkwood)))
+            select: choose(or(culture(elven),culture(mirkwood)))
             reveal: true
             shuffle: true
             showAll: true
@@ -639,11 +639,11 @@
       }
       cost: {
         type: exert
-        filter: self
+        select: self
       }
       effect: {
         type: wound
-        filter: choose(orc)
+        select: choose(orc)
       }
     }
   }
@@ -678,7 +678,7 @@
         }
         effect: {
           type: modifyStrength
-          filter: memory(healedCompanion)
+          select: memory(healedCompanion)
           amount: 2
           until: start(regroup)
         }
@@ -733,11 +733,11 @@
         phase: fellowship
         cost: {
           type: exert
-          filter: self
+          select: self
         }
         effect: {
           type: putCardsFromDiscardIntoHand
-          filter: choose(side(free people),event)
+          select: choose(side(free people),event)
         }
       }
     ]
@@ -773,12 +773,12 @@
           }
           effect: {
             type: wound
-            filter: choose(minion)
+            select: choose(minion)
           }
         }
         {
           type: discard
-          filter: self
+          select: self
         }
       ]
     }
@@ -801,18 +801,18 @@
         effects: [
           {
             type: modifyStrength
-            filter: choose(companion,hasAttached(and(artifact,hand weapon)))
+            select: choose(companion,hasAttached(and(artifact,hand weapon)))
             amount: 3
           }
           {
             type: playCardFromDrawDeck
-            filter: choose(name(Glamdring))
+            select: choose(name(Glamdring))
             showAll: true
             shuffle: true
           }
           {
             type: playCardFromDiscard
-            filter: choose(name(Glamdring))
+            select: choose(name(Glamdring))
           }
         ]
       }
@@ -836,11 +836,11 @@
       }
       cost: {
         type: exert
-        filter: choose(name(Bilbo))
+        select: choose(name(Bilbo))
       }
       effect: {
         type: modifyStrength
-        filter: choose(culture(dwarven),companion)
+        select: choose(culture(dwarven),companion)
         amount: {
           type: cardAffectedLimitPerPhase
           limit: 2
@@ -870,7 +870,7 @@
         }
         effect: {
           type: heal
-          filter: choose(character,or(culture(dwarven),culture(shire)))
+          select: choose(character,or(culture(dwarven),culture(shire)))
         }
       }
       {
@@ -878,11 +878,11 @@
         phase: skirmish
         cost: {
           type: play
-          filter: choose(skirmish,event)
+          select: choose(skirmish,event)
         }
         effect: {
           type: modifyStrength
-          filter: choose(inSkirmishAgainst(name(Bilbo)),not(name(Gollum)))
+          select: choose(inSkirmishAgainst(name(Bilbo)),not(name(Gollum)))
           amount: -2
         }
       }
@@ -908,7 +908,7 @@
       }
       effect: {
         type: playCardFromDiscard
-        filter: choose(culture(dwarven),skirmish,event)
+        select: choose(culture(dwarven),skirmish,event)
       }
       limitPerPhase: 1
     }

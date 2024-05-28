@@ -27,7 +27,7 @@
 				{
 					type: exert
 					count: 1
-					filter: choose(culture(rohan),Man)
+					select: choose(culture(rohan),Man)
 				}
 			]
 			effect: {
@@ -82,7 +82,7 @@
 				}
 				{
 					type: playCardFromDiscard
-					filter: choose(name(Gollum))
+					select: choose(name(Gollum))
 				}
 			]
 			effect: {

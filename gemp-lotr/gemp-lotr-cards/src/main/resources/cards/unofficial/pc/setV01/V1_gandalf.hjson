@@ -13,7 +13,7 @@
             }
 			cost: {
 				type: chooseCardsFromDrawDeck
-				filter: choose(culture(elven),ally)
+				select: choose(culture(elven),ally)
 				memorize: chosenAlly
 				text: Choose an [Elven] ally to reveal from your draw deck.
                 showAll: true
@@ -33,7 +33,7 @@
 					effect: {
 						type: putcardsfromdeckintohand
 						count: 1
-						filter: memory(chosenAlly)
+						select: memory(chosenAlly)
                         reveal: true
                         shuffle: false
                         showAll: false
@@ -69,11 +69,11 @@
 	# 			}
 	# 			cost: {
 	# 				type: exert
-	# 				filter: choose(name(Gandalf))
+	# 				select: choose(name(Gandalf))
 	# 			}
 	# 			effect: {
 	# 				type: shuffleCardsFromDiscardIntoDrawDeck
-	# 				filter: choose(or(culture(gandalf),culture(elven)))
+	# 				select: choose(or(culture(gandalf),culture(elven)))
 	# 			}
 	# 		}
 	# 		{
@@ -155,11 +155,11 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: PutCardsFromDiscardIntoHand
-					filter: choose(event,or(culture(gandalf),culture(elven)))
+					select: choose(event,or(culture(gandalf),culture(elven)))
 				}
 			}			
 			{
@@ -213,7 +213,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(companion,signet(gandalf))
+					select: choose(companion,signet(gandalf))
 				}
 			}
 			{
@@ -221,7 +221,7 @@
 				phase: regroup
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: [
 					{
@@ -238,7 +238,7 @@
 						text: Would you like to take up to 2 Shadow cards into hand from discard?
 						effect: {
 							type: putCardsFromDiscardIntoHand
-							filter: choose(side(shadow))
+							select: choose(side(shadow))
 							count: 2
 						}
 					}
@@ -276,11 +276,11 @@
 				}
 				{
 					type: preventWound
-					filter: choose(minion)
+					select: choose(minion)
 				}
 				{
 					type: heal
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			]
 		}
@@ -353,7 +353,7 @@
 				]
 				cost: {
 					type: exert
-					filter: choose(culture(elven),ally)
+					select: choose(culture(elven),ally)
 					count: 2
 				}
 				effect: {
@@ -369,7 +369,7 @@
 						}
 						{
 							type: heal
-							filter: choose(companion,or(name(Gandalf),signet(gandalf)))
+							select: choose(companion,or(name(Gandalf),signet(gandalf)))
 						}
 					]
 				}

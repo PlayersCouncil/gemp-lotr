@@ -36,7 +36,7 @@
                     type: PutCardsFromDiscardIntoHand
                     player: freeps
                     discard: shadow
-                    filter: choose(minion)
+                    select: choose(minion)
                     count: 1
                     memorize: chosenMinions
                 }
@@ -61,7 +61,7 @@
                             hand: shadowPlayer
                             forced: true
                             player: you
-                            filter: choose(memory(revealedCards),minion)
+                            select: choose(memory(revealedCards),minion)
                         }
                     ]
                 }
@@ -121,7 +121,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
@@ -131,14 +131,14 @@
 		            }
 		            {
 		                type: putCardsFromDeckIntoHand
-		                filter: all(memory(revealedCards),culture(gandalf))
+		                select: all(memory(revealedCards),culture(gandalf))
                         reveal: true
                         shuffle: false
                         showAll: false
 		            }
 		            {
 		                type: discardCardsFromDrawDeck
-		                filter: all(memory(revealedCards),not(culture(gandalf)))
+		                select: all(memory(revealedCards),not(culture(gandalf)))
                         showAll: false
                         shuffle: false
 		            }
@@ -206,14 +206,14 @@
 		            effects: [
 		                {
                             type: playCardFromDrawDeck
-                            filter: choose(culture(gandalf),possession)
+                            select: choose(culture(gandalf),possession)
                             on: self
                             showAll: true
                             shuffle: true
 		                }
 		                {
                             type: playCardFromDiscard
-                            filter: choose(culture(gandalf),possession)
+                            select: choose(culture(gandalf),possession)
                             on: self
 		                }
 		            ]
@@ -228,7 +228,7 @@
 		        }
 		        effect: {
 		            type: reinforceTokens
-		            filter: choose(side(free people))
+		            select: choose(side(free people))
 		        }
 		    }
 		]
@@ -288,11 +288,11 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -334,7 +334,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(gandalf),companion)
+				    select: choose(culture(gandalf),companion)
 				    amount: {
 				        type: forEachYouCanSpot
 				        filter: culture(gandalf),man
@@ -394,7 +394,7 @@
 		        effect: [
                     {
                         type: chooseActiveCards
-                        filter: choose(minion,or(and(not(wizard),canExert),and(wizard,canWound)))
+                        select: choose(minion,or(and(not(wizard),canExert),and(wizard,canWound)))
                         text: Choose a minion to exert (wound if a Wizard)
                         memorize: chosenMinion
                     }
@@ -407,11 +407,11 @@
                         }
                         true: {
                             type: wound
-                            filter: memory(chosenMinion)
+                            select: memory(chosenMinion)
                         }
                         false: {
                             type: exert
-                            filter: memory(chosenMinion)
+                            select: memory(chosenMinion)
                         }
                     }
                 ]
@@ -463,7 +463,7 @@
 		        }
 		        effect: {
 		            type: discardCardsFromDrawDeck
-		            filter: choose(culture(gandalf))
+		            select: choose(culture(gandalf))
                     showAll: true
                     shuffle: true
 		        }
@@ -473,16 +473,16 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: choose(another,pipeweed)
+		            select: choose(another,pipeweed)
 		        }
 		        effect: [
 		            {
 		                type: discard
-		                filter: choose(condition)
+		                select: choose(condition)
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -588,7 +588,7 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: choose(your,wizard)
+		            select: choose(your,wizard)
 		        }
 		        effect: [
 		            {
@@ -618,14 +618,14 @@
     		                }
     		                true: {
     		                    type: putCardsFromDeckIntoHand
-    		                    filter: memory(revealedCards)
+    		                    select: memory(revealedCards)
                                 reveal: true
                                 shuffle: false
                                 showAll: false
     		                }
     		                false: {
     		                    type: discardCardsFromDrawDeck
-    		                    filter: memory(revealedCards)
+    		                    select: memory(revealedCards)
                                 showAll: false
                                 shuffle: false
     		                }
@@ -640,14 +640,14 @@
     		                }
     		                true: {
     		                    type: putCardsFromDeckIntoHand
-    		                    filter: memory(revealedCards)
+    		                    select: memory(revealedCards)
                                 reveal: true
                                 shuffle: false
                                 showAll: false
     		                }
     		                false: {
     		                    type: discardCardsFromDrawDeck
-    		                    filter: memory(revealedCards)
+    		                    select: memory(revealedCards)
                                 showAll: false
                                 shuffle: false
     		                }
@@ -703,7 +703,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: all(other,possession,attachedTo(bearer))
+		            select: all(other,possession,attachedTo(bearer))
 		        }
 		    }
     		{
@@ -763,12 +763,12 @@
 			cost: {
 			    type: discardFromHand
 			    forced: false
-			    filter: choose(companion)
+			    select: choose(companion)
 			}
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(gandalf),companion)
+				    select: choose(culture(gandalf),companion)
 				    amount: {
 				        type: condition
 				        condition: {
@@ -825,11 +825,11 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(ent)
+		            select: choose(ent)
 		            amount: 2
 		        }
 		    }

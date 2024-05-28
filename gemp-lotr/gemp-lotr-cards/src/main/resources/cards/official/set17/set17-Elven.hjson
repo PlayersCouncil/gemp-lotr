@@ -40,11 +40,11 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(another,hunter)
+		            select: choose(another,hunter)
 		        }
 		    }
 		]
@@ -178,7 +178,7 @@
 			effect: [
 				{
 				    type: discard
-				    filter: choose(condition)
+				    select: choose(condition)
 				    count: {
 				        type: condition
 				        condition: {
@@ -235,7 +235,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: elven
-		            filter: self
+		            select: self
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: hunter
@@ -258,17 +258,17 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(condition)
+		            select: choose(condition)
 		        }
 		    }
 		]
@@ -325,7 +325,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: choose(another,culture(elven),hunter)
+                        select: choose(another,culture(elven),hunter)
                     }
                     {
                         type: addThreats
@@ -333,7 +333,7 @@
                 ]
                 effect: {
                     type: wound
-                    filter: choose(minion)
+                    select: choose(minion)
                 }
 		    }
 		]
@@ -406,7 +406,7 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(another,culture(elven),hunter)
+		                select: choose(another,culture(elven),hunter)
 		            }
 		            {
 		                type: addThreats
@@ -414,7 +414,7 @@
 		        ]
 		        effect: {
 		            type: wound
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -477,7 +477,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(elf)
+		            select: choose(elf)
 		        }
 		    }
 		    {
@@ -576,11 +576,11 @@
 				    }
 				    true: {
         				type: wound
-        				filter: choose(minion)
+        				select: choose(minion)
 				    }
 				    false: {
 				        type: exert
-				        filter: choose(minion)
+				        select: choose(minion)
 				        count: 3
 				    }
 				}

@@ -67,7 +67,7 @@
 				}
 				effect: {
 					type: play
-					filter: choose(culture(shire),tale)
+					select: choose(culture(shire),tale)
 				}
 			}
 		]

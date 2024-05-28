@@ -34,7 +34,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: raider
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -43,7 +43,7 @@
 		        effect: [
 		            {
 		                type: heal
-		                filter: choose(culture(raider),archer)
+		                select: choose(culture(raider),archer)
 		                count: {
 		                    type: forEachToken
 		                    culture: raider
@@ -103,7 +103,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
@@ -235,16 +235,16 @@
 		        phase: archery
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: exert
-		                filter: choose(companion,not(ringBearer))
+		                select: choose(companion,not(ringBearer))
 		            }
 		            {
                         type: disableArcheryTotalContribution
-                        filter: self
+                        select: self
 		            }
 		        ]
 		    }
@@ -304,7 +304,7 @@
                 }
                 effect: {
                     type: wound
-                    filter: choose(or(companion,ally),inSkirmishAgainst(self))
+                    select: choose(or(companion,ally),inSkirmishAgainst(self))
                 }
 		    }
 		]
@@ -363,7 +363,7 @@
                 }
                 effect: {
                     type: wound
-                    filter: choose(or(companion,ally),inSkirmishAgainst(self))
+                    select: choose(or(companion,ally),inSkirmishAgainst(self))
                 }
 		    }
 		]
@@ -422,7 +422,7 @@
                 }
                 effect: {
                     type: wound
-                    filter: choose(or(companion,ally),inSkirmishAgainst(self))
+                    select: choose(or(companion,ally),inSkirmishAgainst(self))
                 }
 		    }
 		]
@@ -463,12 +463,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(raider),man)
+				select: choose(culture(raider),man)
 			},
 			effect: [
 				{
 					type: discard
-					filter: choose(side(free),condition)
+					select: choose(side(free),condition)
 					count: {
 					    type: condition
 					    condition: {
@@ -599,7 +599,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(easterling)
+		            select: choose(easterling)
 		            amount: 2
 		        }
 		    }
@@ -617,7 +617,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(easterling)
+		            select: choose(easterling)
 		            amount: 3
 		        }
 		    }
@@ -635,7 +635,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(easterling)
+		            select: choose(easterling)
 		            amount: 4
 		        }
 		    }
@@ -688,7 +688,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addBurdens
@@ -808,7 +808,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addBurdens
@@ -980,7 +980,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(ringBound,companion)
+		            select: all(ringBound,companion)
 		        }
 		    }
 		    {
@@ -989,16 +989,16 @@
 		        cost: [
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: exert
-		                filter: choose(culture(raider),man)
+		                select: choose(culture(raider),man)
 		            }
 		        ]
 		        effect: {
 		            type: exert
-		            filter: choose(ringBound,companion)
+		            select: choose(ringBound,companion)
 		        }
 		    }
 		]
@@ -1048,16 +1048,16 @@
 		        phase: archery
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: exert
-		                filter: choose(companion,not(ringBearer))
+		                select: choose(companion,not(ringBearer))
 		            }
 		            {
                         type: disableArcheryTotalContribution
-                        filter: self
+                        select: self
 		            }
 		        ]
 		    }
@@ -1107,7 +1107,7 @@
 					effects: [
 					    {
 					        type: modifyStrength
-					        filter: choose(southron)
+					        select: choose(southron)
 					        amount: {
 					            type: forEachBurden
 					            limit: 5
@@ -1115,7 +1115,7 @@
 					    }
 					    {
 					        type: modifyStrength
-					        filter: choose(culture(raider),man)
+					        select: choose(culture(raider),man)
 					        amount: 2
 					    }
 					]
@@ -1162,7 +1162,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(southron)
+				select: choose(southron)
 			},
 			effect: [
 				{
@@ -1266,7 +1266,7 @@
 		        effect: {
 		            type: wound
 		            player: fp
-		            filter: choose(ringBound,companion)
+		            select: choose(ringBound,companion)
 		        }
 		    }
 		]
@@ -1359,11 +1359,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(raider),man)
+		            select: choose(culture(raider),man)
 		            amount: 2
 		        }
 		    }
@@ -1463,7 +1463,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(raider),man)
+					select: choose(culture(raider),man)
 					amount: {
 					    type: condition
 					    condition: {
@@ -1513,7 +1513,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(raider),man)
+				select: choose(culture(raider),man)
 			},
 			effect: [
 				{
@@ -1523,7 +1523,7 @@
 					cost: {
 					    type: discard
 					    player: fp
-					    filter: choose(companion,not(ringBearer))
+					    select: choose(companion,not(ringBearer))
 					    count: 2
 					}
 					effect: {
@@ -1575,7 +1575,7 @@
 			effect: [
 				{
 			        type: modifyStrength
-			        filter: choose(culture(raider),man)
+			        select: choose(culture(raider),man)
 			        amount: {
 			            type: condition
 			            condition: {
@@ -1633,13 +1633,13 @@
 		            }
 		            {
 		                type: exert
-		                filter: choose(culture(raider),man)
+		                select: choose(culture(raider),man)
 		            }
 		        ]
 		        effect: {
 		            type: addTokens
 		            culture: raider
-		            filter: self
+		            select: self
 		            count: 1
 		        }
 		    }
@@ -1649,7 +1649,7 @@
 		        cost: {
 		            type: removeTokens
 		            culture: raider
-		            filter: self
+		            select: self
 		            count: 1
 		        }
 		        effect: {
@@ -1695,7 +1695,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(raider),archer)
+				select: choose(culture(raider),archer)
 			},
 			effect: [
 				{
@@ -1758,7 +1758,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
@@ -1876,7 +1876,7 @@
 		        effect: {
 		            type: wound
 		            player: fp
-		            filter: choose(ringBound,companion)
+		            select: choose(ringBound,companion)
 		        }
 		    }
 		]
@@ -1982,16 +1982,16 @@
 		        phase: archery
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: exert
-		                filter: choose(companion,not(ringBearer))
+		                select: choose(companion,not(ringBearer))
 		            }
 		            {
                         type: disableArcheryTotalContribution
-                        filter: self
+                        select: self
 		            }
 		        ]
 		    }
@@ -2058,7 +2058,7 @@
                     cost: {
                         type: discard
                         player: fp
-                        filter: choose(unbound,companion)
+                        select: choose(unbound,companion)
                     }
                     effect: {
                         type: assignFpCharacterToSkirmish
@@ -2113,7 +2113,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: removeTwilight
@@ -2171,7 +2171,7 @@
 		        phase: maneuver
 		        cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 requires: {
                     type: canSpot
@@ -2181,7 +2181,7 @@
                 effect: {
                     type: exert
                     player: fp
-                    filter: choose(companion)
+                    select: choose(companion)
                 }
 		    }
 		]
@@ -2268,7 +2268,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addTwilight
@@ -2366,12 +2366,12 @@
 		            }
 		            {
 		                type: exert
-		                filter: bearer
+		                select: bearer
 		            }
 		        ]
 		        effect: {
 		            type: wound
-		            filter: choose(or(companion,ally),inSkirmishAgainst(bearer))
+		            select: choose(or(companion,ally),inSkirmishAgainst(bearer))
 		        }
 		    }
 		]
@@ -2445,7 +2445,7 @@
 		            cost: {
 		                type: discard
 		                player: shadow
-		                filter: choose(companion,not(ringBearer))
+		                select: choose(companion,not(ringBearer))
 		            }
 		            effect: {
 		                type: assignFpCharacterToSkirmish
@@ -2501,7 +2501,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -2511,7 +2511,7 @@
 		        effect: {
 		            type: exert
 		            player: fp
-		            filter: choose(companion)
+		            select: choose(companion)
 		            count: 2
 		        }
 		    }
@@ -2562,7 +2562,7 @@
 		        phase: assignment
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: [
 		            {
@@ -2631,7 +2631,7 @@
 				{
 					type: chooseActiveCards
 					text: Choose an Easterling to assign to Ring-bearer
-					filter: choose(easterling,assignableToSkirmishAgainst(ringBearer))
+					select: choose(easterling,assignableToSkirmishAgainst(ringBearer))
 					memorize: chosenEasterling
 				}
 				{
@@ -2688,7 +2688,7 @@
 			effect: [
 				{
 					type: wound
-					filter: choose(or(companion,ally),inSkirmishAgainst(culture(raider),man))
+					select: choose(or(companion,ally),inSkirmishAgainst(culture(raider),man))
 				}
 			]
 		}
@@ -2738,7 +2738,7 @@
 		            requiresRanger: true
 		            cost: {
 		                type: wound
-		                filter: choose(companion)
+		                select: choose(companion)
 		            }
 		        }
 		    }
@@ -2747,11 +2747,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(raider),man)
+		            select: choose(culture(raider),man)
 		            amount: 2
 		        }
 		    }

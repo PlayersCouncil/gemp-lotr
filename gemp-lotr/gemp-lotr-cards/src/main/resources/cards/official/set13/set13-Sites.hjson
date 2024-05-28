@@ -242,35 +242,35 @@
 		        effect: [
 		            {
 		                type: heal
-		                filter: choose(companion,culture(dwarven))
+		                select: choose(companion,culture(dwarven))
 		            }
 		            {
 		                type: heal
-		                filter: choose(companion,culture(elven))
+		                select: choose(companion,culture(elven))
 		            }
 		            {
 		                type: heal
-		                filter: choose(companion,culture(gandalf))
+		                select: choose(companion,culture(gandalf))
 		            }
 		            {
 		                type: heal
-		                filter: choose(companion,culture(gollum))
+		                select: choose(companion,culture(gollum))
 		            }
 		            {
 		                type: heal
-		                filter: choose(companion,culture(gondor))
+		                select: choose(companion,culture(gondor))
 		            }
 		            {
 		                type: heal
-		                filter: choose(companion,culture(rohan))
+		                select: choose(companion,culture(rohan))
 		            }
 		            {
 		                type: heal
-		                filter: choose(companion,culture(shire))
+		                select: choose(companion,culture(shire))
 		            }
 		            {
 		                type: heal
-		                filter: choose(companion,culture(esgaroth))
+		                select: choose(companion,culture(esgaroth))
 		            }
 		        ]
 		    }
@@ -465,11 +465,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]

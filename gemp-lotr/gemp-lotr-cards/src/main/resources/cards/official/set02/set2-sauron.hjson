@@ -11,7 +11,7 @@
         cost: [
             {
                 type: exert
-                filter: choose(culture(sauron),orc)
+                select: choose(culture(sauron),orc)
             }
             {
                 type: chooseHowManyBurdensToSpot
@@ -39,7 +39,7 @@
           type: event
           cost: {
             type: exert
-            filter: choose(culture(sauron),orc)
+            select: choose(culture(sauron),orc)
           }
           effect: {
             type: choice
@@ -51,11 +51,11 @@
             [
                 {
                     type: discard
-                    filter: choose(ally)
+                    select: choose(ally)
                 }
                 {
                     type: discard
-                    filter: choose(culture(elven),ally)
+                    select: choose(culture(elven),ally)
                     count: 2
                 }
             ]
@@ -98,11 +98,11 @@
                 effects: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
             }
@@ -127,7 +127,7 @@
         phase: shadow
         cost: {
             type: exert
-            filter: self
+            select: self
         }
         effect: {
             type: addTwilight
@@ -156,7 +156,7 @@
             hand: fp
             player: you
             forced: true
-            filter: all(any)
+            select: all(any)
         }
       }
     }
@@ -220,11 +220,11 @@
         phase: maneuver
         cost: {
             type: exert
-            filter: self
+            select: self
         }
         effect: {
             type: wound
-            filter: choose(ally)
+            select: choose(ally)
         }
       }
     }
@@ -240,7 +240,7 @@
             type: extraCost
             cost: {
                 type: exert
-                filter: choose(culture(sauron),orc)
+                select: choose(culture(sauron),orc)
             }
         }
         {

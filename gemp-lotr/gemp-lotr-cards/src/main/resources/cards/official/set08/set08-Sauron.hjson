@@ -29,11 +29,11 @@
 		        cost: [
                     {
                         type: discard
-                        filter: choose(culture(sauron),minion)
+                        select: choose(culture(sauron),minion)
                     }
                     {
                         type: spot
-                        filter: choose(companion,not(ringBearer),maxVitality(burdenCount))
+                        select: choose(companion,not(ringBearer),maxVitality(burdenCount))
                         memorize: chosenCompanion
                     }
                     {
@@ -46,7 +46,7 @@
                 ]
                 effect: {
                     type: returnToHand
-                    filter: memory(chosenCompanion)
+                    select: memory(chosenCompanion)
                 }
 		    }
 		]
@@ -123,7 +123,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(sauron),engine)
+		            select: choose(culture(sauron),engine)
 		        }
 		    }
 		]
@@ -237,7 +237,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
@@ -254,7 +254,7 @@
 		            }
                     {
                         type: exert
-                        filter: self
+                        select: self
                         times: 2
                     }
                 ]
@@ -313,11 +313,11 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: stackCards
-		                    filter: self
+		                    select: self
 		                    where: choose(controlledSite)
 		                }
 		            ]
@@ -379,7 +379,7 @@
 		        }
 		        effect: {
 		            type: playCardFromStacked
-		            filter: choose(besieger)
+		            select: choose(besieger)
 		            on: controlledSite
 		        }
 		    }
@@ -428,7 +428,7 @@
 		        stackedOn: controlledSite
 		        cost: {
 		            type: discardStackedCards
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addModifier
@@ -483,7 +483,7 @@
 		        phase: archery
 		        cost: {
 		            type: returnToHand
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
@@ -549,7 +549,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
@@ -624,7 +624,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(side(free people),condition)
+		            select: choose(side(free people),condition)
 		        }
 		    }
 		]
@@ -672,12 +672,12 @@
 		        phase: shadow
 		        cost: {
 		            type: play
-		            filter: choose(culture(sauron),minion)
+		            select: choose(culture(sauron),minion)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: sauron
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -699,17 +699,17 @@
                         type: removeTokens
                         culture: sauron
                         count: memory(tokenCount)
-                        filter: self
+                        select: self
                     }
                 ]
                 effect: [
                     {
                         type: discard
-                        filter: choose(side(free people),not(companion),printedTwilightCostFromMemory(tokenCount))
+                        select: choose(side(free people),not(companion),printedTwilightCostFromMemory(tokenCount))
                     }
                     {
                         type: discard
-                        filter: choose(or(and(culture(sauron),minion),self))
+                        select: choose(or(and(culture(sauron),minion),self))
                     }
                 ]
 		    }
@@ -773,7 +773,7 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(sauron))
+		            select: choose(culture(sauron))
 		        }
 		        effect: [
 		            {
@@ -781,7 +781,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -846,19 +846,19 @@
 		        effect: [
                     {
                         type: playCardFromStacked
-                        filter: choose(besieger)
+                        select: choose(besieger)
                         on: controlledSite
                         memorize: playedBesieger
                     }
                     {
                         type: addKeyword
-                        filter: memory(playedBesieger)
+                        select: memory(playedBesieger)
                         keyword: fierce
                         until: regroup
                     }
                     {
                         type: addKeyword
-                        filter: memory(playedBesieger)
+                        select: memory(playedBesieger)
                         keyword: damage
                         amount: 1
                         until: regroup
@@ -909,7 +909,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
@@ -969,7 +969,7 @@
 		        }
 		        effect: {
 		            type: stackCards
-		            filter: choose(your,culture(sauron),minion)
+		            select: choose(your,culture(sauron),minion)
 		            where: choose(controlledSite)
 		        }
 		    }
@@ -981,7 +981,7 @@
 		        }
 		        effect: {
 		            type: playCardFromStacked
-		            filter: choose(culture(sauron),minion)
+		            select: choose(culture(sauron),minion)
 		            on: controlledSite
 		        }
 		    }
@@ -1048,11 +1048,11 @@
 		        phase: regroup
 		        cost: {
                     type: exert
-                    filter: self
+                    select: self
 		        }
 		        effect: {
 		            type: stackCards
-		            filter: choose(your,besieger)
+		            select: choose(your,besieger)
 		            where: choose(controlledSite)
 		        }
 		    }

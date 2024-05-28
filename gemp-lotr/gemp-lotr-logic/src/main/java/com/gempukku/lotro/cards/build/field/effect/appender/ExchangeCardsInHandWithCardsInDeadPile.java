@@ -26,19 +26,19 @@ import java.util.Set;
 public class ExchangeCardsInHandWithCardsInDeadPile implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filterInHand", "filterInDeadPile", "countInHand", "countInDeadPile");
+        FieldUtils.validateAllowedFields(effectObject, "selectInHand", "selectInDeadPile", "countInHand", "countInDeadPile");
 
-        final String filterHand = FieldUtils.getString(effectObject.get("filterInHand"), "filterInHand");
+        final String selectInHand = FieldUtils.getString(effectObject.get("selectInHand"), "selectInHand");
         final ValueSource countHand = ValueResolver.resolveEvaluator(effectObject.get("countInHand"), 1, environment);
-        final String filterDeadPile = FieldUtils.getString(effectObject.get("filterInDeadPile"), "filterInDeadPile");
+        final String selectInDeadPile = FieldUtils.getString(effectObject.get("selectInDeadPile"), "selectInDeadPile");
         final ValueSource countDeadPile = ValueResolver.resolveEvaluator(effectObject.get("countInDeadPile"), 1, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInHand(filterHand, countHand, "_tempHand", "you", "you", "Choose cards to exchange in hand", environment));
+                CardResolver.resolveCardsInHand(selectInHand, countHand, "_tempHand", "you", "you", "Choose cards to exchange in hand", environment));
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeadPile(filterDeadPile, actionContext -> Filters.any, actionContext -> Filters.any,
+                CardResolver.resolveCardsInDeadPile(selectInDeadPile, actionContext -> Filters.any, actionContext -> Filters.any,
                         countDeadPile, "_tempDeadPile", "you", "Choose cards to exchange in dead pile", environment));
         result.addEffectAppender(
                 new DelayedAppender() {

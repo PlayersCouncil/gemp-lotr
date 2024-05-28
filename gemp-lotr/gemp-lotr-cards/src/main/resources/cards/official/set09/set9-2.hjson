@@ -17,12 +17,12 @@
 				phase: shadow
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
 					type: exert
-					filter: choose(ring bearer)
+					select: choose(ring bearer)
 				}
 			}
 			{
@@ -65,12 +65,12 @@
 				phase: regroup
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
 					type: wound
-					filter: choose(ring bearer)
+					select: choose(ring bearer)
 				}
 			}
 		]
@@ -105,7 +105,7 @@
 				effect: [
 					{
 						type: revealCardsFromHand
-						filter: all(any)
+						select: all(any)
 					}
 					{
 						type: repeat
@@ -115,12 +115,12 @@
 						}
 						effect: {
 							type: putCardsFromHandOnBottomOfDeck
-							filter: choose(side(shadow))
+							select: choose(side(shadow))
 						}
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
@@ -155,7 +155,7 @@
 				}
 				effect: {
 					type: kill
-					filter: choose(unbound,companion)
+					select: choose(unbound,companion)
 				}
 			}
 			{
@@ -171,7 +171,7 @@
 				}
 				effect: {
 					type: discard
-					filter: all(minion)
+					select: all(minion)
 				}
 			}
 		]
@@ -212,7 +212,7 @@
 						}
 						{
 							type: wound
-							filter: self
+							select: self
 							times: 2
 						}
 					]
@@ -226,7 +226,7 @@
 				}
 				effect: {
 					type: discard
-					filter: all(minion,inSkirmish)
+					select: all(minion,inSkirmish)
 				}
 			}
 		]
@@ -256,7 +256,7 @@
 				phase: fellowship
 				cost: {
 					type: play
-					filter: choose(artifact)
+					select: choose(artifact)
 					on: self
 				}
 				effect: {
@@ -273,7 +273,7 @@
 				phase: regroup
 				cost: {
 					type: discard
-					filter: choose(culture(gondor),artifact)
+					select: choose(culture(gondor),artifact)
 				}
 				effect: {
 					type: liberateSite
@@ -318,7 +318,7 @@
 						{
 							type: exert
 							count: 3
-							filter: choose(companion)
+							select: choose(companion)
 						}
 					]
 				}
@@ -369,11 +369,11 @@
 				cost: {
 					type: exert
 					count: 2
-					filter: choose(culture(gondor),man)
+					select: choose(culture(gondor),man)
 				}
 				effect: {
 					type: preventWound
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
@@ -400,11 +400,11 @@
                 }
                 cost: {
                     type: discard
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: preventWound
-                    filter: choose(culture(gondor),man)
+                    select: choose(culture(gondor),man)
                 }
             }
         ]
@@ -444,11 +444,11 @@
 				phase: fellowship
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(ring)
+					select: choose(ring)
 				}
 			}
 		]
@@ -503,11 +503,11 @@
 					effects: [
 						{
 							type: exert
-							filter: choose(culture(gondor),man)
+							select: choose(culture(gondor),man)
 						}
 						{
 							type: discard
-							filter: self
+							select: self
 						}
 					]
 				}
@@ -515,7 +515,7 @@
 					{
 						type: discardFromHand
 						forced: false
-						filter: all(any)
+						select: all(any)
 					}
 					{
 						type: drawCards
@@ -578,7 +578,7 @@
 						}
 						{
 							type: discard
-							filter: self
+							select: self
 						}
 					]
 				}
@@ -614,7 +614,7 @@
 				phase: shadow
 				cost: {
 					type: play
-					filter: choose(culture(isengard),minion)
+					select: choose(culture(isengard),minion)
 				}
 				effect: {
 					type: stackTopCardsOfDrawDeck
@@ -630,13 +630,13 @@
 					}
 					{
 						type: discardStackedCards
-						filter: choose(side(free people))
+						select: choose(side(free people))
 						on: self
 					}
 				]
 				effect: {
 					type: modifyStrength
-					filter: choose(culture(isengard),minion)
+					select: choose(culture(isengard),minion)
 					amount: 1
 				}
 			}
@@ -648,7 +648,7 @@
 				}
 				effect: {
 					type: putStackedCardsIntoHand
-					filter: choose(culture(isengard))
+					select: choose(culture(isengard))
 					on: self
 				}
 			}
@@ -671,7 +671,7 @@
 				{
 					type: chooseActiveCards
 					text: Choose minion to give strength bonus and fierce
-					filter: choose(memory(winners),culture(isengard),minion)
+					select: choose(memory(winners),culture(isengard),minion)
 					memorize: chosenMinion
 				}
 				{
@@ -718,7 +718,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),not(event,response))
+				select: choose(culture(moria),not(event,response))
 			}
 		}
 	}
@@ -741,7 +741,7 @@
 				}
 				effect: {
 					type: wound
-					filter: choose(unwounded,companion)
+					select: choose(unwounded,companion)
 				}
 			}
 			{
@@ -751,7 +751,7 @@
 				}
 				effect: {
 					type: returnToHand
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
@@ -771,12 +771,12 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 					times: 2
 				}
 				effect: {
 					type: addKeyword
-					filter: choose(culture(wraith),minion)
+					select: choose(culture(wraith),minion)
 					keyword: damage+1
 				}
 			}
@@ -787,7 +787,7 @@
 				}
 				effect: {
 					type: returnToHand
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
@@ -810,7 +810,7 @@
 				}
 				effect: {
 					type: heal
-					filter: all(nazgul)
+					select: all(nazgul)
 				}
 			}
 			{
@@ -820,7 +820,7 @@
 				}
 				effect: {
 					type: returnToHand
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
@@ -851,11 +851,11 @@
 				}
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: {
 					type: discard
-					filter: all(minion,memory(involvedCharacters))
+					select: all(minion,memory(involvedCharacters))
 				}
 			}
 		]
@@ -872,12 +872,12 @@
 			phase: assignment
 			cost: {
 				type: exert
-				filter: choose(culture(gondor),man)
+				select: choose(culture(gondor),man)
 			}
 			effect: [
 				{
 					type: play
-					filter: choose(culture(rohan),man)
+					select: choose(culture(rohan),man)
 					memorize: playedRohanMan
 				}
 				{
@@ -887,18 +887,18 @@
 						type: costToEffect
 						cost: {
 							type: exert
-							filter: memory(playedRohanMan)
+							select: memory(playedRohanMan)
 						}
 						effect: {
 							type: play
-							filter: choose(possession)
+							select: choose(possession)
 							on: memory(playedRohanMan)
 						}
 					}
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 		}
@@ -915,7 +915,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(or(culture(wraith),culture(sauron)),minion)
+					select: choose(or(culture(wraith),culture(sauron)),minion)
 				}
 			}
 			{
@@ -934,11 +934,11 @@
 				phase: shadow
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: play
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 					cost: -3
 				}
 			}
@@ -1039,7 +1039,7 @@
 				}
 				effect: {
 					type: play
-					filter: choose(culture(shire),tale)
+					select: choose(culture(shire),tale)
 				}
 			}
 		]
@@ -1071,11 +1071,11 @@
 				effect: [
 					{
 						type: AlterOverwhelmMultiplier
-						filter: choose(unbound,hobbit)
+						select: choose(unbound,hobbit)
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
@@ -1100,7 +1100,7 @@
 				}
 				effect: {
 					type: heal
-					filter: all(or(name(Goldberry),name(Tom Bombadil)))
+					select: all(or(name(Goldberry),name(Tom Bombadil)))
 				}
 			}
 			{
@@ -1112,11 +1112,11 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(companion)
+					select: choose(companion)
 					amount: 1
 				}
 			}
@@ -1163,7 +1163,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: {
 						type: currentSiteNumber
 					}

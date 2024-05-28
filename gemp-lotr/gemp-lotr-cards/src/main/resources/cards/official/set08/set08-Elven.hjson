@@ -52,7 +52,7 @@
 			effect: [
 				{
 				    type: heal
-				    filter: choose(unbound,companion)
+				    select: choose(unbound,companion)
 				    count: {
 				        type: fromMemory
 				        memory: x
@@ -164,7 +164,7 @@
 			}
 			cost: {
 				type: discard
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: [
 				{
@@ -211,7 +211,7 @@
 			cost: [
 			    {
 			        type: exert
-			        filter: choose(elf,companion)
+			        select: choose(elf,companion)
 			    }
                 {
                     type: chooseANumber
@@ -236,7 +236,7 @@
 			effect: [
 				{
 				    type: wound
-				    filter: choose(minion)
+				    select: choose(minion)
 				    times: {
 				        type: fromMemory
 				        memory: x
@@ -292,17 +292,17 @@
 		        cost: [
                     {
                         type: exert
-                        filter: choose(elf,companion)
+                        select: choose(elf,companion)
                     }
                     {
                         type: exert
-                        filter: choose(or(culture(gandalf),culture(dwarven)),companion)
+                        select: choose(or(culture(gandalf),culture(dwarven)),companion)
                     }
 		        ]
 		        effect: {
 		            type: addTokens
 		            culture: elven
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -311,7 +311,7 @@
 		        cost: {
 		            type: removeTokens
 		            culture: elven
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyArcheryTotal

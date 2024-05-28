@@ -20,15 +20,15 @@ import java.util.List;
 public class TransferToSupport implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "memorizeBearer");
+        FieldUtils.validateAllowedFields(effectObject, "select", "memorizeBearer");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         String bearerMemory = FieldUtils.getString(effectObject.get("memorizeBearer"), "memorizeBearer");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCard(filter, "_temp1", "you", "Choose card to transfer", environment));
+                CardResolver.resolveCard(select, "_temp1", "you", "Choose card to transfer", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

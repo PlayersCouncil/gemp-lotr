@@ -80,7 +80,7 @@
             }
             effect: {
                 type: addKeyword
-                filter: choose(culture(moria),minion)
+                select: choose(culture(moria),minion)
                 keyword: damage
                 amount: 1
             }
@@ -107,7 +107,7 @@
             ]
             effect: {
                 type: wound
-                filter: choose(archer)
+                select: choose(archer)
             }
         }
     }
@@ -130,12 +130,12 @@
                 player: fp
                 cost: {
                     type: discard
-                    filter: choose(side(free),possession)
+                    select: choose(side(free),possession)
                     count: 2
                 }
                 effect: {
                     type: wound
-                    filter: choose(name(Boromir))
+                    select: choose(name(Boromir))
                     times: 3
                 }
             }

@@ -39,7 +39,7 @@
 				}
 				{
 				    type: modifyStrength
-				    filter: choose(elf)
+				    select: choose(elf)
 				    amount: {
 				        type: fromMemory
 				        memory: cardCount
@@ -53,7 +53,7 @@
 				}
 				{
 				    type: putCardsFromDeckOnBottomOfDeck
-				    filter: memory(topCards)
+				    select: memory(topCards)
                     reveal: true
 				}
 			]
@@ -112,11 +112,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: putCardsFromDiscardOnTopOfDeck
-		            filter: choose(culture(elven))
+		            select: choose(culture(elven))
 		        }
 		    }
 		]
@@ -165,11 +165,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(condition)
+		            select: choose(condition)
 		        }
 		    }
 		]
@@ -322,11 +322,11 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -385,7 +385,7 @@
 		                }
 		                effect: {
 		                    type: addKeyword
-		                    filter: self
+		                    select: self
 		                    keyword: archer
 		                    until: regroup
 		                }
@@ -438,7 +438,7 @@
 			effect: [
 				{
 				    type: discard
-				    filter: choose(condition)
+				    select: choose(condition)
 				}
 			]
 		}
@@ -485,7 +485,7 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(elven),character)
+		            select: choose(culture(elven),character)
 		        }
 		        effect: {
 		            type: modifyArcheryTotal
@@ -501,7 +501,7 @@
 		        }
 		        effect: {
 		            type: returnToHand
-		            filter: choose(elf)
+		            select: choose(elf)
 		        }
 		    }
 		]

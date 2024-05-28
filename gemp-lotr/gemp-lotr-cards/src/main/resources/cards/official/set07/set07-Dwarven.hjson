@@ -27,7 +27,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					amount: {
 					    type: condition
 					    condition: {
@@ -147,7 +147,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -157,17 +157,17 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: heal
-		                filter: choose(dwarf)
+		                select: choose(dwarf)
 		                times: 2
 		            }
 		            {
 		                type: putCardsFromDiscardIntoHand
-		                filter: choose(culture(dwarven),skirmish,event)
+		                select: choose(culture(dwarven),skirmish,event)
 		            }
 		        ]
 		    }
@@ -281,18 +281,18 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(dwarf)
+		                    select: choose(dwarf)
 		                }
 		                {
 		                    type: discardFromHand
 		                    forced: false
-		                    filter: choose(culture(dwarven))
+		                    select: choose(culture(dwarven))
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: preventDiscard
-		            filter: choose(culture(dwarven),condition)
+		            select: choose(culture(dwarven),condition)
 		        }
 		    }
 		]
@@ -348,7 +348,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: all(name(Gimli))
+		            select: all(name(Gimli))
 		        }
 		    }
 		]
@@ -491,13 +491,13 @@
 		        effect: [
 		            {
 		                type: modifyStrength
-		                filter: choose(dwarf)
+		                select: choose(dwarf)
 		                amount: 2
 		                memorize: chosenDwarf
 		            }
 		            {
 		                type: addKeyword
-		                filter: memory(chosenDwarf)
+		                select: memory(chosenDwarf)
 		                keyword: damage
 		                amount: {
 		                    type: forEachStacked
@@ -508,7 +508,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -551,7 +551,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					amount: 2
 					memorize: chosenDwarf
 				}
@@ -568,7 +568,7 @@
                             type: costToEffect
                             cost: {
                                 type: exert
-                                filter: memory(chosenDwarf)
+                                select: memory(chosenDwarf)
                             }
                             effect: {
                                 type: drawCards
@@ -618,7 +618,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(dwarf)
+		            select: choose(dwarf)
 		        }
 		        effect: {
 		            type: stackCardsFromDiscard
@@ -631,7 +631,7 @@
 		        effect: [
 		            {
 		                type: wound
-		                filter: choose(minion,inSkirmishAgainst(dwarf))
+		                select: choose(minion,inSkirmishAgainst(dwarf))
 		                times: {
 		                    type: forEachStacked
 		                    on: self
@@ -640,7 +640,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -698,7 +698,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: drawCards
@@ -762,12 +762,12 @@
                 }
                 cost: {
                     type: discardStackedCards
-                    filter: self
+                    select: self
                     on: culture(dwarven),condition
                 }
                 effect: {
                     type: exert
-                    filter: choose(minion)
+                    select: choose(minion)
                     times: 2
                 }
             }

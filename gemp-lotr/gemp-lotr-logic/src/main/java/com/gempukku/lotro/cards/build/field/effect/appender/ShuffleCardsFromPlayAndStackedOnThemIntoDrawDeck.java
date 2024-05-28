@@ -21,11 +21,11 @@ import java.util.Set;
 public class ShuffleCardsFromPlayAndStackedOnThemIntoDrawDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "filter", "count", "memorize", "memorizeStackedCards");
+        FieldUtils.validateAllowedFields(effectObject, "player", "select", "count", "memorize", "memorizeStackedCards");
 
         String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String memorizeStackedCards = FieldUtils.getString(effectObject.get("memorizeStackedCards"), "memorizeStackedCards");
@@ -33,7 +33,7 @@ public class ShuffleCardsFromPlayAndStackedOnThemIntoDrawDeck implements EffectA
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, valueSource, memorize, player, "Choose cards to shuffle into your deck", environment));
+                CardResolver.resolveCards(select, valueSource, memorize, player, "Choose cards to shuffle into your deck", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

@@ -22,7 +22,7 @@
 			type: event
 			effect: {
 				type: addKeyword
-				filter: choose(uruk-hai)
+				select: choose(uruk-hai)
 				keyword: fierce
 				until: start(regroup)
 			}
@@ -66,7 +66,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(isengard),minion)
+					select: choose(culture(isengard),minion)
 				}
 			}
 			{
@@ -93,7 +93,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -147,7 +147,7 @@
 	# 			effects: [
 	# 				{
 	# 					type: modifyStrength
-	# 					filter: choose(uruk-hai)
+	# 					select: choose(uruk-hai)
 	# 					amount: 2
 	# 				}
 	# 				{
@@ -160,13 +160,13 @@
 	# 					effect: [
 	# 						{
 	# 							type: modifyStrength
-	# 							filter: choose(uruk-hai)
+	# 							select: choose(uruk-hai)
 	# 							amount: 3
 	# 							memorize: chosenUrukHai
 	# 						}
 	# 						{
 	# 							type: addKeyword
-	# 							filter: memory(chosenUrukHai)
+	# 							select: memory(chosenUrukHai)
 	# 							keyword: fierce
 	# 							until: start(regroup)
 	# 						}
@@ -218,7 +218,7 @@
 				effects: [
 					{
 						type: modifyStrength
-						filter: choose(uruk-hai)
+						select: choose(uruk-hai)
 						amount: 2
 					}
 					{
@@ -231,19 +231,19 @@
 						effect: [
 							{
 								type: modifyStrength
-								filter: choose(uruk-hai)
+								select: choose(uruk-hai)
 								amount: 2
 								memorize: chosenUrukHai
 							}
 							{
 								type: modifyStrength
-								filter: memory(chosenUrukHai)
+								select: memory(chosenUrukHai)
 								amount: 2
 								until: start(regroup)
 							}
 							{
 								type: addKeyword
-								filter: memory(chosenUrukHai)
+								select: memory(chosenUrukHai)
 								keyword: fierce
 								until: start(regroup)
 							}
@@ -302,7 +302,7 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(companion)
+						select: choose(companion)
 					}
 					{
 						type: discardTopCardsFromDeck
@@ -357,7 +357,7 @@
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(companion)
+					select: choose(companion)
 					memorize: chosenComp
 					text: Choose a companion to exert
 				}
@@ -373,7 +373,7 @@
 					text: Would you like to discard the top 2 cards of your deck to prevent the exertion of {chosenComp}?
 					effect: {
 						type: exert
-						filter: memory(chosenComp)
+						select: memory(chosenComp)
 					}
 				}
 			]
@@ -426,7 +426,7 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(companion)
+						select: choose(companion)
 					}
 					{
 						type: discardTopCardsFromDeck

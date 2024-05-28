@@ -23,11 +23,11 @@
                 phase: maneuver
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: discard
-                    filter: choose(condition,or(culture(isengard),culture(moria)))
+                    select: choose(condition,or(culture(isengard),culture(moria)))
                 }
             }
         ]
@@ -48,11 +48,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: putCardsFromDiscardIntoHand
-				filter: choose(culture(gandalf),event)
+				select: choose(culture(gandalf),event)
 			}
 		}
 	}
@@ -193,7 +193,7 @@
 						}
 						effect: {
 							type: StackCardsFromHand
-							filter: choose(side(free people),or(artifact,possession))
+							select: choose(side(free people),or(artifact,possession))
 							where: self
 						}
 					}
@@ -209,7 +209,7 @@
 						}
 						cost: {
 							type: ChooseCardsFromSingleStack
-							filter: choose(playable)
+							select: choose(playable)
 							count: 1
 							on: self
 							memorize: chosenCard
@@ -217,7 +217,7 @@
 						}
 						effect: {
 							type: PlayCardFromStacked
-							filter: memory(chosenCard)
+							select: memory(chosenCard)
 							on: self
 							assumePlayable: true
 						}
@@ -240,7 +240,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -283,7 +283,7 @@
 				]
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: [
 					{
@@ -324,7 +324,7 @@
 			}
 			effect: {
 				type: preventWound
-				filter: choose(companion)
+				select: choose(companion)
 			}
 		}
 	}
@@ -338,7 +338,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(companion)
+				select: choose(companion)
 				count: any
 				memorize: exertedCompanions
 			}
@@ -364,7 +364,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 				amount: {
 					type: requires
 					requires: {
@@ -425,7 +425,7 @@
                 phase: fellowship
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: [
                     {
@@ -475,14 +475,14 @@
 				{
 					type: PutCardsFromDeckIntoHand
 					count: 2
-					filter: choose(memory(cardsOnTop))
+					select: choose(memory(cardsOnTop))
 					reveal: true
 					shuffle: false
 					showAll: false
 				}
 				{
 					type: DiscardCardsFromDrawDeck
-					filter: all(memory(cardsOnTop),zone(deck))
+					select: all(memory(cardsOnTop),zone(deck))
                     showAll: false
                     shuffle: false
 				}
@@ -519,14 +519,14 @@
 				{
 					type: PutCardsFromDeckIntoHand
 					count: 1
-					filter: choose(memory(cardsOnTop))
+					select: choose(memory(cardsOnTop))
 					reveal: true
 					shuffle: false
 					showAll: false
 				}
 				{
 					type: DiscardCardsFromDrawDeck
-					filter: all(memory(cardsOnTop),zone(deck))
+					select: all(memory(cardsOnTop),zone(deck))
                     showAll: false
                     shuffle: false
 				}
@@ -550,7 +550,7 @@
             }
 			effect: {
 				type: modifyStrength
-				filter: choose(minion)
+				select: choose(minion)
 				amount: -3
 			}
 		}
@@ -568,11 +568,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			}
 			effect: {
 				type: discard
-				filter: all(condition)
+				select: all(condition)
 			}
 		}
 	}
@@ -597,7 +597,7 @@
 			}
 			effect: {
 				type: placeNoWoundForExert
-				filter: choose(companion)
+				select: choose(companion)
 			}
 		}
 	}
@@ -632,7 +632,7 @@
 			type: event
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(culture(gandalf),character)
+				select: choose(culture(gandalf),character)
                 showAll: true
                 shuffle: true
 			}
@@ -655,11 +655,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: play
-				filter: choose(companion,signet(Gandalf))
+				select: choose(companion,signet(Gandalf))
 				cost: -2
 			}
 		}

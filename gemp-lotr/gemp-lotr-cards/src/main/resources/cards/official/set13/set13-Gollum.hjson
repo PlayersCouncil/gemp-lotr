@@ -86,7 +86,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(minion)
+                        select: choose(minion)
                         amount: 2
                     }
                 ]
@@ -155,12 +155,12 @@
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
                 effect: {
                     type: playCardFromDrawDeck
-                    filter: choose(or(artifact,possession))
+                    select: choose(or(artifact,possession))
                     on: memory(bearer)
                     showAll: true
                     shuffle: true
@@ -220,7 +220,7 @@
 				            forced: false
 				            hand: shadow
 				            player: shadow
-				            filter: choose(side(shadow))
+				            select: choose(side(shadow))
 				        }
 				        {
 				            type: removeTwilight
@@ -291,7 +291,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(name(Sméagol))
+		            select: choose(name(Sméagol))
 		            amount: 2
 		        }
 		    }
@@ -346,7 +346,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: gollum
-		            filter: self
+		            select: self
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: culture(gollum)
@@ -365,11 +365,11 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
-		                    filter: self
+		                    select: self
 		                    culture: gollum
 		                    count: 2
 		                }
@@ -377,7 +377,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromPlayOnTopOfDeck
-		            filter: choose(side(shadow),condition)
+		            select: choose(side(shadow),condition)
 		        }
 		    }
 		]
@@ -447,11 +447,11 @@
 		        phase: shadow
 		        cost: {
 		            type: removeCardsInDiscardFromGame
-		            filter: choose(name(Déagol))
+		            select: choose(name(Déagol))
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -493,7 +493,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(name(Gollum))
+				    select: choose(name(Gollum))
 				    amount: {
 				        type: condition
 				        condition: {
@@ -604,7 +604,7 @@
                                 }
                                 effect: {
                                     type: wound
-                                    filter: choose(companion)
+                                    select: choose(companion)
                                 }
                             }
                             {
@@ -615,7 +615,7 @@
                                 }
                                 effect: {
                                     type: exert
-                                    filter: choose(companion)
+                                    select: choose(companion)
                                 }
                             }
                             {
@@ -626,7 +626,7 @@
                                 }
                                 effect: {
                                     type: playCardFromDiscard
-                                    filter: choose(culture(gollum),minion)
+                                    select: choose(culture(gollum),minion)
                                 }
                             }
                         ]
@@ -673,16 +673,16 @@
                 phase: skirmish
                 cost: {
                     type: removeCardsInDiscardFromGame
-                    filter: choose(other,culture(elven))
+                    select: choose(other,culture(elven))
                     count: 4
                 }
                 effect:
                 {
                    type: playCardFromDiscard
-                   filter: self
+                   select: self
                    extraEffects: {
                        type: removeFromTheGame
-                       filter: self
+                       select: self
                    }
                 }
 		    }
@@ -695,7 +695,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(ringBound,companion)
+                        select: choose(ringBound,companion)
                         amount: 3
                     }
                 ]
@@ -749,14 +749,14 @@
 			        }
 			        {
 			            type: exert
-			            filter: choose(name(Gollum))
+			            select: choose(name(Gollum))
 			        }
 			    ]
 			}
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(name(Sméagol))
+				    select: choose(name(Sméagol))
 				    amount: 2
 				}
 				{
@@ -846,7 +846,7 @@
 		        }
 		        effect: {
 		            type: discardCardsFromDrawDeck
-		            filter: choose(culture(gollum))
+		            select: choose(culture(gollum))
                     showAll: true
                     shuffle: true
 		        }
@@ -895,13 +895,13 @@
                 cost: {
                     type: discardFromHand
                     forced: false
-                    filter: choose(culture(gollum))
+                    select: choose(culture(gollum))
                     count: 2
                 }
                 effect: [
                     {
                         type: returnToHand
-                        filter: choose(minion,maxStrength(6))
+                        select: choose(minion,maxStrength(6))
                     }
                 ]
             }
@@ -952,7 +952,7 @@
 			cost: [
                 {
                     type: discard
-                    filter: choose(name(Gollum))
+                    select: choose(name(Gollum))
                 }
             ]
 			effect: [
@@ -966,7 +966,7 @@
 			            type: costToEffect
 			            cost: {
 			                type: heal
-                            filter: choose(ringBearer)
+                            select: choose(ringBearer)
 			            }
 			            effect: {
 			                type: addBurdens
@@ -985,7 +985,7 @@
                                 type: costToEffect
                                 cost: {
                                     type: heal
-                                    filter: choose(ringBearer)
+                                    select: choose(ringBearer)
                                 }
                                 effect: {
                                     type: addBurdens
@@ -1050,7 +1050,7 @@
 				        {
 				            type: exert
 				            player: free people
-				            filter: choose(companion)
+				            select: choose(companion)
 				        }
 				    ]
 				}

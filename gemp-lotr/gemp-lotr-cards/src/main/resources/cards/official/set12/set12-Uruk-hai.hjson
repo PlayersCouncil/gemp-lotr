@@ -41,7 +41,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -244,7 +244,7 @@
 			effect: [
 				{
 				    type: discard
-				    filter: choose(possession,attachedTo(companion,maxResistance(4)))
+				    select: choose(possession,attachedTo(companion,maxResistance(4)))
 				}
 			]
 		}
@@ -286,7 +286,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(uruk-hai),minion)
+				    select: choose(culture(uruk-hai),minion)
 				    amount: 2
 				}
 				{
@@ -354,11 +354,11 @@
 		        }
 		        cost: {
                     type: exert
-                    filter: self
+                    select: self
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession,attachedTo(memory(loser)))
+		            select: choose(possession,attachedTo(memory(loser)))
 		        }
 		    }
 		]
@@ -405,11 +405,11 @@
 		        cost: [
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: exert
-		                filter: choose(culture(uruk-hai),lurker)
+		                select: choose(culture(uruk-hai),lurker)
 		            }
 		        ]
 		        effect: {
@@ -468,7 +468,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromPlayOnBottomOfDeck
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -510,7 +510,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(uruk-hai),minion)
+				    select: choose(culture(uruk-hai),minion)
 				    memorize: chosenMinion
 				    amount: {
 				        type: forEachYouCanSpot
@@ -573,11 +573,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(uruk-hai),minion)
+		            select: choose(culture(uruk-hai),minion)
 		            amount: 2
 		        }
 		    }
@@ -590,7 +590,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -647,7 +647,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: assignFpCharacterToSkirmish
@@ -715,7 +715,7 @@
 				        {
 				            type: discardFromHand
 				            forced: false
-				            filter: choose(culture(uruk-hai),minion)
+				            select: choose(culture(uruk-hai),minion)
 				        }
 				    ]
 				}
@@ -837,7 +837,7 @@
                 ]
                 effect: {
                     type: discard
-                    filter: all(condition,zone(support))
+                    select: all(condition,zone(support))
                 }
 		    }
 		]
@@ -905,7 +905,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -1063,7 +1063,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
@@ -1073,7 +1073,7 @@
 		            }
                     {
                         type: modifyStrength
-                        filter: self
+                        select: self
                         amount: {
                             type: fromMemory
                             memory: spotCount
@@ -1317,11 +1317,11 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: spot
-		                filter: choose(companion)
+		                select: choose(companion)
 		                memorize: spottedCompanion
 		            }
 		        ]
@@ -1532,7 +1532,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(culture(uruk-hai),minion)
+		            select: choose(culture(uruk-hai),minion)
 		            keyword: muster
 		            until: end(regroup)
 		        }

@@ -27,7 +27,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: self
+                    select: self
                 }
             }
         ]
@@ -47,7 +47,7 @@
             cost: [
                 {
                     type: discard
-                    filter: choose(pipeweed,possession)
+                    select: choose(pipeweed,possession)
                 }
                 {
                     type: chooseHowManyToSpot
@@ -57,7 +57,7 @@
             ]
             effect: {
                 type: heal
-                filter: choose(companion,signet(Frodo))
+                select: choose(companion,signet(Frodo))
                 times: {
                     type: fromMemory
                     memory: pipeCount
@@ -79,11 +79,11 @@
             phase: skirmish
             cost: {
                 type: exert
-                filter: bearer
+                select: bearer
             }
             effect: {
                 type: wound
-                filter: choose(orc,inSkirmishAgainst(bearer))
+                select: choose(orc,inSkirmishAgainst(bearer))
             }
         }
     }
@@ -138,7 +138,7 @@
             }
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: preventBurden
@@ -168,7 +168,7 @@
             }
             effect: {
                 type: discard
-                filter: choose(or(minion,and(side(shadow),condition)))
+                select: choose(or(minion,and(side(shadow),condition)))
             }
         }
     }
@@ -192,7 +192,7 @@
             }
             effect: {
                 type: removeKeyword
-                filter: choose(minion)
+                select: choose(minion)
                 keyword: damage
             }
         }
@@ -223,7 +223,7 @@
                 }
                 effect: {
                     type: heal
-                    filter: choose(companion)
+                    select: choose(companion)
                 }
             }
         ]
@@ -247,7 +247,7 @@
             }
             cost: {
                 type: exert
-                filter: choose(hobbit,ally)
+                select: choose(hobbit,ally)
             }
             effect: {
                 type: preventTwilight

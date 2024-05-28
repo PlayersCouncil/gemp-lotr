@@ -18,17 +18,17 @@ import org.json.simple.JSONObject;
 public class ExchangeSite implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter1", "filter2");
+        FieldUtils.validateAllowedFields(effectObject, "selector1", "selector2");
 
-        final String filter1 = FieldUtils.getString(effectObject.get("filter1"), "filter1");
-        final String filter2 = FieldUtils.getString(effectObject.get("filter2"), "filter2");
+        final String selector1 = FieldUtils.getString(effectObject.get("selector1"), "selector1");
+        final String selector2 = FieldUtils.getString(effectObject.get("selector2"), "selector2");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCard(filter1, "_temp1", "you", "Choose a site to exchange", environment));
+                CardResolver.resolveCard(selector1, "_temp1", "you", "Choose a site to exchange", environment));
         result.addEffectAppender(
-                CardResolver.resolveCard(filter2, "_temp2", "you", "Choose a site to exchange", environment));
+                CardResolver.resolveCard(selector2, "_temp2", "you", "Choose a site to exchange", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

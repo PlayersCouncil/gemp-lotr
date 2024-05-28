@@ -30,11 +30,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: putCardsFromDiscardIntoHand
-				filter: choose(spell)
+				select: choose(spell)
 			}
 		}
 		gametext: <b>Fellowship:</b> Exert Barliman Butterbur to take a spell into hand from your discard pile.
@@ -87,7 +87,7 @@
                 cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: discardFromHand
@@ -135,7 +135,7 @@
 			type: event
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(or(wizard,and(culture(gandalf),ally)))
+				select: choose(or(wizard,and(culture(gandalf),ally)))
                 showAll: true
                 shuffle: true
 			}

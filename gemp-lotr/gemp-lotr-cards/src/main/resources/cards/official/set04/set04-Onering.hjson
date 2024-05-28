@@ -50,7 +50,7 @@
                 effect: [
                     {
                         type: negateWound
-                        filter: bearer
+                        select: bearer
                     }
                     {
                         type: addBurdens
@@ -121,7 +121,7 @@
 				effect: [
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: all(bearer)
 					}
 					{
 						type: addBurdens
@@ -149,7 +149,7 @@
 					}
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: all(bearer)
 					}
 					{
 						type: addBurdens

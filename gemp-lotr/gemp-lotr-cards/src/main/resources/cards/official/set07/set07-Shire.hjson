@@ -103,7 +103,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -193,7 +193,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 2
 		        }
 		    }
@@ -246,17 +246,17 @@
 		        }
 		        cost: {
 		            type: returnToHand
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
                         type: playCardFromDiscard
-                        filter: choose(culture(rohan),possession)
+                        select: choose(culture(rohan),possession)
                         optional: true
                     }
                     {
                         type: playCardFromDiscard
-                        filter: choose(culture(rohan),possession)
+                        select: choose(culture(rohan),possession)
                         optional: true
                     }
                 ]
@@ -299,12 +299,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(companion,not(hobbit))
+				select: choose(companion,not(hobbit))
 			},
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(hobbit)
+					select: choose(hobbit)
 					amount: 3
 				}
 			]
@@ -411,11 +411,11 @@
 		        }
 		        cost: {
 		            type: returnToHand
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(roaming,minion)
+		            select: choose(roaming,minion)
 		            times: 2
 		        }
 		    }
@@ -479,7 +479,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -489,7 +489,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: playNextSite
@@ -541,7 +541,7 @@
 		        phase: fellowship
 		        cost: {
 		            type: play
-		            filter: choose(hobbit,companion)
+		            select: choose(hobbit,companion)
 		        }
 		        effect: {
 		            type: removeBurdens
@@ -611,7 +611,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: self
+		            select: self
 		        }
 		    }
 			{
@@ -678,12 +678,12 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: discard
-		                filter: choose(minion)
+		                select: choose(minion)
 		            }
                     {
                         type: removeBurdens

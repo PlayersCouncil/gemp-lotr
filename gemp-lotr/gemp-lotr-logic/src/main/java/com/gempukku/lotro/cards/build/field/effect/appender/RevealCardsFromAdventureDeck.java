@@ -20,11 +20,11 @@ import java.util.Collection;
 public class RevealCardsFromAdventureDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "memorize", "player");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize", "player");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
-        if (filter == null)
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
+        if (select == null)
             throw new InvalidCardDefinitionException("Filter is required");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
@@ -33,7 +33,7 @@ public class RevealCardsFromAdventureDeck implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInAdventureDeck(filter, null, countSource, memorize, player, environment));
+                CardResolver.resolveCardsInAdventureDeck(select, null, countSource, memorize, player, environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

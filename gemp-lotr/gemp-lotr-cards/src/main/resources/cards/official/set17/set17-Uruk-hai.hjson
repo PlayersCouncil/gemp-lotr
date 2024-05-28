@@ -98,7 +98,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: uruk-hai
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -111,11 +111,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: uruk-hai
-		            filter: choose(any)
+		            select: choose(any)
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
@@ -157,7 +157,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(urukHai)
+				    select: choose(urukHai)
 				    amount: {
 				        type: condition
 				        condition: {
@@ -180,12 +180,12 @@
 				        effect: [
                             {
                                 type: modifyStrength
-                                filter: memory(chosenUrukHai)
+                                select: memory(chosenUrukHai)
                                 amount: 2
                             }
                             {
                                 type: addKeyword
-                                filter: memory(chosenUrukHai)
+                                select: memory(chosenUrukHai)
                                 keyword: damage
                                 amount: 1
                             }
@@ -244,7 +244,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(culture(uruk-hai),minion,not(memory(winner)))
+		            select: choose(culture(uruk-hai),minion,not(memory(winner)))
 		        }
 		    }
 		    {
@@ -252,12 +252,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
 		            type: removeKeyword
-		            filter: choose(companion)
+		            select: choose(companion)
 		            keyword: hunter
 		            until: regroup
 		        }
@@ -317,11 +317,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(condition,attachedTo(companion,inSkirmishAgainst(culture(uruk-hai),minion)))
+		            select: choose(condition,attachedTo(companion,inSkirmishAgainst(culture(uruk-hai),minion)))
 		        }
 		    }
 		]
@@ -413,12 +413,12 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(uruk-hai))
+		            select: choose(culture(uruk-hai))
 		            count: 2
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(uruk-hai),hunter)
+		            select: choose(culture(uruk-hai),hunter)
 		        }
 		    }
 		    {
@@ -426,11 +426,11 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: returnToHand
-		            filter: choose(culture(uruk-hai),hunter)
+		            select: choose(culture(uruk-hai),hunter)
 		        }
 		    }
 		]
@@ -847,11 +847,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(uruk-hai),minion)
+		            select: choose(culture(uruk-hai),minion)
 		            amount: 2
 		        }
 		    }
@@ -963,7 +963,7 @@
 		            }
 		            effect: {
 		                type: exert
-		                filter: choose(companion)
+		                select: choose(companion)
 		            }
 		        }
 		    }
@@ -1116,7 +1116,7 @@
 		        effect: {
 		            type: exert
 		            player: ownerFromMemory(playedEvent)
-		            filter: choose(not(hunter),character)
+		            select: choose(not(hunter),character)
 		            count: 0-1
 		        }
 		    }
@@ -1351,7 +1351,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(uruk-hai),event)
+		            select: choose(culture(uruk-hai),event)
 		        }
 		    }
 		]
@@ -1405,7 +1405,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(hunter)
+		            select: choose(hunter)
 		        }
 		    }
 		]
@@ -1447,7 +1447,7 @@
 			effect: [
 				{
 				    type: discard
-				    filter: choose(condition)
+				    select: choose(condition)
 				    count: {
 				        type: forEachYouCanSpot
 				        filter: culture(uruk-hai),minion
@@ -1502,7 +1502,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		        }
 		    }
 		    {
@@ -1513,7 +1513,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(culture(uruk-hai),minion)
+		            select: choose(culture(uruk-hai),minion)
 		            keyword: damage
 		            amount: 1
 		        }

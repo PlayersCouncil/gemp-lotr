@@ -138,7 +138,7 @@
 		        phase: archery
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyArcheryTotal
@@ -239,7 +239,7 @@
 			effect: [
 				{
 				    type: heal
-				    filter: all(companion,minResistance(5))
+				    select: all(companion,minResistance(5))
 				}
 			]
 		}
@@ -281,7 +281,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(elf)
+				    select: choose(elf)
 				    amount: {
 				        type: condition
 				        condition: {
@@ -408,7 +408,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -465,7 +465,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: bearer
+		            select: bearer
 		        }
 		        limitPerPhase: 1
 		    }
@@ -507,7 +507,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(elf)
+			    select: choose(elf)
 			},
 			effect: [
 				{
@@ -523,7 +523,7 @@
 				    }
 				    effect: {
 				        type: modifyStrength
-				        filter: choose(minion)
+				        select: choose(minion)
 				        amount: -3
 				    }
 				}
@@ -566,12 +566,12 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(elf,minResistance(4))
+			    select: choose(elf,minResistance(4))
 			},
 			effect: [
 				{
 				    type: wound
-				    filter: choose(minion)
+				    select: choose(minion)
 				}
 			]
 		}
@@ -622,7 +622,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: elven
-		            filter: self
+		            select: self
 		            count: 3
 		        }
 		    }
@@ -638,12 +638,12 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: elven
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -657,7 +657,7 @@
 		                text: Would you like to place {revealedCard} beneath your draw deck?
 		                effect: {
 		                    type: putCardsFromDeckOnBottomOfDeck
-		                    filter: memory(revealedCard)
+		                    select: memory(revealedCard)
                             reveal: true
 		                }
 		            }

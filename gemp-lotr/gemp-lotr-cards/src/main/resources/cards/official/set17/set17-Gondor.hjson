@@ -45,7 +45,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: choice
@@ -59,7 +59,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: choose(condition,attachedTo(companion))
+		                    select: choose(condition,attachedTo(companion))
 		                }
 		            ]
 		        }
@@ -137,11 +137,11 @@
 		        }
 		        cost: {
 		            type: wound
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(minion,inSkirmishAgainst(culture(gondor),man))
+		            select: choose(minion,inSkirmishAgainst(culture(gondor),man))
 		            keyword: roaming
 		            until: endOfTurn
 		        }
@@ -204,12 +204,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		            times: 2
 		        }
 		        effect: {
 		            type: exhaust
-		            filter: choose(minion,inSkirmishAgainst(name(Faramir)))
+		            select: choose(minion,inSkirmishAgainst(name(Faramir)))
 		        }
 		    }
 		]
@@ -272,12 +272,12 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: choose(ranger)
+		            select: choose(ranger)
 		            count: 2
 		        }
 		        effect: {
 		            type: modifySiteNumber
-		            filter: choose(minion)
+		            select: choose(minion)
 		            amount: 2
 		            until: regroup
 		        }
@@ -338,11 +338,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(side(shadow),possession)
+		            select: choose(side(shadow),possession)
 		        }
 		    }
 		]
@@ -395,7 +395,7 @@
 			effect: [
 				{
 				    type: discard
-				    filter: choose(side(shadow),possession)
+				    select: choose(side(shadow),possession)
 				}
 			]
 		}
@@ -459,7 +459,7 @@
                 phase: maneuver
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 requires: {
                     type: canSpot
@@ -467,7 +467,7 @@
                 }
                 effect: {
                     type: addKeyword
-                    filter: self
+                    select: self
                     keyword: defender
                     amount: 1
                     until: regroup
@@ -528,7 +528,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -591,20 +591,20 @@
 		                }
 		                {
 		                    type: exert
-		                    filter: choose(culture(gondor),man)
+		                    select: choose(culture(gondor),man)
 		                }
 		            ]
 		        }
 		        effect: [
                     {
                         type: transfer
-                        filter: self
+                        select: self
                         where: choose(minion)
                         memorizeTarget: chosenMinion
                     }
                     {
                         type: wound
-                        filter: memory(chosenMinion)
+                        select: memory(chosenMinion)
                     }
                 ]
 		    }
@@ -613,7 +613,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(ranger)
+		            select: choose(ranger)
 		        }
 		        effect: {
 		            type: reinforceTokens
@@ -700,7 +700,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession)
+		            select: choose(possession)
 		        }
 		    }
 		]

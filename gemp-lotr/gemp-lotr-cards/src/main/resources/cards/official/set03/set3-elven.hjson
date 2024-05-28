@@ -26,7 +26,7 @@
             }
             effect: {
                 type: preventWound
-                filter: choose(ringBearer)
+                select: choose(ringBearer)
             }
         }
     }
@@ -73,7 +73,7 @@
             phase: skirmish
             cost: {
                 type: exert
-                filter: choose(culture(elven),ally)
+                select: choose(culture(elven),ally)
             }
             effect: [
                 {
@@ -90,7 +90,7 @@
                     }
                     effect: {
                         type: modifyStrength
-                        filter: choose(minion,inSkirmishAgainst(elf))
+                        select: choose(minion,inSkirmishAgainst(elf))
                         amount: -1
                     }
                 }
@@ -119,11 +119,11 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: wound
-                filter: choose(minion)
+                select: choose(minion)
             }
         }
     }
@@ -180,7 +180,7 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: removeTwilight
@@ -210,7 +210,7 @@
                 }
                 effect: {
                     type: heal
-                    filter: choose(ally,allyHome(Fellowship,3))
+                    select: choose(ally,allyHome(Fellowship,3))
                     times: 2
                 }
             }
@@ -219,12 +219,12 @@
                 phase: regroup
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                     times: 2
                 }
                 effect: {
                     type: heal
-                    filter: choose(companion)
+                    select: choose(companion)
                 }
             }
         ]
@@ -257,11 +257,11 @@
                 }
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: preventWound
-                    filter: choose(elf)
+                    select: choose(elf)
                 }
             }
         ]
@@ -286,7 +286,7 @@
             }
             effect: {
                 type: wound
-                filter: choose(minion)
+                select: choose(minion)
             }
         }
     }
@@ -308,7 +308,7 @@
                 }
                 {
                     type: heal
-                    filter: choose(culture(elven),ally)
+                    select: choose(culture(elven),ally)
                     count: {
                         type: twilightCostInMemory
                         memory: revealedCard
@@ -350,7 +350,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(elf)
+					select: choose(elf)
 				}
 			}
 			{
@@ -358,7 +358,7 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 1
 				}
 				effect: {
@@ -403,11 +403,11 @@
                 phase: regroup
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: returnToHand
-                    filter: choose(minion)
+                    select: choose(minion)
                 }
             }
         ]
@@ -440,7 +440,7 @@
                     effects: [
                         {
                             type: exert
-                            filter: bearer
+                            select: bearer
                         }
                         {
                             type: discardFromHand
@@ -451,7 +451,7 @@
                 }
                 effect: {
                     type: modifyStrength
-                    filter: choose(minion,inSkirmishAgainst(bearer))
+                    select: choose(minion,inSkirmishAgainst(bearer))
                     amount: -1
                 }
             }
@@ -483,11 +483,11 @@
                 phase: skirmish
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: modifyStrength
-                    filter: choose(orc)
+                    select: choose(orc)
                     amount: -1
                 }
             }
@@ -541,7 +541,7 @@
             }
             effect: {
                 type: heal
-                filter: choose(or(companion,ally))
+                select: choose(or(companion,ally))
             }
         }
     }
@@ -590,7 +590,7 @@
                 type: extraCost
                 cost: {
                     type: exert
-                    filter: choose(elf)
+                    select: choose(elf)
                 }
             }
             {
@@ -629,11 +629,11 @@
                 phase: skirmish
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: modifyStrength
-                    filter: choose(urukHai)
+                    select: choose(urukHai)
                     amount: -1
                 }
             }
@@ -654,11 +654,11 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(elf)
+                select: choose(elf)
             }
             effect: {
                 type: discard
-                filter: choose(culture(isengard),or(possession,artifact))
+                select: choose(culture(isengard),or(possession,artifact))
             }
         }
     }
@@ -677,12 +677,12 @@
             phase: maneuver
             cost: {
                 type: exert
-                filter: bearer
+                select: bearer
                 times: 2
             }
             effect: {
                 type: returnToHand
-                filter: choose(shadow,condition)
+                select: choose(shadow,condition)
             }
         }
     }
@@ -705,7 +705,7 @@
             }
             cost: {
                 type: exert
-                filter: choose(elf)
+                select: choose(elf)
                 memorize: exertedElf
             }
             effect: {

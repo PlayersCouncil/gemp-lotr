@@ -42,7 +42,7 @@
             phase: fellowship
             cost: {
                 type: exert
-                filter: choose(name(Gimli))
+                select: choose(name(Gimli))
             }
             effect: {
                 type: addModifier
@@ -69,7 +69,7 @@
             }
             effect: {
                 type: heal
-                filter: choose(dwarf,companion)
+                select: choose(dwarf,companion)
             }
         }
     }
@@ -85,11 +85,11 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: choose(dwarf, ally)
+                select: choose(dwarf, ally)
             }
             effect: {
                 type: heal
-                filter: choose(dwarf,companion)
+                select: choose(dwarf,companion)
             }
         }
     }
@@ -109,7 +109,7 @@
                 type: extraCost
                 cost: {
                     type: exert
-                    filter: choose(dwarf)
+                    select: choose(dwarf)
                 }
             }
             {
@@ -125,11 +125,11 @@
                 phase: fellowship
                 cost: {
                     type: discard
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: discard
-                    filter: choose(culture(moria),condition)
+                    select: choose(culture(moria),condition)
                     count: 0-2
                 }
             }
@@ -148,12 +148,12 @@
                 {
                     type: revealCardsFromHand
                     hand: shadow
-                    filter: random(1)
+                    select: random(1)
                     memorize: revealedCard
                 }
                 {
                     type: shuffleCardsFromDiscardIntoDrawDeck
-                    filter: choose(culture(dwarven))
+                    select: choose(culture(dwarven))
                     count: {
                         type: range
                         from: 0

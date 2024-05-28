@@ -31,13 +31,13 @@
 			effect: [
 				{
 				    type: play
-				    filter: choose(nazgul)
+				    select: choose(nazgul)
 				    cost: -2
 				    memorize: playedNazgul
 				}
 				{
 				    type: addKeyword
-				    filter: memory(playedNazgul)
+				    select: memory(playedNazgul)
 				    keyword: hunter
 				    amount: 2
 				    until: regroup
@@ -94,12 +94,12 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(nazgul)
+		                    select: choose(nazgul)
 		                    count: 2
 		                }
 		                {
 		                    type: exert
-		                    filter: choose(nazgul)
+		                    select: choose(nazgul)
 		                    times: 2
 		                }
 		            ]
@@ -121,7 +121,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		            removedTwilight: 4
 		        }
 		    }
@@ -171,7 +171,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		        }
 		    }
 		]
@@ -352,12 +352,12 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(companion,hasAttached(culture(wraith),condition))
+		            select: choose(companion,hasAttached(culture(wraith),condition))
 		        }
 		    }
 		]

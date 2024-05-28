@@ -51,7 +51,7 @@
 					effects: [
 						{
 							type: wound
-							filter: choose(companion)
+							select: choose(companion)
 						}
 						{
 							type: discardTopCardsFromDeck
@@ -155,7 +155,7 @@
 			effect: [
 				{
 					type: ChooseCardsFromDrawDeck
-					filter: choose(minion)
+					select: choose(minion)
 					count: 1
 					memorize: chosenCard
 					showAll: true
@@ -172,7 +172,7 @@
 					text: Discard the top 6 cards of your draw deck to prevent your opponent taking {chosenCard} into hand
 					effect: {
 						type: PutCardsFromDeckIntoHand
-						filter: memory(chosenCard)
+						select: memory(chosenCard)
                         reveal: true
                         shuffle: false
                         showAll: false

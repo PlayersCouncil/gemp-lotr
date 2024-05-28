@@ -20,10 +20,10 @@ import java.util.List;
 public class ChooseCardsFromSingleStack implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "on", "memorize", "text");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "on", "memorize", "text");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String on = FieldUtils.getString(effectObject.get("on"), "on", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
         if (memorize == null)
@@ -34,6 +34,6 @@ public class ChooseCardsFromSingleStack implements EffectAppenderProducer {
 
         final FilterableSource onFilterSource = environment.getFilterFactory().generateFilter(on, environment);
 
-        return CardResolver.resolveSingleStack(filter, valueSource, onFilterSource, memorize, "you", text, environment);
+        return CardResolver.resolveSingleStack(select, valueSource, onFilterSource, memorize, "you", text, environment);
     }
 }

@@ -81,19 +81,19 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		            times: 2
 		        }
 		        effect: [
 		            {
 		                type: play
-		                filter: choose(or(culture(wraith),culture(sauron)),minion)
+		                select: choose(or(culture(wraith),culture(sauron)),minion)
 		                cost: -8
 		                memorize: playedMinion
 		            }
 		            {
 		                type: exhaust
-		                filter: memory(playedMinion)
+		                select: memory(playedMinion)
 		            }
 		        ]
 		    }
@@ -147,7 +147,7 @@
 		        effect: {
 		            type: discard
 		            player: fp
-		            filter: choose(side(free),or(possession,condition))
+		            select: choose(side(free),or(possession,condition))
 		        }
 		    }
 		]
@@ -195,7 +195,7 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: discardFromHand
@@ -205,7 +205,7 @@
 		        ]
 		        effect: {
 		            type: returnToHand
-		            filter: choose(companion,not(ringBearer))
+		            select: choose(companion,not(ringBearer))
 		        }
 		    }
 		]
@@ -260,7 +260,7 @@
 		        effect: {
 		            type: exert
 		            player: fp
-		            filter: choose(ringBound,companion)
+		            select: choose(ringBound,companion)
 		            count: {
 		                type: forEachFPCulture
 		                over: 2
@@ -324,7 +324,7 @@
 		                {
 		                    type: exert
 		                    player: fp
-		                    filter: choose(companion)
+		                    select: choose(companion)
 		                }
 		                {
 		                    type: addBurdens
@@ -373,12 +373,12 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(nazgul)
+		            select: choose(nazgul)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: wraith
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -388,7 +388,7 @@
 		            type: removeTokens
 		            culture: wraith
 		            count: 3
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addTwilight
@@ -460,12 +460,12 @@
 		            effects: [
 		                {
 		                    type: wound
-		                    filter: choose(ally)
+		                    select: choose(ally)
 		                    times: 2
 		                }
 		                {
 		                    type: exert
-		                    filter: choose(companion)
+		                    select: choose(companion)
 		                }
 		            ]
 		        }

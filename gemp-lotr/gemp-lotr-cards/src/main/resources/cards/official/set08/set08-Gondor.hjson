@@ -26,7 +26,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(name(Aragorn))
+			    select: choose(name(Aragorn))
 			},
 			effect: [
 				{
@@ -35,7 +35,7 @@
 				}
 				{
 				    type: modifyStrength
-				    filter: choose(unbound,companion,signet(aragorn))
+				    select: choose(unbound,companion,signet(aragorn))
 				    amount: {
 				        type: fromMemory
 				        memory: spotCount
@@ -104,7 +104,7 @@
 		                hand: shadow
 		                player: shadow
 		                forced: true
-		                filter: choose(side(shadow),printedTwilightCostFromMemory(revealedCard))
+		                select: choose(side(shadow),printedTwilightCostFromMemory(revealedCard))
 		            }
 		        ]
 		    }
@@ -157,7 +157,7 @@
 			cost: [
                 {
                     type: discard
-                    filter: choose(memory(killedCharacters),culture(gondor),wraith)
+                    select: choose(memory(killedCharacters),culture(gondor),wraith)
                 }
                 {
                     type: choice
@@ -168,7 +168,7 @@
                     effects: [
                         {
                             type: exhaust
-                            filter: choose(culture(gondor),wraith)
+                            select: choose(culture(gondor),wraith)
                         }
                         {
                             type: spot
@@ -240,7 +240,7 @@
                     }
                     {
                         type: playCardFromDrawDeck
-                        filter: choose(memory(revealedCards),knight)
+                        select: choose(memory(revealedCards),knight)
                         showAll: false
                         shuffle: true
                     }
@@ -297,7 +297,7 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(culture(gondor),man)
+		                    select: choose(culture(gondor),man)
 		                    count: 2
 		                }
 		                {
@@ -310,14 +310,14 @@
 		        effect: [
                     {
                         type: transfer
-                        filter: self
+                        select: self
                         fromSupport: true
                         where: choose(minion,inSkirmishAgainst(culture(gondor),man))
                         memorizeTarget: chosenMinion
                     }
                     {
                         type: exhaust
-                        filter: memory(chosenMinion)
+                        select: memory(chosenMinion)
                     }
                 ]
 		    }
@@ -440,7 +440,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(minion)
+		            select: choose(minion)
 		            count: 2
 		        }
 		    }
@@ -511,11 +511,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(name(Aragorn))
+		            select: choose(name(Aragorn))
 		        }
 		    }
 		]
@@ -566,7 +566,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -615,7 +615,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,notAssignedToSkirmish)
+		            select: choose(minion,notAssignedToSkirmish)
 		        }
 		    }
 		]
@@ -674,7 +674,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
+		            select: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
 		        }
 		    }
 		]
@@ -718,17 +718,17 @@
 		        cost: [
                     {
                         type: exert
-                        filter: choose(culture(gondor),man)
+                        select: choose(culture(gondor),man)
                     }
                     {
                         type: exert
-                        filter: choose(or(culture(dwarven),culture(rohan)),companion)
+                        select: choose(or(culture(dwarven),culture(rohan)),companion)
                     }
                 ]
                 effect: {
                     type: addTokens
                     culture: gondor
-                    filter: self
+                    select: self
                 }
 		    }
 		    {
@@ -737,11 +737,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: gondor
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -851,11 +851,11 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(culture(gondor),man)
+		            select: choose(culture(gondor),man)
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(gondor),fortification)
+		            select: choose(culture(gondor),fortification)
 		        }
 		        limitPerPhase: 1
 		    }
@@ -914,11 +914,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -968,7 +968,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		]
@@ -1075,7 +1075,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }

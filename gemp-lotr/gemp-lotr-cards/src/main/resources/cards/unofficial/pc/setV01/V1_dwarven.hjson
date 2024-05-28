@@ -96,7 +96,7 @@
 				effect: {
 					type: stackcardsfromdiscard
 					where: self
-					filter: memory(topcard)
+					select: memory(topcard)
 				}
 			}
 			{
@@ -104,11 +104,11 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: choose(dwarf)
+					select: choose(dwarf)
 				}
 				effect: {
 					type: putStackedCardsIntoHand
-					filter: choose(culture(dwarven))
+					select: choose(culture(dwarven))
 					on: self
 				}
 			}
@@ -169,19 +169,19 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					until: start(regroup)
 					memorize: chosenDwarf
 					amount: 3
 				}
 				{
 					type: addKeyword
-					filter: memory(chosenDwarf)
+					select: memory(chosenDwarf)
 					keyword: damage+1
 					until: start(regroup)
 				}
@@ -205,13 +205,13 @@
 				{
 					type: chooseActiveCards
 					count: 1
-					filter: choose(dwarf,hasAttachedCount(2,item))
+					select: choose(dwarf,hasAttachedCount(2,item))
 					memorize: chosenDwarf
 					text: Choose a Dwarf with 2 or more items to heal
 				}
 				{
 					type: heal
-					filter: memory(chosenDwarf)
+					select: memory(chosenDwarf)
 					times: 1
 				}
 				{
@@ -224,12 +224,12 @@
 				}
 				{
 					type: returntohand
-					filter: choose(item,attachedTo(memory(chosenDwarf)))
+					select: choose(item,attachedTo(memory(chosenDwarf)))
 					count: 0-50
 				}
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 					count: {
 						type: subtract
 						firstNumber: {
@@ -263,12 +263,12 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 				times: 1
 			}
 			effect: {
 				type: addKeyword
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				keyword: defender+1
 				until: start(regroup)
 			}

@@ -28,7 +28,7 @@
 			phase: Shadow
 			cost: {
 				type: exert
-				filter: choose(culture(moria),orc)
+				select: choose(culture(moria),orc)
 				count: 1
 				times: 1
 			}
@@ -77,7 +77,7 @@
 			effect: {
 				type: playCardFromDiscard
 				removedTwilight: 2
-				filter: choose(culture(moria),possession)
+				select: choose(culture(moria),possession)
 			}
 		}
 		gametext: Plays to your support area.<br><b>Shadow:</b> Remove (2) to play a<br> [moria] possession from your discard pile.
@@ -118,7 +118,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(moria),minion)
+					select: choose(culture(moria),minion)
 				}
 			}
 			{

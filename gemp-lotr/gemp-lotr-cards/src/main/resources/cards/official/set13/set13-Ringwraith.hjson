@@ -27,12 +27,12 @@
 			cost: [
                 {
                     type: exert
-                    filter: choose(your,nazgul)
+                    select: choose(your,nazgul)
                     times: 2
                 }
                 {
                     type: spot
-                    filter: choose(exhausted,companion)
+                    select: choose(exhausted,companion)
                     memorize: exhaustedCompanion
                 }
             ]
@@ -47,7 +47,7 @@
                         type: costToEffect
                         cost: {
                             type: heal
-                            filter: memory(exhaustedCompanion)
+                            select: memory(exhaustedCompanion)
                         }
                         effect: {
                             type: addBurdens
@@ -66,7 +66,7 @@
                                 type: costToEffect
                                 cost: {
                                     type: heal
-                                    filter: memory(exhaustedCompanion)
+                                    select: memory(exhaustedCompanion)
                                 }
                                 effect: {
                                     type: addBurdens
@@ -124,7 +124,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(nazgul,inFierceSkirmish)
+                        select: choose(nazgul,inFierceSkirmish)
                         amount: 2
                     }
                 ]
@@ -174,7 +174,7 @@
 			}
 			cost: {
 			    type: spot
-			    filter: choose(companion)
+			    select: choose(companion)
 			    memorize: spottedCompanion
 			}
 			effect: [
@@ -245,7 +245,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: wraith
-		            filter: self
+		            select: self
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: culture(wraith),your,zone(support)
@@ -264,18 +264,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
-		                    filter: self
+		                    select: self
 		                    count: 2
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(culture(wraith),mount)
+		            select: choose(culture(wraith),mount)
 		            on: your,culture(wraith),minion
                     showAll: true
                     shuffle: true
@@ -342,11 +342,11 @@
 		            }
 		            true: {
 		                type: exert
-		                filter: all(companion)
+		                select: all(companion)
 		            }
 		            false: {
 		                type: exert
-		                filter: choose(unbound,companion)
+		                select: choose(unbound,companion)
 		                count: 2
 		            }
 		        }
@@ -397,17 +397,17 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: discardFromHand
                         forced: false
-                        filter: choose(nazgul)
+                        select: choose(nazgul)
                     }
                ]
                effect: {
                     type: discard
-                    filter: choose(condition)
+                    select: choose(condition)
                }
 		    }
 		]

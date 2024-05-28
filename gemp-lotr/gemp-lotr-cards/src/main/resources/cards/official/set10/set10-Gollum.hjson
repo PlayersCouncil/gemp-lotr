@@ -39,13 +39,13 @@
 			    effects: [
 			        {
 			            type: playCardFromDiscard
-			            filter: choose(name(Gollum))
+			            select: choose(name(Gollum))
 			            cost: -2
 			            memorize: playedGollum
 			        }
 			        {
 			            type: play
-			            filter: choose(name(Gollum))
+			            select: choose(name(Gollum))
 			            cost: -2
 			            memorize: playedGollum
 			        }
@@ -110,7 +110,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(name(Gollum))
+		            select: choose(name(Gollum))
 		        }
 		    }
 		    {
@@ -129,7 +129,7 @@
                 ]
                 cost: {
                     type: exert
-                    filter: choose(name(Gollum))
+                    select: choose(name(Gollum))
                 }
                 effect: {
                     type: cancelSpecialAbility
@@ -190,7 +190,7 @@
 		            effects: [
 		                {
 		                    type: modifyStrength
-		                    filter: self
+		                    select: self
 		                    amount: 3
 		                    until: regroup
 		                }
@@ -265,17 +265,17 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(name(Gollum))
+		            select: choose(name(Gollum))
 		            times: 2
 		        }
 		        effect: [
 		            {
 		                type: discard
-		                filter: choose(possession)
+		                select: choose(possession)
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -336,7 +336,7 @@
 		        effect: [
 		            {
         		        type: disableSkirmishAssignment
-		                filter: choose(companion)
+		                select: choose(companion)
 		                until: endOfTurn
                     }
                 ]
@@ -394,11 +394,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(gollum),minion)
+		            select: choose(culture(gollum),minion)
 		            amount: {
 		                type: forEachCulture
 		            }

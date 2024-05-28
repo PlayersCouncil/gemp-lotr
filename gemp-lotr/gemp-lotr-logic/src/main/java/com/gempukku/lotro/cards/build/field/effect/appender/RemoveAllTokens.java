@@ -24,15 +24,15 @@ import java.util.Map;
 public class RemoveAllTokens implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "memorize");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "self");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "self");
 
         final String memory = "_temp";
 
         MultiEffectAppender result = new MultiEffectAppender();
         result.addEffectAppender(
-                CardResolver.resolveCards(filter,
+                CardResolver.resolveCards(select,
                         actionContext -> new ConstantEvaluator(1), memory, "you", "Choose card to remove tokens from", environment));
         result.addEffectAppender(
                 new DelayedAppender() {

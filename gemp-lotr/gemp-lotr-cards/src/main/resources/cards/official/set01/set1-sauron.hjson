@@ -31,7 +31,7 @@
 				effect: {
 					type: exert
 					player: fp
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			}
 		}
@@ -76,7 +76,7 @@
             }
 			effect: {
 				type: discard
-				filter: choose(culture(elven),condition)
+				select: choose(culture(elven),condition)
 			}
 		}
 	}
@@ -112,14 +112,14 @@
                     }
                     {
                         type: putCardsFromDeckIntoHand
-                        filter: all(memory(revealedCards),culture(sauron))
+                        select: all(memory(revealedCards),culture(sauron))
                         reveal: true
                         shuffle: false
                         showAll: false
                     }
                     {
                         type: discardCardsFromDrawDeck
-                        filter: all(memory(revealedCards),not(culture(sauron)))
+                        select: all(memory(revealedCards),not(culture(sauron)))
                         showAll: false
                         shuffle: false
                     }
@@ -186,7 +186,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{
@@ -253,7 +253,7 @@
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(character,inSkirmishAgainst(culture(sauron),orc))
+				select: choose(character,inSkirmishAgainst(culture(sauron),orc))
 				amount: {
 					type: fromMemory
 					memory: spottedBurdens
@@ -277,7 +277,7 @@
 			}
 			effect: {
 				type: addKeyword
-				filter: memory(winner)
+				select: memory(winner)
 				keyword: fierce
 				until: start(regroup)
 			}
@@ -328,7 +328,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -343,11 +343,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(sauron),orc)
+				select: choose(culture(sauron),orc)
 			}
 			effect: {
 				type: wound
-				filter: choose(companion,not(ring bearer))
+				select: choose(companion,not(ring bearer))
 			}
 		}
 	}
@@ -382,7 +382,7 @@
 				}
 				effect: {
 					type: wound
-					filter: choose(companion,not(ring bearer))
+					select: choose(companion,not(ring bearer))
 				}
 			}
 		}
@@ -398,7 +398,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{
@@ -437,7 +437,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{
@@ -466,7 +466,7 @@
 			phase: shadow
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: {
 				type: addTwilight
@@ -487,12 +487,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(sauron),orc)
+				select: choose(culture(sauron),orc)
 				memorize: exertedOrc
 			}
 			effect: {
 				type: wound
-				filter: choose(character,inSkirmishAgainst(memory(exertedOrc)))
+				select: choose(character,inSkirmishAgainst(memory(exertedOrc)))
 			}
 		}
 	}
@@ -535,7 +535,7 @@
 			}
 			effect: {
 				type: exert
-				filter: choose(hobbit,not(ring bearer))
+				select: choose(hobbit,not(ring bearer))
 			}
 		}
 	}
@@ -557,7 +557,7 @@
 			}
 			effect: {
 				type: shuffleCardsFromDiscardIntoDrawDeck
-				filter: choose(culture(wraith))
+				select: choose(culture(wraith))
 				count: 0-2
 			}
 		}
@@ -656,7 +656,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: cancelEvent
@@ -721,7 +721,7 @@
 			}
 			effect: {
 				type: modifyStrength
-				filter: all(culture(sauron),orc)
+				select: all(culture(sauron),orc)
 				amount: 1
 				until: start(regroup)
 			}
@@ -819,11 +819,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: wound
-				filter: choose(character,inSkirmishAgainst(self))
+				select: choose(character,inSkirmishAgainst(self))
 			}
 		}
 	}
@@ -875,7 +875,7 @@
 				}
 				{
 					type: modifyStrength
-					filter: bearer
+					select: bearer
 					amount: 1
 				}
 			]
@@ -905,11 +905,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: wound
-					filter: choose(character,inSkirmishAgainst(self))
+					select: choose(character,inSkirmishAgainst(self))
 				}
 			}
 		]
@@ -928,11 +928,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: wound
-				filter: choose(character,inSkirmishAgainst(self))
+				select: choose(character,inSkirmishAgainst(self))
 			}
 		}
 	}
@@ -950,11 +950,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: wound
-				filter: choose(character,inSkirmishAgainst(self))
+				select: choose(character,inSkirmishAgainst(self))
 			}
 		}
 	}
@@ -998,7 +998,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{
@@ -1054,7 +1054,7 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(culture(sauron),tracker)
+				select: choose(culture(sauron),tracker)
 			}
 			effect: {
 				type: cancelEvent
@@ -1073,7 +1073,7 @@
 			cost: [
 				{
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 				{
 					type: removeTwilight
@@ -1095,11 +1095,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(sauron),orc)
+				select: choose(culture(sauron),orc)
 			}
 			effect: {
 				type: discard
-				filter: choose(side(free people),condition)
+				select: choose(side(free people),condition)
 			}
 		}
 	}
@@ -1118,7 +1118,7 @@
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(sauron),orc)
+				select: choose(culture(sauron),orc)
 				amount: 1
 			}
 		}
@@ -1135,7 +1135,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{
@@ -1201,7 +1201,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),tracker)
+					select: choose(culture(sauron),tracker)
 				}
 			}
 			{
@@ -1212,7 +1212,7 @@
 				effect: {
 					type: exert
 					player: fp
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			}
 		]
@@ -1228,7 +1228,7 @@
 			type: extraCost
 			cost: {
 				type: exert
-				filter: choose(culture(sauron),orc)
+				select: choose(culture(sauron),orc)
 			}
 		}
 	}

@@ -78,11 +78,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(roaming,culture(sauron),minion)
+		            select: choose(roaming,culture(sauron),minion)
 		            amount: 3
 		        }
 		    }
@@ -182,17 +182,17 @@
                     effects: [
                         {
                             type: exert
-                            filter: self
+                            select: self
                         }
                         {
                             type: discard
-                            filter: self
+                            select: self
                         }
                     ]
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(culture(sauron),minion)
+		            select: choose(culture(sauron),minion)
 		            count: any
 		            keyword: roaming
 		            until: regroup
@@ -248,7 +248,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(ringBound,companion)
+		            select: all(ringBound,companion)
 		        }
 		    }
 		    {
@@ -256,11 +256,11 @@
 		        phase: shadow
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: play
-		            filter: choose(culture(sauron),minion)
+		            select: choose(culture(sauron),minion)
 		            cost: -2
 		        }
 		    }
@@ -303,7 +303,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(sauron),minion)
+				    select: choose(culture(sauron),minion)
 				    amount: {
 				        type: forEachYouCanSpot
 				        filter: controlledSite
@@ -319,7 +319,7 @@
 				    }
 				    effect: {
 				        type: addKeyword
-				        filter: memory(chosenMinion)
+				        select: memory(chosenMinion)
 				        keyword: fierce
 				        until: regroup
 				    }
@@ -554,11 +554,11 @@
                 phase: skirmish
                 cost: {
                     type: discard
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: modifyStrength
-                    filter: choose(culture(sauron),minion)
+                    select: choose(culture(sauron),minion)
                     memorize: chosenMinion
                     amount: {
                         type: condition
@@ -623,7 +623,7 @@
 		        phase: regroup
 		        effect: {
 		            type: stackCards
-		            filter: self
+		            select: self
 		            where: choose(controlledSite)
 		        }
 		    }
@@ -687,7 +687,7 @@
                 effect: [
                     {
                         type: playCardFromDiscard
-                        filter: choose(besieger)
+                        select: choose(besieger)
                     }
                     {
                         type: takeControlOfSite
@@ -743,7 +743,7 @@
 		        effect: {
 		            type: wound
 		            player: free people
-		            filter: choose(companion)
+		            select: choose(companion)
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: controlledByOtherPlayer
@@ -985,7 +985,7 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -1003,7 +1003,7 @@
 		                text: Would you like to exert a companion to prevent taking control of site?
 		                cost: {
 		                    type: exert
-		                    filter: choose(companion)
+		                    select: choose(companion)
 		                }
 		                effect: {
 		                    type: takeControlOfSite
@@ -1061,7 +1061,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(another,culture(sauron),minion)
+		            select: choose(another,culture(sauron),minion)
 		            times: 2
 		        }
 		        effect: [
@@ -1128,7 +1128,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(condition)
+		            select: choose(condition)
 		        }
 		    }
 		]
@@ -1227,7 +1227,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: sauron
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -1242,18 +1242,18 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: choose(urukHai)
+		                    select: choose(urukHai)
 		                }
 		                {
 		                    type: discard
-		                    filter: choose(culture(sauron),minion)
+		                    select: choose(culture(sauron),minion)
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: sauron
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -1261,12 +1261,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: removeTokens
-		            filter: self
+		            select: self
 		            count: 2
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(sauron),minion)
+		            select: choose(culture(sauron),minion)
 		            amount: 2
 		        }
 		    }
@@ -1361,7 +1361,7 @@
 			cost: {
 			    type: discardFromHand
 			    forced: false
-			    filter: choose(culture(sauron),minion)
+			    select: choose(culture(sauron),minion)
 			}
 			effect: [
 				{
@@ -1421,7 +1421,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(character)
+		            select: choose(character)
 		        }
 		    }
 		]
@@ -1462,7 +1462,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(culture(sauron),minion)
+			    select: choose(culture(sauron),minion)
 			},
 			effect: [
 				{
@@ -1474,11 +1474,11 @@
 				    effects: [
 				        {
 				            type: returnToHand
-				            filter: choose(side(free people),condition)
+				            select: choose(side(free people),condition)
 				        }
 				        {
 				            type: returnToHand
-				            filter: choose(side(free people),condition,culture(shire))
+				            select: choose(side(free people),condition,culture(shire))
 				            count: 2
 				        }
 				    ]
@@ -1646,7 +1646,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		        }
 		    }
 		]

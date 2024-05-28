@@ -27,7 +27,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 					amount: {
 					    type: condition
 					    condition: {
@@ -47,7 +47,7 @@
 				    }
 				    effect: {
 				        type: addKeyword
-				        filter: memory(chosenGandalf)
+				        select: memory(chosenGandalf)
 				        keyword: damage
 				        amount: 1
 				    }
@@ -99,7 +99,7 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			}
 			effect: [
 				{
@@ -158,7 +158,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 				times: 2
 			},
 			effect: [
@@ -171,12 +171,12 @@
 				{
 				    type: chooseActiveCards
 				    text: Choose companion of the culture you wish to heal
-				    filter: choose(companion,not(culture(Gandalf)))
+				    select: choose(companion,not(culture(Gandalf)))
 				    memorize: chosenCompanion
 				}
 				{
 				    type: heal
-				    filter: all(companion,cultureFromMemory(chosenCompanion))
+				    select: all(companion,cultureFromMemory(chosenCompanion))
 				}
 			]
 		}
@@ -224,7 +224,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: memory(winner)
+		            select: memory(winner)
 		        }
 		        effect: {
 		            type: drawCards
@@ -281,13 +281,13 @@
 					type: chooseActiveCards
 					player: shadow
 					text: Choose Shadow conditions to spare, all others will be discarded
-					filter: choose(side(shadow),condition)
+					select: choose(side(shadow),condition)
 					count: 2
 					memorize: chosenConditions
 				}
 				{
 				    type: discard
-				    filter: all(side(shadow),condition,not(memory(chosenConditions)))
+				    select: all(side(shadow),condition,not(memory(chosenConditions)))
 				}
 			]
 		}
@@ -405,7 +405,7 @@
 		            }
 		            effect: {
 		                type: modifyStrength
-		                filter: choose(minion,inSkirmishAgainst(unbound,companion))
+		                select: choose(minion,inSkirmishAgainst(unbound,companion))
 		                amount: -3
 		            }
 		        }
@@ -529,7 +529,7 @@
 		        effect: {
 		            type: exert
 		            player: shadow
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -575,7 +575,7 @@
 			effect: [
 				{
 					type: heal
-					filter: choose(unbound,companion)
+					select: choose(unbound,companion)
 					times: 2
 				}
 			]
@@ -629,7 +629,7 @@
 			effect: [
 				{
 					type: preventWound
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			]
 		}
@@ -670,7 +670,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 				times: 2
 			},
 			effect: [
@@ -688,7 +688,7 @@
 					effect: {
 					    type: exert
 					    player: shadow
-					    filter: choose(minion)
+					    select: choose(minion)
 					}
 				}
 			]
@@ -730,7 +730,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 				times: {
 				    type: condition
 				    condition: {
@@ -745,12 +745,12 @@
 				{
 				    type: chooseActiveCards
 				    text: Choose companion of the culture you want to give strength +3 to
-				    filter: choose(unbound,companion,not(culture(Gandalf)))
+				    select: choose(unbound,companion,not(culture(Gandalf)))
 				    memorize: chosenCompanion
 				}
 				{
 				    type: modifyStrength
-				    filter: all(unbound,companion,cultureFromMemory(chosenCompanion))
+				    select: all(unbound,companion,cultureFromMemory(chosenCompanion))
 				    amount: 3
 				    until: regroup
 				}
@@ -804,7 +804,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(name(Gandalf))
+		            select: choose(name(Gandalf))
 		        }
 		    }
 		]
@@ -882,7 +882,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -928,7 +928,7 @@
 			effect: [
 				{
 					type: heal
-					filter: choose(unbound,hobbit)
+					select: choose(unbound,hobbit)
 					times: 3
 				}
 			]
@@ -981,7 +981,7 @@
 				}
 				{
 				    type: modifyStrength
-				    filter: choose(culture(gondor),companion)
+				    select: choose(culture(gondor),companion)
 				    amount: {
 				        type: fromMemory
 				        memory: spotCount
@@ -1048,7 +1048,7 @@
 		                }
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
@@ -1058,11 +1058,11 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion)
+		            select: choose(minion)
 		            count: 2
 		        }
 		    }
@@ -1120,16 +1120,16 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: discard
-		                filter: choose(minion)
+		                select: choose(minion)
 		            }
 		            {
 		                type: heal
-		                filter: choose(companion)
+		                select: choose(companion)
 		                times: 3
 		            }
 		        ]
@@ -1191,14 +1191,14 @@
                 }
                 {
                     type: exert
-                    filter: choose(name(Gandalf))
+                    select: choose(name(Gandalf))
                     times: memory(exertCount)
                 }
 			]
 			effect: [
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 					memorize: chosenMinion
 					times: {
 					    type: condition
@@ -1262,7 +1262,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 				memorize: chosenGandalf
 			},
 			effect: [
@@ -1272,7 +1272,7 @@
 			    }
 				{
 					type: modifyStrength
-					filter: memory(chosenGandalf)
+					select: memory(chosenGandalf)
 					amount: {
 					    type: fromMemory
 					    memory: spotCount
@@ -1322,12 +1322,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		            times: 2
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion)
+		            select: choose(minion)
 		            amount: -3
 		        }
 		    }

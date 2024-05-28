@@ -66,11 +66,11 @@
 								type: exert
 								player: freeps
 								times: 2
-								filter: bearer
+								select: bearer
 							}
 							effect: {
 								type: Discard
-								filter: self
+								select: self
 							}
 						}
 					}
@@ -128,7 +128,7 @@
                     cost: {
                         type: discardfromhand
                         forced: false
-                        filter: choose(culture(isengard))
+                        select: choose(culture(isengard))
                         count: 1
                         memorize: discardedCard
                     }
@@ -230,7 +230,7 @@
 	# 			}
 	# 			effect: {
 	# 				type: addKeyword
-	# 				filter: choose(uruk-hai)
+	# 				select: choose(uruk-hai)
 	# 				keyword: fierce
 	# 				until: start(regroup)
 	# 				memorize: chosenUruk
@@ -249,7 +249,7 @@
 	# 			effect:
 	# 			{
 	# 				type: preventWound
-	# 				filter: choose(uruk-hai)
+	# 				select: choose(uruk-hai)
 	# 			}
 	# 		}
 	# 	]
@@ -323,11 +323,11 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: addKeyword
-					filter: choose(uruk-hai)
+					select: choose(uruk-hai)
 					keyword: fierce
 					until: start(regroup)
 					memorize: chosenUruk
@@ -355,7 +355,7 @@
 							}
 							effect: {
 								type: exert
-								filter: self
+								select: self
 							}
 						}
 						{
@@ -366,7 +366,7 @@
 							}
 							effect: {
 								type: discard
-								filter: self
+								select: self
 							}
 						}
 					]
@@ -374,7 +374,7 @@
 				effect:
 				{
 					type: preventWound
-					filter: choose(uruk-hai)
+					select: choose(uruk-hai)
 				}
 			}
 		]
@@ -442,7 +442,7 @@
                     }
                     {
                         type: putCardsFromHandOnTopOfDeck
-                        filter: all(memory(revealedCard))
+                        select: all(memory(revealedCard))
                         player: shadow
                         hand: freeps
                     }

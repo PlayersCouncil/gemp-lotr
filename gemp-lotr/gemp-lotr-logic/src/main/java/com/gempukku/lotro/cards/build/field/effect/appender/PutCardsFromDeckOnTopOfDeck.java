@@ -23,16 +23,16 @@ import java.util.*;
 public class PutCardsFromDeckOnTopOfDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "reveal");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "reveal");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final boolean reveal = FieldUtils.getBoolean(effectObject.get("reveal"), "reveal");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeck(filter, null, valueSource, "_temp", "you", "you", false, "Choose cards from deck", environment));
+                CardResolver.resolveCardsInDeck(select, null, valueSource, "_temp", "you", "you", false, "Choose cards from deck", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

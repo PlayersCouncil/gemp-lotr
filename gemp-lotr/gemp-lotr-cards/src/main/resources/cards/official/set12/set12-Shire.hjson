@@ -36,11 +36,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(shire),skirmish,event)
+		            select: choose(culture(shire),skirmish,event)
 		        }
 		    }
 		]
@@ -82,12 +82,12 @@
                 type: event
                 cost: {
                     type: discard
-                    filter: choose(hobbit,notAssignedToSkirmish)
+                    select: choose(hobbit,notAssignedToSkirmish)
                 }
                 effect: [
                     {
                         type: discard
-                        filter: choose(minion)
+                        select: choose(minion)
                     }
                 ]
             }
@@ -146,7 +146,7 @@
 			effect: [
 				{
 				    type: heal
-				    filter: choose(hobbit)
+				    select: choose(hobbit)
 				}
 			]
 		}
@@ -203,7 +203,7 @@
                         }
                         effect: {
                             type: heal
-                            filter: choose(ringBearer)
+                            select: choose(ringBearer)
                         }
                     }
                 ]
@@ -247,7 +247,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(hobbit)
+				    select: choose(hobbit)
 				    amount: 2
 				    memorize: chosenHobbit
 				}
@@ -314,11 +314,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: all(companion,minResistance(7))
+		            select: all(companion,minResistance(7))
 		            amount: 2
 		            until: regroup
 		        }
@@ -409,7 +409,7 @@
 			effect: [
 				{
 				    type: alterOverwhelmMultiplier
-				    filter: choose(hobbit)
+				    select: choose(hobbit)
 				    multiplier: 3
 				}
 				{
@@ -492,7 +492,7 @@
 		                }
 		                {
 		                    type: heal
-		                    filter: choose(companion)
+		                    select: choose(companion)
 		                }
 		            ]
 		        }
@@ -652,11 +652,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: all(hobbit)
+		            select: all(hobbit)
 		        }
 		    }
 		]
@@ -703,7 +703,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: memory(winner)
+		            select: memory(winner)
 		            keyword: muster
 		            until: endOfTurn
 		        }
@@ -752,7 +752,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: shire
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -761,11 +761,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: shire
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(shire),companion)
+		            select: choose(culture(shire),companion)
 		            amount: 1
 		        }
 		    }
@@ -820,7 +820,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventEffect

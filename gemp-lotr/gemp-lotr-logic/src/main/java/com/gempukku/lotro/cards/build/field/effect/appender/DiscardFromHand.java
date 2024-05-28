@@ -20,12 +20,12 @@ import java.util.Collection;
 public class DiscardFromHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "forced", "count", "filter", "memorize", "hand", "player");
+        FieldUtils.validateAllowedFields(effectObject, "forced", "count", "select", "memorize", "hand", "player");
 
         final String hand = FieldUtils.getString(effectObject.get("hand"), "hand", "you");
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final boolean forced = FieldUtils.getBoolean(effectObject.get("forced"), "forced");
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final PlayerSource handSource = PlayerResolver.resolvePlayer(hand, environment);
@@ -35,7 +35,7 @@ public class DiscardFromHand implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInHand(filter,
+                CardResolver.resolveCardsInHand(select,
                         actionContext -> Filters.not(actionContext.getSource()),
                         countSource, memorize, player, hand, "Choose cards from hand to discard", true, environment));
         result.addEffectAppender(

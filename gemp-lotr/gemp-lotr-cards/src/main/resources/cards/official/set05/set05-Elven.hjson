@@ -85,7 +85,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf,companion)
+				select: choose(elf,companion)
 				count: 3
 			},
 			effect: [
@@ -144,7 +144,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		]
@@ -260,7 +260,7 @@
 			effect: [
 				{
 					type: heal
-					filter: choose(companion)
+					select: choose(companion)
 				}
 				{
 				    type: liberateSite
@@ -316,60 +316,12 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(another,or(dwarf,elf),companion)
+		            select: choose(another,or(dwarf,elf),companion)
 		        }
 		    }
 		]
 		gametext: <b>Archer</b>.<br>Each time Legolas wins a skirmish, you may heal a Dwarf companion or another Elf companion.
 		lore: ...even more would I give for a hundred good archers of Mirkwood. We shall need them.'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	5_124: {
-		cardInfo: {
-			imagePath: decipher/LOTR05124.jpg
-			javaClass: true
-			//parentId: 5_124
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 5R124
-			rarity: R
-			setNum: "5"
-			cardNum: 124
-			style: Standard
-		}
-		title: Break the Charge
-		unique: false
-		side: Free Peoples
-		culture: Elven
-		twilight: 2
-		type: Event
-		keywords: Archery
-		effects: {
-			type: event
-			cost: {
-				type: exert
-				filter: choose(elf,companion)
-				count: 3
-			},
-			effect: [
-				{
-					type: modifyArcheryTotal
-					side: free people
-					amount: 2
-				}
-			]
-		}
-		gametext: <b>Archery:</b> Exert 3 Elf companions to make the fellowship archery total +2.
-		lore: A wall of Elven arrows met the attackers before they reached the Hornburg itself.
 		promotext: ""
 		alts: {
 			promos: {

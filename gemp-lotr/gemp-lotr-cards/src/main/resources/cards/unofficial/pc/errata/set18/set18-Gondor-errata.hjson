@@ -46,12 +46,12 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: heal
-						filter: choose(another,wounded,companion,minResistance(5))
+						select: choose(another,wounded,companion,minResistance(5))
 					}
 				]
 			}
@@ -105,7 +105,7 @@
 					type: addtokens
 					count: 1
 					culture: gondor
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -115,12 +115,12 @@
 					type: removetokens
 					count: 3
 					culture: gondor
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: ChooseActiveCards
-						filter: choose(minion)
+						select: choose(minion)
 						memorize: chosenMinion
 						text: Choose a minion to prevent from skirmishing until the Regroup phase.
 					}
@@ -134,7 +134,7 @@
 						}
 						effect: {
                             type: disableSkirmishAssignment
-                            filter: memory(chosenMinion)
+                            select: memory(chosenMinion)
 							until: regroup
 						}
 					}

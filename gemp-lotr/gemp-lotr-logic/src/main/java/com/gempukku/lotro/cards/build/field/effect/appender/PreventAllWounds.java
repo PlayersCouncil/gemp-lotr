@@ -20,15 +20,15 @@ import java.util.Collection;
 public class PreventAllWounds implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter");
+        FieldUtils.validateAllowedFields(effectObject, "select");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
 
         MultiEffectAppender result = new MultiEffectAppender();
         String cardMemory = "_temp";
 
         result.addEffectAppender(
-                CardResolver.resolveCard(filter, cardMemory, "you", "Choose card to prevent wounds to", environment));
+                CardResolver.resolveCard(select, cardMemory, "you", "Choose card to prevent wounds to", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

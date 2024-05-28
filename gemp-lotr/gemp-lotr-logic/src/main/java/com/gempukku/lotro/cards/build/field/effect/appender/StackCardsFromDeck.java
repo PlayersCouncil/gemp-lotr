@@ -23,9 +23,9 @@ import java.util.List;
 public class StackCardsFromDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "where", "count", "shuffle", "showAll");
+        FieldUtils.validateAllowedFields(effectObject, "select", "where", "count", "shuffle", "showAll");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String where = FieldUtils.getString(effectObject.get("where"), "where");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
@@ -36,7 +36,7 @@ public class StackCardsFromDeck implements EffectAppenderProducer {
         result.addEffectAppender(
                 CardResolver.resolveCard(where, "_temp1", "you", "Choose card to stack on", environment));
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeck(filter, null, valueSource, "_temp2", "you", "you", showAll, "Choose cards to stack", environment));
+                CardResolver.resolveCardsInDeck(select, null, valueSource, "_temp2", "you", "you", showAll, "Choose cards to stack", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
             @Override

@@ -33,17 +33,17 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: spot
-		                filter: choose(side(free people),condition)
+		                select: choose(side(free people),condition)
 		                memorize: spottedCondition
 		            }
 		        ]
 		        effect: {
 		            type: modifyResistance
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		            amount: {
 		                type: forEachYouCanSpot
 		                filter: nameFromMemory(spottedCondition)
@@ -200,11 +200,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(uruk-hai),minion)
+		            select: choose(culture(uruk-hai),minion)
 		            memorize: chosenMinion
 		            amount: {
 		                type: sum
@@ -316,7 +316,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addTwilight
@@ -541,7 +541,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(culture(uruk-hai),minion,inSkirmishAgainst(companion,maxResistance(4)))
+                        select: choose(culture(uruk-hai),minion,inSkirmishAgainst(companion,maxResistance(4)))
                         amount: 2
                     }
                 ]
@@ -594,7 +594,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(companion,inSkirmishAgainst(culture(uruk-hai),lurker,minion))
+		            select: all(companion,inSkirmishAgainst(culture(uruk-hai),lurker,minion))
 		        }
 		    }
 		]
@@ -774,11 +774,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession,attachedTo(companion,inSkirmishAgainst(another,culture(uruk-hai),minion)))
+		            select: choose(possession,attachedTo(companion,inSkirmishAgainst(another,culture(uruk-hai),minion)))
 		        }
 		    }
 		]
@@ -930,7 +930,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromPlayOnBottomOfDeck
-		            filter: choose(memory(killed),culture(uruk-hai),minion,inSkirmish)
+		            select: choose(memory(killed),culture(uruk-hai),minion,inSkirmish)
 		        }
 		    }
 		]
@@ -981,19 +981,19 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: [
                     {
                         type: addKeyword
-                        filter: self
+                        select: self
                         keyword: fierce
                         until: regroup
                     }
                     {
                         type: modifyStrength
-                        filter: self
+                        select: self
                         amount: 4
                         until: regroup
                     }
@@ -1043,11 +1043,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(companion,inSkirmishAgainst(culture(uruk-hai),lurker))
+		            select: choose(companion,inSkirmishAgainst(culture(uruk-hai),lurker))
 		            amount: -2
 		        }
 		    }
@@ -1089,12 +1089,12 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(your,lurker,minion)
+			    select: choose(your,lurker,minion)
 			}
 			effect: [
 				{
 				    type: playCardFromDiscard
-				    filter: choose(culture(uruk-hai),hand weapon)
+				    select: choose(culture(uruk-hai),hand weapon)
 				    on: your,culture(uruk-hai),minion
 				}
 			]
@@ -1142,7 +1142,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: uruk-hai
-		            filter: self
+		            select: self
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: wounded,companion
@@ -1161,18 +1161,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
-		                    filter: self
+		                    select: self
 		                    count: 2
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(companion,inSkirmishAgainst(culture(uruk-hai),minion))
+		            select: choose(companion,inSkirmishAgainst(culture(uruk-hai),minion))
 		            amount: -1
 		        }
 		    }

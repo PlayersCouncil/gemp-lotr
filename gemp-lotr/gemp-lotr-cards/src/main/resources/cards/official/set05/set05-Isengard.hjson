@@ -43,13 +43,13 @@
                 effect: [
                     {
                         type: addKeyword
-                        filter: choose(urukHai)
+                        select: choose(urukHai)
                         keyword: damage
                         amount: 1
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		    }
@@ -109,19 +109,19 @@
 		        cost: [
                     {
                         type: removeTokens
-                        filter: choose(machine)
+                        select: choose(machine)
                         culture: isengard
                         count: 3
                     }
                     {
                         type: exert
-                        filter: self
+                        select: self
                         times: 2
                     }
                 ]
                 effect: {
                     type: wound
-                    filter: all(ally)
+                    select: all(ally)
                     times: 2
                 }
 		    }
@@ -181,19 +181,19 @@
 		        cost: [
                     {
                         type: removeTokens
-                        filter: choose(machine)
+                        select: choose(machine)
                         culture: isengard
                         count: 4
                     }
                     {
                         type: exert
-                        filter: self
+                        select: self
                         times: 2
                     }
                 ]
                 effect: {
                     type: modifyStrength
-                    filter: self
+                    select: self
                     amount: 8
                 }
 		    }
@@ -254,19 +254,19 @@
 		        cost: [
                     {
                         type: removeTokens
-                        filter: choose(machine)
+                        select: choose(machine)
                         culture: isengard
                         count: 5
                     }
                     {
                         type: exert
-                        filter: self
+                        select: self
                         times: 2
                     }
                 ]
                 effect: {
                     type: wound
-                    filter: all(companion)
+                    select: all(companion)
                 }
 		    }
 		]
@@ -321,7 +321,7 @@
 					effect: {
 					    type: wound
 					    player: fp
-					    filter: choose(minion)
+					    select: choose(minion)
 					    count: 0-1
 					}
 				}
@@ -333,7 +333,7 @@
 					}
 					effect: {
 					    type: playCardFromDiscard
-					    filter: choose(culture(isengard),weapon)
+					    select: choose(culture(isengard),weapon)
 					}
 				}
 			]
@@ -380,12 +380,12 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: choose(urukHai)
+		            select: choose(urukHai)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: isengard
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -398,11 +398,11 @@
 		        effect: [
 		            {
 		                type: exert
-		                filter: all(character)
+		                select: all(character)
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -519,18 +519,18 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
                         type: chooseActiveCards
-                        filter: choose(unbound,companion,canBeReturnedToHand)
+                        select: choose(unbound,companion,canBeReturnedToHand)
                         text: Choose unbound companion to return to hand
                         memorize: chosenCompanion
                     }
                     {
                         type: returnToHand
-                        filter: all(or(memory(chosenCompanion),attachedTo(memory(chosenCompanion))))
+                        select: all(or(memory(chosenCompanion),attachedTo(memory(chosenCompanion))))
                     }
                 ]
 		    }
@@ -736,7 +736,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: takeControlOfSite
@@ -815,7 +815,7 @@
                 }
                 effect: {
                     type: heal
-                    filter: all(culture(isengard),orc)
+                    select: all(culture(isengard),orc)
                     times: 2
                 }
             }
@@ -824,11 +824,11 @@
                 phase: shadow
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: playCardFromDiscard
-                    filter: choose(culture(isengard),possession)
+                    select: choose(culture(isengard),possession)
                 }
             }
 		]
@@ -874,12 +874,12 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: choose(urukHai)
+		            select: choose(urukHai)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: isengard
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -892,11 +892,11 @@
 		        effect: [
                     {
                         type: heal
-                        filter: choose(urukHai)
+                        select: choose(urukHai)
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		    }
@@ -958,7 +958,7 @@
 		        effect: {
 		            type: exert
 		            player: fp
-		            filter: choose(companion,not(hobbit))
+		            select: choose(companion,not(hobbit))
 		        }
 		    }
 		]
@@ -1020,7 +1020,7 @@
                 }
                 cost: {
                     type: exert
-                    filter: bearer
+                    select: bearer
                 }
                 effect: {
                     type: cancelSpecialAbility
@@ -1069,12 +1069,12 @@
 		        phase: shadow
 		        cost: {
 		            type: play
-		            filter: choose(urukHai)
+		            select: choose(urukHai)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: isengard
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -1086,11 +1086,11 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventDiscard
-		            filter: choose(machine)
+		            select: choose(machine)
 		        }
 		    }
 		]
@@ -1141,7 +1141,7 @@
 		        }
 		        effect: {
 		            type: addTokens
-		            filter: choose(machine)
+		            select: choose(machine)
 		            culture: isengard
 		        }
 		    }
@@ -1193,7 +1193,7 @@
 		        }
 		        effect: {
 		            type: addTokens
-		            filter: choose(machine)
+		            select: choose(machine)
 		            culture: isengard
 		        }
 		    }
@@ -1297,7 +1297,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: cancelSpecialAbility
@@ -1353,7 +1353,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: cancelSpecialAbility
@@ -1407,7 +1407,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(isengard),mount)
+		            select: choose(culture(isengard),mount)
 		        }
 		    }
 		    {
@@ -1504,7 +1504,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(isengard),orc)
+					select: choose(culture(isengard),orc)
 					amount: 2
 					memorize: chosenOrc
 				}
@@ -1517,7 +1517,7 @@
 				    }
 				    effect: {
 				        type: heal
-				        filter: memory(chosenOrc)
+				        select: memory(chosenOrc)
 				    }
 				}
 			]
@@ -1561,82 +1561,17 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(culture(isengard),orc)
+		            select: choose(culture(isengard),orc)
 		        }
 		        effect: {
 		            type: wound
 		            player: fp
-		            filter: choose(companion)
+		            select: choose(companion)
 		        }
 		    }
 		]
 		gametext: Plays on a plains site you control.<br><b>Regroup:</b> Exert an [isengard] Orc to make the Free Peoples player wound a companion.
 		lore: Saruman's warg-riders traveled the plains faster than even the Riders of Rohan.
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	5_125: {
-		cardInfo: {
-			imagePath: decipher/LOTR05125.jpg
-			javaClass: true
-			//parentId: 5_125
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 5R125
-			rarity: R
-			setNum: "5"
-			cardNum: 125
-			style: Standard
-		}
-		title: Foul Horde
-		unique: true
-		side: Shadow
-		culture: Isengard
-		twilight: 4
-		type: Minion
-		race: Orc
-		strength: 9
-		vitality: 3
-		site: 4
-		keywords: Warg-rider
-		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,not(exhausted)
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,minVitality(3)
-		            keyword: ambush
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,minVitality(4)
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		]
-		gametext: <b>Warg-rider</b>.<br>While Foul Horde is not exhausted, it is <b>fierce</b>.<br>While Foul Horde has at least 3 vitality, it is <b>ambush</b> (1).<br>While Foul Horde has at least 4 vitality, it is <b>damage +1</b>.
-		lore: ""
 		promotext: ""
 		alts: {
 			promos: {

@@ -29,12 +29,12 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(culture(uruk-hai),hunter)
+		            select: choose(culture(uruk-hai),hunter)
 		            times: 2
 		        }
 		        effect: {
 		            type: transfer
-		            filter: self
+		            select: self
 		            fromSupport: true
 		            where: choose(unbound,companion)
 		        }
@@ -48,7 +48,7 @@
 		        }
 		        effect:{
 		            type: transfer
-		            filter: self
+		            select: self
 		            fromSupport: true
 		            where: choose(side(free people),archer)
 		        }
@@ -160,11 +160,11 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: choose(follower)
+		                    select: choose(follower)
 		                }
 		                {
 		                    type: heal
-		                    filter: choose(culture(uruk-hai),minion)
+		                    select: choose(culture(uruk-hai),minion)
 		                }
 		                {
 		                    type: takeControlOfSite
@@ -211,13 +211,13 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(uruk-hai),minion)
+				    select: choose(culture(uruk-hai),minion)
 				    amount: 2
 				    memorize: chosenMinion
 				}
 				{
 				    type: addKeyword
-				    filter: memory(chosenMinion)
+				    select: memory(chosenMinion)
 				    keyword: damage
 				    amount: 1
 				}
@@ -275,7 +275,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: self
+		            select: self
 		            keyword: fierce
 		            until: regroup
 		        }
@@ -285,14 +285,14 @@
 		        phase: assignment
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: [
 		            {
 		                type: chooseActiveCards
 		                text: Choose unbound companion to assign Lurtz to
-		                filter: choose(unbound,companion,assignableToSkirmishAgainst(self))
+		                select: choose(unbound,companion,assignableToSkirmishAgainst(self))
 		                memorize: chosenCompanion
 		            }
 		            {
@@ -308,7 +308,7 @@
 		                    effects: [
 		                        {
 		                            type: exert
-		                            filter: memory(chosenCompanion)
+		                            select: memory(chosenCompanion)
 		                        }
 		                        {
 		                            type: addBurdens
@@ -386,11 +386,11 @@
 		            type: discardFromHand
 		            forced: false
 		            count: 2
-		            filter: choose(culture(uruk-hai))
+		            select: choose(culture(uruk-hai))
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		        }
 		    }
 		]
@@ -431,7 +431,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(culture(uruk-hai))
+			    select: choose(culture(uruk-hai))
 			}
 			effect: [
 				{
@@ -490,11 +490,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(uruk-hai),minion,hasAttached(possession))
+		            select: choose(culture(uruk-hai),minion,hasAttached(possession))
 		            amount: 2
 		        }
 		    }
@@ -623,7 +623,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(companion,inSkirmishAgainst(culture(uruk-hai),hunter))
+		            select: all(companion,inSkirmishAgainst(culture(uruk-hai),hunter))
 		        }
 		    }
 		]
@@ -726,7 +726,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(culture(uruk-hai),minion)
+		            select: choose(culture(uruk-hai),minion)
 		        }
 		    }
 		]
@@ -876,11 +876,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(culture(uruk-hai),minion)
+		            select: choose(culture(uruk-hai),minion)
 		        }
 		    }
 		]
@@ -988,12 +988,12 @@
 		        effect: [
                     {
                         type: modifyStrength
-                        filter: self
+                        select: self
                         amount: 1
                     }
                     {
                         type: addKeyword
-                        filter: self
+                        select: self
                         keyword: damage
                         amount: 1
                     }

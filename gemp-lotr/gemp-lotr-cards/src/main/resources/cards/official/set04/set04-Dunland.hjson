@@ -36,7 +36,7 @@
 			effect: [
 				{
 					type: addKeyword
-					filter: choose(culture(dunland),man)
+					select: choose(culture(dunland),man)
 					until: start(regroup)
 					keyword: fierce
 				}
@@ -84,7 +84,7 @@
 				}
 				effect: {
 				    type: addKeyword
-				    filter: self
+				    select: self
 				    keyword: fierce
 				    until: start(regroup)
 				}
@@ -124,7 +124,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(dunland),man)
+					select: choose(culture(dunland),man)
 					amount: {
 					    type: condition
 					    condition: {
@@ -180,7 +180,7 @@
 				effect: {
 				    type: playCardFromDiscard
 				    removedTwilight: 2
-				    filter: choose(culture(dunland),man)
+				    select: choose(culture(dunland),man)
 				}
 			}
 		]
@@ -218,7 +218,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(dunland),man)
+					select: choose(culture(dunland),man)
 					amount: {
 					    type: condition
 					    condition: {
@@ -265,7 +265,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(dunland),man)
+					select: choose(culture(dunland),man)
 					amount: {
 					    type: forEachYouCanSpot
 					    filter: companion
@@ -317,18 +317,18 @@
 				    {
 				        type: play
 				        cost: -2
-				        filter: choose(culture(dunland),man)
+				        select: choose(culture(dunland),man)
 				        memorize: playedMinion
 				    }
 				    {
 				        type: addKeyword
-				        filter: memory(playedMinion)
+				        select: memory(playedMinion)
 				        keyword: fierce
 				        until: start(regroup)
 				    }
 				    {
 				        type: addKeyword
-				        filter: memory(playedMinion)
+				        select: memory(playedMinion)
 				        keyword: damage
 				        amount: 1
 				        until: start(regroup)
@@ -410,7 +410,7 @@
 				}
 				effect: {
 				    type: stackCards
-				    filter: self
+				    select: self
 				    where: choose(controlledSite)
 				}
 			}
@@ -420,9 +420,9 @@
 				stackedOn: controlledSite
 				effect: {
 				    type: playCardFromStacked
-				    filter: self
-                    on: controlledSite
-                    cost: -2
+						select: self
+						on: controlledSite
+						cost: -2
 				}
 			}
 		]
@@ -469,13 +469,13 @@
 				effect: [
 				    {
 				        type: modifyStrength
-				        filter: self
+				        select: self
 				        amount: 2
 				        until: start(regroup)
 				    }
 				    {
 				        type: addKeyword
-				        filter: self
+				        select: self
 				        keyword: fierce
 				        until: start(regroup)
 				    }
@@ -524,7 +524,7 @@
 				}
 				effect: {
 				    type: discard
-				    filter: choose(side(free),possession)
+				    select: choose(side(free),possession)
 				    count: {
 				        type: condition
 				        condition: {
@@ -638,7 +638,7 @@
 				effect: [
 				    {
 				        type: enableParticipationInSkirmishes
-				        filter: choose(ally)
+				        select: choose(ally)
 				        memorize: chosenAlly
 				    }
 				    {
@@ -692,13 +692,13 @@
 				effect: [
 				    {
 				        type: modifyStrength
-				        filter: self
+				        select: self
 				        amount: 2
 				        until: start(regroup)
 				    }
 				    {
 				        type: addKeyword
-				        filter: self
+				        select: self
 				        keyword: fierce
 				        until: start(regroup)
 				    }
@@ -780,7 +780,7 @@
 				effect: [
 				    {
 				        type: enableParticipationInSkirmishes
-				        filter: choose(ally)
+				        select: choose(ally)
 				        memorize: chosenAlly
 				    }
 				    {
@@ -845,7 +845,7 @@
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(culture(dunland),man)
+		            select: choose(culture(dunland),man)
 		        }
 		    }
 		]
@@ -891,7 +891,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: drawCards
@@ -1064,18 +1064,18 @@
 				    {
 				        type: play
 				        cost: -2
-				        filter: choose(culture(dunland),man)
+				        select: choose(culture(dunland),man)
 				        memorize: playedMinion
 				    }
 				    {
 				        type: addKeyword
-				        filter: memory(playedMinion)
+				        select: memory(playedMinion)
 				        keyword: fierce
 				        until: start(regroup)
 				    }
 				    {
 				        type: addKeyword
-				        filter: memory(playedMinion)
+				        select: memory(playedMinion)
 				        keyword: damage
 				        amount: 1
 				        until: start(regroup)
@@ -1125,7 +1125,7 @@
 				}
 				effect: {
 				    type: stackCards
-				    filter: self
+				    select: self
 				    where: choose(controlledSite)
 				}
 			}
@@ -1135,9 +1135,9 @@
 				stackedOn: controlledSite
 				effect: {
 				    type: playCardFromStacked
-				    filter: self
-                    on: controlledSite
-                    cost: -2
+						select: self
+						on: controlledSite
+						cost: -2
 				}
 			}
 		]
@@ -1263,13 +1263,13 @@
 		        effect: [
                     {
                         type: modifyStrength
-                        filter: memory(winner)
+                        select: memory(winner)
                         amount: 2
                         until: regroup
                     }
                     {
                         type: addKeyword
-                        filter: memory(winner)
+                        select: memory(winner)
                         keyword: fierce
                         until: regroup
                     }
@@ -1316,7 +1316,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: dunland
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -1326,12 +1326,12 @@
 		            {
 		                type: removeTokens
 		                culture: dunland
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: chooseActiveCards
 		                text: Choose DUNLAND Man
-		                filter: choose(culture(dunland),man)
+		                select: choose(culture(dunland),man)
 		                memorize: chosenMan
 		            }
 		            {
@@ -1429,7 +1429,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addModifier
@@ -1526,7 +1526,7 @@
 			effect: [
 				{
 					type: discard
-					filter: all(side(free),attachedTo(memory(loser)))
+					select: all(side(free),attachedTo(memory(loser)))
 				}
 			]
 		}
@@ -1582,7 +1582,7 @@
 		        effect: {
 		            type: exert
 		            player: fp
-		            filter: choose(companion)
+		            select: choose(companion)
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: culture(dunland),man
@@ -1594,11 +1594,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(dunland),man)
+		            select: choose(culture(dunland),man)
 		            amount: 2
 		        }
 		    }
@@ -1644,7 +1644,7 @@
                 effect: {
                     type: addTokens
                     culture: dunland
-                    filter: self
+                    select: self
                 }
 		    }
 		    {
@@ -1653,7 +1653,7 @@
 		        effect: [
                     {
                         type: discard
-                        filter: choose(side(free),possession)
+                        select: choose(side(free),possession)
                         count: {
                             type: forEachToken
                             filter: self
@@ -1663,7 +1663,7 @@
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		    }
@@ -1707,7 +1707,7 @@
 			effect: [
 				{
 					type: addKeyword
-					filter: all(culture(dunland),man)
+					select: all(culture(dunland),man)
 					keyword: fierce
 					until: regroup
 				}
@@ -1754,7 +1754,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(side(free),possession)
+		            select: choose(side(free),possession)
 		            count: 2
 		        }
 		    }
@@ -1799,13 +1799,13 @@
 			effect: [
 				{
 					type: addKeyword
-					filter: memory(winner)
+					select: memory(winner)
 					keyword: fierce
 					until: regroup
 				}
 				{
 				    type: modifyStrength
-				    filter: memory(winner)
+				    select: memory(winner)
 				    amount: 4
 				    until: regroup
 				}
@@ -1855,18 +1855,18 @@
 				    {
 				        type: play
 				        cost: -2
-				        filter: choose(culture(dunland),man)
+				        select: choose(culture(dunland),man)
 				        memorize: playedMinion
 				    }
 				    {
 				        type: addKeyword
-				        filter: memory(playedMinion)
+				        select: memory(playedMinion)
 				        keyword: fierce
 				        until: start(regroup)
 				    }
 				    {
 				        type: addKeyword
-				        filter: memory(playedMinion)
+				        select: memory(playedMinion)
 				        keyword: damage
 				        amount: 1
 				        until: start(regroup)
@@ -1913,7 +1913,7 @@
 			effect: [
 				{
 					type: discard
-					filter: choose(side(free),or(possession,condition))
+					select: choose(side(free),or(possession,condition))
 				}
 			]
 		}
@@ -1960,7 +1960,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: takeControlOfSite

@@ -49,13 +49,13 @@
 		                times: 2
 		                effect: {
                             type: playCardFromDiscard
-                            filter: choose(culture(sauron),condition)
+                            select: choose(culture(sauron),condition)
                             optional: true
 		                }
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -102,7 +102,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(or(companion,ally),inSkirmishAgainst(culture(sauron),orc))
+                        select: choose(or(companion,ally),inSkirmishAgainst(culture(sauron),orc))
                         amount: {
                             type: forEachYouCanSpot
                             filter: ringBound,companion
@@ -121,7 +121,7 @@
                 cost: {
                     type: discardFromHand
                     forced: false
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: addBurdens
@@ -176,7 +176,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: removeTwilight
@@ -235,7 +235,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpotBurdens
@@ -293,7 +293,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -358,7 +358,7 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        requires: {
@@ -418,7 +418,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		            count: 2
 		        }
 		    }
@@ -510,7 +510,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -625,16 +625,16 @@
 		        cost: [
 		            {
 		                type: discard
-		                filter: choose(another,culture(sauron),orc)
+		                select: choose(another,culture(sauron),orc)
 		            }
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		            }
 		        ]
 		        effect: {
                     type: wound
-                    filter: choose(companion,inSkirmishAgainst(self))
+                    select: choose(companion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -684,7 +684,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: takeControlOfSite
@@ -737,7 +737,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: takeControlOfSite
@@ -795,7 +795,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        requires: {
@@ -804,7 +804,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(condition)
+		            select: choose(condition)
 		        }
 		    }
 		]
@@ -864,7 +864,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: removeTwilight
@@ -933,7 +933,7 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: discardFromHand
@@ -987,7 +987,7 @@
 		        cost: [
                     {
                         type: spot
-                        filter: choose(culture(sauron),orc)
+                        select: choose(culture(sauron),orc)
                         memorize: spottedOrc
                     }
                     {
@@ -997,7 +997,7 @@
 		        ]
 		        effect: {
 		            type: stackCards
-		            filter: memory(spottedOrc)
+		            select: memory(spottedOrc)
 		            where: self
 		        }
 		    }
@@ -1006,7 +1006,7 @@
 		        phase: shadow
 		        effect: {
 		            type: playCardFromStacked
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		            on: self
 		        }
 		    }

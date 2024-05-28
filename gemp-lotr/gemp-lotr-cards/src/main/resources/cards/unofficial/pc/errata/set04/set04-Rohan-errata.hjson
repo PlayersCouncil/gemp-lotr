@@ -31,7 +31,7 @@
 				effect: {
 					type: addTokens
 					culture: rohan
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -51,7 +51,7 @@
 				effect: [
 					{
 						type: discard
-						filter: choose(side(shadow),condition)
+						select: choose(side(shadow),condition)
 						count: {
 							type: fromMemory
 							memory: numberOfTokens
@@ -60,7 +60,7 @@
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}

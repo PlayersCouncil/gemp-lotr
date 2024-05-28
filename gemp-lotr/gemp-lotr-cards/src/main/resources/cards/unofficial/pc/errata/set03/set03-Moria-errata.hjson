@@ -33,12 +33,12 @@
 			effect: [
 				{
 					type: playCardFromDiscard
-					filter: choose(item,or(culture(sauron),culture(moria)))
+					select: choose(item,or(culture(sauron),culture(moria)))
 					memorize: item1
 				}
 				{
 					type: playCardFromDiscard
-					filter: choose(item,or(culture(sauron),culture(moria)))
+					select: choose(item,or(culture(sauron),culture(moria)))
 					memorize: item2
 				}
 				{
@@ -58,7 +58,7 @@
 					}
 					effect: {
 						type: wound
-						filter: choose(side(Free Peoples),archer)
+						select: choose(side(Free Peoples),archer)
 					}
 				}
 			]
@@ -118,7 +118,7 @@
 					{
 						type: ChooseActiveCards
 						text: Choose a possession attached to {bearer} to discard.
-						filter: choose(possession,AttachedTo(bearer))
+						select: choose(possession,AttachedTo(bearer))
 						memorize: chosenPoss
 					}
 					{
@@ -132,18 +132,18 @@
 						effects: [
 							{
 								type: exert
-								filter: bearer
+								select: bearer
 								times: 1
 							}
 							{
 								type: Discard
 								player: freeps
-								filter: choose(item,side(freeps),not(memory(chosenPoss)))
+								select: choose(item,side(freeps),not(memory(chosenPoss)))
 							}
 							{
 								type: Discard
 								player: shadow
-								filter: memory(chosenPoss)
+								select: memory(chosenPoss)
 							}
 						]
 					}

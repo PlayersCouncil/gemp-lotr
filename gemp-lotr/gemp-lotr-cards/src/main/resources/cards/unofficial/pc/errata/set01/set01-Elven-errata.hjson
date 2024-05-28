@@ -23,7 +23,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(elf)
+					select: choose(elf)
 					amount: 1
 					memorize: chosenElf
 				}
@@ -39,7 +39,7 @@
 						{
 							type: chooseActiveCards
 							count: 1
-							filter: choose(wounded,Elf)
+							select: choose(wounded,Elf)
 							memorize: chosenElf
 							text: Choose Elf to heal
 						}
@@ -56,7 +56,7 @@
 							text: Discard 1 card from hand to prevent healing {chosenElf}
 							effect: {
 								type: heal
-								filter: memory(chosenElf)
+								select: memory(chosenElf)
 							}
 						}
 					]
@@ -97,7 +97,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: [
 				{
@@ -210,7 +210,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(ally,allyHome(fellowship,3))
+					select: choose(ally,allyHome(fellowship,3))
 					count: 0-3
 				}
 			}
@@ -219,7 +219,7 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: {
 						type: requires
 						requires: {
@@ -333,7 +333,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(ally,allyHome(fellowship,6))
+					select: choose(ally,allyHome(fellowship,6))
 					count: 0-3
 				}
 			}
@@ -342,12 +342,12 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 1
 				}
 				effect: {
 					type: play
-					filter: choose(elf)
+					select: choose(elf)
 					cost: -1
 				}
 			}
@@ -437,7 +437,7 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: choose(name(Galadriel))
+					select: choose(name(Galadriel))
 				}
 				effect: [
 					{
@@ -449,7 +449,7 @@
 					}
 					{
 						type: putCardsFromHandOnTopOfDeck
-						filter: choose(memory(revealedCards))
+						select: choose(memory(revealedCards))
 						player: freeps
 						hand: shadow
 					}
@@ -499,7 +499,7 @@
 				}
 				{
 					type: exert
-					filter: choose(or(dwarf,elf))
+					select: choose(or(dwarf,elf))
 					memorize: exerter
 				}
 			]
@@ -513,7 +513,7 @@
 					}
 					effect: {
 						type: heal
-						filter: choose(elf)
+						select: choose(elf)
 					}
 				}
 				{
@@ -525,7 +525,7 @@
 					}
 					effect: {
 						type: heal
-						filter: choose(dwarf)
+						select: choose(dwarf)
 					}
 				}
 			]
@@ -570,12 +570,12 @@
 			}
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(minion,not(exhausted))
+					select: choose(minion,not(exhausted))
 					memorize: targetMinion
 					text: Choose a minion to exert
 				}
@@ -592,7 +592,7 @@
 					text: Discard a card from hand to prevent {targetMinion} from exerting
 					effect: {
 						type: exert
-						filter: memory(targetMinion)
+						select: memory(targetMinion)
 					}
 				}
 			]

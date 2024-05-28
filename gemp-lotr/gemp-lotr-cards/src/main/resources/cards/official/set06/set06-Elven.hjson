@@ -37,7 +37,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: elven
-		            filter: self
+		            select: self
 		            count: 2
 		        }
 		    }
@@ -53,18 +53,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: elven
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion,inSkirmishAgainst(elf))
+		            select: choose(minion,inSkirmishAgainst(elf))
 		            amount: -1
 		        }
 		    }
@@ -113,11 +113,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(elf)
+		            select: choose(elf)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		            amount: -1
 		        }
 		    }
@@ -176,7 +176,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: liberateSite
@@ -228,7 +228,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -236,7 +236,7 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
@@ -257,11 +257,11 @@
                             effect: [
                                 {
                                     type: putCardsFromDiscardIntoHand
-                                    filter: memory(discardedCard)
+                                    select: memory(discardedCard)
                                 }
                                 {
                                     type: heal
-                                    filter: choose(elf,companion)
+                                    select: choose(elf,companion)
                                 }
                             ]
                         }
@@ -311,7 +311,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(minion,inSkirmishAgainst(elf))
+					select: choose(minion,inSkirmishAgainst(elf))
 					amount: {
 					    type: twilightCostInMemory
 					    memory: revealedCard
@@ -381,11 +381,11 @@
 		                    type: costToEffect
 		                    cost: {
 		                        type: discard
-		                        filter: self
+		                        select: self
 		                    }
 		                    effect: {
 		                        type: discardCardsFromDrawDeck
-		                        filter: memory(revealedCard)
+		                        select: memory(revealedCard)
 								showAll: false
 								shuffle: false
 		                    }
@@ -439,7 +439,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -447,7 +447,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
@@ -464,7 +464,7 @@
                         }
                         effect: {
                             type: modifyStrength
-                            filter: choose(minion,inSkirmishAgainst(elf))
+                            select: choose(minion,inSkirmishAgainst(elf))
                             amount: -3
                         }
                     }
@@ -525,7 +525,7 @@
 				    effects: [
 				        {
 				            type: discardCardsFromDrawDeck
-				            filter: memory(revealedCard)
+				            select: memory(revealedCard)
                             showAll: false
                             shuffle: false
 				        }
@@ -534,7 +534,7 @@
 				        }
 				        {
 				            type: putCardsFromDeckIntoHand
-				            filter: memory(revealedCard)
+				            select: memory(revealedCard)
                             reveal: true
                             shuffle: false
                             showAll: false
@@ -589,7 +589,7 @@
 				}
 				{
 				    type: heal
-				    filter: choose(companion,cultureFromMemory(revealedCard))
+				    select: choose(companion,cultureFromMemory(revealedCard))
 				    count: 0-2
 				}
 				{
@@ -597,7 +597,7 @@
 				    text: Would you like to discard {revealedCard}?
 				    effect: {
 				        type: discardCardsFromDrawDeck
-				        filter: memory(revealedCard)
+				        select: memory(revealedCard)
                         showAll: false
                         shuffle: false
 				    }
@@ -645,7 +645,7 @@
 		        phase: archery
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: [
 		            {
@@ -662,7 +662,7 @@
 		                }
 		                effect: {
 		                    type: exert
-		                    filter: choose(minion)
+		                    select: choose(minion)
 		                }
 		            }
 		        ]
@@ -718,7 +718,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
@@ -735,7 +735,7 @@
                         }
                         effect: {
                             type: modifyStrength
-                            filter: choose(minion,inSkirmishAgainst(self))
+                            select: choose(minion,inSkirmishAgainst(self))
                             amount: -2
                         }
                     }

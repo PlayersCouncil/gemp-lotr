@@ -92,7 +92,7 @@
 			effect: [
 				{
 					type: ChooseCardsFromDiscard
-					filter: choose(culture(sauron))
+					select: choose(culture(sauron))
 					memorize: chosenCard
 					text: Choose a [Sauron] card to take into hand from your discard pile
 				}
@@ -108,7 +108,7 @@
 					text: Discard the top 8 cards of your deck to prevent your opponent taking {chosenCard} into hand from their discard pile
 					effect: {
 						type: PutCardsFromDiscardIntoHand
-						filter: memory(chosenCard)
+						select: memory(chosenCard)
 					}
 				}
 			]
@@ -147,7 +147,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(sauron),minion)
+				select: choose(culture(sauron),minion)
 			}
 			effect: {
 				type: addTwilight
@@ -194,7 +194,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{
@@ -260,7 +260,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 				}
 			}
 			{
@@ -275,7 +275,7 @@
 				}
 				effect: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
@@ -489,7 +489,7 @@
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(companion,not(exhausted),not(Ring-bearer))
+					select: choose(companion,not(exhausted),not(Ring-bearer))
 					memorize: chosenComp
 					text: Choose a companion to exhaust
 				}
@@ -505,7 +505,7 @@
 					text: Discard 2 cards at random from hand to prevent exhausting {chosenComp}
 					effect: {
 						type: exhaust
-						filter: memory(chosenComp)
+						select: memory(chosenComp)
 					}
 				}
 			]
@@ -546,7 +546,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{

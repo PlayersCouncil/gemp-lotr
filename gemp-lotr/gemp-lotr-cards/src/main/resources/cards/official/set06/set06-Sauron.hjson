@@ -84,11 +84,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(or(culture(sauron),twilight),minion)
+		            select: choose(or(culture(sauron),twilight),minion)
 		            amount: {
 		                type: forEachYouCanSpot
 		                filter: twilight,minion
@@ -199,21 +199,21 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: [
 		            {
 		                type: chooseActiveCards
 		                player: fp
-		                filter: choose(or(companion,ally))
+		                select: choose(or(companion,ally))
 		                count: 0-3
 		                text: Choose up to 3 characters of cultures you want to spare, characters of not chosen cultures will get wounded
 		                memorize: chosenCharacters
 		            }
 		            {
 		                type: wound
-		                filter: all(or(companion,ally),not(cultureFromMemory(chosenCharacters)))
+		                select: all(or(companion,ally),not(cultureFromMemory(chosenCharacters)))
 		            }
 		        ]
 		    }
@@ -260,7 +260,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        requires: {
@@ -269,7 +269,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(condition)
+		            select: choose(condition)
 		        }
 		    }
 		]
@@ -373,7 +373,7 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
                     {
@@ -436,18 +436,18 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(culture(sauron),orc)
+		            select: choose(culture(sauron),orc)
 		        }
 		        effect: [
                     {
                         type: play
-                        filter: choose(or(nazgul,culture(sauron)),minion)
+                        select: choose(or(nazgul,culture(sauron)),minion)
                         cost: -4
                         memorize: playedMinion
                     }
                     {
                         type: exhaust
-                        filter: memory(playedMinion)
+                        select: memory(playedMinion)
                     }
                 ]
 		    }
@@ -504,11 +504,11 @@
 		        cost: {
 		            type: discardFromHand
 		            forced: false
-		            filter: choose(culture(sauron))
+		            select: choose(culture(sauron))
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: 1
 		        }
 		    }
@@ -608,7 +608,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addBurdens
@@ -617,64 +617,6 @@
 		]
 		gametext: <b>Twilight</b>.<br><b>Regroup:</b> Spot another [sauron] or twilight minion and discard this minion to add a burden.
 		lore: They do not see what lies ahead / When Sun has failed and Moon is dead.'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	6_128: {
-		cardInfo: {
-			imagePath: decipher/LOTR06128.jpg
-			javaClass: true
-			//parentId: 6_128
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 6R128
-			rarity: R
-			setNum: "6"
-			cardNum: 128
-			style: Standard
-		}
-		title: Gate Troll
-		unique: true
-		side: Shadow
-		culture: Sauron
-		twilight: 8
-		type: Minion
-		race: Troll
-		strength: 13
-		vitality: 4
-		site: 6
-		keywords: Fierce
-		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: canSpot
-		            filter: troll
-		        }
-		        amount: -4
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: another,culture(sauron),minion
-		            }
-		        }
-		    }
-		]
-		gametext: <b>Fierce</b>.<br>While you can spot a Troll, Gate Troll's twilight cost is -4.<br>For each other [sauron] minion you can spot, this minion is strength +1.
-		lore: ...what the plague did you bring us here for?'
 		promotext: ""
 		alts: {
 			promos: {

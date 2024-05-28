@@ -22,7 +22,7 @@
 			type: event
 			cost: {
 				type: Exert
-				filter: choose(mounted,companion)
+				select: choose(mounted,companion)
 				count: {
 					type: range
 					from: 0
@@ -42,7 +42,7 @@
 			effect: [
 				{
 					type: Wound
-					filter: choose(minion)
+					select: choose(minion)
 					count: {
 						type: ForEachInMemory
 						memory: exertedComps

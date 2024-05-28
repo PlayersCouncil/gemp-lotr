@@ -40,7 +40,7 @@
 		            effects: [
 		                {
                             type: exert
-                            filter: choose(unbound,hobbit)
+                            select: choose(unbound,hobbit)
                         }
                         {
                             type: discardFromHand
@@ -62,11 +62,11 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(unbound,hobbit)
+		            select: choose(unbound,hobbit)
 		        }
 		    }
 		]
@@ -110,34 +110,34 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 				times: 3
 			},
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(unbound,companion,signet(Gandalf))
+					select: choose(unbound,companion,signet(Gandalf))
 					amount: 5
 					until: regroup
 					memorize: chosenCompanion
 				}
 				{
 				    type: addKeyword
-				    filter: memory(chosenCompanion)
+				    select: memory(chosenCompanion)
 				    keyword: defender
 				    amount: 1
 				    until: regroup
 				}
 				{
 				    type: addKeyword
-				    filter: memory(chosenCompanion)
+				    select: memory(chosenCompanion)
 				    keyword: damage
 				    amount: 2
 				    until: regroup
 				}
 				{
 				    type: disableWounds
-                    filter: memory(chosenCompanion)
+                    select: memory(chosenCompanion)
 				    until: regroup
 				}
 			]
@@ -192,7 +192,7 @@
 		            effects: [
 		                {
                             type: exert
-                            filter: choose(unbound,hobbit)
+                            select: choose(unbound,hobbit)
                         }
                         {
                             type: discardFromHand
@@ -214,11 +214,11 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(unbound,hobbit)
+		            select: choose(unbound,hobbit)
 		        }
 		    }
 		]
@@ -266,12 +266,12 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			},
 			effect: [
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 					times: 2
 				}
 			]
@@ -327,7 +327,7 @@
 		            effects: [
 		                {
                             type: exert
-                            filter: choose(unbound,hobbit)
+                            select: choose(unbound,hobbit)
                         }
                         {
                             type: discardFromHand
@@ -349,11 +349,11 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(unbound,hobbit)
+		            select: choose(unbound,hobbit)
 		        }
 		    }
 		    {
@@ -361,11 +361,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(culture(isengard),minion,inSkirmishAgainst(self))
+		            select: choose(culture(isengard),minion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -409,7 +409,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			},
 			effect: [
 				{
@@ -419,11 +419,11 @@
 					cost: {
 					    type: discard
 					    player: shadow
-					    filter: choose(minion)
+					    select: choose(minion)
 					}
 					effect: {
 					    type: discard
-					    filter: choose(side(shadow),possession)
+					    select: choose(side(shadow),possession)
 					    count: 0-2
 					}
 				}

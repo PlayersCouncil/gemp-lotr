@@ -44,7 +44,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -85,11 +85,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: {
 				type: wound
-				filter: choose(orc,inSkirmishAgainst(bearer))
+				select: choose(orc,inSkirmishAgainst(bearer))
 			}
 		}
 		gametext: Bearer must be a Hobbit.<br><b>Skirmish:</b> Exert bearer to wound an Orc he or she is skirmishing.
@@ -151,7 +151,7 @@
                     {
                         type: heal
                         count: 0-2
-                        filter: choose(companion)
+                        select: choose(companion)
                     }
                 ]
             }

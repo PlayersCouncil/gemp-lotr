@@ -25,19 +25,19 @@ import java.util.Set;
 public class ExchangeCardsInHandWithCardsInDiscard implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filterInHand", "filterInDiscard", "countInHand", "countInDiscard");
+        FieldUtils.validateAllowedFields(effectObject, "selectInHand", "selectInDiscard", "countInHand", "countInDiscard");
 
-        final String filterHand = FieldUtils.getString(effectObject.get("filterInHand"), "filterInHand");
+        final String selectInHand = FieldUtils.getString(effectObject.get("selectInHand"), "selectInHand");
         final ValueSource countHand = ValueResolver.resolveEvaluator(effectObject.get("countInHand"), 1, environment);
-        final String filterDiscard = FieldUtils.getString(effectObject.get("filterInDiscard"), "filterInDiscard");
+        final String selectInDiscard = FieldUtils.getString(effectObject.get("selectInDiscard"), "selectInDiscard");
         final ValueSource countDiscard = ValueResolver.resolveEvaluator(effectObject.get("countInDiscard"), 1, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInHand(filterHand, countHand, "_tempHand", "you", "you", "Choose cards to exchange in hand", environment));
+                CardResolver.resolveCardsInHand(selectInHand, countHand, "_tempHand", "you", "you", "Choose cards to exchange in hand", environment));
         result.addEffectAppender(
-                CardResolver.resolveCardsInDiscard(filterDiscard, countDiscard, "_tempDiscard", "you", "Choose cards to exchange in discard", environment));
+                CardResolver.resolveCardsInDiscard(selectInDiscard, countDiscard, "_tempDiscard", "you", "Choose cards to exchange in discard", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

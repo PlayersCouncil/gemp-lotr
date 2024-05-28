@@ -44,11 +44,11 @@
                 phase: maneuver
                 cost: {
                     type: exert
-                    filter: choose(name(Gandalf))
+                    select: choose(name(Gandalf))
                 }
                 effect: {
                     type: wound
-                    filter: choose(name(Saruman))
+                    select: choose(name(Saruman))
                     times: 2
                 }
             }
@@ -156,18 +156,18 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(self,notAssignedToSkirmish)
+		                select: choose(self,notAssignedToSkirmish)
 		            }
 		            {
 		                type: exert
-		                filter: choose(another,unbound,companion,inSkirmishAgainst(minion))
+		                select: choose(another,unbound,companion,inSkirmishAgainst(minion))
 		                memorize: anotherCompanion
 		            }
 		        ]
 		        effect: [
 		            {
 		                type: modifyStrength
-		                filter: self
+		                select: self
 		                amount: 3
 		            }
 		            {
@@ -288,7 +288,7 @@
 				        {
 				            type: discard
 				            player: shadow
-				            filter: choose(side(shadow),condition)
+				            select: choose(side(shadow),condition)
 				        }
 				        {
 				            type: conditional
@@ -298,7 +298,7 @@
 				            }
 				            effect: {
 				                type: discard
-				                filter: choose(condition)
+				                select: choose(condition)
 				            }
 				        }
 				    ]
@@ -409,7 +409,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(name(Gandalf))
+				    select: choose(name(Gandalf))
 				    amount: {
 				        type: condition
 				        condition: {
@@ -478,11 +478,11 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: preventWound
-		                filter: memory(bearer)
+		                select: memory(bearer)
 		            }
 		        ]
 		    }
@@ -525,7 +525,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(gandalf),companion)
+				    select: choose(culture(gandalf),companion)
 				    amount: 2
 				}
 				{
@@ -536,7 +536,7 @@
 				    }
                     effect: {
                         type: putCardsFromDiscardIntoHand
-                        filter: choose(culture(gandalf),condition)
+                        select: choose(culture(gandalf),condition)
                         count: 0-1
                     }
 				}
@@ -588,7 +588,7 @@
 				{
 				    type: chooseActiveCards
 				    text: Choose site to replace
-				    filter: choose(siteInCurrentRegion)
+				    select: choose(siteInCurrentRegion)
 				    memorize: chosenSite
 				}
 				{

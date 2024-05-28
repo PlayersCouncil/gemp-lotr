@@ -37,7 +37,7 @@
 				effect: [
 					{
 						type: PutCardsFromDiscardIntoHand
-						filter: choose(culture(gandalf),event)
+						select: choose(culture(gandalf),event)
 						count: 1
 					}
 					{

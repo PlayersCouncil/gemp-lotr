@@ -117,12 +117,12 @@
             }
             cost: {
                 type: exert
-                filter: choose(your,culture(isengard),orc)
+                select: choose(your,culture(isengard),orc)
             }
             effect: {
                 type: wound
                 player: fp
-                filter: choose(companion)
+                select: choose(companion)
             }
         }
     }

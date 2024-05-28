@@ -40,11 +40,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: raider
-		            filter: choose(any)
+		            select: choose(any)
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession,attachedTo(character,inSkirmishAgainst(self)))
+		            select: choose(possession,attachedTo(character,inSkirmishAgainst(self)))
 		        }
 		    }
 		]
@@ -92,7 +92,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: raider
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -123,7 +123,7 @@
                     {
                         type: removeTokens
                         culture: raider
-                        filter: self
+                        select: self
                         count: {
                             type: fromMemory
                             memory: tokenCount
@@ -132,7 +132,7 @@
                 ]
                 effect: {
                     type: playCardFromDiscard
-                    filter: choose(corsair)
+                    select: choose(corsair)
 		            cost: {
                         type: forEachToken
                         culture: raider
@@ -190,17 +190,17 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: play
-                        filter: choose(corsair)
+                        select: choose(corsair)
                     }
                 ]
                 effect: {
                     type: addTokens
                     culture: raider
-                    filter: choose(hasToken(raider))
+                    select: choose(hasToken(raider))
                     count: 2
                 }
 		    }
@@ -317,7 +317,7 @@
                 effect: {
                     type: addTokens
                     culture: raider
-                    filter: choose(hasToken(raider))
+                    select: choose(hasToken(raider))
                     count: 2
                 }
 		    }
@@ -374,7 +374,7 @@
                 effect: {
                     type: addTokens
                     culture: raider
-                    filter: choose(hasToken(raider))
+                    select: choose(hasToken(raider))
                     count: 2
                 }
 		    }
@@ -426,12 +426,12 @@
 		        }
 		        cost: {
 		            type: removeTokens
-		            filter: choose(any)
+		            select: choose(any)
 		            culture: raider
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(corsair)
+		            select: choose(corsair)
 		            keyword: fierce
 		            until: regroup
 		        }
@@ -488,12 +488,12 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: choose(ally)
+		            select: choose(ally)
 		        }
                 effect: {
                     type: addTokens
                     culture: raider
-                    filter: choose(hasToken(raider))
+                    select: choose(hasToken(raider))
                     count: 2
                 }
 		    }
@@ -548,12 +548,12 @@
 			}
 			cost: {
 				type: discard
-				filter: choose(possession)
+				select: choose(possession)
 			}
             effect: {
                 type: addTokens
                 culture: raider
-                filter: choose(hasToken(raider))
+                select: choose(hasToken(raider))
                 count: 2
             }
 		}
@@ -610,7 +610,7 @@
                 effect: {
                     type: addTokens
                     culture: raider
-                    filter: choose(hasToken(raider))
+                    select: choose(hasToken(raider))
                     count: 2
                 }
 		    }
@@ -660,7 +660,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: raider
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -693,7 +693,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -810,7 +810,7 @@
     		    cost: {
     		        type: discardFromHand
     		        forced: false
-    		        filter: choose(culture(raider))
+    		        select: choose(culture(raider))
     		    }
     		    effect: [
     		        {
@@ -819,7 +819,7 @@
     		        }
     		        {
     		            type: discard
-    		            filter: self
+    		            select: self
     		        }
     		    ]
     		}
@@ -1059,14 +1059,14 @@
 		                {
 		                    type: discardFromHand
 		                    forced: false
-		                    filter: choose(culture(raider))
+		                    select: choose(culture(raider))
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: raider
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -1075,12 +1075,12 @@
 		        cost: {
 		            type: removeTokens
 		            culture: raider
-		            filter: self
+		            select: self
 		            count: 2
 		        }
 		        effect: {
 		            type: putCardsFromDiscardOnTopOfDeck
-		            filter: choose(culture(raider))
+		            select: choose(culture(raider))
 		        }
 		    }
 		]
@@ -1132,7 +1132,7 @@
 				}
 				{
 				    type: modifyStrength
-				    filter: choose(corsair)
+				    select: choose(corsair)
 				    amount: {
 				        type: fromMemory
 				        memory: spotCount

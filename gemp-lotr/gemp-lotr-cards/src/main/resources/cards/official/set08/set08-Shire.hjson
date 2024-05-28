@@ -29,7 +29,7 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(unbound,hobbit)
+		                select: choose(unbound,hobbit)
 		            }
 		            {
 		                type: addBurdens
@@ -42,7 +42,7 @@
 		            }
 		            {
 		                type: putCardsFromHandOnBottomOfDeck
-		                filter: all(side(free people))
+		                select: all(side(free people))
 		            }
 		        ]
 		    }
@@ -109,7 +109,7 @@
                     {
                         type: discardFromHand
                         forced: false
-                        filter: self
+                        select: self
                         count: {
                             type: range
                             from: 0
@@ -121,7 +121,7 @@
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		    }
@@ -176,7 +176,7 @@
 				}
 				{
 				    type: modifyStrength
-				    filter: choose(unbound,hobbit)
+				    select: choose(unbound,hobbit)
 				    amount: {
 				        type: fromMemory
 				        memory: spotCount
@@ -224,17 +224,17 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(culture(shire),companion)
+		                select: choose(culture(shire),companion)
 		            }
 		            {
 		                type: exert
-		                filter: choose(or(culture(rohan),culture(gandalf)),companion)
+		                select: choose(or(culture(rohan),culture(gandalf)),companion)
 		            }
 		        ]
 		        effect: {
 		            type: addTokens
 		            culture: shire
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -243,11 +243,11 @@
 		        cost: {
                     type: removeTokens
                     culture: shire
-                    filter: self
+                    select: self
 		        }
 		        effect: {
 		            type: alterOverwhelmMultiplier
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		            multiplier: 3
 		        }
 		    }
@@ -303,7 +303,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(minion,inSkirmish)
+		            select: choose(minion,inSkirmish)
 		        }
 		    }
 		]
@@ -344,7 +344,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Frodo))
+				select: choose(name(Frodo))
 			},
 			effect: [
 				{
@@ -404,12 +404,12 @@
 			text: Wound {exertedMinion}
 			cost: {
 				type: exert
-				filter: choose(unbound,hobbit)
+				select: choose(unbound,hobbit)
 			}
 			effect: [
 				{
 				    type: wound
-				    filter: memory(exertedMinion)
+				    select: memory(exertedMinion)
 				}
 			]
 		}
@@ -457,12 +457,12 @@
 			}
 			cost: {
 			    type: exert
-			    filter: choose(unbound,hobbit)
+			    select: choose(unbound,hobbit)
 			}
 			effect: [
 				{
 				    type: putCardsFromDiscardOnTopOfDeck
-				    filter: choose(side(shadow))
+				    select: choose(side(shadow))
 				}
 			]
 		}
@@ -528,7 +528,7 @@
                     }
                     {
                         type: modifyStrength
-                        filter: self
+                        select: self
                         amount: {
                             type: fromMemory
                             memory: spotCount
@@ -594,7 +594,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(self),hasAttached(fortification))
+		            select: choose(minion,inSkirmishAgainst(self),hasAttached(fortification))
 		            times: 2
 		        }
 		    }

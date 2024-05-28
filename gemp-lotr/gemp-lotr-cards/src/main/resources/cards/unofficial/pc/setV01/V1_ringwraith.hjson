@@ -9,24 +9,24 @@
 		effects: {
 			type: event
 			effect: {
-					type: choice
-					texts: [
-						Play a WRAITH item from your draw deck
-						Play a WRAITH item from your discard pile
-					]
-					effects: [
-						{
-							type: playCardFromDrawDeck
-							filter: choose(culture(wraith),item)
-                            showAll: true
-                            shuffle: true
-						}
-						{
-							type: playCardFromDiscard
-							filter: choose(culture(wraith),item)
-						}
-					]
-				}
+				type: choice
+				texts: [
+					Play a WRAITH item from your draw deck
+					Play a WRAITH item from your discard pile
+				]
+				effects: [
+					{
+						type: playCardFromDrawDeck
+						select: choose(culture(wraith),item)
+						showAll: true
+						shuffle: true
+					}
+					{
+						type: playCardFromDiscard
+						select: choose(culture(wraith),item)
+					}
+				]
+			}
 		}
 	}
 
@@ -114,7 +114,7 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					fromSupport: true
 					where: choose(nazgul,not(hasAttached(helm)))
 				}
@@ -156,13 +156,13 @@
 				optional: true
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: preventable
 					effect: {
 						type: addKeyword
-						filter: self
+						select: self
 						keyword: fierce
 						until: start(regroup)				 
 					}
@@ -170,7 +170,7 @@
 					player: freeps
 					cost: {
 						type: exert
-						filter: choose(ring-bearer)
+						select: choose(ring-bearer)
 					}
 				}
 			}
@@ -241,11 +241,11 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(twilight,nazgul)
+					select: choose(twilight,nazgul)
 				}
 				effect: {
 					type: shufflecardsfromdiscardintodrawdeck
-					filter: choose(culture(wraith))
+					select: choose(culture(wraith))
 					count: 1
 				}
 			}
@@ -264,7 +264,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(twilight,nazgul,inSkirmish)
+					select: choose(twilight,nazgul,inSkirmish)
 					memorize: chosenNazzy
 					amount: {
 						type: forEachWound
@@ -282,7 +282,7 @@
 					}
 					effect: {
 						type: addKeyword
-						filter: memory(chosenNazzy)
+						select: memory(chosenNazzy)
 						keyword: damage+1
 					}
 				}

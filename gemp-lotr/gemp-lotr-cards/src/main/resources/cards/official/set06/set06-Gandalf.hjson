@@ -27,7 +27,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(ent)
+					select: choose(ent)
 					amount: {
 					    type: forEachYouCanSpot
 					    filter: unbound,hobbit
@@ -36,7 +36,7 @@
 				}
 				{
 				    type: addKeyword
-				    filter: memory(chosenEnt)
+				    select: memory(chosenEnt)
 				    keyword: damage
 				    amount: {
 				        type: forEachYouCanSpot
@@ -82,7 +82,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(ent)
+				select: choose(ent)
 				count: 2
 			},
 			effect: [
@@ -91,7 +91,7 @@
 				}
 				{
 				    type: discard
-				    filter: choose(side(shadow),condition)
+				    select: choose(side(shadow),condition)
 				}
 			]
 		}
@@ -137,7 +137,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -305,7 +305,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(unbound,hobbit)
+		            select: choose(unbound,hobbit)
 		        }
 		    }
 		]
@@ -356,7 +356,7 @@
 		        }
 		        effect: {
 		            type: wound
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -419,7 +419,7 @@
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: bearer
+		            select: bearer
 		            keyword: damage
 		            amount: 1
 		        }
@@ -563,7 +563,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(ent)
+				select: choose(ent)
 				memorize: exertedEnt
 			},
 			effect: [
@@ -575,7 +575,7 @@
 			    }
 				{
 					type: modifyStrength
-					filter: memory(exertedEnt)
+					select: memory(exertedEnt)
 					amount: {
 					    type: fromMemory
 					    memory: spotCount
@@ -638,11 +638,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(unbound,hobbit)
+		            select: choose(unbound,hobbit)
 		        }
 		    }
 		]
@@ -687,7 +687,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(minion,inSkirmishAgainst(name(Gandalf)))
+					select: choose(minion,inSkirmishAgainst(name(Gandalf)))
 					amount: {
 					    type: forEachWound
 					    filter: character,inSkirmish
@@ -740,7 +740,7 @@
 		        phase: assignment
 		        cost: {
 		            type: exert
-		            filter: choose(unbound,hobbit)
+		            select: choose(unbound,hobbit)
 		        }
 		        effect: {
 		            type: addModifier
@@ -755,11 +755,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(ent)
+		            select: choose(ent)
 		            keyword: damage
 		            amount: 1
 		        }
@@ -767,114 +767,6 @@
 		]
 		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit to allow Treebeard to skirmish.<br><b>Skirmish:</b> Exert Treebeard to make an Ent <b>damage +1</b>.
 		lore: The little that I know of his long slow story would make a tale for which we have no time now.'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	6_123: {
-		cardInfo: {
-			imagePath: decipher/LOTR06123.jpg
-			javaClass: true
-			//parentId: 6_123
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 6R123
-			rarity: R
-			setNum: "6"
-			cardNum: 123
-			style: Standard
-		}
-		title: Enraged
-		unique: false
-		side: Free Peoples
-		culture: Gandalf
-		twilight: 2
-		type: Condition
-		strength: 4
-		target: ent,not(hasAttached(name(Enraged)))
-		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: endOfTurn
-		        }
-		        effect: {
-		            type: discard
-		            filter: self
-		        }
-		    }
-		]
-		gametext: Bearer must be an Ent. Limit 1 per bearer.<br>Discard this condition at the end of the turn.
-		lore: They pushed, pulled, tore, shook, and hammered....'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	6_124: {
-		cardInfo: {
-			imagePath: decipher/LOTR06124.jpg
-			javaClass: true
-			//parentId: 6_124
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 6R124
-			rarity: R
-			setNum: "6"
-			cardNum: 124
-			style: Standard
-		}
-		title: Skinbark
-		subtitle: Fladrif
-		unique: true
-		side: Free Peoples
-		culture: Gandalf
-		twilight: 7
-		type: Companion
-		race: Ent
-		strength: 8
-		vitality: 4
-		resistance: 6
-		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: or(ent,and(unbound,hobbit))
-		            multiplier: -1
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: unbound,hobbit
-		        }
-		        cost: {
-		            type: exert
-		            filter: self
-		        }
-		        effect: {
-		            type: preventWound
-		            filter: choose(unbound,hobbit)
-		        }
-		    }
-		]
-		gametext: Skinbark's twilight cost is -1 for each Ent or unbound Hobbit you can spot.<br><b>Response:</b> If an unbound Hobbit is about to take a wound, exert Skinbark to prevent that wound.
-		lore: He has gone up onto the high places, among the birches that he loves best....'
 		promotext: ""
 		alts: {
 			promos: {

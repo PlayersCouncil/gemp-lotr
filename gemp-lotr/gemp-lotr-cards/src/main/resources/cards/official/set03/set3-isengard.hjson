@@ -52,7 +52,7 @@
                 }
                 effect: {
                     type: exhaust
-                    filter: choose(name(Aragorn))
+                    select: choose(name(Aragorn))
                 }
             }
         }
@@ -75,7 +75,7 @@
                 }
                 {
                     type: heal
-                    filter: choose(culture(isengard),minion)
+                    select: choose(culture(isengard),minion)
                     count: {
                         type: twilightCostInMemory
                         memory: revealedCard
@@ -96,11 +96,11 @@
             phase: shadow
             cost: {
                 type: exert
-                filter: choose(name(Saruman))
+                select: choose(name(Saruman))
             }
             effect: {
                 type: playCardFromDiscard
-                filter: choose(culture(isengard),weather,condition)
+                select: choose(culture(isengard),weather,condition)
                 cost: -2
             }
         }
@@ -150,7 +150,7 @@
                 phase: shadow
                 cost: {
                     type: discard
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: addTwilight
@@ -195,7 +195,7 @@
             phase: shadow
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: addTwilight
@@ -218,12 +218,12 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: wound
                 player: fp
-                filter: choose(companion)
+                select: choose(companion)
             }
         }
     }
@@ -242,12 +242,12 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: wound
                 player: fp
-                filter: choose(companion)
+                select: choose(companion)
             }
         }
     }
@@ -273,7 +273,7 @@
             }
             effect: {
                 type: preventWound
-                filter: choose(culture(isengard),orc)
+                select: choose(culture(isengard),orc)
             }
         }
     }
@@ -292,7 +292,7 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: if
@@ -303,11 +303,11 @@
                 }
                 true: {
                     type: discard
-                    filter: all(side(free),possession)
+                    select: all(side(free),possession)
                 }
                 false: {
                     type: discard
-                    filter: choose(weapon)
+                    select: choose(weapon)
                 }
             }
         }
@@ -339,7 +339,7 @@
                 phase: regroup
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 requires: {
                     type: canSpotWounds
@@ -348,7 +348,7 @@
                 }
                 effect: {
                     type: exert
-                    filter: all(companion)
+                    select: all(companion)
                 }
             }
         ]
@@ -368,12 +368,12 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: self
+                select: self
             }
             effect: {
                 type: wound
                 player: fp
-                filter: choose(companion)
+                select: choose(companion)
             }
         }
     }
@@ -388,12 +388,12 @@
             type: event
             cost: {
                 type: exert
-                filter: choose(culture(isengard),minion)
+                select: choose(culture(isengard),minion)
             }
             effect: {
                 type: exert
                 player: fp
-                filter: choose(companion)
+                select: choose(companion)
                 count: {
                     type: forEachRace
                     filter: companion,or(dwarf,elf,man,wizard)
@@ -426,12 +426,12 @@
                 phase: regroup
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: wound
                     player: fp
-                    filter: choose(companion)
+                    select: choose(companion)
                 }
             }
         ]
@@ -452,12 +452,12 @@
             phase: regroup
             cost: {
                 type: exert
-                filter: self
+                select: self
                 times: 2
             }
             effect: {
                 type: exhaust
-                filter: choose(companion,not(ringBearer))
+                select: choose(companion,not(ringBearer))
             }
         }
     }
@@ -482,12 +482,12 @@
             }
             cost: {
                 type: exert
-                filter: self
+                select: self
                 times: 2
             }
             effect: {
                 type: exhaust
-                filter: choose(companion,not(ringBearer))
+                select: choose(companion,not(ringBearer))
             }
         }
     }
@@ -529,7 +529,7 @@
                     {
                         type: putCardsFromHandOnTopOfDeck
                         hand: fp
-                        filter: memory(revealedCard)
+                        select: memory(revealedCard)
                     }
                 ]
             }
@@ -590,11 +590,11 @@
                 }
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: preventWound
-                    filter: choose(urukHai)
+                    select: choose(urukHai)
                 }
             }
         ]
@@ -643,18 +643,18 @@
                 phase: assignment
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: [
                     {
                         type: chooseActiveCards
-                        filter: choose(culture(isengard),minion,assignableToSkirmishAgainst(companion,not(ringBearer)))
+                        select: choose(culture(isengard),minion,assignableToSkirmishAgainst(companion,not(ringBearer)))
                         text: Choose ISENGARD minion to assign
                         memorize: assignedMinion
                     }
                     {
                         type: chooseActiveCards
-                        filter: choose(companion,not(ringBearer),assignableToSkirmishAgainst(memory(assignedMinion)))
+                        select: choose(companion,not(ringBearer),assignableToSkirmishAgainst(memory(assignedMinion)))
                         text: Choose companion (except Ring-Bearer) to assign
                         memorize: assignedCompanion
                     }
@@ -676,7 +676,7 @@
                             text: Would you like to exert {assignedCompanion} to prevent it being assigned to {assignedMinion}
                             cost: {
                                 type: exert
-                                filter: memory(assignedCompanion)
+                                select: memory(assignedCompanion)
                             }
                             effect: {
                                 type: assignFpCharacterToSkirmish
@@ -700,7 +700,7 @@
             type: event
             effect: {
                 type: modifyStrength
-                filter: choose(culture(isengard),orc)
+                select: choose(culture(isengard),orc)
                 amount: {
                     type: condition
                     condition: {
@@ -776,14 +776,14 @@
             type: event
             cost: {
                 type: discard
-                filter: choose(culture(isengard),orc)
+                select: choose(culture(isengard),orc)
                 count: any
                 memorize: discardedOrcs
             }
             effect: {
                 type: wound
                 player: fp
-                filter: choose(companion)
+                select: choose(companion)
                 count: {
                     type: forEachInMemory
                     memory: discardedOrcs

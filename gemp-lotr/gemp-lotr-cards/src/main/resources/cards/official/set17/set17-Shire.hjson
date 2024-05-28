@@ -38,7 +38,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: choose(pipeweed)
+		            select: choose(pipeweed)
 		        }
 		        effect: {
 		            type: cancelSkirmish
@@ -96,11 +96,11 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: putCardsFromDiscardOnBottomOfDeck
-		            filter: choose(pipeweed)
+		            select: choose(pipeweed)
 		        }
 		    }
 		]
@@ -154,7 +154,7 @@
 		        text: Remove a threat
 		        cost: {
 		            type: discard
-		            filter: choose(pipeweed)
+		            select: choose(pipeweed)
 		        }
 		        effect: {
 		            type: removeThreats
@@ -166,11 +166,11 @@
 		        text: Discard a minion
 		        cost: {
 		            type: discard
-		            filter: choose(pipeweed)
+		            select: choose(pipeweed)
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -224,7 +224,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: discard
-		            filter: choose(pipeweed)
+		            select: choose(pipeweed)
 		            count: 2
 		        }
 		        effect: {
@@ -281,11 +281,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: choose(pipeweed)
+		            select: choose(pipeweed)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(unbound,hobbit)
+		            select: choose(unbound,hobbit)
 		            amount: 2
 		        }
             }
@@ -294,11 +294,11 @@
                 phase: regroup
                 cost: {
                     type: discard
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: playCardFromDrawDeck
-                    filter: choose(pipeweed)
+                    select: choose(pipeweed)
                     showAll: true
                     shuffle: true
                 }
@@ -353,11 +353,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: choose(pipeweed)
+		            select: choose(pipeweed)
 		        }
 		        effect: {
 		            type: alterOverwhelmMultiplier
-		            filter: choose(unbound,hobbit)
+		            select: choose(unbound,hobbit)
 		            multiplier: 3
 		        }
 		    }

@@ -42,7 +42,7 @@
 		        cost: {
 		            type: spot
 		            text: Choose a Dwarf to spot
-		            filter: choose(dwarf)
+		            select: choose(dwarf)
 		            memorize: chosenDwarf
 		        }
 		        effect: [
@@ -56,7 +56,7 @@
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		    }
@@ -99,7 +99,7 @@
 			cost: {
 				type: spot
 				text: Choose a Dwarf to spot
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				memorize: chosenDwarf
 			}
 			effect: [
@@ -112,7 +112,7 @@
                     }
                     effect: {
                         type: wound
-                        filter: choose(minion)
+                        select: choose(minion)
                     }
 				}
 			]
@@ -154,7 +154,7 @@
 			type: event
 			cost: {
 			    type: exert
-			    filter: choose(dwarf)
+			    select: choose(dwarf)
 			    times: 2
 			    memorize: exertedDwarf
 			},
@@ -324,7 +324,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(dwarf)
+				    select: choose(dwarf)
 				    memorize: chosenDwarf
 				    amount: {
 				        type: forEachKeywordOnCardInMemory
@@ -377,7 +377,7 @@
 			effect: [
 				{
 				    type: wound
-				    filter: choose(minion,notAssignedToSkirmish)
+				    select: choose(minion,notAssignedToSkirmish)
 				    times: {
 				        type: forEachKeywordOnCardInMemory
 				        memory: winningDwarf
@@ -426,17 +426,17 @@
 		        cost: [
                     {
                         type: exert
-                        filter: choose(dwarf)
+                        select: choose(dwarf)
                     }
                     {
                         type: exert
-                        filter: choose(or(and(culture(elven),companion),and(culture(gondor),man)))
+                        select: choose(or(and(culture(elven),companion),and(culture(gondor),man)))
                     }
                 ]
                 effect: {
                     type: addTokens
                     culture: dwarven
-                    filter: self
+                    select: self
                 }
 		    }
 		    {
@@ -445,11 +445,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: dwarven
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(companion)
+		            select: choose(companion)
 		            keyword: damage
 		            amount: 1
 		        }

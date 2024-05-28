@@ -32,20 +32,20 @@
 				{
 					type: choice
 					texts: [
-                        Exchange with card in dead pile
-                        Exchange with card in discard
+						Exchange with card in dead pile
+						Exchange with card in discard
 					]
 					effects: [
-					    {
-					        type: exchangeCardsInHandWithCardsInDeadPile
-					        filterInHand: choose(companion)
-					        filterInDeadPile: choose(companion)
-					    }
-					    {
-					        type: exchangeCardsInHandWithCardsInDiscard
-					        filterInHand: choose(companion)
-					        filterInDiscard: choose(companion)
-					    }
+						{
+							type: exchangeCardsInHandWithCardsInDeadPile
+							selectInHand: choose(companion)
+							selectInDeadPile: choose(companion)
+						}
+						{
+							type: exchangeCardsInHandWithCardsInDiscard
+							selectInHand: choose(companion)
+							selectInDiscard: choose(companion)
+						}
 					]
 				}
 			]
@@ -98,7 +98,7 @@
 		        effect: {
 		            type: discard
 		            player: shadow
-		            filter: choose(side(shadow),condition)
+		            select: choose(side(shadow),condition)
 		        }
 		    }
 		]
@@ -139,7 +139,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(your,wizard)
+				select: choose(your,wizard)
 			},
 			effect: [
 				{
@@ -150,7 +150,7 @@
 				}
 				{
 				    type: modifyStrength
-				    filter: all(minion,printedTwilightCostFromMemory(chosenNumber))
+				    select: all(minion,printedTwilightCostFromMemory(chosenNumber))
 				    amount: -2
 				    until: regroup
 				}
@@ -200,12 +200,12 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(your,wizard)
+				select: choose(your,wizard)
 			}
 			effect: [
 				{
 					type: discard
-					filter: all(minion)
+					select: all(minion)
 				}
 			]
 		}
@@ -260,18 +260,18 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		            times: 2
 		        }
 		        effect: [
 		            {
 		                type: playCardFromDiscard
-		                filter: choose(culture(gandalf),condition)
+		                select: choose(culture(gandalf),condition)
 		            }
 		            {
 		                type: discard
 		                player: shadow
-		                filter: choose(side(shadow),condition)
+		                select: choose(side(shadow),condition)
 		            }
 		        ]
 		    }

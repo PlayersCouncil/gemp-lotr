@@ -183,12 +183,12 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(hunter,companion)
+		            select: choose(hunter,companion)
 		            count: 2
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(hunter,companion)
+		            select: choose(hunter,companion)
                     showAll: true
                     shuffle: true
 		        }
@@ -286,7 +286,7 @@
 		        effect: {
 		            type: exert
 		            player: shadow
-		            filter: choose(companion)
+		            select: choose(companion)
 		            times: 2
 		        }
 		    }

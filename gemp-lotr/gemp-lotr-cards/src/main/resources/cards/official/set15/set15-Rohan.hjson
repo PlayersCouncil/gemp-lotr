@@ -27,7 +27,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(rohan),companion)
+				    select: choose(culture(rohan),companion)
 				    memorize: chosenCompanion
 				    amount: {
 				        type: condition
@@ -49,7 +49,7 @@
 				    }
 				    effect: {
 				        type: addKeyword
-				        filter: memory(chosenCompanion)
+				        select: memory(chosenCompanion)
 				        keyword: damage
 				        amount: 1
 				    }
@@ -94,7 +94,7 @@
 			effect: [
 				{
 				    type: addKeyword
-				    filter: choose(culture(rohan),companion)
+				    select: choose(culture(rohan),companion)
 				    keyword: defender
 				    amount: 1
 				    until: regroup
@@ -166,11 +166,11 @@
 		        cost: {
                     type: discardFromHand
                     forced: false
-                    filter: choose(culture(rohan))
+                    select: choose(culture(rohan))
                 }
                 effect: {
                     type: modifyStrength
-                    filter: self
+                    select: self
                     amount: 2
                 }
 		    }
@@ -244,12 +244,12 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(memory(bearer)))
+		            select: choose(minion,inSkirmishAgainst(memory(bearer)))
 		        }
 		    }
 		]
@@ -300,11 +300,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(or(and(hunter,companion),and(valiant,man)))
+		            select: choose(or(and(hunter,companion),and(valiant,man)))
 		        }
 		    }
 		]
@@ -409,7 +409,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(rohan),man)
+				    select: choose(culture(rohan),man)
 				    amount: {
 				        type: max
 				        firstNumber: {
@@ -546,7 +546,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(minion,inSkirmishAgainst(bearer))
+		            select: all(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		    {
@@ -554,11 +554,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(rohan),man)
+		            select: choose(culture(rohan),man)
 		            amount: 1
 		        }
 		    }
@@ -669,7 +669,7 @@
 				    }
 				    effect: {
 				        type: playCardFromDiscard
-				        filter: choose(possession)
+				        select: choose(possession)
 				    }
 				}
 			]
@@ -726,7 +726,7 @@
 			effect: [
 				{
 				    type: playCardFromDrawDeck
-				    filter: choose(culture(rohan),or(companion,follower))
+				    select: choose(culture(rohan),or(companion,follower))
                     showAll: true
                     shuffle: true
 				}
@@ -775,7 +775,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(minion,inSkirmishAgainst(bearer))
+		            select: all(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		]
@@ -883,7 +883,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		            times: 2
 		        }
 		    }
@@ -1120,14 +1120,14 @@
 		                }
 		                {
 		                    type: exert
-		                    filter: choose(valiant,man)
+		                    select: choose(valiant,man)
 		                    count: 2
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: self
+		            select: self
 		            keyword: defender
 		            amount: 1
 		            until: regroup
@@ -1239,7 +1239,7 @@
 		            }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		        effect: {
@@ -1303,12 +1303,12 @@
 				{
 				    type: chooseActiveCards
 				    text: Choose a character
-				    filter: choose(character)
+				    select: choose(character)
 				    memorize: chosenCharacter
 				}
 				{
 				    type: discard
-				    filter: all(possession,attachedTo(memory(chosenCharacter)))
+				    select: all(possession,attachedTo(memory(chosenCharacter)))
 				}
 			]
 		}

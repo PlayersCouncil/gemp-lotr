@@ -90,12 +90,12 @@
 		        phase: shadow
 		        cost: {
 		            type: play
-		            filter: choose(urukHai)
+		            select: choose(urukHai)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: isengard
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -105,12 +105,12 @@
                     {
                         type: removeTokens
                         culture: isengard
-                        filter: self
+                        select: self
                         count: 3
                     }
                     {
                         type: discard
-                        filter: choose(urukHai)
+                        select: choose(urukHai)
                     }
                 ]
                 effect: {
@@ -208,7 +208,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(or(name(Saruman),and(culture(isengard),man)))
+		            select: choose(or(name(Saruman),and(culture(isengard),man)))
 		        }
 		    }
 		    {
@@ -219,7 +219,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		]
@@ -260,7 +260,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(urukHai)
+				select: choose(urukHai)
 				count: 2
 			},
 			effect: [
@@ -315,7 +315,7 @@
 			}
 			cost: {
 			    type: exert
-			    filter: choose(culture(isengard),minion)
+			    select: choose(culture(isengard),minion)
 			}
 			effect: [
 				{
@@ -424,13 +424,13 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(isengard),tracker)
+				select: choose(culture(isengard),tracker)
 				memorize: exertedTracker
 			},
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(unbound,companion,assignableToSkirmishAgainst(memory(exertedTracker)))
+					select: choose(unbound,companion,assignableToSkirmishAgainst(memory(exertedTracker)))
 					text: Choose companion to assign {exertedTracker} to
 					memorize: chosenCompanion
 				}
@@ -453,7 +453,7 @@
                         cost: {
                             type: exert
                             player: fp
-                            filter: memory(chosenCompanion)
+                            select: memory(chosenCompanion)
                         }
                         effect: {
                             type: assignFPCharacterToSkirmish
@@ -506,11 +506,11 @@
 		        }
 		        cost: {
 		            type: play
-		            filter: choose(urukHai)
+		            select: choose(urukHai)
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(side(free),condition)
+		            select: choose(side(free),condition)
 		        }
 		    }
 		]
@@ -551,7 +551,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(isengard),archer)
+				select: choose(culture(isengard),archer)
 			},
 			effect: [
 				{
@@ -676,7 +676,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -724,7 +724,7 @@
 		        effect: {
     		        type: addTokens
     		        culture: isengard
-    		        filter: self
+    		        select: self
 		        }
 		    }
 		    {
@@ -734,7 +734,7 @@
 		            type: removeTokens
 		            culture: isengard
 		            count: 2
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: takeControlOfSite
@@ -837,17 +837,17 @@
 		        phase: archery
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: wound
 		                player: fp
-		                filter: choose(unbound,companion)
+		                select: choose(unbound,companion)
 		            }
 		            {
                         type: disableArcheryTotalContribution
-                        filter: self
+                        select: self
 		            }
 		        ]
 		    }
@@ -890,7 +890,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(urukHai)
+					select: choose(urukHai)
 					amount: {
 					    type: condition
 					    condition: {
@@ -941,7 +941,7 @@
 			effect: [
 			    {
 			        type: disableSkirmishAssignment
-			        filter: choose(culture(isengard),tracker)
+			        select: choose(culture(isengard),tracker)
 				}
 			]
 		}
@@ -1035,7 +1035,7 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -1045,12 +1045,12 @@
                     {
                         type: chooseActiveCards
                         text: Choose unbound companion to return attached Free Peoples cards to hand
-                        filter: choose(unbound,companion,hasAttachedCount(3,any))
+                        select: choose(unbound,companion,hasAttachedCount(3,any))
                         memorize: chosenCompanion
                     }
                     {
                         type: returnToHand
-                        filter: all(attachedTo(memory(chosenCompanion)),side(free))
+                        select: all(attachedTo(memory(chosenCompanion)),side(free))
                     }
                 ]
 		    }
@@ -1096,7 +1096,7 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(name(Gríma))
+				select: choose(name(Gríma))
 			},
 			effect: [
 				{
@@ -1142,7 +1142,7 @@
 			effect: [
 				{
     			    type: modifyStrength
-    			    filter: choose(culture(isengard),tracker)
+    			    select: choose(culture(isengard),tracker)
     			    memorize: chosenTracker
     			    amount: {
     			        type: condition
@@ -1197,7 +1197,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(or(name(Saruman),and(culture(isengard),man)))
+		            select: choose(or(name(Saruman),and(culture(isengard),man)))
 		        }
 		    }
 		    {
@@ -1251,11 +1251,11 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(another,urukHai)
+		            select: choose(another,urukHai)
 		            keyword: fierce
 		            until: regroup
 		        }
@@ -1301,7 +1301,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(culture(isengard),tracker)
+		            select: choose(culture(isengard),tracker)
 		        }
 		    }
 		    {
@@ -1310,7 +1310,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: choose(culture(isengard),tracker)
+                        select: choose(culture(isengard),tracker)
                         memorize: chosenTracker
                     }
                     {
@@ -1324,7 +1324,7 @@
                     player: fp
                     cost: {
                         type: exert
-                        filter: bearer
+                        select: bearer
                     }
                     effect: {
                         type: assignFPCharacterToSkirmish
@@ -1386,7 +1386,7 @@
 		        effect: [
 		            {
 		                type: disableWounds
-		                filter: choose(culture(isengard),tracker)
+		                select: choose(culture(isengard),tracker)
                     }
                 ]
 		    }
@@ -1433,7 +1433,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(unbound,companion)
+					select: choose(unbound,companion)
 					amount: -2
 				}
 			]
@@ -1484,13 +1484,13 @@
                 {
                     type: discardFromHand
                     forced: false
-                    filter: all(side(free))
+                    select: all(side(free))
                 }
             ],
 			effect: [
 				{
 					type: putCardsFromDiscardIntoHand
-					filter: choose(culture(isengard))
+					select: choose(culture(isengard))
 				}
 			]
 		}
@@ -1531,12 +1531,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(urukHai)
+				select: choose(urukHai)
 			},
 			effect: [
 				{
 					type: exert
-					filter: choose(unbound,companion)
+					select: choose(unbound,companion)
 					count: {
 					    type: forEachYouCanSpot
 					    filter: controlledSite
@@ -1588,13 +1588,13 @@
                 cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                 ]
                 effect: [
                     {
                         type: chooseActiveCards
-                        filter: choose(unbound,companion,assignableToSkirmishAgainst(self))
+                        select: choose(unbound,companion,assignableToSkirmishAgainst(self))
                         text: Choose companion to assign it to
                         memorize: chosenCompanion
                     }
@@ -1604,7 +1604,7 @@
                         player: fp
                         cost: {
                             type: exert
-                            filter: memory(chosenCompanion)
+                            select: memory(chosenCompanion)
                         }
                         effect: {
                             type: assignFPCharacterToSkirmish
@@ -1726,7 +1726,7 @@
                                         text: Would you like to put {revealedCard} beneath your deck?
                                         effect: {
                                             type: putCardsFromDeckOnBottomOfDeck
-                                            filter: memory(revealedCard)
+                                            select: memory(revealedCard)
                                             reveal: true
                                         }
                                     }
@@ -1745,7 +1745,7 @@
                                         text: Would you like to put {revealedCard} beneath their deck?
                                         effect: {
                                             type: putCardsFromDeckOnBottomOfDeck
-                                            filter: memory(revealedCard)
+                                            select: memory(revealedCard)
                                             reveal: true
                                         }
                                     }
@@ -1905,17 +1905,17 @@
 		        phase: archery
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: wound
 		                player: fp
-		                filter: choose(unbound,companion)
+		                select: choose(unbound,companion)
 		            }
 		            {
                         type: disableArcheryTotalContribution
-                        filter: self
+                        select: self
 		            }
 		        ]
 		    }
@@ -1964,7 +1964,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(isengard),minion)
+		            select: choose(culture(isengard),minion)
 		            cost: -2
 		        }
 		    }
@@ -2027,14 +2027,14 @@
                     {
                         type: discardCardsFromDrawDeck
                         deck: fp
-                        filter: choose(side(shadow),memory(revealedCards))
+                        select: choose(side(shadow),memory(revealedCards))
                         showAll: false
                         shuffle: false
                     }
                     {
                         type: discardCardsFromDrawDeck
                         deck: fp
-                        filter: choose(side(free),memory(revealedCards))
+                        select: choose(side(free),memory(revealedCards))
                         showAll: false
                         shuffle: false
                     }
@@ -2095,7 +2095,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(ally)
+		            select: all(ally)
 		        }
 		    }
 		]
@@ -2172,7 +2172,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(condition)
+		            select: choose(condition)
 		        }
 		    }
 		    {
@@ -2180,11 +2180,11 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(name(Saruman's Staff))
+		            select: choose(name(Saruman's Staff))
 		        }
 		    }
 		]
@@ -2294,12 +2294,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(urukHai,notAssignedToSkirmish)
+				select: choose(urukHai,notAssignedToSkirmish)
 			},
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(urukHai)
+					select: choose(urukHai)
 					amount: 3
 				}
 			]
@@ -2428,17 +2428,17 @@
 		        cost: [
                     {
                         type: exert
-                        filter: bearer
+                        select: bearer
                     }
                     {
                         type: discardFromHand
                         forced: false
-                        filter: choose(minion)
+                        select: choose(minion)
                     }
                 ]
                 effect: {
                     type: play
-                    filter: choose(minion)
+                    select: choose(minion)
                     cost: -3
                 }
 		    }
@@ -2492,7 +2492,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: memory(assignedCharacter)
+		            select: memory(assignedCharacter)
 		        }
 		    }
 		]
@@ -2624,7 +2624,7 @@
 		        }
 		        effect: {
 		            type: stackCards
-		            filter: self
+		            select: self
 		            where: choose(controlledSite)
 		        }
 		    }
@@ -2634,7 +2634,7 @@
 		        stackedOn: controlledSite
 		        effect: {
 		            type: playCardFromStacked
-		            filter: self
+		            select: self
 		            cost: -1
 		        }
 		    }
@@ -2746,7 +2746,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: isengard
-		            filter: choose(machine)
+		            select: choose(machine)
 		        }
 		    }
 		]
@@ -2793,17 +2793,17 @@
 		        phase: archery
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: wound
 		                player: fp
-		                filter: choose(unbound,companion)
+		                select: choose(unbound,companion)
 		            }
 		            {
                         type: disableArcheryTotalContribution
-                        filter: self
+                        select: self
 		            }
 		        ]
 		    }
@@ -2855,11 +2855,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(another,urukHai)
+		            select: choose(another,urukHai)
 		            amount: 2
 		        }
 		    }
@@ -2971,7 +2971,7 @@
 		        }
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: addBurdens
@@ -3112,12 +3112,12 @@
 		        }
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                     times: 2
                 }
                 effect: {
                     type: exhaust
-                    filter: choose(companion)
+                    select: choose(companion)
                 }
 		    }
 		]
@@ -3254,12 +3254,12 @@
 		        }
                 cost: {
                     type: exert
-                    filter: self
+                    select: self
                 }
                 effect: {
                     type: wound
                     player: fp
-                    filter: choose(unbound,companion)
+                    select: choose(unbound,companion)
                 }
 		    }
 		]
@@ -3306,7 +3306,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: location
@@ -3314,7 +3314,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(another,urukHai)
+		            select: choose(another,urukHai)
 		            amount: 1
 		        }
 		    }
@@ -3362,11 +3362,11 @@
 		        phase: shadow
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: play
-		            filter: choose(urukHai)
+		            select: choose(urukHai)
 		            cost: {
 		                type: forEachYouCanSpot
 		                filter: another,urukHai
@@ -3593,11 +3593,11 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(side(free),mount)
+		            select: choose(side(free),mount)
 		        }
 		    }
 		]
@@ -3761,7 +3761,7 @@
 		        }
 		        effect: {
 		            type: stackCards
-		            filter: self
+		            select: self
 		            where: choose(controlledSite)
 		        }
 		    }
@@ -3771,7 +3771,7 @@
 		        stackedOn: controlledSite
 		        effect: {
 		            type: playCardFromStacked
-		            filter: self
+		            select: self
 		            cost: -1
 		        }
 		    }
@@ -3893,7 +3893,7 @@
 		        }
 		        effect: {
 		            type: stackCards
-		            filter: self
+		            select: self
 		            where: choose(controlledSite)
 		        }
 		    }
@@ -3903,7 +3903,7 @@
 		        stackedOn: controlledSite
 		        effect: {
 		            type: playCardFromStacked
-		            filter: self
+		            select: self
 		            cost: -1
 		        }
 		    }
@@ -4228,7 +4228,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(culture(isengard),tracker)
+					select: choose(culture(isengard),tracker)
 					amount: {
 					    type: forEachYouCanSpot
 					    filter: attachedTo(character,inSkirmishAgainst(self))
@@ -4274,13 +4274,13 @@
 			type: event
 			cost: {
 				type: discard
-				filter: choose(culture(isengard),archer)
+				select: choose(culture(isengard),archer)
 				count: 2
 			},
 			effect: [
 				{
 					type: exhaust
-					filter: choose(unbound,companion)
+					select: choose(unbound,companion)
 				}
 			]
 		}
@@ -4322,7 +4322,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(urukHai)
+					select: choose(urukHai)
 					amount: 2
 					memorize: chosenUrukHai
 				}
@@ -4333,7 +4333,7 @@
 				    }
 				    effect: {
 				        type: addKeyword
-				        filter: memory(chosenUrukHai)
+				        select: memory(chosenUrukHai)
 				        keyword: damage
 				        amount: 1
 				    }
@@ -4382,12 +4382,12 @@
 		        phase: shadow
 		        cost: {
 		            type: play
-		            filter: choose(culture(isengard),archer)
+		            select: choose(culture(isengard),archer)
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: isengard
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -4397,7 +4397,7 @@
 		            type: removeTokens
 		            culture: isengard
 		            count: 2
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
@@ -4407,7 +4407,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -4457,7 +4457,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		]
@@ -4515,7 +4515,7 @@
                 }
                 effect: {
                     type: putCardsFromDiscardIntoHand
-                    filter: choose(culture(isengard),tracker)
+                    select: choose(culture(isengard),tracker)
                 }
 		    }
 		]
@@ -4561,7 +4561,7 @@
 			effect: [
 				{
 					type: discard
-					filter: choose(possession,attachedTo(or(ally,and(unbound,companion))))
+					select: choose(possession,attachedTo(or(ally,and(unbound,companion))))
 				}
 			]
 		}
@@ -4603,7 +4603,7 @@
 		        type: extraCost
 		        cost: {
 		            type: exert
-		            filter: choose(culture(isengard),man)
+		            select: choose(culture(isengard),man)
 		        }
 		    }
 		    {
@@ -4614,7 +4614,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		    {

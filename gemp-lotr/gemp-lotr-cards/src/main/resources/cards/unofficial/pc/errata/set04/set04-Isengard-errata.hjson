@@ -34,7 +34,7 @@
 				effect: [
 					{
 						type: ChooseActiveCards
-						filter: choose(fortification)
+						select: choose(fortification)
 						memorize: targetFort
 						text: Select a fortification to assault
 					}
@@ -53,7 +53,7 @@
 						effect: {
 							type: Wound
 							player: freeps
-							filter: choose(culture(isengard),minion)
+							select: choose(culture(isengard),minion)
 						}
 					}
 				]
@@ -125,11 +125,11 @@
 			phase: shadow
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: play
-				filter: choose(uruk-hai)
+				select: choose(uruk-hai)
 				cost: {
 					type: forEachYouCanSpot
 					filter: not(self),uruk-hai

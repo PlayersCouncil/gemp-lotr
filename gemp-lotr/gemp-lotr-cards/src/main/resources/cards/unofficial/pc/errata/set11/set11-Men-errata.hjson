@@ -31,11 +31,11 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: transfer
-				filter: choose(or(possession,condition),attachedTo(character))
+				select: choose(or(possession,condition),attachedTo(character))
 				where: choose(any)
 				checkTarget: true
 			}

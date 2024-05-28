@@ -57,11 +57,11 @@
 		        cost: {
 		            type: removeTokens
 		            culture: elven
-		            filter: choose(any)
+		            select: choose(any)
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		            amount: -2
 		        }
 		    }
@@ -116,7 +116,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		    {
@@ -222,11 +222,11 @@
 		        phase: maneuver
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: putCardsFromDiscardOnBottomOfDeck
-		            filter: choose(culture(elven))
+		            select: choose(culture(elven))
 		        }
 		    }
 		]
@@ -273,7 +273,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(hunter,or(and(culture(dwarven),dwarf),and(culture(gondor),man)))
+		            select: choose(hunter,or(and(culture(dwarven),dwarf),and(culture(gondor),man)))
 		        }
 		    }
 		    {
@@ -281,11 +281,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(elven),elf)
+		            select: choose(culture(elven),elf)
 		            amount: 2
 		        }
 		    }
@@ -336,12 +336,12 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(or(memory(winner),name(Aragorn)))
+		            select: choose(or(memory(winner),name(Aragorn)))
 		        }
 		        effect: {
 		            type: addTokens
 		            culture: elven
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -354,7 +354,7 @@
 		        cost: {
 		            type: removeTokens
 		            culture: elven
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: drawCards
@@ -475,7 +475,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(hunter,companion)
+		            select: choose(hunter,companion)
 		            count: 2
 		        }
 		        effect: {
@@ -530,7 +530,7 @@
 		        phase: archery
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyArcheryTotal
@@ -696,7 +696,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(elf)
+		            select: choose(elf)
 		        }
 		        effect: [
 		            {
@@ -716,14 +716,14 @@
 		            }
 		            {
 		                type: putCardsFromDeckIntoHand
-		                filter: memory(chosenCard)
+		                select: memory(chosenCard)
                         reveal: true
                         shuffle: false
                         showAll: false
 		            }
 		            {
 		                type: putCardsFromDeckOnBottomOfDeck
-		                filter: memory(cards)
+		                select: memory(cards)
                         reveal: true
 		            }
 		        ]
@@ -767,7 +767,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(elf)
+				    select: choose(elf)
 				    amount: {
 				        type: condition
 				        condition: {
@@ -840,11 +840,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(elven),companion)
+		            select: choose(culture(elven),companion)
 		            amount: {
 		                type: forEachYouCanSpot
 		                filter: archer,companion
@@ -904,11 +904,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(minion,inSkirmishAgainst(bearer))
+		            select: choose(minion,inSkirmishAgainst(bearer))
 		        }
 		    }
 		]
@@ -964,11 +964,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: choose(elf)
+		            select: choose(elf)
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(currentSite)
+		            select: choose(currentSite)
 		            keyword: forest
 		            until: endOfTurn
 		        }
@@ -1015,16 +1015,16 @@
 		        cost: [
                     {
                         type: exert
-                        filter: choose(name(Legolas))
+                        select: choose(name(Legolas))
                     }
                     {
                         type: exert
-                        filter: choose(name(Aragorn))
+                        select: choose(name(Aragorn))
                     }
                 ]
                 effect: {
                     type: wound
-                    filter: choose(minion)
+                    select: choose(minion)
                 }
 		    }
 		    {
@@ -1032,7 +1032,7 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(name(Aragorn))
+		            select: choose(name(Aragorn))
 		        }
 		        requires: {
 		            type: canSpot
@@ -1040,7 +1040,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion)
+		            select: choose(minion)
 		            amount: {
 		                type: condition
 		                condition: [
@@ -1063,7 +1063,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: choose(name(Gimli))
+		            select: choose(name(Gimli))
 		        }
 		        requires: {
 		            type: canSpot

@@ -19,16 +19,16 @@ import org.json.simple.JSONObject;
 public class RemoveCharacterFromSkirmish implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "filter", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "player", "select", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter,
+                CardResolver.resolveCards(select,
                         (actionContext) -> Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource()),
                         actionContext -> new ConstantEvaluator(1), memory, player, "Choose characters to remove from skirmish", environment));
         result.addEffectAppender(

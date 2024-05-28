@@ -36,11 +36,11 @@
 			phase: maneuver
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: addKeyword
-				filter: self
+				select: self
 				keyword: defender+1
 				until: start(regroup)
 			}
@@ -68,16 +68,16 @@
 				phase: archery
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: [
 					{
 						type: wound
-						filter: choose(minion)
+						select: choose(minion)
 					}
 					{
                         type: disableArcheryTotalContribution
-                        filter: bearer
+                        select: bearer
 					}
 				]
 			}
@@ -97,7 +97,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -111,7 +111,7 @@
 					type: fromMemory
 					memory: spottedPipes
 				}
-				filter: choose(companion)
+				select: choose(companion)
 			}
 		}
 	}
@@ -151,11 +151,11 @@
 						type: costToEffect
 						cost: {
 							type: exert
-							filter: choose(name(Aragorn))
+							select: choose(name(Aragorn))
 						}
 						effect: {
 							type: modifyStrength
-							filter: choose(name(Arwen))
+							select: choose(name(Arwen))
 							amount: 3
 						}
 					}
@@ -163,11 +163,11 @@
 						type: costToEffect
 						cost: {
 							type: exert
-							filter: choose(name(Arwen))
+							select: choose(name(Arwen))
 						}
 						effect: {
 							type: modifyStrength
-							filter: choose(name(Aragorn))
+							select: choose(name(Aragorn))
 							amount: 3
 						}
 					}
@@ -186,7 +186,7 @@
 			phase: fellowship
 			cost: {
 				type: discard
-				filter: self
+				select: self
 			}
 			effect: {
 				type: choice
@@ -197,11 +197,11 @@
 				effects: [
 					{
 						type: heal
-						filter: choose(companion)
+						select: choose(companion)
 					}
 					{
 						type: discard
-						filter: choose(side(shadow),condition,attachedTo(companion))
+						select: choose(side(shadow),condition,attachedTo(companion))
 					}
 				]
 			}
@@ -230,11 +230,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: {
 					type: wound
-					filter: choose(or(orc,uruk-hai),inSkirmishAgainst(bearer))
+					select: choose(or(orc,uruk-hai),inSkirmishAgainst(bearer))
 				}
 			}
 		]
@@ -277,11 +277,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(hobbit)
+				select: choose(hobbit)
 				amount: 3
 			}
 		}
@@ -299,11 +299,11 @@
 			phase: maneuver
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: {
 				type: discard
-				filter: choose(weather,condition)
+				select: choose(weather,condition)
 			}
 		}
 	}
@@ -318,7 +318,7 @@
 			requiresRanger: true
 			cost: {
 				type: exert
-				filter: choose(ranger)
+				select: choose(ranger)
 			}
 			effect: [
 				{
@@ -357,22 +357,22 @@
 						type: costToEffect
 						cost: {
 							type: exert
-							filter: choose(name(Aragorn))
+							select: choose(name(Aragorn))
 						}
 						effect: {
 							type: heal
-							filter: choose(name(Arwen))
+							select: choose(name(Arwen))
 						}
 					}
 					{
 						type: costToEffect
 						cost: {
 							type: exert
-							filter: choose(name(Arwen))
+							select: choose(name(Arwen))
 						}
 						effect: {
 							type: heal
-							filter: choose(name(Aragorn))
+							select: choose(name(Aragorn))
 						}
 					}
 				]
@@ -405,13 +405,13 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(or(culture(gondor),culture(shire)),companion,hasAttached(hand weapon))
+					select: choose(or(culture(gondor),culture(shire)),companion,hasAttached(hand weapon))
 					amount: 2
 					memorize: chosenCompanion
 				}
 				{
 					type: addKeyword
-					filter: memory(chosenCompanion)
+					select: memory(chosenCompanion)
 					keyword: damage+1
 				}
 			]
@@ -427,7 +427,7 @@
 			type: event
 			effect: {
 				type: addKeyword
-				filter: choose(culture(gondor),companion)
+				select: choose(culture(gondor),companion)
 				keyword: defender+1
 				until: start(regroup)
 			}
@@ -444,11 +444,11 @@
 			requiresRanger: true
 			cost: {
 				type: exert
-				filter: choose(ranger)
+				select: choose(ranger)
 			}
 			effect: {
 				type: modifyStrength
-				filter: all(roaming,minion)
+				select: all(roaming,minion)
 				amount: -3
 				until: start(regroup)
 			}
@@ -465,11 +465,11 @@
 			phase: maneuver
 			cost: {
 				type: exert
-				filter: choose(culture(gondor),character)
+				select: choose(culture(gondor),character)
 			}
 			effect: {
 				type: wound
-				filter: choose(culture(sauron),minion)
+				select: choose(culture(sauron),minion)
 			}
 		}
 	}
@@ -484,11 +484,11 @@
 			requiresRanger: true
 			cost: {
 				type: exert
-				filter: choose(ranger,companion)
+				select: choose(ranger,companion)
 			}
 			effect: {
 				type: discard
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}
@@ -533,19 +533,19 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Aragorn))
+				select: choose(name(Aragorn))
 			}
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(ally)
+					select: choose(ally)
 					amount: 2
 					until: start(regroup)
 					memorize: exertedAlly
 				}
 				{
 					type: EnableParticipationInArcheryFireAndSkirmishes
-					filter: memory(exertedAlly)
+					select: memory(exertedAlly)
 					until: start(regroup)
 				}
 			]
@@ -583,11 +583,11 @@
 			requiresRanger: true
 			cost: {
 				type: exert
-				filter: choose(ranger,companion)
+				select: choose(ranger,companion)
 			}
 			effect: {
 				type: wound
-				filter: all(minion)
+				select: all(minion)
 			}
 		}
 	}
@@ -624,11 +624,11 @@
 			requiresRanger: true
 			cost: {
 				type: exert
-				filter: choose(ranger)
+				select: choose(ranger)
 			}
 			effect: {
 				type: exhaust
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}
@@ -652,12 +652,12 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {
 				type: modifyStrength
-				filter: memory(bearer)
+				select: memory(bearer)
 				amount: 2
 			}
 		}
@@ -693,7 +693,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(gondor),companion)
+				select: choose(culture(gondor),companion)
 				memorize: chosenCompanion
 				amount: {
 					type: requires
@@ -717,7 +717,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(ranger)
+				select: choose(ranger)
 				memorize: chosenRanger
 				amount: {
 					type: requires
@@ -742,14 +742,14 @@
 			effect: [
 				{
 					type: addKeyword
-					filter: choose(name(Aragorn))
+					select: choose(name(Aragorn))
 					keyword: defender+1
 					until: start(regroup)
 					memorize: chosenAragorn
 				}
 				{
 				    type: disableWoundsOver
-                    filter: memory(chosenAragorn)
+                    select: memory(chosenAragorn)
                     phase: skirmish
 					until: regroup
 				}
@@ -771,7 +771,7 @@
 			requiresRanger: true
 			effect: {
 				type: discard
-				filter: choose(roaming,minion)
+				select: choose(roaming,minion)
 			}
 		}
 	}
@@ -796,7 +796,7 @@
 			}
 			effect: {
 				type: heal
-				filter: choose(another,companion,signet(Aragorn))
+				select: choose(another,companion,signet(Aragorn))
 			}
 		}
 	}

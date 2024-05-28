@@ -36,7 +36,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            filter: choose(fortification)
+		            select: choose(fortification)
                     showAll: true
                     shuffle: true
 		        }
@@ -83,7 +83,7 @@
 		        cost: [
                     {
                         type: exert
-                        filter: choose(minion)
+                        select: choose(minion)
                     }
                     {
                         type: removeBurdens
@@ -92,7 +92,7 @@
                 effect: {
                     type: discard
                     player: free people
-                    filter: choose(side(free people),condition)
+                    select: choose(side(free people),condition)
                 }
 		    }
 		]
@@ -196,7 +196,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(your,culture(wraith),orc)
+		            select: choose(your,culture(wraith),orc)
 		            amount: 3
 		        }
 		    }

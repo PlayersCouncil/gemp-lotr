@@ -21,14 +21,14 @@ import java.util.Collection;
 public class PreventExert implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter");
+        FieldUtils.validateAllowedFields(effectObject, "select");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "all(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "all(any)");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter,
+                CardResolver.resolveCards(select,
                         (actionContext) -> {
                             final PreventableCardEffect preventableEffect = (PreventableCardEffect) actionContext.getEffect();
                             return Filters.in(preventableEffect.getAffectedCardsMinusPrevented(actionContext.getGame()));

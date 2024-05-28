@@ -30,13 +30,13 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(your,wizard)
+				select: choose(your,wizard)
 				times: 2
 			}
 			effect: {
 				type: discard
 				count: 0-3
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 		gametext: If the fellowship moves during the regroup phase, exert your Wizard twice to discard up to 3 minions.

@@ -49,12 +49,12 @@
 	# 				effects: [
 	# 					{
 	# 						type: putCardsFromDeckOnTopOfDeck
-	# 						filter: choose(culture(isengard),weather)
+	# 						select: choose(culture(isengard),weather)
 	# 						count: 1
 	# 					}
 	# 					{
 	# 						type: putCardsFromDiscardOnTopOfDeck
-	# 						filter: choose(culture(isengard),weather)
+	# 						select: choose(culture(isengard),weather)
 	# 						count: 1
 	# 					}
 	# 				]
@@ -130,7 +130,7 @@
 						effects: [
 							{
 								type: PutCardsFromDeckIntoHand
-								filter: choose(culture(isengard),weather)
+								select: choose(culture(isengard),weather)
 								count: 1
                                 reveal: true
                                 shuffle: true
@@ -138,7 +138,7 @@
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
-								filter: choose(culture(isengard),weather)
+								select: choose(culture(isengard),weather)
 								count: 1
 							}
 						]
@@ -181,7 +181,7 @@
 	# 			effect: [
 	# 				{
 	# 					type: spot
-	# 					filter: choose(companion)
+	# 					select: choose(companion)
 	# 					memorize: spottedComp
 	# 				}
 	# 				{
@@ -232,12 +232,12 @@
 	# 				effects: [
 	# 					{
 	# 						type: putCardsFromDeckOnTopOfDeck
-	# 						filter: choose(culture(isengard),item)
+	# 						select: choose(culture(isengard),item)
 	# 						count: 1
 	# 					}
 	# 					{
 	# 						type: putCardsFromDiscardOnTopOfDeck
-	# 						filter: choose(culture(isengard),item)
+	# 						select: choose(culture(isengard),item)
 	# 						count: 1
 	# 					}
 	# 				]
@@ -280,7 +280,7 @@
 				effect: [
 					{
 						type: spot
-						filter: choose(companion)
+						select: choose(companion)
 						memorize: spottedComp
 					}
 					{
@@ -333,7 +333,7 @@
 						effects: [
 							{
 								type: PutCardsFromDeckIntoHand
-								filter: choose(culture(isengard),item)
+								select: choose(culture(isengard),item)
 								count: 1
                                 reveal: true
                                 shuffle: true
@@ -341,7 +341,7 @@
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
-								filter: choose(culture(isengard),item)
+								select: choose(culture(isengard),item)
 								count: 1
 							}
 						]
@@ -399,7 +399,7 @@
 				}
 				effect:	{
 					type: wound
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
@@ -429,12 +429,12 @@
 	# 				effects: [
 	# 					{
 	# 						type: putCardsFromDeckOnTopOfDeck
-	# 						filter: choose(title(Saruman))
+	# 						select: choose(title(Saruman))
 	# 						count: 1
 	# 					}
 	# 					{
 	# 						type: putCardsFromDiscardOnTopOfDeck
-	# 						filter: choose(title(Saruman))
+	# 						select: choose(title(Saruman))
 	# 						count: 1
 	# 					}
 	# 				]
@@ -442,7 +442,7 @@
 	# 			{
 	# 				type: DiscardFromHand
 	# 				forced: false
-	# 				filter: choose(any)
+	# 				select: choose(any)
 	# 				count: {
 	# 					type: range
 	# 					from: 0
@@ -486,7 +486,7 @@
 			cost: {
 				type: DiscardFromHand
 				forced: false
-				filter: choose(side(freeps))
+				select: choose(side(freeps))
 				count: 1
 			}
 			effect: [
@@ -499,7 +499,7 @@
 					effects: [
 						{
 							type: PlayCardFromDrawDeck
-							filter: choose(title(Saruman))
+							select: choose(title(Saruman))
 							cost: {
 								type: ForEachYouCanSpot
 								filter: Crow
@@ -510,7 +510,7 @@
 						}
 						{
 							type: PlayCardFromDiscard
-							filter: choose(title(Saruman))
+							select: choose(title(Saruman))
 							cost: {
 								type: ForEachYouCanSpot
 								filter: Crow
@@ -582,12 +582,12 @@
 	# 				effects: [
 	# 					{
 	# 						type: putCardsFromDeckOnTopOfDeck
-	# 						filter: choose(culture(isengard),condition)
+	# 						select: choose(culture(isengard),condition)
 	# 						count: 1
 	# 					}
 	# 					{
 	# 						type: putCardsFromDiscardOnTopOfDeck
-	# 						filter: choose(culture(isengard),condition)
+	# 						select: choose(culture(isengard),condition)
 	# 						count: 1
 	# 					}
 	# 				]
@@ -663,7 +663,7 @@
 						effects: [
 							{
 								type: PutCardsFromDeckIntoHand
-								filter: choose(culture(isengard),condition)
+								select: choose(culture(isengard),condition)
 								count: 1
                                 reveal: true
                                 shuffle: true
@@ -671,7 +671,7 @@
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
-								filter: choose(culture(isengard),condition)
+								select: choose(culture(isengard),condition)
 								count: 1
 							}
 						]
@@ -762,11 +762,11 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: exert
-					filter: all(companion)
+					select: all(companion)
 				}
 			}
 		]

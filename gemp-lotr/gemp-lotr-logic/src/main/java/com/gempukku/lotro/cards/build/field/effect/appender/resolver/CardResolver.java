@@ -25,7 +25,7 @@ import java.util.function.Function;
 
 public class CardResolver {
 
-    public static EffectAppender resolveSingleStack(String selector, ValueSource countSource, FilterableSource stackedOn,
+    public static EffectAppender resolveSingleStack(String select, ValueSource countSource, FilterableSource stackedOn,
         String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
 
         Function<ActionContext, Iterable<? extends PhysicalCard>> stackedOnSource = actionContext ->
@@ -34,10 +34,10 @@ public class CardResolver {
         Function<ActionContext, Iterable<? extends PhysicalCard>> stackSource = actionContext ->
                 Filters.filter(actionContext.getGame().getGameState().getAllCards(), actionContext.getGame(), Filters.stackedOn(stackedOn.getFilterable(actionContext)));
 
-        if (selector.startsWith("memory(") && selector.endsWith(")")) {
-            return resolveMemoryCards(selector, null, null, countSource, memory, stackSource);
+        if (select.startsWith("memory(") && select.endsWith(")")) {
+            return resolveMemoryCards(select, null, null, countSource, memory, stackSource);
         }
-        else if (selector.startsWith("choose(") && selector.endsWith(")")) {
+        else if (select.startsWith("choose(") && select.endsWith(")")) {
             final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
                 String choicePlayerId = playerSource.getPlayer(actionContext);
@@ -55,9 +55,9 @@ public class CardResolver {
                 };
             };
 
-            return resolveChoiceCards(selector, null, null, countSource, environment, stackSource, effectSource);
+            return resolveChoiceCards(select, null, null, countSource, environment, stackSource, effectSource);
         }
-        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + selector);
+        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + select);
     }
 
     public static EffectAppender resolveStackedCards(String type, ValueSource countSource, FilterableSource stackedOn,

@@ -31,7 +31,7 @@
 				}
 				{
 					type: ModifyStrength
-					filter: choose(minion,InSkirmishAgainst(Elf))
+					select: choose(minion,InSkirmishAgainst(Elf))
 					amount: {
 						type: TwilightCostInMemory
 						memory: revealedCard
@@ -51,7 +51,7 @@
 					}
 					effect: {
 						type: DiscardCardsFromDrawDeck
-						filter: memory(revealedCard)
+						select: memory(revealedCard)
                         showAll: false
                         shuffle: false
 					}

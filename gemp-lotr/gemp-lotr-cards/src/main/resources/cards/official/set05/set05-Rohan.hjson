@@ -44,18 +44,18 @@
 		                effects: [
                             {
                                 type: removeTokens
-                                filter: choose(machine)
+                                select: choose(machine)
                                 count: 2
                             }
                             {
                                 type: putCardsFromDiscardIntoHand
-                                filter: choose(culture(rohan),possession)
+                                select: choose(culture(rohan),possession)
                             }
 		                ]
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -108,11 +108,11 @@
 		        effect: [
                     {
                         type: discard
-                        filter: choose(or(possession,machine))
+                        select: choose(or(possession,machine))
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
 		    }
@@ -161,7 +161,7 @@
 		        phase: fellowship
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -170,7 +170,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(rohan),possession)
+		            select: choose(culture(rohan),possession)
 		        }
 		    }
 		]
@@ -225,18 +225,18 @@
 		        phase: skirmish
 		        cost: {
 		            type: play
-		            filter: choose(culture(rohan),possession)
+		            select: choose(culture(rohan),possession)
 		            on: self
 		        }
 		        effect: [
                     {
                         type: modifyStrength
-                        filter: self
+                        select: self
                         amount: 2
                     }
                     {
                         type: addKeyword
-                        filter: self
+                        select: self
                         keyword: damage
                         amount: 1
                     }
@@ -317,13 +317,13 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Théoden))
+				select: choose(name(Théoden))
 				times: 2
 			},
 			effect: [
 				{
 					type: heal
-					filter: all(another,companion,signet(Théoden))
+					select: all(another,companion,signet(Théoden))
 					times: 2
 				}
 			]
@@ -371,7 +371,7 @@
 			effect: [
 				{
 					type: discard
-					filter: choose(condition)
+					select: choose(condition)
 					count: 0-2
 				}
 				{
@@ -422,7 +422,7 @@
 			effect: [
 				{
 					type: addKeyword
-					filter: choose(valiant,man)
+					select: choose(valiant,man)
 					keyword: defender
 					amount: 1
 					until: regroup
@@ -484,7 +484,7 @@
 		                effects: [
 		                    {
 		                        type: removeTokens
-		                        filter: choose(machine)
+		                        select: choose(machine)
 		                        count: 2
 		                    }
 		                    {
@@ -496,7 +496,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }
@@ -543,16 +543,16 @@
 		        cost: [
                     {
                         type: exert
-                        filter: bearer
+                        select: bearer
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
                 ]
                 effect: {
                     type: wound
-                    filter: choose(minion)
+                    select: choose(minion)
                 }
 		    }
 		]
@@ -602,7 +602,7 @@
 		            }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
 		        ]
 		        effect: {
@@ -612,7 +612,7 @@
 		            cost: {
 		                type: exert
 		                player: shadow
-		                filter: choose(minion,inSkirmish)
+		                select: choose(minion,inSkirmish)
 		            }
 		            effect: {
 		                type: cancelSkirmish
@@ -668,11 +668,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: returnToHand
-		            filter: choose(culture(rohan),possession)
+		            select: choose(culture(rohan),possession)
 		        }
 		    }
 		]
@@ -730,12 +730,12 @@
 		            }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
 		        ]
 		        effect: {
 		            type: heal
-		            filter: memory(bearer)
+		            select: memory(bearer)
 		        }
 		    }
 		]
@@ -783,7 +783,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        requires: {
 		            type: canSpot
@@ -792,7 +792,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -841,12 +841,12 @@
 		        phase: maneuver
 		        cost: {
 		            type: play
-		            filter: choose(culture(rohan),possession)
+		            select: choose(culture(rohan),possession)
 		            on: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(culture(rohan),ally)
+		            select: choose(culture(rohan),ally)
 		        }
 		    }
 		]
@@ -889,12 +889,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: [
 		            {
 		                type: modifyStrength
-		                filter: choose(mounted,culture(rohan),man)
+		                select: choose(mounted,culture(rohan),man)
 		                amount: 3
 		                memorize: chosenMan
 		            }
@@ -906,7 +906,7 @@
 		                }
 		                effect: {
 		                    type: heal
-		                    filter: memory(chosenMan)
+		                    select: memory(chosenMan)
 		                }
 		            }
 		        ]
@@ -957,144 +957,17 @@
 		        phase: maneuver
 		        cost: {
 		            type: play
-		            filter: choose(culture(rohan),possession)
+		            select: choose(culture(rohan),possession)
 		            on: self
 		        }
 		        effect: {
 		            type: heal
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
 		gametext: <b>Valiant</b>.<br><b>Maneuver:</b> Play a [rohan] possession on Éowyn to heal her.
 		lore: Let the heralds announce to the folk that Lady Éowyn will lead them!'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	5_127: {
-		cardInfo: {
-			imagePath: decipher/LOTR05127.jpg
-			javaClass: true
-			//parentId: 5_127
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 5R127
-			rarity: R
-			setNum: "5"
-			cardNum: 127
-			style: Standard
-		}
-		title: Rohirrim Helm
-		unique: false
-		side: Free Peoples
-		culture: Rohan
-		twilight: 1
-		type: Possession
-		itemclass: Helm
-		target: culture(rohan),man
-		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-		            {
-		                type: memorizeActive
-		                filter: bearer
-		                memory: bearer
-		            }
-                    {
-                        type: discard
-                        filter: self
-                    }
-		        ]
-		        effect: {
-		            type: preventable
-		            player: shadow
-		            text: Would you like to exert a minion in skirmish to prevent cancelling skirmish involving {bearer}?
-		            cost: {
-		                type: exert
-		                player: shadow
-		                filter: choose(minion,inSkirmish)
-		            }
-		            effect: {
-		                type: cancelSkirmish
-		                filter: memory(bearer)
-		            }
-		        }
-		    }
-		]
-		gametext: Bearer must be a [rohan] Man.<br><b>Skirmish:</b> Discard this possession to cancel a skirmish involving bearer. A minion in this skirmish may exert to prevent this.
-		lore: A helm split by an Uruk blade often still saves the rider who wears it.
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	5_128: {
-		cardInfo: {
-			imagePath: decipher/LOTR05128.jpg
-			javaClass: true
-			//parentId: 5_128
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 5R128
-			rarity: R
-			setNum: "5"
-			cardNum: 128
-			style: Standard
-		}
-		title: Thundering Host
-		unique: false
-		side: Free Peoples
-		culture: Rohan
-		twilight: 1
-		type: Condition
-		keywords: Support Area
-		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            filter: self
-		        }
-		        effect: [
-		            {
-		                type: modifyStrength
-		                filter: choose(mounted,culture(rohan),man)
-		                amount: 3
-		                memorize: chosenMan
-		            }
-		            {
-		                type: conditional
-		                requires: {
-		                    type: location
-		                    filter: plains
-		                }
-		                effect: {
-		                    type: heal
-		                    filter: memory(chosenMan)
-		                }
-		            }
-		        ]
-		    }
-		]
-		gametext: Plays to your support area.<br><b>Skirmish:</b> Discard this condition to make a mounted [rohan] Man strength +3 (and heal that Man if at a plains).
-		lore: The roar of hooves was enough to rout the Uruk-hai without sword or spear.
 		promotext: ""
 		alts: {
 			promos: {

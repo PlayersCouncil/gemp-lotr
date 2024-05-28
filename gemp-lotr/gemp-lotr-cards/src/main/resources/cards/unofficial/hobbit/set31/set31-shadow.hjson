@@ -32,7 +32,7 @@
 				}
 				cost: {
 					type: discard
-					filter: choose(orc)
+					select: choose(orc)
 				}
 				effect: {
 					type: choice
@@ -43,13 +43,13 @@
 					effects: [
 						{
 							type: playCardFromDrawDeck
-							filter: choose(name(Gollum))
+							select: choose(name(Gollum))
                             showAll: true
                             shuffle: true
 						}
 						{
 							type: playCardFromDiscard
-							filter: choose(name(Gollum))
+							select: choose(name(Gollum))
 						}
 					]
 				}
@@ -90,7 +90,7 @@
 				cost: [
 					{
 						type: exert
-						filter: choose(self,not(roaming))
+						select: choose(self,not(roaming))
 					}
 				]
 				effect: [
@@ -101,7 +101,7 @@
 					}
 					{
 						type: modifyStrength
-						filter: self
+						select: self
 						amount: {
 							type: requires
 							requires: {
@@ -130,12 +130,12 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: choose(name(Gollum))
+					select: choose(name(Gollum))
 					times: 2
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -143,7 +143,7 @@
 				effect: [
 					{
 						type: modifyStrength
-						filter: choose(minion)
+						select: choose(minion)
 						amount: 2
 						memorize: chosenMinion
 					}
@@ -197,7 +197,7 @@
 				cost: [
 					{
 						type: exert
-						filter: choose(minion)
+						select: choose(minion)
 					}
 					{
 						type: discardFromHand
@@ -215,7 +215,7 @@
 					}
 					effect: {
 						type: discard
-						filter: choose(culture(shire),not(name(Bilbo)))
+						select: choose(culture(shire),not(name(Bilbo)))
 					}
 				}
 			}
@@ -243,7 +243,7 @@
 			effect: {
 				type: exert
 				player: fp
-				filter: choose(culture(dwarven),companion)
+				select: choose(culture(dwarven),companion)
 			}
 		}
 	}
@@ -268,7 +268,7 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 				times: 2
 			}
 			effect: {
@@ -304,7 +304,7 @@
 				effect: {
 					type: exert
 					player: fp
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 					count: {
 						type: forEachYouCanSpot
 						filter: culture(gandalf)
@@ -344,7 +344,7 @@
 					effects: [
 						{
 							type: exert
-							filter: bearer
+							select: bearer
 							times: 2
 						}
 						{
@@ -388,11 +388,11 @@
 				}
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: {
 					type: wound
-					filter: choose(ally)
+					select: choose(ally)
 				}
 			}
 		]
@@ -424,12 +424,12 @@
 				}
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: {
 					type: wound
 					player: fp
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			}
 		]
@@ -450,7 +450,7 @@
 				}
 				effect: {
 					type: discard
-					filter: all(weapon,attachedTo(culture(dwarven),companion))
+					select: all(weapon,attachedTo(culture(dwarven),companion))
 				}
 			}
 			{
@@ -462,7 +462,7 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(culture(dwarven),character)
+					select: choose(culture(dwarven),character)
 					amount: {
                         type: cardAffectedLimitPerPhase
                         limit: 3
@@ -549,7 +549,7 @@
 			}
 			effect: {
 				type: putCardsFromDiscardOnBottomOfDeck
-				filter: choose(orc)
+				select: choose(orc)
 				count: {
 					type: requires
 					requires: {
@@ -574,12 +574,12 @@
         phase: maneuver
         cost: {
           type: exert
-          filter: choose(name(The Great Goblin))
+          select: choose(name(The Great Goblin))
           times: 2
         }
         effect: {
           type: playCardFromDiscard
-          filter: self
+          select: self
         }
       }
       {
@@ -587,11 +587,11 @@
         cost: {
           type: exert
           count: 2
-          filter: choose(orc)
+          select: choose(orc)
         }
         effect: {
           type: discard
-          filter: choose(culture(dwarven),or(possession,artifact),attachedTo(companion))
+          select: choose(culture(dwarven),or(possession,artifact),attachedTo(companion))
         }
       }
     ]
@@ -618,7 +618,7 @@
         }
         effect: {
           type: stackCards
-          filter: choose(your,orc,inSkirmish)
+          select: choose(your,orc,inSkirmish)
           where: self
         }
       }
@@ -627,7 +627,7 @@
         phase: shadow
         effect: {
           type: playCardFromStacked
-          filter: choose(orc)
+          select: choose(orc)
           on: self
         }
       }
@@ -673,7 +673,7 @@
           effects: [
             {
               type: discard
-              filter: self
+              select: self
             }
             {
               type: removeTwilight
@@ -683,7 +683,7 @@
         }
         effect: {
           type: preventWound
-          filter: choose(orc)
+          select: choose(orc)
         }
       }
     ]
@@ -705,7 +705,7 @@
       phase: maneuver
       cost: {
         type: exert
-        filter: self
+        select: self
         times: 2
       }
       effect: [
@@ -717,7 +717,7 @@
         {
           type: discardFromHand
           hand: fp
-          filter: choose(culture(dwarven),event)
+          select: choose(culture(dwarven),event)
           forced: true
         }
       ]
@@ -754,7 +754,7 @@
             text: Do you want to play an Orc from your discard pile?
             effect: {
               type: playCardFromDiscard
-              filter: choose(orc)
+              select: choose(orc)
             }
           }
         }
@@ -768,7 +768,7 @@
         }
         effect: {
           type: addKeyword
-          filter: self
+          select: self
           keyword: fierce
           until: start(regroup)
         }
@@ -815,7 +815,7 @@
             }
             effect: {
               type: wound
-              filter: bearer
+              select: bearer
             }
           }
         ]
@@ -833,7 +833,7 @@
           }
           effect: {
             type: transfer
-            filter: choose(name(The Arkenstone))
+            select: choose(name(The Arkenstone))
             where: self
           }
         }
@@ -851,7 +851,7 @@
           }
           effect: {
             type: discard
-            filter: choose(name(The Arkenstone))
+            select: choose(name(The Arkenstone))
           }
         }
       }
@@ -891,13 +891,13 @@
       effect: [
         {
           type: play
-          filter: choose(spider)
+          select: choose(spider)
           cost: -2
           memorize: playedSpider
         }
         {
           type: modifyStrength
-          filter: memory(playedSpider)
+          select: memory(playedSpider)
           amount: 2
           until: start(regroup)
         }
@@ -926,7 +926,7 @@
           type: exert
           player: fp
           count: 2
-          filter: choose(culture(dwarven),companion)
+          select: choose(culture(dwarven),companion)
         }
       }
       {
@@ -941,12 +941,12 @@
           effects: [
             {
               type: discard
-              filter: self
+              select: self
             }
             {
               type: exert
               count: 3
-              filter: choose(spider)
+              select: choose(spider)
             }
           ]
         }
@@ -980,7 +980,7 @@
         phase: regroup
         cost: {
           type: discard
-          filter: self
+          select: self
         }
         effect: {
           type: addBurdens
@@ -1014,11 +1014,11 @@
         phase: skirmish
         cost: {
           type: discard
-          filter: choose(orc)
+          select: choose(orc)
         }
         effect: {
           type: addKeyword
-          filter: choose(spider)
+          select: choose(spider)
           keyword: damage+1
         }
       }
@@ -1047,7 +1047,7 @@
       }
       effect: {
         type: playCardFromDiscard
-        filter: choose(or(spider,orc))
+        select: choose(or(spider,orc))
         removedTwilight: 1
       }
     }
@@ -1071,7 +1071,7 @@
           phase: assignment
           cost: {
             type: discard
-            filter: choose(orc)
+            select: choose(orc)
           }
           effect: {
             type: choice
@@ -1082,7 +1082,7 @@
             effects: [
               {
                 type: playCardFromDrawDeck
-                filter: choose(spider)
+                select: choose(spider)
                 cost: {
                   type: requires
                   requires: {
@@ -1097,7 +1097,7 @@
               }
               {
                 type: playCardFromDiscard
-                filter: choose(spider)
+                select: choose(spider)
                 cost: {
                   type: requires
                   requires: {
@@ -1128,11 +1128,11 @@
       phase: skirmish
       cost: {
         type: discard
-        filter: choose(orc)
+        select: choose(orc)
       }
       effect: {
         type: modifyStrength
-        filter: choose(spider)
+        select: choose(spider)
         amount: {
           type: requires
           requires: {
@@ -1164,7 +1164,7 @@
         type: extraCost
         cost: {
           type: discard
-          filter: choose(orc)
+          select: choose(orc)
         }
       }
       {
@@ -1185,7 +1185,7 @@
         }
         effect: {
           type: discard
-          filter: choose(ally)
+          select: choose(ally)
         }
       }
     ]
@@ -1205,7 +1205,7 @@
         }
         effect: {
           type: discard
-          filter: self
+          select: self
         }
       }
       {
@@ -1220,17 +1220,17 @@
           effects: [
             {
               type: discard
-              filter: choose(minion)
+              select: choose(minion)
             }
             {
               type: exert
-              filter: choose(troll)
+              select: choose(troll)
             }
           ]
         }
         effect: {
           type: transfer
-          filter: self
+          select: self
           where: choose(culture(dwarven),companion)
         }
       }
@@ -1261,7 +1261,7 @@
         type: extraCost
         cost: {
           type: discard
-          filter: choose(orc)
+          select: choose(orc)
         }
       }
       {
@@ -1280,7 +1280,7 @@
         }
         effect: {
           type: modifyStrength
-          filter: all(troll)
+          select: all(troll)
           amount: 1
           until: start(regroup)
         }
@@ -1312,7 +1312,7 @@
           }
           effect: {
             type: playCardFromDiscard
-            filter: choose(minion)
+            select: choose(minion)
           }
         }
     ]
@@ -1351,7 +1351,7 @@
         type: extraCost
         cost: {
           type: discard
-          filter: choose(orc)
+          select: choose(orc)
         }
       }
       {
@@ -1372,7 +1372,7 @@
         }
         effect: {
           type: discard
-          filter: choose(hand weapon)
+          select: choose(hand weapon)
         }
       }
     ]

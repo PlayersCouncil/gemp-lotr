@@ -24,9 +24,9 @@ import java.util.Collection;
 public class DisableWounds implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "until", "memorize", "requires");
+        FieldUtils.validateAllowedFields(effectObject, "select", "until", "memorize", "requires");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
 
@@ -36,7 +36,7 @@ public class DisableWounds implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, actionContext -> new ConstantEvaluator(1), memory, "you", "Choose cards to make take no wounds", environment));
+                CardResolver.resolveCards(select, actionContext -> new ConstantEvaluator(1), memory, "you", "Choose cards to make take no wounds", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

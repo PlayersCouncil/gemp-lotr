@@ -37,11 +37,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -190,7 +190,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(ranger)
+				    select: choose(ranger)
 				    memorize: chosenRanger
 				    amount: {
 				        type: condition
@@ -252,7 +252,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(culture(gondor),companion)
+		            select: choose(culture(gondor),companion)
 		        }
 		    }
 		]
@@ -305,7 +305,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: modifyArcheryTotal
@@ -430,20 +430,20 @@
                     effect: {
                         type: chooseActiveCards
                         text: Choose companions to exert with total resistance 12 or more
-                        filter: choose(culture(gondor),companion,canExert)
+                        select: choose(culture(gondor),companion,canExert)
                         count: any
                         memorize: chosenCompanions
                     }
                 }
                 {
                     type: exert
-                    filter: memory(chosenCompanions)
+                    select: memory(chosenCompanions)
                 }
             ]
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(minion,inSkirmishAgainst(culture(gondor),companion))
+				    select: choose(minion,inSkirmishAgainst(culture(gondor),companion))
 				    amount: {
 				        type: forEachInMemory
 				        memory: chosenCompanion
@@ -499,7 +499,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: gondor
-		            filter: self
+		            select: self
 		            count: 3
 		        }
 		    }
@@ -520,19 +520,19 @@
 		                effects: [
 		                    {
 		                        type: discard
-		                        filter: self
+		                        select: self
 		                    }
 		                    {
 		                        type: removeTokens
 		                        culture: gondor
-		                        filter: self
+		                        select: self
 		                    }
 		                ]
 		            }
 		        ]
 		        effect: {
 		            type: heal
-		            filter: choose(culture(gondor),man)
+		            select: choose(culture(gondor),man)
 		        }
 		    }
 		]
@@ -584,7 +584,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: playNextSite
@@ -629,7 +629,7 @@
 			effect: [
 				{
 				    type: heal
-				    filter: all(culture(gondor),companion,minResistance(5))
+				    select: all(culture(gondor),companion,minResistance(5))
 				}
 			]
 		}
@@ -671,7 +671,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(gondor),companion)
+				    select: choose(culture(gondor),companion)
 				    memorize: chosenCompanion
 				    amount: {
 				        type: condition
@@ -776,7 +776,7 @@
 			requiresRanger: true
 			cost: {
 			    type: exert
-			    filter: choose(ranger)
+			    select: choose(ranger)
 			},
 			effect: [
 				{

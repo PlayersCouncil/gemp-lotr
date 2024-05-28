@@ -44,7 +44,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: choose(culture(gondor),attachedTo(name(Boromir)))
+		            select: choose(culture(gondor),attachedTo(name(Boromir)))
 		        }
 		        effect: {
 		            type: replaceInSkirmish
@@ -101,7 +101,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: self
+		            select: self
 		        }
 		    }
 		]
@@ -143,7 +143,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(gondor),man)
+				    select: choose(culture(gondor),man)
 				    amount: 1
 				    memorize: chosenMan
 				}
@@ -211,7 +211,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: all(unbound,companion)
+		            select: all(unbound,companion)
 		            amount: 1
 		            until: regroup
 		        }
@@ -256,7 +256,7 @@
 			effect: [
 				{
 				    type: addKeyword
-				    filter: choose(culture(gondor),companion)
+				    select: choose(culture(gondor),companion)
 				    keyword: defender
 				    amount: 1
 				    until: regroup
@@ -307,11 +307,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: {
 		                type: forEachWound
 		                filter: ringBearer
@@ -481,7 +481,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: replaceInSkirmish
@@ -529,11 +529,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
                     type: heal
-                    filter: choose(culture(gondor),man)
+                    select: choose(culture(gondor),man)
                     count: {
                         type: condition
                         condition: {
@@ -585,11 +585,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(gondor),man)
+		            select: choose(culture(gondor),man)
 		            memorize: chosenMan
 		            amount: {
 		                type: sum
@@ -683,12 +683,12 @@
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
 		        ]
 		        effect: {
 		            type: discard
-		            filter: choose(possession,attachedTo(minion,inSkirmishAgainst(memory(bearer))))
+		            select: choose(possession,attachedTo(minion,inSkirmishAgainst(memory(bearer))))
 		        }
 		    }
 

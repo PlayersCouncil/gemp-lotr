@@ -23,7 +23,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(sauron),minion)
+				select: choose(culture(sauron),minion)
 			}
 			effect: [
 				{
@@ -43,7 +43,7 @@
 				}
 				{
 					type: ChooseCardsFromDrawDeck
-					filter: choose(minion,MaxTwilight(memory(revealedCard)))
+					select: choose(minion,MaxTwilight(memory(revealedCard)))
 					memorize: chosenCard
 					text: Choose a minion to take into hand from your draw deck
 					showAll: true
@@ -64,7 +64,7 @@
 					text: Discard {twilightCostInMemory} cards from hand to prevent your opponent taking {chosenCard} into hand from their draw deck
 					effect: {
 						type: PutCardsFromDeckIntoHand
-						filter: memory(chosenCard)
+						select: memory(chosenCard)
                         reveal: true
                         shuffle: false
                         showAll: false
@@ -138,7 +138,7 @@
 						times: {
 							type: ForEachBurden
 						}
-						filter: choose(companion)
+						select: choose(companion)
 					}
 				}
 			}
@@ -180,12 +180,12 @@
 	# 		type: event
 	# 		cost: {
 	# 			type: exert
-	# 			filter: choose(culture(sauron),minion,unique)
+	# 			select: choose(culture(sauron),minion,unique)
 	# 		}
 	# 		effect: [
 	# 			{
 	# 				type: chooseActiveCards
-	# 				filter: choose(companion,not(exhausted),not(Ring-bearer))
+	# 				select: choose(companion,not(exhausted),not(Ring-bearer))
 	# 				memorize: chosenComp
 	# 				text: Choose a companion to exhaust
 	# 			}
@@ -201,7 +201,7 @@
 	# 				text: Discard 2 cards at random from hand to prevent exhausting {chosenComp}
 	# 				effect: {
 	# 					type: exhaust
-	# 					filter: memory(chosenComp)
+	# 					select: memory(chosenComp)
 	# 				}
 	# 			}
 	# 		]
@@ -246,18 +246,18 @@
             }
 			cost: {
 				type: exert
-				filter: choose(unique,culture(sauron),minion,not(exhausted))
+				select: choose(unique,culture(sauron),minion,not(exhausted))
 			},
 			effect: [
 				{
 					type: ChooseActiveCards
-					filter: choose(companion,not(ring-bearer))
+					select: choose(companion,not(ring-bearer))
 					memorize: chosenComp
 					text: Choose a companion (except the Ring-bearer) to exert and have a borne possession discarded.
 				}
 				{
 					type: ChooseActiveCards
-					filter: choose(possession,AttachedTo(memory(chosenComp)))
+					select: choose(possession,AttachedTo(memory(chosenComp)))
 					memorize: chosenPoss
 					text: Choose a possession attached to that companion to discard.
 				}
@@ -275,11 +275,11 @@
 					effect:[
 						{
 							type: Exert
-							filter: memory(chosenComp)
+							select: memory(chosenComp)
 						}
 						{
 							type: Discard
-							filter: memory(chosenPoss)
+							select: memory(chosenPoss)
 						}
 					]
 				}
@@ -324,7 +324,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 				}
 			]
 			effect: [
@@ -344,7 +344,7 @@
 					effect: [
 						{
 							type: chooseActiveCards
-							filter: choose(companion,not(exhausted),not(Ring-bearer))
+							select: choose(companion,not(exhausted),not(Ring-bearer))
 							memorize: chosenComp
 							text: Choose a companion to exert (except the Ring-bearer)
 						}
@@ -355,14 +355,14 @@
 								type: DiscardCardsFromDrawDeck
 								player: freeps
 								deck: freeps
-								filter: all(side(freeps),memory(cardsOnTop))
+								select: all(side(freeps),memory(cardsOnTop))
                                 showAll: false
                                 shuffle: false
 							}
 							text: Discard all revealed Free Peoples cards to prevent exerting {chosenComp}?
 							effect: {
 								type: exert
-								filter: memory(chosenComp)
+								select: memory(chosenComp)
 							}
 						}
 					]
@@ -376,11 +376,11 @@
 					effects: [
 						{
 							type: exert
-							filter: memory(chosenMinion)
+							select: memory(chosenMinion)
 						}
 						{
 							type: discard
-							filter: choose(culture(sauron),minion)
+							select: choose(culture(sauron),minion)
 						}
 					]
 				}
@@ -425,7 +425,7 @@
 			type: event
 			cost: {
 				type: discard
-				filter: choose(culture(sauron),minion)
+				select: choose(culture(sauron),minion)
 			}
 			effect: [
 				{
@@ -438,7 +438,7 @@
 				}
 				{
 					type: chooseActiveCards
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 					memorize: chosenMinions
 					text: Choose minions to return to hand
 					count: {
@@ -462,7 +462,7 @@
 					effect: {
 						type: ReturnToHand
 						player: shadow
-						filter: memory(chosenMinions)
+						select: memory(chosenMinions)
 					}
 				}
 			]
@@ -527,7 +527,7 @@
 	# 						effects: [
 	# 							{
 	# 								type: discard
-	# 								filter: choose(Elf)
+	# 								select: choose(Elf)
 	# 								count: 2
 	# 							}
 	# 							{
@@ -540,7 +540,7 @@
 	# 					effect: {
 	# 						type: wound
 	# 						times: 3
-	# 						filter: choose(title(Galadriel))
+	# 						select: choose(title(Galadriel))
 	# 					}
 	# 				}
 	# 			}
@@ -555,14 +555,14 @@
 	# 					player: freeps
 	# 					cost: {
 	# 						type: discard
-	# 						filter: choose(Elf)
+	# 						select: choose(Elf)
 	# 						count: 2
 	# 					}
 	# 					text: Discard 2 Elves to prevent wounding Galadriel 3 times
 	# 					effect: {
 	# 						type: wound
 	# 						times: 3
-	# 						filter: choose(title(Galadriel))
+	# 						select: choose(title(Galadriel))
 	# 					}
 	# 				}
 	# 			}
@@ -606,7 +606,7 @@
 				type: ExtraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron), orc)
+					select: choose(culture(sauron), orc)
 				}
 			}
 			{
@@ -634,11 +634,11 @@
 							{
 								type: Discard
 								player: freeps
-								filter: choose(side(freeps),character)
+								select: choose(side(freeps),character)
 							}
 							{
 								type: wound
-								filter: bearer
+								select: bearer
 							}
 						]
 					}
@@ -684,7 +684,7 @@
 				type: ExtraCost
 				cost: {
 					type: exert
-				filter: choose(culture(sauron),minion)
+				select: choose(culture(sauron),minion)
 				}
 			}
 			{
@@ -770,7 +770,7 @@
 							{
 								type: Discard
 								player: shadow
-								filter: choose(side(freeps),condition)
+								select: choose(side(freeps),condition)
 							}
 							{
 								type: AddBurdens

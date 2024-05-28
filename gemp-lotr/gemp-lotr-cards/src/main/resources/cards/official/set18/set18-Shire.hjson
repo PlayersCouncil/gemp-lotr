@@ -38,12 +38,12 @@
 		        phase: maneuver
 		        cost: {
 		            type: discard
-		            filter: choose(tale)
+		            select: choose(tale)
 		        }
 		        effect: {
 		            type: exert
 		            player: shadow
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -150,7 +150,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: shire
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -159,7 +159,7 @@
 		        cost: {
 		            type: removeTokens
 		            culture: shire
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: removeBurdens
@@ -259,7 +259,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(culture(shire),companion)
+		            select: choose(culture(shire),companion)
 		        }
 		    }
 		    {
@@ -270,7 +270,7 @@
 		        }
 		        effect: {
 		            type: removeKeyword
-		            filter: choose(minion)
+		            select: choose(minion)
 		            keyword: fierce
 		            until: regroup
 		        }
@@ -391,7 +391,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -404,11 +404,11 @@
 		        cost: {
 		            type: addTokens
 		            culture: shire
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: preventDiscard
-		            filter: choose(culture(shire),or(condition,possession))
+		            select: choose(culture(shire),or(condition,possession))
 		        }
 		    }
 		]
@@ -456,7 +456,7 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: bearer
+		            select: bearer
 		        }
 		        effect: {
 		            type: removeThreats

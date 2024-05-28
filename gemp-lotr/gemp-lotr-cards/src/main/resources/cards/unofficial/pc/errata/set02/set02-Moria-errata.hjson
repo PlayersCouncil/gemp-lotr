@@ -22,7 +22,7 @@
 			type: event
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),not(title(Foul Things)),not(event,response))
+				select: choose(culture(moria),not(title(Foul Things)),not(event,response))
 			}
 		}
 		gametext: <b>Shadow</b>: Play a [Moria] card from your discard pile.

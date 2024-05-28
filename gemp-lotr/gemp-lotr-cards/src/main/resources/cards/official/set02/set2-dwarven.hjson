@@ -20,7 +20,7 @@
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(culture(dwarven),weapon)
+					select: choose(culture(dwarven),weapon)
 				}
 			}
 		]
@@ -35,12 +35,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				memorize: exertedDwarf
 			}
 			effect: {
 				type: addKeyword
-				filter: memory(exertedDwarf)
+				select: memory(exertedDwarf)
 				keyword: defender
 				amount: {
 					type: requires
@@ -77,12 +77,12 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {
 				type: preventWound
-				filter: memory(bearer)
+				select: memory(bearer)
 			}
 		}
 	}
@@ -104,12 +104,12 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {
 				type: modifyStrength
-				filter: memory(bearer)
+				select: memory(bearer)
 				amount: 1
 			}
 		}
@@ -125,7 +125,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					memorize: chosenDwarf
 					amount: {
 						type: requires
@@ -147,7 +147,7 @@
 					}
 					effect: {
 						type: addKeyword
-						filter: memory(chosenDwarf)
+						select: memory(chosenDwarf)
 						keyword: damage+1
 					}
 				}
@@ -241,7 +241,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -269,7 +269,7 @@
 			}
 			effect: {
 				type: putCardsFromDiscardIntoHand
-				filter: choose(culture(dwarven),event)
+				select: choose(culture(dwarven),event)
 			}
 		}
 	}
@@ -289,8 +289,8 @@
 				type: activated
 				phase: archery
 				cost: {
-					type:discard
-					filter: self
+					type: discard
+					select: self
 				}
 				effect: {
 					type: modifyArcheryTotal
@@ -312,7 +312,7 @@
 			cost: [
 				{
 					type: exert
-					filter: choose(dwarf,companion)
+					select: choose(dwarf,companion)
 				}
 				{
 					type: discardTopCardsFromDeck
@@ -322,7 +322,7 @@
 			]
 			effect: {
 				type: discard
-				filter: choose(or(and(side(shadow),condition,attachedTo(dwarf)),and(weather,condition)))
+				select: choose(or(and(side(shadow),condition,attachedTo(dwarf)),and(weather,condition)))
 			}
 		}
 	}
@@ -344,7 +344,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					memorize: chosenDwarf
 					amount: {
 						type: cardAffectedLimitPerPhase
@@ -361,7 +361,7 @@
 					}
 					effect: {
 						type: addKeyword
-						filter: memory(chosenDwarf)
+						select: memory(chosenDwarf)
 						keyword: damage
 						amount: {
 							type: cardAffectedLimitPerPhase
@@ -424,7 +424,7 @@
 			effect: {
 				type: heal
 				count: 1-100
-				filter: choose(dwarf,companion)
+				select: choose(dwarf,companion)
 			}
 		}
 	}
@@ -438,7 +438,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf)
+				select: choose(dwarf)
 			}
 			effect: [
 				{
@@ -457,7 +457,7 @@
 						{
 							type: discardFromHand
 							count: 2
-							filter: choose(side(shadow))
+							select: choose(side(shadow))
 							forced: false
 						}
 						{

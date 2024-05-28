@@ -36,12 +36,12 @@
                 }
                 cost: {
                     type: discard
-                    filter: choose(or(name(Éomer),name(Théodred)))
+                    select: choose(or(name(Éomer),name(Théodred)))
                 }
                 effect: [
                     {
                         type: preventWound
-                        filter: choose(name(Théoden))
+                        select: choose(name(Théoden))
                     }
                 ]
             }
@@ -58,12 +58,12 @@
                 }
                 cost: {
                     type: discard
-                    filter: choose(or(name(Éomer),name(Éowyn)))
+                    select: choose(or(name(Éomer),name(Éowyn)))
                 }
                 effect: [
                     {
                         type: preventWound
-                        filter: choose(name(Théodred))
+                        select: choose(name(Théodred))
                     }
                 ]
             }
@@ -260,7 +260,7 @@
 				    }
 				    effect: {
 				        type: discard
-				        filter: choose(possession)
+				        select: choose(possession)
 				    }
 				}
 			]
@@ -333,14 +333,14 @@
 		        effect: [
                     {
                         type: addKeyword
-                        filter: bearer
+                        select: bearer
                         keyword: defender
                         amount: 1
                         until: regroup
                     }
                     {
                         type: modifyStrength
-                        filter: bearer
+                        select: bearer
                         amount: 1
                         until: regroup
                     }
@@ -389,7 +389,7 @@
 		        }
 		        effect: {
 		            type: addTokens
-		            filter: self
+		            select: self
 		            culture: rohan
 		        }
 		    }
@@ -405,18 +405,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: rohan
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: playCardFromDiscard
-		            filter: choose(culture(rohan),possession)
+		            select: choose(culture(rohan),possession)
 		            on: culture(rohan),companion
 		        }
 		    }
@@ -479,7 +479,7 @@
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession)
+		            select: choose(possession)
 		        }
 		    }
 		]
@@ -521,7 +521,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(rohan),companion)
+				    select: choose(culture(rohan),companion)
 				    amount: {
 				        type: condition
 				        condition: {
@@ -573,16 +573,16 @@
                 phase: skirmish
                 cost: {
                     type: removeCardsInDiscardFromGame
-                    filter: choose(other,culture(rohan))
+                    select: choose(other,culture(rohan))
                     count: 4
                 }
                 effect:
                 {
                    type: playCardFromDiscard
-                   filter: self
+                   select: self
                    extraEffects: {
                        type: removeFromTheGame
-                       filter: self
+                       select: self
                    }
                 }
 		    }
@@ -591,7 +591,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(mounted,culture(rohan),companion)
+                        select: choose(mounted,culture(rohan),companion)
                         amount: 3
                     }
                 ]
@@ -637,11 +637,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(name(Éomer))
+		            select: choose(name(Éomer))
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(or(name(Éowyn),name(Théoden)))
+		            select: choose(or(name(Éowyn),name(Théoden)))
 		            amount: 2
 		        }
 		    }
@@ -651,11 +651,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(name(Éowyn))
+		            select: choose(name(Éowyn))
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(or(name(Éomer),name(Théoden)))
+		            select: choose(or(name(Éomer),name(Théoden)))
 		            amount: 2
 		        }
 		    }
@@ -665,11 +665,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: choose(name(Théoden))
+		            select: choose(name(Théoden))
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(or(name(Éomer),name(Éowyn)))
+		            select: choose(or(name(Éomer),name(Éowyn)))
 		            amount: 2
 		        }
 		    }
@@ -723,7 +723,7 @@
                     }
                     {
                         type: removeTokens
-                        filter: choose(side(free people))
+                        select: choose(side(free people))
                     }
                 ]
                 effect: {
@@ -854,7 +854,7 @@
                         type: costToEffect
                         cost: {
                             type: exert
-                            filter: choose(name(Théoden))
+                            select: choose(name(Théoden))
                         }
                         effect: {
                             type: memorizeValue
@@ -866,7 +866,7 @@
                 effect: [
                     {
                         type: modifyStrength
-                        filter: choose(your,culture(rohan),companion)
+                        select: choose(your,culture(rohan),companion)
                         amount: {
                             type: condition
                             condition: {
@@ -888,7 +888,7 @@
                         }
                         effect: {
                             type: addKeyword
-                            filter: memory(chosenCompanion)
+                            select: memory(chosenCompanion)
                             keyword: damage
                             amount: 1
                         }
@@ -949,7 +949,7 @@
 		        effect: {
 		            type: wound
 		            player: shadow
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -1017,7 +1017,7 @@
 		        }
 		        effect: {
 		            type: exhaust
-		            filter: choose(minion,inSkirmishAgainst(name(Théoden)))
+		            select: choose(minion,inSkirmishAgainst(name(Théoden)))
 		        }
 		    }
 		]
@@ -1160,7 +1160,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: all(minion,inSkirmishAgainst(self))
+		            select: all(minion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -1215,7 +1215,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: rohan
-		            filter: self
+		            select: self
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: or(plains,battleground),site,zone(adventure path)
@@ -1231,7 +1231,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: rohan
-		            filter: self
+		            select: self
 		            count: {
 		                type: forEachYouCanSpot
 		                filter: your,companion,muster

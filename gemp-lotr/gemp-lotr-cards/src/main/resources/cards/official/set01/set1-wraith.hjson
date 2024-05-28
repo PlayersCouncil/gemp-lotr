@@ -13,7 +13,7 @@
 			}
 			effect: {
 				type: preventWound
-				filter: choose(nazgul)
+				select: choose(nazgul)
 			}
 		}
 	}
@@ -27,7 +27,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(nazgul)
+				select: choose(nazgul)
 				amount: {
 					type: requires
 					requires: {
@@ -49,7 +49,7 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(nazgul)
+				select: choose(nazgul)
 			}
 			effect: {
 				type: choice
@@ -66,7 +66,7 @@
 						}
 						effect: {
 							type: discard
-							filter: choose(side(free people),or(possession,condition))
+							select: choose(side(free people),or(possession,condition))
 						}
 					}
 					{
@@ -77,7 +77,7 @@
 						}
 						effect: {
 							type: discard
-							filter: choose(or(ally,companion),not(ring bearer))
+							select: choose(or(ally,companion),not(ring bearer))
 						}
 					}
 				]
@@ -119,11 +119,11 @@
 					effects: [
 						{
 							type: exert
-							filter: choose(nazgul)
+							select: choose(nazgul)
 						}
 						{
 							type: discard
-							filter: self
+							select: self
 						}
 					]
 				}
@@ -142,7 +142,7 @@
 				phase: skirmish
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					fromSupport: true
 					where: choose(character,inSkirmishAgainst(nazgul))
 				}
@@ -199,7 +199,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -220,7 +220,7 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					fromSupport: true
 					where: choose(character,inSkirmishAgainst(memory(winner)),not(hasAttached(name(Blade Tip))))
 				}
@@ -238,7 +238,7 @@
 				effect: [
 					{
 						type: wound
-						filter: all(hasAttached(self),not(ring bearer))
+						select: all(hasAttached(self),not(ring bearer))
 					}
 					{
 						type: conditional
@@ -282,13 +282,13 @@
 						effect: [
 							{
 								type: modifyStrength
-								filter: choose(nazgul)
+								select: choose(nazgul)
 								amount: 1
 								memorize: chosenNazgul
 							}
 							{
 								type: addKeyword
-								filter: memory(chosenNazgul)
+								select: memory(chosenNazgul)
 								keyword: damage+1
 							}
 						]
@@ -302,13 +302,13 @@
 						effect: [
 							{
 								type: modifyStrength
-								filter: choose(nazgul)
+								select: choose(nazgul)
 								amount: 3
 								memorize: chosenNazgul
 							}
 							{
 								type: addKeyword
-								filter: memory(chosenNazgul)
+								select: memory(chosenNazgul)
 								keyword: damage+2
 							}
 						]
@@ -351,11 +351,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(your,nazgul)
+				select: choose(your,nazgul)
 			}
 			effect: {
 				type: discard
-				filter: choose(ally)
+				select: choose(ally)
 			}
 		}
 	}
@@ -369,7 +369,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(nazgul)
+				select: choose(nazgul)
 				amount: {
 					type: requires
 					requires: {
@@ -404,7 +404,7 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(ring bearer)
+						select: choose(ring bearer)
 					}
 					{
 						type: addBurdens
@@ -440,14 +440,14 @@
 				}
 				{
 					type: putCardsFromDeckIntoHand
-					filter: all(memory(revealedCards),culture(wraith))
+					select: all(memory(revealedCards),culture(wraith))
 					reveal: true
 					shuffle: false
 					showAll: false
 				}
 				{
 					type: discardCardsFromDrawDeck
-					filter: all(memory(revealedCards),not(culture(wraith)))
+					select: all(memory(revealedCards),not(culture(wraith)))
                     showAll: false
                     shuffle: false
 				}
@@ -477,7 +477,7 @@
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 				effect: {
@@ -489,13 +489,13 @@
 					effects: [
 						{
 							type: transfer
-							filter: choose(name(Blade Tip),zone(support))
+							select: choose(name(Blade Tip),zone(support))
 							where: choose(companion,inSkirmishAgainst(memory(bearer)),not(hasAttached(name(Blade Tip))))
 							fromSupport: true
 						}
 						{
 							type: transferFromDiscard
-							filter: choose(name(Blade Tip))
+							select: choose(name(Blade Tip))
 							where: choose(companion,inSkirmishAgainst(memory(bearer)),not(hasAttached(name(Blade Tip))))
 						}
 					]
@@ -513,7 +513,7 @@
 			type: event
 			effect: {
 				type: play
-				filter: choose(nazgul)
+				select: choose(nazgul)
 				cost: -2
 			}
 		}
@@ -557,7 +557,7 @@
 			}
 			effect: {
 				type: exert
-				filter: choose(hobbit,not(ring bearer))
+				select: choose(hobbit,not(ring bearer))
 			}
 		}
 	}
@@ -579,7 +579,7 @@
 			}
 			effect: {
 				type: heal
-				filter: choose(nazgul)
+				select: choose(nazgul)
 			}
 		}
 	}
@@ -609,11 +609,11 @@
 				}
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: {
 					type: discard
-					filter: choose(side(free people),condition)
+					select: choose(side(free people),condition)
 				}
 			}
 		]
@@ -662,11 +662,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(nazgul)
+				select: choose(nazgul)
 			}
 			effect: {
 				type: wound
-				filter: all(archer,companion)
+				select: all(archer,companion)
 			}
 		}
 	}
@@ -734,11 +734,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: {
 					type: discard
-					filter: choose(possession,attachedTo(character,inSkirmishAgainst(bearer)))
+					select: choose(possession,attachedTo(character,inSkirmishAgainst(bearer)))
 				}
 			}
 		]
@@ -753,11 +753,11 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(nazgul)
+				select: choose(nazgul)
 			}
 			effect: {
 				type: wound
-				filter: all(ally)
+				select: all(ally)
 			}
 		}
 	}
@@ -771,7 +771,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(nazgul)
+				select: choose(nazgul)
 				amount: {
 					type: requires
 					requires: {
@@ -797,7 +797,7 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(nazgul)
+				select: choose(nazgul)
 			}
 			effect: {
 				type: addBurdens
@@ -836,7 +836,7 @@
 					}
 					{
 						type: modifyStrength
-						filter: self
+						select: self
 						amount: 1
 					}
 				]
@@ -860,11 +860,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: discard
-				filter: choose(weapon,attachedTo(character,inSkirmishAgainst(self)))
+				select: choose(weapon,attachedTo(character,inSkirmishAgainst(self)))
 			}
 		}
 	}
@@ -899,11 +899,11 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: wound
-				filter: choose(companion,not(ring bearer))
+				select: choose(companion,not(ring bearer))
 			}
 		}
 	}
@@ -945,11 +945,11 @@
 			cost: [
 				{
 					type: exert
-					filter: self
+					select: self
 				}
 				{
 					type: spot
-					filter: choose(not(your),site)
+					select: choose(not(your),site)
 					memorize: spottedSite
 				}
 			]
@@ -1028,7 +1028,7 @@
 								}
 								{
 									type: playCardFromDiscard
-									filter: choose(minion)
+									select: choose(minion)
 								}
 							]
 						}
@@ -1053,11 +1053,11 @@
 			phase: shadow
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: addKeyword
-				filter: choose(culture(wraith),minion)
+				select: choose(culture(wraith),minion)
 				keyword: fierce
 				until: start(regroup)
 			}

@@ -10,7 +10,7 @@
 			type: event
 			cost: {
 				type: discard
-				filter: choose(culture(sauron),orc)
+				select: choose(culture(sauron),orc)
 			}
 			effect: [
 				{
@@ -19,7 +19,7 @@
 					player: fp
  					cost: {
 						type: discard
-						filter: choose(side(free people),condition)
+						select: choose(side(free people),condition)
 					}
 					effect: {
 						type: addBurdens
@@ -51,7 +51,7 @@
 				}
 				effect: {
 					type: preventdiscard
-					filter: choose(culture(sauron),condition)
+					select: choose(culture(sauron),condition)
 				}
 			}
 		]
@@ -91,7 +91,7 @@
  			}
 				effect: {
 				type: discard
-				filter: self
+				select: self
 				}
 			}
 		]
@@ -116,7 +116,7 @@
 				type: extraCost
 				cost: {
 					type: discard
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{
@@ -230,7 +230,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]

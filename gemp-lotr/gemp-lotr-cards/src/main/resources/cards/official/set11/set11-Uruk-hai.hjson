@@ -132,7 +132,7 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: cancelSpecialAbility
@@ -177,7 +177,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(uruk-hai),minion)
+				    select: choose(culture(uruk-hai),minion)
 				    amount: {
 				        type: forEachYouCanSpot
 				        filter: battleground,site
@@ -283,7 +283,7 @@
 			effect: [
 				{
 				    type: discard
-				    filter: choose(condition)
+				    select: choose(condition)
 				}
 			]
 		}
@@ -402,7 +402,7 @@
 		        effect: [
 		            {
 		                type: negateWound
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: drawCards
@@ -458,7 +458,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: uruk-hai
-		            filter: self
+		            select: self
 		            count: 3
 		        }
 		    }
@@ -477,18 +477,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: uruk-hai
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(culture(uruk-hai),minion)
+		            select: choose(culture(uruk-hai),minion)
 		        }
 		    }
 		]
@@ -580,7 +580,7 @@
 			effect: [
 				{
 				    type: modifyStrength
-				    filter: choose(culture(uruk-hai),minion)
+				    select: choose(culture(uruk-hai),minion)
 				    amount: {
 				        type: condition
 				        condition: {
@@ -700,7 +700,7 @@
                 ]
                 effect: {
                     type: modifyResistance
-                    filter: choose(unbound,companion)
+                    select: choose(unbound,companion)
                     amount: -2
                     until: endOfTurn
                 }
@@ -1194,7 +1194,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: -2
 		            until: regroup
 		        }
@@ -1248,11 +1248,11 @@
 		        }
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession,attachedTo(memory(assignedAgainst)))
+		            select: choose(possession,attachedTo(memory(assignedAgainst)))
 		        }
 		    }
 		]
@@ -1316,17 +1316,17 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: preventWound
-		            filter: choose(culture(uruk-hai),minion)
+		            select: choose(culture(uruk-hai),minion)
 		        }
 		    }
 		]

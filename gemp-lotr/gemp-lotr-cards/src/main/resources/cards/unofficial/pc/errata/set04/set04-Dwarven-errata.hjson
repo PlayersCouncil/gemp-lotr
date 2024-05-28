@@ -52,7 +52,7 @@
 				}
 				effect: {
 					type: putStackedCardsIntoHand
-					filter: choose(side(free people))
+					select: choose(side(free people))
 					on: self
 				}
 			}

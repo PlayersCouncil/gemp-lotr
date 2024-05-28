@@ -15,11 +15,11 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(culture(shire),companion)
+				select: choose(culture(shire),companion)
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(culture(shire),condition)
+				select: choose(culture(shire),condition)
                 showAll: true
                 shuffle: true
 			}
@@ -79,7 +79,7 @@
 			]
 			cost: {
 				type: exert
-				filter: choose(companion)
+				select: choose(companion)
 				memorize: exertedComp
 			}
 			effect: [
@@ -90,7 +90,7 @@
 				{
 					type: chooseActiveCards
 					text: Choose a companion of a different culture to make strength +1 until the end of the turn.
-					filter: choose(companion,not(cultureFromMemory(exertedComp)))
+					select: choose(companion,not(cultureFromMemory(exertedComp)))
 					memorize: pumpedComp 
 				}
 				{
@@ -155,11 +155,11 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(culture(elven),ally)
+				select: choose(culture(elven),ally)
 			}
 			effect: {
 				type: heal
-				filter: memory(exertedComp)
+				select: memory(exertedComp)
 			}
 		}
 	}
@@ -181,7 +181,7 @@
 			}
 			effect: {
 				type: wound
-				filter: all(character,inSkirmish,unwounded)
+				select: all(character,inSkirmish,unwounded)
 			}
 		}
 	}

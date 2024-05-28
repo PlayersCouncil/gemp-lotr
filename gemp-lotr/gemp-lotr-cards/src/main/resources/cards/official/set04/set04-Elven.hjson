@@ -66,14 +66,14 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf,companion)
+				select: choose(elf,companion)
 				count: any
 				memorize: exertedElves
 			},
 			effect: [
 			    {
 			        type: modifyStrength
-			        filter: choose(minion,inSkirmishAgainst(unbound,companion))
+			        select: choose(minion,inSkirmishAgainst(unbound,companion))
 			        amount: {
                         type: forEachInMemory
                         memory: exertedElves
@@ -140,7 +140,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -183,7 +183,7 @@
 			effect: [
 			    {
 			        type: discard
-			        filter: choose(condition)
+			        select: choose(condition)
 			    }
 			]
 		}
@@ -275,11 +275,11 @@
 		        effect: [
                     {
                         type: preventDiscard
-                        filter: choose(another,possession,attachedTo(bearer))
+                        select: choose(another,possession,attachedTo(bearer))
                     }
                     {
                         type: discard
-                        filter: self
+                        select: self
                     }
 		        ]
 		    }
@@ -328,7 +328,7 @@
 		            effects: [
 		                {
 		                    type: exert
-		                    filter: bearer
+		                    select: bearer
 		                }
 		                {
 		                    type: discardFromHand
@@ -339,7 +339,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion,inSkirmishAgainst(bearer))
+		            select: choose(minion,inSkirmishAgainst(bearer))
 		            amount: -1
 		        }
 		    }
@@ -444,7 +444,7 @@
 			effect: [
 			    {
 			        type: modifyStrength
-			        filter: choose(minion,inSkirmishAgainst(elf))
+			        select: choose(minion,inSkirmishAgainst(elf))
 			        memorize: minion
 			        amount: {
 			            type: forEachWound
@@ -501,17 +501,17 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: removeTokens
 		                culture: elven
-		                filter: choose(your,condition)
+		                select: choose(your,condition)
 		            }
 		        ]
 		        effect: {
 		            type: wound
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		        }
 		    }
 		]
@@ -561,11 +561,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		            amount: -2
 		        }
 		    }
@@ -609,7 +609,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: elven
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -668,13 +668,13 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 				memorize: exertedElf
 			},
 			effect: [
 			    {
 			        type: modifyStrength
-			        filter: choose(minion,inSkirmishAgainst(memory(exertedElf)))
+			        select: choose(minion,inSkirmishAgainst(memory(exertedElf)))
 			        amount: -3
 			    }
 			]
@@ -734,11 +734,11 @@
 		        cost: [
                     {
                         type: exert
-                        filter: self
+                        select: self
                     }
                     {
                         type: exert
-                        filter: choose(another,elf)
+                        select: choose(another,elf)
                     }
                 ]
 		        effect: {
@@ -800,7 +800,7 @@
                 }
                 effect: {
                     type: discard
-                    filter: self
+                    select: self
                 }
             }
 		]
@@ -893,11 +893,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(minion,inSkirmishAgainst(unbound,companion))
+		            select: choose(minion,inSkirmishAgainst(unbound,companion))
 		            amount: {
 		                type: condition
 		                condition: {
@@ -953,7 +953,7 @@
 		        phase: regroup
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: reconcileHand
@@ -998,12 +998,12 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: wound
 		            player: shadow
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		]
@@ -1061,7 +1061,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -1149,7 +1149,7 @@
 			}
 			cost: {
 				type: exert
-				filter: memory(winner)
+				select: memory(winner)
 			},
 			effect: [
 			    {
@@ -1164,7 +1164,7 @@
 			            }
 			            {
 			                type: wound
-			                filter: choose(minion)
+			                select: choose(minion)
 			            }
 			        ]
 			    }
@@ -1318,7 +1318,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: elven
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -1327,7 +1327,7 @@
 		        effect: [
 		            {
 		                type: modifyStrength
-		                filter: choose(minion,inSkirmishAgainst(elf))
+		                select: choose(minion,inSkirmishAgainst(elf))
 		                amount: {
                             type: forEachToken
                             culture: elven
@@ -1373,7 +1373,7 @@
 			effect: [
 			    {
 			        type: modifyStrength
-			        filter: choose(elf)
+			        select: choose(elf)
 			        amount: {
 			            type: condition
 			            condition: {
@@ -1439,7 +1439,7 @@
 			            }
 			            {
 			                type: exert
-			                filter: choose(minion)
+			                select: choose(minion)
 			            }
 			        ]
 			    }
@@ -1491,11 +1491,11 @@
 		        phase: regroup
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: discardStackedCards
-		            filter: choose(minion)
+		            select: choose(minion)
 		            on: or(condition,site)
 		        }
 		    }
@@ -1591,7 +1591,7 @@
 			effect: [
 			    {
 			        type: modifyStrength
-			        filter: choose(elf)
+			        select: choose(elf)
 			        memorize: chosenElf
 			        amount: {
 			            type: condition

@@ -34,7 +34,7 @@
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(minion)
+		            select: choose(minion)
 		        }
 		    }
 		    {
@@ -46,7 +46,7 @@
 		        }
 		        cost: {
 		            type: discard
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: liberateSite
@@ -93,7 +93,7 @@
 		        cost: [
 		            {
 		                type: chooseActiveCards
-    		            filter: choose(mount,attachedTo(culture(rohan),man),canBeDiscarded)
+    		            select: choose(mount,attachedTo(culture(rohan),man),canBeDiscarded)
     		            text: Choose cards to discard
     		            memorize: chosenMount
 		            }
@@ -104,12 +104,12 @@
 		            }
     		        {
 	    	            type: discard
-	    	            filter: memory(chosenMount)
+	    	            select: memory(chosenMount)
 		            }
 		        ]
 		        effect: {
 		            type: alterOverwhelmMultiplier
-		            filter: memory(chosenMan)
+		            select: memory(chosenMan)
 		            multiplier: 3
 		        }
 		    }
@@ -172,7 +172,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(rohan),man)
+		            select: choose(culture(rohan),man)
 		            memorize: chosenMan
 		            amount: {
 		                type: forEachWound
@@ -219,13 +219,13 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(mounted,culture(rohan),man)
+				select: choose(mounted,culture(rohan),man)
 				count: 2
 			},
 			effect: [
 				{
 					type: discard
-					filter: choose(wounded,minion)
+					select: choose(wounded,minion)
 					count: 0-2
 				}
 			]
@@ -280,11 +280,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: discard
-		            filter: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
+		            select: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
 		        }
 		    }
 		]
@@ -338,11 +338,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: heal
-		            filter: choose(minion,inSkirmishAgainst(self))
+		            select: choose(minion,inSkirmishAgainst(self))
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: self
+		            select: self
 		            amount: {
 		                type: cardPhaseLimit
 		                limit: 3
@@ -460,7 +460,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: raider
-		            filter: self
+		            select: self
 		            count: 2
 		        }
 		    }
@@ -476,18 +476,18 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: self
+		                    select: self
 		                }
 		                {
 		                    type: removeTokens
 		                    culture: rohan
-		                    filter: self
+		                    select: self
 		                }
 		            ]
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(culture(rohan),man,inSkirmishAgainst(exhausted,minion))
+		            select: choose(culture(rohan),man,inSkirmishAgainst(exhausted,minion))
 		            amount: 2
 		        }
 		    }

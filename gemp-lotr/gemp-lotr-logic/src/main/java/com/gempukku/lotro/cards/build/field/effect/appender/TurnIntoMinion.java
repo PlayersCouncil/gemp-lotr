@@ -34,9 +34,9 @@ import java.util.List;
 public class TurnIntoMinion implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "count", "strength", "vitality", "keywords", "until", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "count", "strength", "vitality", "keywords", "until", "memorize");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final ValueSource strength = ValueResolver.resolveEvaluator(effectObject.get("strength"), environment);
         final ValueSource vitality = ValueResolver.resolveEvaluator(effectObject.get("vitality"), environment);
@@ -54,7 +54,7 @@ public class TurnIntoMinion implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, valueSource, memory, "you", "Choose cards to turn into minions", environment));
+                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to turn into minions", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

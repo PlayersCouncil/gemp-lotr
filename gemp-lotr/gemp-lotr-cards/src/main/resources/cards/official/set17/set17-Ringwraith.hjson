@@ -45,11 +45,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: exert
-		            filter: choose(companion,maxResistance(2))
+		            select: choose(companion,maxResistance(2))
 		        }
 		    }
 		]
@@ -110,12 +110,12 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
 					type: discard
-					filter: choose(condition)
+					select: choose(condition)
 					count: {
 						type: condition
 						condition: {
@@ -194,12 +194,12 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: self
+		                select: self
 		            }
 		            {
 		                type: discardFromHand
 		                forced: false
-		                filter: choose(culture(wraith))
+		                select: choose(culture(wraith))
 		            }
 		        ]
 		        effect: {
@@ -264,7 +264,7 @@
 		                {
 		                    type: exert
 		                    player: free people
-		                    filter: choose(companion)
+		                    select: choose(companion)
 		                }
 		            ]
 		        }
@@ -276,7 +276,7 @@
 		        }
 		        effect: {
 		            type: returnToHand
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		]
@@ -338,7 +338,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            filter: choose(culture(wraith))
+		            select: choose(culture(wraith))
 		        }
 		    }
 		    {
@@ -348,7 +348,7 @@
 		        }
 		        effect: {
 		            type: returnToHand
-		            filter: bearer
+		            select: bearer
 		        }
 		    }
 		]
@@ -407,7 +407,7 @@
 		            }
 		            effect: {
 		                type: exert
-		                filter: choose(companion)
+		                select: choose(companion)
 		            }
 		        }
 		    }

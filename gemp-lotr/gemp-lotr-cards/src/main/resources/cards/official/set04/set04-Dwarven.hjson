@@ -42,7 +42,7 @@
 		            effects: [
 		                {
 		                    type: discard
-		                    filter: choose(culture(dwarven),condition)
+		                    select: choose(culture(dwarven),condition)
 		                }
 		                {
 		                    type: discardStackedCards
@@ -52,7 +52,7 @@
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: bearer
+		            select: bearer
 		            amount: 1
 		        }
 		    }
@@ -91,7 +91,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					amount: {
 					    type: condition
 					    condition: {
@@ -193,7 +193,7 @@
 		        }
 		        effect: {
 		            type: heal
-		            filter: choose(dwarf)
+		            select: choose(dwarf)
 		        }
 		    }
 		]
@@ -235,7 +235,7 @@
 			effect: [
 				{
 					type: putStackedCardsIntoHand
-					filter: choose(side(free))
+					select: choose(side(free))
 					on: culture(dwarven),condition
 				}
 			]
@@ -302,7 +302,7 @@
 				}
 				effect: {
 					type: putStackedCardsIntoHand
-					filter: choose(side(free people))
+					select: choose(side(free people))
 					on: self
 				}
 			}
@@ -371,18 +371,18 @@
 		        cost: [
 		            {
 		                type: exert
-		                filter: choose(dwarf)
+		                select: choose(dwarf)
 		                memorize: exertedDwarf
 		            }
 		            {
 		                type: stackCardsFromHand
-		                filter: choose(side(free))
+		                select: choose(side(free))
 		                where: self
 		            }
 		        ]
 		        effect: {
 		            type: preventAllWounds
-		            filter: memory(exertedDwarf)
+		            select: memory(exertedDwarf)
 		        }
 		    }
 		]
@@ -475,11 +475,11 @@
 		        phase: skirmish
 		        cost: {
 		            type: exert
-		            filter: self
+		            select: self
 		        }
 		        effect: {
 		            type: modifyStrength
-		            filter: choose(unbound,companion)
+		            select: choose(unbound,companion)
 		            memorize: chosenCompanion
 		            amount: {
 		                type: condition
@@ -532,12 +532,12 @@
 		        phase: skirmish
 		        cost: {
 		            type: stackCardsFromHand
-		            filter: choose(side(free))
+		            select: choose(side(free))
 		            where: self
 		        }
 		        effect: {
 		            type: addKeyword
-		            filter: choose(dwarf)
+		            select: choose(dwarf)
 		            keyword: damage
 		            amount: 1
 		        }
@@ -584,20 +584,20 @@
 				    true: [
 				        {
 				            type: modifyStrength
-				            filter: choose(dwarf)
+				            select: choose(dwarf)
 				            amount: 3
 				            memorize: chosenDwarf
 				        }
 				        {
 				            type: addKeyword
-				            filter: memory(chosenDwarf)
+				            select: memory(chosenDwarf)
 				            keyword: damage
 				            amount: 1
 				        }
 				    ]
 				    false: {
 				        type: modifyStrength
-				        filter: choose(dwarf)
+				        select: choose(dwarf)
 				        amount: 2
 				    }
 				}
@@ -642,7 +642,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: dwarven
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -712,7 +712,7 @@
 			effect: [
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 				}
 			]
 		}
@@ -750,7 +750,7 @@
 			effect: [
 				{
 					type: shuffleCardsFromPlayAndStackedOnThemIntoDrawDeck
-					filter: choose(culture(dwarven),condition)
+					select: choose(culture(dwarven),condition)
 					count: any
 				}
 			]
@@ -788,12 +788,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf)
+				select: choose(dwarf)
 			},
 			effect: [
 				{
 					type: shuffleCardsFromPlayAndStackedOnThemIntoDrawDeck
-					filter: choose(culture(dwarven),condition)
+					select: choose(culture(dwarven),condition)
 					memorizeStackedCards: stackedCards
 				}
 				{
@@ -804,7 +804,7 @@
 				    }
 				    effect: {
 				        type: exert
-				        filter: choose(minion)
+				        select: choose(minion)
 				    }
 				}
 			]
@@ -895,7 +895,7 @@
 		        effect: {
 		            type: addTokens
 		            culture: dwarven
-		            filter: self
+		            select: self
 		        }
 		    }
 		    {
@@ -904,7 +904,7 @@
 		        effect: [
 		            {
 		                type: modifyStrength
-		                filter: choose(unbound,companion)
+		                select: choose(unbound,companion)
 		                amount: {
 		                    type: forEachToken
 		                    culture: dwarven
@@ -914,7 +914,7 @@
 		            }
 		            {
 		                type: discard
-		                filter: self
+		                select: self
 		            }
 		        ]
 		    }

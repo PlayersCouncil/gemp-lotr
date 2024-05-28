@@ -43,7 +43,7 @@
                 }
                 effect: {
                     type: play
-                    filter: choose(culture(dwarven),or(condition,possession))
+                    select: choose(culture(dwarven),or(condition,possession))
                 }
             }
         ]
