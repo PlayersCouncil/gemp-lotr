@@ -125,7 +125,7 @@
 				type: wound
 				select: all(nazgul)
 				times: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: location
 						filter: river

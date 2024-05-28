@@ -11,7 +11,7 @@
 				type: modifyStrength
 				select: choose(uruk-hai)
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: hobbit,companion,notAssignedToSkirmish

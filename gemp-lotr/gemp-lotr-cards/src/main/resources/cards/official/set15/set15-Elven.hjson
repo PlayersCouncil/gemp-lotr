@@ -769,8 +769,8 @@
 				    type: modifyStrength
 				    select: choose(elf)
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: canSpot
 				            filter: archer
 				            count: 3
@@ -1042,8 +1042,8 @@
 		            type: modifyStrength
 		            select: choose(minion)
 		            amount: {
-		                type: condition
-		                condition: [
+		                type: Conditional
+		                requires: [
                             {
                                 type: canSpot
                                 filter: name(Aragorn),hunter
@@ -1072,8 +1072,8 @@
 		        effect: {
 		            type: drawCards
 		            count: {
-		                type: condition
-		                condition: [
+		                type: Conditional
+		                requires: [
                             {
                                 type: canSpot
                                 filter: name(Gimli),hunter

@@ -128,8 +128,8 @@
 		                filter: companion
 		                over: 4
 		                multiplier: {
-		                    type: condition
-		                    condition: {
+		                    type: Conditional
+		                    requires: {
 		                        type: canSpot
 		                        filter: hunter,minion
 		                    }

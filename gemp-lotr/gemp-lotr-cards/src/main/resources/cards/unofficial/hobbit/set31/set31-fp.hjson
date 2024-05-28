@@ -360,7 +360,7 @@
 				type: modifyArcheryTotal
 				side: free people
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: location
 						filter: or(river,forest)

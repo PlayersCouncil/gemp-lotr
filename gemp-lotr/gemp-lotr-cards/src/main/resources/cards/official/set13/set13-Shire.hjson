@@ -227,8 +227,8 @@
 		                type: sum
 		                source: [
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: memoryMatches
 		                            memory: chosenHobbit
 		                            filter: inFierceSkirmish
@@ -237,8 +237,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: memoryMatches
 		                            memory: chosenHobbit
 		                            filter: minResistance(7)
@@ -247,8 +247,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: location
 		                            filter: dwelling
 		                        }
@@ -256,8 +256,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: canSpot
 		                            filter: unwounded,hobbit
 		                        }
@@ -458,8 +458,8 @@
 		            type: heal
 		            select: choose(not(memory(winner)),hobbit)
 		            times: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: memoryMatches
 		                    memory: winner
 		                    filter: or(name(Frodo),name(Bilbo))
@@ -659,8 +659,8 @@
 		            type: heal
 		            select: bearer
 		            times: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: location
 		                    filter: dwelling
 		                }
@@ -868,8 +868,8 @@
 		            select: choose(companion)
 		            memorize: chosenCompanion
 		            times: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: memoryMatches
 		                    memory: chosenCompanion
 		                    filter: name(Sam)

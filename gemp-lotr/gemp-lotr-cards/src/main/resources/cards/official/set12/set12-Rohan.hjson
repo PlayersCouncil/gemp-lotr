@@ -157,8 +157,8 @@
 				    select: choose(culture(rohan),companion)
 				    memorize: chosenCompanion
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: memoryMatches
 				            memory: chosenCompanion
 				            filter: minResistance(5)
@@ -221,8 +221,8 @@
 		                type: sum
 		                source: [
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: location
 		                            filter: plains
 		                        }
@@ -230,8 +230,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: canSpot
 		                            filter: memory(chosenCompanion),minResistance(4)
 		                        }
@@ -239,8 +239,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: canSpot
 		                            filter: memory(chosenCompanion),hasAttached(armor)
 		                        }
@@ -248,8 +248,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: canSpot
 		                            filter: memory(chosenCompanion),inSkirmishAgainst(wounded,minion)
 		                        }

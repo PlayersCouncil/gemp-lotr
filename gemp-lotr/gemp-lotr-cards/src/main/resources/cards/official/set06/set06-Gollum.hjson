@@ -89,8 +89,8 @@
 		            select: choose(minion,inSkirmishAgainst(name(Sméagol)))
 		            memorize: chosenMinion
 		            times: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: memoryMatches
 		                    memory: chosenMinion
 		                    filter: culture(wraith),minion
@@ -149,8 +149,8 @@
 		            type: modifyStrength
 		            select: self
 		            amount: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: canSpot
 		                    filter: self,inSkirmishAgainst(ringBound,companion)
 		                }
@@ -495,8 +495,8 @@
 		            select: choose(companion,inSkirmishAgainst(name(Gollum)))
 		            memorize: chosenCompanion
 		            times: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: memoryMatches
 		                    memory: chosenCompanion
 		                    filter: culture(shire),companion

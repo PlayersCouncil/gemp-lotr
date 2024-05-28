@@ -43,7 +43,7 @@
 				select: memory(exertedDwarf)
 				keyword: defender
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: orc
@@ -128,7 +128,7 @@
 					select: choose(dwarf)
 					memorize: chosenDwarf
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: canSpot
 							count: 2

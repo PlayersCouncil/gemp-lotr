@@ -102,8 +102,8 @@
                 type: putCardsFromDiscardOnBottomOfDeck
                 select: choose(side(free))
                 count: {
-                    type: condition
-                    condition: {
+                    type: Conditional
+                    requires: {
                         type: memoryMatches
                         memory: exertedCompanion
                         filter: signet(Frodo)

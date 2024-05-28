@@ -179,7 +179,7 @@
 				select: choose(unbound,companion)
 				memorize: unboundCompanion
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: memoryMatches
 						memory: unboundCompanion
@@ -904,7 +904,7 @@
         type: modifyStrength
         select: choose(name(Gandalf))
         amount: {
-          type: requires
+          type: Conditional
           requires: {
             type: canSpotBurdens
             amount: 5
@@ -1123,7 +1123,7 @@
         select: choose(minion)
         memorize: chosenMinion
         amount: {
-          type: requires
+          type: Conditional
           requires: {
             type: memoryMatches
             memory: chosenMinion

@@ -218,8 +218,8 @@
 				    select: choose(culture(orc),minion)
 				    memorize: chosenMinion
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: memoryMatches
 				            memory: chosenMinion
 				            filter: mounted
@@ -280,8 +280,8 @@
                     filter: culture(orc),orc
                     keyword: hunter
                     amount: {
-                        type: condition
-                        condition: {
+                        type: Conditional
+                        requires: {
                             type: canSpot
                             filter: culture(uruk-hai),minion,name(Uglúk)
                         }

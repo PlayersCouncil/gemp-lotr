@@ -116,7 +116,7 @@
 				select: choose(elf)
 				memorize: chosenElf
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: memory(chosenElf),inSkirmishAgainst(archer)
@@ -250,7 +250,7 @@
 				select: choose(elf)
 				memorize: chosenElf
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: memory(chosenElf),inSkirmishAgainst(nazgul)

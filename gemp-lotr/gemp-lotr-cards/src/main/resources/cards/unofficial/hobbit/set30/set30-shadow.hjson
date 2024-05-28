@@ -12,7 +12,7 @@
 				select: choose(minion)
 				memorize: chosenMinion
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: memoryMatches
 						memory: chosenMinion

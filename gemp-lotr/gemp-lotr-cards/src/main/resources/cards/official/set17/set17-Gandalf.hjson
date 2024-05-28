@@ -770,8 +770,8 @@
 				    type: modifyStrength
 				    select: choose(culture(gandalf),companion)
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: canSpot
 				            filter: ent
 				            count: 3

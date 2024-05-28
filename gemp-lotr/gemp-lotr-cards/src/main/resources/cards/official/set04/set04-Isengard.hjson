@@ -321,8 +321,8 @@
 				{
 					type: addBurdens
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: memoryMatches
 					        memory: killedCharacter
 					        filter: or(name(Aragorn),name(Gandalf),name(Théoden))
@@ -892,8 +892,8 @@
 					type: modifyStrength
 					select: choose(urukHai)
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: location
 					        filter: battleground
 					    }
@@ -1145,8 +1145,8 @@
     			    select: choose(culture(isengard),tracker)
     			    memorize: chosenTracker
     			    amount: {
-    			        type: condition
-    			        condition: {
+    			        type: Conditional
+    			        requires: {
     			            type: memoryMatches
     			            memory: chosenTracker
     			            filter: inSkirmishAgainst(hasAttached(search))

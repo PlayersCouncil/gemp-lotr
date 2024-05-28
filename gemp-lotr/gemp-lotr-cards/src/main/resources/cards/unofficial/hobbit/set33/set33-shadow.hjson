@@ -1048,7 +1048,7 @@
 				type: playCardFromDiscard
 				select: choose(orc)
 				cost: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: location
 						filter: forest

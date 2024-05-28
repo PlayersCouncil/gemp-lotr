@@ -210,8 +210,8 @@
 		                type: sum
 		                source: [
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: location
 		                            filter: battleground
 		                        }
@@ -219,8 +219,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: memoryMatches
 		                            memory: chosenMinion
 		                            filter: inSkirmishAgainst(companion,maxResistance(4))
@@ -229,8 +229,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: memoryMatches
 		                            memory: chosenMinion
 		                            filter: hasAttached(possession)
@@ -239,8 +239,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: canSpot
 		                            filter: culture(uruk-hai),minion,notAssignedToSkirmish
 		                        }

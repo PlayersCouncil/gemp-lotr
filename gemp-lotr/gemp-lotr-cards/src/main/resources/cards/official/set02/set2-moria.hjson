@@ -657,7 +657,7 @@
                 type: modifyStrength
                 select: choose(or(Elf,Dwarf))
                 amount: {
-                    type: requires
+                    type: Conditional
                     requires: [
                         {
                             type: canSpot

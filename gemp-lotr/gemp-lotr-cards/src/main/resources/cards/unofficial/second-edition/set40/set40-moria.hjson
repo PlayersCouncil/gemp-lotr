@@ -640,7 +640,7 @@
 				type: modifyStrength
 				select: choose(culture(moria),goblin)
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: dwarf

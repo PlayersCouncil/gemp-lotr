@@ -696,7 +696,7 @@
 				select: choose(culture(gondor),companion)
 				memorize: chosenCompanion
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: memory(chosenCompanion),defender
@@ -720,7 +720,7 @@
 				select: choose(ranger)
 				memorize: chosenRanger
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: memory(chosenRanger),inSkirmishAgainst(roaming,minion)

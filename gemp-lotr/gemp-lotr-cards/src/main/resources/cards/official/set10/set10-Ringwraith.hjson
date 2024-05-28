@@ -39,8 +39,8 @@
                 effect: {
                     type: addTwilight
                     amount: {
-                        type: condition
-                        condition: {
+                        type: Conditional
+                        requires: {
                             type: haveInitiative
                             side: shadow
                         }
@@ -492,8 +492,8 @@
 					select: choose(culture(wraith),minion)
 					memorize: chosenMinion
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: memoryMatches
 					        memory: chosenMinion
 					        filter: inSkirmishAgainst(cultureInDeadPile)

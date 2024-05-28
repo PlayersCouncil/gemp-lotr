@@ -148,8 +148,8 @@
 		            type: play
 		            select: choose(culture(orc),minion)
 		            cost: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: canSpot
 		                    filter: companion
 		                    count: 6
@@ -1025,7 +1025,7 @@
 				type: discount
 				memorize: DiscountPaid
 				max: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: CanSpot
 						filter: culture(orc),minion

@@ -317,8 +317,8 @@
 		            select: choose(dwarf)
 		            memorize: chosenDwarf
 		            amount: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: memoryMatches
 		                    filter: minResistance(4)
 		                }
@@ -432,8 +432,8 @@
 		                type: sum
 		                source: [
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: location
 		                            filter: or(mountain,underground)
 		                        }
@@ -441,8 +441,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
                                     type: memoryMatches
                                     memory: chosenDwarf
                                     filter: minResistance(3)
@@ -451,8 +451,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: memoryMatches
 		                            memory: chosenDwarf
 		                            filter: hasAttached(possession)
@@ -461,8 +461,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: memoryMatches
 		                            memory: chosenDwarf
 		                            filter: inSkirmishAgainst(fierce,minion)
@@ -737,8 +737,8 @@
 				    select: choose(dwarf)
 				    memorize: chosenDwarf
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: memoryMatches
 				            memory: chosenDwarf
 				            filter: minResistance(4)

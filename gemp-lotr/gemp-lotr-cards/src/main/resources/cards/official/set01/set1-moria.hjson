@@ -123,7 +123,7 @@
 				select: choose(culture(moria),orc)
 				memorize: chosenOrc
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: memory(chosenOrc),inSkirmishAgainst(dwarf)
@@ -455,7 +455,7 @@
 			effect: {
 				type: addBurdens
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: memoryMatches
 						memory: killedCompanion
@@ -976,7 +976,7 @@
 				select: choose(culture(moria),orc)
 				memorize: chosenOrc
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: memoryMatches
 						memory: chosenOrc

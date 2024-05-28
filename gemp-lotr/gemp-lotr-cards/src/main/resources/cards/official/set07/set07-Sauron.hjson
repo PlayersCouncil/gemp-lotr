@@ -415,8 +415,8 @@
 		            {
 		                type: drawCards
 		                count: {
-		                    type: condition
-		                    condition: {
+		                    type: Conditional
+		                    requires: {
 		                        type: memoryMatches
 		                        memory: spottedMinion
 		                        filter: besieger
@@ -596,8 +596,8 @@
 		                type: forEachYouCanSpot
 		                filter: controlledSite
 		                multiplier: {
-		                    type: condition
-		                    condition: {
+		                    type: Conditional
+		                    requires: {
 		                        type: haveInitiative
 		                        side: shadow
 		                    }
@@ -894,8 +894,8 @@
 		            type: modifyStrength
 		            select: choose(culture(sauron),orc)
 		            amount: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: haveInitiative
 		                    side: shadow
 		                }

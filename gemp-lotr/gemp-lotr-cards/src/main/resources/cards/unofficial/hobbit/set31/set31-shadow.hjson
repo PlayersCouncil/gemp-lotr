@@ -103,7 +103,7 @@
 						type: modifyStrength
 						select: self
 						amount: {
-							type: requires
+							type: Conditional
 							requires: {
 								type: location
 								filter: underground
@@ -551,7 +551,7 @@
 				type: putCardsFromDiscardOnBottomOfDeck
 				select: choose(orc)
 				count: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: location
 						filter: underground
@@ -1099,7 +1099,7 @@
                 type: playCardFromDiscard
                 select: choose(spider)
                 cost: {
-                  type: requires
+                  type: Conditional
                   requires: {
                     type: location
                     filter: forest
@@ -1134,7 +1134,7 @@
         type: modifyStrength
         select: choose(spider)
         amount: {
-          type: requires
+          type: Conditional
           requires: {
             type: canSpot
             count: 6

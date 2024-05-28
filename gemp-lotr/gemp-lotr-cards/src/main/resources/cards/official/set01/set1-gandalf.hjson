@@ -109,7 +109,7 @@
 					type: sum
 					source: [
 						{
-							type: requires
+							type: Conditional
 							requires: {
 								type: canSpot
 								filter: hobbit,companion
@@ -118,7 +118,7 @@
 							false: 0
 						}
 						{
-							type: requires
+							type: Conditional
 							requires: {
 								type: canSpot
 								filter: dwarf,companion
@@ -127,7 +127,7 @@
 							false: 0
 						}
 						{
-							type: requires
+							type: Conditional
 							requires: {
 								type: canSpot
 								filter: elf,companion
@@ -136,7 +136,7 @@
 							false: 0
 						}
 						{
-							type: requires
+							type: Conditional
 							requires: {
 								type: canSpot
 								filter: man,companion
@@ -366,7 +366,7 @@
 				type: modifyStrength
 				select: choose(name(Gandalf))
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpotBurdens
 						amount: 5

@@ -29,8 +29,8 @@
 					type: modifyStrength
 					select: choose(name(Gandalf))
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: haveInitiative
 					        side: free people
 					    }
@@ -732,8 +732,8 @@
 				type: exert
 				select: choose(name(Gandalf))
 				times: {
-				    type: condition
-				    condition: {
+				    type: Conditional
+				    requires: {
 				        type: haveInitiative
 				        side: free people
 				    }
@@ -1201,8 +1201,8 @@
 					select: choose(minion)
 					memorize: chosenMinion
 					times: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
                             type: memoryMatches
                             memory: chosenMinion
                             filter: nazgul

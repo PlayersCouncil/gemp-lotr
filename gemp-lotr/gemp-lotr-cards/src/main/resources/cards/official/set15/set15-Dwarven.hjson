@@ -371,8 +371,8 @@
 				    type: modifyStrength
 				    select: choose(dwarf)
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: canSpot
 				            filter: hunter,minion
 				        }
@@ -596,8 +596,8 @@
 		            type: modifyStrength
 		            select: choose(minion)
 		            amount: {
-		                type: condition
-		                condition: [
+		                type: Conditional
+		                requires: [
                             {
                                 type: canSpot
                                 filter: name(Aragorn),hunter
@@ -626,8 +626,8 @@
 		        effect: {
 		            type: drawCards
 		            count: {
-		                type: condition
-		                condition: [
+		                type: Conditional
+		                requires: [
                             {
                                 type: canSpot
                                 filter: name(Gimli),hunter

@@ -29,7 +29,7 @@
 				type: modifyStrength
 				select: choose(nazgul)
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: ringIsOn
 					}
@@ -371,7 +371,7 @@
 				type: modifyStrength
 				select: choose(nazgul)
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: ring bearer,notassignedtoskirmish
@@ -773,7 +773,7 @@
 				type: modifyStrength
 				select: choose(nazgul)
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpotBurdens
 						amount: 5

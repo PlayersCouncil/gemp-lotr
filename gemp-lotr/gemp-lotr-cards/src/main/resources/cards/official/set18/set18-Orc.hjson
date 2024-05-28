@@ -362,8 +362,8 @@
 				    select: choose(companion,inSkirmishAgainst(culture(orc),minion))
 				    memorize: chosenCompanion
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: memoryMatches
 				            memory: chosenCompanion
 				            filter: archer

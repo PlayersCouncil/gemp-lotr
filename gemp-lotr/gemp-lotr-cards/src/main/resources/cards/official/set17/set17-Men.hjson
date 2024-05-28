@@ -1017,8 +1017,8 @@
 		        effect: {
 		            type: repeat
 		            times: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
                             type: canSpot
                             filter: companion
                             count: 6

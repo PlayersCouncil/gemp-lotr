@@ -196,8 +196,8 @@
 		        effect: {
 		            type: repeat
 		            times: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: canSpot
 		                    filter: or(name(Éomer),name(Théoden))
 		                }
@@ -523,8 +523,8 @@
 				    type: modifyStrength
 				    select: choose(culture(rohan),companion)
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: moveCountMinimum
 				            amount: 2
 				        }
@@ -868,8 +868,8 @@
                         type: modifyStrength
                         select: choose(your,culture(rohan),companion)
                         amount: {
-                            type: condition
-                            condition: {
+                            type: Conditional
+                            requires: {
                                 type: memoryIs
                                 memory: exertedTheoden
                                 value: yes

@@ -180,8 +180,8 @@
 				    type: discard
 				    select: choose(condition)
 				    count: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: canSpot
 				            filter: side(shadow),condition
 				            count: 4

@@ -117,8 +117,8 @@
 					type: discard
 					select: choose(condition)
 					count: {
-						type: condition
-						condition: {
+						type: Conditional
+						requires: {
 							type: canSpot
 							filter: condition,side(free people)
 							count: 5

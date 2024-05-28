@@ -1257,8 +1257,8 @@
 			        type: heal
 			        select: choose(unbound,hobbit)
 			        times: {
-			            type: condition
-			            condition: {
+			            type: Conditional
+			            requires: {
 			                type: canSpot
 			                filter: name(Gandalf)
 			            }

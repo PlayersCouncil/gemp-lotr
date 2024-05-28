@@ -357,8 +357,8 @@
 		        effect: {
 		            type: removeBurdens
 		            amount: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: canSpot
 		                    filter: another,culture(gandalf),companion
 		                }
@@ -411,8 +411,8 @@
 				    type: modifyStrength
 				    select: choose(name(Gandalf))
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: cantSpotBurdens
 				            amount: 5
 				        }

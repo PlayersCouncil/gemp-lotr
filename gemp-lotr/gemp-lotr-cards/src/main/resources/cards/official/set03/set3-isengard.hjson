@@ -702,8 +702,8 @@
                 type: modifyStrength
                 select: choose(culture(isengard),orc)
                 amount: {
-                    type: condition
-                    condition: {
+                    type: Conditional
+                    requires: {
                         type: isLessThan
                         firstNumber: {
                             type: forEachInHand

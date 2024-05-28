@@ -88,22 +88,9 @@ public class ValueResolver {
                                 return -1;
                             };
                         });
-            } else if (type.equalsIgnoreCase("requires")) {
+            } else if (type.equalsIgnoreCase("conditional")) {
                 FieldUtils.validateAllowedFields(object, "requires", "true", "false");
                 final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
-                final Requirement[] conditions = environment.getRequirementFactory().getRequirements(conditionArray, environment);
-                ValueSource trueValue = resolveEvaluator(object.get("true"), environment);
-                ValueSource falseValue = resolveEvaluator(object.get("false"), environment);
-                return (actionContext) -> (Evaluator) (game, cardAffected) -> {
-                    for (Requirement condition : conditions) {
-                        if (!condition.accepts(actionContext))
-                            return falseValue.getEvaluator(actionContext).evaluateExpression(game, cardAffected);
-                    }
-                    return trueValue.getEvaluator(actionContext).evaluateExpression(game, cardAffected);
-                };
-            } else if (type.equalsIgnoreCase("condition")) {
-                FieldUtils.validateAllowedFields(object, "condition", "true", "false");
-                final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("condition"), "condition");
                 final Requirement[] conditions = environment.getRequirementFactory().getRequirements(conditionArray, environment);
                 ValueSource trueValue = resolveEvaluator(object.get("true"), environment);
                 ValueSource falseValue = resolveEvaluator(object.get("false"), environment);

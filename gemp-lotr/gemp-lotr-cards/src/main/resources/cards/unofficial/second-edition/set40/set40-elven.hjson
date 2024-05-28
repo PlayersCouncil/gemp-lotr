@@ -598,7 +598,7 @@
 					type: discard
 					select: choose(side(shadow),condition)
 					count: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: memoryMatches
 							memory: revealedCard
@@ -871,7 +871,7 @@
           effect: {
             type: removeBurdens
             amount: {
-              type: requires
+              type: Conditional
               requires: {
                 type: memoryMatches
                 memory: exertedElf
@@ -1197,7 +1197,7 @@
         type: modifyArcheryTotal
         side: free people
         amount: {
-          type: requires
+          type: Conditional
           requires: {
             type: location
             filter: forest

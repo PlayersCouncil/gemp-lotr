@@ -310,8 +310,8 @@
 					select: choose(minion)
 					memorize: chosenMinion
 					times: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: memoryMatches
 					        memory: chosenMinion
 					        filter: urukHai
@@ -1364,8 +1364,8 @@
 					select: choose(culture(gondor),man)
 					memorize: chosenMan
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: canSpot
 					        filter: memory(chosenMan),inSkirmishAgainst(roaming,minion)
 					    }

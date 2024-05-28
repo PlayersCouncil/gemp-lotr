@@ -561,8 +561,8 @@
                     select: choose(culture(sauron),minion)
                     memorize: chosenMinion
                     amount: {
-                        type: condition
-                        condition: {
+                        type: Conditional
+                        requires: {
                             type: memoryMatches
                             memory: chosenMinion
                             filter: roaming
@@ -805,8 +805,8 @@
                     type: modifyStrength
                     filter: bearer
                     amount: {
-                        type: condition
-                        condition: {
+                        type: Conditional
+                        requires: {
                             type: canSpot
                             filter: bearer,name(Gothmog)
                         }
@@ -928,8 +928,8 @@
                 effect: {
                     type: addTwilight
                     amount: {
-                        type: condition
-                        condition: {
+                        type: Conditional
+                        requires: {
                             type: canSpot
                             filter: self,roaming
                         }

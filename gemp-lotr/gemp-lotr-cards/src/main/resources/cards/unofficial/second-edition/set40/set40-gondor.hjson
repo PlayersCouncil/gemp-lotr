@@ -788,7 +788,7 @@
 				select: choose(culture(gondor),companion)
 				memorize: chosenCompanion
 				amount: {
-					type: requires
+					type: Conditional
 					requires: [
 						{
 							type: fierceSkirmish
@@ -839,7 +839,7 @@
         select: choose(culture(gondor),companion)
         memorize: chosenCompanion
         amount: {
-          type: requires
+          type: Conditional
           requires: {
             type: canSpot
             filter: memory(chosenCompanion),defender

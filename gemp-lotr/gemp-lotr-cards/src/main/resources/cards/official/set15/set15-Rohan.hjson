@@ -30,8 +30,8 @@
 				    select: choose(culture(rohan),companion)
 				    memorize: chosenCompanion
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: memoryMatches
 				            memory: chosenCompanion
 				            filter: hunter,companion
@@ -1245,8 +1245,8 @@
 		        effect: {
 		            type: repeat
 		            times: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: memoryMatches
 		                    memory: bearer
 		                    filter: mounted

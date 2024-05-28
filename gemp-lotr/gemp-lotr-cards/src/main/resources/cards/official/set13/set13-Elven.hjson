@@ -361,8 +361,8 @@
 				    type: modifyStrength
 				    select: choose(culture(elven),companion)
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: isGreaterThan
 				            firstNumber: moveCount
 				            secondNumber: 1
@@ -807,8 +807,8 @@
 				    type: modifyArcheryTotal
 				    side: free people
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: shadowPlayerReplacedCurrentSite
 				        }
 				        true: 2
@@ -1053,8 +1053,8 @@
 		                type: sum
 		                source: [
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: memoryMatches
 		                            memory: chosenMinion
 		                            filter: inSkirmishAgainst(companion,minResistance(4))
@@ -1063,8 +1063,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: memoryMatches
 		                            memory: chosenMinion
 		                            filter: wounded
@@ -1073,8 +1073,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: canSpot
 		                            filter: elf,archer
 		                        }
@@ -1082,8 +1082,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: location
 		                            filter: forest
 		                        }

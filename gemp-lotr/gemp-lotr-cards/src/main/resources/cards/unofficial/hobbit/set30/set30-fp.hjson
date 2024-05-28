@@ -15,7 +15,7 @@
 				type: discard
 				select: choose(condition)
 				count: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: side(shadow),condition
@@ -64,7 +64,7 @@
 				select: choose(dwarf,character)
 				memorize: chosenDwarf
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: memoryMatches
 						memory: chosenDwarf
@@ -1097,7 +1097,7 @@
           type: modifyStrength
           select: self
           amount: {
-            type: requires
+            type: Conditional
             requires: {
               type: canSpot
               filter: name(Gollum)
@@ -1119,7 +1119,7 @@
           type: modifyStrength
           select: self
           amount: {
-            type: requires
+            type: Conditional
             requires: {
               type: canSpot
               filter: name(Gollum)
@@ -1258,7 +1258,7 @@
         effect: {
           type: drawCards
           count: {
-            type: requires
+            type: Conditional
             requires: {
               type: canSpot
               filter: self,inSkirmish

@@ -977,7 +977,7 @@
 			effect: {
 				type: addBurdens
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: ringIsOn
 					}

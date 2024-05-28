@@ -193,8 +193,8 @@
 				    select: choose(ranger)
 				    memorize: chosenRanger
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: canSpot
 				            filter: memory(chosenRanger),inSkirmishAgainst(minion,damage)
 				        }
@@ -674,8 +674,8 @@
 				    select: choose(culture(gondor),companion)
 				    memorize: chosenCompanion
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: canSpot
 				            filter: memory(chosenCompanion),minResistance(4)
 				        }

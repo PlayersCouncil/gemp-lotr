@@ -126,8 +126,8 @@
 					type: modifyStrength
 					select: choose(culture(dunland),man)
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: controlsSite
 					    }
 					    true: 4
@@ -220,8 +220,8 @@
 					type: modifyStrength
 					select: choose(culture(dunland),man)
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: location
 					        filter: sanctuary
 					    }
@@ -526,8 +526,8 @@
 				    type: discard
 				    select: choose(side(free),possession)
 				    count: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: canSpot
 				            filter: companion
 				            count: 6

@@ -245,8 +245,8 @@
             type: wound
             select: choose(ringBearer)
             times: {
-                type: condition
-                condition: {
+                type: Conditional
+                requires: {
                     type: canSpotBurdens
                     amount: 5
                 }

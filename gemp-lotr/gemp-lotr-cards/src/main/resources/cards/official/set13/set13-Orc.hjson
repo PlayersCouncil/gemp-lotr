@@ -1149,8 +1149,8 @@
 				    type: modifyStrength
 				    select: choose(culture(orc),orc)
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: memoryIs
 				            memory: removedBurdens
 				            value: yes

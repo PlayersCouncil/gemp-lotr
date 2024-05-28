@@ -1078,8 +1078,8 @@
                             type: fromMemory
                             memory: spotCount
                             multiplier: {
-                                type: condition
-                                condition: {
+                                type: Conditional
+                                requires: {
                                     type: canSpot
                                     filter: companion,maxResistance(3)
                                 }
@@ -1135,8 +1135,8 @@
 		            type: modifyStrength
     		        filter: self,inSkirmishAgainst(exhausted,companion)
     		        amount: {
-    		            type: condition
-    		            condition: {
+    		            type: Conditional
+    		            requires: {
     		                type: canSpot
     		                filter: self,inSkirmishAgainst(exhausted,companion,maxResistance(4))
     		            }

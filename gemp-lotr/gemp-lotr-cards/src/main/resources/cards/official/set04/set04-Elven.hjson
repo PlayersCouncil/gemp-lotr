@@ -899,8 +899,8 @@
 		            type: modifyStrength
 		            select: choose(minion,inSkirmishAgainst(unbound,companion))
 		            amount: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: canSpot
 		                    filter: name(Gimli),inSkirmish
 		                }
@@ -1375,8 +1375,8 @@
 			        type: modifyStrength
 			        select: choose(elf)
 			        amount: {
-			            type: condition
-			            condition: {
+			            type: Conditional
+			            requires: {
 			                type: canSpot
 			                filter: elf,companion
 			                count: 3
@@ -1594,8 +1594,8 @@
 			        select: choose(elf)
 			        memorize: chosenElf
 			        amount: {
-			            type: condition
-			            condition: {
+			            type: Conditional
+			            requires: {
 			                type: canSpot
 			                filter: memory(chosenElf),inSkirmishAgainst(wounded,minion)
 			            }

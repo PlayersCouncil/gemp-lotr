@@ -697,8 +697,8 @@
 		            type: heal
 		            select: choose(another,easterling)
 		            count: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: haveInitiative
 		                    side: shadow
 		                }
@@ -1502,8 +1502,8 @@
 					type: modifyStrength
 					select: choose(culture(raider),man)
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: haveInitiative
 					        side: shadow
 					    }

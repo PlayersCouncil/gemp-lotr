@@ -305,8 +305,8 @@
                     type: modifyStrength
                     filter: self,inFierceSkirmish
                     amount: {
-                        type: condition
-                        condition: {
+                        type: Conditional
+                        requires: {
                             type: canSpot
                             filter: self,inSkirmishAgainst(companion,maxResistance(4))
                         }
@@ -412,8 +412,8 @@
 		            }
 		            filter: unbound,companion
 		            amount: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: location
 		                    filter: battleground
 		                }

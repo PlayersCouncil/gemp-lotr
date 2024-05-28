@@ -97,8 +97,8 @@
 			    {
 			        type: removeBurdens
 			        amount: {
-			            type: condition
-			            condition: {
+			            type: Conditional
+			            requires: {
 			                type: location
 			                filter: dwelling
 			            }
@@ -504,8 +504,8 @@
 			            memory: revealedCards
 			            filter: companion
 			            multiplier: {
-			                type: condition
-			                condition: {
+			                type: Conditional
+			                requires: {
 			                    type: location
 			                    filter: battleground
 			                }

@@ -183,7 +183,7 @@
 				select: choose(companion,not(name(Aragorn)))
 				memorize: chosenCompanion
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: memoryMatches
 						memory: chosenCompanion
@@ -209,7 +209,7 @@
 				select: choose(culture(gondor),companion)
 				memorize: chosenCompanion
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: fierceSkirmish
 					}

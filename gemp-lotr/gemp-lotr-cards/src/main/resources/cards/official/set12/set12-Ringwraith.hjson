@@ -1220,8 +1220,8 @@
 		                type: sum
 		                source: [
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: location
 		                            filter: or(battleground,forest)
 		                        }
@@ -1229,8 +1229,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: canSpot
 		                            filter: memory(chosenNazgul),inSkirmishAgainst(companion,maxResistance(4))
 		                        }
@@ -1238,8 +1238,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: canSpot
 		                            filter: memory(chosenNazgul),hasAttached(possession)
 		                        }
@@ -1247,8 +1247,8 @@
 		                        false: 0
 		                    }
 		                    {
-		                        type: condition
-		                        condition: {
+		                        type: Conditional
+		                        requires: {
 		                            type: canSpot
 		                            filter: memory(chosenNazgul),inFierceSkirmish
 		                        }

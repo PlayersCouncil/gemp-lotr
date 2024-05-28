@@ -672,8 +672,8 @@
 					select: choose(culture(gondor),man)
 					memorize: chosenMan
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: canSpot
 					        filter: memory(chosenMan),inSkirmishAgainst(minion,hasAttached(culture(gondor),fortification))
 					    }

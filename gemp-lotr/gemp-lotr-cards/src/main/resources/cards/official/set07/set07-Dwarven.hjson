@@ -29,8 +29,8 @@
 					type: modifyStrength
 					select: choose(dwarf)
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: canSpot
 					        filter: culture(dwarven),condition,hasStacked(any)
 					    }

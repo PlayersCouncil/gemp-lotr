@@ -1539,7 +1539,7 @@
 				type: modifyStrength
 				select: self
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: nameFromMemory(discardedNazgul)

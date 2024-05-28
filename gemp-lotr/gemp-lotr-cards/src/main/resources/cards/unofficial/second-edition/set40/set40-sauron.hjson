@@ -1005,7 +1005,7 @@
         type: modifyStrength
         select: choose(culture(sauron),minion)
         amount: {
-          type: requires
+          type: Conditional
           requires: {
             type: cantSpotFPCultures
             amount: 3

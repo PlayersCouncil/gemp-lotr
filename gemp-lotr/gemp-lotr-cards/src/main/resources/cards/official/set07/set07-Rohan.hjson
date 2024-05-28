@@ -563,8 +563,8 @@
 					select: choose(culture(rohan),man)
 					memorize: chosenMan
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: memoryMatches
 					        memory: chosenMan
 					        filter: inSkirmishAgainst(wounded,minion)

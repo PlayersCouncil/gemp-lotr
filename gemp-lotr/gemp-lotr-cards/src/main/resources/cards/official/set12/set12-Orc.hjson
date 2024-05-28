@@ -603,8 +603,8 @@
 		        effect: {
 		            type: addTwilight
 		            amount: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: location
 		                    filter: or(battleground,underground)
 		                }
@@ -1315,8 +1315,8 @@
 			cost: {
                 type: revealTopCardsOfDrawDeck
                 count: {
-                    type: condition
-                    condition: {
+                    type: Conditional
+                    requires: {
                         type: location
                         filter: battleground
                     }

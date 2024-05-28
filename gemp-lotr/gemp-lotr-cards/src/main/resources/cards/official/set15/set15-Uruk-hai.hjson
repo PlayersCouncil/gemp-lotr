@@ -272,8 +272,8 @@
 		            type: heal
 		            select: choose(culture(uruk-hai),minion)
 		            times: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: controlsSite
 		                }
 		                true: 2

@@ -135,7 +135,7 @@
                     effect: {
                         type: addTwilight
                         amount: {
-                            type: requires
+                            type: Conditional
                             requires: {
                                 type: MemoryMatches
                                 memory: discardedCard

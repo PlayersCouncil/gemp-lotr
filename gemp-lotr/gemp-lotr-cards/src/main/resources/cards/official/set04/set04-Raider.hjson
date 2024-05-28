@@ -470,8 +470,8 @@
 					type: discard
 					select: choose(side(free),condition)
 					count: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: canSpotBurdens
 					        amount: 3
 					    }
@@ -1465,8 +1465,8 @@
 					type: modifyStrength
 					select: choose(culture(raider),man)
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: canSpotBurdens
 					        amount: 4
 					    }
@@ -1577,8 +1577,8 @@
 			        type: modifyStrength
 			        select: choose(culture(raider),man)
 			        amount: {
-			            type: condition
-			            condition: {
+			            type: Conditional
+			            requires: {
 			                type: canSpot
 			                filter: companion
 			                count: 6

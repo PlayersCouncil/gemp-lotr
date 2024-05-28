@@ -326,8 +326,8 @@
 				    type: modifyStrength
 				    select: choose(dwarf)
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: cantSpotThreats
 				        }
 				        true: {

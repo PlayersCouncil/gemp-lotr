@@ -661,8 +661,8 @@
 					type: modifyStrength
 					select: choose(culture(rohan),man)
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: canSpot
 					        filter: villager
 					    }

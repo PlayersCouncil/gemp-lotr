@@ -12,7 +12,7 @@
 				select: choose(dwarf)
 				memorize: chosenDwarf
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: memory(chosenDwarf),hasAttached(culture(dwarven),hand weapon)
@@ -762,7 +762,7 @@
 				type: modifyStrength
 				select: choose(dwarf)
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: location
 						filter: underground

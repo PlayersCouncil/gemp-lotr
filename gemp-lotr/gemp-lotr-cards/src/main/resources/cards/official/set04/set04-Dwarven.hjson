@@ -93,8 +93,8 @@
 					type: modifyStrength
 					select: choose(dwarf)
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: location
 					        filter: battleground
 					    }
@@ -482,8 +482,8 @@
 		            select: choose(unbound,companion)
 		            memorize: chosenCompanion
 		            amount: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: memoryMatches
 		                    memory: chosenCompanion
 		                    filter: name(Legolas)

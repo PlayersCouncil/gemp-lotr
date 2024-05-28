@@ -121,7 +121,7 @@
 					type: modifyStrength
 					select: choose(nazgul)
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: canSpotBurdens
 							amount: 6
@@ -136,7 +136,7 @@
 					select: memory(chosenNazgul)
 					keyword: damage
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: canSpotBurdens
 							amount: 6
@@ -167,7 +167,7 @@
 			effect: {
 				type: addBurdens
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: companion,maxResistance(0)

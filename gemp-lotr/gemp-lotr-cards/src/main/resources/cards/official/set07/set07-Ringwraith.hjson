@@ -2092,8 +2092,8 @@
 				{
 					type: addThreats
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: haveInitiative
 					        side: shadow
 					    }
@@ -2820,8 +2820,8 @@
 					type: modifyStrength
 					select: choose(culture(wraith),orc)
 					amount: {
-					    type: condition
-					    condition: {
+					    type: Conditional
+					    requires: {
 					        type: canSpotWounds
 					        filter: ringBearer
 					        amount: 2

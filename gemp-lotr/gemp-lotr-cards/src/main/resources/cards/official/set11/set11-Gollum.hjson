@@ -350,8 +350,8 @@
 				    type: modifyStrength
 				    select: choose(not(memory(gollum)),minion)
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: location
 				            filter: mountain
 				        }

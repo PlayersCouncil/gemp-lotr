@@ -1389,8 +1389,8 @@
 				    type: modifyStrength
 				    select: choose(culture(men),minion)
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: location
 				            filter: or(battleground,plains)
 				        }

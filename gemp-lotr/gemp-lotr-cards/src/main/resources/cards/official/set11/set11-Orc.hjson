@@ -111,8 +111,8 @@
 		            type: modifyStrength
 		            select: self
 		            amount: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: canSpot
 		                    filter: self,inSkirmishAgainst(companion,maxResistance(4))
 		                }
@@ -501,8 +501,8 @@
 		        effect: {
 		            type: addTwilight
 		            amount: {
-		                type: condition
-		                condition: {
+		                type: Conditional
+		                requires: {
 		                    type: canSpot
 		                    filter: companion
 		                    count: 6
@@ -1918,8 +1918,8 @@
 				    select: choose(culture(orc),minion)
 				    memorize: chosenMinion
 				    amount: {
-				        type: condition
-				        condition: {
+				        type: Conditional
+				        requires: {
 				            type: memoryMatches
 				            memory: chosenMinion
 				            filter: lurker

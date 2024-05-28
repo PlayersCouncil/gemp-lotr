@@ -47,7 +47,7 @@
 					type: modifyStrength
 					select: bearer
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: canSpot
 							filter: bearer,title(Erkenbrand)
