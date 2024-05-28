@@ -18,7 +18,11 @@ public class Card_V2_012_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_12");
+					put("jetsam", "102_12");
+					put("pipe", "1_285");
+					put("pipeweed", "1_305");
+					put("pipe2", "1_285");
+					put("pipeweed2", "1_305");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -45,31 +49,67 @@ public class Card_V2_012_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var jetsam = scn.GetFreepsCard("jetsam");
 
-		assertEquals("Jetsam", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals("Jetsam", jetsam.getBlueprint().getTitle());
+		assertNull(jetsam.getBlueprint().getSubtitle());
+		assertFalse(jetsam.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, jetsam.getBlueprint().getSide());
+		assertEquals(Culture.GANDALF, jetsam.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, jetsam.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(jetsam, Keyword.PIPEWEED));
+		assertTrue(scn.HasKeyword(jetsam, Keyword.SUPPORT_AREA));
+		assertEquals(1, jetsam.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
+	@Test
 	public void JetsamTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var jetsam = scn.GetFreepsCard("jetsam");
+		var pipe = scn.GetFreepsCard("pipe");
+		var pipeweed = scn.GetFreepsCard("pipeweed");
+		// var pipe2 = scn.GetFreepsCard("pipe2");
+		// var pipeweed2 = scn.GetFreepsCard("pipeweed2");
+
+		scn.FreepsMoveCardToHand(jetsam);
+		scn.FreepsMoveCardToDiscard(pipe);
+		scn.FreepsMoveCardToDiscard(pipeweed);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
+
+		assertEquals(2, scn.GetFreepsDeckCount());
+		assertEquals(2, scn.GetFreepsDiscardCount());
+		assertEquals(0, scn.GetTwilight());
+
+
+		scn.FreepsPlayCard(jetsam);
+
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertTrue(scn.FreepsDecisionAvailable(""));
+		assertEquals(1, scn.GetFreepsCardChoiceCount());
+		assertEquals(Zone.DISCARD, pipe.getZone());
+
+		scn.FreepsChooseCardIDFromSelection(pipe);
+
+		assertEquals(Zone.DECK, pipe.getZone());
+
+
+		assertEquals(1, scn.GetFreepsCardChoiceCount());
+
+		scn.FreepsChooseCardIDFromSelection(pipeweed);
+
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(4, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
 		assertEquals(1, scn.GetTwilight());
 	}
 }
