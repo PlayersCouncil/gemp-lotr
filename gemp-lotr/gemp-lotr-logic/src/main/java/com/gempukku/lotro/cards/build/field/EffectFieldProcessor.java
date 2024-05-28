@@ -21,8 +21,8 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("assignmentcost", new AssignmentCost());
         effectProcessors.put("copycard", new CopyCard());
         effectProcessors.put("deckbuildingrestriction", new DeckBuildingRestrictionGameTextProcessor());
-        effectProcessors.put("displayableinformation", new DisplayableInformationEffectProcessor());
         effectProcessors.put("discardedfromplaytrigger", new DiscardedFromPlayTriggerEffectProcessor());
+        effectProcessors.put("displayableinformation", new DisplayableInformationEffectProcessor());
         effectProcessors.put("discount", new PotentialDiscount());
         effectProcessors.put("event", new EventEffectProcessor());
         effectProcessors.put("exerttargetextracost", new ExertTargetExtraCost());
@@ -30,14 +30,14 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("extrapossessionclass", new ExtraPossessionClassEffectProcessor());
         effectProcessors.put("inhandtrigger", new InHandTriggerEffectProcessor());
         effectProcessors.put("killedtrigger", new KilledTriggerEffectProcessor());
-        effectProcessors.put("stackedonmodifier", new StackedOnModifier());
         effectProcessors.put("modifier", new Modifier());
         effectProcessors.put("modifierindiscard", new ModifierInDiscard());
-        effectProcessors.put("permanentsitemodifier", new PermanentSiteModifier());
         effectProcessors.put("modifyowncost", new ModifyOwnCost());
+        effectProcessors.put("permanentsitemodifier", new PermanentSiteModifier());
         effectProcessors.put("playedinotherphase", new PlayedInOtherPhase());
         effectProcessors.put("response", new ResponseEffectProcessor());
         effectProcessors.put("responseevent", new ResponseEventEffectProcessor());
+        effectProcessors.put("stackedonmodifier", new StackedOnModifier());
         effectProcessors.put("trigger", new TriggerEffectProcessor());
         effectProcessors.put("toplay", new ToPlay());
     }

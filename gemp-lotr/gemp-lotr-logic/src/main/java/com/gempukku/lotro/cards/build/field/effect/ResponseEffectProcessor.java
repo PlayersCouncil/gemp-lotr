@@ -22,6 +22,9 @@ public class ResponseEffectProcessor implements EffectProcessor {
 
         final JSONObject[] triggerArray = FieldUtils.getObjectArray(value.get("trigger"), "trigger");
 
+        if (triggerArray.length == 0)
+            throw new InvalidCardDefinitionException("At least one trigger is required on Response effects.");
+
         final String text = FieldUtils.getString(value.get("text"), "text");
 
         final Phase phase = FieldUtils.getEnum(Phase.class, value.get("phase"), "phase");

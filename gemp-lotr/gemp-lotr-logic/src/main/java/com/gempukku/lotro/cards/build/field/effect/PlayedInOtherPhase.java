@@ -12,6 +12,9 @@ public class PlayedInOtherPhase implements EffectProcessor {
         FieldUtils.validateAllowedFields(value, "phase", "requires", "cost");
 
         final Phase phase = FieldUtils.getEnum(Phase.class, value.get("phase"), "phase");
+        if (phase == null)
+            throw new InvalidCardDefinitionException("Phase is required on PlayedInOtherPhase effects.");
+
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(value.get("requires"), "requires");
 
         final JSONObject[] costArray = FieldUtils.getObjectArray(value.get("cost"), "cost");

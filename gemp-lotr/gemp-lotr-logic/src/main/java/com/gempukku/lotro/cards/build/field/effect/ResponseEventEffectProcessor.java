@@ -14,6 +14,9 @@ public class ResponseEventEffectProcessor implements EffectProcessor {
         FieldUtils.validateAllowedFields(value, "trigger", "requires", "cost", "effect", "text");
 
         final JSONObject[] triggerArray = FieldUtils.getObjectArray(value.get("trigger"), "trigger");
+        if (triggerArray.length == 0)
+            throw new InvalidCardDefinitionException("At least one trigger is required on ResponseEvent effects.");
+
         final String text = FieldUtils.getString(value.get("text"), "text");
 
         for (JSONObject trigger : triggerArray) {

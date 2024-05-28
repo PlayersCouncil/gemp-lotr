@@ -27,6 +27,9 @@ public class ExtraCost implements EffectProcessor {
         final JSONObject[] costArray = FieldUtils.getObjectArray(value.get("cost"), "cost");
         final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
 
+        if (costAppenders.length == 0)
+            throw new InvalidCardDefinitionException("At least one cost is required on ExtraCost effects.");
+
         blueprint.appendExtraPlayCost(
                 (actionContext) -> new ExtraPlayCost() {
                     private Condition condition = RequirementCondition.createCondition(requirements, actionContext);

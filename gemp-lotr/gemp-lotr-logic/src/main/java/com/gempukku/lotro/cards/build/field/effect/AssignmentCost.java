@@ -37,6 +37,9 @@ public class AssignmentCost implements EffectProcessor {
         final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
+        if (costAppenders.length == 0)
+            throw new InvalidCardDefinitionException("At least one cost is required on AssignmentCost effects.");
+
         blueprint.appendInPlayModifier(
                 new ModifierSource() {
                     @Override
