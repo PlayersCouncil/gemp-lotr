@@ -492,12 +492,12 @@
                     }
                     {
                         type: canSpot
-                        filter: unbound,companion,resistanceLessThanFilter(self)
+                        filter: unbound, companion, InSkirmish, resistanceLessThanFilter(self)
                     }
                 ]
                 effect: {
                     type: replaceInSkirmish
-                    filter: unbound,companion,resistanceLessThanFilter(self)
+                    filter: unbound, companion, InSkirmish, resistanceLessThanFilter(self)
                     with: self
                 }
 		    }

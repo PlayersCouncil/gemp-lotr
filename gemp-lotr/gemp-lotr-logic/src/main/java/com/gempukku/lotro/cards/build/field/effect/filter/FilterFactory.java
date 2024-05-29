@@ -540,7 +540,7 @@ public class FilterFactory {
                             @Override
                             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                                 int resistance = game.getModifiersQuerying().getResistance(game, physicalCard);
-                                return Filters.countActive(game, filterable, Filters.maxResistance(resistance - 1)) > 0;
+                                return Filters.countActive(game, filterable, Filters.minResistance(resistance + 1)) > 0;
                             }
                         };
                     };
