@@ -533,16 +533,13 @@ public class FilterFactory {
         parameterFilters.put("resistancelessthanfilter",
                 (parameter, environment) -> {
                     FilterableSource filter = environment.getFilterFactory().createFilter(parameter, environment);
-
                     return (actionContext) -> {
-                        Filterable filterable = filter.getFilterable(actionContext);
-                        return new Filter() {
-                            @Override
-                            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                                int resistance = game.getModifiersQuerying().getResistance(game, physicalCard);
-                                return Filters.countActive(game, filterable, Filters.minResistance(resistance + 1)) > 0;
+                        int resistance = 0;
+                        LotroGame game = actionContext.getGame();
+                        for (PhysicalCard physicalCard : Filters.filterActive(game, filter.getFilterable(actionContext))) {
+                            resistance += game.getModifiersQuerying().getResistance(game, physicalCard);
                             }
-                        };
+                        return Filters.maxResistance(resistance - 1);
                     };
                 });
         parameterFilters.put("maxresistance",
@@ -604,16 +601,17 @@ public class FilterFactory {
                         for (PhysicalCard physicalCard : Filters.filterActive(game, filter.getFilterable(actionContext))) {
                             strength += game.getModifiersQuerying().getStrength(game, physicalCard);
                         }
-                        return Filters.lessStrengthThan(strength);
+                        return Filters.maxStrength(strength - 1);
                     };
                 });
+
         parameterFilters.put("maxstrength",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
 
                     return (actionContext) -> {
                         int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.lessStrengthThan(amount + 1);
+                        return Filters.maxStrength(amount);
                     };
                 });
         parameterFilters.put("minstrength",
@@ -622,7 +620,7 @@ public class FilterFactory {
 
                     return (actionContext) -> {
                         int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.moreStrengthThan(amount - 1);
+                        return Filters.minStrength(amount);
                     };
                 });
         parameterFilters.put("strengthlessthan",
@@ -631,7 +629,7 @@ public class FilterFactory {
 
                     return (actionContext) -> {
                         int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.lessStrengthThan(amount);
+                        return Filters.maxStrength(amount - 1);
                     };
                 });
         parameterFilters.put("title", parameterFilters.get("name"));

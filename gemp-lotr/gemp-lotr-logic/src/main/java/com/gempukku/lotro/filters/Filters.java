@@ -126,12 +126,12 @@ public class Filters {
         return (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) == evaluator.evaluateExpression(game, null);
     }
 
-    public static Filter moreStrengthThan(final int strength) {
-        return (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) > strength;
+    public static Filter minStrength(final int strength) {
+        return (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) >= strength;
     }
 
-    public static Filter lessStrengthThan(final int strength) {
-        return (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) < strength;
+    public static Filter maxStrength(final int strength) {
+        return (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) <= strength;
     }
 
     private static Filter possessionClass(final PossessionClass possessionClass) {
