@@ -36,7 +36,7 @@
 			type: trigger
 			trigger: {
 				type: played
-				filter: minion,strengthLessThan(7)
+				filter: minion,MaxStrength(6)
 				memorize: weakMinion
 			}
 			effect: {

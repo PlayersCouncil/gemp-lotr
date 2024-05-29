@@ -34,7 +34,7 @@
 		            filter: self
 		            amount: {
 		                type: forEachYouCanSpot
-		                filter: culture(gondor),hasAnyTokens
+		                filter: culture(gondor),HasAnyCultureTokens
 		            }
 		        }
 		    }

@@ -999,7 +999,7 @@
 				    select: choose(elf)
 				    amount: {
 				        type: forEachYouCanSpot
-				        filter: hasToken(elven)
+				        filter: HasCultureToken(elven)
 				    }
 				}
 			]

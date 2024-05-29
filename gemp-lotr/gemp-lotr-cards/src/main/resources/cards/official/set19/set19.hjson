@@ -734,7 +734,7 @@
 						type: location
 						filter: underground
 					}
-					fpCharacter: companion,strengthLessThan(7)
+					fpCharacter: companion,MaxStrength(6)
 					minion: self
 				}
 			}

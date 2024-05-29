@@ -78,13 +78,17 @@
 			        type: memorizeNumber
 			        memory: hobbitResistance
 			        amount: {
-			            type: forEachResistance
-			            filter: hobbit,inSkirmish
+			            type: Subtract
+			            firstNumber: {
+                            type: forEachResistance
+                            filter: hobbit,inSkirmish
+                        }
+                        secondNumber: 1
 			        }
 			    }
 				{
 				    type: cancelSkirmish
-				    filter: hobbit,inSkirmishAgainst(minion,strengthLessThan(memory(hobbitResistance)))
+				    filter: hobbit,inSkirmishAgainst(minion,MaxStrength(memory(hobbitResistance)))
 				}
 			]
 		}

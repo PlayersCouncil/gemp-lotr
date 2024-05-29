@@ -41,7 +41,7 @@
 				modifier: {
 				    type: cantBeAssignedToSkirmishAgainst
 				    minion: self
-				    fpCharacter: strengthLessThan(6)
+				    fpCharacter: MaxStrength(5)
 				}
 			}
 		]

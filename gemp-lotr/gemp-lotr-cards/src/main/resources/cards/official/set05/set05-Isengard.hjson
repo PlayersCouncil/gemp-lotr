@@ -37,7 +37,7 @@
                     }
                     {
                         type: canSpot
-                        filter: self,hasToken(isengard)
+                        filter: self,HasCultureToken(isengard)
                     }
                 ]
                 effect: [
@@ -393,7 +393,7 @@
 		        phase: maneuver
 		        requires: {
 		            type: canSpot
-		            filter: self,hasTokenCount(5,isengard)
+		            filter: self,HasCultureTokenCount(5,isengard)
 		        }
 		        effect: [
 		            {
@@ -887,7 +887,7 @@
 		        phase: skirmish
 		        requires: {
 		            type: canSpot
-		            filter: self,hasToken(isengard)
+		            filter: self,HasCultureToken(isengard)
 		        }
 		        effect: [
                     {

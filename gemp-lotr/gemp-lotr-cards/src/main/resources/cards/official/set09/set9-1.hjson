@@ -534,7 +534,7 @@
                 effect: {
                     type: returnToHand
                     player: shadowPlayer
-                    select: choose(minion,strengthLessThan(7))
+                    select: choose(minion,MaxStrength(6))
                 }
             }
         ]

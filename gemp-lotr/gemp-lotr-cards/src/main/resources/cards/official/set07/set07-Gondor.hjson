@@ -1590,7 +1590,7 @@
 				    effect: {
 				        type: addTokens
 				        culture: gondor
-				        select: choose(your,condition,hasToken(gondor))
+				        select: choose(your,condition,HasCultureToken(gondor))
 				    }
 				}
 				{

@@ -55,7 +55,7 @@
 								requires: {
 									type: cantSpot
 									count: 1
-									filter: HasAnyTokens,self
+									filter: HasAnyCultureTokens,self
 								}
 								effect: [
 									{
@@ -69,7 +69,7 @@
 								requires: {
 									type: canSpot
 									count: 1
-									filter: HasAnyTokens,self
+									filter: HasAnyCultureTokens,self
 								}
 								effect: [
 									{

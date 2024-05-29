@@ -179,7 +179,7 @@
 					type: ConstantlyCheck
 					requires: {
 						type: canSpot
-						filter: self,hasTokenCount(3,shire)
+						filter: self,HasCultureTokenCount(3,shire)
 					}
 				}
 				effect: {

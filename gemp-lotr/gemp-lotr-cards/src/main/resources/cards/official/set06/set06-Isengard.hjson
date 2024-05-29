@@ -171,7 +171,7 @@
                     select: choose(companion)
                     count: {
                         type: forEachYouCanSpot
-                        filter: controlledByOtherPlayer
+                        filter: SiteYouControl
                     }
                 }
 		    }

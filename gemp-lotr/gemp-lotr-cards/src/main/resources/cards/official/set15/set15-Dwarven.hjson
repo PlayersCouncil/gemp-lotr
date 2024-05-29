@@ -134,7 +134,7 @@
 				{
 				    type: chooseActiveCards
 				    text: Choose {dwarven} condition to shuffle into deck
-				    select: choose(culture(dwarven),condition,hasToken(dwarven))
+				    select: choose(culture(dwarven),condition,HasCultureToken(dwarven))
 				    memorize: chosenCondition
 				}
 				{
@@ -312,7 +312,7 @@
 		        type: modifyOwnCost
 		        amount: {
 		            type: forEachYouCanSpot
-		            filter: culture(dwarven),hasAnyTokens
+		            filter: culture(dwarven),HasAnyCultureTokens
 		            multiplier: -1
 		        }
 		    }

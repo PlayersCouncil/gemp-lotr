@@ -322,7 +322,7 @@
 				}
 				effect: {
 					type: discard
-					select: choose(minion,strengthLessThan(8))
+					select: choose(minion,MaxStrength(7))
 				}
 			}
 		]

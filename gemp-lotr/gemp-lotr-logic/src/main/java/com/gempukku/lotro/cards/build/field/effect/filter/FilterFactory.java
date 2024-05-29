@@ -43,11 +43,11 @@ public class FilterFactory {
                     return Filters.region(GameUtils.getRegion(attachedTo.getSiteNumber()));
                 });
         simpleFilters.put("bearer", (actionContext -> Filters.hasAttached(actionContext.getSource())));
-        simpleFilters.put("character", (actionContext) -> Filters.character);
         simpleFilters.put("canbediscarded", (actionContext -> Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource())));
         simpleFilters.put("canbereturnedtohand", (actionContext -> Filters.canBeReturnedToHand(actionContext.getSource())));
         simpleFilters.put("canexert", (actionContext -> Filters.canExert(actionContext.getSource())));
         simpleFilters.put("canwound", (actionContext -> Filters.canTakeWounds(actionContext.getSource(), 1)));
+        simpleFilters.put("character", (actionContext) -> Filters.character);
         simpleFilters.put("controlledbyotherplayer",
                 (actionContext -> Filters.siteControlledByOtherPlayer(actionContext.getPerformingPlayer())));
         simpleFilters.put("controlledbyshadowplayer",
@@ -95,10 +95,10 @@ public class FilterFactory {
                 }));
         simpleFilters.put("currentsite",
                 (actionContext) -> Filters.currentSite);
-        simpleFilters.put("nextsite",
-                (actionContext) -> Filters.nextSite);
         simpleFilters.put("currentsitenumber",
                 (actionContext -> Filters.siteNumber(actionContext.getGame().getGameState().getCurrentSiteNumber())));
+        simpleFilters.put("nextsite",
+                (actionContext) -> Filters.nextSite);
         simpleFilters.put("nextsitenumber",
                 (actionContext -> Filters.siteNumber(actionContext.getGame().getGameState().getCurrentSiteNumber() + 1)));
         simpleFilters.put("exhausted", (actionContext) -> Filters.exhausted);
@@ -183,20 +183,7 @@ public class FilterFactory {
         simpleFilters.put("wounded", (actionContext) -> Filters.wounded);
         simpleFilters.put("your", (actionContext) -> Filters.owner(actionContext.getPerformingPlayer()));
 
-        parameterFilters.put("allyhome",
-                (parameter, environment) -> {
-                    final String[] parameterSplit = parameter.split(",");
-                    final SitesBlock sitesBlock = SitesBlock.findBlock(parameterSplit[0]);
-                    int number = Integer.parseInt(parameterSplit[1]);
-                    return (actionContext) -> Filters.isAllyHome(number, sitesBlock);
-                });
-        parameterFilters.put("allyinregion",
-                (parameter, environment) -> {
-                    final String[] parameterSplit = parameter.split(",");
-                    final SitesBlock sitesBlock = Enum.valueOf(SitesBlock.class, parameterSplit[0].toUpperCase().replace('_', ' '));
-                    int number = Integer.parseInt(parameterSplit[1]);
-                    return (actionContext) -> Filters.isAllyInRegion(number, sitesBlock);
-                });
+
         parameterFilters.put("and",
                 (parameter, environment) -> {
                     final String[] filters = splitIntoFilters(parameter);
@@ -211,6 +198,40 @@ public class FilterFactory {
                         return Filters.and(filters1);
                     };
                 });
+        parameterFilters.put("not",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.not(filterableSource.getFilterable(actionContext));
+                });
+        parameterFilters.put("or",
+                (parameter, environment) -> {
+                    final String[] filters = splitIntoFilters(parameter);
+                    FilterableSource[] filterables = new FilterableSource[filters.length];
+                    for (int i = 0; i < filters.length; i++)
+                        filterables[i] = environment.getFilterFactory().generateFilter(filters[i], environment);
+                    return (actionContext) -> {
+                        Filterable[] filters1 = new Filterable[filterables.length];
+                        for (int i = 0; i < filterables.length; i++)
+                            filters1[i] = filterables[i].getFilterable(actionContext);
+
+                        return Filters.or(filters1);
+                    };
+                });
+        parameterFilters.put("allyhome",
+                (parameter, environment) -> {
+                    final String[] parameterSplit = parameter.split(",");
+                    final SitesBlock sitesBlock = SitesBlock.findBlock(parameterSplit[0]);
+                    int number = Integer.parseInt(parameterSplit[1]);
+                    return (actionContext) -> Filters.isAllyHome(number, sitesBlock);
+                });
+        parameterFilters.put("allyinregion",
+                (parameter, environment) -> {
+                    final String[] parameterSplit = parameter.split(",");
+                    final SitesBlock sitesBlock = Enum.valueOf(SitesBlock.class, parameterSplit[0].toUpperCase().replace('_', ' '));
+                    int number = Integer.parseInt(parameterSplit[1]);
+                    return (actionContext) -> Filters.isAllyInRegion(number, sitesBlock);
+                });
+
         parameterFilters.put("assignabletoskirmishagainst",
                 (parameter, environment) -> {
                     final FilterableSource againstFilterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
@@ -255,6 +276,32 @@ public class FilterFactory {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameterSplit[1], environment);
                     return (actionContext) -> Filters.hasAttached(count, filterableSource.getFilterable(actionContext));
                 });
+        parameterFilters.put("hasanyculturetokens", (parameter, environment) -> {
+            int count = Integer.parseInt(parameter != null ? parameter : "1");
+            return (actionContext) -> Filters.hasAnyCultureTokens(count);
+        });
+        parameterFilters.put("hasculturetoken", (parameter, environment) -> {
+            final Culture culture = Culture.findCulture(parameter);
+            if (culture == null)
+                throw new InvalidCardDefinitionException("Unable to find culture for: " + parameter);
+            final Token token = Token.findTokenForCulture(culture);
+            if (token == null)
+                throw new InvalidCardDefinitionException("Unable to find token for culture: " + parameter);
+
+            return (actionContext) -> Filters.hasToken(token);
+        });
+        parameterFilters.put("hasculturetokencount", (parameter, environment) -> {
+            String[] parameterSplit = parameter.split(",", 2);
+            int count = Integer.parseInt(parameterSplit[0]);
+            final Culture culture = Culture.findCulture(parameterSplit[1]);
+            if (culture == null)
+                throw new InvalidCardDefinitionException("Unable to find culture for: " + parameter);
+            final Token token = Token.findTokenForCulture(culture);
+            if (token == null)
+                throw new InvalidCardDefinitionException("Unable to find token for culture: " + parameter);
+
+            return (actionContext) -> Filters.hasToken(token, count);
+        });
         parameterFilters.put("hasstacked",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
@@ -267,48 +314,7 @@ public class FilterFactory {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameterSplit[1], environment);
                     return (actionContext) -> Filters.hasStacked(count, filterableSource.getFilterable(actionContext));
                 });
-        parameterFilters.put("hasanytokens", (parameter, environment) -> {
-            int count = Integer.parseInt(parameter != null ? parameter : "1");
-            return (actionContext) -> Filters.hasAnyCultureTokens(count);
-        });
-        parameterFilters.put("hastoken", (parameter, environment) -> {
-            final Culture culture = Culture.findCulture(parameter);
-            if (culture == null)
-                throw new InvalidCardDefinitionException("Unable to find culture for: " + parameter);
-            final Token token = Token.findTokenForCulture(culture);
-            if (token == null)
-                throw new InvalidCardDefinitionException("Unable to find token for culture: " + parameter);
 
-            return (actionContext) -> Filters.hasToken(token);
-        });
-        parameterFilters.put("hastokencount", (parameter, environment) -> {
-            String[] parameterSplit = parameter.split(",", 2);
-            int count = Integer.parseInt(parameterSplit[0]);
-            final Culture culture = Culture.findCulture(parameterSplit[1]);
-            if (culture == null)
-                throw new InvalidCardDefinitionException("Unable to find culture for: " + parameter);
-            final Token token = Token.findTokenForCulture(culture);
-            if (token == null)
-                throw new InvalidCardDefinitionException("Unable to find token for culture: " + parameter);
-
-            return (actionContext) -> Filters.hasToken(token, count);
-        });
-        parameterFilters.put("inskirmishagainst",
-                (parameter, environment) -> {
-                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
-                    return (actionContext) -> Filters.inSkirmishAgainst(filterableSource.getFilterable(actionContext));
-                });
-        parameterFilters.put("inskirmishagainstatleast",
-                (parameter, environment) -> {
-                    String[] split = parameter.split(",", 2);
-                    int count = Integer.parseInt(split[0]);
-                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(split[1], environment);
-                    return (actionContext) -> Filters.and(Filters.inSkirmish,
-                            (Filter) (game, physicalCard) -> {
-                                Filterable filterable = filterableSource.getFilterable(actionContext);
-                                return Filters.filter(game.getGameState().getSkirmish().getShadowCharacters(), game, filterable).size() >= count;
-                            });
-                });
         parameterFilters.put("highestracecount",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
@@ -385,6 +391,22 @@ public class FilterFactory {
                         );
                     };
                 });
+        parameterFilters.put("inskirmishagainst",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.inSkirmishAgainst(filterableSource.getFilterable(actionContext));
+                });
+        parameterFilters.put("inskirmishagainstatleast",
+                (parameter, environment) -> {
+                    String[] split = parameter.split(",", 2);
+                    int count = Integer.parseInt(split[0]);
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(split[1], environment);
+                    return (actionContext) -> Filters.and(Filters.inSkirmish,
+                            (Filter) (game, physicalCard) -> {
+                                Filterable filterable = filterableSource.getFilterable(actionContext);
+                                return Filters.filter(game.getGameState().getSkirmish().getShadowCharacters(), game, filterable).size() >= count;
+                            });
+                });
         parameterFilters.put("maxtwilight",
                 (parameter, environment) -> {
                     if (parameter.startsWith("memory(") && parameter.endsWith(")")) {
@@ -405,8 +427,6 @@ public class FilterFactory {
                         };
                     }
                 });
-        parameterFilters.put("memory",
-                (parameter, environment) -> (actionContext) -> Filters.in(actionContext.getCardsFromMemory(parameter)));
         parameterFilters.put("mintwilight",
                 (parameter, environment) -> {
                     if (parameter.startsWith("memory(") && parameter.endsWith(")")) {
@@ -427,7 +447,61 @@ public class FilterFactory {
                         };
                     }
                 });
+        parameterFilters.put("maxresistance",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
 
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.maxResistance(amount);
+                    };
+                });
+        parameterFilters.put("minresistance",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.minResistance(amount);
+                    };
+                });
+        parameterFilters.put("maxstrength",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.maxStrength(amount);
+                    };
+                });
+        parameterFilters.put("minstrength",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.minStrength(amount);
+                    };
+                });
+
+        parameterFilters.put("minvitality",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.minVitality(amount);
+                    };
+                });
+        parameterFilters.put("maxvitality",
+                (parameter, environment) -> {
+                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+                    return (actionContext) -> {
+                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                        return Filters.maxVitality(amount);
+                    };
+                });
+        parameterFilters.put("memory",
+                (parameter, environment) -> (actionContext) -> Filters.in(actionContext.getCardsFromMemory(parameter)));
         parameterFilters.put("name",
                 (parameter, environment) -> {
                     String name = Names.SanitizeName(Sanitize(parameter));
@@ -436,6 +510,7 @@ public class FilterFactory {
                                     && physicalCard.getBlueprint().getSanitizedTitle() != null
                                     && name.equals(Sanitize(physicalCard.getBlueprint().getSanitizedTitle()));
                 });
+        parameterFilters.put("title", parameterFilters.get("name"));
         parameterFilters.put("namefrommemory",
                 (parameter, environment) -> actionContext -> {
                     Set<String> titles = new HashSet<>();
@@ -459,25 +534,7 @@ public class FilterFactory {
                         };
                     };
                 });
-        parameterFilters.put("not",
-                (parameter, environment) -> {
-                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
-                    return (actionContext) -> Filters.not(filterableSource.getFilterable(actionContext));
-                });
-        parameterFilters.put("or",
-                (parameter, environment) -> {
-                    final String[] filters = splitIntoFilters(parameter);
-                    FilterableSource[] filterables = new FilterableSource[filters.length];
-                    for (int i = 0; i < filters.length; i++)
-                        filterables[i] = environment.getFilterFactory().generateFilter(filters[i], environment);
-                    return (actionContext) -> {
-                        Filterable[] filters1 = new Filterable[filterables.length];
-                        for (int i = 0; i < filterables.length; i++)
-                            filters1[i] = filterables[i].getFilterable(actionContext);
 
-                        return Filters.or(filters1);
-                    };
-                });
         parameterFilters.put("printedtwilightcostfrommemory",
                 (parameter, environment) -> actionContext -> {
                     PhysicalCard card = actionContext.getCardFromMemory(parameter);
@@ -538,28 +595,11 @@ public class FilterFactory {
                         LotroGame game = actionContext.getGame();
                         for (PhysicalCard physicalCard : Filters.filterActive(game, filter.getFilterable(actionContext))) {
                             resistance += game.getModifiersQuerying().getResistance(game, physicalCard);
-                            }
+                        }
                         return Filters.maxResistance(resistance - 1);
                     };
                 });
-        parameterFilters.put("maxresistance",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
 
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.maxResistance(amount);
-                    };
-                });
-        parameterFilters.put("minresistance",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.minResistance(amount);
-                    };
-                });
         parameterFilters.put("side", (parameter, environment) -> {
             final Side side = Side.Parse(parameter);
             if (side == null)
@@ -602,51 +642,6 @@ public class FilterFactory {
                             strength += game.getModifiersQuerying().getStrength(game, physicalCard);
                         }
                         return Filters.maxStrength(strength - 1);
-                    };
-                });
-
-        parameterFilters.put("maxstrength",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.maxStrength(amount);
-                    };
-                });
-        parameterFilters.put("minstrength",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.minStrength(amount);
-                    };
-                });
-        parameterFilters.put("strengthlessthan",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.maxStrength(amount - 1);
-                    };
-                });
-        parameterFilters.put("title", parameterFilters.get("name"));
-        parameterFilters.put("minvitality",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.minVitality(amount);
-                    };
-                });
-        parameterFilters.put("maxvitality",
-                (parameter, environment) -> {
-                    final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-                    return (actionContext) -> {
-                        int amount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                        return Filters.maxVitality(amount);
                     };
                 });
         parameterFilters.put("zone",

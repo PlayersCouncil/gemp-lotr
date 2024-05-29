@@ -936,7 +936,7 @@
       type: modifier
       modifier: {
         type: modifyStrength
-        filter: bearer,inSkirmishAgainst(minion,strengthLessThan(9))
+        filter: bearer,inSkirmishAgainst(minion,MaxStrength(8))
         amount: 2
       }
     }

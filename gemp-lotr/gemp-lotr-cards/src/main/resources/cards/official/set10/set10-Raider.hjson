@@ -222,7 +222,7 @@
                 effect: {
                     type: addTokens
                     culture: raider
-                    select: choose(hasToken(raider))
+                    select: choose(HasCultureToken(raider))
                     count: 2
                 }
 		    }

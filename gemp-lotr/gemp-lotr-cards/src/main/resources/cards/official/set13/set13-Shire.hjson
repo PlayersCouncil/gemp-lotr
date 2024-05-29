@@ -1070,7 +1070,7 @@
 		            filter: self
 		            amount: {
 		                type: forEachYouCanSpot
-		                filter: culture(shire),hasAnyTokens
+		                filter: culture(shire),HasAnyCultureTokens
 		            }
 		        }
 		    }

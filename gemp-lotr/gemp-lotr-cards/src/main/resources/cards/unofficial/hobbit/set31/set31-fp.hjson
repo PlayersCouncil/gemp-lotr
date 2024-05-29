@@ -392,7 +392,7 @@
 			}
 			effect: {
 				type: returnToHand
-				select: choose(orc,strengthLessThan(8))
+				select: choose(orc,MaxStrength(7))
 			}
 		}
 	}

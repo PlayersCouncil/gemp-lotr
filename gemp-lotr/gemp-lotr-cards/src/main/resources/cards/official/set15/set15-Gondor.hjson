@@ -98,13 +98,17 @@
 		                type: memorizeNumber
 		                memory: aragornStrength
 		                amount: {
-		                    type: forEachStrength
-		                    filter: self
+		                    type: Subtract
+		                    firstNumber: {
+                                type: forEachStrength
+                                filter: self
+                            }
+                            secondNumber: 1
 		                }
 		            }
                     {
                         type: exert
-                        select: choose(not(hunter),minion,strengthLessThan(memory(aragornStrength)))
+                        select: choose(not(hunter),minion,MaxStrength(memory(aragornStrength)))
                     }
                 ]
 		    }

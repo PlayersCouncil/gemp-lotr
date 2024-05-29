@@ -147,7 +147,7 @@
 		            requires: [
 		                {
 		                    type: canSpot
-		                    filter: side(free people),hasAnyTokens
+		                    filter: side(free people),HasAnyCultureTokens
 		                }
 		                {
 		                    type: not
