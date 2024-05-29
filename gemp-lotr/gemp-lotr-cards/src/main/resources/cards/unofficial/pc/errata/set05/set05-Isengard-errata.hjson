@@ -54,7 +54,7 @@
 					{
 						type: repeat
 						times: {
-							type: ForEachToken
+							type: ForEachCultureToken
 							filter: self
 							culture: isengard
 						}

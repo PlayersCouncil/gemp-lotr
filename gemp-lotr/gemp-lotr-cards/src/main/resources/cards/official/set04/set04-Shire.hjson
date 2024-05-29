@@ -452,7 +452,7 @@
 		            {
 		                type: removeBurdens
 		                amount: {
-		                    type: forEachToken
+		                    type: ForEachCultureToken
 		                    filter: self
 		                    culture: shire
 		                    limit: 3

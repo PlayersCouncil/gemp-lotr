@@ -1054,7 +1054,7 @@
 		        effect: {
 		            type: addTwilight
 		            amount: {
-		                type: forEachTwilightCostToPlay
+		                type: ForEachTwilightCost
 		                filter: currentSite
 		            }
 		        }

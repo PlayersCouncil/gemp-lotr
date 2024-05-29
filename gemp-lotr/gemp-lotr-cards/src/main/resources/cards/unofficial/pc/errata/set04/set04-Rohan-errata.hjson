@@ -42,7 +42,7 @@
 						type: memorizeNumber
 						memory: numberOfTokens
 						amount: {
-							type: forEachToken
+							type: ForEachCultureToken
 							culture: rohan
 							filter: self
 						}

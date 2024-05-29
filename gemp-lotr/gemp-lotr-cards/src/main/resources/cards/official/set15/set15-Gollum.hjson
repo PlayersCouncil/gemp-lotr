@@ -451,7 +451,7 @@
 		            {
 		                type: repeat
 		                times: {
-		                    type: forEachToken
+		                    type: ForEachCultureToken
 		                    filter: self
 		                }
 		                effect: {

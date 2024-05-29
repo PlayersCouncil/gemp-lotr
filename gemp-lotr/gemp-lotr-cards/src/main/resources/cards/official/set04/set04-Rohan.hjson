@@ -836,7 +836,7 @@
 		                type: discard
 		                select: choose(side(shadow),condition)
 		                count: {
-		                    type: forEachToken
+		                    type: ForEachCultureToken
 		                    filter: self
 		                    culture: rohan
 		                }

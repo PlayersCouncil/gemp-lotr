@@ -283,7 +283,7 @@
 	# 				type: memorizeNumber
 	# 				memory: numberOfTokens
 	# 				amount: {
-	# 					type: forEachToken
+	# 					type: ForEachCultureToken
 	# 					culture: raider
 	# 					filter: self
 	# 				}
@@ -375,7 +375,7 @@
 					type: memorizeNumber
 					memory: numberOfTokens
 					amount: {
-						type: forEachToken
+						type: ForEachCultureToken
 						culture: raider
 						filter: any
 					}

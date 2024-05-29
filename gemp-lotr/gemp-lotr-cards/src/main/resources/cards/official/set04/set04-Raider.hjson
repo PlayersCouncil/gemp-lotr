@@ -45,7 +45,7 @@
 		                type: heal
 		                select: choose(culture(raider),archer)
 		                count: {
-		                    type: forEachToken
+		                    type: ForEachCultureToken
 		                    culture: raider
 		                    filter: self
 		                }

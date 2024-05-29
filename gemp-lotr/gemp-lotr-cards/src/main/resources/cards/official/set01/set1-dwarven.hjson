@@ -480,7 +480,7 @@
 							player: you
 							deck: you
 							count: {
-								type: forEachMatchingInMemory
+								type: forEachInMemory
 								memory: revealedFreepsCards
 								filter: zone(deck)
 							}
@@ -511,7 +511,7 @@
 							player: you
 							deck: shadow
 							count: {
-								type: forEachMatchingInMemory
+								type: forEachInMemory
 								memory: revealedShadowCards
 								filter: zone(deck)
 							}

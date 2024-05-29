@@ -441,7 +441,7 @@
 		            {
 		                type: repeat
 		                times: {
-		                    type: forEachMatchingInMemory
+		                    type: forEachInMemory
 		                    filter: culture(elven)
 		                }
 		                effect: {

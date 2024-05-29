@@ -338,6 +338,7 @@
 					amount: {
 						type: forEachInMemory
 						memory: discardedCards
+						filter: any
 						limit: 3
 					}
 				}

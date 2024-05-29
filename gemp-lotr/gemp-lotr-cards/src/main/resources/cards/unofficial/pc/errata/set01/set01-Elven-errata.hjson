@@ -111,7 +111,7 @@
 					type: memorizeNumber
 					memory: OrcCount
 					amount: {
-						type: forEachMatchingInMemory
+						type: forEachInMemory
 						memory: revealedCards
 						filter: orc
 					}
@@ -147,7 +147,7 @@
 									type: modifyArcheryTotal
 									side: freeps
 									amount: {
-										type: forEachMatchingInMemory
+										type: forEachInMemory
 										memory: revealedCards
 										filter: orc
 									}

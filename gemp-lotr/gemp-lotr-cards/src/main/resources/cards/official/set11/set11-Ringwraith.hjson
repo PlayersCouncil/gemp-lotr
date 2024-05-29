@@ -447,7 +447,7 @@
 				    type: modifyStrength
 				    select: choose(culture(wraith),minion)
 				    amount: {
-				        type: forEachMatchingInMemory
+				        type: forEachInMemory
 				        memory: revealedCards
 				        filter: culture(wraith),minion
 				    }
@@ -648,7 +648,7 @@
 		            cost: {
 		                type: addTwilight
 		                amount: {
-		                    type: forEachTwilightCostToPlay
+		                    type: ForEachTwilightCost
 		                    filter: memory(playedCompanion)
 		                }
 		            }

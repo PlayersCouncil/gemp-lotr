@@ -819,7 +819,7 @@
 						type: cardPhaseLimit
 						limit:	4
 						amount: {
-							type: forEachMatchingInMemory
+							type: forEachInMemory
 							memory: revealedCards
 							filter: orc
 							limit: 4

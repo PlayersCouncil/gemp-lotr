@@ -1084,7 +1084,7 @@
                 type: playCardFromDrawDeck
                 select: choose(spider)
                 cost: {
-                  type: requires
+                  type: Conditional
                   requires: {
                     type: location
                     filter: forest

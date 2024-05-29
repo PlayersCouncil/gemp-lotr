@@ -40,7 +40,7 @@
 		                type: wound
 		                select: choose(minion,inSkirmishAgainst(name(Gandalf)))
 		                times: {
-		                    type: forEachToken
+		                    type: ForEachCultureToken
 		                    filter: self
 		                    culture: gandalf
 		                }

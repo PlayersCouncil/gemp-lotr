@@ -1652,7 +1652,7 @@
 		            type: modifyStrength
 		            filter: culture(rohan),man
 		            amount: {
-		                type: forEachToken
+		                type: ForEachCultureToken
 		                filter: self
 		                culture: rohan
 		            }

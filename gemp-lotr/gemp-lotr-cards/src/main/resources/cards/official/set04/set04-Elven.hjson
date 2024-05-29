@@ -620,13 +620,13 @@
 		            amount: {
 		                type: min
                         firstNumber: {
-                            type: forEachToken
+                            type: ForEachCultureToken
                             filter: self
                             culture: elven
                             limit: 3
                         }
 		                secondNumber: {
-                            type: forEachToken
+                            type: ForEachCultureToken
                             filter: name(My Axe Is Notched)
                             culture: dwarven
                             limit: 3
@@ -1329,7 +1329,7 @@
 		                type: modifyStrength
 		                select: choose(minion,inSkirmishAgainst(elf))
 		                amount: {
-                            type: forEachToken
+                            type: ForEachCultureToken
                             culture: elven
                             filter: self
                             limit: 3

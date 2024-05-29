@@ -216,7 +216,7 @@
 					requires: {
 						type: isGreaterThan
 						firstNumber: {
-							type: forEachMatchingInMemory
+							type: forEachInMemory
 							memory: cardsInHand
 							filter: orc
 						}
@@ -228,7 +228,7 @@
 						player: shadowPlayer
 						forced: true
 						count: {
-							type: forEachMatchingInMemory
+							type: forEachInMemory
 							memory: cardsInHand
 							filter: orc
 						}

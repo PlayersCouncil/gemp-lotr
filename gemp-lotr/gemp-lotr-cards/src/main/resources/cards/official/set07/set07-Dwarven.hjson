@@ -478,7 +478,7 @@
 		            {
 		                type: drawCards
 		                count: {
-		                    type: forEachMatchingInMemory
+		                    type: forEachInMemory
 		                    memory: stackedCards
 		                    filter: culture(dwarven)
 		                }

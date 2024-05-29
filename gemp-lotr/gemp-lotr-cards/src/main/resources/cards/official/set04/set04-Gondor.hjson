@@ -909,7 +909,7 @@
                         type: exert
                         select: choose(minion)
                         count: {
-                            type: forEachToken
+                            type: ForEachCultureToken
                             filter: self
                             culture: gondor
                             limit: 3

@@ -1052,7 +1052,7 @@
 				{
 					type: addBurdens
 					amount: {
-						type: forEachMatchingInMemory
+						type: forEachInMemory
 						memory: discardedCards
 						filter: side(shadow)
 					}

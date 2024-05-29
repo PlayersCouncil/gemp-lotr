@@ -1655,7 +1655,7 @@
                         type: discard
                         select: choose(side(free),possession)
                         count: {
-                            type: forEachToken
+                            type: ForEachCultureToken
                             filter: self
                             culture: dunland
                             limit: 3

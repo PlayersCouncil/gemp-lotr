@@ -335,7 +335,7 @@
 						type: memorizeNumber
 						memory: numberOfTokens
 						amount: {
-							type: forEachToken
+							type: ForEachCultureToken
 							culture: moria
 							filter: self
 						}

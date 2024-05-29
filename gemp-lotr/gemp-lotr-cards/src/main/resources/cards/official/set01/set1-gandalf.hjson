@@ -294,7 +294,7 @@
 					{
 						type: removeTwilight
 						amount: {
-							type: forEachMatchingInMemory
+							type: forEachInMemory
 							memory: revealedCards
 							filter: orc
 						}

@@ -423,7 +423,7 @@
                     {
                         type: repeat
                         times: {
-                            type: forEachMatchingInMemory
+                            type: forEachInMemory
                             filter: side(shadow)
                             memory: revealedCards
                         }

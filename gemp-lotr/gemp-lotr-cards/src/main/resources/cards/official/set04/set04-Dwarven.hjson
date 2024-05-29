@@ -653,13 +653,13 @@
 		            amount: {
 		                type: min
                         firstNumber: {
-                            type: forEachToken
+                            type: ForEachCultureToken
                             filter: self
                             culture: dwarven
                             limit: 3
                         }
 		                secondNumber: {
-                            type: forEachToken
+                            type: ForEachCultureToken
                             filter: name(Final Count)
                             culture: elven
                             limit: 3
@@ -906,7 +906,7 @@
 		                type: modifyStrength
 		                select: choose(unbound,companion)
 		                amount: {
-		                    type: forEachToken
+		                    type: ForEachCultureToken
 		                    culture: dwarven
 		                    filter: self
 		                    limit: 3

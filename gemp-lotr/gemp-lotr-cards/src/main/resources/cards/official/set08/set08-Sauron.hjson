@@ -689,7 +689,7 @@
                         text: Choose X
                         from: 0
                         to: {
-                            type: forEachToken
+                            type: ForEachCultureToken
                             culture: sauron
                             filter: self
                         }

@@ -630,7 +630,7 @@
 					type: modifyArcheryTotal
 					side: shadow
 					amount: {
-						type: forEachMatchingInMemory
+						type: forEachInMemory
 						memory: revealedCards
 						filter: side(shadow)
 					}
@@ -1227,7 +1227,7 @@
 					type: modifyStrength
 					select: choose(orc)
 					 amount: {
-                        type: forEachMatchingInMemory
+                        type: forEachInMemory
                         memory: shuffledOrcs
                         filter: orc
 						multiplier: 3

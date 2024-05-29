@@ -47,7 +47,7 @@
 					    text: Choose how many {sauron} tokens to remove
 					    from: 0
 					    to: {
-					        type: forEachToken
+					        type: ForEachCultureToken
 					        culture: sauron
 					        filter: self
 					    }

@@ -44,8 +44,8 @@
 					requires: {
 						type: IsLessThanOrEqual
 						firstNumber: {
-							type: StrengthFromMemory
-							memory: weakenedMinion
+							type: ForEachStrength
+							filter: memory(weakenedMinion)
 						}
 						secondNumber: 4
 					}

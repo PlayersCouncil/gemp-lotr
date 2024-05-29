@@ -274,7 +274,7 @@
 		            type: modifyStrength
 		            filter: bearer
 		            amount: {
-		                type: forEachToken
+		                type: ForEachCultureToken
 		                culture: men
 		                limit: 5
 		            }

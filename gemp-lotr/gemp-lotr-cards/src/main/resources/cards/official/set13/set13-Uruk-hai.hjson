@@ -96,7 +96,7 @@
 		            type: modifyStrength
 		            filter: self
 		            amount: {
-		                type: forEachToken
+		                type: ForEachCultureToken
 		                filter: side(free people)
 		            }
 		        }

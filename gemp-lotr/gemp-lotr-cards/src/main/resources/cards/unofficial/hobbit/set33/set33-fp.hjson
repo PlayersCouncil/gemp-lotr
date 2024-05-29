@@ -767,7 +767,7 @@
         {
           type: repeat
           times: {
-            type: forEachMatchingInMemory
+            type: forEachInMemory
             memory: cardsInHand
             filter: side(free people),skirmish,event
           }

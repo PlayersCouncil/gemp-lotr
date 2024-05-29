@@ -500,7 +500,7 @@
 			        type: modifyStrength
 			        select: choose(minion)
 			        amount: {
-			            type: forEachMatchingInMemory
+			            type: forEachInMemory
 			            memory: revealedCards
 			            filter: companion
 			            multiplier: {

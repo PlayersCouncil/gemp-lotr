@@ -3103,7 +3103,7 @@
 		            {
 		                type: addTwilight
 		                amount: {
-		                    type: forEachToken
+		                    type: ForEachCultureToken
 		                    culture: sauron
 		                    filter: self
 		                    multiplier: 2

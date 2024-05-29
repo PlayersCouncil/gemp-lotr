@@ -141,7 +141,7 @@
 				    type: memorizeNumber
 				    memory: tokenCount
 				    amount: {
-				        type: forEachToken
+				        type: ForEachCultureToken
 				        filter: memory(chosenCondition)
 				        culture: dwarven
 				    }
