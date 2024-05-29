@@ -653,9 +653,6 @@ public class FilterFactory {
                 });
         parameterFilters.put("zone",
                 (parameter, environment) -> {
-                    // Fix for faulty "Sanitize" method, which removes spaces and underscores, therefore making it
-                    // impossible to match ADVENTURE_PATH Zone
-                    if (parameter.equals("adventurepath")) parameter = "adventure path";
                     final Zone zone = FieldUtils.getEnum(Zone.class, parameter, "parameter");
                     return actionContext -> zone;
                 });
@@ -734,7 +731,7 @@ public class FilterFactory {
         if (filterString.contains("(") && filterString.endsWith(")")) {
             String filterName = filterString.substring(0, filterString.indexOf("("));
             String filterParameter = filterString.substring(filterString.indexOf("(") + 1, filterString.lastIndexOf(")"));
-            return lookupFilter(Sanitize(filterName), Sanitize(filterParameter), environment);
+            return lookupFilter(Sanitize(filterName), filterParameter.trim().toLowerCase(), environment);
         }
         return lookupFilter(Sanitize(filterString), null, environment);
     }
