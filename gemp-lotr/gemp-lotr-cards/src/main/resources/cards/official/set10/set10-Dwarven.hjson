@@ -156,9 +156,10 @@
 		effects: {
 			type: responseEvent
 			trigger: {
-				type: killedInSkirmish
+				type: Killed
 				filter: minion
-				by: dwarf
+				killer: dwarf
+				inSkirmish: true
 				memorize: killedMinion
 			}
 			text: Play for {killedMinion}

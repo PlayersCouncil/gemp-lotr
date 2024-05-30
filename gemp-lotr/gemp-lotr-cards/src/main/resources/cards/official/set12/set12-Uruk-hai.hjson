@@ -1188,9 +1188,10 @@
 		        type: trigger
 		        optional: true
 		        trigger: {
-		            type: killedInSkirmish
+		            type: Killed
 		            filter: companion
-		            by: culture(uruk-hai),minion
+		            killer: culture(uruk-hai),minion
+		            inSkirmish: true
 		        }
 		        cost: {
 		            type: discardFromHand

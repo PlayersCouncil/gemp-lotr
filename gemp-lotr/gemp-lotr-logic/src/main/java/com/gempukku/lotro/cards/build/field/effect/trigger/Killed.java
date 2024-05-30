@@ -14,11 +14,12 @@ import org.json.simple.JSONObject;
 public class Killed implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "filter", "killer", "memorize");
+        FieldUtils.validateAllowedFields(value, "filter", "killer", "inSkirmish", "memorize");
 
         final String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
         final String byFilter = FieldUtils.getString(value.get("killer"), "killer", "any");
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
+        final boolean inSkirmish = FieldUtils.getBoolean(value.get("inSkirmish"), "inSkirmish", false);
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource byFilterableSource = environment.getFilterFactory().generateFilter(byFilter, environment);
@@ -33,7 +34,15 @@ public class Killed implements TriggerCheckerProducer {
             public boolean accepts(ActionContext actionContext) {
                 final Filterable filterable = filterableSource.getFilterable(actionContext);
                 Filterable byFilterable = byFilterableSource.getFilterable(actionContext);
-                final boolean result = TriggerConditions.forEachKilledBy(actionContext.getGame(), actionContext.getEffectResult(), byFilterable, filterable);
+                boolean result = false;
+
+                if(inSkirmish) {
+                    result = TriggerConditions.forEachKilledInASkirmish(actionContext.getGame(), actionContext.getEffectResult(), byFilterable, filterable);
+                }
+                else {
+                    result = TriggerConditions.forEachKilledBy(actionContext.getGame(), actionContext.getEffectResult(), byFilterable, filterable);
+                }
+
                 if (result && memorize != null) {
                     final PhysicalCard killedCard = ((ForEachKilledResult) actionContext.getEffectResult()).getKilledCard();
                     actionContext.setCardMemory(memorize, killedCard);

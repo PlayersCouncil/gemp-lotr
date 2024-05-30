@@ -3706,9 +3706,10 @@
 		        type: trigger
 		        optional: true
 		        trigger: {
-		            type: killedInSkirmish
+		            type: Killed
 		            filter: or(companion,ally)
-		            by: urukHai
+		            killer: urukHai
+		            inSkirmish: true
 		        }
 		        effect: {
 		            type: takeControlOfSite

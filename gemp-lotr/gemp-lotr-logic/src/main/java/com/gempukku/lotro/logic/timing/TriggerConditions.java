@@ -282,7 +282,7 @@ public class TriggerConditions {
             ForEachKilledResult killResult = (ForEachKilledResult) effectResult;
             var killers = killResult.getKillers();
 
-            if (killers == null || killers.isEmpty() || killers.stream().allMatch(Objects::isNull))
+            if (killedBy != Filters.any && (killers == null || killers.isEmpty() || killers.stream().allMatch(Objects::isNull)))
                 return false;
 
             return Filters.filter(killResult.getKillers(), game, killedBy).size() > 0 &&
