@@ -354,34 +354,25 @@ public class TriggerConditions {
         return false;
     }
 
-    public static boolean played(LotroGame game, EffectResult effectResult, Filterable... filters) {
+    public static boolean played(LotroGame game, EffectResult effectResult, Filterable targetFilter, Filterable fromFilter, Zone fromZone, Filterable... filters) {
         if (effectResult.getType() == EffectResult.Type.PLAY) {
-            PhysicalCard playedCard = ((PlayCardResult) effectResult).getPlayedCard();
-            return Filters.and(filters).accepts(game, playedCard);
-        }
-        return false;
-    }
+            final var playResult = (PlayCardResult) effectResult;
+            final var attachedTo = playResult.getAttachedTo();
+            final var cardPlayedFrom = playResult.getAttachedOrStackedPlayedFrom();
+            final var zone = playResult.getPlayedFrom();
 
-    public static boolean playedFromStacked(LotroGame game, EffectResult effectResult, Filterable stackedOnFilter, Filterable... filters) {
-        if (effectResult.getType() == EffectResult.Type.PLAY) {
-            final PlayCardResult playResult = (PlayCardResult) effectResult;
-            PhysicalCard playedCard = playResult.getPlayedCard();
-            return (playResult.getPlayedFrom() == Zone.STACKED
-                    && Filters.accepts(game, stackedOnFilter, playResult.getAttachedOrStackedPlayedFrom())
-                    && Filters.and(filters).accepts(game, playedCard));
-        }
-        return false;
-    }
-
-    public static boolean playedOn(LotroGame game, EffectResult effectResult, Filterable targetFilter, Filterable... filters) {
-        if (effectResult.getType() == EffectResult.Type.PLAY) {
-            final PlayCardResult playResult = (PlayCardResult) effectResult;
-            final PhysicalCard attachedTo = playResult.getAttachedTo();
-            if (attachedTo == null)
+            if (targetFilter != null && targetFilter != Filters.any && attachedTo != null
+                    && !Filters.accepts(game, targetFilter, attachedTo))
                 return false;
-            PhysicalCard playedCard = playResult.getPlayedCard();
-            return Filters.and(filters).accepts(game, playedCard)
-                    && Filters.accepts(game, targetFilter, attachedTo);
+
+            if(fromFilter != null && fromFilter != Filters.any && cardPlayedFrom != null
+                    && !Filters.accepts(game, fromFilter, cardPlayedFrom))
+                return false;
+
+            if(fromZone != null && zone != fromZone)
+                return false;
+
+            return Filters.and(filters).accepts(game, playResult.getPlayedCard());
         }
         return false;
     }

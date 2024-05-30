@@ -57,7 +57,6 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("losesinitiative", new LosesInitiative());
         triggerCheckers.put("losesskirmish", new LosesSkirmish());
         triggerCheckers.put("played", new PlayedTriggerCheckerProducer());
-        triggerCheckers.put("playedfromstacked", new PlayedFromStacked());
         triggerCheckers.put("playerdrawscard", new PlayerDrawsCard());
         triggerCheckers.put("putsonring", new PutsOnRing());
         triggerCheckers.put("reconciles", new Reconciles());

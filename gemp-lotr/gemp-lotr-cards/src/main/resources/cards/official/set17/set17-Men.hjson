@@ -633,7 +633,7 @@
 		        trigger: {
 		            type: played
 		            filter: self
-		            from: hand
+		            fromZone: hand
 		        }
 		        effect: {
 		            type: choice
@@ -1563,12 +1563,13 @@
 		            {
 		                type: played
 		                filter: self
-		                from: deck
+		                fromZone: deck
 		            }
 		            {
-		                type: playedFromStacked
+		                type: played
 		                filter: self
 		                from: your,culture(men),possession
+		                fromZone: stacked
 		            }
 		        ]
 		        effect: {

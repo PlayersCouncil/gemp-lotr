@@ -531,9 +531,10 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: playedFromStacked
+		            type: played
 		            filter: self
 		            from: controlledSite
+		            fromZone: stacked
 		        }
 		        effect: {
 		            type: addBurdens
@@ -649,9 +650,10 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: playedFromStacked
+		            type: played
 		            filter: self
 		            from: controlledSite
+		            fromZone: stacked
 		        }
 		        effect: {
 		            type: addThreats

@@ -29,7 +29,7 @@
 		            type: played
 		            player: you
 		            filter: culture(rohan),possession
-		            from: hand
+		            fromZone: hand
 		        }
 		        effect: {
 		            type: addTokens
