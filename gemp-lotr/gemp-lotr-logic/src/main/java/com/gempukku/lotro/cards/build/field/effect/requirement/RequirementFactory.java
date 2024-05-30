@@ -13,9 +13,16 @@ public class RequirementFactory {
     private final Map<String, RequirementProducer> requirementProducers = new HashMap<>();
 
     public RequirementFactory() {
-        requirementProducers.put("not", new NotRequirementProducer());
         requirementProducers.put("and", new AndRequirementProducer());
+        requirementProducers.put("not", new NotRequirementProducer());
         requirementProducers.put("or", new OrRequirementProducer());
+        requirementProducers.put("isequal", new IsEqual());
+        requirementProducers.put("isnotequal", new IsNotEqual());
+        requirementProducers.put("isgreaterthan", new IsGreaterThan());
+        requirementProducers.put("isgreaterthanorequal", new IsGreaterThanOrEqual());
+        requirementProducers.put("islessthan", new IsLessThan());
+        requirementProducers.put("islessthanorequal", new IsLessThanOrEqual());
+
         requirementProducers.put("canmove", new CanMove());
         requirementProducers.put("canplayfromdiscard", new CanPlayFromDiscard());
         requirementProducers.put("canselfbeplayed", new CanSelfBePlayed());
@@ -47,12 +54,6 @@ public class RequirementFactory {
         requirementProducers.put("hasinzonedata", new HasInZoneData());
         requirementProducers.put("haveinitiative", new HaveInitiative());
         requirementProducers.put("isahead", new IsAhead());
-        requirementProducers.put("isequal", new IsEqual());
-        requirementProducers.put("isgreaterthan", new IsGreaterThan());
-        requirementProducers.put("isgreaterthanorequal", new IsGreaterThanOrEqual());
-        requirementProducers.put("islessthan", new IsLessThan());
-        requirementProducers.put("islessthanorequal", new IsLessThanOrEqual());
-        requirementProducers.put("isnotequal", new IsNotEqual());
         requirementProducers.put("isowner", new IsOwnerRequirementProducer());
         requirementProducers.put("isside", new IsSideRequirementProducer());
         requirementProducers.put("killedwithsurplusdamage", new KilledWithSurplusDamage());

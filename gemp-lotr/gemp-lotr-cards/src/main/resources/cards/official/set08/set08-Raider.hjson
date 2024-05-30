@@ -101,7 +101,7 @@
 		        requires: {
 		            type: canPlayFromDiscard
 		            filter: corsair
-		            cost: {
+		            discount: {
                         type: ForEachCultureToken
                         culture: raider
                         filter: self
