@@ -63,7 +63,6 @@ public class ModifierSourceFactory {
         modifierProducers.put("fpculturespot", new FPCultureSpot());
         modifierProducers.put("fpusesresinsteadofstr", new FPUsesResInsteadOfStr());
         modifierProducers.put("fpusesvitinsteadofstr", new FPUsesVitInsteadOfStr());
-        modifierProducers.put("fpcantassigntoskirmish", new FPCantAssignToSkirmish());
         modifierProducers.put("hastomoveifable", new AddModifierFlag(ModifierFlag.HAS_TO_MOVE_IF_POSSIBLE));
         modifierProducers.put("itemclassspot", new ItemClassSpot());
         modifierProducers.put("modifyarcherytotal", new ModifyArcheryTotal());

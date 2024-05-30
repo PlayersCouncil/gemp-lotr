@@ -23,8 +23,9 @@
         {
             type: modifier
             modifier: {
-                type: fpCantAssignToSkirmish
+                type: CantBeAssignedToSkirmish
                 filter: self
+                player: freeps
             }
         }
         {
