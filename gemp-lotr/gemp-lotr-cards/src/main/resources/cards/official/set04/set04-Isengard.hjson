@@ -161,7 +161,7 @@
 		effects: {
 			type: modifier
 			modifier: {
-				type: archeryTotal
+				type: ModifyArcheryTotal
 				side: shadow
 				requires: {
 					type: controlsSite

@@ -615,7 +615,7 @@
         effects: {
             type: modifier
             modifier: {
-                type: archeryTotal
+                type: ModifyArcheryTotal
                 requires: {
                     type: canSpot
                     filter: another,culture(moria),archer

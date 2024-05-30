@@ -300,7 +300,7 @@
             {
                 type: modifier
                 modifier: {
-                    type: archeryTotal
+                    type: ModifyArcheryTotal
                     side: shadow
                     amount: -1
                 }

@@ -24,7 +24,6 @@ public class ModifierSourceFactory {
         modifierProducers.put("allycanparticipateinarcheryfire", new AllyCanParticipateInArcheryFire());
         modifierProducers.put("allycanparticipateinskirmishes", new AllyCanParticipateInSkirmishes());
         modifierProducers.put("allymaynotparticipateinarcheryfireorskirmishes", new AllyMayNotParticipateInArcheryFireOrSkirmishes());
-        modifierProducers.put("archerytotal", new ArcheryTotal());
         modifierProducers.put("cancelkeywordbonus", new CancelKeywordBonus());
         modifierProducers.put("cancelstrengthbonus", new CancelStrengthBonus());
         modifierProducers.put("canplaystackedcards", new CanPlayStackedCards());
