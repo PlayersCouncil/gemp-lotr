@@ -1071,7 +1071,7 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: exerts
+		            type: exerted
 		            filter: name(Denethor)
 		        }
 		        effect: {
@@ -1083,7 +1083,7 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: exerts
+		            type: exerted
 		            filter: name(Boromir)
 		        }
 		        effect: {
@@ -1095,7 +1095,7 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: exerts
+		            type: exerted
 		            filter: name(Faramir)
 		        }
 		        cost: {

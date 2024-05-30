@@ -58,7 +58,7 @@
             {
                 type: trigger
                 trigger: {
-                    type: exerts
+                    type: exerted
                     filter: culture(shire),ally
                 }
                 effect: {

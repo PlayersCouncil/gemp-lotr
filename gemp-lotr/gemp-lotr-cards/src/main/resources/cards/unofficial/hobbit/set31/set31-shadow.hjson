@@ -186,7 +186,7 @@
 				type: Response
 				trigger: [
 					{
-						type: exerts
+						type: exerted
 						filter: name(Bilbo)
 					}
 					{

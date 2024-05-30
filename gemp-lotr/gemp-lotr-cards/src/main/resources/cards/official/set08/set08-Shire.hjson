@@ -397,7 +397,7 @@
 		effects: {
 			type: responseEvent
 			trigger: {
-				type: exerts
+				type: exerted
 				filter: minion
 				memorize: exertedMinion
 			}

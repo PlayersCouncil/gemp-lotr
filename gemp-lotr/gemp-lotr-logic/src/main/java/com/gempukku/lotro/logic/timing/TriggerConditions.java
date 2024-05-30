@@ -176,9 +176,7 @@ public class TriggerConditions {
     }
 
     public static boolean forEachExerted(LotroGame game, EffectResult effectResult, Filterable... filters) {
-        if (effectResult.getType() == EffectResult.Type.FOR_EACH_EXERTED)
-            return Filters.and(filters).accepts(game, ((ExertResult) effectResult).getExertedCard());
-        return false;
+        return forEachExertedBy(game, effectResult, Filters.any, filters);
     }
 
     public static boolean forEachExertedBy(LotroGame game, EffectResult effectResult, Filterable exertedBy, Filterable... exerted) {

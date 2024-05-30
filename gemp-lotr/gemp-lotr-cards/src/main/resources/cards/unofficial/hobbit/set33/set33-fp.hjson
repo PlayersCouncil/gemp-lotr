@@ -356,9 +356,9 @@
         type: trigger
         optional: true
         trigger: {
-          type: exertedBy
+          type: exerted
           filter: name(Balin)
-          by: culture(dwarven),event
+          source: culture(dwarven),event
         }
         effect: {
           type: heal

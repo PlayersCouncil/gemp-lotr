@@ -11,14 +11,14 @@ import com.gempukku.lotro.logic.timing.TriggerConditions;
 import com.gempukku.lotro.logic.timing.results.ExertResult;
 import org.json.simple.JSONObject;
 
-public class ExertedBy implements TriggerCheckerProducer {
+public class Exerted implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "filter", "memorize", "by");
+        FieldUtils.validateAllowedFields(value, "filter", "memorize", "source");
 
         final String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
-        final String byFilter = FieldUtils.getString(value.get("by"), "by");
+        final String byFilter = FieldUtils.getString(value.get("source"), "source", "any");
 
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);

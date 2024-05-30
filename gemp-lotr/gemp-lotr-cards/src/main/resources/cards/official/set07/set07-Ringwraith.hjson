@@ -2150,7 +2150,7 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: exerts
+		            type: exerted
 		            filter: bearer
 		        }
 		        effect: {
