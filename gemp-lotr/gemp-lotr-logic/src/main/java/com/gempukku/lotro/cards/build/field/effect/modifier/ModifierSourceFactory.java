@@ -47,7 +47,6 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantplayphaseevents", new CantPlayPhaseEvents());
         modifierProducers.put("cantplayphaseeventsorphasespecialabilities", new CantPlayPhaseEventsOrPhaseSpecialAbilities());
         modifierProducers.put("cantplaysite", new CantPlaySite());
-        modifierProducers.put("cantplayspecialabilities", new CantPlaySpecialAbilities());
         modifierProducers.put("cantpreventwounds", new AddModifierFlag(ModifierFlag.CANT_PREVENT_WOUNDS));
         modifierProducers.put("cantremoveburdens", new CantRemoveBurdens());
         modifierProducers.put("cantremovethreats", new CantRemoveThreats());
@@ -58,6 +57,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("canttakewoundsfromlosingskirmish", new CantTakeWoundsFromLosingSkirmish());
         modifierProducers.put("canttouchtokens", new AddModifierFlag(ModifierFlag.CANT_TOUCH_CULTURE_TOKENS));
         modifierProducers.put("cantusespecialabilities", new CantUseSpecialAbilities());
+        modifierProducers.put("playercantusespecialabilities", new PlayerCantUseSpecialAbilities());
         modifierProducers.put("disablegametext", new DisableGameText());
         modifierProducers.put("doesnotaddtoarcherytotal", new DoesNotAddToArcheryTotal());
         modifierProducers.put("extracosttoplay", new ExtraCostToPlay());

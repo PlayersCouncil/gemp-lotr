@@ -8,7 +8,7 @@ import com.gempukku.lotro.logic.modifiers.CantUseSpecialAbilitiesModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import org.json.simple.JSONObject;
 
-public class CantPlaySpecialAbilities implements ModifierSourceProducer {
+public class PlayerCantUseSpecialAbilities implements ModifierSourceProducer {
     @Override
     public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(object, "player", "phase", "requires", "filter");

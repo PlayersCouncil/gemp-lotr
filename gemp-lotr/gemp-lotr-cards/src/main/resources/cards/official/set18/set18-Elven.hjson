@@ -291,7 +291,7 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: cantPlaySpecialAbilities
+		            type: PlayerCantUseSpecialAbilities
 		            requires: {
 		                type: canSpot
 		                filter: bearer,unique,companion

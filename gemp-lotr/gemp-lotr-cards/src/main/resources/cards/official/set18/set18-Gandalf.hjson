@@ -514,7 +514,7 @@
 		        effect: {
 		            type: addModifier
 		            modifier: {
-                        type: cantPlaySpecialAbilities
+                        type: PlayerCantUseSpecialAbilities
                         filter: memory(spottedMinion)
                     }
                     until: regroup

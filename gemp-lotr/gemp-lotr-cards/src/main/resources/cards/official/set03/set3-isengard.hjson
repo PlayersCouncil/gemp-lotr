@@ -326,7 +326,7 @@
             {
                 type: modifier
                 modifier: {
-                    type: cantPlaySpecialAbilities
+                    type: PlayerCantUseSpecialAbilities
                     requires: {
                         type: canSpot
                         filter: another,culture(isengard),orc
