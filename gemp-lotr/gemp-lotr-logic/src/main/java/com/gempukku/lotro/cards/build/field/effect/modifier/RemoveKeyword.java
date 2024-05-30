@@ -17,6 +17,9 @@ public class RemoveKeyword implements ModifierSourceProducer {
 
         Keyword keyword = FieldUtils.getEnum(Keyword.class, object.get("keyword"), "keyword");
 
+        if (keyword == null)
+            throw new InvalidCardDefinitionException("'keyword' is required for RemoveKeyword modifier.");
+
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
