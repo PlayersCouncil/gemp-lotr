@@ -312,7 +312,7 @@
                     {
                         type: addModifier
                         modifier: {
-                            type: PlayerCantUseSpecialAbilities
+                            type: CantUseSpecialAbilities
                             phase: skirmish
                             filter: or(memory(assignedCompanion),memory(assignedMinion))
                         }

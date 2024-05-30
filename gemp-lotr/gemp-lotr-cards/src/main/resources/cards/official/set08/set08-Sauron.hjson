@@ -494,7 +494,7 @@
                     {
                         type: addModifier
                         modifier: {
-                            type: PlayerCantUseSpecialAbilities
+                            type: CantUseSpecialAbilities
                             player: free people
                             phase: archery
                         }

@@ -61,7 +61,7 @@
 				{
 				    type: addModifier
 				    modifier: {
-				        type: PlayerCantUseSpecialAbilities
+				        type: CantUseSpecialAbilities
 				        player: you
 				        phase: archery
 				    }
@@ -245,7 +245,7 @@
 				{
 				    type: addModifier
 				    modifier: {
-				        type: PlayerCantUseSpecialAbilities
+				        type: CantUseSpecialAbilities
 				        player: you
 				        phase: archery
 				    }

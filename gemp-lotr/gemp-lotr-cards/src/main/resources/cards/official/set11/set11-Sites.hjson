@@ -262,7 +262,7 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: PlayerCantUseSpecialAbilities
+		            type: CantUseSpecialAbilities
 		            phase: skirmish
 		        }
 		    }

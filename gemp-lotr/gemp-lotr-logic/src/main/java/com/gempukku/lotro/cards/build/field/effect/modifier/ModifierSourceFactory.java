@@ -57,7 +57,6 @@ public class ModifierSourceFactory {
         modifierProducers.put("canttakewoundsfromlosingskirmish", new CantTakeWoundsFromLosingSkirmish());
         modifierProducers.put("canttouchtokens", new AddModifierFlag(ModifierFlag.CANT_TOUCH_CULTURE_TOKENS));
         modifierProducers.put("cantusespecialabilities", new CantUseSpecialAbilities());
-        modifierProducers.put("playercantusespecialabilities", new PlayerCantUseSpecialAbilities());
         modifierProducers.put("disablegametext", new DisableGameText());
         modifierProducers.put("doesnotaddtoarcherytotal", new DoesNotAddToArcheryTotal());
         modifierProducers.put("extracosttoplay", new ExtraCostToPlay());
