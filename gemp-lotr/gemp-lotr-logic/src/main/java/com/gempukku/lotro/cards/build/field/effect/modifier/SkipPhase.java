@@ -15,6 +15,9 @@ public class SkipPhase implements ModifierSourceProducer {
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
         final Phase phase = FieldUtils.getEnum(Phase.class, object.get("phase"), "phase");
 
+        if (phase == null)
+            throw new InvalidCardDefinitionException("'phase' is required for SkipPhase modifier.");
+
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return new ModifierSource() {

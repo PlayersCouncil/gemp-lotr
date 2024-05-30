@@ -868,10 +868,9 @@
           memorize: chosenCharacter
         }
         {
-          type: addModifier
-          modifier: {
-            type: FPUsesResInsteadOfStr
-            filter: memory(chosenCharacter)
+          type: setFPStrengthOverride
+          amount: {
+            type: forEachResistance
           }
         }
       ]

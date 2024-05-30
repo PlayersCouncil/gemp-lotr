@@ -336,7 +336,7 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: removeText
+		            type: DisableGameText
 		            filter: bearer,name(Denethor)
 		        }
 		    }

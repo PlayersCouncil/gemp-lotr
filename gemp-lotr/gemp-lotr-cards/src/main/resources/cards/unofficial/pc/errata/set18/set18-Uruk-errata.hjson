@@ -26,19 +26,17 @@
             }
 			effect: [
 				{
-					type: addModifier
-					modifier: {
-						type: FPUsesVitInsteadOfStr
-						filter: companion,InSkirmishAgainst(your,Uruk-hai)
-					}
-				}
-				{
-					type: addModifier
-					modifier: {
-						type: ShadowUsesVitInsteadOfStr
-						filter: your,Uruk-hai,InSkirmishAgainst(companion)
-					}
-				}
+                    type: setFPStrengthOverride
+                    amount: {
+                        type: forEachVitality
+                    }
+                }
+                {
+                    type: setShadowStrengthOverride
+                    amount: {
+                        type: forEachVitality
+                    }
+                }
 				{
 					type: addModifier
 					modifier: {

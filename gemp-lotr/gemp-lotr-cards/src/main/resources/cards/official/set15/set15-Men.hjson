@@ -349,7 +349,7 @@
 		    {
 		        type: modifier
 		        modifier: {
-		            type: removeText
+		            type: DisableGameText
 		            filter: site,zone(adventure path),storedTitle
 		        }
 		    }
