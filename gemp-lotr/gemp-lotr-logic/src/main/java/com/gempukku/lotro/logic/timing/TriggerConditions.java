@@ -269,11 +269,7 @@ public class TriggerConditions {
     }
 
     public static boolean forEachKilled(LotroGame game, EffectResult effectResult, Filterable... filters) {
-        if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED) {
-            ForEachKilledResult killResult = (ForEachKilledResult) effectResult;
-            return Filters.and(filters).accepts(game, killResult.getKilledCard());
-        }
-        return false;
+        return forEachKilledBy(game, effectResult, Filters.any, filters);
     }
 
     public static boolean forEachKilledBy(LotroGame game, EffectResult effectResult, Filterable killedBy, Filterable... killed) {

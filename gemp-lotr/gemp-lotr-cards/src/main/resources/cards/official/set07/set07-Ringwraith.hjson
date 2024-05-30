@@ -573,9 +573,9 @@
 		effects: {
 			type: responseEvent
 			trigger: {
-				type: killedBy
+				type: killed
 				filter: character
-				by: nazgul
+				killer: nazgul
 			}
 			effect: [
 				{
