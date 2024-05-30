@@ -14,9 +14,9 @@ public class HasCardInRemoved implements RequirementProducer {
     public Requirement getPlayRequirement(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(object, "player", "count", "filter");
 
-        final String player = FieldUtils.getString(object.get("player"), "player");
+        final String player = FieldUtils.getString(object.get("player"), "player", "you");
         final int count = FieldUtils.getInteger(object.get("count"), "count", 1);
-        final String filter = FieldUtils.getString(object.get("filter"), "filter");
+        final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
         final PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player, environment) : null;
 
