@@ -163,6 +163,7 @@
             optional: true
             trigger: {
                 type: discardFromHandBy
+                player: you
                 by: side(shadow)
                 forced: true
             }

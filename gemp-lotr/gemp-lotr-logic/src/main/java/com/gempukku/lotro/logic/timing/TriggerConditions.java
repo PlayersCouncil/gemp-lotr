@@ -15,12 +15,12 @@ import java.util.Objects;
 public class TriggerConditions {
     public static boolean startOfPhase(LotroGame game, EffectResult effectResult, Phase phase) {
         return (effectResult.getType() == EffectResult.Type.START_OF_PHASE
-                && game.getGameState().getCurrentPhase() == phase);
+                && ((StartOfPhaseResult) effectResult).getPhase() == phase || phase == null);
     }
 
     public static boolean endOfPhase(LotroGame game, EffectResult effectResult, Phase phase) {
         return (effectResult.getType() == EffectResult.Type.END_OF_PHASE
-                && (game.getGameState().getCurrentPhase() == phase || phase == null));
+                && ((EndOfPhaseResult) effectResult).getPhase() == phase || phase == null);
     }
 
     public static boolean startOfTurn(LotroGame game, EffectResult effectResult) {

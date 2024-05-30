@@ -6,8 +6,6 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResol
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.logic.modifiers.CantUseSpecialAbilitiesModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
-import com.gempukku.lotro.logic.modifiers.PlayerCantUseCardSpecialAbilitiesModifier;
-import com.gempukku.lotro.logic.modifiers.PlayersCantUseCardSpecialAbilitiesModifier;
 import org.json.simple.JSONObject;
 
 public class CantUseSpecialAbilities implements ModifierSourceProducer {

@@ -168,13 +168,9 @@
 		keywords: Plains
 		effects: [
 		    {
-		        type: modifier
+		        type: controlledSiteModifier
 		        modifier: {
 		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: self,controlledByShadowPlayer
-		            }
 		            filter: hunter,minion
 		            amount: 1
 		        }

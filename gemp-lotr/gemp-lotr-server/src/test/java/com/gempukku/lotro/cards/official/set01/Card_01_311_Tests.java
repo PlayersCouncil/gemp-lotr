@@ -9,7 +9,8 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_01_311_Tests
 {
@@ -64,18 +65,22 @@ public class Card_01_311_Tests
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SamTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void samPicksUpTheRing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-
+		var sam = scn.GetFreepsCard("card");
+		scn.FreepsMoveCharToTable(sam);
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		PhysicalCardImpl frodo = scn.GetRingBearer();
+		scn.AddWoundsToChar(frodo, 4);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(scn.GetRingBearer(), sam);
+		assertEquals(Zone.DEAD, frodo.getZone());
 	}
 }

@@ -14,8 +14,8 @@ import com.gempukku.lotro.logic.decisions.YesNoDecision;
 import com.gempukku.lotro.logic.effects.AddUntilEndOfPhaseModifierEffect;
 import com.gempukku.lotro.logic.effects.PlayoutDecisionEffect;
 import com.gempukku.lotro.logic.effects.StackActionEffect;
+import com.gempukku.lotro.logic.modifiers.CantBeAssignedToSkirmishModifier;
 import com.gempukku.lotro.logic.modifiers.Condition;
-import com.gempukku.lotro.logic.modifiers.FreePeoplePlayerMayNotAssignCharacterModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.modifiers.PaidAssignmentCostModifier;
 import com.gempukku.lotro.logic.modifiers.condition.AndCondition;
@@ -44,7 +44,7 @@ public class AssignmentCost implements EffectProcessor {
                 new ModifierSource() {
                     @Override
                     public Modifier getModifier(ActionContext actionContext) {
-                        return new FreePeoplePlayerMayNotAssignCharacterModifier(actionContext.getSource(),
+                        return new CantBeAssignedToSkirmishModifier(actionContext.getSource(),
                                 new AndCondition(
                                         RequirementCondition.createCondition(requirements, actionContext),
                                         new Condition() {
@@ -53,7 +53,7 @@ public class AssignmentCost implements EffectProcessor {
                                                 return !game.getModifiersQuerying().assignmentCostWasPaid(game, actionContext.getSource());
                                             }
                                         }
-                                ), actionContext.getSource());
+                                ), actionContext.getGame().getGameState().getCurrentPlayerId(), actionContext.getSource());
                     }
                 });
 

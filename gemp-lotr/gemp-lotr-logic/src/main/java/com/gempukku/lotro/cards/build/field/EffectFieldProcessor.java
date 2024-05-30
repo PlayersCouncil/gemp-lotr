@@ -19,6 +19,7 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("activatedindiscard", new ActivatedInDiscardEffectProcessor());
         effectProcessors.put("aidcost", new AidCost());
         effectProcessors.put("assignmentcost", new AssignmentCost());
+        effectProcessors.put("controlledsitemodifier", new ControlledSiteModifier());
         effectProcessors.put("copycard", new CopyCard());
         effectProcessors.put("deckbuildingrestriction", new DeckBuildingRestrictionGameTextProcessor());
         effectProcessors.put("discardedfromplaytrigger", new DiscardedFromPlayTriggerEffectProcessor());
