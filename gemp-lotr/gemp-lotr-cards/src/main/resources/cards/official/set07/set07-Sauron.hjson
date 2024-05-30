@@ -1374,7 +1374,7 @@
 		        type: Response
 		        trigger: {
 		            type: beforeThreatWounds
-		            killedFilter: companion
+		            filter: companion
 		            deathCause: overwhelm
 		        }
 		        requires: [
@@ -1382,7 +1382,8 @@
                         type: canSpot
                         filter: culture(sauron),orc,inSkirmish
                     }
-                    // TODO: Not sure why this is here, it was in the source code... maybe not needed
+                    // 4bc90765940487de4959dfcee32ad8c130427016
+                    // "Mordor Assassin no longer crashes the game if the RB is overwhelmed"
                     {
                         type: canSpot
                         filter: ringBearer

@@ -12,6 +12,19 @@ public class TriggerCheckerFactory {
     private final Map<String, TriggerCheckerProducer> triggerCheckers = new HashMap<>();
 
     public TriggerCheckerFactory() {
+
+        //Movement triggers
+        triggerCheckers.put("movesfrom", new MovesFrom());
+        triggerCheckers.put("moves", new Moves());
+        triggerCheckers.put("abouttomoveto", new AboutToMoveTo());
+        triggerCheckers.put("movesto", new MovesTo());
+
+        //Timing Triggers
+        triggerCheckers.put("startofturn", new StartOfTurn());
+        triggerCheckers.put("startofphase", new StartOfPhase());
+        triggerCheckers.put("endofphase", new EndOfPhase());
+        triggerCheckers.put("endofturn", new EndOfTurn());
+
         triggerCheckers.put("abouttoaddburden", new AboutToAddBurden());
         triggerCheckers.put("abouttoaddtwilight", new AboutToAddTwilight());
         triggerCheckers.put("abouttobekilled", new AboutToBeKilled());
@@ -20,7 +33,6 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("abouttodrawcard", new AboutToDrawCard());
         triggerCheckers.put("abouttoexert", new AboutToExert());
         triggerCheckers.put("abouttoheal", new AboutToHeal());
-        triggerCheckers.put("abouttomoveto", new AboutToMoveTo());
         triggerCheckers.put("abouttotakecontrolofsite", new AboutToTakeControlOfSite());
         triggerCheckers.put("abouttotakewound", new AboutToTakeWound());
         triggerCheckers.put("addsburden", new AddsBurden());
@@ -33,11 +45,6 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("cancelledskirmish", new CancelledSkirmish());
         triggerCheckers.put("constantlycheck", new ConstantlyCheckTrigger());
         triggerCheckers.put("discarded", new Discarded());
-        triggerCheckers.put("discardfromdeck", new DiscardFromDeck());
-        triggerCheckers.put("discardfromhand", new DiscardFromHand());
-        triggerCheckers.put("discardfromhandby", new DiscardFromHandBy());
-        triggerCheckers.put("endofphase", new EndOfPhase());
-        triggerCheckers.put("endofturn", new EndOfTurn());
         triggerCheckers.put("exertedby", new ExertedBy());
         triggerCheckers.put("exerts", new Exerts());
         triggerCheckers.put("exertsforspecialability", new ExertsForSpecialAbility());
@@ -52,9 +59,6 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("killedinskirmish", new KilledInSkirmish());
         triggerCheckers.put("losesinitiative", new LosesInitiative());
         triggerCheckers.put("losesskirmish", new LosesSkirmish());
-        triggerCheckers.put("moves", new Moves());
-        triggerCheckers.put("movesfrom", new MovesFrom());
-        triggerCheckers.put("movesto", new MovesTo());
         triggerCheckers.put("played", new PlayedTriggerCheckerProducer());
         triggerCheckers.put("playedfromstacked", new PlayedFromStacked());
         triggerCheckers.put("playerdrawscard", new PlayerDrawsCard());
@@ -66,9 +70,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("revealscardfromtopofdrawdeck", new RevealsCardFromTopOfDrawDeck());
         triggerCheckers.put("revealedcardfromhand", new RevealedCardFromHand());
         triggerCheckers.put("skirmishabouttoend", new SkirmishAboutToEnd());
-        triggerCheckers.put("startofphase", new StartOfPhase());
         triggerCheckers.put("startofskirmishinvolving", new StartOfSkirmishInvolving());
-        triggerCheckers.put("startofturn", new StartOfTurn());
         triggerCheckers.put("takencontrolofsite", new TakenControlOfSite());
         triggerCheckers.put("takesoffring", new TakesOffRing());
         triggerCheckers.put("takeswound", new TakesWound());

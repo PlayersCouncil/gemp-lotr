@@ -18,9 +18,9 @@ import java.util.Set;
 public class BeforeThreatWounds implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "killedFilter", "deathCause");
+        FieldUtils.validateAllowedFields(value, "filter", "deathCause");
 
-        String filter = FieldUtils.getString(value.get("killedFilter"), "killedFilter");
+        String filter = FieldUtils.getString(value.get("filter"), "filter");
         KillEffect.Cause deathCause = FieldUtils.getEnum(KillEffect.Cause.class, value.get("deathCause"), "deathCause");
 
         final FilterableSource affectedFilter = environment.getFilterFactory().generateFilter(filter, environment);

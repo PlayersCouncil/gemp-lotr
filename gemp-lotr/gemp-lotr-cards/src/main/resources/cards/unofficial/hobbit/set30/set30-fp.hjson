@@ -1152,8 +1152,9 @@
         type: trigger
         optional: true
         trigger: {
-          type: discardFromHandBy
-          by: follower
+          type: discarded
+          fromZone: hand
+          source: follower
         }
         effect: {
           type: drawCards

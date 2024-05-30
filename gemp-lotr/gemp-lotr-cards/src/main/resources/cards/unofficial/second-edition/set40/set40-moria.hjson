@@ -670,7 +670,8 @@
 			{
 				type: Response
 				trigger: {
-					type: discardFromHand
+					type: discarded
+					fromZone: hand
 					filter: goblin
 					memorize: discardedGoblin
 				}

@@ -85,8 +85,9 @@
 				type: trigger
 				optional: true
 				trigger: {
-					type: discardfromdeck
+					type: discarded
 					filter: your,culture(dwarven)
+					fromZone: deck
 					memorize: topcard
 				}
 				cost:{
