@@ -71,9 +71,9 @@
 		culture: Gandalf
 		twilight: 0
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Spell
-			Skirmish
 		]
 		effects: {
 			type: event
@@ -130,7 +130,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -326,7 +326,7 @@
 		                }
                         {
                             type: putCardsFromDiscardIntoHand
-                            select: choose(culture(gandalf),skirmish,event)
+                            select: choose(culture(gandalf),timeword(skirmish),event)
                         }
 		            ]
 		        }
@@ -364,9 +364,9 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
+		timeword: Maneuver
 		keywords: [
 			Spell
-			Maneuver
 		]
 		effects: {
 			type: event

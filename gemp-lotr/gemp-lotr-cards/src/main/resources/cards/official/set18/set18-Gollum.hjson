@@ -21,7 +21,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: {
@@ -120,7 +120,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {
@@ -166,7 +166,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			requires: {
@@ -298,7 +298,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 
 		effects: {
 			type: event
@@ -428,7 +428,7 @@
 		culture: Gollum
 		twilight: 10
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requires: {
@@ -480,12 +480,12 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
 				type: played
-				filter: skirmish,event
+				filter: timeword(skirmish),event
 			}
 			requires: {
 			    type: canSpot
@@ -529,7 +529,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

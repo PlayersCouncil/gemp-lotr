@@ -54,7 +54,7 @@ public class Card_V1_037_Tests
 		assertEquals(Culture.WRAITH, fell.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, fell.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, fell.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(fell, Keyword.SHADOW)); // test for keywords as needed
+        assertTrue(scn.hasTimeword(fell, Timeword.SHADOW)); // test for keywords as needed
 		assertEquals(0, fell.getBlueprint().getTwilightCost());
 		//assertEquals(, fell.getBlueprint().getStrength());
 		//assertEquals(, fell.getBlueprint().getVitality());

@@ -24,6 +24,7 @@ public class Filters {
     private static final Map<Side, Filter> _sideFilterMap = new HashMap<>();
     private static final Map<Culture, Filter> _cultureFilterMap = new HashMap<>();
     private static final Map<Keyword, Filter> _keywordFilterMap = new HashMap<>();
+    private static final Map<Timeword, Filter> _timewordFilterMap = new HashMap<>();
 
     static {
         for (Culture culture : Culture.values())
@@ -42,6 +43,10 @@ public class Filters {
             _possessionClassFilterMap.put(possessionClass, possessionClass(possessionClass));
         for (Keyword keyword : Keyword.values())
             _keywordFilterMap.put(keyword, keyword(keyword));
+        for (Timeword timeword : Timeword.values()) {
+            _timewordFilterMap.put(timeword, timeword(timeword));
+        }
+
 
         // Some simple shortcuts for filters
         // Only companions can be rangers
@@ -66,6 +71,10 @@ public class Filters {
         return countSpottable(game, filters) >= count;
     }
 
+    public static boolean hasActive(LotroGame game, Filterable... filters) {
+        return findFirstActive(game, filters) != null;
+    }
+
     public static Collection<PhysicalCard> filterActive(LotroGame game, Filterable... filters) {
         Filter filter = Filters.and(filters);
         GetCardsMatchingFilterVisitor getCardsMatchingFilter = new GetCardsMatchingFilterVisitor(game, filter);
@@ -73,7 +82,7 @@ public class Filters {
         return getCardsMatchingFilter.getPhysicalCards();
     }
 
-    public static Collection<PhysicalCard> filter(Iterable<? extends PhysicalCard> cards, LotroGame game, Filterable... filters) {
+    public static Collection<PhysicalCard> filter(LotroGame game, Iterable<? extends PhysicalCard> cards, Filterable... filters) {
         Filter filter = Filters.and(filters);
         List<PhysicalCard> result = new LinkedList<>();
         for (PhysicalCard card : cards) {
@@ -105,6 +114,10 @@ public class Filters {
     }
 
     // Filters available
+
+    public static Filter timeword(Timeword timeword) {
+        return (game, physicalCard) -> physicalCard.getBlueprint().hasTimeword(timeword);
+    }
 
     public static Filter maxResistance(final int resistance) {
         return (game, physicalCard) -> game.getModifiersQuerying().getResistance(game, physicalCard) <= resistance;
@@ -293,7 +306,7 @@ public class Filters {
         return (game, physicalCard) -> {
             Skirmish skirmish = game.getGameState().getSkirmish();
             if (skirmish != null && skirmish.getFellowshipCharacter() != null) {
-                return (skirmish.getFellowshipCharacter() == physicalCard && Filters.filter(skirmish.getShadowCharacters(), game, againstFilter).size() > 0)
+                return (skirmish.getFellowshipCharacter() == physicalCard && Filters.acceptsAny(game, skirmish.getShadowCharacters(), Filters.and(againstFilter)))
                         || (skirmish.getShadowCharacters().contains(physicalCard) && Filters.and(againstFilter).accepts(game, skirmish.getFellowshipCharacter()));
             }
             return false;
@@ -341,7 +354,7 @@ public class Filters {
         return (game, physicalCard) -> {
             for (Assignment assignment : game.getGameState().getAssignments()) {
                 if (assignment.getFellowshipCharacter() == physicalCard)
-                    return Filters.filter(assignment.getShadowCharacters(), game, againstFilters).size() > 0;
+                    return Filters.acceptsAny(game, assignment.getShadowCharacters(), Filters.and(againstFilters));
                 else if (assignment.getShadowCharacters().contains(physicalCard) && assignment.getFellowshipCharacter() != null)
                     return Filters.and(againstFilters).accepts(game, assignment.getFellowshipCharacter());
             }
@@ -492,7 +505,7 @@ public class Filters {
     public static Filter hasAttached(int count, final Filterable... filters) {
         return (game, physicalCard) -> {
             List<PhysicalCard> physicalCardList = game.getGameState().getAttachedCards(physicalCard);
-            return (Filters.filter(physicalCardList, game, filters).size() >= count);
+            return (Filters.filter(game, physicalCardList, filters).size() >= count);
         };
     }
 
@@ -505,7 +518,7 @@ public class Filters {
             List<PhysicalCard> physicalCardList = game.getGameState().getStackedCards(physicalCard);
             if (filter.length == 1 && filter[0] == Filters.any)
                 return physicalCardList.size() >= count;
-            return (Filters.filter(physicalCardList, game, Filters.and(filter, activeSide)).size() >= count);
+            return (Filters.filter(game, physicalCardList, Filters.and(filter, activeSide)).size() >= count);
         };
     }
 
@@ -604,6 +617,8 @@ public class Filters {
             return _cultureFilterMap.get((Culture) filter);
         else if (filter instanceof Keyword)
             return _keywordFilterMap.get((Keyword) filter);
+        else if (filter instanceof Timeword)
+            return _timewordFilterMap.get((Timeword) filter);
         else if (filter instanceof PossessionClass)
             return _possessionClassFilterMap.get((PossessionClass) filter);
         else if (filter instanceof Race)
@@ -660,8 +675,8 @@ public class Filters {
         return changeToFilter(filterable).accepts(game, physicalCard);
     }
 
-    public static boolean acceptsAny(LotroGame game, Filterable filterable, Iterable<PhysicalCard> cards) {
-        Filter filter = changeToFilter(filterable);
+    public static boolean acceptsAny(LotroGame game, Iterable<? extends PhysicalCard> cards, Filterable... filterable) {
+        Filter filter = and(filterable);
         for (PhysicalCard card : cards) {
             if (filter.accepts(game, card))
                 return true;

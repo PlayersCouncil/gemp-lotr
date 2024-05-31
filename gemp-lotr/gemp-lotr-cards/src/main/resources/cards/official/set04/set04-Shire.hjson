@@ -376,7 +376,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -534,7 +534,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -593,7 +593,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			effect: [
@@ -635,7 +635,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -798,7 +798,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: {
@@ -1147,7 +1147,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -1192,9 +1192,9 @@
 		culture: Shire
 		twilight: 1
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Stealth
-			Skirmish
 		]
 		effects: {
 			type: event
@@ -1249,7 +1249,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			effect: [
@@ -1300,9 +1300,9 @@
 		culture: Shire
 		twilight: 1
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Stealth
-			Skirmish
 		]
 		effects: {
 			type: event
@@ -1357,9 +1357,9 @@
 		culture: Shire
 		twilight: 0
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Stealth
-			Skirmish
 		]
 		effects: {
 			type: event

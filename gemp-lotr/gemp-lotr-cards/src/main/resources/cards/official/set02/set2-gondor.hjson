@@ -83,7 +83,7 @@
 		culture: Gondor
 		title: Flee in Terror
 		type: event
-		keyword: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -119,7 +119,7 @@
 		culture: Gondor
 		title: Gondor Will See It Done
 		type: event
-		keyword: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -171,7 +171,7 @@
 		culture: Gondor
 		title: No Mere Ranger
 		type: event
-		keyword: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -201,7 +201,7 @@
 		culture: Gondor
 		title: Sentinels of Númenor
 		type: event
-		keyword: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {

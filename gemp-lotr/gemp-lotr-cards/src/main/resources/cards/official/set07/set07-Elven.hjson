@@ -200,7 +200,7 @@
 		        optional: true
 		        trigger: {
 		            type: played
-		            filter: culture(elven),skirmish,event
+		            filter: culture(elven),timeword(skirmish),event
 		        }
 		        requires: {
 		            type: canSpot
@@ -244,7 +244,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requires: {
@@ -294,7 +294,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -422,7 +422,7 @@
 		        type: Response
 		        trigger: {
 		            type: played
-		            filter: culture(elven),skirmish,event
+		            filter: culture(elven),timeword(skirmish),event
 		        }
 		        cost: {
 		            type: discard
@@ -742,7 +742,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			cost: {
@@ -871,7 +871,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -921,7 +921,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

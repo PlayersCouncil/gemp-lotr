@@ -59,7 +59,7 @@
 		culture: dwarven
 		twilight: 2
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: [
@@ -111,7 +111,7 @@
 				}
 				effect: {
 					type: putCardsFromDeckIntoHand
-					select: choose(culture(dwarven),skirmish,event)
+					select: choose(culture(dwarven),timeword(skirmish),event)
 					reveal: true
 					shuffle: true
 					showAll: true
@@ -124,7 +124,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			effect: {
@@ -255,7 +255,7 @@
     culture: dwarven
     twilight: 1
     type: event
-    keyword: response
+    timeword: response
     effects: {
       type: responseEvent
         requires: [
@@ -380,7 +380,7 @@
               limit: 4
               source: {
                 type: forEachInDiscard
-                filter: event,skirmish,maxTwilight(0)
+                filter: event,timeword(skirmish),maxTwilight(0)
               }
           }
         }
@@ -567,7 +567,7 @@
     culture: elven
     twilight: 1
     type: event
-    keyword: fellowship
+    timeword: fellowship
     effects: {
       type: event
       cost: {
@@ -690,7 +690,7 @@
     culture: elven
     twilight: 2
     type: event
-    keyword: fellowship
+    timeword: fellowship
     effects: {
       type: event
         requires: {
@@ -769,7 +769,7 @@
           times: {
             type: forEachInMemory
             memory: cardsInHand
-            filter: side(free people),skirmish,event
+            filter: side(free people),timeword(skirmish),event
           }
           effect: {
             type: wound
@@ -788,7 +788,7 @@
     culture: gandalf
     twilight: 1
     type: event
-    keyword: skirmish
+    timeword: skirmish
     effects: {
       type: event
       effect: {
@@ -878,7 +878,7 @@
         phase: skirmish
         cost: {
           type: play
-          select: choose(skirmish,event)
+          select: choose(timeword(skirmish),event)
         }
         effect: {
           type: modifyStrength
@@ -908,7 +908,7 @@
       }
       effect: {
         type: playCardFromDiscard
-        select: choose(culture(dwarven),skirmish,event)
+        select: choose(culture(dwarven),timeword(skirmish),event)
       }
       limitPerPhase: 1
     }

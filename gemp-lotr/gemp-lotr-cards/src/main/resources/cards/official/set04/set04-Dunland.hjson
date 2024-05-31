@@ -17,7 +17,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: {
@@ -118,7 +118,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -212,7 +212,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -259,7 +259,7 @@
 		culture: Dunland
 		twilight: 3
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1515,7 +1515,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -1696,7 +1696,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -1787,7 +1787,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -1902,7 +1902,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {

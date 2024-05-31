@@ -1132,7 +1132,7 @@
 		culture: Raider
 		twilight: 7
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requires: {
@@ -1313,7 +1313,7 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -1445,7 +1445,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -1494,7 +1494,7 @@
 		culture: Raider
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1647,7 +1647,7 @@
 		culture: Raider
 		twilight: 5
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -2542,7 +2542,7 @@
 		culture: Raider
 		twilight: 3
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requires: {
@@ -2675,7 +2675,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {

@@ -4,9 +4,9 @@
 		culture: sauron
 		twilight: 2
 		type: event
+		timeword: maneuver
 		keyword: [
 			search
-			maneuver
 		]
 		effects: {
 			type: event
@@ -67,7 +67,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
             requires: {
@@ -145,7 +145,7 @@
 		culture: sauron
 		twilight: 2
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
             requires: [
@@ -221,7 +221,7 @@
 		culture: sauron
 		twilight: 2
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
             requires: {
@@ -244,7 +244,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -267,7 +267,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -288,7 +288,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {
@@ -338,7 +338,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -356,9 +356,9 @@
 		culture: sauron
 		twilight: 3
 		type: event
+		timeword: maneuver
 		keyword: [
 			search
-			maneuver
 		]
 		effects: {
 			type: event
@@ -482,7 +482,7 @@
 		culture: sauron
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -648,7 +648,7 @@
 				type: Response
 				trigger: {
 					type: played
-					filter: side(free people),regroup,event
+					filter: side(free people),timeword(regroup),event
 				}
 				requires: {
 					type: phase
@@ -751,7 +751,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
             requires: {
@@ -963,7 +963,7 @@
 		culture: sauron
 		twilight: 3
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
             requires: {
@@ -1090,7 +1090,7 @@
 		culture: sauron
 		twilight: 1
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {

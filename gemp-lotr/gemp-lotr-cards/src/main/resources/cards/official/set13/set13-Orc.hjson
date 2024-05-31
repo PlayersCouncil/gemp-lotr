@@ -180,7 +180,7 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: [
 		    {
 		        type: discount
@@ -295,7 +295,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -526,7 +526,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -1126,7 +1126,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {

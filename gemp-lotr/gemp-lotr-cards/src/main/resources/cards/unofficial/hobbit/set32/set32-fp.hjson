@@ -86,7 +86,7 @@
 		culture: dwarven
 		twilight: 3
 		type: event
-		keyword: assignment
+		timeword: assignment
 		effects: {
 			type: event
 			cost: {
@@ -164,7 +164,7 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -312,7 +312,7 @@
 		culture: dwarven
 		twilight: 3
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
@@ -771,7 +771,7 @@
     culture: gandalf
     twilight: 1
     type: event
-    keyword: maneuver
+    timeword: maneuver
     effects: {
       type: event
       cost: {
@@ -799,9 +799,9 @@
     culture: gandalf
     twilight: 3
     type: event
+    timeword: maneuver
     keyword: [
       spell
-      maneuver
     ]
     effects: {
       type: event

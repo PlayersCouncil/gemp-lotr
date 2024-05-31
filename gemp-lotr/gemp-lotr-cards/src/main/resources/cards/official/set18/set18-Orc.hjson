@@ -96,7 +96,7 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			requires: {
@@ -353,7 +353,7 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -859,7 +859,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {

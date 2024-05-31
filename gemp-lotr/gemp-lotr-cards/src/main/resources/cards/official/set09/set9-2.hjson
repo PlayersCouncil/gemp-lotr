@@ -659,7 +659,7 @@
 		culture: isengard
 		twilight: 1
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -718,7 +718,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				select: choose(culture(moria),not(event,response))
+				select: choose(culture(moria),not(event,timeword(response)))
 			}
 		}
 	}

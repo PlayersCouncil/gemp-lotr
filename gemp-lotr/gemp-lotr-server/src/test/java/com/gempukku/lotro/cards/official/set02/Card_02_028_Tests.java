@@ -52,7 +52,7 @@ public class Card_02_028_Tests
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
-		assertTrue(scn.HasKeyword(card, Keyword.MANEUVER));
+        assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

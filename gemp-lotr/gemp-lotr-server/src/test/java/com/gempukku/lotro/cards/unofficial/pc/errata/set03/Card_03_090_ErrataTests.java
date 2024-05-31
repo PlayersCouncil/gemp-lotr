@@ -59,7 +59,7 @@ public class Card_03_090_ErrataTests
 		assertEquals(Side.SHADOW, hand.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, hand.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, hand.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(hand, Keyword.MANEUVER));
+        assertTrue(scn.hasTimeword(hand, Timeword.MANEUVER));
 		assertEquals(0, hand.getBlueprint().getTwilightCost());
 	}
 

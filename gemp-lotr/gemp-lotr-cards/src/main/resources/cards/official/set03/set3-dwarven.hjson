@@ -141,7 +141,7 @@
         culture: Dwarven
         twilight: 1
         type: event
-        keyword: Fellowship
+        timeword: fellowship
         effects: {
             type: event
             effect: [

@@ -21,9 +21,9 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
+		timeword: Maneuver
 		keywords: [
 			Spell
-			Maneuver
 		]
 		effects: {
 			type: event
@@ -374,7 +374,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -477,9 +477,9 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Spell
-			Skirmish
 		]
 		effects: {
 			type: event

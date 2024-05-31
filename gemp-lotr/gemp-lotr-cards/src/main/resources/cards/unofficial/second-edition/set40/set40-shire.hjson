@@ -67,7 +67,7 @@
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -466,8 +466,8 @@
 		culture: shire
 		twilight: 1
 		type: event
+		timeword: skirmish
 		keyword: [
-			skirmish
 			stealth
 		]
 		effects: {
@@ -870,7 +870,7 @@
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1010,7 +1010,7 @@
     culture: shire
     twilight: 1
     type: event
-    keyword: skirmish
+    timeword: skirmish
     effects: {
       type: event
       effect: {

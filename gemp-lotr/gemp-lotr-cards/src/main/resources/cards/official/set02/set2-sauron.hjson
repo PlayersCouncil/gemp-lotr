@@ -4,7 +4,7 @@
       culture: Sauron
       title: The Eye of Sauron
       type: event
-      keyword: Shadow
+      timeword: shadow
       twilight: 1
       effects: {
         type: event
@@ -33,7 +33,7 @@
       culture: Sauron
       title: Memory of Many Things
       type: event
-      keyword: Maneuver
+      timeword: maneuver
       twilight: 2
       effects: {
           type: event
@@ -140,7 +140,7 @@
       culture: Sauron
       title: Southern Spies
       type: event
-      keyword: Response
+      timeword: response
       twilight: 0
       effects: {
         type: responseEvent

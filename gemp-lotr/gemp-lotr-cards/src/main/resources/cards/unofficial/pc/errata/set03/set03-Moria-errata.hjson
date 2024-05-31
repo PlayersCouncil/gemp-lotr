@@ -17,7 +17,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
             requires: [

@@ -21,7 +21,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {
@@ -80,7 +80,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -260,7 +260,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
@@ -312,7 +312,7 @@
 		culture: Sauron
 		twilight: 2
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			effect: [
@@ -2769,7 +2769,7 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: {
@@ -2968,7 +2968,7 @@
 		culture: Sauron
 		twilight: 4
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

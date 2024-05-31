@@ -34,7 +34,7 @@ public class BeforeThreatWounds implements TriggerCheckerProducer {
                     KilledResult killResult = threatWoundsEffect.getKillResult();
                     if (deathCause == null || killResult.getCause() == deathCause) {
                         Set<PhysicalCard> killedCards = killResult.getKilledCards();
-                        return !Filters.filter(killedCards, actionContext.getGame(), affectedFilter.getFilterable(actionContext)).isEmpty();
+                        return !Filters.filter(actionContext.getGame(), killedCards, affectedFilter.getFilterable(actionContext)).isEmpty();
                     }
                 }
                 return false;

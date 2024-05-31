@@ -34,7 +34,7 @@
         culture: Wraith
         twilight: 1
         type: event
-        keyword: Skirmish
+        timeword: skirmish
         effects: {
             type: event
             requires: {
@@ -102,7 +102,7 @@
         culture: Wraith
         twilight: 2
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             requires: {
@@ -133,7 +133,7 @@
         culture: Wraith
         twilight: 0
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             requires: {

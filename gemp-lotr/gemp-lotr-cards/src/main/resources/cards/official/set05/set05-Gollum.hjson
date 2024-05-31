@@ -21,7 +21,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -295,7 +295,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			requires: {
@@ -536,7 +536,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: [
+		timeword: [
 			Shadow
 			Skirmish
 		]

@@ -4,7 +4,7 @@
 		culture: isengard
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -134,8 +134,8 @@
 		culture: isengard
 		twilight: 2
 		type: event
+		timeword: skirmish
 		keyword: [
-			skirmish
 			spell
 		]
 		effects: {
@@ -156,7 +156,7 @@
 		culture: isengard
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -178,7 +178,7 @@
 		culture: isengard
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -225,8 +225,8 @@
 		culture: isengard
 		twilight: 1
 		type: event
+		timeword: maneuver
 		keyword: [
-			maneuver
 			spell
 		]
 		effects: {
@@ -257,7 +257,7 @@
 		culture: isengard
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -501,7 +501,7 @@
 		culture: isengard
 		twilight: 2
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {
@@ -604,8 +604,8 @@
 		culture: isengard
 		twilight: 1
 		type: event
+		timeword: maneuver
 		keyword: [
-			maneuver
 			spell
 		]
 		effects: {
@@ -677,7 +677,7 @@
 		culture: isengard
 		twilight: 1
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -848,8 +848,8 @@
     culture: isengard
     twilight: 1
     type: event
+    timeword: maneuver
     keyword: [
-      maneuver
       spell
     ]
     effects: {
@@ -898,8 +898,8 @@
     culture: isengard
     twilight: 2
     type: event
+    timeword: response
     keyword: [
-      response
       spell
     ]
     effects: {
@@ -964,7 +964,7 @@
     culture: isengard
     twilight: 1
     type: event
-    keyword: maneuver
+    timeword: maneuver
     effects: {
       type: event
       cost: [

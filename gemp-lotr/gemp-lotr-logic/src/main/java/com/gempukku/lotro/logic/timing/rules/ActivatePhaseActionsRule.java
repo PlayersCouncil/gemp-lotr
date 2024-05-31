@@ -26,7 +26,7 @@ public class ActivatePhaseActionsRule {
                     @Override
                     public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
                         List<Action> result = new LinkedList<>();
-                        for (PhysicalCard activableCard : Filters.filter(game.getGameState().getInPlay(), game, getActivatableCardsFilter(playerId))) {
+                        for (PhysicalCard activableCard : Filters.filter(game, game.getGameState().getInPlay(), getActivatableCardsFilter(playerId))) {
                             if (!game.getModifiersQuerying().hasTextRemoved(game, activableCard)) {
                                 final List<? extends ActivateCardAction> actions = activableCard.getBlueprint().getPhaseActionsInPlay(playerId, game, activableCard);
                                 if (actions != null)

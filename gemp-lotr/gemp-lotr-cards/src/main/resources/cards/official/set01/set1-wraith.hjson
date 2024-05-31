@@ -4,7 +4,7 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -22,7 +22,7 @@
 		culture: wraith
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -44,7 +44,7 @@
 		culture: wraith
 		twilight: 5
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -259,7 +259,7 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
             requires: {
@@ -343,9 +343,9 @@
 		culture: wraith
 		twilight: 1
 		type: event
+		timeword: maneuver
 		keyword: [
 			search
-			maneuver
 		]
 		effects: {
 			type: event
@@ -364,7 +364,7 @@
 		culture: wraith
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -387,7 +387,7 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -418,9 +418,9 @@
 		culture: wraith
 		twilight: 1
 		type: event
+		timeword: shadow
 		keyword: [
 			search
-			shadow
 		]
 		effects: {
 			type: event
@@ -508,7 +508,7 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
@@ -657,7 +657,7 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -675,7 +675,7 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
             requires: {
@@ -748,7 +748,7 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -766,7 +766,7 @@
 		culture: wraith
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -789,7 +789,7 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

@@ -5,7 +5,7 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
@@ -258,7 +258,7 @@
 		culture: wraith
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

@@ -30,7 +30,7 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -119,7 +119,7 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -379,7 +379,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
             requires: {
@@ -433,7 +433,7 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {

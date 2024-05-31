@@ -79,7 +79,7 @@
 			phase: skirmish
 			cost: {
 				type: play
-				select: choose(culture(gondor),skirmish,event)
+				select: choose(culture(gondor),timeword(skirmish),event)
 			}
 			effect: {
 				type: modifyStrength

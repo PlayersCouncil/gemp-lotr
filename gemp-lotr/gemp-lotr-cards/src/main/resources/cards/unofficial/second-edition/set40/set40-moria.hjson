@@ -78,7 +78,7 @@
 				type: trigger
 				trigger: {
 					type: played
-					filter: culture(dwarven),skirmish,event
+					filter: culture(dwarven),timeword(skirmish),event
 				}
 				effect: {
 					type: exert
@@ -168,7 +168,7 @@
 		culture: moria
 		twilight: 3
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
@@ -514,7 +514,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
             requires: {
@@ -619,7 +619,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
@@ -634,7 +634,7 @@
 		culture: moria
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -753,7 +753,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
             requires: {

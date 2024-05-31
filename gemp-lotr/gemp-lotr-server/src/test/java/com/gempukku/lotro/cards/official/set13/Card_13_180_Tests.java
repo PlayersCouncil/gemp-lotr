@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set13;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -54,7 +53,7 @@ public class Card_13_180_Tests
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.TOIL));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.TOIL));
-		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
+        assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}
 

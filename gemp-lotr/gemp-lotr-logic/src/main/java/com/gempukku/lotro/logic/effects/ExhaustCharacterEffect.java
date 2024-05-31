@@ -36,7 +36,7 @@ public class ExhaustCharacterEffect extends AbstractSubActionEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return Filters.filterActive(game, _filters).size() > 0;
+        return Filters.hasActive(game, _filters);
     }
 
     @Override

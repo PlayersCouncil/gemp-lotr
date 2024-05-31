@@ -43,7 +43,7 @@
 		culture: gandalf
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: [
 			Make Gandalf strength +1.
 			If Gandalf wins this skirmish, you may draw 2 cards.
@@ -120,8 +120,8 @@
 		culture: gandalf
 		twilight: 3
 		type: event
+		timeword: skirmish
 		keyword: [
-			skirmish
 			spell
 		]
 		gametext: [
@@ -159,8 +159,8 @@
 		culture: gandalf
 		twilight: 1
 		type: event
+		timeword: skirmish
 		keyword: [
-			skirmish
 			spell
 		]
 		gametext: [
@@ -196,8 +196,8 @@
 		culture: gandalf
 		twilight: 0
 		type: event
+		timeword: fellowship
 		keyword: [
-			fellowship
 			spell
 		]
 		gametext: [
@@ -531,8 +531,8 @@
 		culture: gandalf
 		twilight: 0
 		type: event
+		timeword: regroup
 		keyword: [
-			regroup
 			spell
 		]
 		gametext: [
@@ -598,8 +598,8 @@
 		culture: gandalf
 		twilight: 1
 		type: event
+		timeword: maneuver
 		keyword: [
-			maneuver
 			spell
 		]
 		gametext: [
@@ -841,8 +841,8 @@
     culture: gandalf
     twilight: 2
     type: event
+    timeword: maneuver
     keyword: [
-      maneuver
       spell
     ]
     gametext: [
@@ -889,8 +889,8 @@
     culture: gandalf
     twilight: 2
     type: event
+    timeword: skirmish
     keyword: [
-      skirmish
       spell
     ]
     gametext: [
@@ -920,7 +920,7 @@
     culture: gandalf
     twilight: 2
     type: event
-    keyword: skirmish
+    timeword: skirmish
     gametext: If Gandalf is not assigned to a skirmish, have him replace another unbound companion in a skirmish. Gandalf is strength +2 while in that skirmish.
     lore: \The Black Speech of Mordor may yet be heard in every corner of the West!\
     effects: {
@@ -949,7 +949,7 @@
     culture: gandalf
     twilight: 3
     type: event
-    keyword: [
+    timeword: [
       fellowship
       maneuver
     ]
@@ -972,7 +972,7 @@
     culture: gandalf
     twilight: 1
     type: event
-    keyword: [
+    timeword: [
       fellowship
       regroup
     ]
@@ -1011,7 +1011,7 @@
     culture: gandalf
     twilight: 1
     type: event
-    keyword: fellowship
+    timeword: fellowship
     gametext: Spot Gandalf and exert a companion of another culture to take a card from that companion's culture into hand from your draw deck.
     lore: Gandalf often offered counsel to the leaders of Free Peoples.
     effects: {
@@ -1039,7 +1039,7 @@
     culture: gandalf
     twilight: 1
     type: event
-    keyword: fellowship
+    timeword: fellowship
     gametext: Play a {gandalf} character from your draw deck.
     lore: \A wizard is never late, Frodo Baggins, nor is he early. He arrives precisely when he means to.\
     effects: {
@@ -1109,7 +1109,7 @@
     culture: gandalf
     twilight: 1
     type: event
-    keyword: skirmish
+    timeword: skirmish
     gametext: Spot Gandalf to make a minion strength -2 (or -3 if it is skirmishing a companion with 5 or more resistance.)
     lore: \The Dark Fire will not avail you, Flame of Udûn!\
     effects: {

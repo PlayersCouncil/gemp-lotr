@@ -458,7 +458,7 @@
 		culture: Dunland
 		twilight: 2
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

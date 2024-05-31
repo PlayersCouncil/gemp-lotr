@@ -26,14 +26,14 @@ public class PlayUtils {
         };
     }
 
-    public static Map<Phase, Keyword> PhaseKeywordMap = ImmutableMap.copyOf(new HashMap<>() {{
-        put(Phase.FELLOWSHIP, Keyword.FELLOWSHIP);
-        put(Phase.SHADOW, Keyword.SHADOW);
-        put(Phase.MANEUVER, Keyword.MANEUVER);
-        put(Phase.ARCHERY, Keyword.ARCHERY);
-        put(Phase.ASSIGNMENT, Keyword.ASSIGNMENT);
-        put(Phase.SKIRMISH, Keyword.SKIRMISH);
-        put(Phase.REGROUP, Keyword.REGROUP);
+    public static Map<Phase, Timeword> PhaseKeywordMap = ImmutableMap.copyOf(new HashMap<>() {{
+        put(Phase.FELLOWSHIP, Timeword.FELLOWSHIP);
+        put(Phase.SHADOW, Timeword.SHADOW);
+        put(Phase.MANEUVER, Timeword.MANEUVER);
+        put(Phase.ARCHERY, Timeword.ARCHERY);
+        put(Phase.ASSIGNMENT, Timeword.ASSIGNMENT);
+        put(Phase.SKIRMISH, Timeword.SKIRMISH);
+        put(Phase.REGROUP, Timeword.REGROUP);
     }});
 
     private static Filter getFullAttachValidTargetFilter(final LotroGame game, final PhysicalCard card, int twilightModifier, int withTwilightRemoved) {
@@ -122,15 +122,13 @@ public class PlayUtils {
                 && !(checkRuleOfNine(game, card) && checkPlayRingBearer(game, card)))
             return false;
 
-        if(blueprint.getCardType() == CardType.EVENT)
-        {
-            if(game.getModifiersQuerying().hasKeyword(game, card, Keyword.RESPONSE)) {
+        if (blueprint.getCardType() == CardType.EVENT) {
+            if (card.getBlueprint().hasTimeword(Timeword.RESPONSE)) {
                 if (ignoreResponseEvents)
                     return false;
-            }
-            else {
-                final Keyword phaseKeyword = PhaseKeywordMap.get(game.getGameState().getCurrentPhase());
-                if (phaseKeyword != null && !game.getModifiersQuerying().hasKeyword(game, card, phaseKeyword))
+            } else {
+                final Timeword timeword = PhaseKeywordMap.get(game.getGameState().getCurrentPhase());
+                if (timeword != null && !card.getBlueprint().hasTimeword(timeword))
                     return false;
             }
         }
@@ -159,7 +157,7 @@ public class PlayUtils {
 
         final int activeCount = Filters.countActive(game, Filters.name(blueprint.getSanitizedTitle()));
         return activeCount == 0
-                && (ignoreCheckingDeadPile || (Filters.filter(game.getGameState().getDeadPile(self.getOwner()), game, Filters.name(blueprint.getSanitizedTitle())).size() == 0));
+                && (ignoreCheckingDeadPile || (Filters.filter(game, game.getGameState().getDeadPile(self.getOwner()), Filters.name(blueprint.getSanitizedTitle())).size() == 0));
     }
 
     private static boolean checkRuleOfNine(LotroGame game, PhysicalCard self) {
@@ -171,7 +169,7 @@ public class PlayUtils {
 
     private static int getTotalCompanions(String playerId, LotroGame game) {
         return Filters.countActive(game, CardType.COMPANION)
-                + Filters.filter(game.getGameState().getDeadPile(playerId), game, CardType.COMPANION).size();
+                + Filters.filter(game, game.getGameState().getDeadPile(playerId), CardType.COMPANION).size();
     }
 
     private static boolean checkPlayRingBearer(LotroGame game, PhysicalCard self) {

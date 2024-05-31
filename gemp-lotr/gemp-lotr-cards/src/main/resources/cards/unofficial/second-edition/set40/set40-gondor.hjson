@@ -166,7 +166,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -384,7 +384,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -514,8 +514,8 @@
 		culture: gondor
 		twilight: 1
 		type: event
+		timeword: maneuver
 		keyword: [
-			maneuver
 			tale
 		]
 		effects: {
@@ -547,7 +547,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: [
+		timeword: [
 			fellowship
 			regroup
 		]
@@ -616,7 +616,7 @@
 		culture: gondor
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requiresRanger: true
@@ -662,7 +662,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requiresRanger: true
@@ -780,7 +780,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -831,7 +831,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
       type: event
       effect: {

@@ -1,9 +1,11 @@
 package com.gempukku.lotro.cards.official.set11;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -52,8 +54,8 @@ public class Card_11_066_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
-		assertTrue(scn.HasKeyword(card, Keyword.REGROUP));
+        assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
+        assertTrue(scn.hasTimeword(card, Timeword.REGROUP));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

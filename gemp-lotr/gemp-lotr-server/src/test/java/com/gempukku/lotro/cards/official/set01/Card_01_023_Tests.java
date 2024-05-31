@@ -60,7 +60,7 @@ public class Card_01_023_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
+        assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

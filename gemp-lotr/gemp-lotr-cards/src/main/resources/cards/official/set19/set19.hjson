@@ -136,7 +136,7 @@
 		culture: dwarven
 		twilight: 2
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
             requires: {
@@ -1049,7 +1049,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {

@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set03;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -53,7 +52,7 @@ public class Card_03_112_Tests
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.STEALTH));
-		assertTrue(scn.HasKeyword(card, Keyword.SKIRMISH));
+        assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

@@ -93,7 +93,7 @@
         culture: Shire
         twilight: 1
         type: event
-        keyword: Fellowship
+        timeword: fellowship
         effects: {
             type: event
             requires: {
@@ -179,9 +179,9 @@
         culture: Shire
         twilight: 1
         type: event
+        timeword: Skirmish
         keyword:
         [
-            Skirmish
             Stealth
         ]
         effects: {

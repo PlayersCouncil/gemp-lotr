@@ -19,7 +19,7 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		keyword: Archery
+		timeword: archery
 		effects: {
 			type: event
 			effect: [

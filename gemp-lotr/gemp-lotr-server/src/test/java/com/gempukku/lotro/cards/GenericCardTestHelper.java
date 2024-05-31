@@ -930,6 +930,10 @@ public class GenericCardTestHelper extends AbstractAtTest {
         return _game.getModifiersQuerying().hasKeyword(_game, card, keyword);
     }
 
+    public boolean hasTimeword(PhysicalCardImpl card, Timeword timeword) {
+        return card.getBlueprint().hasTimeword(timeword);
+    }
+
     public int GetKeywordCount(PhysicalCardImpl card, Keyword keyword)
     {
         return _game.getModifiersQuerying().getKeywordCount(_game, card, keyword);

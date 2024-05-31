@@ -61,7 +61,7 @@ public class Card_17_015_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
+        assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
 		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}

@@ -92,7 +92,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keywords: [
+		timeword: [
 			Skirmish
 			Response
 		]

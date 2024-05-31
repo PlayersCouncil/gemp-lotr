@@ -82,7 +82,7 @@
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -233,7 +233,7 @@
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -253,7 +253,7 @@
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: [
@@ -311,9 +311,9 @@
 		culture: shire
 		twilight: 1
 		type: event
+		timeword: skirmish
 		keyword: [
 			stealth
-			skirmish
 		]
 		effects: {
 			type: event
@@ -383,9 +383,9 @@
 		culture: shire
 		twilight: 1
 		type: event
+		timeword: skirmish
 		keyword: [
 			stealth
-			skirmish
 		]
 		effects: {
 			type: event
@@ -552,7 +552,7 @@
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -651,7 +651,7 @@
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -775,7 +775,7 @@
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -859,7 +859,7 @@
 		culture: shire
 		twilight: 1
 		type: event
-		keyword: [
+		timeword: [
 			maneuver
 			skirmish
 		]

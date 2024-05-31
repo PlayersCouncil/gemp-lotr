@@ -185,7 +185,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			requires: {
@@ -194,7 +194,7 @@
 			}
 			trigger: {
 				type: played
-				filter: skirmish,event
+				filter: timeword(skirmish),event
 			}
 			effect: {
 				type: cancelEvent

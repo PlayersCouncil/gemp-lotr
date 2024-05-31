@@ -307,7 +307,7 @@
 		culture: Rohan
 		twilight: 3
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -477,7 +477,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			cost: {

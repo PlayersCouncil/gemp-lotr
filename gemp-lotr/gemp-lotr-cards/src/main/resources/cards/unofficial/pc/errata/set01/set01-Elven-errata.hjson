@@ -17,7 +17,7 @@
 		culture: elven
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -92,7 +92,7 @@
 		culture: elven
 		twilight: 2
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {

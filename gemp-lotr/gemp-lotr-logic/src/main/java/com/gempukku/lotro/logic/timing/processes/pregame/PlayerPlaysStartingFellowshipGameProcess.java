@@ -39,7 +39,7 @@ public class PlayerPlaysStartingFellowshipGameProcess implements GameProcess {
     }
 
     private Collection<PhysicalCard> getPossibleCharacters(final LotroGame game, final String playerId) {
-        return Filters.filter(game.getGameState().getDeck(playerId), game,
+        return Filters.filter(game, game.getGameState().getDeck(playerId),
                 CardType.COMPANION,
                 new Filter() {
                     @Override

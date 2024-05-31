@@ -19,7 +19,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

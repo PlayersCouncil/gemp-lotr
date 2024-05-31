@@ -17,7 +17,7 @@
 		culture: uruk-hai
 		twilight: 4
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
             requires: {

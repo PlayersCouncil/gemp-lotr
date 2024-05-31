@@ -21,7 +21,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			requires: [
@@ -283,7 +283,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			requires: {
@@ -387,7 +387,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -695,7 +695,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			requires: {
@@ -1909,7 +1909,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1962,9 +1962,9 @@
 		culture: Orc
 		twilight: 8
 		type: Event
+		timeword: Assignment
 		keywords: [
 			Toil 3
-			Assignment
 		]
 		effects: {
 			type: event

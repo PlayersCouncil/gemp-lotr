@@ -21,7 +21,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			requires: {
@@ -134,7 +134,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -188,7 +188,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

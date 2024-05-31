@@ -134,7 +134,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

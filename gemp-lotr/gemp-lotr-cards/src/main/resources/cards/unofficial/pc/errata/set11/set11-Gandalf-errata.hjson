@@ -18,7 +18,7 @@
 		culture: gandalf
 		twilight: 1
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: [

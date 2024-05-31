@@ -21,7 +21,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -67,9 +67,9 @@
 		culture: Shire
 		twilight: 2
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Stealth
-			Skirmish
 		]
 		effects: {
 			type: event
@@ -317,9 +317,9 @@
 		culture: Shire
 		twilight: 1
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Stealth
-			Skirmish
 		]
 		effects: {
 			type: event
@@ -430,9 +430,9 @@
 		culture: Shire
 		twilight: 6
 		type: Event
+		timeword: Fellowship
 		keywords: [
 			Toil 2
-			Fellowship
 		]
 		effects: {
 			type: event
@@ -725,7 +725,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -771,7 +771,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -819,7 +819,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			effect: [

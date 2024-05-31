@@ -25,7 +25,7 @@ public class MemoryMatches implements RequirementProducer {
             final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
             final Filterable filterable = filterableSource.getFilterable(actionContext);
             Evaluator countEvaluator = countSource.getEvaluator(actionContext);
-            return Filters.filter(cardsFromMemory, actionContext.getGame(), filterable).size() >= countEvaluator.evaluateExpression(actionContext.getGame(), null);
+            return Filters.filter(actionContext.getGame(), cardsFromMemory, filterable).size() >= countEvaluator.evaluateExpression(actionContext.getGame(), null);
         };
     }
 }

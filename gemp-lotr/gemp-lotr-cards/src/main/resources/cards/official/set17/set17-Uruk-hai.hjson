@@ -151,7 +151,7 @@
 		culture: Uruk-hai
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1441,7 +1441,7 @@
 		culture: Uruk-hai
 		twilight: 2
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			effect: [

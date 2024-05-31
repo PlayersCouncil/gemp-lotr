@@ -132,7 +132,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -490,7 +490,7 @@
 		        trigger: {
 		            type: played
 		            player: you
-		            filter: culture(elven),skirmish,event
+		            filter: culture(elven),timeword(skirmish),event
 		        }
 		        effect: {
 		            type: reinforceTokens
@@ -552,7 +552,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(elven),skirmish,event)
+		            select: choose(culture(elven),timeword(skirmish),event)
 		        }
 		    }
 		    {
@@ -788,7 +788,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {

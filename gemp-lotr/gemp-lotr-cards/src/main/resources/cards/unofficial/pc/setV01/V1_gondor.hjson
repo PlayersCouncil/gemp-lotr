@@ -289,7 +289,7 @@
 				optional: true
 				trigger: {
 					type: played
-					filter: your,skirmish,event
+					filter: your,timeword(skirmish),event
 				}
 				requires: [
 					{

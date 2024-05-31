@@ -332,7 +332,7 @@
         culture: Moria
         title: Final Cry
         type: event
-        keyword: Response
+        timeword: response
         effects: {
             type: responseEvent
             trigger: {
@@ -402,7 +402,7 @@
         culture: Moria
         title: Foul Things
         type: event
-        keyword: Shadow
+        timeword: shadow
         effects: {
             type: event
             effect: {
@@ -631,7 +631,7 @@
         culture: Moria
         title: Must Do Without Hope
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             cost: {
@@ -650,7 +650,7 @@
         culture: Moria
         title: Old Differences
         type: event
-        keyword: Skirmish
+        timeword: skirmish
         effects: {
             type: event
             effect: {
@@ -680,7 +680,7 @@
         culture: Moria
         title: Power and Terror
         type: event
-        keyword: Shadow
+        timeword: shadow
         effects: {
             type: event
             cost: {
@@ -731,7 +731,7 @@
         culture: Moria
         title: Troubled Mountains
         type: event
-        keyword: Shadow
+        timeword: shadow
         effects: {
             type: event
             cost: {

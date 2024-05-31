@@ -142,7 +142,7 @@
 		culture: Isengard
 		title: Too Much Attention
 		type: event
-		keyword: Response
+		timeword: response
 		effects: {
 			type: responseEvent
             requires: {

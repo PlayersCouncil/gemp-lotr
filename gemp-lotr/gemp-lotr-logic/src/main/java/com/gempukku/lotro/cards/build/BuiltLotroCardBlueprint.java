@@ -32,6 +32,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private Race race;
     private Signet signet;
     private Map<Keyword, Integer> keywords;
+    private Set<Timeword> timewords;
     private int cost = -1;
     private int strength;
     private int vitality;
@@ -338,6 +339,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         this.keywords = keywords;
     }
 
+    public void setTimewords(Set<Timeword> timewords) {
+        this.timewords = timewords;
+    }
+
     public void setCost(int cost) {
         this.cost = cost;
     }
@@ -497,6 +502,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     @Override
     public boolean hasKeyword(Keyword keyword) {
         return keywords != null && keywords.containsKey(keyword);
+    }
+
+    @Override
+    public boolean hasTimeword(Timeword timeword) {
+        return timewords != null && timewords.contains(timeword);
     }
 
     @Override
@@ -760,6 +770,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, effect);
                 if (beforeActivatedTrigger.isValid(actionContext)) {
                     ActivateCardAction action = new ActivateCardAction(self);
+                    action.setActionTimeword(Timeword.RESPONSE);
                     beforeActivatedTrigger.createAction(action, actionContext);
                     result.add(action);
                 }
@@ -790,6 +801,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, effectResult, null);
                 if (afterActivatedTrigger.isValid(actionContext)) {
                     ActivateCardAction action = new ActivateCardAction(self);
+                    action.setActionTimeword(Timeword.RESPONSE);
                     afterActivatedTrigger.createAction(action, actionContext);
                     result.add(action);
                 }
@@ -1083,13 +1095,13 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 && cardType != CardType.CONDITION)
             throw new InvalidCardDefinitionException("Only minions, sites, and conditions have a site number, use siteHome for allies");
         if (cardType == CardType.EVENT) {
-            List<Keyword> requiredKeywords = Arrays.asList(
-                    Keyword.RESPONSE, Keyword.FELLOWSHIP, Keyword.SHADOW, Keyword.MANEUVER, Keyword.ARCHERY, Keyword.ASSIGNMENT,
-                    Keyword.SKIRMISH, Keyword.REGROUP);
-            if (keywords == null || Collections.disjoint(keywords.keySet(), requiredKeywords))
-                throw new InvalidCardDefinitionException("Events have to have a response or phase keyword");
+            List<Timeword> requiredTimewords = Arrays.asList(
+                    Timeword.RESPONSE, Timeword.FELLOWSHIP, Timeword.SHADOW, Timeword.MANEUVER, Timeword.ARCHERY, Timeword.ASSIGNMENT,
+                    Timeword.SKIRMISH, Timeword.REGROUP);
+            if (timewords == null || Collections.disjoint(timewords, requiredTimewords))
+                throw new InvalidCardDefinitionException("Events have to have a timeword(s)");
 
-            if (keywords.containsKey(Keyword.RESPONSE)) {
+            if (timewords.contains(Timeword.RESPONSE)) {
                 if (optionalInHandBeforeActions == null && optionalInHandAfterActions == null)
                     throw new InvalidCardDefinitionException("Response events have to have responseEvent type effect");
             } else {
@@ -1097,6 +1109,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                     throw new InvalidCardDefinitionException("Events have to have an event type effect");
             }
         }
+        if (timewords != null && cardType != CardType.EVENT)
+            throw new InvalidCardDefinitionException("Only events should have timewords");
         if (cardType != CardType.EVENT && playEventAction != null)
             throw new InvalidCardDefinitionException("Only events should have an event type effect");
         if (cost == -1)

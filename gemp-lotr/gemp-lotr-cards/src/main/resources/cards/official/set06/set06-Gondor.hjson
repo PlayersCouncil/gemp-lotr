@@ -360,7 +360,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -414,7 +414,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requiresRanger: true
@@ -523,7 +523,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

@@ -614,9 +614,9 @@
 		culture: Men
 		twilight: 6
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Toil 2
-			Skirmish
 		]
 		effects: {
 			type: event
@@ -1137,10 +1137,12 @@
 		culture: Men
 		twilight: 4
 		type: Event
+		timeword: [
+            Maneuver
+            Regroup
+        ]
 		keywords: [
 			Toil 2
-			Maneuver
-			Regroup
 		]
 		effects: {
 			type: event

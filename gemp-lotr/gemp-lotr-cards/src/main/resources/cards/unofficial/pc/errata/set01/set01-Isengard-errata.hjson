@@ -17,7 +17,7 @@
 		culture: isengard
 		twilight: 2
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			effect: {
@@ -135,7 +135,7 @@
 	# 	culture: isengard
 	# 	twilight: 0
 	# 	type: event
-	# 	keyword: skirmish
+	# 	timeword: skirmish
 	# 	effects: {
 	# 		type: event
 	# 		effect: {
@@ -206,7 +206,7 @@
 		culture: isengard
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {

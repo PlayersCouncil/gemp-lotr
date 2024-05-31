@@ -356,7 +356,7 @@ public class ValueResolver {
                 return new SmartValueSource(environment, object,
                         actionContext -> {
                             Filterable filterable = filterableSource.getFilterable(actionContext);
-                            return (game, cardAffected) -> Filters.filter(game.getGameState().getDeadPile(game.getGameState().getCurrentPlayerId()), game, filterable).size();
+                            return (game, cardAffected) -> Filters.filter(game, game.getGameState().getDeadPile(game.getGameState().getCurrentPlayerId()), filterable).size();
                         });
             } else if (type.equalsIgnoreCase("forEachInDiscard")) {
                 FieldUtils.validateAllowedFields(object, "discard", "filter", "over", "limit", "multiplier", "divider");
@@ -371,10 +371,10 @@ public class ValueResolver {
                             return (game, cardAffected) -> {
                                 int count = 0;
                                 if (playerId != null) {
-                                    count += Filters.filter(game.getGameState().getDiscard(playerId), game, filterable).size();
+                                    count += Filters.filter(game, game.getGameState().getDiscard(playerId), filterable).size();
                                 } else {
                                     for (String player : game.getGameState().getPlayerOrder().getAllPlayers())
-                                        count += Filters.filter(game.getGameState().getDiscard(player), game, filterable).size();
+                                        count += Filters.filter(game, game.getGameState().getDiscard(player), filterable).size();
                                 }
 
                                 return count;
@@ -392,7 +392,7 @@ public class ValueResolver {
                         actionContext -> {
                             String playerId = player.getPlayer(actionContext);
                             Filterable filterable = filterableSource.getFilterable(actionContext);
-                            return (game, cardAffected) -> Filters.filter(game.getGameState().getHand(playerId), game, filterable).size();
+                            return (game, cardAffected) -> Filters.filter(game, game.getGameState().getHand(playerId), filterable).size();
                         });
             } else if (type.equalsIgnoreCase("forEachInMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "filter", "over", "limit", "multiplier", "divider");
@@ -401,7 +401,7 @@ public class ValueResolver {
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) ->
-                                Filters.filter(actionContext.getCardsFromMemory(memory), game,
+                                Filters.filter(game, actionContext.getCardsFromMemory(memory),
                                         filterableSource.getFilterable(actionContext)).size());
             } else if (type.equalsIgnoreCase("forEachKeyword")) {
                 FieldUtils.validateAllowedFields(object, "filter", "keyword", "over", "limit", "multiplier", "divider");
@@ -484,7 +484,7 @@ public class ValueResolver {
                             return (game, cardAffected) -> {
                                 int count = 0;
                                 for (PhysicalCard card : Filters.filterActive(game, onFilter)) {
-                                    count += Filters.filter(game.getGameState().getStackedCards(card), game, stackedFilter).size();
+                                    count += Filters.filter(game, game.getGameState().getStackedCards(card), stackedFilter).size();
                                 }
                                 return count;
                             };

@@ -5,7 +5,7 @@
         culture: Isengard
         twilight: 1
         type: event
-        keyword: Shadow
+        timeword: shadow
         effects: {
             type: event
             requires: {
@@ -35,7 +35,7 @@
         culture: Isengard
         twilight: 0
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             requires: {
@@ -63,7 +63,7 @@
         culture: Isengard
         twilight: 2
         type: event
-        keyword: Regroup
+        timeword: regroup
         effects: {
             type: event
             effect: [
@@ -111,7 +111,7 @@
         culture: Isengard
         twilight: 2
         type: event
-        keyword: Shadow
+        timeword: shadow
         effects: {
             type: event
             requires: [
@@ -383,7 +383,7 @@
         culture: Isengard
         twilight: 1
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             cost: {
@@ -695,7 +695,7 @@
         culture: Isengard
         twilight: 0
         type: event
-        keyword: Skirmish
+        timeword: skirmish
         effects: {
             type: event
             effect: {
@@ -771,7 +771,7 @@
         culture: Isengard
         twilight: 1
         type: event
-        keyword: Regroup
+        timeword: regroup
         effects: {
             type: event
             cost: {

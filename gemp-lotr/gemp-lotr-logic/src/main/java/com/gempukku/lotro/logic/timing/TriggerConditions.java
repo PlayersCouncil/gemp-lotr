@@ -35,7 +35,7 @@ public class TriggerConditions {
         if (effectResult.getType() == EffectResult.Type.CHARACTER_LOST_SKIRMISH) {
             CharacterLostSkirmishResult wonResult = (CharacterLostSkirmishResult) effectResult;
             return Filters.accepts(game, loserFilter, wonResult.getLoser())
-                    && Filters.filter(wonResult.getInvolving(), game, involvingFilter).size() > 0;
+                    && Filters.acceptsAny(game, wonResult.getInvolving(), involvingFilter);
         }
         return false;
     }
@@ -81,7 +81,7 @@ public class TriggerConditions {
             }
 
             return Filters.and(assignedFilters).accepts(game, assignmentResult.getAssignedCard())
-                    && Filters.filter(assignmentResult.getAgainst(), game, againstFilter).size() > 0;
+                    && Filters.acceptsAny(game, assignmentResult.getAgainst(), againstFilter);
         }
         return false;
     }
@@ -145,7 +145,7 @@ public class TriggerConditions {
             var woundResult = (WoundResult) effectResult;
             var wounded = woundResult.getWoundedCard();
 
-            return Filters.filter(woundResult.getSources(), game, woundedBy).size() > 0 &&
+            return Filters.acceptsAny(game, woundResult.getSources(), woundedBy) &&
                     Filters.and(filters).accepts(game, woundResult.getWoundedCard()) &&
                     (
                             (Filters.or(CardType.ALLY, CardType.COMPANION).accepts(game, wounded) &&
@@ -230,7 +230,7 @@ public class TriggerConditions {
     public static boolean isGettingHealed(Effect effect, LotroGame game, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_HEALED) {
             PreventableCardEffect healEffect = (PreventableCardEffect) effect;
-            return Filters.filter(healEffect.getAffectedCardsMinusPrevented(game), game, filters).size() > 0;
+            return Filters.acceptsAny(game, healEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
     }
@@ -238,7 +238,7 @@ public class TriggerConditions {
     public static boolean isGettingKilled(Effect effect, LotroGame game, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_KILLED) {
             KillEffect killEffect = (KillEffect) effect;
-            return Filters.filter(killEffect.getCharactersToBeKilled(), game, filters).size() > 0;
+            return Filters.acceptsAny(game, killEffect.getCharactersToBeKilled(), filters);
         }
         return false;
     }
@@ -246,7 +246,7 @@ public class TriggerConditions {
     public static boolean isSkirmishAboutToEnd(EffectResult effectResult, LotroGame game, Filterable... minionsInvolving) {
         if (effectResult.getType() == EffectResult.Type.SKIRMISH_ABOUT_TO_END) {
             SkirmishAboutToEndResult skirmishAboutToEnd = (SkirmishAboutToEndResult) effectResult;
-            return Filters.filter(skirmishAboutToEnd.getMinionsInvolved(), game, minionsInvolving).size() > 0;
+            return Filters.acceptsAny(game, skirmishAboutToEnd.getMinionsInvolved(), minionsInvolving);
         }
         return false;
     }
@@ -285,7 +285,7 @@ public class TriggerConditions {
             if (killedBy != Filters.any && (killers == null || killers.isEmpty() || killers.stream().allMatch(Objects::isNull)))
                 return false;
 
-            return Filters.filter(killResult.getKillers(), game, killedBy).size() > 0 &&
+            return Filters.acceptsAny(game, killResult.getKillers(), killedBy) &&
                     Filters.and(killed).accepts(game, killResult.getKilledCard());
         }
         return false;
@@ -305,8 +305,8 @@ public class TriggerConditions {
     public static boolean isGettingWoundedBy(Effect effect, LotroGame game, Filterable sourceFilter, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_WOUND) {
             WoundCharactersEffect woundEffect = (WoundCharactersEffect) effect;
-            if (woundEffect.getSources() != null && Filters.filter(woundEffect.getSources(), game, sourceFilter).size() > 0)
-                return Filters.filter(woundEffect.getAffectedCardsMinusPrevented(game), game, filters).size() > 0;
+            if (woundEffect.getSources() != null && Filters.acceptsAny(game, woundEffect.getSources(), sourceFilter))
+                return Filters.acceptsAny(game, woundEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
     }
@@ -314,7 +314,7 @@ public class TriggerConditions {
     public static boolean isGettingExerted(Effect effect, LotroGame game, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_EXERT) {
             PreventableCardEffect woundEffect = (PreventableCardEffect) effect;
-            return Filters.filter(woundEffect.getAffectedCardsMinusPrevented(game), game, filters).size() > 0;
+            return Filters.acceptsAny(game, woundEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
     }
@@ -322,7 +322,7 @@ public class TriggerConditions {
     public static boolean isGettingWounded(Effect effect, LotroGame game, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_WOUND) {
             PreventableCardEffect woundEffect = (PreventableCardEffect) effect;
-            return Filters.filter(woundEffect.getAffectedCardsMinusPrevented(game), game, filters).size() > 0;
+            return Filters.acceptsAny(game, woundEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
     }
@@ -331,7 +331,7 @@ public class TriggerConditions {
         if (effect.getType() == Effect.Type.BEFORE_DISCARD_FROM_PLAY) {
             PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
             if (effect.getSource() != null && Filters.accepts(game, sourceFilter, effect.getSource()))
-                return Filters.filter(preventableEffect.getAffectedCardsMinusPrevented(game), game, filters).size() > 0;
+                return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
     }
@@ -341,7 +341,7 @@ public class TriggerConditions {
             PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
             if (effect.getSource() != null && Filters.accepts(game, sourceFilter, effect.getSource())
                     && !effect.getPerformingPlayer().equals(playerId))
-                return Filters.filter(preventableEffect.getAffectedCardsMinusPrevented(game), game, filters).size() > 0;
+                return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
     }

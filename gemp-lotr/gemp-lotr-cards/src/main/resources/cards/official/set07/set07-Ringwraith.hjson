@@ -81,7 +81,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -131,7 +131,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requires: {
@@ -274,7 +274,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -523,7 +523,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -569,7 +569,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -2035,7 +2035,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -2081,7 +2081,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			requires: {
@@ -2812,7 +2812,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

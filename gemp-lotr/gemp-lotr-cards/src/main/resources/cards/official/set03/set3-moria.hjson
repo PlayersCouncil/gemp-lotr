@@ -5,7 +5,7 @@
         culture: Moria
         twilight: 2
         type: event
-        keyword: Shadow
+        timeword: shadow
         effects: {
             type: event
             requires: {
@@ -66,9 +66,9 @@
         culture: Moria
         twilight: 1
         type: event
+        timeword: Skirmish
         keyword:
         [
-            Skirmish
             Search
         ]
         effects: {
@@ -92,7 +92,7 @@
         culture: Moria
         twilight: 0
         type: event
-        keyword: Archery
+        timeword: archery
         effects: {
             type: event
             requires: [
@@ -117,7 +117,7 @@
         culture: Moria
         twilight: 0
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             requires: {

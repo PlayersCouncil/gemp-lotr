@@ -29,10 +29,10 @@ public class CardResolver {
         String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
 
         Function<ActionContext, Iterable<? extends PhysicalCard>> stackedOnSource = actionContext ->
-                Filters.filter(actionContext.getGame().getGameState().getAllCards(), actionContext.getGame(), stackedOn.getFilterable(actionContext));
+                Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), stackedOn.getFilterable(actionContext));
 
         Function<ActionContext, Iterable<? extends PhysicalCard>> stackSource = actionContext ->
-                Filters.filter(actionContext.getGame().getGameState().getAllCards(), actionContext.getGame(), Filters.stackedOn(stackedOn.getFilterable(actionContext)));
+                Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(stackedOn.getFilterable(actionContext)));
 
         if (select.startsWith("memory(") && select.endsWith(")")) {
             return resolveMemoryCards(select, null, null, countSource, memory, stackSource);
@@ -74,7 +74,7 @@ public class CardResolver {
                                                      String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
             final Filterable stackedOnFilter = stackedOn.getFilterable(actionContext);
-            return Filters.filter(actionContext.getGame().getGameState().getAllCards(), actionContext.getGame(), Filters.stackedOn(stackedOnFilter));
+            return Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(stackedOnFilter));
         };
 
         if (type.startsWith("memory(") && type.endsWith(")")) {
@@ -411,7 +411,7 @@ public class CardResolver {
                     Filterable additionalFilterable = Filters.any;
                     if (filter != null)
                         additionalFilterable = filter.getFilterable(actionContext);
-                    return Filters.filter(cardSource.apply(actionContext), actionContext.getGame(), attachedTo, additionalFilterable);
+                    return Filters.filter(actionContext.getGame(), cardSource.apply(actionContext), attachedTo, additionalFilterable);
                 }
             };
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
@@ -474,7 +474,7 @@ public class CardResolver {
                 Filterable additionalFilterable = Filters.any;
                 if (filter != null)
                     additionalFilterable = filter.getFilterable(actionContext);
-                return Filters.filter(cardSource.apply(actionContext), actionContext.getGame(), source, additionalFilterable);
+                return Filters.filter(actionContext.getGame(), cardSource.apply(actionContext), source, additionalFilterable);
             }
         };
     }
@@ -525,7 +525,7 @@ public class CardResolver {
                 Filterable additionalFilterable = Filters.any;
                 if (filter != null)
                     additionalFilterable = filter.getFilterable(actionContext);
-                return Filters.filter(cardSource.apply(actionContext), actionContext.getGame(), Filters.in(cardsFromMemory), additionalFilterable);
+                return Filters.filter(actionContext.getGame(), cardSource.apply(actionContext), Filters.in(cardsFromMemory), additionalFilterable);
             }
         };
     }
@@ -555,7 +555,7 @@ public class CardResolver {
                 Filterable additionalFilterable = Filters.any;
                 if (filter != null)
                     additionalFilterable = filter.getFilterable(actionContext);
-                return Filters.filter(cardSource.apply(actionContext), actionContext.getGame(), filterable, additionalFilterable);
+                return Filters.filter(actionContext.getGame(), cardSource.apply(actionContext), filterable, additionalFilterable);
             }
         };
     }
@@ -577,7 +577,7 @@ public class CardResolver {
                         Filterable additionalFilterable = Filters.any;
                         if (filter != null)
                             additionalFilterable = filter.getFilterable(actionContext);
-                        return Filters.filter(cardSource.apply(actionContext), actionContext.getGame(), filterable, additionalFilterable);
+                        return Filters.filter(actionContext.getGame(), cardSource.apply(actionContext), filterable, additionalFilterable);
                     }
                 };
             }

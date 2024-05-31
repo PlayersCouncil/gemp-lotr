@@ -4,7 +4,7 @@
 		culture: dwarven
 		twilight: 2
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -56,7 +56,7 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -81,7 +81,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -360,7 +360,7 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			effect: {
@@ -395,7 +395,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -580,7 +580,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			effect: {
@@ -687,7 +687,7 @@
 		culture: gandalf
 		twilight: 1
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			effect: {
@@ -716,8 +716,8 @@
 		culture: gandalf
 		twilight: 3
 		type: event
+		timeword: skirmish
 		keyword: [
-			skirmish
 			spell
 		]
 		effects: {
@@ -782,7 +782,7 @@
 				cost: [
 					{
 						type: play
-						select: choose(culture(gandalf),skirmish,event)
+						select: choose(culture(gandalf),timeword(skirmish),event)
 					}
 					{
 						type: addBurdens
@@ -802,7 +802,7 @@
 				text: Play a [DWARVEN] skirmish event
 				cost: {
 					type: play
-					select: choose(culture(dwarven),skirmish,event)
+					select: choose(culture(dwarven),timeword(skirmish),event)
 				}
 				effect: {
 					type: modifyStrength
@@ -997,7 +997,7 @@
     culture: gandalf
     twilight: 2
     type: event
-    keyword: maneuver
+    timeword: maneuver
     effects: {
       type: event
       requires: {
@@ -1041,9 +1041,9 @@
     culture: gandalf
     twilight: 1
     type: event
+    timeword: skirmish
     keyword: [
       spell
-      skirmish
     ]
     effects: {
       type: event
@@ -1079,7 +1079,7 @@
         optional: true
         trigger: {
           type: played
-          filter: culture(dwarven),fellowship,event
+          filter: culture(dwarven),timeword(fellowship),event
         }
         effect: {
           type: drawCards
@@ -1254,7 +1254,7 @@
         phase: skirmish
         cost: {
           type: play
-          select: choose(culture(dwarven),skirmish,event)
+          select: choose(culture(dwarven),timeword(skirmish),event)
         }
         effect: {
           type: drawCards

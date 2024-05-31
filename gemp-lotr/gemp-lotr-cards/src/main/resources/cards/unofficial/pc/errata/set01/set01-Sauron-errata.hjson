@@ -78,7 +78,7 @@
 		culture: sauron
 		twilight: 2
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
             requires: {
@@ -142,7 +142,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {
@@ -308,7 +308,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: [
 			{
 				type: responseEvent

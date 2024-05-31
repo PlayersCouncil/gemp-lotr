@@ -378,7 +378,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keywords: [
+		timeword: [
 		    Fellowship
 		    Skirmish
 		]

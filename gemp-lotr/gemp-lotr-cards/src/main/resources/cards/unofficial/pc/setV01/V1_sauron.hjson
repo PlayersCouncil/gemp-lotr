@@ -5,7 +5,7 @@
 		culture: sauron
 		twilight: 1
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
@@ -103,7 +103,7 @@
 		culture: sauron
 		twilight: 1
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: [
 		    {
 		        type: toPlay

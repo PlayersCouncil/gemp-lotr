@@ -459,7 +459,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

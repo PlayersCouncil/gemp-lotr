@@ -226,7 +226,7 @@
 		culture: shire
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -251,7 +251,7 @@
 		culture: shire
 		twilight: 2
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
             requires: [

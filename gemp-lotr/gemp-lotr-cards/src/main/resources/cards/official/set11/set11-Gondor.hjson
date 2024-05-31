@@ -33,7 +33,7 @@
 		        optional: true
 		        trigger: {
 		            type: played
-		            filter: side(free people),skirmish,event
+		            filter: side(free people),timeword(skirmish),event
 		        }
 		        cost: {
 		            type: exert
@@ -184,7 +184,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -405,7 +405,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: {
@@ -623,7 +623,7 @@
 		culture: Gondor
 		twilight: 3
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			effect: [
@@ -665,7 +665,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -767,7 +767,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: [
+		timeword: [
 			Fellowship
 			Regroup
 		]

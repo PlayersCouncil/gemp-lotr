@@ -221,7 +221,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -357,7 +357,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -500,7 +500,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -546,7 +546,7 @@
 		culture: Gondor
 		twilight: 3
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -663,7 +663,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

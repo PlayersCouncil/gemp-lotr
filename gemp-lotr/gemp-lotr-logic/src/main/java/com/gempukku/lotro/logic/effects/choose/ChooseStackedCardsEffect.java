@@ -52,7 +52,7 @@ public abstract class ChooseStackedCardsEffect extends AbstractEffect {
         List<PhysicalCard> stackedCards = new LinkedList<>();
 
         for (PhysicalCard stackedOnCard : Filters.filterActive(game, _stackedOnFilter))
-            stackedCards.addAll(Filters.filter(game.getGameState().getStackedCards(stackedOnCard), game, _stackedCardFilter));
+            stackedCards.addAll(Filters.filter(game, game.getGameState().getStackedCards(stackedOnCard), _stackedCardFilter));
 
         int maximum = Math.min(_maximum, stackedCards.size());
 

@@ -49,14 +49,14 @@ public class PlaySite implements EffectAppenderProducer {
                         }
                     };
                     if (block != null)
-                        return Filters.filter(game.getGameState().getAdventureDeck(playerId), game, Filters.and(filterable, printedSiteNumber, Filters.siteBlock(block))).size() > 0;
+                        return Filters.acceptsAny(game, game.getGameState().getAdventureDeck(playerId), Filters.and(filterable, printedSiteNumber, Filters.siteBlock(block)));
                     else
-                        return Filters.filter(game.getGameState().getAdventureDeck(playerId), game, Filters.and(filterable, printedSiteNumber)).size() > 0;
+                        return Filters.acceptsAny(game, game.getGameState().getAdventureDeck(playerId), Filters.and(filterable, printedSiteNumber));
                 } else {
                     if (block != null)
-                        return Filters.filter(game.getGameState().getAdventureDeck(playerId), game, Filters.and(filterable, Filters.siteBlock(block))).size() > 0;
+                        return Filters.acceptsAny(game, game.getGameState().getAdventureDeck(playerId), Filters.and(filterable, Filters.siteBlock(block)));
                     else
-                        return Filters.filter(game.getGameState().getAdventureDeck(playerId), game, filterable).size() > 0;
+                        return Filters.acceptsAny(game, game.getGameState().getAdventureDeck(playerId), filterable);
                 }
             }
 

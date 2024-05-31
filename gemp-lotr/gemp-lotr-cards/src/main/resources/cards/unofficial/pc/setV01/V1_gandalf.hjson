@@ -4,7 +4,7 @@
 		culture: gandalf
 		twilight: 0
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
             requires: {
@@ -290,7 +290,7 @@
 		culture: gandalf
 		twilight: 3
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
             requires: [

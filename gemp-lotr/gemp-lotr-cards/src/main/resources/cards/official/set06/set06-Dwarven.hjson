@@ -21,7 +21,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -156,7 +156,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: [
 		    {
 		        type: stackedOnModifier

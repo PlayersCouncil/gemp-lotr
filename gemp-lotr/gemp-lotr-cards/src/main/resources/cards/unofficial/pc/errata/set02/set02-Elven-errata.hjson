@@ -19,7 +19,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {

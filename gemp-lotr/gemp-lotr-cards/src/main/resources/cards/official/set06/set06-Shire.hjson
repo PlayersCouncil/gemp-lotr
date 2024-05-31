@@ -94,7 +94,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requires: [
@@ -232,7 +232,7 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {

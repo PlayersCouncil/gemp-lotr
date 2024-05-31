@@ -102,7 +102,7 @@
       culture: Wraith
       title: It Wants to be Found
       type: event
-      keyword: Maneuver
+      timeword: maneuver
       twilight: 2
       effects: {
         type: event
@@ -121,7 +121,7 @@
       culture: Wraith
       title: Resistance Becomes Unbearable
       type: event
-      keyword: Maneuver
+      timeword: maneuver
       twilight: 1
       effects: {
         type: event
@@ -153,7 +153,7 @@
       culture: Wraith
       title: Stricken Dumb
       type: event
-      keyword: Maneuver
+      timeword: maneuver
       twilight: 2
       effects: {
         type: event
@@ -172,7 +172,7 @@
       culture: Wraith
       title: They Will Find the Ring
       type: event
-      keyword: Maneuver
+      timeword: maneuver
       twilight: 1
       effects: {
         type: event
@@ -363,7 +363,7 @@
       culture: Wraith
       title: Wraith-world
       type: event
-      keyword: Skirmish
+      timeword: skirmish
       twilight: 1
       effects: {
         type: event

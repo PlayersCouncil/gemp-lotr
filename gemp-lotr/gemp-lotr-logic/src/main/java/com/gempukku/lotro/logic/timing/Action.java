@@ -1,6 +1,6 @@
 package com.gempukku.lotro.logic.timing;
 
-import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
@@ -13,7 +13,7 @@ public interface Action {
 
     public PhysicalCard getActionSource();
 
-    public void setActionTimeword(Phase phase);
+    public void setActionTimeword(Timeword timeword);
 
     public PhysicalCard getActionAttachedToCard();
 
@@ -25,7 +25,7 @@ public interface Action {
 
     public String getPerformingPlayer();
 
-    public Phase getActionTimeword();
+    public Timeword getActionTimeword();
 
     public String getText(LotroGame game);
 

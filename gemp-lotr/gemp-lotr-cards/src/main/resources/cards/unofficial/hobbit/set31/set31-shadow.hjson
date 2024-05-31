@@ -123,7 +123,7 @@
 		side: shadow
 		twilight: 2
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: [
 			{
 				type: activatedInDiscard
@@ -567,7 +567,7 @@
 		culture: moria
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: [
 			{
 				type: activatedInDiscard

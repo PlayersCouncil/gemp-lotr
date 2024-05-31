@@ -530,7 +530,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: [
@@ -633,7 +633,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			cost: {
@@ -944,7 +944,7 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

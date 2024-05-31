@@ -17,9 +17,9 @@
 		culture: Elven
 		twilight: 3
 		type: Event
+		timeword: fellowship
 		keyword: [
 		    tale
-		    fellowship
 		]
 		effects: {
 			type: event
@@ -61,7 +61,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -172,7 +172,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: archery
+		timeword: archery
 		effects: {
 			type: event
 			requires: {
@@ -438,7 +438,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -663,7 +663,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -1139,7 +1139,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -1367,7 +1367,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1415,7 +1415,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: [
+		timeword: [
 		    skirmish
 		    regroup
 		]
@@ -1585,7 +1585,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
