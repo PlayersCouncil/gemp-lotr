@@ -26,7 +26,7 @@ public class SortAndFilterCards {
         Integer siteNumber = getSiteNumber(filterParams);
         Set<Race> races = getEnumFilter(Race.values(), Race.class, "race", null, filterParams);
         Set<PossessionClass> itemClasses = getEnumFilter(PossessionClass.values(), PossessionClass.class, "itemClass", Collections.emptySet(), filterParams);
-        Set<Keyword> phases = getEnumFilter(Keyword.values(),Keyword.class, "phase", Collections.emptySet(), filterParams);
+        Set<Keyword> phases = getEnumFilter(Keyword.values(), Keyword.class, "phase", Collections.emptySet(), filterParams);
 
         List<T> result = new ArrayList<>();
         Map<String, LotroCardBlueprint> cardBlueprintMap = new HashMap<>();
@@ -91,19 +91,18 @@ public class SortAndFilterCards {
                     || (type.equals("nonFoil") && !blueprintId.endsWith("*"))
                     || (type.equals("tengwar") && (blueprintId.endsWith("T*") || blueprintId.endsWith("T")))) {
                 final LotroCardBlueprint blueprint = cardBlueprint.get(blueprintId);
-                if (side == null || blueprint.getSide() == side)
-                    if (rarity == null || isRarity(blueprintId, rarity, library, library.getSetDefinitions()))
-                        if (sets == null || isInSets(blueprintId, sets, library, formatLibrary, cardBlueprint))
-                            if (cardTypes == null || cardTypes.contains(blueprint.getCardType()))
-                                if (cultures == null || cultures.contains(blueprint.getCulture()))
-                                    if (containsAllKeywords(blueprint, keywords))
-                                        if (containsAllWords(blueprint, words))
-                                            if (canStartWithRing == null || blueprint.canStartWithRing() == canStartWithRing)
-                                                if (siteNumber == null || blueprint.getSiteNumber() == siteNumber)
-                                                    if (races == null || races.contains(blueprint.getRace()))
-                                                        if (containsAllClasses(blueprint, itemClasses))
-                                                            if (containsAllKeywords(blueprint, phases))
-                                                                return true;
+                return (side == null || blueprint.getSide() == side)
+                        && (rarity == null || isRarity(blueprintId, rarity, library, library.getSetDefinitions()))
+                        && (sets == null || isInSets(blueprintId, sets, library, formatLibrary, cardBlueprint))
+                        && (cardTypes == null || cardTypes.contains(blueprint.getCardType()))
+                        && (cultures == null || cultures.contains(blueprint.getCulture()))
+                        && (containsAllKeywords(blueprint, keywords))
+                        && (containsAllWords(blueprint, words))
+                        && (canStartWithRing == null || blueprint.canStartWithRing() == canStartWithRing)
+                        && (siteNumber == null || blueprint.getSiteNumber() == siteNumber)
+                        && (races == null || races.contains(blueprint.getRace()))
+                        && (containsAllClasses(blueprint, itemClasses))
+                        && (containsAllKeywords(blueprint, phases));
             }
         }
         return false;
@@ -146,7 +145,7 @@ public class SortAndFilterCards {
             SetDefinition setRarity = rarities.get(blueprintId.substring(0, blueprintId.indexOf("_")));
             if (setRarity != null) {
                 String cardRarity = setRarity.getCardRarity(library.stripBlueprintModifiers(blueprintId));
-                if(cardRarity == null) {
+                if (cardRarity == null) {
                     //TODO: log that the rarity was not set
                     //real TODO: put the rarity in the friggin json
                     return false;
@@ -167,7 +166,7 @@ public class SortAndFilterCards {
 
             if (format != null) {
                 String valid = format.validateCard(blueprintId);
-                if(valid != null && !valid.isEmpty())
+                if (valid != null && !valid.isEmpty())
                     return false;
 
                 final LotroCardBlueprint blueprint = cardBlueprint.get(blueprintId);
@@ -272,7 +271,7 @@ public class SortAndFilterCards {
                     if (filterPossessionClass == PossessionClass.CLASSLESS)
                         return true;
                     return false;
-                }            
+                }
                 for (PossessionClass blueprintPossessionClass : blueprint.getPossessionClasses()) {
                     if (filterPossessionClass == blueprintPossessionClass)
                         return true;
