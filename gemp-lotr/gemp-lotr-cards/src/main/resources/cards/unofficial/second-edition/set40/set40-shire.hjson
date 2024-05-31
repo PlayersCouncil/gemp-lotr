@@ -151,7 +151,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 10
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: {
 			type: trigger
 			optional: true
@@ -176,7 +176,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 10
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: {
 			type: trigger
 			optional: true

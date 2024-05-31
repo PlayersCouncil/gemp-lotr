@@ -1087,9 +1087,9 @@
 		strength: 3
 		vitality: 4
 		resistance: 10
+		canStartWithRing: true
 		keyword: [
 			fellowship
-			can start with ring
 		]
 		effects: {
 			type: modifier

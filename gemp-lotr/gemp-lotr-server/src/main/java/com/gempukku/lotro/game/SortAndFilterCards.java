@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.packs.SetDefinition;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.util.MultipleComparator;
 
-import java.text.Normalizer;
 import java.util.*;
 
 public class SortAndFilterCards {
@@ -20,6 +19,7 @@ public class SortAndFilterCards {
         String[] rarity = getRarityFilter(filterParams);
         String[] sets = getSetFilter(filterParams);
         List<String> words = getWords(filterParams);
+        Boolean canStartWithRing = getBoolean(filterParams, false);
         Set<CardType> cardTypes = getEnumFilter(CardType.values(), CardType.class, "cardType", null, filterParams);
         Set<Culture> cultures = getEnumFilter(Culture.values(), Culture.class, "culture", null, filterParams);
         Set<Keyword> keywords = getEnumFilter(Keyword.values(), Keyword.class, "keyword", Collections.emptySet(), filterParams);
@@ -34,12 +34,12 @@ public class SortAndFilterCards {
         for (T item : items) {
             String blueprintId = item.getBlueprintId();
             if (isPack(blueprintId)) {
-                if (acceptsFilters(cardLibrary, cardBlueprintMap, formatLibrary, blueprintId, side, type, rarity, sets, cardTypes, cultures, keywords, words, siteNumber, races, itemClasses, phases))
+                if (acceptsFilters(cardLibrary, cardBlueprintMap, formatLibrary, blueprintId, side, type, rarity, sets, cardTypes, cultures, keywords, words, canStartWithRing, siteNumber, races, itemClasses, phases))
                     result.add(item);
             } else {
                 try {
                     cardBlueprintMap.put(blueprintId, cardLibrary.getLotroCardBlueprint(blueprintId));
-                    if (acceptsFilters(cardLibrary, cardBlueprintMap, formatLibrary, blueprintId, side, type, rarity, sets, cardTypes, cultures, keywords, words, siteNumber, races, itemClasses, phases))
+                    if (acceptsFilters(cardLibrary, cardBlueprintMap, formatLibrary, blueprintId, side, type, rarity, sets, cardTypes, cultures, keywords, words, canStartWithRing, siteNumber, races, itemClasses, phases))
                         result.add(item);
                 } catch (CardNotFoundException e) {
                     // Ignore the card
@@ -80,7 +80,7 @@ public class SortAndFilterCards {
 
     private boolean acceptsFilters(
             LotroCardBlueprintLibrary library, Map<String, LotroCardBlueprint> cardBlueprint, LotroFormatLibrary formatLibrary, String blueprintId, Side side, String type, String[] rarity, String[] sets,
-            Set<CardType> cardTypes, Set<Culture> cultures, Set<Keyword> keywords, List<String> words, Integer siteNumber, Set<Race> races, Set<PossessionClass> itemClasses, Set<Keyword> phases) {
+            Set<CardType> cardTypes, Set<Culture> cultures, Set<Keyword> keywords, List<String> words, Boolean canStartWithRing, Integer siteNumber, Set<Race> races, Set<PossessionClass> itemClasses, Set<Keyword> phases) {
         if (isPack(blueprintId)) {
             if (type == null || type.equals("pack"))
                 return true;
@@ -98,11 +98,12 @@ public class SortAndFilterCards {
                                 if (cultures == null || cultures.contains(blueprint.getCulture()))
                                     if (containsAllKeywords(blueprint, keywords))
                                         if (containsAllWords(blueprint, words))
-                                            if (siteNumber == null || blueprint.getSiteNumber() == siteNumber)
-                                                if (races == null || races.contains(blueprint.getRace()))
-                                                    if (containsAllClasses(blueprint, itemClasses))
-                                                        if (containsAllKeywords(blueprint, phases))
-                                                            return true;
+                                            if (canStartWithRing == null || blueprint.canStartWithRing() == canStartWithRing)
+                                                if (siteNumber == null || blueprint.getSiteNumber() == siteNumber)
+                                                    if (races == null || races.contains(blueprint.getRace()))
+                                                        if (containsAllClasses(blueprint, itemClasses))
+                                                            if (containsAllKeywords(blueprint, phases))
+                                                                return true;
             }
         }
         return false;
@@ -218,6 +219,15 @@ public class SortAndFilterCards {
                 return filterParam.substring("set:".length());
         }
         return null;
+    }
+
+    private Boolean getBoolean(String[] filterParams) {
+        Boolean result = null;
+        for (String filterParam : filterParams) {
+            if (filterParam.startsWith("canStartWithRing:"))
+                result = Boolean.parseBoolean(filterParam.substring("canStartWithRing:".length()));
+        }
+        return result;
     }
 
     private List<String> getWords(String[] filterParams) {

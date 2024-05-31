@@ -1,6 +1,9 @@
 package com.gempukku.lotro.game.formats;
 
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.JSONDefs;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
@@ -732,7 +735,7 @@ public class DefaultLotroFormat implements LotroFormat {
             return "Deck doesn't have a Ring-bearer";
         try{
             LotroCardBlueprint ringBearer = _library.getLotroCardBlueprint(rb);
-            if (!ringBearer.hasKeyword(Keyword.CAN_START_WITH_RING))
+            if (!ringBearer.canStartWithRing())
                 return "Card assigned as Ring-bearer cannot bear the ring";
         }
         catch(CardNotFoundException exception)

@@ -44,6 +44,7 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("direction", new DirectionFieldProcessor());
         fieldProcessors.put("target", new TargetFieldProcessor());
         fieldProcessors.put("effects", new EffectFieldProcessor());
+        fieldProcessors.put("canstartwithring", new CanStartWithRing());
 
         fieldProcessors.put("gametext", new GameTextFieldProcessor());
         fieldProcessors.put("lore", new LoreFieldProcessor());

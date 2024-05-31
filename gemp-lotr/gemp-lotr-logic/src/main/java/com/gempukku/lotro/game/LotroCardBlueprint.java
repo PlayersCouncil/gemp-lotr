@@ -22,6 +22,8 @@ public interface LotroCardBlueprint {
 
     String getId();
 
+    boolean canStartWithRing();
+
     //This isn't ideal, but there's 2,000 java cards that already exist.
     // Adding the argument to their constructors would be a chore.
     void setId(String id);

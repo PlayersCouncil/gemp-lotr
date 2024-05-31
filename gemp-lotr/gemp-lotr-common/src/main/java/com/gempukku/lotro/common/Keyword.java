@@ -10,9 +10,6 @@ public enum Keyword implements Filterable {
     ASSIGNMENT("Assignment", false, false, false, false),
     REGROUP("Regroup", false, false, false, false),
 
-    // TODO: Fake keyword for purpose of marking cards that can start with ring - refactor out to separate flag
-    CAN_START_WITH_RING("Can-bear-ring", false, false, false, false),
-
     // TODO: not a real keyword - count be refactored out to separate systems
     ROAMING("Roaming", true, false, false, false),
     MOUNTED("Mounted", false, false, false, false),

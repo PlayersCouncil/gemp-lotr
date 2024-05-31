@@ -1069,9 +1069,9 @@
     strength: 3
     vitality: 4
     resistance: 8
+    canStartWithRing: true
     keyword: [
       burglar
-      can start with ring
     ]
     effects: [
       {
@@ -1143,9 +1143,9 @@
     strength: 3
     vitality: 4
     resistance: 8
+	canStartWithRing: true
     keyword: [
       burglar
-      can start with ring
     ]
     effects: [
       {
@@ -1195,9 +1195,9 @@
     strength: 3
     vitality: 4
     resistance: 8
+	canStartWithRing: true
     keyword: [
       burglar
-      can start with ring
     ]
     effects: [
       {
@@ -1236,9 +1236,9 @@
     strength: 3
     vitality: 4
     resistance: 8
+	canStartWithRing: true
     keyword: [
       burglar
-      can start with ring
     ]
     effects: [
       {

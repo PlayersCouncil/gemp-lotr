@@ -210,7 +210,7 @@
         title: Frodo
         unique: true
         type: companion
-        keyword: can start with ring
+		canStartWithRing: true
         twilight: 0
         resistance: 10
         effects: {

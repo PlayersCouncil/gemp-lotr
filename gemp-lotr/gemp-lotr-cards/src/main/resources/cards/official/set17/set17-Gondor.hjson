@@ -102,7 +102,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		keywords: CAN_START_WITH_RING
+		canStartWithRing: true
 		effects: [
 		    {
 		        type: trigger

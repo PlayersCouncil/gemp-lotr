@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.official.set09;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_09_004_Tests
 {
@@ -58,7 +58,7 @@ public class Card_09_004_Tests
 		assertEquals(Race.DWARF, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(card, Keyword.CAN_START_WITH_RING));
+        assertTrue(card.getBlueprint().canStartWithRing());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());

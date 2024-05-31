@@ -137,9 +137,9 @@
 		strength: 3
 		vitality: 4
 		resistance: 7
+		canStartWithRing: true
 		keyword: [
 			ring-bound
-			can start with ring
 		]
 		effects: [
 			{
@@ -187,7 +187,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: [
 			{
 				type: trigger
@@ -292,7 +292,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: [
 			{
 				type: trigger
@@ -996,8 +996,8 @@
 		strength: 3
 		vitality: 4
 		resistance: 8
+		canStartWithRing: true
 		keyword: [
-			can start with ring
 			ring-bound
 		]
 		effects: [

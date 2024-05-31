@@ -991,9 +991,9 @@
 		strength: 3
 		vitality: 4
 		resistance: 5
+		canStartWithRing: true
 		keywords: [
 			Ring-bound
-			CAN_START_WITH_RING
 		]
 		effects: [
 		    {

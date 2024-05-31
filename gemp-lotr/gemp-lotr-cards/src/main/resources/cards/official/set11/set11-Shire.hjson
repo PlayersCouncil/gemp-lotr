@@ -180,9 +180,9 @@
 		strength: 3
 		vitality: 4
 		resistance: 10
+		canStartWithRing: true
 		keywords: [
 			Ring-Bound
-			Can Start With Ring
 		]
 		effects: [
 		    {

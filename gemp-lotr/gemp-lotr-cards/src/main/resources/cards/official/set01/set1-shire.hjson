@@ -134,7 +134,7 @@
 		vitality: 4
 		resistance: 10
 		signet: gandalf
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: {
 			type: trigger
 			optional: true
@@ -159,7 +159,7 @@
 		vitality: 4
 		resistance: 10
 		signet: frodo
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: {
 			type: activated
 			phase: fellowship

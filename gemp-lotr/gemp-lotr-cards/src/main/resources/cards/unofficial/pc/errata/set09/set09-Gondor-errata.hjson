@@ -24,7 +24,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: [
 			{
 				type: trigger
@@ -103,7 +103,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: [
 			{
 				type: trigger

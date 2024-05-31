@@ -151,9 +151,9 @@
 		strength: 6
 		vitality: 3
 		resistance: 4
+		canStartWithRing: true
 		keyword: [
 			damage+1
-			can_start_with_ring
 		]
 		effects: [
 			{
@@ -550,7 +550,7 @@
 		strength: 3
 		vitality: 3
 		resistance: 3
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: {
 			type: modifier
 			modifier: {

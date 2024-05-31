@@ -24,6 +24,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private String title;
     private String sanitizedTitle;
     private String subtitle;
+    private boolean canStartWithRing;
     private boolean unique;
     private Side side;
     private CardType cardType;
@@ -98,6 +99,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     public void setBlueprintId(String id) {
         this.id = id;
+    }
+
+    public void setCanStartWithRing(boolean canStartWithRing) {
+        this.canStartWithRing = canStartWithRing;
     }
 
     public void setDeckValidation(PreGameDeckValidation validation) {
@@ -427,6 +432,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     @Override
     public String getSubtitle() {
         return subtitle;
+    }
+
+    @Override
+    public boolean canStartWithRing() {
+        return canStartWithRing;
     }
 
     @Override
@@ -1110,7 +1120,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("Possession, condition or artifact without a filter needs a SUPPORT_AREA keyword");
         if (cardType == CardType.FOLLOWER && aidCostSource == null)
             throw new InvalidCardDefinitionException("Follower requires an aid cost");
-        if (title.equals("Frodo") && (keywords == null || !keywords.containsKey(Keyword.CAN_START_WITH_RING)) && !frodosThatCantStartWithRing.contains(subtitle)) {
+        if (title.equals("Frodo") && !canStartWithRing && !frodosThatCantStartWithRing.contains(subtitle)) {
             throw new InvalidCardDefinitionException("Frodo (except some permitted) must be able to start with ring");
         }
         if (title.equals("Frodo") && resistance != 10 && !frodosWithNon10Resistance.contains(subtitle)) {

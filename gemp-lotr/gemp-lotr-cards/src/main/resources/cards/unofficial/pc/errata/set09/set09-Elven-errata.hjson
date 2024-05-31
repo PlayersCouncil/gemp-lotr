@@ -97,7 +97,7 @@
 		strength: 3
 		vitality: 3
 		resistance: 4
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: {
 			type: modifier
 			modifier: {

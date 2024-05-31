@@ -27,7 +27,7 @@
 		vitality: 4
 		signet: Aragorn
 		resistance: 10
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: [
 		    {
 		        type: activated

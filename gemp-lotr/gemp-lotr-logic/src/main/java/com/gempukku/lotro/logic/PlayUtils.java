@@ -181,7 +181,7 @@ public class PlayUtils {
         PhysicalCard ringBearer = game.getGameState().getRingBearer(game.getGameState().getCurrentPlayerId());
         boolean ringBearerIsNotFrodo = ringBearer != null && !ringBearer.getBlueprint().getTitle().equals("Frodo");
         if (ringBearerIsNotFrodo) {
-            boolean isRingBearerFrodo = self.getBlueprint().getTitle().equals("Frodo") && self.getBlueprint().hasKeyword(Keyword.CAN_START_WITH_RING);
+            boolean isRingBearerFrodo = self.getBlueprint().getTitle().equals("Frodo") && self.getBlueprint().canStartWithRing();
             return !isRingBearerFrodo;
         }
         return true;

@@ -780,7 +780,7 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 12
-		keywords: Can start with ring
+		canStartWithRing: true
 		gametext: <b>Ring-bearer (resistance 12).</b>
 		lore: ...if it's the only way, we must take it.'
 		promotext: ""
