@@ -18,8 +18,8 @@
 		culture: gandalf
 		twilight: 1
 		type: event
+		timeword: fellowship
 		keyword: [
-			fellowship
 			spell
 		]
 		effects: [

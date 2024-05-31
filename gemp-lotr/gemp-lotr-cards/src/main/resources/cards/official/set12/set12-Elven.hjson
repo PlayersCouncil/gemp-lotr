@@ -21,7 +21,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: {
@@ -425,9 +425,9 @@
 		culture: Elven
 		twilight: 3
 		type: Event
+		timeword: Maneuver
 		keywords: [
 			Toil 2
-			Maneuver
 		]
 		effects: {
 			type: event

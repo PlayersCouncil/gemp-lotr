@@ -5,7 +5,7 @@
 		culture: Isengard
 		title: Beyond the Height of Men
 		type: event
-		keyword: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -74,7 +74,7 @@
 		culture: Isengard
 		title: Evil Afoot
 		type: event
-		keyword: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: [
@@ -201,7 +201,7 @@
 		culture: Isengard
 		title: Too Much Attention
 		type: event
-		keyword: Response
+		timeword: response
 		effects: {
 			type: responseEvent
             requires: {

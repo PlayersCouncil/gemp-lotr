@@ -148,7 +148,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -478,7 +478,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: [
             {
                 type: event
@@ -669,7 +669,7 @@
 		        }
 		        effect: {
 		            type: playCardFromDrawDeck
-		            select: choose(culture(rohan),skirmish,event)
+		            select: choose(culture(rohan),timeword(skirmish),event)
                     showAll: true
                     shuffle: true
 		        }

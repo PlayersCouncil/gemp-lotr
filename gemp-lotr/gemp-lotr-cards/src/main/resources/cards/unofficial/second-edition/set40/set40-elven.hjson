@@ -4,7 +4,7 @@
 		culture: elven
 		twilight: 2
 		type: event
-		keyword: archery
+		timeword: archery
 		gametext: [
 			To play, spot an Elf archer companion.
 			Make a fellowship archery total -X (to a minimum of 0) to discard X shadow conditions.
@@ -287,7 +287,7 @@
 		culture: elven
 		twilight: 2
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		gametext: [
 			To play spot an Elf.
 			Until the regroup phase, each wounded minion loses [keyword]fierce[/keyword] and cannot gain [keyword]fierce[/keyword].
@@ -426,7 +426,7 @@
 		culture: elven
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: [
 			Make an Elf strength +1.
 			If that Elf wins this skirmish, you may place up to 2 {elven} cards from your discard pile on top of your draw deck.
@@ -580,7 +580,7 @@
 		culture: elven
 		twilight: 1
 		type: event
-		keyword: regroup
+		timeword: regroup
 		gametext: Exert Galadriel and reveal the top card of your draw deck to discard a Shadow condition (or 2 Shadow conditions if you reveal an {elven} card).
 		lore: “Even the smallest person can change the course of the future.”
 		effects: {
@@ -745,7 +745,7 @@
 		culture: elven
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: Spot 3 Elves to make a minion skirmishing and Elf strength -3.
 		lore: “We still remember, we who dwell...”
 		effects: {
@@ -913,7 +913,7 @@
     culture: elven
     twilight: 1
     type: event
-    keyword: archery
+    timeword: archery
     gametext: Exert an {elven} ally and add a threat to wound a minion. If it is an {isengard} minion, wound it again.
     lore: “Strange creatures bearing the mark of the White Hand have been seen on our borders.”
     effects: {
@@ -1183,7 +1183,7 @@
     culture: elven
     twilight: 2
     type: event
-    keyword: archery
+    timeword: archery
     gametext: Spot 2 Elf archers to make the fellowship archery total +2 (or +3 if at a forest).
     lore: “The Dwarf breathes so loud...”
     effects: {

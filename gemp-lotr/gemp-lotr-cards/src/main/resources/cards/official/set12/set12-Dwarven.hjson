@@ -21,7 +21,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -188,7 +188,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -561,9 +561,9 @@
 		culture: Dwarven
 		twilight: 4
 		type: Event
+		timeword: Fellowship
 		keywords: [
 			Toil 2
-			Fellowship
 		]
 		effects: {
 			type: event
@@ -621,7 +621,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -728,7 +728,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

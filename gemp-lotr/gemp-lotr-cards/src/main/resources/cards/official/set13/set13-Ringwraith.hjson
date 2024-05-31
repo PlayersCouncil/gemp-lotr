@@ -21,7 +21,7 @@
 		culture: Wraith
 		twilight: 3
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: [
@@ -109,7 +109,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: [
 		    {
 		        type: discount
@@ -162,9 +162,9 @@
 		culture: Wraith
 		twilight: 4
 		type: Event
+		timeword: Shadow
 		keywords: [
 			Toil 1
-			Shadow
 		]
 		effects: {
 			type: event

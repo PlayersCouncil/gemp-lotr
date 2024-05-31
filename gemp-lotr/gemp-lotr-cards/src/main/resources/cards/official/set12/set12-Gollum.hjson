@@ -91,7 +91,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 
 		effects: {
 			type: event

@@ -130,7 +130,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			effect: {

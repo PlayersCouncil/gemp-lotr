@@ -4,8 +4,8 @@
 		culture: elven
 		twilight: 1
 		type: event
+		timeword: skirmish
 		keyword: [
-			skirmish
 			tale
 		]
 		effects: {

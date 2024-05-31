@@ -154,7 +154,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: [
 		    {
 		        type: activatedInDiscard
@@ -616,7 +616,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -744,7 +744,7 @@
 		culture: Gondor
 		twilight: 2
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -1013,7 +1013,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

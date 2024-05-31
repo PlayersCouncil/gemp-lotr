@@ -336,7 +336,7 @@
 		        type: Response
 		        trigger: {
 		            type: played
-		            filter: skirmish,event
+		            filter: timeword(skirmish),event
 		        }
 		        cost: {
 		            type: discard
@@ -379,7 +379,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: [
@@ -455,7 +455,7 @@
 		culture: Men
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: [

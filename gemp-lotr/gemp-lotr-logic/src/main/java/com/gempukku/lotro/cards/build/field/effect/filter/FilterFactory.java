@@ -256,6 +256,13 @@ public class FilterFactory {
 
             return (actionContext) -> culture;
         });
+        parameterFilters.put("timeword", (parameter, environment) -> {
+            final Timeword timeword = Timeword.findTimeword(parameter);
+            if (timeword == null)
+                throw new InvalidCardDefinitionException("Unable to find timeword for: " + parameter);
+
+            return (actionContext) -> timeword;
+        });
         parameterFilters.put("culturefrommemory", ((parameter, environment) -> actionContext -> {
             Set<Culture> cultures = new HashSet<>();
             for (PhysicalCard physicalCard : actionContext.getCardsFromMemory(parameter)) {

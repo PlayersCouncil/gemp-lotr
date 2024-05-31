@@ -63,7 +63,7 @@ public class Card_07_183_Tests
         assertEquals(Side.SHADOW, card.getBlueprint().getSide());
         assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
         assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
+        assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
         assertEquals(1, card.getBlueprint().getTwilightCost());
     }
 

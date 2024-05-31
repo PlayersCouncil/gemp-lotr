@@ -54,7 +54,7 @@ public class Card_V1_028_Tests
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertTrue(scn.HasKeyword(card, Keyword.WEATHER));
-		assertTrue(scn.HasKeyword(card, Keyword.SHADOW));
+        assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

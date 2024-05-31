@@ -1,8 +1,8 @@
 package com.gempukku.lotro.logic.timing.rules;
 
 import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -32,7 +32,7 @@ public class PlayResponseEventRule {
                     public List<? extends Action> getOptionalAfterActions(String playerId, LotroGame game, EffectResult effectResult) {
                         List<Action> result = new LinkedList<>();
                         final Side side = GameUtils.getSide(game, playerId);
-                        for (PhysicalCard responseEvent : Filters.filter(game, game.getGameState().getHand(playerId), side, CardType.EVENT, Keyword.RESPONSE)) {
+                        for (PhysicalCard responseEvent : Filters.filter(game, game.getGameState().getHand(playerId), side, CardType.EVENT, Filters.timeword(Timeword.RESPONSE))) {
                             if (PlayUtils.checkPlayRequirements(game, responseEvent, Filters.any, 0, 0, false, false, false)) {
                                 final List<PlayEventAction> actions = responseEvent.getBlueprint().getPlayResponseEventAfterActions(playerId, game, effectResult, responseEvent);
                                 if (actions != null)
@@ -46,7 +46,7 @@ public class PlayResponseEventRule {
                     public List<? extends Action> getOptionalBeforeActions(String playerId, LotroGame game, Effect effect) {
                         List<Action> result = new LinkedList<>();
                         final Side side = GameUtils.getSide(game, playerId);
-                        for (PhysicalCard responseEvent : Filters.filter(game, game.getGameState().getHand(playerId), side, CardType.EVENT, Keyword.RESPONSE)) {
+                        for (PhysicalCard responseEvent : Filters.filter(game, game.getGameState().getHand(playerId), side, CardType.EVENT, Filters.timeword(Timeword.RESPONSE))) {
                             if (PlayUtils.checkPlayRequirements(game, responseEvent, Filters.any, 0, 0, false, false, false)) {
                                 final List<PlayEventAction> actions = responseEvent.getBlueprint().getPlayResponseEventBeforeActions(playerId, game, effect, responseEvent);
                                 if (actions != null)

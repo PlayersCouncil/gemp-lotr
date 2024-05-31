@@ -21,9 +21,9 @@
 		culture: Wraith
 		twilight: 6
 		type: Event
+		timeword: Shadow
 		keywords: [
 			Toil 2
-			Shadow
 		]
 		effects: {
 			type: event
@@ -221,9 +221,9 @@
 		culture: Wraith
 		twilight: 7
 		type: Event
+		timeword: Maneuver
 		keywords: [
 			Toil 2
-			Maneuver
 		]
 		effects: {
 			type: event
@@ -435,7 +435,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {

@@ -102,9 +102,9 @@
 		culture: Gandalf
 		twilight: 5
 		type: Event
+		timeword: Maneuver
 		keywords: [
 			Spell
-			Maneuver
 		]
 		effects: {
 			type: event
@@ -254,9 +254,9 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
+		timeword: Maneuver
 		keywords: [
 			Spell
-			Maneuver
 		]
 		effects: {
 			type: event
@@ -401,9 +401,9 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
+		timeword: Maneuver
 		keywords: [
 			Spell
-			Maneuver
 		]
 		effects: {
 			type: event

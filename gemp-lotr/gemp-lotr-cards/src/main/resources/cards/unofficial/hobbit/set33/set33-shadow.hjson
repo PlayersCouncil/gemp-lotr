@@ -1037,7 +1037,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: assignment
+		timeword: assignment
 		effects: {
 			type: event
             requires: {
@@ -1208,7 +1208,7 @@
 		culture: sauron
 		twilight: 2
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
             requires: {

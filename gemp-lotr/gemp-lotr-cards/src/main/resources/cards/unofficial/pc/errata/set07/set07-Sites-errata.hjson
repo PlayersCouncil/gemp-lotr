@@ -34,7 +34,7 @@
 				type: AddModifier
 				modifier: {
 					type: ModifyCost
-					filter: or(condition,possession),shadow
+					filter: or(condition,possession),side(shadow)
 					amount: 2
 				}
 				until: start(regroup)

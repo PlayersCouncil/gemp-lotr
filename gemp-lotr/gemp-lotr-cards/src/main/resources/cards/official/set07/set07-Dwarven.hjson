@@ -21,7 +21,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -72,7 +72,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			requires: {
@@ -167,7 +167,7 @@
 		            }
 		            {
 		                type: putCardsFromDiscardIntoHand
-		                select: choose(culture(dwarven),skirmish,event)
+		                select: choose(culture(dwarven),timeword(skirmish),event)
 		            }
 		        ]
 		    }
@@ -545,7 +545,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -738,7 +738,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: [
             {
                 type: event

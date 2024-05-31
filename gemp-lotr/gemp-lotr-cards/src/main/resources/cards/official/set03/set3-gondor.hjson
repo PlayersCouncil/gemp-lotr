@@ -56,9 +56,9 @@
         culture: Gondor
         twilight: 0
         type: event
+        timeword: Maneuver
         keyword:
         [
-            Maneuver
             Tale
         ]
         effects: {
@@ -185,9 +185,9 @@
         culture: Gondor
         twilight: 1
         type: event
+        timeword: Maneuver
         keyword:
         [
-            Maneuver
             Tale
         ]
         effects: {
@@ -254,9 +254,9 @@
         culture: Gondor
         twilight: 0
         type: event
+        timeword: Maneuver
         keyword:
         [
-            Maneuver
             Tale
         ]
         effects: {
@@ -269,7 +269,7 @@
                 type: addModifier
                 modifier: {
                     type: modifyCost
-                    filter: maneuver,event
+                    filter: timeword(maneuver),event
                     amount: 2
                 }
             }
@@ -281,7 +281,7 @@
         culture: Gondor
         twilight: 0
         type: event
-        keyword: Skirmish
+        timeword: skirmish
         effects: {
             type: event
             requires: {
@@ -315,7 +315,7 @@
         culture: Gondor
         twilight: 0
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             cost: {
@@ -337,7 +337,7 @@
         culture: Gondor
         twilight: 0
         type: event
-        keyword: Response
+        timeword: response
         effects: {
             type: responseEvent
             trigger: {

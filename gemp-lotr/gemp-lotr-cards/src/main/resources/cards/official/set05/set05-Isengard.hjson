@@ -302,7 +302,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -1498,7 +1498,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

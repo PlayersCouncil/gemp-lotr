@@ -526,7 +526,7 @@
 		culture: Uruk-hai
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: [
 		    {
 		        type: discount
@@ -1084,7 +1084,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {

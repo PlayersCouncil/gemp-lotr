@@ -21,7 +21,7 @@
 		culture: Gandalf
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -77,7 +77,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
@@ -558,7 +558,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -678,9 +678,9 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Spell
-			Skirmish
 		]
 		effects: {
 			type: event

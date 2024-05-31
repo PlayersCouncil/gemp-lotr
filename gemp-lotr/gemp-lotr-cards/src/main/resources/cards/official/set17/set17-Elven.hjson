@@ -80,7 +80,7 @@
 		culture: Elven
 		twilight: 3
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requires: {
@@ -149,7 +149,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -523,7 +523,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			requires: {

@@ -1,9 +1,9 @@
 package com.gempukku.lotro.logic.timing.rules;
 
 import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -15,6 +15,8 @@ import com.gempukku.lotro.logic.timing.Action;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.gempukku.lotro.filters.Filters.timeword;
 
 public class PlayCardInPhaseRule {
     private final DefaultActionsEnvironment actionsEnvironment;
@@ -34,7 +36,7 @@ public class PlayCardInPhaseRule {
                             if (GameUtils.isFP(game, playerId)) {
                                 List<Action> result = new LinkedList<>();
                                 for (PhysicalCard card : Filters.filter(game, game.getGameState().getHand(playerId), side,
-                                        Filters.or(Filters.and(CardType.EVENT, Keyword.FELLOWSHIP), Filters.not(CardType.EVENT)))) {
+                                        Filters.or(Filters.and(CardType.EVENT, timeword(Timeword.FELLOWSHIP)), Filters.not(CardType.EVENT)))) {
                                     if (PlayUtils.checkPlayRequirements(game, card, Filters.any, 0, 0, false, false, true))
                                         result.add(PlayUtils.getPlayCardAction(game, card, 0, Filters.any, false));
                                 }
@@ -44,18 +46,18 @@ public class PlayCardInPhaseRule {
                             if (GameUtils.isShadow(game, playerId)) {
                                 List<Action> result = new LinkedList<>();
                                 for (PhysicalCard card : Filters.filter(game, game.getGameState().getHand(playerId), side,
-                                        Filters.or(Filters.and(CardType.EVENT, Keyword.SHADOW), Filters.not(CardType.EVENT)))) {
+                                        Filters.or(Filters.and(CardType.EVENT, timeword(Timeword.SHADOW)), Filters.not(CardType.EVENT)))) {
                                     if (PlayUtils.checkPlayRequirements(game, card, Filters.any, 0, 0, false, false, true))
                                         result.add(PlayUtils.getPlayCardAction(game, card, 0, Filters.any, false));
                                 }
                                 return result;
                             }
                         } else {
-                            final Keyword phaseKeyword = PlayUtils.PhaseKeywordMap.get(game.getGameState().getCurrentPhase());
-                            if (phaseKeyword != null) {
+                            final Timeword timeword = PlayUtils.PhaseKeywordMap.get(game.getGameState().getCurrentPhase());
+                            if (timeword != null) {
                                 List<Action> result = new LinkedList<>();
                                 for (PhysicalCard card : Filters.filter(game, game.getGameState().getHand(playerId), side,
-                                        Filters.and(CardType.EVENT, phaseKeyword))) {
+                                        Filters.and(CardType.EVENT, Filters.timeword(timeword)))) {
                                     if (PlayUtils.checkPlayRequirements(game, card, Filters.any, 0, 0, false, false, true))
                                         result.add(PlayUtils.getPlayCardAction(game, card, 0, Filters.any, false));
                                 }

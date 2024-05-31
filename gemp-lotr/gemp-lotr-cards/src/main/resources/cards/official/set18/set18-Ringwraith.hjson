@@ -21,7 +21,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
             requires: {
@@ -87,7 +87,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		keywords: Assignment
+		timeword: assignment
 		effects: {
 			type: event
 			cost: {

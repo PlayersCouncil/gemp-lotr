@@ -26,7 +26,7 @@
 		culture: moria
 		twilight: 1
 		type: event
-		keyword: archery
+		timeword: archery
 		effects: {
 			type: event
             requires: {
@@ -95,7 +95,7 @@
 		culture: moria
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -115,7 +115,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -139,7 +139,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: assignment
+		timeword: assignment
 		effects: {
 			type: event
             requires: {
@@ -160,7 +160,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
             requires: {
@@ -202,7 +202,7 @@
 		culture: moria
 		twilight: 2
 		type: event
-		keyword: assignment
+		timeword: assignment
 		effects: {
 			type: event
 			effect: {
@@ -602,7 +602,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
@@ -654,7 +654,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: [
@@ -795,9 +795,9 @@
 		culture: moria
 		twilight: 0
 		type: event
+		timeword: response
 		keyword: [
 			search
-			response
 		]
 		effects: {
 			type: responseEvent
@@ -861,7 +861,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {
@@ -968,7 +968,7 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {

@@ -21,7 +21,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -141,7 +141,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

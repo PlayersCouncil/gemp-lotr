@@ -86,7 +86,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -162,7 +162,7 @@
 		        }
 		        effect: {
 		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(gandalf),skirmish,event)
+		            select: choose(culture(gandalf),timeword(skirmish),event)
 		        }
 		    }
 		]
@@ -198,7 +198,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: [
@@ -484,7 +484,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: {
@@ -616,10 +616,10 @@
 		culture: Gandalf
 		twilight: 6
 		type: Event
+		timeword: Fellowship
 		keywords: [
 			Spell
 			Toil 2
-			Fellowship
 		]
 		effects: {
 			type: event
@@ -667,7 +667,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {

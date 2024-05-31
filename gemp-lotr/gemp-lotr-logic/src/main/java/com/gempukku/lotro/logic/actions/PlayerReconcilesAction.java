@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.actions;
 
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -45,12 +46,12 @@ public class PlayerReconcilesAction implements Action {
     }
 
     @Override
-    public Phase getActionTimeword() {
+    public Timeword getActionTimeword() {
         return null;
     }
 
     @Override
-    public void setActionTimeword(Phase phase) {
+    public void setActionTimeword(Timeword timeword) {
     }
 
     @Override

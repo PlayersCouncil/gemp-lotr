@@ -21,7 +21,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

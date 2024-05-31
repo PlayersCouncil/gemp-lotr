@@ -17,7 +17,7 @@
 		culture: wraith
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			effect: [

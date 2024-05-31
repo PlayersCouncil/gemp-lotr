@@ -85,7 +85,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -132,7 +132,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			effect: [
@@ -225,7 +225,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			requires: {
@@ -571,7 +571,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -696,7 +696,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: [
@@ -744,7 +744,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			effect: [
@@ -783,7 +783,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
@@ -837,7 +837,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			requires: {

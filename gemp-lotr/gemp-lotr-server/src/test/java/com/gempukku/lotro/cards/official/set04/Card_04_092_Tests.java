@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -53,7 +52,7 @@ public class Card_04_092_Tests
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
-		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
+        assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 	}
 

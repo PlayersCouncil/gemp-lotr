@@ -21,7 +21,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: [
@@ -127,7 +127,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {
@@ -224,7 +224,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			requires: {
@@ -291,7 +291,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -337,7 +337,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -446,7 +446,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: [
+		timeword: [
 		    Fellowship
 		    Regroup
 		]
@@ -651,7 +651,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			requires: [

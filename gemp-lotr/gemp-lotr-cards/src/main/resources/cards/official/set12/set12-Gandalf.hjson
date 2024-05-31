@@ -85,10 +85,10 @@
 		culture: Gandalf
 		twilight: 7
 		type: Event
+		timeword: Fellowship
 		keywords: [
 			Spell
 			Toil 3
-			Fellowship
 		]
 		effects: {
 			type: event
@@ -267,9 +267,9 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
+		timeword: Fellowship
 		keywords: [
 			Spell
-			Fellowship
 		]
 		effects: {
 			type: event
@@ -400,9 +400,9 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Spell
-			Skirmish
 		]
 		effects: {
 			type: event
@@ -519,7 +519,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -574,7 +574,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keywords: [
+		timeword: [
 		    Maneuver
 		    Regroup
 		]

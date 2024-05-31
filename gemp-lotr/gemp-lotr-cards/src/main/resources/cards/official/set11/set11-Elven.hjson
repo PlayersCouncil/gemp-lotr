@@ -229,7 +229,7 @@
 		culture: Elven
 		twilight: 3
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			requires: {
@@ -275,7 +275,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -502,7 +502,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -561,7 +561,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			cost: {

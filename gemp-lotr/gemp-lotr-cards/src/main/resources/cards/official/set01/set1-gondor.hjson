@@ -4,7 +4,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
             requires: {
@@ -137,7 +137,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -312,7 +312,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requiresRanger: true
@@ -399,7 +399,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -422,7 +422,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			effect: {
@@ -438,7 +438,7 @@
 		culture: gondor
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requiresRanger: true
@@ -478,7 +478,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requiresRanger: true
@@ -528,7 +528,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -556,7 +556,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: [
+		timeword: [
 			fellowship
 			regroup
 		]
@@ -577,7 +577,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requiresRanger: true
@@ -614,7 +614,7 @@
 		culture: gondor
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
             requires: {
@@ -667,7 +667,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
             requires: {
@@ -676,7 +676,7 @@
             }
 			trigger: {
 				type: played
-				filter: skirmish,event
+				filter: timeword(skirmish),event
 			}
 			effect: {
 				type: cancelEvent
@@ -688,7 +688,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -712,7 +712,7 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -736,7 +736,7 @@
 		culture: gondor
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			effect: [
@@ -761,7 +761,7 @@
 		culture: gondor
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
             requires: {

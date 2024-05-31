@@ -5,7 +5,7 @@
         culture: Sauron
         twilight: 2
         type: event
-        keyword: Regroup
+        timeword: regroup
         effects: {
             type: event
             cost: {
@@ -45,9 +45,9 @@
         culture: Sauron
         twilight: 0
         type: event
+        timeword: Shadow
         keyword:
         [
-            Shadow
             Search
         ]
         effects: {
@@ -78,7 +78,7 @@
         culture: Sauron
         twilight: 0
         type: event
-        keyword: Regroup
+        timeword: regroup
         effects: {
             type: event
             cost: {
@@ -101,7 +101,7 @@
         culture: Sauron
         twilight: 0
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             cost: {
@@ -145,7 +145,7 @@
         culture: Sauron
         twilight: 1
         type: event
-        keyword: Regroup
+        timeword: regroup
         effects: {
             type: event
             cost: {
@@ -419,7 +419,7 @@
         culture: Sauron
         twilight: 0
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             requires: {
@@ -479,7 +479,7 @@
         culture: Sauron
         twilight: 0
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             requires: {

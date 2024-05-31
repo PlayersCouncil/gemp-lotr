@@ -91,7 +91,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -241,7 +241,7 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: [
             {
                 type: activatedInDiscard
@@ -376,7 +376,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -433,7 +433,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {

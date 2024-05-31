@@ -653,7 +653,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -764,7 +764,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -990,7 +990,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requires: {
@@ -1163,7 +1163,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1544,7 +1544,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			requires: {
@@ -1968,7 +1968,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

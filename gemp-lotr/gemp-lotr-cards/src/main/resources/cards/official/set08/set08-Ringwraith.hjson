@@ -21,7 +21,7 @@
 		culture: Wraith
 		twilight: 4
 		type: Event
-		keywords: Assignment
+		timeword: assignment
 		effects: {
 			type: event
 			cost: {
@@ -70,7 +70,7 @@
 		culture: Wraith
 		twilight: 3
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -399,7 +399,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -909,7 +909,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

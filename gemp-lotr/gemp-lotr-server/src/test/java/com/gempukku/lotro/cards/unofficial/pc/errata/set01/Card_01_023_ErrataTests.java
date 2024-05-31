@@ -59,7 +59,7 @@ public class Card_01_023_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, nobody.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, nobody.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, nobody.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(nobody, Keyword.RESPONSE));
+        assertTrue(scn.hasTimeword(nobody, Timeword.RESPONSE));
 		assertEquals(0, nobody.getBlueprint().getTwilightCost());
 	}
 

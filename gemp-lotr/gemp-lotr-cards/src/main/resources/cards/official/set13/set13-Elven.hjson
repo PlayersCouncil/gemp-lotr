@@ -353,7 +353,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -484,7 +484,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -494,7 +494,7 @@
 			effect: [
 				{
 				    type: putCardsFromDiscardIntoHand
-				    select: choose(culture(elven),skirmish,event)
+				    select: choose(culture(elven),timeword(skirmish),event)
 				}
 				{
 				    type: optional
@@ -538,7 +538,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: [
 		    {
 		        type: activatedInDiscard
@@ -674,7 +674,7 @@
 		culture: Elven
 		twilight: 4
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			requires: {
@@ -794,7 +794,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			requires: {
@@ -990,7 +990,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

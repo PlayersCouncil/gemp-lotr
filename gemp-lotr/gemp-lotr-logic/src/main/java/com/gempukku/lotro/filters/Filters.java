@@ -24,6 +24,7 @@ public class Filters {
     private static final Map<Side, Filter> _sideFilterMap = new HashMap<>();
     private static final Map<Culture, Filter> _cultureFilterMap = new HashMap<>();
     private static final Map<Keyword, Filter> _keywordFilterMap = new HashMap<>();
+    private static final Map<Timeword, Filter> _timewordFilterMap = new HashMap<>();
 
     static {
         for (Culture culture : Culture.values())
@@ -42,6 +43,10 @@ public class Filters {
             _possessionClassFilterMap.put(possessionClass, possessionClass(possessionClass));
         for (Keyword keyword : Keyword.values())
             _keywordFilterMap.put(keyword, keyword(keyword));
+        for (Timeword timeword : Timeword.values()) {
+            _timewordFilterMap.put(timeword, timeword(timeword));
+        }
+
 
         // Some simple shortcuts for filters
         // Only companions can be rangers
@@ -109,6 +114,10 @@ public class Filters {
     }
 
     // Filters available
+
+    public static Filter timeword(Timeword timeword) {
+        return (game, physicalCard) -> physicalCard.getBlueprint().hasTimeword(timeword);
+    }
 
     public static Filter maxResistance(final int resistance) {
         return (game, physicalCard) -> game.getModifiersQuerying().getResistance(game, physicalCard) <= resistance;
@@ -608,6 +617,8 @@ public class Filters {
             return _cultureFilterMap.get((Culture) filter);
         else if (filter instanceof Keyword)
             return _keywordFilterMap.get((Keyword) filter);
+        else if (filter instanceof Timeword)
+            return _timewordFilterMap.get((Timeword) filter);
         else if (filter instanceof PossessionClass)
             return _possessionClassFilterMap.get((PossessionClass) filter);
         else if (filter instanceof Race)

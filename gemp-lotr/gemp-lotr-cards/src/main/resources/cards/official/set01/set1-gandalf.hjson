@@ -61,7 +61,7 @@
 		culture: gandalf
 		twilight: 2
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
             requires: [
@@ -308,9 +308,9 @@
 		culture: gandalf
 		twilight: 2
 		type: event
+		timeword: response
 		keyword: [
 			spell
-			response
 		]
 		effects: {
 			type: responseEvent
@@ -333,7 +333,7 @@
 		culture: gandalf
 		twilight: 0
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -356,8 +356,8 @@
 		culture: gandalf
 		twilight: 2
 		type: event
+		timeword: skirmish
 		keyword: [
-			skirmish
 			spell
 		]
 		effects: {
@@ -450,9 +450,9 @@
 		culture: gandalf
 		twilight: 3
 		type: event
+		timeword: fellowship
 		keyword: [
 			spell
-			fellowship
 		]
 		effects: {
 			type: event
@@ -494,9 +494,9 @@
 		culture: gandalf
 		twilight: 1
 		type: event
+		timeword: fellowship
 		keyword: [
 			spell
-			fellowship
 		]
 		effects: {
 			type: event
@@ -538,9 +538,9 @@
 		culture: gandalf
 		twilight: 1
 		type: event
+		timeword: skirmish
 		keyword: [
 			spell
-			skirmish
 		]
 		effects: {
 			type: event
@@ -560,9 +560,9 @@
 		culture: gandalf
 		twilight: 3
 		type: event
+		timeword: fellowship
 		keyword: [
 			spell
-			fellowship
 		]
 		effects: {
 			type: event
@@ -581,9 +581,9 @@
 		culture: gandalf
 		twilight: 1
 		type: event
+		timeword: response
 		keyword: [
 			spell
-			response
 		]
 		effects: {
 			type: responseEvent
@@ -606,9 +606,9 @@
 		culture: gandalf
 		twilight: 1
 		type: event
+		timeword: fellowship
 		keyword: [
 			spell
-			fellowship
 		]
 		effects: {
 			type: event
@@ -627,7 +627,7 @@
 		culture: gandalf
 		twilight: 1
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			effect: {

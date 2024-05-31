@@ -56,7 +56,7 @@
 				optional: true
 				trigger: {
 					type: played
-					filter: your,culture(elven),skirmish,event
+					filter: your,culture(elven),timeword(skirmish),event
 				}
 				cost: {
 					type: exert
@@ -124,7 +124,7 @@
 				}
 				effect: {
 					type: putcardsfromdiscardintohand
-					select: choose(culture(elven),event,skirmish)
+					select: choose(culture(elven),event,timeword(skirmish))
 					count: 1
 				}
 			}

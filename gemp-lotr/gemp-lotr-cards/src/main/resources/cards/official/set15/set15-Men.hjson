@@ -818,7 +818,7 @@
 		culture: Men
 		twilight: 3
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			cost: {
@@ -865,7 +865,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: [

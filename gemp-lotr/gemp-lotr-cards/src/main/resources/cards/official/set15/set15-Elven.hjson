@@ -578,7 +578,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			requires: {
@@ -625,7 +625,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			requires: {
@@ -761,7 +761,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

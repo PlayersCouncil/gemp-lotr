@@ -17,7 +17,7 @@
 		culture: rohan
 		twilight: 1
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {

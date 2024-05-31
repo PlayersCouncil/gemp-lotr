@@ -10,9 +10,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_044_Tests
 {
@@ -58,7 +56,7 @@ public class Card_V1_044_Tests
 		assertEquals(Culture.SAURON, fell.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, fell.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, fell.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(fell, Keyword.REGROUP)); // test for keywords as needed
+        assertTrue(scn.hasTimeword(fell, Timeword.REGROUP)); // test for keywords as needed
 		assertEquals(1, fell.getBlueprint().getTwilightCost());
 		//assertEquals(, fell.getBlueprint().getStrength());
 		//assertEquals(, fell.getBlueprint().getVitality());

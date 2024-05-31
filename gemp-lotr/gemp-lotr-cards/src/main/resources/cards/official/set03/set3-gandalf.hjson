@@ -44,9 +44,9 @@
         culture: Gandalf
         twilight: 4
         type: event
+        timeword: Maneuver
         keyword:
         [
-            Maneuver
             Spell
         ]
         effects: {
@@ -63,7 +63,7 @@
             ]
             effect: {
                 type: discard
-                select: all(shadow,condition)
+                select: all(side(shadow),condition)
             }
         }
     }
@@ -73,9 +73,9 @@
         culture: Gandalf
         twilight: 1
         type: event
+        timeword: Maneuver
         keyword:
         [
-            Maneuver
             Stealth
         ]
         effects: {
@@ -121,9 +121,9 @@
         culture: Gandalf
         twilight: 1
         type: event
+        timeword: Fellowship
         keyword:
         [
-            Fellowship
             Spell
         ]
         effects: {
@@ -159,7 +159,7 @@
         culture: Gandalf
         twilight: 1
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             requires: {

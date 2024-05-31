@@ -57,7 +57,7 @@ public class Card_01_265_ErrataTests
 		assertEquals(Side.SHADOW, butchery.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, butchery.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, butchery.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(butchery, Keyword.RESPONSE));
+        assertTrue(scn.hasTimeword(butchery, Timeword.RESPONSE));
 		assertEquals(0, butchery.getBlueprint().getTwilightCost());
 	}
 

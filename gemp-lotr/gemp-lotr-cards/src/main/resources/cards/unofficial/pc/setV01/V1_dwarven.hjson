@@ -165,7 +165,7 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -195,7 +195,7 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
             requires: {

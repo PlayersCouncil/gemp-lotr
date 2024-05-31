@@ -71,7 +71,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: [
@@ -170,9 +170,9 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
+		timeword: Shadow
 		keywords: [
 			Toil 2
-			Shadow
 		]
 		effects: {
 			type: event
@@ -228,7 +228,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -342,9 +342,9 @@
 		culture: Wraith
 		twilight: 4
 		type: Event
+		timeword: Shadow
 		keywords: [
 			Toil 2
-			Shadow
 		]
 		effects: {
 			type: event

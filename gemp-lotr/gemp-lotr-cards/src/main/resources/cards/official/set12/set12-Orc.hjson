@@ -21,7 +21,7 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -72,9 +72,9 @@
 		culture: Orc
 		twilight: 5
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Toil 2
-			Skirmish
 		]
 		effects: {
 			type: event
@@ -181,7 +181,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			requires: {
@@ -836,7 +836,7 @@
 		        type: modifier
 		        modifier: {
 		            type: modifyCost
-		            filter: your,skirmish,event
+		            filter: your,timeword(skirmish),event
 		            amount: -1
 		        }
 		    }
@@ -1259,9 +1259,9 @@
 		culture: Orc
 		twilight: 3
 		type: Event
+		timeword: Maneuver
 		keywords: [
 			Toil 2
-			Maneuver
 		]
 		effects: {
 			type: event
@@ -1309,7 +1309,7 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {

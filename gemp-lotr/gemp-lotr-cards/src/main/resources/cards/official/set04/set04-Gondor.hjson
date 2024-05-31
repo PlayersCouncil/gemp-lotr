@@ -52,7 +52,7 @@
 		culture: Gondor
 		twilight: 3
 		type: Event
-		keyword: [
+		timeword: [
 		    archery
 		    skirmish
 		]
@@ -197,7 +197,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -297,7 +297,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -726,7 +726,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			requires: {
@@ -1008,7 +1008,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: {
@@ -1064,7 +1064,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: [
+		timeword: [
 		    fellowship
 		    regroup
 		]
@@ -1355,7 +1355,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

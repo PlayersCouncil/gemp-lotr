@@ -21,7 +21,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -192,7 +192,7 @@
 		culture: Gollum
 		twilight: 5
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
@@ -247,7 +247,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -292,7 +292,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -343,7 +343,7 @@
 		culture: Gollum
 		twilight: 5
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: [
@@ -539,7 +539,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

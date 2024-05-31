@@ -255,7 +255,7 @@
 		culture: Isengard
 		twilight: 5
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -304,7 +304,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			text: Play in response to death of {killedCharacter}
@@ -416,9 +416,9 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
+	    timeword: Assignment
 		keywords: [
 			Search
-			Assignment
 		]
 		effects: {
 			type: event
@@ -546,7 +546,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			cost: {
@@ -773,7 +773,7 @@
 		culture: Isengard
 		twilight: 3
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			requires: {
@@ -884,7 +884,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -935,7 +935,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keywords: Assignment
+		timeword: assignment
 		effects: {
 			type: event
 			effect: [
@@ -1087,7 +1087,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -1136,7 +1136,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1423,7 +1423,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: {
@@ -1470,7 +1470,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requires: {
@@ -1526,7 +1526,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -2289,7 +2289,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -4223,7 +4223,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -4270,7 +4270,7 @@
 		culture: Isengard
 		twilight: 3
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			cost: {
@@ -4317,7 +4317,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -4552,7 +4552,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {

@@ -214,7 +214,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
@@ -383,7 +383,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			requires: {

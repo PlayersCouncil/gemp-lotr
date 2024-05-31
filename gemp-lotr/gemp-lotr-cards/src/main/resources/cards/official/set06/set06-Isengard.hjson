@@ -344,7 +344,7 @@
 		culture: Isengard
 		twilight: 4
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {

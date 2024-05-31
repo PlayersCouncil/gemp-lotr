@@ -21,7 +21,7 @@
 		culture: Dwarven
 		twilight: 3
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -152,7 +152,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {

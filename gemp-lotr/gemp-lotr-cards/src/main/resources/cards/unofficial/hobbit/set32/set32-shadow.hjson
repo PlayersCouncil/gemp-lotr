@@ -383,13 +383,13 @@
 				effects: [
 					{
 						type: playCardFromDrawDeck
-						select: choose(culture(moria),not(response))
+						select: choose(culture(moria),not(timeword(response)))
                         showAll: true
                         shuffle: true
 					}
 					{
 						type: playCardFromDiscard
-						select: choose(culture(moria),not(response))
+						select: choose(culture(moria),not(timeword(response)))
 					}
 				]
 			}
@@ -505,13 +505,13 @@
 					effects: [
 						{
 							type: playCardFromDrawDeck
-							select: choose(culture(sauron),not(and(response,event)))
+							select: choose(culture(sauron),not(and(timeword(response),event)))
                             showAll: true
                             shuffle: true
 						}
 						{
 							type: playCardFromDiscard
-							select: choose(culture(sauron),not(and(response,event)))
+							select: choose(culture(sauron),not(and(timeword(response),event)))
 						}
 					]
 				}
@@ -552,7 +552,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
             requires: {
@@ -926,7 +926,7 @@
     culture: smaug
     twilight: 2
     type: event
-    keyword: skirmish
+    timeword: skirmish
     effects: [
       {
         type: activatedInDiscard
@@ -1018,7 +1018,7 @@
     culture: smaug
     twilight: 0
     type: event
-    keyword: shadow
+    timeword: shadow
     effects: {
       type: event
       effect: [
@@ -1271,13 +1271,13 @@
           effects: [
             {
               type: playCardFromDrawDeck
-              select: choose(culture(wraith),not(response,event))
+              select: choose(culture(wraith),not(timeword(response),event))
                 showAll: true
                 shuffle: true
             }
             {
               type: playCardFromDiscard
-              select: choose(culture(wraith),not(response,event))
+              select: choose(culture(wraith),not(timeword(response),event))
             }
           ]
         }
@@ -1289,7 +1289,7 @@
     culture: wraith
     twilight: 1
     type: event
-    keyword: shadow
+    timeword: shadow
     effects: {
       type: event
       effect: [

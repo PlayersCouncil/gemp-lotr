@@ -71,7 +71,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -189,7 +189,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: [
@@ -588,7 +588,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -634,7 +634,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		keywords: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {

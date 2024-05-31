@@ -25,7 +25,7 @@
 		culture: dwarven
 		twilight: 3
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -401,7 +401,7 @@
 		culture: elven
 		twilight: 2
 		type: event
-		keyword: archery
+		timeword: archery
 		effects: {
 			type: event
 			cost: {
@@ -516,9 +516,9 @@
 		culture: gandalf
 		twilight: 3
 		type: event
+		timeword: skirmish
 		keyword: [
 			spell
-			skirmish
 		]
 		effects: {
 			type: event
@@ -613,8 +613,8 @@
 		culture: gandalf
 		twilight: 3
 		type: event
+		timeword: assignment
 		keyword: [
-			assignment
 			spell
 		]
 		effects: {
@@ -732,7 +732,7 @@
     title: An Invisible Ring
     culture: shire
     type: event
-    keyword: skirmish
+    timeword: skirmish
     twilight: 1
     effects: {
       type: event
@@ -755,7 +755,7 @@
     title: Barrels
     culture: shire
     type: event
-    keyword: regroup
+    timeword: regroup
     twilight: 1
     effects: {
       type: event
@@ -878,7 +878,7 @@
     title: Skillful Negociator
     culture: shire
     type: event
-    keyword: maneuver
+    timeword: maneuver
     twilight: 1
     effects: {
       type: event

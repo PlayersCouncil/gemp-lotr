@@ -313,7 +313,7 @@
 		culture: Men
 		twilight: 0
 		type: Event
-		keywords: Response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -611,7 +611,7 @@
 		culture: Men
 		twilight: 2
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {
@@ -987,7 +987,7 @@
 		culture: Men
 		twilight: 3
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			requires: {

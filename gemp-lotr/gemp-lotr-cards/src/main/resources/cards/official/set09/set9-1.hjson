@@ -417,7 +417,7 @@
 			type: modifier
 			modifier: {
 				type: canPlayStackedCards
-				filter: culture(dwarven),skirmish,event
+				filter: culture(dwarven),timeword(skirmish),event
 				on: culture(dwarven),condition
 				requires: {
 					type: phase

@@ -27,7 +27,7 @@
             ]
             effect: {
                 type: discard
-                select: choose(shadow,condition,zone(support))
+                select: choose(side(shadow),condition,zone(support))
             }
         }
     }
@@ -89,7 +89,7 @@
         culture: Shire
         title: Dear Friends
         type: event
-        keyword: Fellowship
+        timeword: fellowship
         twilight: 0
         effects: {
             type: event
@@ -119,9 +119,9 @@
         culture: Shire
         title: Deft in Their Movements
         type: event
+        timeword: Regroup
         keyword:
         [
-            Regroup
             Stealth
         ]
         twilight: 0
@@ -228,7 +228,7 @@
         culture: Shire
         title: Hobbit Sword-play
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         twilight: 0
         effects: {
             type: event
@@ -428,7 +428,7 @@
         culture: Shire
         title: Orc-bane
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         twilight: 0
         effects: {
             type: event
@@ -517,7 +517,7 @@
         culture: Shire
         title: Practically Everyone Was Invited
         type: event
-        keyword: Fellowship
+        timeword: fellowship
         twilight: 0
         effects: {
             type: event

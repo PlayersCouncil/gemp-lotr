@@ -820,7 +820,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		keywords: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {

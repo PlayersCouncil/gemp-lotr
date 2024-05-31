@@ -476,8 +476,8 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
+		timeword: shadow
 		keyword: [
-			shadow
 			spell
 			weather
 		]

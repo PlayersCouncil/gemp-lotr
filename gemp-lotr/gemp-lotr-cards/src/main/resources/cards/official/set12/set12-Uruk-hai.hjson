@@ -231,9 +231,9 @@
 		culture: Uruk-hai
 		twilight: 3
 		type: Event
+		timeword: Maneuver
 		keywords: [
 			Toil 2
-			Maneuver
 		]
 		effects: {
 			type: event
@@ -280,7 +280,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -504,7 +504,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -688,7 +688,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		keywords: Shadow
+		timeword: shadow
 		effects: {
 			type: event
 			requires: {

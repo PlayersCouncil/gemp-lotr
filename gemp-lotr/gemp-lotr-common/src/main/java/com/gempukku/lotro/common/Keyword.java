@@ -1,15 +1,6 @@
 package com.gempukku.lotro.common;
 
 public enum Keyword implements Filterable {
-    // TODO: Event playable keywords - needs to be refactored to its own thing
-    SKIRMISH("Skirmish", false, false, false, false),
-    RESPONSE("Response", false, false, false, false),
-    MANEUVER("Maneuver", false, false, false, false),
-    ARCHERY("Archery", false, false, false, false),
-    SHADOW("Shadow", false, false, false, false),
-    ASSIGNMENT("Assignment", false, false, false, false),
-    REGROUP("Regroup", false, false, false, false),
-
     // TODO: not a real keyword - count be refactored out to separate systems
     ROAMING("Roaming", true, false, false, false),
     MOUNTED("Mounted", false, false, false, false),

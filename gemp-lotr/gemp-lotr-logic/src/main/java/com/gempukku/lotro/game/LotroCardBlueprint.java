@@ -48,6 +48,8 @@ public interface LotroCardBlueprint {
 
     int getKeywordCount(Keyword keyword);
 
+    boolean hasTimeword(Timeword timeword);
+
     Filterable getValidTargetFilter(String playerId, LotroGame game, PhysicalCard self);
 
     int getTwilightCost();

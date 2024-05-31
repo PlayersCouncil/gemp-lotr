@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -59,7 +62,7 @@ public class Card_01_036_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, feet.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, feet.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, feet.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(feet, Keyword.FELLOWSHIP));
+        assertTrue(scn.hasTimeword(feet, Timeword.FELLOWSHIP));
 		assertEquals(2, feet.getBlueprint().getTwilightCost());
 	}
 

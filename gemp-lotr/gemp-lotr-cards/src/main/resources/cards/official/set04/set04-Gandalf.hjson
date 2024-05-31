@@ -227,9 +227,9 @@
 		culture: Gandalf
 		twilight: 5
 		type: Event
+		timeword: fellowship
 		keyword: [
 		    spell
-		    fellowship
 		]
 		effects: {
 			type: event
@@ -272,7 +272,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			requires: {
@@ -375,9 +375,9 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
+		timeword: response
 		keyword: [
 		    spell
-		    response
 		]
 		effects: {
 			type: responseEvent
@@ -425,7 +425,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requires: [
@@ -473,9 +473,9 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
+		timeword: skirmish
 		keyword: [
 		    spell
-		    skirmish
 		]
 		effects: {
 			type: event
@@ -528,9 +528,9 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
+		timeword: maneuver
 		keyword: [
 		    spell
-		    maneuver
 		]
 		effects: {
 			type: event
@@ -573,7 +573,7 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		keyword: [
+		timeword: [
 		    fellowship
 		    maneuver
 		]
@@ -685,7 +685,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: [
@@ -742,9 +742,9 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
+		timeword: regroup
 		keyword: [
 		    spell
-		    regroup
 		]
 		effects: {
 			type: event
@@ -910,7 +910,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -957,7 +957,7 @@
 		culture: Gandalf
 		twilight: 5
 		type: Event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			requires: [
@@ -1080,7 +1080,7 @@
 		culture: Gandalf
 		twilight: 4
 		type: Event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {

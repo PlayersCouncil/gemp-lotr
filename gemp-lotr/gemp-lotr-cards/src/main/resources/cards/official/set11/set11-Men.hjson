@@ -200,7 +200,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		keywords: Regroup
+		timeword: regroup
 		effects: {
 			type: event
 			requires: {
@@ -247,9 +247,9 @@
 		culture: Men
 		twilight: 5
 		type: Event
+		timeword: Skirmish
 		keywords: [
 			Toil 2
-			Skirmish
 		]
 		effects: {
 			type: event
@@ -626,9 +626,9 @@
 		culture: Men
 		twilight: 7
 		type: Event
+		timeword: Archery
 		keywords: [
 			Toil 2
-			Archery
 		]
 		effects: {
 			type: event
@@ -1381,7 +1381,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1594,7 +1594,7 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		keywords: Archery
+		timeword: archery
 		effects: {
 			type: event
 			requires: {
@@ -2055,7 +2055,7 @@
 		culture: Men
 		twilight: 3
 		type: Event
-		keywords: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [

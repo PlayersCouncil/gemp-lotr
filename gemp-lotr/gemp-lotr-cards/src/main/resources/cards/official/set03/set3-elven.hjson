@@ -133,7 +133,7 @@
         culture: Elven
         twilight: 1
         type: event
-        keyword: Maneuver
+        timeword: maneuver
         effects: {
             type: event
             requires: {
@@ -296,7 +296,7 @@
         culture: Elven
         twilight: 1
         type: event
-        keyword: Fellowship
+        timeword: fellowship
         effects: {
             type: event
             effect: [
@@ -518,7 +518,7 @@
         culture: Elven
         twilight: 1
         type: event
-        keyword:
+        timeword:
         [
             Fellowship
             Regroup
@@ -645,7 +645,7 @@
         culture: Elven
         twilight: 0
         type: event
-        keyword:
+        timeword:
         [
             Fellowship
             Maneuver
@@ -682,7 +682,7 @@
             }
             effect: {
                 type: returnToHand
-                select: choose(shadow,condition)
+                select: choose(side(shadow),condition)
             }
         }
     }
@@ -692,9 +692,9 @@
         culture: Elven
         twilight: 2
         type: event
+        timeword: Skirmish
         keyword:
         [
-            Skirmish
             Tale
         ]
         effects: {

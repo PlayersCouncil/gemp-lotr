@@ -18,7 +18,7 @@
 		culture: Sauron
 		title: Southern Spies
 		type: event
-		keyword: Response
+		timeword: response
 		effects: {
 			type: responseEvent
             requires: {
