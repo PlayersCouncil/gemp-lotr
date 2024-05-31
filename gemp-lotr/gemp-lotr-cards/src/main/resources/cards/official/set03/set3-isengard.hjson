@@ -296,7 +296,7 @@
             }
             effect: {
                 type: if
-                condition: {
+                check: {
                     type: canSpot
                     filter: companion
                     count: 5
@@ -659,8 +659,8 @@
                         memorize: assignedCompanion
                     }
                     {
-                        type: conditional
-                        requires: [
+                        type: If
+                        check: [
                             {
                                 type: hasInMemory
                                 memory: assignedMinion
@@ -670,7 +670,7 @@
                                 memory: assignedCompanion
                             }
                         ]
-                        effect: {
+                        true: {
                             type: preventable
                             player: fp
                             text: Would you like to exert {assignedCompanion} to prevent it being assigned to {assignedMinion}

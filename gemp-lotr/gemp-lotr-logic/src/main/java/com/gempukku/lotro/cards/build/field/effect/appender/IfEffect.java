@@ -16,9 +16,9 @@ import org.json.simple.JSONObject;
 public class IfEffect implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "condition", "true", "false");
+        FieldUtils.validateAllowedFields(effectObject, "check", "true", "false");
 
-        final JSONObject[] conditionArray = FieldUtils.getObjectArray(effectObject.get("condition"), "condition");
+        final JSONObject[] conditionArray = FieldUtils.getObjectArray(effectObject.get("check"), "check");
         final JSONObject[] trueEffects = FieldUtils.getObjectArray(effectObject.get("true"), "true");
         final JSONObject[] falseEffects = FieldUtils.getObjectArray(effectObject.get("false"), "false");
 
@@ -30,6 +30,10 @@ public class IfEffect implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 EffectAppender[] effects = checkConditions(actionContext) ? trueEffectAppenders : falseEffectAppenders;
+
+                if(effects == null || effects.length == 0)
+                    return null;
+
                 SubAction subAction = new SubAction(action);
                 for (EffectAppender effectAppender : effects)
                     effectAppender.appendEffect(cost, subAction, actionContext);
@@ -48,6 +52,10 @@ public class IfEffect implements EffectAppenderProducer {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 EffectAppender[] effects = checkConditions(actionContext) ? trueEffectAppenders : falseEffectAppenders;
+
+                if(effects == null || effects.length == 0)
+                    return false;
+
                 for (EffectAppender effectAppender : effects) {
                     if (!effectAppender.isPlayableInFull(actionContext))
                         return false;

@@ -357,12 +357,12 @@
 					count: 2
 				}
 				effect: {
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: perPhaseLimit
 						limit: 2
 					}
-					effect: [
+					true: [
 						{
 							type: incrementPerPhaseLimit
 							limit: 1

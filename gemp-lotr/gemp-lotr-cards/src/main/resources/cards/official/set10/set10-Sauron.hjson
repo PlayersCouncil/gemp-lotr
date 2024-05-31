@@ -312,12 +312,12 @@
 				    memorize: chosenMinion
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: haveInitiative
 				        side: shadow
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenMinion)
 				        keyword: fierce
@@ -993,7 +993,7 @@
 		        }
 		        effect: {
 		            type: if
-		            condition: {
+		            check: {
 		                type: cantSpotFPCultures
 		                amount: 3
 		            }
@@ -1225,7 +1225,7 @@
                     filter: roaming,culture(sauron),minion
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: sauron
 		            select: self
 		        }
@@ -1251,7 +1251,7 @@
 		            ]
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: sauron
 		            select: self
 		        }

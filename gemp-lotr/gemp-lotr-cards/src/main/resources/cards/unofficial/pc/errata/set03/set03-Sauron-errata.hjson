@@ -109,8 +109,8 @@
 		effects: {
 			type: event
 			effect: {
-				type: conditional
-				requires: [
+				type: If
+				check: [
 					{
 						type: canSpot
 						filter: culture(sauron)
@@ -120,7 +120,7 @@
 						filter: nazgul
 					}
 				]
-				effect:	{
+				true:	{
 					type: preventable
 					player: freeps
 					cost: {
@@ -335,13 +335,13 @@
 					memorize: cardsOnTop
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryMatches
 						memory: cardsOnTop
 						filter: side(freeps)
 					}
-					effect: [
+					true: [
 						{
 							type: chooseActiveCards
 							select: choose(companion,not(exhausted),not(Ring-bearer))

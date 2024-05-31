@@ -781,7 +781,7 @@
 		        }
 		        effect: {
 		            type: if
-		            condition: {
+		            check: {
 		                type: memoryMatches
 		                memory: exertedCompanion
 		                filter: unbound,culture(gondor),man
@@ -896,7 +896,7 @@
 		            filter: culture(gondor),man
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gondor
 		            select: self
 		        }
@@ -1374,12 +1374,12 @@
 					}
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: canSpot
 					    filter: memory(chosenMan),inSkirmishAgainst(roaming,minion)
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenMan)
 				        keyword: damage

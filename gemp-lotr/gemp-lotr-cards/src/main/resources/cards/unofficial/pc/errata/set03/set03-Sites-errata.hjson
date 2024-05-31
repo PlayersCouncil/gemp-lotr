@@ -39,13 +39,13 @@
 						select: choose(companion)
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							count: 6
 							filter: companion
 						}
-						effect: [
+						true: [
 							{
 								type: wound
 								count: 2

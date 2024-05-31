@@ -285,13 +285,13 @@
 					memorize: chosenMan
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: chosenMan
 				        filter: inSkirmishAgainst(culture(sauron),minion)
 				    }
-				    effect: [
+				    true: [
 				        {
 				            type: memorizeActive
 				            filter: culture(sauron),minion,inSkirmishAgainst(memory(chosenMan))
@@ -1254,13 +1254,13 @@
 					memorize: chosenCompanion
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: canSpot
 				        filter: culture(gondor),fortification
 				        count: 2
 				    }
-				    effect: {
+				    true: {
 				        type: exert
 				        select: choose(minion,inSkirmishAgainst(memory(chosenCompanion)))
 				    }
@@ -1588,7 +1588,7 @@
 				        filter: side(free people)
 				    }
 				    effect: {
-				        type: addTokens
+				        type: AddCultureTokens
 				        culture: gondor
 				        select: choose(your,condition,HasCultureToken(gondor))
 				    }
@@ -1750,7 +1750,7 @@
 		        }
 		        effect: {
 		            type: if
-		            condition: {
+		            check: {
 		                type: twilightPoolLessThan
 		                amount: 1
 		            }
@@ -2029,7 +2029,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gondor
 		            select: self
 		            count: {
@@ -2698,7 +2698,7 @@
 		            select: choose(culture(gondor),man)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gondor
 		            select: self
 		        }

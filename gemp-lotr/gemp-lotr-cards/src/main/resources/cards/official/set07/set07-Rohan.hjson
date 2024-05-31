@@ -106,13 +106,13 @@
                             memorize: exertedCharacter
                         }
                         {
-                            type: conditional
-                            requires: {
+                            type: If
+                            check: {
                                 type: memoryMatches
                                 memory: exertedCharacter
                                 filter: character
                             }
-                            effect: {
+                            true: {
                                 type: exert
                                 player: free people
                                 select: choose(companion)
@@ -574,13 +574,13 @@
 					}
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
                         type: memoryMatches
                         memory: chosenMan
                         filter: inSkirmishAgainst(wounded,minion)
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenMan)
 				        keyword: damage
@@ -1641,7 +1641,7 @@
 		            filter: culture(rohan),man
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: rohan
 		            select: self
 		        }
@@ -2239,13 +2239,13 @@
 					memorize: chosenCompanion
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: chosenCompanion
 				        filter: inSkirmishAgainst(culture(raider),minion)
 				    }
-				    effect: [
+				    true: [
 				        {
 				            type: modifyStrength
 				            select: memory(chosenCompanion)
@@ -2304,13 +2304,13 @@
 					memorize: chosenCompanion
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: chosenCompanion
 				        filter: mounted
 				    }
-				    effect: {
+				    true: {
 				        type: putRandomCardFromHandBeneathDrawDeck
 				        hand: shadow
 				    }

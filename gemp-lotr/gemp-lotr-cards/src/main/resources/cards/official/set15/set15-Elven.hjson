@@ -339,7 +339,7 @@
 		            select: choose(or(memory(winner),name(Aragorn)))
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: elven
 		            select: self
 		        }

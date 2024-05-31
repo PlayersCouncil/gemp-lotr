@@ -90,7 +90,7 @@
 		            filter: dwarf
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: dwarven
 		            select: self
 		            count: 2

@@ -621,25 +621,25 @@
 					memorize: revealedCard
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: revealedCard
 						filter: side(free people)
 					}
-					effect: {
+					true: {
 						type: heal
 						select: choose(companion)
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: revealedCard
 						filter: side(shadow)
 					}
-					effect: {
+					true: {
 						type: exert
 						select: choose(minion)
 					}
@@ -993,13 +993,13 @@
           memorize: playedSite
         }
         {
-          type: conditional
-          requires: {
+          type: If
+          check: {
             type: memoryMatches
             memory: playedSite
             filter: underground
           }
-          effect: {
+          true: {
             type: drawCards
           }
         }

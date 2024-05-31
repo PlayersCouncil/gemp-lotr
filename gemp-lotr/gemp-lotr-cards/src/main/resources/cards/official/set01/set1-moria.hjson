@@ -659,7 +659,7 @@
 			type: responseEvent
 			trigger: [
 				{
-					type: exerts
+					type: exerted
 					filter: ring bearer
 				}
 				{

@@ -823,7 +823,7 @@
 		            filter: culture(rohan),man
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: rohan
 		            select: self
 		        }
@@ -1979,13 +1979,13 @@
 					memorize: chosenMan
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: chosenMan
 				        filter: mounted
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenMan)
 				        keyword: damage

@@ -375,12 +375,12 @@
 						 select: choose(companion)
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							filter: name(Elrond)
 						}
-						effect: {
+						true: {
 							type: heal
 							select: choose(companion,dwarf)
 							count: 2
@@ -668,13 +668,13 @@
 					memorize: chosenMinion
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: chosenMinion
 						filter: name(Smaug)
 					}
-					effect: {
+					true: {
 						type: wound
 						select: memory(chosenMinion)
 					}
@@ -1152,8 +1152,9 @@
         type: trigger
         optional: true
         trigger: {
-          type: discardFromHandBy
-          by: follower
+          type: discarded
+          fromZone: hand
+          source: follower
         }
         effect: {
           type: drawCards

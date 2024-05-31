@@ -29,7 +29,7 @@
 					filter: self
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: elven
 					select: self
 					count: {
@@ -51,13 +51,13 @@
 						]
 						effects: [
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: cantSpot
 									count: 1
 									filter: HasAnyCultureTokens,self
 								}
-								effect: [
+								true: [
 									{
 										type: discard
 										select: self
@@ -65,13 +65,13 @@
 								]
 							}
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: canSpot
 									count: 1
 									filter: HasAnyCultureTokens,self
 								}
-								effect: [
+								true: [
 									{
 										type: removeTokens
 										count: 1

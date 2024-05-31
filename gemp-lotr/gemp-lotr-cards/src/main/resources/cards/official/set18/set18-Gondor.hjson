@@ -735,7 +735,7 @@
 		            filter: man
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gondor
 		            select: self
 		        }
@@ -926,12 +926,12 @@
 		                until: regroup
 		            }
 		            {
-		                type: conditional
-		                requires: {
+		                type: If
+		                check: {
 		                    type: canSpot
 		                    filter: bearer,name(Boromir)
 		                }
-		                effect: [
+		                true: [
                             {
                                 type: addKeyword
                                 select: bearer

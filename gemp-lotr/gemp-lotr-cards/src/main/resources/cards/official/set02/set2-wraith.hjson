@@ -136,12 +136,12 @@
                 memorize: ringBearer
             }
             {
-                type: conditional
-                requires: {
+                type: If
+                check: {
                     type: canSpot
                     filter: memory(ringBearer),exhausted
                 }
-                effect: {
+                true: {
                     type: putOnRing
                 }
             }

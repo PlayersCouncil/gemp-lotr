@@ -323,13 +323,13 @@
 					memorize: discardedCard
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: discardedCard
 				        filter: any
 				    }
-				    effect: [
+				    true: [
                         {
                             type: chooseHowManyToSpot
                             filter: besieger
@@ -337,7 +337,7 @@
                         }
                         {
                             type: if
-                            condition: {
+                            check: {
                                 type: memoryMatches
                                 memory: discardedCard
                                 filter: minTwilight(memory(spotCount))
@@ -531,9 +531,10 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: playedFromStacked
+		            type: played
 		            filter: self
 		            from: controlledSite
+		            fromZone: stacked
 		        }
 		        effect: {
 		            type: addBurdens
@@ -649,9 +650,10 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: playedFromStacked
+		            type: played
 		            filter: self
 		            from: controlledSite
+		            fromZone: stacked
 		        }
 		        effect: {
 		            type: addThreats
@@ -1181,7 +1183,7 @@
 		            select: choose(besieger)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            select: self
 		            culture: sauron
 		        }
@@ -1374,7 +1376,7 @@
 		        type: Response
 		        trigger: {
 		            type: beforeThreatWounds
-		            killedFilter: companion
+		            filter: companion
 		            deathCause: overwhelm
 		        }
 		        requires: [
@@ -1382,7 +1384,8 @@
                         type: canSpot
                         filter: culture(sauron),orc,inSkirmish
                     }
-                    // TODO: Not sure why this is here, it was in the source code... maybe not needed
+                    // 4bc90765940487de4959dfcee32ad8c130427016
+                    // "Mordor Assassin no longer crashes the game if the RB is overwhelmed"
                     {
                         type: canSpot
                         filter: ringBearer
@@ -3030,7 +3033,7 @@
 		            select: choose(culture(sauron),condition)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: sauron
 		            select: self
 		        }
@@ -3089,7 +3092,7 @@
 		            filter: your,culture(sauron),minion
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: sauron
 		            select: self
 		        }

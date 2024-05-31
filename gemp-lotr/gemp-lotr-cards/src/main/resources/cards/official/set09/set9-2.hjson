@@ -471,19 +471,19 @@
 					]
 					effects: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: canSpot
 								filter: culture(gondor),man,minVitality(3)
 							}
 						}
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: canSpot
 								filter: culture(gondor),man
 							}
-							effect: {
+							true: {
 								type: addThreats
 								amount: 2
 							}
@@ -543,19 +543,19 @@
 					]
 					effects: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: canSpot
 								filter: culture(gondor),man,minVitality(3)
 							}
 						}
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: canSpot
 								filter: culture(gondor),man
 							}
-							effect: {
+							true: {
 								type: addThreats
 								amount: 2
 							}

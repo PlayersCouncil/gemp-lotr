@@ -1314,7 +1314,7 @@
 		            amount: 3
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: dunland
 		            select: self
 		        }
@@ -1642,7 +1642,7 @@
                     against: culture(dunland),man
                 }
                 effect: {
-                    type: addTokens
+                    type: AddCultureTokens
                     culture: dunland
                     select: self
                 }

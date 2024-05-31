@@ -290,13 +290,13 @@
 				    amount: 2
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: canSpot
 				        filter: companion
 				        count: 6
 				    }
-				    effect: {
+				    true: {
 				        type: optional
 				        text: Would you like to return this event to hand?
 				        effect: {
@@ -1188,9 +1188,10 @@
 		        type: trigger
 		        optional: true
 		        trigger: {
-		            type: killedInSkirmish
+		            type: Killed
 		            filter: companion
-		            by: culture(uruk-hai),minion
+		            killer: culture(uruk-hai),minion
+		            inSkirmish: true
 		        }
 		        cost: {
 		            type: discardFromHand

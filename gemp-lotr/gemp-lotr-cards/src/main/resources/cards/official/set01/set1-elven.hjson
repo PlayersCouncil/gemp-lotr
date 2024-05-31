@@ -212,8 +212,8 @@
 					memorize: cardsInHand
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: isGreaterThan
 						firstNumber: {
 							type: forEachInMemory
@@ -222,7 +222,7 @@
 						}
 						secondNumber: 0
 					}
-					effect: {
+					true: {
 						type: discardFromHand
 						hand: shadowPlayer
 						player: shadowPlayer
@@ -420,13 +420,13 @@
 					memorize: revealedCards
 				}
 				{
-					type: Conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryMatches
 						memory: revealedCards
 						filter: culture(isengard),minion
 					}
-					effect: {
+					true: {
 						type: optional
 						text: Would you like to discard an ISENGARD minion revealed to draw 2 cards?
 						effect: {
@@ -871,25 +871,25 @@
 			]
 			effect: [
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryMatches
 						memory: exerter
 						filter: dwarf
 					}
-					effect: {
+					true: {
 						type: heal
 						select: choose(elf)
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryMatches
 						memory: exerter
 						filter: elf
 					}
-					effect: {
+					true: {
 						type: heal
 						select: choose(dwarf)
 					}

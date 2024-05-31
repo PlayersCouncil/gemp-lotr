@@ -33,7 +33,7 @@
 					select: choose(culture(sauron),minion)
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: sauron
 					select: self
 				}
@@ -71,15 +71,15 @@
 				]
 				effect: [
 					{
-						type: conditional
-						requires: [
+						type: If
+						check: [
 							{
 								type: MemoryMatches
 								memory: chosenCard
 								filter: not(or(zone(SUPPORT),and(zone(ATTACHED),attachedTo(zone(SUPPORT)))))
 							}
 						]
-						effect: {
+						true: {
 							type: discard
 							select: self
 						}

@@ -41,8 +41,8 @@
                     memorize: chosenMinions
                 }
                 {
-                    type: conditional
-                    requires: {
+                    type: If
+                    check: {
                         type: IsGreaterThan
                         firstNumber: {
                             type: ForEachInMemory
@@ -50,7 +50,7 @@
                         }
                         secondNumber: 0
                     }
-                    effect: [
+                    true: [
                         {
                             type: revealHand
                             hand: shadowPlayer
@@ -400,7 +400,7 @@
                     }
                     {
                         type: if
-                        condition: {
+                        check: {
                             type: memoryMatches
                             memory: chosenMinion
                             filter: wizard
@@ -603,14 +603,14 @@
 		            }
 		            {
 		                type: if
-		                condition: {
+		                check: {
 		                    type: memoryIs
 		                    memory: chosenFP
 		                    value: yes
 		                }
 		                true: {
     		                type: if
-    		                condition: {
+    		                check: {
     		                    type: memoryMatches
     		                    memory: revealedCards
     		                    filter: side(free people)
@@ -632,7 +632,7 @@
 		                }
 		                false: {
     		                type: if
-    		                condition: {
+    		                check: {
     		                    type: memoryMatches
     		                    memory: revealedCards
     		                    filter: side(shadow)

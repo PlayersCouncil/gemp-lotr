@@ -162,10 +162,10 @@
             type: trigger
             optional: true
             trigger: {
-                type: discardFromHandBy
-                player: you
-                by: side(shadow)
-                forced: true
+                type: discarded
+                filter: your
+                source: side(shadow)
+                ignoreVoluntary: true
             }
             effect: {
                 type: discard

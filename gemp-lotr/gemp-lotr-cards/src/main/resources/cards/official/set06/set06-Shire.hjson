@@ -164,7 +164,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: shire
 		            select: self
 		            count: 2

@@ -320,12 +320,12 @@
 					on: culture(dwarven),condition
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: location
 						filter: or(mountain,underground)
 					}
-					effect: {
+					true: {
 						type: drawCards
 						count: {
 							type: forEachInMemory
@@ -638,12 +638,12 @@
 						memorize: chosenDwarf
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: underground
 						}
-						effect: {
+						true: {
 							type: addKeyword
 							select: memory(chosenDwarf)
 							keyword: damage+1
@@ -671,12 +671,12 @@
 					memorize: dwarf
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: canSpot
 						filter: culture(dwarven),condition,hasStacked(any)
 					}
-					effect: {
+					true: {
 						type: addKeyword
 						select: memory(dwarf)
 						keyword: damage+1

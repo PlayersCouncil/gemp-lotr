@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AddTokens implements EffectAppenderProducer {
+public class AddCultureTokens implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "count", "culture", "select", "memorize");
@@ -32,9 +32,12 @@ public class AddTokens implements EffectAppenderProducer {
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final Culture culture = FieldUtils.getEnum(Culture.class, effectObject.get("culture"), "culture");
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
-        if (select == null)
-            throw new InvalidCardDefinitionException("select needs to be defined");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
+
+        if (select == null)
+            throw new InvalidCardDefinitionException("'select' is a required field for AddCultureTokens");
+        if (culture == null)
+            throw new InvalidCardDefinitionException("'culture' is a required field for AddCultureTokens");
 
         MultiEffectAppender result = new MultiEffectAppender();
 

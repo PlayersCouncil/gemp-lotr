@@ -246,9 +246,10 @@
 			type: trigger
 			optional: true
 			trigger: {
-				type: playedFromStacked
+				type: played
 				filter: culture(moria),minion
 				from: culture(moria),condition
+				fromZone: stacked
 			}
 			effect: {
 				type: modifyStrength
@@ -670,7 +671,8 @@
 			{
 				type: Response
 				trigger: {
-					type: discardFromHand
+					type: discarded
+					fromZone: hand
 					filter: goblin
 					memorize: discardedGoblin
 				}

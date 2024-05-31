@@ -2065,12 +2065,12 @@
 				    memorize: woundedCharacter
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: location
 				        filter: battleground
 				    }
-				    effect: {
+				    true: {
 				        type: optional
 				        text: Would you like to remove (3) to wound {woundedCharacter} again?
 				        effect: {

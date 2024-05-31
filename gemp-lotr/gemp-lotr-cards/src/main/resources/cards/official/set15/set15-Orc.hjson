@@ -733,8 +733,8 @@
 		            ]
 		            effects: [
 		                {
-		                    type: conditional
-		                    requires: {
+		                    type: If
+		                    check: {
 		                        type: canSpotFPCultures
 		                        amount: 3
 		                    }
@@ -1137,7 +1137,7 @@
                     }
                     {
                         type: if
-                        condition: {
+                        check: {
                             type: memoryMatches
                             memory: revealedCard
                             filter: culture(orc),orc
@@ -1378,7 +1378,7 @@
 		        }
 		        effect: {
 		            type: if
-		            condition: {
+		            check: {
 		                type: cantSpot
 		                filter: companion
 		                count: 6

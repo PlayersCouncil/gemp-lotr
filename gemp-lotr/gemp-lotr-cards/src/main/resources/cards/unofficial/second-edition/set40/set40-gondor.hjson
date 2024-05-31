@@ -354,23 +354,23 @@
 				]
 				effects: [
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: not(your)
 						}
-						effect: {
+						true: {
 							type: wound
 							select: choose(roaming,minion,inSkirmishAgainst(bearer))
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: your
 						}
-						effect: {
+						true: {
 							type: wound
 							select: choose(minion,inSkirmishAgainst(bearer))
 						}
@@ -632,23 +632,23 @@
 				]
 				effects: [
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: not(your)
 						}
-						effect: {
+						true: {
 							type: exhaust
 							select: choose(roaming,minion)
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: your
 						}
-						effect: {
+						true: {
 							type: exhaust
 							select: choose(minion)
 						}

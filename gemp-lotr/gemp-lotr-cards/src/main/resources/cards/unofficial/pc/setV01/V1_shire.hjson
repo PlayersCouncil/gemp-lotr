@@ -148,13 +148,13 @@
 						memorize: shireCompanion
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							filter: companion,signet(frodo)
 							count: 3
 						}
-						effect: {
+						true: {
 							type: modifyStrength
 							select: choose(memory(shireCompanion))
 							amount: 1

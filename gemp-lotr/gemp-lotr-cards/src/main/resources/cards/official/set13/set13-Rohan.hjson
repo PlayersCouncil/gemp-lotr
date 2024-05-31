@@ -253,12 +253,12 @@
 			}
 			effect: [
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: cantSpot
 				        filter: companion,maxResistance(3)
 				    }
-				    effect: {
+				    true: {
 				        type: discard
 				        select: choose(possession)
 				    }
@@ -388,7 +388,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            select: self
 		            culture: rohan
 		        }
@@ -880,13 +880,13 @@
                         memorize: chosenCompanion
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: memoryIs
                             memory: exertedTheoden
                             value: yes
                         }
-                        effect: {
+                        true: {
                             type: addKeyword
                             select: memory(chosenCompanion)
                             keyword: damage
@@ -1213,7 +1213,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: rohan
 		            select: self
 		            count: {
@@ -1229,7 +1229,7 @@
 		            phase: regroup
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: rohan
 		            select: self
 		            count: {

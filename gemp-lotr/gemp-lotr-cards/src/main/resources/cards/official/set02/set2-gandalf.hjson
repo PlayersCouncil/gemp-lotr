@@ -172,13 +172,13 @@
 					memorize: playedSite
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: playedSite
 						filter: underground
 					}
-					effect: {
+					true: {
 						type: drawCards
 					}
 				}

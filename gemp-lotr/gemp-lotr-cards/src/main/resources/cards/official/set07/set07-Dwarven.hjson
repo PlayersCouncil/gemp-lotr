@@ -556,12 +556,12 @@
 					memorize: chosenDwarf
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: canSpot
 				        filter: memory(chosenDwarf),canExert
 				    }
-				    effect: {
+				    true: {
                         type: optional
                         text: Would you like to exert {chosenDwarf} to draw 2 cards?
                         effect: {

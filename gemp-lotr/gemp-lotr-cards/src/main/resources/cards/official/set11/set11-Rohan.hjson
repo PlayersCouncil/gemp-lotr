@@ -34,7 +34,7 @@
 		            filter: mounted,culture(rohan),man
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: rohan
 		            select: self
 		            count: 3
@@ -1004,13 +1004,13 @@
 				    amount: 3
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: exertedCompanion
 				        filter: minResistance(5)
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(exertedCompanion)
 				        keyword: damage

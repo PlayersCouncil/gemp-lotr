@@ -124,13 +124,13 @@
                         shuffle: false
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: memoryMatches
                             memory: revealedCards
                             filter: not(culture(sauron))
                         }
-                        effect: {
+                        true: {
                             type: discardFromHand
                             forced: false
                             count: 1

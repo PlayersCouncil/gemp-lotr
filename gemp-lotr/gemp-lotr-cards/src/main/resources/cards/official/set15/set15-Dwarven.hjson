@@ -35,7 +35,7 @@
 		            filter: dwarf
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: dwarven
 		            select: self
 		            count: 2
@@ -69,7 +69,7 @@
 		            }
 		            {
 		                type: if
-		                condition: {
+		                check: {
 		                    type: memoryMatches
 		                    memory: revealedCard
 		                    filter: culture(dwarven)
@@ -385,12 +385,12 @@
 				    memorize: chosenDwarf
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
                         type: canSpot
                         filter: hunter,minion
 				    }
-				    effect: {
+				    true: {
                         type: addKeyword
                         select: memory(chosenDwarf)
                         keyword: damage

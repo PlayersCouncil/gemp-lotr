@@ -186,7 +186,7 @@
 				type: Response
 				trigger: [
 					{
-						type: exerts
+						type: exerted
 						filter: name(Bilbo)
 					}
 					{
@@ -797,23 +797,23 @@
         }
         effect: [
           {
-            type: conditional
-            requires: {
+            type: If
+            check: {
               type: canSpot
               filter: self,attachedTo(name(Bilbo))
             }
-            effect: {
+            true: {
               type: addBurdens
               amount: 1
             }
           }
           {
-            type: conditional
-            requires: {
+            type: If
+            check: {
               type: canSpot
               filter: self,attachedTo(not(name(Bilbo)))
             }
-            effect: {
+            true: {
               type: wound
               select: bearer
             }

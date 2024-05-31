@@ -577,7 +577,7 @@
 			effect: [
 				{
 				    type: if
-				    condition: {
+				    check: {
 				        type: canSpot
 				        filter: name(Legolas)
 				    }
@@ -640,7 +640,7 @@
 		            filter: name(Gimli)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: dwarven
 		            select: self
 		        }
@@ -893,7 +893,7 @@
 		            filter: dwarf
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: dwarven
 		            select: self
 		        }

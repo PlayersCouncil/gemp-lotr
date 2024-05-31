@@ -33,7 +33,7 @@
 			effect: [
 				{
 				    type: if
-				    condition: {
+				    check: {
 				        type: location
 				        filter: battleground
 				    }
@@ -495,7 +495,7 @@
 		        type: trigger
 		        optional: true
 		        trigger: {
-		            type: exerts
+		            type: exerted
 		            filter: companion
 		        }
 		        effect: {
@@ -1520,13 +1520,13 @@
 		                memorize: revealedCard
 		            }
 		            {
-		                type: conditional
-		                requires: {
+		                type: If
+		                check: {
 		                    type: memoryMatches
 		                    memory: revealedCard
 		                    filter: side(shadow)
 		                }
-		                effect: {
+		                true: {
 		                    type: addTwilight
 		                    amount: {
 		                        type: twilightCostInMemory

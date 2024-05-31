@@ -515,13 +515,13 @@
 				    memorize: revealedCard
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: revealedCard
 				        filter: maxTwilight(3)
 				    }
-				    effect: {
+				    true: {
 				        type: modifyStrength
 				        select: choose(minion)
 				        amount: -3
@@ -620,7 +620,7 @@
 		            filter: elf
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: elven
 		            select: self
 		            count: 3

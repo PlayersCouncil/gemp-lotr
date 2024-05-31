@@ -679,7 +679,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gondor
 		            select: self
 		        }
@@ -966,13 +966,13 @@
                         memorize: chosenCompanion
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: memoryMatches
                             memory: chosenCompanion
                             filter: culture(shire),companion
                         }
-                        effect: {
+                        true: {
                             type: discard
                             select: choose(condition,attachedTo(memory(chosenCompanion)))
                             count: 0-1
@@ -1071,7 +1071,7 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: exerts
+		            type: exerted
 		            filter: name(Denethor)
 		        }
 		        effect: {
@@ -1083,7 +1083,7 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: exerts
+		            type: exerted
 		            filter: name(Boromir)
 		        }
 		        effect: {
@@ -1095,7 +1095,7 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: exerts
+		            type: exerted
 		            filter: name(Faramir)
 		        }
 		        cost: {
@@ -1155,7 +1155,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            select: self
 		            culture: gondor
 		            count: {

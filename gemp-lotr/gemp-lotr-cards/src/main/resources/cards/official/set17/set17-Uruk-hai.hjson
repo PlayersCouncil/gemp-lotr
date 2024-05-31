@@ -96,7 +96,7 @@
 		            filter: or(possession,artifact)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: uruk-hai
 		            select: self
 		        }

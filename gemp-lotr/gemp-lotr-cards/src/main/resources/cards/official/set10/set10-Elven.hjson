@@ -105,13 +105,13 @@
 		                forced: false
 		            }
 		            {
-		                type: conditional
-		                requires: {
+		                type: If
+		                check: {
 		                    type: memoryMatches
 		                    memory: discardedCard
 		                    filter: culture(elven)
 		                }
-		                effect: {
+		                true: {
 		                    type: modifyStrength
 		                    select: all(minion,inSkirmishAgainst(self))
 		                    amount: -3
@@ -227,13 +227,13 @@
 		                memorize: revealedCard
 		            }
 		            {
-		                type: conditional
-		                requires: {
+		                type: If
+		                check: {
 		                    type: memoryMatches
 		                    memory: revealedCard
 		                    filter: culture(elven)
 		                }
-		                effect: {
+		                true: {
 		                    type: optional
 		                    text: Discard the card?
 		                    effect: {
@@ -380,13 +380,13 @@
 		                memorize: revealedCard
 		            }
 		            {
-		                type: conditional
-		                requires: {
+		                type: If
+		                check: {
 		                    type: memoryMatches
 		                    memory: revealedCard
 		                    filter: culture(elven)
 		                }
-		                effect: {
+		                true: {
 		                    type: heal
 		                    select: choose(another,elf)
 		                    count: 0-1
@@ -437,12 +437,12 @@
 				    amount: -2
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: canSpot
 				        filter: site,zone(support)
 				    }
-				    effect: {
+				    true: {
 				        type: putPlayedEventOnTopOfDrawDeck
 				    }
 				}

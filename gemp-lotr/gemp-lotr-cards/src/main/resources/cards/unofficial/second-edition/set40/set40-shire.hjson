@@ -480,8 +480,8 @@
 				]
 				effects: [
 					{
-						type: conditional
-						requires: [
+						type: If
+						check: [
 							{
 								type: location
 								filter: siteNumber(1-5)
@@ -492,7 +492,7 @@
 								count: 2
 							}
 						]
-						effect: {
+						true: {
 							type: cancelSkirmish
 							filter: hobbit
 						}
@@ -1025,8 +1025,8 @@
             select: choose(hobbit)
           }
           {
-            type: conditional
-            requires: [
+            type: If
+            check: [
               {
                 type: canSpot
                 count: 2
@@ -1037,7 +1037,7 @@
                 filter: siteNumber(1-4)
               }
             ]
-            effect: {
+            true: {
               type: cancelSkirmish
               filter: hobbit
             }

@@ -232,7 +232,7 @@
 		            }
 		        ]
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: shire
 		            select: self
 		        }
@@ -397,7 +397,7 @@
 		effects: {
 			type: responseEvent
 			trigger: {
-				type: exerts
+				type: exerted
 				filter: minion
 				memorize: exertedMinion
 			}

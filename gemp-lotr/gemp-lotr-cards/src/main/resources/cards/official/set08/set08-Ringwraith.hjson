@@ -269,9 +269,10 @@
 		        type: trigger
 		        optional: true
 		        trigger: {
-		            type: playedFromStacked
+		            type: played
 		            filter: minion
 		            from: self
+		            fromZone: stacked
 		        }
 		        effect: {
 		            type: exert

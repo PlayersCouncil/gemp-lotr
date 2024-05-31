@@ -497,7 +497,7 @@
 		            filter: culture(gondor),man
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gondor
 		            select: self
 		            count: 3
@@ -781,7 +781,7 @@
 			effect: [
 				{
 				    type: if
-				    condition: {
+				    check: {
 				        type: location
 				        filter: regionNumber(1)
 				    }

@@ -36,34 +36,34 @@
 				]
 				effects: [
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: siteNumber(1-5),siteBlock(hobbit)
 						}
-						effect: {
+						true: {
 							type: discard
 							select: choose(culture(dwarven),follower)
 							memorize: discardedFollower
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: not(siteNumber(1-5),siteBlock(hobbit))
 						}
 					}
 				]
 			}
-			effect: [
+			true: [
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: location
 						filter: siteNumber(1-5),siteBlock(hobbit)
 					}
-					effect: {
+					true: {
 						type: repeat
 						times: {
 							type: twilightCostInMemory
@@ -78,12 +78,12 @@
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: location
 						filter: not(siteNumber(1-5),siteBlock(hobbit))
 					}
-					effect: {
+					true: {
 						type: heal
 						select: choose(name(Thorin))
 						times: 2
@@ -275,12 +275,12 @@
 					select: choose(culture(dwarven),companion)
 				}
 				effect: {
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: perPhaseLimit
 						limit: 1
 					}
-					effect: [
+					true: [
 						{
 							type: incrementPerPhaseLimit
 							limit: 1
@@ -595,12 +595,12 @@
 					}
 				]
 				effect: {
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: canSpot
 						filter: inSkirmish,mounted,orc
 					}
-					effect: {
+					true: {
 						type: cancelSkirmish
 						filter: memory(bearer)
 					}
@@ -775,12 +775,12 @@
           count: 3
         }
         {
-          type: conditional
-          requires: {
+          type: If
+          check: {
             type: location
             filter: river
           }
-          effect: {
+          true: {
             type: addModifier
             modifier: {
               type: modifyMoveLimit

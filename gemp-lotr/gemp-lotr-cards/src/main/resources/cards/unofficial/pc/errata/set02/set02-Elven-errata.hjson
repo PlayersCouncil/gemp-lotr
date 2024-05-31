@@ -34,8 +34,8 @@
 					select: choose(condition)
 				}
 				{
-					type: conditional
-					requires: [
+					type: If
+					check: [
 						{
 							type: CanSpot
 							filter: Orc
@@ -46,7 +46,7 @@
 							filter: Elf,ally,not(exhausted),not(memory(firstAlly))
 						}
 					]
-					effect: {
+					true: {
 						type: Optional
 						player: you
 						text: Would you like to exert another Elf ally to discard another condition?

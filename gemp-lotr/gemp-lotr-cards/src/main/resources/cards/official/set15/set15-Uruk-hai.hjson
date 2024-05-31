@@ -665,7 +665,7 @@
 		            against: culture(uruk-hai),minion
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: uruk-hai
 		            select: self
 		        }
@@ -1135,8 +1135,8 @@
 		        ]
 		        effect: {
 		            type: exchangeSite
-		            selector1: memory(spottedSite)
-		            selector2: choose(controlledSite)
+		            site1: memory(spottedSite)
+		            site2: choose(controlledSite)
 		        }
 		    }
 		]
@@ -1466,13 +1466,13 @@
 				    memorize: chosenMinion
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: chosenMinion
 				        filter: hunter
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenMinion)
 				        keyword: damage

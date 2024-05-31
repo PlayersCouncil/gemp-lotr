@@ -21,6 +21,9 @@ public class AppendCardIdsToWhileInZone implements EffectAppenderProducer {
 
         String memory = FieldUtils.getString(effectObject.get("memory"), "memory");
 
+        if (memory == null)
+            throw new InvalidCardDefinitionException("'memory' needs to be defined for AppendCardIdsToWhileInZone effect.");
+
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {

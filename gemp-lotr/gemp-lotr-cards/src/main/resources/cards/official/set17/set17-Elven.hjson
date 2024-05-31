@@ -233,7 +233,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: elven
 		            select: self
 		            count: {
@@ -569,7 +569,7 @@
 			effect: [
 				{
 				    type: if
-				    condition: {
+				    check: {
 				        type: memoryIs
 				        memory: played
 				        value: first

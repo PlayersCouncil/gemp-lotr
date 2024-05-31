@@ -243,13 +243,13 @@
 				    memorize: chosenSite
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: chosenSite
 				        filter: any
 				    }
-				    effect: {
+				    true: {
                         type: playSite
                         number: {
                             type: siteNumberInMemory

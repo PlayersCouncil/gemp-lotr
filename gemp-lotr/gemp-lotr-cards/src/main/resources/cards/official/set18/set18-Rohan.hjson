@@ -29,10 +29,10 @@
 		            type: played
 		            player: you
 		            filter: culture(rohan),possession
-		            from: hand
+		            fromZone: hand
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: rohan
 		            select: self
 		        }
@@ -422,12 +422,12 @@
                         amount: 4
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: canSpot
                             filter: bearer,name(Gamling)
                         }
-                        effect: {
+                        true: {
                             type: costToEffect
                             cost: {
                                 type: spot

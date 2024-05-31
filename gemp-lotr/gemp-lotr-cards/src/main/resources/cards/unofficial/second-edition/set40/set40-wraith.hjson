@@ -91,12 +91,12 @@
 						select: all(hasAttached(self),not(ring bearer))
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							filter: hasAttached(self),ring bearer
 						}
-						effect: {
+						true: {
 							type: addBurdens
 						}
 					}

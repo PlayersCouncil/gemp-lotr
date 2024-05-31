@@ -208,12 +208,12 @@
 						count: 1
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							filter: exhausted,ring bearer
 						}
-						effect: {
+						true: {
 								type: drawCards
 								count: 1
 						}
@@ -274,13 +274,13 @@
 				 
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memorymatches
 						memory: chosenNazzy
 						filter: name(The Witch-king)
 					}
-					effect: {
+					true: {
 						type: addKeyword
 						select: memory(chosenNazzy)
 						keyword: damage+1

@@ -291,12 +291,12 @@
 				            select: choose(side(shadow),condition)
 				        }
 				        {
-				            type: conditional
-				            requires: {
+				            type: If
+				            check: {
 				                type: location
 				                filter: battleground
 				            }
-				            effect: {
+				            true: {
 				                type: discard
 				                select: choose(condition)
 				            }
@@ -529,12 +529,12 @@
 				    amount: 2
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: location
 				        filter: or(battleground,dwelling)
 				    }
-                    effect: {
+                    true: {
                         type: putCardsFromDiscardIntoHand
                         select: choose(culture(gandalf),condition)
                         count: 0-1

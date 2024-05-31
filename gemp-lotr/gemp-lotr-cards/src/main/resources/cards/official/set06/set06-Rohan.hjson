@@ -458,7 +458,7 @@
 		            filter: culture(rohan),man
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: raider
 		            select: self
 		            count: 2

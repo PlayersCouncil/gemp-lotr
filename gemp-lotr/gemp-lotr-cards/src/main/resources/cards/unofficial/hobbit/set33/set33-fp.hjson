@@ -169,7 +169,7 @@
 					filter: or(name(bifur),name(bofur),name(bombur))
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: dwarven
 					select: self
 				}
@@ -356,9 +356,9 @@
         type: trigger
         optional: true
         trigger: {
-          type: exertedBy
+          type: exerted
           filter: name(Balin)
-          by: culture(dwarven),event
+          source: culture(dwarven),event
         }
         effect: {
           type: heal
@@ -578,26 +578,26 @@
         ]
         effects: [
           {
-            type: conditional
-            requires: {
+            type: If
+            check: {
               type: cantSpot
               filter: culture(dwarven),possession
             }
-            effect: {
+            true: {
               type: exert
               select: choose(dwarf,companion)
             }
           }
           {
-            type: conditional
-            requires: {
+            type: If
+            check: {
               type: canSpot
               filter: culture(dwarven),possession
             }
           }
         ]
       }
-      effect: {
+      true: {
         type: choice
         texts: [
           Take from your draw deck

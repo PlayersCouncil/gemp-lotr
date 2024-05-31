@@ -102,12 +102,12 @@
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: location
 						filter: underground
 					}
-					effect: {
+					true: {
 						type: addKeyword
 						select: memory(chosenDwarf)
 						keyword: damage
@@ -126,13 +126,13 @@
 					memorize: choice
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryIs
 						memory: choice
 						value: yes
 					}
-					effect: {
+					true: {
 						type: discardTopCardsFromDeck
 						count: 3
 						forced: false
@@ -142,13 +142,13 @@
 					type: Repeat
 					times: 9
 					effect: {
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: MemoryIs
 							memory: choice
 							value: yes
 						}
-						effect: [
+						true: [
 							{
 								type: chooseYesOrNo
 								player: you
@@ -156,13 +156,13 @@
 								memorize: choice
 							}
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: MemoryIs
 									memory: choice
 									value: yes
 								}
-								effect: {
+								true: {
 									type: discardTopCardsFromDeck
 									count: 3
 									forced: false

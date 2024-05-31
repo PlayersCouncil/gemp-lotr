@@ -573,9 +573,9 @@
 		effects: {
 			type: responseEvent
 			trigger: {
-				type: killedBy
+				type: killed
 				filter: character
-				by: nazgul
+				killer: nazgul
 			}
 			effect: [
 				{
@@ -633,7 +633,7 @@
 		            select: choose(nazgul)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: wraith
 		            select: self
 		        }
@@ -1976,7 +1976,7 @@
 		                limit: 1
 		            }
 		            {
-		                type: addTokens
+		                type: AddCultureTokens
 		                culture: wraith
 		                select: self
 		            }
@@ -2150,7 +2150,7 @@
 		    {
 		        type: trigger
 		        trigger: {
-		            type: exerts
+		            type: exerted
 		            filter: bearer
 		        }
 		        effect: {

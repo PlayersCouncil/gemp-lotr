@@ -121,13 +121,13 @@
 						memorize: bottomCard
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryMatches
 							memory: bottomCard
 							filter: minion
 						}
-						effect: {
+						true: {
 							type: playCardFromDiscard
 							select: choose(culture(men),man)
 						}
@@ -251,13 +251,13 @@
 					memorize: bottomCard
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: bottomCard
 						filter: minion
 					}
-					effect: {
+					true: {
 						type: addKeyword
 						select: bearer
 						keyword: damage+1
@@ -959,26 +959,26 @@
 						]
 						effects: [
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: memoryMatches
 									memory: revealedCard
 									filter: side(shadow)
 								}
-								effect: {
+								true: {
 									type: modifyArcheryTotal
 									side: shadow
 									amount: 2
 								}
 							}
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: memoryMatches
 									memory: revealedCard
 									filter: side(free people)
 								}
-								effect: {
+								true: {
 									type: exert
 									select: self
 								}

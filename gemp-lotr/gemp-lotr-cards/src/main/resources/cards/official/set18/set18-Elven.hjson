@@ -405,7 +405,7 @@
 		            select: choose(side(free people))
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: elven
 		            select: self
 		        }

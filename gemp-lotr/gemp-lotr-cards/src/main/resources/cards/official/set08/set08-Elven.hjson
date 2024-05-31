@@ -300,7 +300,7 @@
                     }
 		        ]
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: elven
 		            select: self
 		        }

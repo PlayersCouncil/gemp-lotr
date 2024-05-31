@@ -633,7 +633,7 @@
 		        trigger: {
 		            type: played
 		            filter: self
-		            from: hand
+		            fromZone: hand
 		        }
 		        effect: {
 		            type: choice
@@ -643,12 +643,12 @@
 		            ]
 		            effects: [
 		                {
-		                    type: conditional
-		                    requires: {
+		                    type: If
+		                    check: {
 		                        type: canSpot
 		                        filter: another,culture(men),minion
 		                    }
-		                    effect: {
+		                    true: {
 		                        type: removeTwilight
 		                        amount: 3
 		                    }
@@ -1563,12 +1563,13 @@
 		            {
 		                type: played
 		                filter: self
-		                from: deck
+		                fromZone: deck
 		            }
 		            {
-		                type: playedFromStacked
+		                type: played
 		                filter: self
 		                from: your,culture(men),possession
+		                fromZone: stacked
 		            }
 		        ]
 		        effect: {

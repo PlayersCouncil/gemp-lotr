@@ -40,12 +40,12 @@
 				memorize: weakMinion
 			}
 			effect: {
-				type: conditional
-				requires: {
+				type: If
+				check: {
 					type: cantSpot
 					filter: culture(gandalf)
 				}
-				effect: {
+				true: {
 					type: addModifier
 					modifier: {
 						type: modifyStrength
@@ -145,7 +145,7 @@
 			type: trigger
 			optional: true
 			trigger: {
-				type: exerts
+				type: exerted
 				filter: your,companion
 				memorize: exertedComp
 			}

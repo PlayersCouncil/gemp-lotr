@@ -36,7 +36,7 @@
 		            count: 2
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: dunland
 		            select: self
 		            count: 2

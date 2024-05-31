@@ -146,12 +146,12 @@
 					# Need to check for minions first, else if this was the last
 					# minion on the table, it defaults to asking freeps to make
 					# the choice.
-					type: Conditional
-					requires: {
+					type: If
+					check: {
 						type: CanSpot
 						filter: minion
 					}
-					effect: [
+					true: [
 						{
 							type: ChooseActiveCards
 							select: choose(minion)

@@ -1140,7 +1140,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: uruk-hai
 		            select: self
 		            count: {

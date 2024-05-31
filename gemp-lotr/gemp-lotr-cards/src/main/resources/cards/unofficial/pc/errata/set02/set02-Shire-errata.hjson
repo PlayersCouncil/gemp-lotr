@@ -153,12 +153,12 @@
 				]
 				effects: [
 					{ 
-						type: Conditional
-						requires: {
+						type: If
+						check: {
 							type: CanSpot
 							filter: memory(bearer),InSkirmishAgainst(Nazgul)
 						}
-						effect: {
+						true: {
 							type: addmodifier
 							modifier: {
 								type: modifyStrength

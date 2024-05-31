@@ -96,7 +96,7 @@
 		            select: choose(urukHai)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: sauron
 		            select: self
 		        }

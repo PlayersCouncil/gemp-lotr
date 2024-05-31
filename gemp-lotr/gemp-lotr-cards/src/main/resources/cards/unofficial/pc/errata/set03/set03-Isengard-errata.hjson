@@ -348,23 +348,23 @@
 					]
 					effects: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: canSpot
 								filter: self,not(exhausted)
 							}
-							effect: {
+							true: {
 								type: exert
 								select: self
 							}
 						}
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: canSpot
 								filter: self,exhausted
 							}
-							effect: {
+							true: {
 								type: discard
 								select: self
 							}

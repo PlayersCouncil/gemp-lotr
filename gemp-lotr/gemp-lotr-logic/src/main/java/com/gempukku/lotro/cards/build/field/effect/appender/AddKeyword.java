@@ -36,6 +36,9 @@ public class AddKeyword implements EffectAppenderProducer {
         final String keywordString = FieldUtils.getString(effectObject.get("keyword"), "keyword");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
 
+        if (keywordString == null)
+            throw new InvalidCardDefinitionException("'keyword' needs to be defined for AddKeyword effect.");
+
         Function<ActionContext, Keyword> keywordFunction;
         ValueSource amount;
         if (keywordString.startsWith("fromMemory(") && keywordString.endsWith(")")) {

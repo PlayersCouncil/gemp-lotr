@@ -31,7 +31,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: orc
 		            select: self
 		            count: {
@@ -432,8 +432,9 @@
 		        type: trigger
 		        optional: true
 		        trigger: {
-		            type: killedInSkirmish
+		            type: Killed
 		            filter: culture(orc),minion
+		            inSkirmish: true
 		        }
 		        effect: {
 		            type: modifyStrength
@@ -727,12 +728,12 @@
                                 select: self
                             }
                             {
-                                type: conditional
-                                requires: {
+                                type: If
+                                check: {
                                     type: canSpot
                                     filter: nextSite,underground
                                 }
-                                effect: {
+                                true: {
                                     type: exert
                                     select: self
                                 }

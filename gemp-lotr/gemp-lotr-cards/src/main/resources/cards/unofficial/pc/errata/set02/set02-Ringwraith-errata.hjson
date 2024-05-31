@@ -140,12 +140,12 @@
 						# Doing this as an effect and not a cost as I'm not
 						# sure whether violating the condition would count
 						# as "not paying" the cost.
-						type: Conditional
-						requires: {
+						type: If
+						check: {
 							type: CantSpot
 							filter: Nazgul
 						}
-						effect: {
+						true: {
 							type: RevealCardsFromHand
 							select: choose(Nazgul)
 						}

@@ -196,12 +196,12 @@
                         type: removeBurdens
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: location
                             filter: dwelling
                         }
-                        effect: {
+                        true: {
                             type: heal
                             select: choose(ringBearer)
                         }
@@ -413,12 +413,12 @@
 				    multiplier: 3
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: location
 				        filter: dwelling
 				    }
-				    effect: {
+				    true: {
 				        type: optional
 				        text: Would you like to discard 2 cards to return this event to your hand?
 				        effect: {
@@ -750,7 +750,7 @@
 		            filter: culture(shire),companion
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: shire
 		            select: self
 		        }

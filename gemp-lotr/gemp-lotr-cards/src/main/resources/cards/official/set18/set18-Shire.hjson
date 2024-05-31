@@ -148,7 +148,7 @@
 		            filter: culture(shire),companion
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: shire
 		            select: self
 		        }
@@ -402,7 +402,7 @@
 		            source: side(shadow)
 		        }
 		        cost: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: shire
 		            select: self
 		        }

@@ -17,7 +17,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("addkeyword", new AddKeyword());
         effectAppenderProducers.put("addmodifier", new AddModifier());
         effectAppenderProducers.put("addthreats", new AddThreats());
-        effectAppenderProducers.put("addtokens", new AddTokens());
+        effectAppenderProducers.put("addculturetokens", new AddCultureTokens());
         effectAppenderProducers.put("addtrigger", new AddTrigger());
         effectAppenderProducers.put("addtwilight", new AddTwilight());
         effectAppenderProducers.put("alteroverwhelmmultiplier", new AlterOverwhelmMultiplier());
@@ -44,7 +44,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("choosehowmanythreatstospot", new ChooseHowManyThreatsToSpot());
         effectAppenderProducers.put("choosehowmanytwilighttokenstospot", new ChooseHowManyTwilightTokensToSpot());
         effectAppenderProducers.put("chooseyesorno", new ChooseYesOrNo());
-        effectAppenderProducers.put("conditional", new ConditionalEffect());
         effectAppenderProducers.put("consumesurplusdamage", new ConsumeSurplusDamage());
         effectAppenderProducers.put("corruptringbearer", new CorruptRingBearer());
         effectAppenderProducers.put("costtoeffect", new CostToEffect());
