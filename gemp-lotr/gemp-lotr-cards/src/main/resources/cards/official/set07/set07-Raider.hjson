@@ -1263,7 +1263,7 @@
 		            amount: 3
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: raider
 		            select: self
 		        }

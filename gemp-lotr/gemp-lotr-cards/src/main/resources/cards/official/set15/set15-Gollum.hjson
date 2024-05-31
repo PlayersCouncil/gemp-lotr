@@ -439,7 +439,7 @@
 		            filter: name(Sméagol)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gollum
 		            select: self
 		        }

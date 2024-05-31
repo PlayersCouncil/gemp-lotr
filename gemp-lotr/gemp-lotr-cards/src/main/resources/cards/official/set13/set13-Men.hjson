@@ -775,7 +775,7 @@
 		                memorize: spotCount
 		            }
 		            {
-		                type: addTokens
+		                type: AddCultureTokens
 		                select: self
 		                culture: men
 		                count: memory(spotCount)
@@ -1108,7 +1108,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: men
 		            select: self
 		        }

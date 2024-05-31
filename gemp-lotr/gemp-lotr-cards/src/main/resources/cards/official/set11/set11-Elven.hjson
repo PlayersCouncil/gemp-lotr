@@ -620,7 +620,7 @@
 		            filter: elf
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: elven
 		            select: self
 		            count: 3

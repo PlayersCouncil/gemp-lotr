@@ -1588,7 +1588,7 @@
 				        filter: side(free people)
 				    }
 				    effect: {
-				        type: addTokens
+				        type: AddCultureTokens
 				        culture: gondor
 				        select: choose(your,condition,HasCultureToken(gondor))
 				    }
@@ -2029,7 +2029,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gondor
 		            select: self
 		            count: {
@@ -2698,7 +2698,7 @@
 		            select: choose(culture(gondor),man)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gondor
 		            select: self
 		        }

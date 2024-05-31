@@ -195,7 +195,7 @@
 					filter: culture(shire),or(condition,possession)
 				}
 				cost: {
-					type: addtokens
+					type: AddCultureTokens
 					count: 1
 					culture: shire
 					select: self

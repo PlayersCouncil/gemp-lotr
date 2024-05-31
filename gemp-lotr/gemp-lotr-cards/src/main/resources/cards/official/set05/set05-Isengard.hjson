@@ -383,7 +383,7 @@
 		            select: choose(urukHai)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: isengard
 		            select: self
 		        }
@@ -877,7 +877,7 @@
 		            select: choose(urukHai)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: isengard
 		            select: self
 		        }
@@ -1072,7 +1072,7 @@
 		            select: choose(urukHai)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: isengard
 		            select: self
 		        }
@@ -1140,7 +1140,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            select: choose(machine)
 		            culture: isengard
 		        }
@@ -1192,7 +1192,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            select: choose(machine)
 		            culture: isengard
 		        }

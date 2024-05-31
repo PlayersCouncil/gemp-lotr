@@ -169,7 +169,7 @@
 					filter: or(name(bifur),name(bofur),name(bombur))
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: dwarven
 					select: self
 				}

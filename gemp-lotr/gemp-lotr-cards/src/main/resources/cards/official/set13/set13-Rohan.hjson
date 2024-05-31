@@ -388,7 +388,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            select: self
 		            culture: rohan
 		        }
@@ -1213,7 +1213,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: rohan
 		            select: self
 		            count: {
@@ -1229,7 +1229,7 @@
 		            phase: regroup
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: rohan
 		            select: self
 		            count: {

@@ -1183,7 +1183,7 @@
 		            select: choose(besieger)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            select: self
 		            culture: sauron
 		        }
@@ -3033,7 +3033,7 @@
 		            select: choose(culture(sauron),condition)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: sauron
 		            select: self
 		        }
@@ -3092,7 +3092,7 @@
 		            filter: your,culture(sauron),minion
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: sauron
 		            select: self
 		        }

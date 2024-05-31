@@ -665,7 +665,7 @@
 		            against: culture(uruk-hai),minion
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: uruk-hai
 		            select: self
 		        }

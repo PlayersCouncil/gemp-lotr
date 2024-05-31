@@ -376,7 +376,7 @@
 		            select: choose(nazgul)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: wraith
 		            select: self
 		        }

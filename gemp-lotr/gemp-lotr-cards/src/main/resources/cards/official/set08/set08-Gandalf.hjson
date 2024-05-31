@@ -259,7 +259,7 @@
 		            }
 		        ]
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gandalf
 		            select: self
 		        }

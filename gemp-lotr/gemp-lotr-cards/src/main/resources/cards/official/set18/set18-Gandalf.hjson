@@ -234,7 +234,7 @@
 		            select: choose(culture(gandalf),man)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            count: 2
 		            culture: gandalf
 		            select: self

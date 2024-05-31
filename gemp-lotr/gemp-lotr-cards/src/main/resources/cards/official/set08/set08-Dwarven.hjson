@@ -434,7 +434,7 @@
                     }
                 ]
                 effect: {
-                    type: addTokens
+                    type: AddCultureTokens
                     culture: dwarven
                     select: self
                 }

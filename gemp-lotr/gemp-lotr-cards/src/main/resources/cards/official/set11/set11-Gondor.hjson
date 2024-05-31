@@ -497,7 +497,7 @@
 		            filter: culture(gondor),man
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gondor
 		            select: self
 		            count: 3

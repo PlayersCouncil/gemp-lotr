@@ -220,7 +220,7 @@
 		            forced: true
 		        }
                 effect: {
-                    type: addTokens
+                    type: AddCultureTokens
                     culture: raider
                     select: choose(HasCultureToken(raider))
                     count: 2

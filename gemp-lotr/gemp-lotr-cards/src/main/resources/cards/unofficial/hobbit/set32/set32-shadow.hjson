@@ -318,7 +318,7 @@
 					filter: culture(moria),minion
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: moria
 					select: self
 				}

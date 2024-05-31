@@ -90,7 +90,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: raider
 		            select: self
 		        }
@@ -198,7 +198,7 @@
                     }
                 ]
                 effect: {
-                    type: addTokens
+                    type: AddCultureTokens
                     culture: raider
                     select: choose(HasCultureToken(raider))
                     count: 2
@@ -315,7 +315,7 @@
 		            type: removeThreats
 		        }
                 effect: {
-                    type: addTokens
+                    type: AddCultureTokens
                     culture: raider
                     select: choose(HasCultureToken(raider))
                     count: 2
@@ -372,7 +372,7 @@
 		            count: 2
 		        }
                 effect: {
-                    type: addTokens
+                    type: AddCultureTokens
                     culture: raider
                     select: choose(HasCultureToken(raider))
                     count: 2
@@ -491,7 +491,7 @@
 		            select: choose(ally)
 		        }
                 effect: {
-                    type: addTokens
+                    type: AddCultureTokens
                     culture: raider
                     select: choose(HasCultureToken(raider))
                     count: 2
@@ -551,7 +551,7 @@
 				select: choose(possession)
 			}
             effect: {
-                type: addTokens
+                type: AddCultureTokens
                 culture: raider
                 select: choose(HasCultureToken(raider))
                 count: 2
@@ -608,7 +608,7 @@
 		            count: 2
 		        }
                 effect: {
-                    type: addTokens
+                    type: AddCultureTokens
                     culture: raider
                     select: choose(HasCultureToken(raider))
                     count: 2
@@ -658,7 +658,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: raider
 		            select: self
 		        }
@@ -1064,7 +1064,7 @@
 		            ]
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: raider
 		            select: self
 		        }

@@ -1641,7 +1641,7 @@
 		            filter: culture(rohan),man
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: rohan
 		            select: self
 		        }

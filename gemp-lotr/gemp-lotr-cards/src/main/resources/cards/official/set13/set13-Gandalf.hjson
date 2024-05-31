@@ -153,7 +153,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gandalf
 		            select: self
 		        }
@@ -893,7 +893,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gandalf
 		            select: self
 		            count: {

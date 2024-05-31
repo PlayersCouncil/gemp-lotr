@@ -607,7 +607,7 @@
 		            filter: name(Legolas)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: elven
 		            select: self
 		        }
@@ -1316,7 +1316,7 @@
 		            filter: elf
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: elven
 		            select: self
 		        }

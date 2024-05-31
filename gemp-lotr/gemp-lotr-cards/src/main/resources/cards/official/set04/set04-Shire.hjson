@@ -440,7 +440,7 @@
 		            filter: hobbit
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: shire
 		            select: self
 		        }

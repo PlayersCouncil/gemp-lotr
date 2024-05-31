@@ -17,7 +17,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("addkeyword", new AddKeyword());
         effectAppenderProducers.put("addmodifier", new AddModifier());
         effectAppenderProducers.put("addthreats", new AddThreats());
-        effectAppenderProducers.put("addtokens", new AddTokens());
+        effectAppenderProducers.put("addculturetokens", new AddCultureTokens());
         effectAppenderProducers.put("addtrigger", new AddTrigger());
         effectAppenderProducers.put("addtwilight", new AddTwilight());
         effectAppenderProducers.put("alteroverwhelmmultiplier", new AlterOverwhelmMultiplier());

@@ -344,7 +344,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: gollum
 		            select: self
 		            count: {

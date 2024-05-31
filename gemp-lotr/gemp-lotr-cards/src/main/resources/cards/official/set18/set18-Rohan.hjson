@@ -32,7 +32,7 @@
 		            fromZone: hand
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: rohan
 		            select: self
 		        }

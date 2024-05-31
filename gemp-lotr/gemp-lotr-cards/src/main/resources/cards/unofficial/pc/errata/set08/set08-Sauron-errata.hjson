@@ -33,7 +33,7 @@
 					select: choose(culture(sauron),minion)
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: sauron
 					select: self
 				}

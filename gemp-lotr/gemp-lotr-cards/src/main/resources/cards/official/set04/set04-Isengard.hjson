@@ -93,7 +93,7 @@
 		            select: choose(urukHai)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: isengard
 		            select: self
 		        }
@@ -722,7 +722,7 @@
 		            against: urukHai
 		        }
 		        effect: {
-    		        type: addTokens
+    		        type: AddCultureTokens
     		        culture: isengard
     		        select: self
 		        }
@@ -2744,7 +2744,7 @@
 		            filter: self
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: isengard
 		            select: choose(machine)
 		        }
@@ -4386,7 +4386,7 @@
 		            select: choose(culture(isengard),archer)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: isengard
 		            select: self
 		        }

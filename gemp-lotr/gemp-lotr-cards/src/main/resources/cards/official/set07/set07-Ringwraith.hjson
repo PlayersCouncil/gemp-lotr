@@ -633,7 +633,7 @@
 		            select: choose(nazgul)
 		        }
 		        effect: {
-		            type: addTokens
+		            type: AddCultureTokens
 		            culture: wraith
 		            select: self
 		        }
@@ -1976,7 +1976,7 @@
 		                limit: 1
 		            }
 		            {
-		                type: addTokens
+		                type: AddCultureTokens
 		                culture: wraith
 		                select: self
 		            }
