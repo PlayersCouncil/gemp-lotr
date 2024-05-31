@@ -47,12 +47,12 @@ public class DiscardCardFromHandDiscountEffect extends AbstractSubActionEffect i
 
     @Override
     public int getMaximumPossibleDiscount(LotroGame game) {
-        return Filters.filter(game.getGameState().getHand(_playerId), game, _discardedCardFilter).size();
+        return Filters.filter(game, game.getGameState().getHand(_playerId), _discardedCardFilter).size();
     }
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return Filters.filter(game.getGameState().getHand(_playerId), game, _discardedCardFilter).size() >= _minimalDiscount;
+        return Filters.filter(game, game.getGameState().getHand(_playerId), _discardedCardFilter).size() >= _minimalDiscount;
     }
 
     @Override

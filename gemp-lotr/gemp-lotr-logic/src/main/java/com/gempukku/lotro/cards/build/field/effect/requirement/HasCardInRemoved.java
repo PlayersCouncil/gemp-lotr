@@ -26,11 +26,11 @@ public class HasCardInRemoved implements RequirementProducer {
             if (playerSource != null) {
                 LotroGame game = actionContext.getGame();
                 String playerId = playerSource.getPlayer(actionContext);
-                return Filters.filter(game.getGameState().getRemoved(playerId), game, new Filterable[]{filterable}).size() >= count;
+                return Filters.filter(game, game.getGameState().getRemoved(playerId), new Filterable[]{filterable}).size() >= count;
             } else {
                 int totalCount = 0;
                 for (String playerId : GameUtils.getAllPlayers(actionContext.getGame())) {
-                    totalCount += Filters.filter(actionContext.getGame().getGameState().getRemoved(playerId), actionContext.getGame(), filterable).size();
+                    totalCount += Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getRemoved(playerId), filterable).size();
                     if (totalCount >= count)
                         return true;
                 }

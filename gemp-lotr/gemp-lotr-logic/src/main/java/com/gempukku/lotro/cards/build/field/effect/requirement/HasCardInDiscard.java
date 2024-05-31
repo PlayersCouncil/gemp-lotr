@@ -24,7 +24,7 @@ public class HasCardInDiscard implements RequirementProducer {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
             LotroGame game = actionContext.getGame();
             String playerId = playerSource.getPlayer(actionContext);
-            return Filters.filter(game.getGameState().getDiscard(playerId), game, new Filterable[]{filterable}).size() >= count;
+            return Filters.filter(game, game.getGameState().getDiscard(playerId), new Filterable[]{filterable}).size() >= count;
         };
     }
 }

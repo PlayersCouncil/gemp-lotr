@@ -66,6 +66,10 @@ public class Filters {
         return countSpottable(game, filters) >= count;
     }
 
+    public static boolean hasActive(LotroGame game, Filterable... filters) {
+        return findFirstActive(game, filters) != null;
+    }
+
     public static Collection<PhysicalCard> filterActive(LotroGame game, Filterable... filters) {
         Filter filter = Filters.and(filters);
         GetCardsMatchingFilterVisitor getCardsMatchingFilter = new GetCardsMatchingFilterVisitor(game, filter);
@@ -73,7 +77,7 @@ public class Filters {
         return getCardsMatchingFilter.getPhysicalCards();
     }
 
-    public static Collection<PhysicalCard> filter(Iterable<? extends PhysicalCard> cards, LotroGame game, Filterable... filters) {
+    public static Collection<PhysicalCard> filter(LotroGame game, Iterable<? extends PhysicalCard> cards, Filterable... filters) {
         Filter filter = Filters.and(filters);
         List<PhysicalCard> result = new LinkedList<>();
         for (PhysicalCard card : cards) {
@@ -293,7 +297,7 @@ public class Filters {
         return (game, physicalCard) -> {
             Skirmish skirmish = game.getGameState().getSkirmish();
             if (skirmish != null && skirmish.getFellowshipCharacter() != null) {
-                return (skirmish.getFellowshipCharacter() == physicalCard && Filters.filter(skirmish.getShadowCharacters(), game, againstFilter).size() > 0)
+                return (skirmish.getFellowshipCharacter() == physicalCard && Filters.acceptsAny(game, skirmish.getShadowCharacters(), Filters.and(againstFilter)))
                         || (skirmish.getShadowCharacters().contains(physicalCard) && Filters.and(againstFilter).accepts(game, skirmish.getFellowshipCharacter()));
             }
             return false;
@@ -341,7 +345,7 @@ public class Filters {
         return (game, physicalCard) -> {
             for (Assignment assignment : game.getGameState().getAssignments()) {
                 if (assignment.getFellowshipCharacter() == physicalCard)
-                    return Filters.filter(assignment.getShadowCharacters(), game, againstFilters).size() > 0;
+                    return Filters.acceptsAny(game, assignment.getShadowCharacters(), Filters.and(againstFilters));
                 else if (assignment.getShadowCharacters().contains(physicalCard) && assignment.getFellowshipCharacter() != null)
                     return Filters.and(againstFilters).accepts(game, assignment.getFellowshipCharacter());
             }
@@ -492,7 +496,7 @@ public class Filters {
     public static Filter hasAttached(int count, final Filterable... filters) {
         return (game, physicalCard) -> {
             List<PhysicalCard> physicalCardList = game.getGameState().getAttachedCards(physicalCard);
-            return (Filters.filter(physicalCardList, game, filters).size() >= count);
+            return (Filters.filter(game, physicalCardList, filters).size() >= count);
         };
     }
 
@@ -505,7 +509,7 @@ public class Filters {
             List<PhysicalCard> physicalCardList = game.getGameState().getStackedCards(physicalCard);
             if (filter.length == 1 && filter[0] == Filters.any)
                 return physicalCardList.size() >= count;
-            return (Filters.filter(physicalCardList, game, Filters.and(filter, activeSide)).size() >= count);
+            return (Filters.filter(game, physicalCardList, Filters.and(filter, activeSide)).size() >= count);
         };
     }
 
@@ -660,8 +664,8 @@ public class Filters {
         return changeToFilter(filterable).accepts(game, physicalCard);
     }
 
-    public static boolean acceptsAny(LotroGame game, Filterable filterable, Iterable<PhysicalCard> cards) {
-        Filter filter = changeToFilter(filterable);
+    public static boolean acceptsAny(LotroGame game, Iterable<? extends PhysicalCard> cards, Filterable... filterable) {
+        Filter filter = and(filterable);
         for (PhysicalCard card : cards) {
             if (filter.accepts(game, card))
                 return true;

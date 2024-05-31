@@ -33,7 +33,7 @@ public class PlayCardInPhaseRule {
                         if (phase == Phase.FELLOWSHIP) {
                             if (GameUtils.isFP(game, playerId)) {
                                 List<Action> result = new LinkedList<>();
-                                for (PhysicalCard card : Filters.filter(game.getGameState().getHand(playerId), game, side,
+                                for (PhysicalCard card : Filters.filter(game, game.getGameState().getHand(playerId), side,
                                         Filters.or(Filters.and(CardType.EVENT, Keyword.FELLOWSHIP), Filters.not(CardType.EVENT)))) {
                                     if (PlayUtils.checkPlayRequirements(game, card, Filters.any, 0, 0, false, false, true))
                                         result.add(PlayUtils.getPlayCardAction(game, card, 0, Filters.any, false));
@@ -43,7 +43,7 @@ public class PlayCardInPhaseRule {
                         } else if (phase == Phase.SHADOW) {
                             if (GameUtils.isShadow(game, playerId)) {
                                 List<Action> result = new LinkedList<>();
-                                for (PhysicalCard card : Filters.filter(game.getGameState().getHand(playerId), game, side,
+                                for (PhysicalCard card : Filters.filter(game, game.getGameState().getHand(playerId), side,
                                         Filters.or(Filters.and(CardType.EVENT, Keyword.SHADOW), Filters.not(CardType.EVENT)))) {
                                     if (PlayUtils.checkPlayRequirements(game, card, Filters.any, 0, 0, false, false, true))
                                         result.add(PlayUtils.getPlayCardAction(game, card, 0, Filters.any, false));
@@ -54,7 +54,7 @@ public class PlayCardInPhaseRule {
                             final Keyword phaseKeyword = PlayUtils.PhaseKeywordMap.get(game.getGameState().getCurrentPhase());
                             if (phaseKeyword != null) {
                                 List<Action> result = new LinkedList<>();
-                                for (PhysicalCard card : Filters.filter(game.getGameState().getHand(playerId), game, side,
+                                for (PhysicalCard card : Filters.filter(game, game.getGameState().getHand(playerId), side,
                                         Filters.and(CardType.EVENT, phaseKeyword))) {
                                     if (PlayUtils.checkPlayRequirements(game, card, Filters.any, 0, 0, false, false, true))
                                         result.add(PlayUtils.getPlayCardAction(game, card, 0, Filters.any, false));

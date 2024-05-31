@@ -25,7 +25,7 @@ public class HasCardInDeadPile implements RequirementProducer {
             final LotroGame game = actionContext.getGame();
 
             // You can "spot" cards in dead pile, only for current player
-            return Filters.filter(game.getGameState().getDeadPile(GameUtils.getFreePeoplePlayer(game)), game, filterable).size() >= count;
+            return Filters.filter(game, game.getGameState().getDeadPile(GameUtils.getFreePeoplePlayer(game)), filterable).size() >= count;
         };
     }
 }

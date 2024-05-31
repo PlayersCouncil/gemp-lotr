@@ -48,9 +48,9 @@ public class PlayNextSite implements EffectAppenderProducer {
                             return physicalCard.getBlueprint().getSiteNumber() == nextSiteNumber;
                         }
                     };
-                    return Filters.filter(game.getGameState().getAdventureDeck(playerId), game, Filters.and(filterable, printedSiteNumber)).size() > 0;
+                    return Filters.acceptsAny(game, game.getGameState().getAdventureDeck(playerId), Filters.and(filterable, printedSiteNumber));
                 } else {
-                    return Filters.filter(game.getGameState().getAdventureDeck(playerId), game, filterable).size() > 0;
+                    return Filters.acceptsAny(game, game.getGameState().getAdventureDeck(playerId), filterable);
                 }
             }
 

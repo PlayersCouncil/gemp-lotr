@@ -21,7 +21,7 @@ public class CantBeAssignedAgainstModifier extends AbstractModifier {
 
     @Override
     public boolean isValidAssignments(LotroGame game, Side side, PhysicalCard companion, Set<PhysicalCard> minions) {
-        if ((_side == null || side == _side) && Filters.filter(minions, game, _minionFilter).size() > 0)
+        if ((_side == null || side == _side) && Filters.acceptsAny(game, minions, _minionFilter))
             return false;
 
         return true;

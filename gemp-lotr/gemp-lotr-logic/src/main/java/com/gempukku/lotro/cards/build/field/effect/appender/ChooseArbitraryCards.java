@@ -45,7 +45,7 @@ public class ChooseArbitraryCards implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 Collection<? extends PhysicalCard> cards = actionContext.getCardsFromMemory(fromMemory);
-                Collection<PhysicalCard> selectableCards = Filters.filter(cards, actionContext.getGame(), filterableSource.getFilterable(actionContext));
+                Collection<PhysicalCard> selectableCards = Filters.filter(actionContext.getGame(), cards, filterableSource.getFilterable(actionContext));
 
                 Evaluator evaluator = valueSource.getEvaluator(actionContext);
                 int minimum = Math.min(selectableCards.size(), evaluator.getMinimum(actionContext.getGame(), null));

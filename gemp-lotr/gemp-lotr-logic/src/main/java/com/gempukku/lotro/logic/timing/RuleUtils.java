@@ -164,7 +164,7 @@ public class RuleUtils {
                             for (PossessionClass possessionClass : possessionClasses) {
                                 List<PhysicalCard> attachedCards = game.getGameState().getAttachedCards(attachedTo);
 
-                                Collection<PhysicalCard> matchingClassPossessions = Filters.filter(attachedCards, game, Filters.or(CardType.POSSESSION, CardType.ARTIFACT), possessionClass);
+                                Collection<PhysicalCard> matchingClassPossessions = Filters.filter(game, attachedCards, Filters.or(CardType.POSSESSION, CardType.ARTIFACT), possessionClass);
                                 if (matchingClassPossessions.size() > 1)
                                     return false;
 

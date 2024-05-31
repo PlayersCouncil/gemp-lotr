@@ -153,7 +153,7 @@ public class LotroGameMediator {
 
                 if (card.getZone() == Zone.HAND)
                     sb.append("<b>Card is in hand - stats are only provisional</b><br><br>");
-                else if (Filters.filterActive(_lotroGame, card).size() == 0)
+                else if (!Filters.hasActive(_lotroGame, card))
                     sb.append("<b>Card is inactive - current stats may be inaccurate</b><br><br>");
 
                 sb.append("<b>Affecting card:</b>");

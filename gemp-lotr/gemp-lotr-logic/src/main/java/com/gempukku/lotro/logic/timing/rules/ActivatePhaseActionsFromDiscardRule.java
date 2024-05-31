@@ -26,7 +26,7 @@ public class ActivatePhaseActionsFromDiscardRule {
                     public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
                         List<Action> result = new LinkedList<>();
                         final Side side = GameUtils.getSide(game, playerId);
-                        for (PhysicalCard activableCard : Filters.filter(game.getGameState().getDiscard(playerId), game, side)) {
+                        for (PhysicalCard activableCard : Filters.filter(game, game.getGameState().getDiscard(playerId), side)) {
                             List<? extends Action> list = activableCard.getBlueprint().getPhaseActionsFromDiscard(playerId, game, activableCard);
                             if (list != null) {
                                 for (Action action : list) {

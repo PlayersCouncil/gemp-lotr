@@ -25,7 +25,7 @@ public class AddKeywordFromModifier extends AbstractModifier implements KeywordA
     public boolean hasKeyword(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
         if (terrainOnly && !keyword.isTerrain())
             return false;
-        return Filters.filterActive(game, from, keyword).size() > 0;
+        return Filters.hasActive(game, from, keyword);
     }
 
     @Override

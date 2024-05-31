@@ -45,7 +45,7 @@ public class MemorizeDiscard implements EffectAppenderProducer {
                         if (uniqueTitles) {
                             discard = filterUniqueTitles(discard);
                         }
-                        final Collection<PhysicalCard> physicalCards = Filters.filter(discard, game, filterable);
+                        final Collection<PhysicalCard> physicalCards = Filters.filter(game, discard, filterable);
                         actionContext.setCardMemory(memory, physicalCards);
                     }
                 };

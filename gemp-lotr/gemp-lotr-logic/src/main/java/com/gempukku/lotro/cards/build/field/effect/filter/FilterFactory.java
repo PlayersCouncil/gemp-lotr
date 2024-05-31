@@ -66,8 +66,7 @@ public class FilterFactory {
                             @Override
                             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                                 Culture culture = physicalCard.getBlueprint().getCulture();
-                                // TODO - replace all Filters.filter(...).size() > 0 with Filters.acceptsAny - much faster
-                                return Filters.filter(deadPile, game, culture).size() > 0;
+                                return Filters.acceptsAny(game, deadPile, culture);
                             }
                         };
                     }
@@ -404,7 +403,7 @@ public class FilterFactory {
                     return (actionContext) -> Filters.and(Filters.inSkirmish,
                             (Filter) (game, physicalCard) -> {
                                 Filterable filterable = filterableSource.getFilterable(actionContext);
-                                return Filters.filter(game.getGameState().getSkirmish().getShadowCharacters(), game, filterable).size() >= count;
+                                return Filters.filter(game, game.getGameState().getSkirmish().getShadowCharacters(), filterable).size() >= count;
                             });
                 });
         parameterFilters.put("maxtwilight",

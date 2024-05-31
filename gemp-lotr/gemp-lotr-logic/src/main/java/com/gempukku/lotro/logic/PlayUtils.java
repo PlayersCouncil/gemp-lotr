@@ -159,7 +159,7 @@ public class PlayUtils {
 
         final int activeCount = Filters.countActive(game, Filters.name(blueprint.getSanitizedTitle()));
         return activeCount == 0
-                && (ignoreCheckingDeadPile || (Filters.filter(game.getGameState().getDeadPile(self.getOwner()), game, Filters.name(blueprint.getSanitizedTitle())).size() == 0));
+                && (ignoreCheckingDeadPile || (Filters.filter(game, game.getGameState().getDeadPile(self.getOwner()), Filters.name(blueprint.getSanitizedTitle())).size() == 0));
     }
 
     private static boolean checkRuleOfNine(LotroGame game, PhysicalCard self) {
@@ -171,7 +171,7 @@ public class PlayUtils {
 
     private static int getTotalCompanions(String playerId, LotroGame game) {
         return Filters.countActive(game, CardType.COMPANION)
-                + Filters.filter(game.getGameState().getDeadPile(playerId), game, CardType.COMPANION).size();
+                + Filters.filter(game, game.getGameState().getDeadPile(playerId), CardType.COMPANION).size();
     }
 
     private static boolean checkPlayRingBearer(LotroGame game, PhysicalCard self) {

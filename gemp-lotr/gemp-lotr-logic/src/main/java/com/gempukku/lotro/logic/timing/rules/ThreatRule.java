@@ -31,7 +31,7 @@ public class ThreatRule {
                     public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult) {
                         if (effectResult.getType() == EffectResult.Type.ANY_NUMBER_KILLED) {
                             KilledResult killResult = (KilledResult) effectResult;
-                            if (Filters.filter(killResult.getKilledCards(), game, Filters.or(CardType.COMPANION, CardType.ALLY)).size() > 0) {
+                            if (Filters.acceptsAny(game, killResult.getKilledCards(), Filters.or(CardType.COMPANION, CardType.ALLY))) {
                                 RequiredTriggerAction action = new RequiredTriggerAction(null);
                                 action.appendEffect(
                                         new ThreatWoundsEffect(killResult));

@@ -30,7 +30,7 @@ public class HasCardStacked implements RequirementProducer {
             LotroGame game = actionContext.getGame();
             final Collection<PhysicalCard> matchingStackedOn = Filters.filterActive(game, onFilterable);
             for (PhysicalCard stackedOnCard : matchingStackedOn) {
-                if (Filters.filter(game.getGameState().getStackedCards(stackedOnCard), game, new Filterable[]{filterable}).size() >= count)
+                if (Filters.filter(game, game.getGameState().getStackedCards(stackedOnCard), new Filterable[]{filterable}).size() >= count)
                     return true;
             }
             return false;

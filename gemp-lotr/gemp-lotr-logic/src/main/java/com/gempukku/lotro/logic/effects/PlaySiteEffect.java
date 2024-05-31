@@ -60,14 +60,14 @@ public class PlaySiteEffect extends AbstractEffect {
                 }
             };
             if (_siteBlock != null)
-                return Filters.filter(game.getGameState().getAdventureDeck(_playerId), game, Filters.and(_extraSiteFilters, printedSiteNumber, Filters.siteBlock(_siteBlock)));
+                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, printedSiteNumber, Filters.siteBlock(_siteBlock)));
             else
-                return Filters.filter(game.getGameState().getAdventureDeck(_playerId), game, Filters.and(_extraSiteFilters, printedSiteNumber));
+                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, printedSiteNumber));
         } else {
             if (_siteBlock != null)
-                return Filters.filter(game.getGameState().getAdventureDeck(_playerId), game, Filters.and(_extraSiteFilters, Filters.siteBlock(_siteBlock)));
+                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, Filters.siteBlock(_siteBlock)));
             else
-                return Filters.filter(game.getGameState().getAdventureDeck(_playerId), game, _extraSiteFilters);
+                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), _extraSiteFilters);
         }
     }
 

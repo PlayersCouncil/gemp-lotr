@@ -32,7 +32,7 @@ public class PlayResponseEventRule {
                     public List<? extends Action> getOptionalAfterActions(String playerId, LotroGame game, EffectResult effectResult) {
                         List<Action> result = new LinkedList<>();
                         final Side side = GameUtils.getSide(game, playerId);
-                        for (PhysicalCard responseEvent : Filters.filter(game.getGameState().getHand(playerId), game, side, CardType.EVENT, Keyword.RESPONSE)) {
+                        for (PhysicalCard responseEvent : Filters.filter(game, game.getGameState().getHand(playerId), side, CardType.EVENT, Keyword.RESPONSE)) {
                             if (PlayUtils.checkPlayRequirements(game, responseEvent, Filters.any, 0, 0, false, false, false)) {
                                 final List<PlayEventAction> actions = responseEvent.getBlueprint().getPlayResponseEventAfterActions(playerId, game, effectResult, responseEvent);
                                 if (actions != null)
@@ -46,7 +46,7 @@ public class PlayResponseEventRule {
                     public List<? extends Action> getOptionalBeforeActions(String playerId, LotroGame game, Effect effect) {
                         List<Action> result = new LinkedList<>();
                         final Side side = GameUtils.getSide(game, playerId);
-                        for (PhysicalCard responseEvent : Filters.filter(game.getGameState().getHand(playerId), game, side, CardType.EVENT, Keyword.RESPONSE)) {
+                        for (PhysicalCard responseEvent : Filters.filter(game, game.getGameState().getHand(playerId), side, CardType.EVENT, Keyword.RESPONSE)) {
                             if (PlayUtils.checkPlayRequirements(game, responseEvent, Filters.any, 0, 0, false, false, false)) {
                                 final List<PlayEventAction> actions = responseEvent.getBlueprint().getPlayResponseEventBeforeActions(playerId, game, effect, responseEvent);
                                 if (actions != null)
