@@ -19,7 +19,7 @@ public class SortAndFilterCards {
         String[] rarity = getRarityFilter(filterParams);
         String[] sets = getSetFilter(filterParams);
         List<String> words = getWords(filterParams);
-        Boolean canStartWithRing = getBoolean(filterParams, false);
+        Boolean canStartWithRing = getBoolean(filterParams);
         Set<CardType> cardTypes = getEnumFilter(CardType.values(), CardType.class, "cardType", null, filterParams);
         Set<Culture> cultures = getEnumFilter(Culture.values(), Culture.class, "culture", null, filterParams);
         Set<Keyword> keywords = getEnumFilter(Keyword.values(), Keyword.class, "keyword", Collections.emptySet(), filterParams);
