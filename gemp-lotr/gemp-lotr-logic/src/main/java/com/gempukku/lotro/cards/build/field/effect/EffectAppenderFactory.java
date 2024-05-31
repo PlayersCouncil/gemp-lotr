@@ -85,11 +85,11 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("memorize", new MemorizeActive());
         effectAppenderProducers.put("memorizeactive", new MemorizeActive());
         effectAppenderProducers.put("memorizediscard", new MemorizeDiscard());
+        effectAppenderProducers.put("memorizeinfo", new MemorizeInfo());
         effectAppenderProducers.put("memorizenumber", new MemorizeNumber());
         effectAppenderProducers.put("memorizestacked", new MemorizeStacked());
         effectAppenderProducers.put("memorizetitle", new MemorizeTitle());
         effectAppenderProducers.put("memorizetopofdeck", new MemorizeTopOfDeck());
-        effectAppenderProducers.put("memorizevalue", new MemorizeValue());
         effectAppenderProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
         effectAppenderProducers.put("modifyresistance", new ModifyResistance());
         effectAppenderProducers.put("modifysitenumber", new ModifySiteNumber());

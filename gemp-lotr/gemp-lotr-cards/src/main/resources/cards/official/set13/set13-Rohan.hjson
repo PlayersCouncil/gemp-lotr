@@ -857,9 +857,9 @@
                             select: choose(name(Théoden))
                         }
                         effect: {
-                            type: memorizeValue
+                            type: MemorizeInfo
                             memory: exertedTheoden
-                            value: yes
+                            info: yes
                         }
                     }
                 }

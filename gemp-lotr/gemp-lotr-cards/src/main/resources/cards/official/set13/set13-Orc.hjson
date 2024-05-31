@@ -1139,9 +1139,9 @@
 			            amount: 2
 			        }
 			        effect: {
-			            type: memorizeValue
+			            type: MemorizeInfo
 			            memory: removedBurdens
-			            value: yes
+			            info: yes
 			        }
 			    }
 			}

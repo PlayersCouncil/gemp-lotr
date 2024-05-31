@@ -12,12 +12,12 @@ import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import org.json.simple.JSONObject;
 
-public class MemorizeValue implements EffectAppenderProducer {
+public class MemorizeInfo implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "value", "memory");
+        FieldUtils.validateAllowedFields(effectObject, "info", "memory");
 
-        final String value = FieldUtils.getString(effectObject.get("value"), "value");
+        final String info = FieldUtils.getString(effectObject.get("info"), "info");
         final String memory = FieldUtils.getString(effectObject.get("memory"), "memory");
 
         if (memory == null)
@@ -29,11 +29,10 @@ public class MemorizeValue implements EffectAppenderProducer {
                 return new UnrespondableEffect() {
                     @Override
                     protected void doPlayEffect(LotroGame game) {
-                        actionContext.setValueToMemory(memory, value);
+                        actionContext.setValueToMemory(memory, info);
                     }
                 };
             }
         };
     }
-
 }

@@ -32,9 +32,9 @@
 			}
 			effect: [
 				{
-					type: MemorizeValue
+					type: MemorizeInfo
 					memory: choice
-					value: yes
+					info: yes
 				}
 				{
 					type: If

@@ -391,9 +391,9 @@
 			                filter: ent
 			            }
 			            true: {
-			                type: memorizeValue
+			                type: MemorizeInfo
 			                memory: effect
-			                value: first
+			                info: first
 			            }
 			        }
 			        {
@@ -404,9 +404,9 @@
 			                count: 2
 			            }
 			            true: {
-			                type: memorizeValue
+			                type: MemorizeInfo
 			                memory: effect
-			                value: second
+			                info: second
 			            }
 			        }
 			    ]

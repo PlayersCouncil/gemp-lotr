@@ -25,12 +25,12 @@ public class MemorizeDiscard implements EffectAppenderProducer {
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "filter", "memory", "uniqueTitles");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "any");
         final String memory = FieldUtils.getString(effectObject.get("memory"), "memory");
         final boolean uniqueTitles = FieldUtils.getBoolean(effectObject.get("uniqueTitles"), "uniqueTitles", false);
 
         if (memory == null)
-            throw new InvalidCardDefinitionException("Memory is required for a Memorize effect.");
+            throw new InvalidCardDefinitionException("Memory is required for a MemorizeDiscard effect.");
 
         final FilterableSource filterSource = environment.getFilterFactory().generateFilter(filter, environment);
 

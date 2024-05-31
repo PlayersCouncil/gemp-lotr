@@ -544,9 +544,9 @@
                                 type: addThreats
 			                }
 			                {
-			                    type: memorizeValue
+			                    type: MemorizeInfo
 			                    memory: played
-			                    value: first
+			                    info: first
 			                }
 			            ]
 			        }
@@ -558,9 +558,9 @@
                                 amount: 3
 			                }
 			                {
-			                    type: memorizeValue
+			                    type: MemorizeInfo
 			                    memory: played
-			                    value: second
+			                    info: second
 			                }
 			            ]
 			        }

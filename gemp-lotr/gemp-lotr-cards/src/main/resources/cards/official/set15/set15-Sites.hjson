@@ -343,9 +343,9 @@
 		        }
 		        effect: [
 		            {
-		                type: memorizeValue
+		                type: MemorizeInfo
 		                memory: used
-		                value: yes
+		                info: yes
 		            }
 		            {
 		                type: storeWhileInZone
