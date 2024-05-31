@@ -25,17 +25,18 @@ public class ChooseArbitraryCards implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "fromMemory", "count", "filter", "memorize", "text", "player");
 
         final String fromMemory = FieldUtils.getString(effectObject.get("fromMemory"), "fromMemory");
-        if (fromMemory == null)
-            throw new InvalidCardDefinitionException("You need to define fromMemory to display arbitrary cards");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "any");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
-        if (memorize == null)
-            throw new InvalidCardDefinitionException("You need to define what memory to use to store chosen cards");
         final String text = FieldUtils.getString(effectObject.get("text"), "text");
-        if (text == null)
-            throw new InvalidCardDefinitionException("You need to define text to show");
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
+
+        if (fromMemory == null)
+            throw new InvalidCardDefinitionException("'fromMemory' field required for ChooseArbitraryCards effect.");
+        if (memorize == null)
+            throw new InvalidCardDefinitionException("'memorize' field required for ChooseArbitraryCards effect.");
+        if (text == null)
+            throw new InvalidCardDefinitionException("'text' field required for ChooseArbitraryCards effect.");
 
         FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);

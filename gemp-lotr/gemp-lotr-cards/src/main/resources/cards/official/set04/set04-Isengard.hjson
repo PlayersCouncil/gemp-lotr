@@ -436,7 +436,7 @@
 				}
 				{
 				    type: if
-				    condition: {
+				    check: {
 				        type: memoryMatches
 				        memory: chosenCompanion
 				        filter: hobbit

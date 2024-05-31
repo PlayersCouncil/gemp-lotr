@@ -296,7 +296,7 @@
             }
             effect: {
                 type: if
-                condition: {
+                check: {
                     type: canSpot
                     filter: companion
                     count: 5

@@ -27,7 +27,7 @@
 			effect: [
 				{
 					type: if
-					condition: {
+					check: {
 					    type: location
 					    filter: siteBlock(king),siteNumber(1-5)
 					}

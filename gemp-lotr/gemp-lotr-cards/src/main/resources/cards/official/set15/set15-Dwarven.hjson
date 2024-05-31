@@ -69,7 +69,7 @@
 		            }
 		            {
 		                type: if
-		                condition: {
+		                check: {
 		                    type: memoryMatches
 		                    memory: revealedCard
 		                    filter: culture(dwarven)

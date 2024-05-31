@@ -28,7 +28,7 @@ public class DiscardFromPlay implements EffectAppenderProducer {
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         if (select == null)
-            throw new InvalidCardDefinitionException("select is required");
+            throw new InvalidCardDefinitionException("'select' is required for Discard effect.");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String stackedCardsMemory = FieldUtils.getString(effectObject.get("memorizeStackedCards"), "memorizeStackedCards");
 

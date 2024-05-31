@@ -39,7 +39,7 @@
 			effect: [
                 {
                     type: if
-                    condition: {
+                    check: {
                         type: location
                         filter: regionNumber(1)
                     }
@@ -335,7 +335,7 @@
 		        }
 		        effect: {
 		            type: if
-		            condition: {
+		            check: {
 		                type: canSpot
 		                filter: companion
 		                count: 6

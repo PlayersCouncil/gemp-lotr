@@ -577,7 +577,7 @@
 			effect: [
 				{
 				    type: if
-				    condition: {
+				    check: {
 				        type: canSpot
 				        filter: name(Legolas)
 				    }

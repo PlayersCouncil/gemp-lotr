@@ -414,7 +414,7 @@
 			effect: [
 				{
 				    type: if
-				    condition: {
+				    check: {
 				        type: memoryIs
 				        memory: effect
 				        value: first

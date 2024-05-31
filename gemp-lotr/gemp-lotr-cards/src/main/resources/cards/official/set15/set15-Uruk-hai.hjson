@@ -1135,8 +1135,8 @@
 		        ]
 		        effect: {
 		            type: exchangeSite
-		            selector1: memory(spottedSite)
-		            selector2: choose(controlledSite)
+		            site1: memory(spottedSite)
+		            site2: choose(controlledSite)
 		        }
 		    }
 		]

@@ -569,7 +569,7 @@
 			effect: [
 				{
 				    type: if
-				    condition: {
+				    check: {
 				        type: memoryIs
 				        memory: played
 				        value: first

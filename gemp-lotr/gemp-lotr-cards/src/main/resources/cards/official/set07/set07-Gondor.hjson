@@ -1750,7 +1750,7 @@
 		        }
 		        effect: {
 		            type: if
-		            condition: {
+		            check: {
 		                type: twilightPoolLessThan
 		                amount: 1
 		            }

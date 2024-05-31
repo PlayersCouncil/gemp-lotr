@@ -544,7 +544,7 @@
 			type: event
 			cost: {
 			    type: if
-			    condition: {
+			    check: {
 			        type: phase
 			        phase: shadow
 			    }

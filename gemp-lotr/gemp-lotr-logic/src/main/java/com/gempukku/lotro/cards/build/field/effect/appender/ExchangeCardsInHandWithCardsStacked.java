@@ -32,7 +32,7 @@ public class ExchangeCardsInHandWithCardsStacked implements EffectAppenderProduc
         final ValueSource countHand = ValueResolver.resolveEvaluator(effectObject.get("countInHand"), 1, environment);
         final String selectInStacked = FieldUtils.getString(effectObject.get("selectInStacked"), "selectInStacked");
 
-        final ValueSource stackedCardCount = ValueResolver.resolveEvaluator("1", environment);
+        final ValueSource stackedCardCount = ValueResolver.resolveEvaluator(effectObject.get("countInStacked"), 1, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
