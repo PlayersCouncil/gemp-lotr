@@ -512,12 +512,33 @@
 		            memorizeMinion: chosenMinion
 		        }
 		        effect: {
-		            type: addModifier
-		            modifier: {
-                        type: removeAllKeywords
-                        filter: memory(chosenMinion)
+		            type: doWhile
+		            condition: {
+		                type: memoryIs
+		                memory: choice
+		                value: yes
 		            }
-		            until: regroup
+		            effect: [
+		                {
+		                    type: chooseAKeyword
+		                    memorize: keyword
+		                }
+		                {
+		                    type: sendMessage
+		                    text: A {keyword} was chosen
+		                }
+		                {
+                            type: removeKeyword
+                            select: memory(chosenMinion)
+                            keywordFromMemory: keyword
+                            until: regroup
+		                }
+		                {
+		                    type: chooseYesOrNo
+		                    text: Would you like to choose more keywords?
+		                    memorize: choice
+		                }
+		            ]
 		        }
 		    }
 		]

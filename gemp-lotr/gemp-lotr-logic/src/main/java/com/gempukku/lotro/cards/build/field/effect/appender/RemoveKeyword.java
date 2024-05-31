@@ -24,13 +24,17 @@ import java.util.Collection;
 public class RemoveKeyword implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize", "keyword", "until");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize", "keyword", "until", "keywordFromMemory");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         Keyword keyword = FieldUtils.getEnum(Keyword.class, effectObject.get("keyword"), "keyword");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
+        String keywordFromMemory = FieldUtils.getString(effectObject.get("keywordFromMemory"), "keywordFromMemory");
+
+        if (keyword == null && keywordFromMemory == null)
+            throw new InvalidCardDefinitionException("Keyword or keywordFromMemory is required");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
@@ -41,8 +45,9 @@ public class RemoveKeyword implements EffectAppenderProducer {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
+                        Keyword keywordToRemove = keyword != null ? keyword : Keyword.valueOf(actionContext.getValueFromMemory(keywordFromMemory));
                         return new AddUntilModifierEffect(
-                                new RemoveKeywordModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, keyword), until);
+                                new RemoveKeywordModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, keywordToRemove), until);
                     }
                 });
 

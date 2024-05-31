@@ -339,6 +339,7 @@
 		        effect: {
 		            type: removeKeyword
 		            select: memory(spottedLurker)
+		            keyword: lurker
 		            until: regroup
 		        }
 		    }
