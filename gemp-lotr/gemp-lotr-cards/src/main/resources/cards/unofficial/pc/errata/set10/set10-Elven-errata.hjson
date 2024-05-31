@@ -52,13 +52,13 @@
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memorymatches
 							memory: chosenMinion
 							filter: maxStrength(6)
 						}
-						effect: {
+						true: {
 							type: removeCardsInDiscardFromGame
 							count: 3
 							select: choose(culture(elven),event)

@@ -40,12 +40,12 @@
 				memorize: weakMinion
 			}
 			effect: {
-				type: conditional
-				requires: {
+				type: If
+				check: {
 					type: cantSpot
 					filter: culture(gandalf)
 				}
-				effect: {
+				true: {
 					type: addModifier
 					modifier: {
 						type: modifyStrength

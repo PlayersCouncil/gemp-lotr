@@ -1140,12 +1140,12 @@
 				    }
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: haveInitiative
 				        side: shadow
 				    }
-				    effect: {
+				    true: {
                         type: optional
                         text: Would you like to place {self} on top of your draw deck?
                         effect: {

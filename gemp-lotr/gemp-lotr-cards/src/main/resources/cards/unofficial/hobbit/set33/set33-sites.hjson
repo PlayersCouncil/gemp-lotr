@@ -104,13 +104,13 @@
 					]
 					effects: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: memoryIs
 								memory: choice
 								value: yes
 							}
-							effect: [
+							true: [
 								{
 									type: transfer
 									select: choose(culture(dwarven),follower)
@@ -124,26 +124,26 @@
 										filter: follower,culture(dwarven),not(memory(transferredFollowers))
 									}
 									effect: {
-										type: conditional
-										requires: {
+										type: If
+										check: {
 											type: memoryIs
 											memory: choice
 											value: yes
 										}
-										effect: [
+										true: [
 											{
 												type: chooseYesOrNo
 												text: Would you like to transfer another follower for free?
 												memorize: choice
 											}
 											{
-												type: conditional
-												requires: {
+												type: If
+												check: {
 													type: memoryIs
 													memory: choice
 													value: yes
 												}
-												effect: [
+												true: [
 													{
 														type: transfer
 														select: choose(culture(dwarven),follower,not(memory(transferredFollowers)))

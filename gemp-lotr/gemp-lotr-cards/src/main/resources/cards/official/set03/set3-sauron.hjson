@@ -20,12 +20,12 @@
                     memorize: revealedCard
                 }
                 {
-                    type: conditional
-                    requires: {
+                    type: If
+                    check: {
                         type: hasInMemory
                         memory: revealedCard
                     }
-                    effect: {
+                    true: {
                         type: discardFromHand
                         forced: true
                         hand: fp

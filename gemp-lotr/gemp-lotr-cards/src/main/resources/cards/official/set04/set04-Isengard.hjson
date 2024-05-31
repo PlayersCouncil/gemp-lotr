@@ -4328,11 +4328,11 @@
 					memorize: chosenUrukHai
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: controlsSite
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenUrukHai)
 				        keyword: damage

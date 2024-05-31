@@ -552,34 +552,34 @@
                         ]
                         effects: [
                             {
-                                type: conditional
-                                requires: {
+                                type: If
+                                check: {
                                     type: location
                                     filter: regionNumber(1)
                                 }
-                                effect: {
+                                true: {
                                     type: spot
                                     filter: name(Gollum)
                                 }
                             }
                             {
-                                type: conditional
-                                requires: {
+                                type: If
+                                check: {
                                     type: location
                                     filter: regionNumber(2)
                                 }
-                                effect: {
+                                true: {
                                     type: spot
                                     filter: name(Gollum)
                                 }
                             }
                             {
-                                type: conditional
-                                requires: {
+                                type: If
+                                check: {
                                     type: location
                                     filter: regionNumber(3)
                                 }
-                                effect: {
+                                true: {
                                     type: spot
                                     filter: any
                                 }
@@ -597,34 +597,34 @@
                         ]
                         effects: [
                             {
-                                type: conditional
-                                requires: {
+                                type: If
+                                check: {
                                     type: location
                                     filter: regionNumber(1)
                                 }
-                                effect: {
+                                true: {
                                     type: wound
                                     select: choose(companion)
                                 }
                             }
                             {
-                                type: conditional
-                                requires: {
+                                type: If
+                                check: {
                                     type: location
                                     filter: regionNumber(2)
                                 }
-                                effect: {
+                                true: {
                                     type: exert
                                     select: choose(companion)
                                 }
                             }
                             {
-                                type: conditional
-                                requires: {
+                                type: If
+                                check: {
                                     type: location
                                     filter: regionNumber(3)
                                 }
-                                effect: {
+                                true: {
                                     type: playCardFromDiscard
                                     select: choose(culture(gollum),minion)
                                 }

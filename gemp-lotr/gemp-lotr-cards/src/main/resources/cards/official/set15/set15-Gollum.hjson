@@ -697,13 +697,13 @@
                     shuffle: true
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: playedCondition
 				        filter: culture(gollum),condition
 				    }
-				    effect: {
+				    true: {
 				        type: optional
 				        text: Would you like to make an opponent place a random card from hand beneath draw deck?
 				        effect: {
@@ -763,13 +763,13 @@
                     shuffle: true
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: playedMinion
 				        filter: culture(gollum),minion
 				    }
-				    effect: {
+				    true: {
 				        type: playCardFromDrawDeck
 				        select: choose(or(possession,condition))
                         showAll: true

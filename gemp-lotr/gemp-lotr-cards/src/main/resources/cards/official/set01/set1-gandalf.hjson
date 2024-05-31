@@ -184,14 +184,14 @@
 				
 				effects: [
 					{
-						type: Conditional
-						requires: {
+						type: If
+						check: {
 							type: HasCardInHand
 							player: you
 							count: 1
 							filter: side(free people),or(artifact,possession)
 						}
-						effect: {
+						true: {
 							type: StackCardsFromHand
 							select: choose(side(free people),or(artifact,possession))
 							where: self

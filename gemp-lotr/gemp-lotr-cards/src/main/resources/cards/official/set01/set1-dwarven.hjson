@@ -141,12 +141,12 @@
 			}
 			effect: [
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: perPhaseLimit
 						limit: 1
 					}
-					effect: {
+					true: {
 						type: discardTopCardsFromDeck
 						deck: ownerFromMemory(losingMinion)
 						forced: true
@@ -458,13 +458,13 @@
 					]
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryLike
 						memory: revealChoice
 						value: your deck
 					}
-					effect: [
+					true: [
 						{
 							type: optional
 							text: Would you like to discard 1 Shadow card revealed?
@@ -488,13 +488,13 @@
 					]
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryLike
 						memory: revealChoice
 						value: your opponent's deck
 					}
-					effect: [
+					true: [
 						{
 							type: optional
 							text: Would you like to discard 1 Shadow card revealed?

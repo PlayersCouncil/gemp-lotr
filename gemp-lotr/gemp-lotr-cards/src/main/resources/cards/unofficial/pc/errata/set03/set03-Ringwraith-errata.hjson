@@ -122,14 +122,14 @@
 						memory: bearer
 					}
 					{
-						type: Conditional
-						requires: {
+						type: If
+						check: {
 							type: HasCardInHand
 							player: freeps
 							count: 1
 							filter: CultureFromMemory(bearer)
 						}
-						effect: {
+						true: {
 							type: Optional
 							player: freeps
 							text: Would you like to discard 1 card from hand matching {bearer}'s culture to discard Too Great and Terrible?

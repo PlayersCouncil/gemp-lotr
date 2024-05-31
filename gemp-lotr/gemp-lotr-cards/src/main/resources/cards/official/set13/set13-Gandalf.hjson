@@ -354,13 +354,13 @@
 		                    amount: 3
 		                }
 		                {
-		                    type: conditional
-		                    requires: {
+		                    type: If
+		                    check: {
 		                        type: canSpot
 		                        filter: other,companion
 		                        count: 2
 		                    }
-		                    effect: {
+		                    true: {
 		                        type: discardFromHand
 		                        forced: false
 		                        select: choose(culture(gandalf))

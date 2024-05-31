@@ -30,6 +30,10 @@ public class IfEffect implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 EffectAppender[] effects = checkConditions(actionContext) ? trueEffectAppenders : falseEffectAppenders;
+
+                if(effects == null || effects.length == 0)
+                    return null;
+
                 SubAction subAction = new SubAction(action);
                 for (EffectAppender effectAppender : effects)
                     effectAppender.appendEffect(cost, subAction, actionContext);
@@ -48,6 +52,10 @@ public class IfEffect implements EffectAppenderProducer {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 EffectAppender[] effects = checkConditions(actionContext) ? trueEffectAppenders : falseEffectAppenders;
+
+                if(effects == null || effects.length == 0)
+                    return false;
+
                 for (EffectAppender effectAppender : effects) {
                     if (!effectAppender.isPlayableInFull(actionContext))
                         return false;

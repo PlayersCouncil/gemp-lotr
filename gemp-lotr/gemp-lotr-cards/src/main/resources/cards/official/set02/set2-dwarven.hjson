@@ -139,13 +139,13 @@
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: canSpot
 						count: 2
 						filter: hand weapon,attachedTo(memory(chosenDwarf))
 					}
-					effect: {
+					true: {
 						type: addKeyword
 						select: memory(chosenDwarf)
 						keyword: damage+1
@@ -354,12 +354,12 @@
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: location
 						filter: underground
 					}
-					effect: {
+					true: {
 						type: addKeyword
 						select: memory(chosenDwarf)
 						keyword: damage

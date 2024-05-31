@@ -728,12 +728,12 @@
                                 select: self
                             }
                             {
-                                type: conditional
-                                requires: {
+                                type: If
+                                check: {
                                     type: canSpot
                                     filter: nextSite,underground
                                 }
-                                effect: {
+                                true: {
                                     type: exert
                                     select: self
                                 }

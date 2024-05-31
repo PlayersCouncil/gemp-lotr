@@ -578,26 +578,26 @@
         ]
         effects: [
           {
-            type: conditional
-            requires: {
+            type: If
+            check: {
               type: cantSpot
               filter: culture(dwarven),possession
             }
-            effect: {
+            true: {
               type: exert
               select: choose(dwarf,companion)
             }
           }
           {
-            type: conditional
-            requires: {
+            type: If
+            check: {
               type: canSpot
               filter: culture(dwarven),possession
             }
           }
         ]
       }
-      effect: {
+      true: {
         type: choice
         texts: [
           Take from your draw deck

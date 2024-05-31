@@ -141,24 +141,24 @@
 			    ]
 			    effects: [
 			        {
-			            type: conditional
-			            requires: {
+			            type: If
+			            check: {
 			                type: location
 			                filter: or(regionNumber(1),regionNumber(2))
 			            }
-			            effect: {
+			            true: {
 			                type: exert
 			                select: choose(ent)
 			                count: 2
 			            }
 			        }
 			        {
-			            type: conditional
-			            requires: {
+			            type: If
+			            check: {
 			                type: location
 			                filter: regionNumber(3)
 			            }
-			            effect: {
+			            true: {
 			                type: spot
 			                filter: culture(gandalf),companion
 			            }
@@ -167,12 +167,12 @@
 			},
 			effect: [
 				{
-				    type: conditional
-                    requires: {
+				    type: If
+                    check: {
                         type: location
                         filter: or(regionNumber(1),regionNumber(2))
                     }
-                    effect: {
+                    true: {
                         type: addKeyword
                         select: choose(ent)
                         keyword: defender
@@ -181,12 +181,12 @@
                     }
 				}
 				{
-                    type: conditional
-                    requires: {
+                    type: If
+                    check: {
                         type: location
                         filter: regionNumber(3)
                     }
-                    effect: {
+                    true: {
                         type: drawCards
                     }
 				}

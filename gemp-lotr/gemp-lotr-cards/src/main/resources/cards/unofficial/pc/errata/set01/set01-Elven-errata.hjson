@@ -117,8 +117,8 @@
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: isGreaterThan
 						firstNumber: {
 							type: FromMemory
@@ -126,7 +126,7 @@
 						}
 						secondNumber: 0
 					}
-					effect: [
+					true: [
 						{
 							type: preventable
 							player: shadow
@@ -505,25 +505,25 @@
 			]
 			effect: [
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryMatches
 						memory: exerter
 						filter: dwarf
 					}
-					effect: {
+					true: {
 						type: heal
 						select: choose(elf)
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryMatches
 						memory: exerter
 						filter: elf
 					}
-					effect: {
+					true: {
 						type: heal
 						select: choose(dwarf)
 					}

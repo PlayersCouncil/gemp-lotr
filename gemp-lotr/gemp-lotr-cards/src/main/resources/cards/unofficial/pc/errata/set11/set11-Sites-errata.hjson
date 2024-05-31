@@ -167,25 +167,25 @@
 					type: ForEachPlayer
 					effect: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: CanSpot
 								filter: your,InSkirmish,character,not(exhausted)
 							}
-							effect: [
+							true: [
 								{
 									type: chooseYesOrNo
 									text: Would you like to exert your skirmishing character to prevent all special abilities from being used this skirmish?
 									memorize: choice
 								}
 								{
-									type: conditional
-									requires: {
+									type: If
+									check: {
 										type: memoryIs
 										memory: choice
 										value: yes
 									}
-									effect: {
+									true: {
 										type: CostToEffect
 										cost: {
 											type: exert

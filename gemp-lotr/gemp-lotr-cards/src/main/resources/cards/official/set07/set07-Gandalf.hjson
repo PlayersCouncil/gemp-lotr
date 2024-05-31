@@ -40,12 +40,12 @@
 					memorize: chosenGandalf
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: haveInitiative
 				        side: free people
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenGandalf)
 				        keyword: damage

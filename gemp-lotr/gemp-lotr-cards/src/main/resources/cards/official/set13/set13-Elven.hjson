@@ -119,12 +119,12 @@
                         select: bearer
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: canSpot
                             filter: bearer,inFierceSkirmish
                         }
-                        effect: {
+                        true: {
                             type: heal
                             select: choose(not(bearer),elf)
                         }
@@ -562,12 +562,12 @@
                 type: event
                 effect: [
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: location
                             filter: or(forest,river)
                         }
-                        effect: {
+                        true: {
                             type: modifyStrength
                             select: choose(minion,inSkirmishAgainst(your,elf))
                             amount: -3
@@ -628,13 +628,13 @@
 		                memorize: revealedCard
 		            }
 		            {
-		                type: conditional
-		                requires: {
+		                type: If
+		                check: {
                             type: memoryMatches
                             memory: revealedCard
                             filter: culture(elven)
 		                }
-		                effect: {
+		                true: {
 		                    type: wound
 		                    select: choose(minion)
 		                }

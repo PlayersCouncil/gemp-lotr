@@ -41,8 +41,8 @@
                     memorize: chosenMinions
                 }
                 {
-                    type: conditional
-                    requires: {
+                    type: If
+                    check: {
                         type: IsGreaterThan
                         firstNumber: {
                             type: ForEachInMemory
@@ -50,7 +50,7 @@
                         }
                         secondNumber: 0
                     }
-                    effect: [
+                    true: [
                         {
                             type: revealHand
                             hand: shadowPlayer

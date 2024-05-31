@@ -733,8 +733,8 @@
 		            ]
 		            effects: [
 		                {
-		                    type: conditional
-		                    requires: {
+		                    type: If
+		                    check: {
 		                        type: canSpotFPCultures
 		                        amount: 3
 		                    }

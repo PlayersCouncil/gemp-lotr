@@ -213,13 +213,13 @@
 						memorize: revealedCard
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryMatches
 							memory: revealedCard
 							filter: culture(elven)
 						}
-						effect: {
+						true: {
 							type: optional
 							text: Do you want to discard the top card of deck to wound a minion?
 							effect: {
@@ -349,13 +349,13 @@
 						memorize: revealedCard
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryMatches
 							memory: revealedCard
 							filter: culture(elven)
 						}
-						effect: {
+						true: {
 							type: optional
 							text: Do you want to discard the top card of deck to heal a companion?
 							effect: {
@@ -373,13 +373,13 @@
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryMatches
 							memory: revealedCard
 							filter: side(shadow)
 						}
-						effect: {
+						true: {
 							type: optional
 							text: Do you want to discard the top card of deck to discard a Shadow condition?
 							effect: {
@@ -547,13 +547,13 @@
 						memorize: revealedCard
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryMatches
 							memory: revealedCard
 							filter: culture(elven)
 						}
-						effect: {
+						true: {
 							type: optional
 							text: Do you want to discard the top card of deck to make a minion skirmishing an elf strength -2?
 							effect: {
@@ -934,13 +934,13 @@
           memorize: woundedMinion
         }
         {
-          type: conditional
-          requires: {
+          type: If
+          check: {
             type: memoryMatches
             memory: woundedMinion
             filter: culture(isengard),minion
           }
-          effect: {
+          true: {
             type: wound
             select: memory(woundedMinion)
           }
@@ -999,13 +999,13 @@
           memorize: revealedCard
         }
         {
-          type: conditional
-          requires: {
+          type: If
+          check: {
             type: memoryMatches
             memory: revealedCard
             filter: culture(elven)
           }
-          effect: {
+          true: {
             type: optional
             text: Would you like to make the Shadow player wound a minion?
             effect: {

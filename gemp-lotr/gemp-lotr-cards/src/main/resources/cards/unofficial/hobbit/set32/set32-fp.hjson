@@ -426,13 +426,13 @@
 					memorize: playedSite
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: playedSite
 						filter: mountain
 					}
-					effect: {
+					true: {
 						type: heal
 						select: choose(culture(dwarven),companion)
 					}
@@ -608,13 +608,13 @@
 					memorize: woundedMinion
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: woundedMinion
 						filter: name(Smaug)
 					}
-					effect: {
+					true: {
 						type: wound
 						select: memory(woundedMinion)
 					}

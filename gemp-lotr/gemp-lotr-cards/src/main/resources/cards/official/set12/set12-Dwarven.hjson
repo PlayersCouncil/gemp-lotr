@@ -198,12 +198,12 @@
 				    amount: 2
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: location
 				        filter: or(battleground,mountain)
 				    }
-				    effect: {
+				    true: {
 				        type: drawCards
 				    }
 				}

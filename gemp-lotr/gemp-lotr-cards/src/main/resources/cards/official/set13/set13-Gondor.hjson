@@ -966,13 +966,13 @@
                         memorize: chosenCompanion
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: memoryMatches
                             memory: chosenCompanion
                             filter: culture(shire),companion
                         }
-                        effect: {
+                        true: {
                             type: discard
                             select: choose(condition,attachedTo(memory(chosenCompanion)))
                             count: 0-1

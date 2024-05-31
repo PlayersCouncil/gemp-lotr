@@ -14,25 +14,25 @@
 			}
 			effect: [
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: canSpot
 						filter: companion
 						count: 6
 					}
-					effect: {
+					true: {
 						type: discard
 						select: all(side(free people),possession,or(armor,helm,shield))
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: cantSpot
 						filter: companion
 						count: 6
 					}
-					effect: {
+					true: {
 						type: discard
 						select: choose(possession,or(armor,helm,shield))
 					}

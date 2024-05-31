@@ -422,12 +422,12 @@
                         amount: 4
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: canSpot
                             filter: bearer,name(Gamling)
                         }
-                        effect: {
+                        true: {
                             type: costToEffect
                             cost: {
                                 type: spot

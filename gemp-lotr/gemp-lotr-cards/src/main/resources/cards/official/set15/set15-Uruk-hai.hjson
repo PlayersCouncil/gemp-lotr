@@ -1466,13 +1466,13 @@
 				    memorize: chosenMinion
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: chosenMinion
 				        filter: hunter
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenMinion)
 				        keyword: damage

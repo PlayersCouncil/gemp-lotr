@@ -624,12 +624,12 @@
 				    select: choose(follower)
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: canSpot
 				        filter: name(Gríma)
 				    }
-				    effect: {
+				    true: {
 				        type: drawCards
 				    }
 				}

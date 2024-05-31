@@ -187,13 +187,13 @@
 						memorize: choice
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryIs
 							memory: choice
 							value: yes
 						}
-						effect: {
+						true: {
 							type: addModifier
 							until: start(regroup)
 							modifier: {

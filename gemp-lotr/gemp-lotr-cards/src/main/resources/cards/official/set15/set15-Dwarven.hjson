@@ -385,12 +385,12 @@
 				    memorize: chosenDwarf
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
                         type: canSpot
                         filter: hunter,minion
 				    }
-				    effect: {
+				    true: {
                         type: addKeyword
                         select: memory(chosenDwarf)
                         keyword: damage

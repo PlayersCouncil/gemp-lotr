@@ -377,13 +377,13 @@
 		                memorize: revealedCard
 		            }
 		            {
-		                type: conditional
-		                requires: {
+		                type: If
+		                check: {
 		                    type: memoryMatches
 		                    memory: revealedCard
 		                    filter: culture(elven)
 		                }
-		                effect: {
+		                true: {
 		                    type: addKeyword
 		                    select: self
 		                    keyword: archer

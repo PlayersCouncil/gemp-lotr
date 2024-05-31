@@ -110,12 +110,12 @@
 				    }
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
                         type: canSpotCultureTokens
                         culture: dwarven
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenDwarf)
 				        keyword: damage

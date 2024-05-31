@@ -312,12 +312,12 @@
 				    memorize: chosenMinion
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: haveInitiative
 				        side: shadow
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenMinion)
 				        keyword: fierce

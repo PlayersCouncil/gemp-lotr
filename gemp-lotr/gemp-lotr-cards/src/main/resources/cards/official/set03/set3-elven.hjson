@@ -82,13 +82,13 @@
                     memorize: discardedCard
                 }
                 {
-                    type: conditional
-                    requires: {
+                    type: If
+                    check: {
                         type: memoryMatches
                         memory: discardedCard
                         filter: culture(elven)
                     }
-                    effect: {
+                    true: {
                         type: modifyStrength
                         select: choose(minion,inSkirmishAgainst(elf))
                         amount: -1

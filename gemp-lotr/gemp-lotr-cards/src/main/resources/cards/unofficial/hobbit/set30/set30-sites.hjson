@@ -265,13 +265,13 @@
 						memorize: choice
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryIs
 							memory: choice
 							value: yes
 						}
-						effect: {
+						true: {
 							type: playCardFromDrawDeck
 							select: choose(hand weapon)
                             showAll: true

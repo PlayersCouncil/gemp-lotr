@@ -59,23 +59,23 @@
 				]
 				effects: [
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							filter: side(free people),or(possession,condition)
 						}
-						effect: {
+						true: {
 							type: discard
 							select: choose(side(free people),or(possession,condition))
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: cantSpot
 							filter: side(free people),or(possession,condition)
 						}
-						effect: {
+						true: {
 							type: discard
 							select: choose(or(ally,companion),not(ring bearer))
 						}
@@ -241,12 +241,12 @@
 						select: all(hasAttached(self),not(ring bearer))
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							filter: hasAttached(self),ring bearer
 						}
-						effect: {
+						true: {
 							type: addBurdens
 						}
 					}
@@ -274,12 +274,12 @@
 				]
 				effects: [
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpotBurdens
 							amount: 3
 						}
-						effect: [
+						true: [
 							{
 								type: modifyStrength
 								select: choose(nazgul)
@@ -294,12 +294,12 @@
 						]
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpotBurdens
 							amount: 6
 						}
-						effect: [
+						true: [
 							{
 								type: modifyStrength
 								select: choose(nazgul)
@@ -824,12 +824,12 @@
 				type: removeTwilight
 			}
 			effect: {
-				type: conditional
-				requires: {
+				type: If
+				check: {
 					type: perPhaseLimit
 					limit: 5
 				}
-				effect: [
+				true: [
 					{
 						type: incrementPerPhaseLimit
 						limit: 5
@@ -987,8 +987,8 @@
 					value: yes
 				}
 				{
-					type: conditional
-					requires: [
+					type: If
+					check: [
 						{
 							type: CanSpot
 							filter: companion
@@ -999,7 +999,7 @@
 							filter: minion
 						}
 					]
-					effect: {
+					true: {
 						type: Repeat
 						times: {
 							type: forEachYouCanSpot
@@ -1007,8 +1007,8 @@
 							over: 4
 						}
 						effect: {
-							type: conditional
-							requires: [
+							type: If
+							check: [
 								{
 									type: MemoryIs
 									memory: choice
@@ -1019,7 +1019,7 @@
 									filter: playable,minion
 								}
 							]
-							effect: [
+							true: [
 								{
 									type: chooseYesOrNo
 									player: you

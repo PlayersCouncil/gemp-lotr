@@ -82,12 +82,12 @@
 				}
 				effect: [
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: cantSpot
 							filter: culture(dwarven),ally
 						}
-						effect: {
+						true: {
 							type: discard
 							select: choose(culture(dwarven),possession)
 						}
@@ -221,7 +221,7 @@
 				player: fp
 				text: Would you like to add 2 doubts to prevent shadow player drawing 3 cards?
 				cost: {
-					type: conditional
+					type: Conditional
 					requires: {
 						type: cantSpot
 						count: 3
@@ -565,12 +565,12 @@
 					select: choose(culture(sauron),orc)
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: HasCardInDeadPile
 						filter: character
 					}
-					effect: {
+					true: {
 						type: playCardFromDiscard
 						select: choose(culture(sauron),orc)
 					}
@@ -1097,12 +1097,12 @@
             select: choose(weapon)
           }
           {
-            type: conditional
-            requires: {
+            type: If
+            check: {
               type: canSpot
               filter: name(Smaug)
             }
-            effect: {
+            true: {
               type: exert
               select: all(ally)
             }

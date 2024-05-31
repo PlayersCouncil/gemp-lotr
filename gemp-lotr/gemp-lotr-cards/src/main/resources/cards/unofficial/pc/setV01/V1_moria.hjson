@@ -157,24 +157,24 @@
 					]
 					effects: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: HasCardInHand
 								filter: tentacle
 							}
-							effect: {
+							true: {
 								type: stackCardsFromHand
 								select: choose(tentacle)
 								where: self
 							}
 						}
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: canSpot
 								filter: self,hasStacked(any)
 							}
-							effect: {
+							true: {
 								type: playCardFromStacked
 								select: choose(tentacle)
 								on: self
@@ -239,20 +239,20 @@
 					]
 					effects: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: HasCardInHand
 								filter: culture(moria),item
 							}
-							effect: {
+							true: {
 								type: stackCardsFromHand
 								select: choose(culture(moria),item)
 								where: self
 							}
 						}
 						{
-							type: conditional
-							requires: [
+							type: If
+							check: [
 								{
 									type: canSpot
 									filter: title(The Balrog)
@@ -262,7 +262,7 @@
 									filter: self,hasStacked(any)
 								}
 							]
-							effect: {
+							true: {
 								type: putStackedCardsIntoHand
 								select: choose(culture(moria))
 								on: self

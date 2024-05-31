@@ -323,13 +323,13 @@
 					memorize: discardedCard
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: discardedCard
 				        filter: any
 				    }
-				    effect: [
+				    true: [
                         {
                             type: chooseHowManyToSpot
                             filter: besieger

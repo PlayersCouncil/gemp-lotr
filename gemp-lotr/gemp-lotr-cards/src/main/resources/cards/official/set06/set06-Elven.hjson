@@ -245,13 +245,13 @@
                         memorize: discardedCard
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: memoryMatches
                             memory: discardedCard
                             filter: culture(elven)
                         }
-                        effect: {
+                        true: {
                             type: optional
                             text: Would you like to put {discardedCard} into hand and heal an Elf companion?
                             effect: [
@@ -456,13 +456,13 @@
                         memorize: discardedCard
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: memoryMatches
                             memory: discardedCard
                             filter: side(shadow)
                         }
-                        effect: {
+                        true: {
                             type: modifyStrength
                             select: choose(minion,inSkirmishAgainst(elf))
                             amount: -3
@@ -654,13 +654,13 @@
 		                memorize: discardedCard
 		            }
 		            {
-		                type: conditional
-		                requires: {
+		                type: If
+		                check: {
 		                    type: memoryMatches
 		                    memory: discardedCard
 		                    filter: culture(elven)
 		                }
-		                effect: {
+		                true: {
 		                    type: exert
 		                    select: choose(minion)
 		                }
@@ -727,13 +727,13 @@
                         memorize: discardedCard
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: memoryMatches
                             memory: discardedCard
                             filter: culture(elven)
                         }
-                        effect: {
+                        true: {
                             type: modifyStrength
                             select: choose(minion,inSkirmishAgainst(self))
                             amount: -2

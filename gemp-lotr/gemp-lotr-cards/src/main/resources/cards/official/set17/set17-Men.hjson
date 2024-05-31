@@ -643,12 +643,12 @@
 		            ]
 		            effects: [
 		                {
-		                    type: conditional
-		                    requires: {
+		                    type: If
+		                    check: {
 		                        type: canSpot
 		                        filter: another,culture(men),minion
 		                    }
-		                    effect: {
+		                    true: {
 		                        type: removeTwilight
 		                        amount: 3
 		                    }

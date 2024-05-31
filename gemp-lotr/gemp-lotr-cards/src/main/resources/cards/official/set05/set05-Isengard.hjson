@@ -1509,13 +1509,13 @@
 					memorize: chosenOrc
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: chosenOrc
 				        filter: mounted
 				    }
-				    effect: {
+				    true: {
 				        type: heal
 				        select: memory(chosenOrc)
 				    }

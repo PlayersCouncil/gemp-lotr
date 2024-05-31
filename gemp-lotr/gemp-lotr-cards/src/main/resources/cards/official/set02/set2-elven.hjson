@@ -155,12 +155,12 @@
 					amount: 1
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: canSpot
 						filter: orc
 					}
-					effect: {
+					true: {
 						type: chooseYesOrNo
 						text: Would you like to spot an Orc?
 						memorize: discardCount

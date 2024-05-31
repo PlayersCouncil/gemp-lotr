@@ -962,13 +962,13 @@
 				    select: memory(playedPossession)
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: memoryMatches
 				        memory: playedPossession
 				        filter: or(culture(gondor),culture(rohan)),possession
 				    }
-				    effect: {
+				    true: {
 				        type: wound
 				        select: choose(unbound,man)
 				    }

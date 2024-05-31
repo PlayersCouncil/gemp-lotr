@@ -41,13 +41,13 @@
 				    }
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
                         type: memoryMatches
                         memory: chosenCompanion
                         filter: hunter,companion
 				    }
-				    effect: {
+				    true: {
 				        type: addKeyword
 				        select: memory(chosenCompanion)
 				        keyword: damage

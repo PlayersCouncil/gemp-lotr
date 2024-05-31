@@ -1520,13 +1520,13 @@
 		                memorize: revealedCard
 		            }
 		            {
-		                type: conditional
-		                requires: {
+		                type: If
+		                check: {
 		                    type: memoryMatches
 		                    memory: revealedCard
 		                    filter: side(shadow)
 		                }
-		                effect: {
+		                true: {
 		                    type: addTwilight
 		                    amount: {
 		                        type: twilightCostInMemory

@@ -385,25 +385,25 @@
 			    ]
 			    effects: [
 			        {
-			            type: conditional
-			            requires: {
+			            type: If
+			            check: {
 			                type: canSpot
 			                filter: ent
 			            }
-			            effect: {
+			            true: {
 			                type: memorizeValue
 			                memory: effect
 			                value: first
 			            }
 			        }
 			        {
-			            type: conditional
-			            requires: {
+			            type: If
+			            check: {
 			                type: canSpot
 			                filter: ent
 			                count: 2
 			            }
-			            effect: {
+			            true: {
 			                type: memorizeValue
 			                memory: effect
 			                value: second
@@ -689,13 +689,13 @@
                         memorize: revealedCard
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: memoryMatches
                             memory: revealedCard
                             filter: culture(gandalf),character
                         }
-                        effect: {
+                        true: {
                             type: optional
                             text: Would you like to play {revealedCard}?
                             effect: {

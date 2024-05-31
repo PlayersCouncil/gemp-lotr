@@ -370,12 +370,12 @@
 					amount: 2
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: canSpotCultureTokens
 				        culture: rohan
 				    }
-				    effect: {
+				    true: {
 				        type: exert
 				        select: choose(minion)
 				    }
@@ -533,12 +533,12 @@
 					amount: 2
 				}
 				{
-				    type: conditional
-				    requires: {
+				    type: If
+				    check: {
 				        type: canSpotCultureTokens
 				        culture: elven
 				    }
-				    effect: {
+				    true: {
 				        type: heal
 				        select: choose(companion)
 				    }

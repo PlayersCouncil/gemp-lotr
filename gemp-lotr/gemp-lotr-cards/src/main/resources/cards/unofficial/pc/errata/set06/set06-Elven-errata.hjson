@@ -40,8 +40,8 @@
 					memorize: weakenedMinion
 				}
 				{
-					type: Conditional
-					requires: {
+					type: If
+					check: {
 						type: IsLessThanOrEqual
 						firstNumber: {
 							type: ForEachStrength
@@ -49,7 +49,7 @@
 						}
 						secondNumber: 4
 					}
-					effect: {
+					true: {
 						type: DiscardCardsFromDrawDeck
 						select: memory(revealedCard)
                         showAll: false

@@ -564,13 +564,13 @@
                         memorize: discardedCard
                     }
                     {
-                        type: conditional
-                        requires: {
+                        type: If
+                        check: {
                             type: memoryMatches
                             memory: discardedCard
                             filter: or(culture(gollum),culture(wraith))
                         }
-                        effect: {
+                        true: {
                             type: putCardsFromDiscardIntoHand
                             select: memory(discardedCard)
                         }
