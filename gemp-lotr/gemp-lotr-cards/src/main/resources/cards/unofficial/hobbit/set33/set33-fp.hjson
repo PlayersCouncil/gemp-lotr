@@ -597,7 +597,7 @@
           }
         ]
       }
-      true: {
+      effect: {
         type: choice
         texts: [
           Take from your draw deck

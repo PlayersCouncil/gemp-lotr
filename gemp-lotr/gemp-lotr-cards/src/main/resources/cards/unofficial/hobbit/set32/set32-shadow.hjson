@@ -221,13 +221,13 @@
 				player: fp
 				text: Would you like to add 2 doubts to prevent shadow player drawing 3 cards?
 				cost: {
-					type: Conditional
-					requires: {
+					type: If
+					check: {
 						type: cantSpot
 						count: 3
 						filter: orc
 					}
-					effect: {
+					true: {
 						type: addBurdens
 						amount: 2
 					}
