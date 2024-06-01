@@ -133,7 +133,7 @@
                 effect: {
                     type: playCardFromDiscard
                     select: choose(corsair)
-		            cost: {
+                    discount: {
                         type: ForEachCultureToken
                         culture: raider
                         filter: self
@@ -193,7 +193,7 @@
                         select: self
                     }
                     {
-                        type: play
+                        type: PlayCardFromHand
                         select: choose(corsair)
                     }
                 ]

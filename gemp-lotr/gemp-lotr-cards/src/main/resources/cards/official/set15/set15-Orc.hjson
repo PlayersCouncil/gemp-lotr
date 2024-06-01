@@ -145,9 +145,9 @@
 		            select: choose(culture(orc),condition)
 		        }
 		        effect: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(orc),minion)
-		            cost: {
+		            discount: {
 		                type: Conditional
 		                requires: {
 		                    type: canSpot
@@ -1066,7 +1066,7 @@
 						removedTwilight: 2
 						select: choose(culture(orc), orc)
 						memorize: PlayedOrc
-						cost: -2
+						discount: -2
 					}
 				]
 			}

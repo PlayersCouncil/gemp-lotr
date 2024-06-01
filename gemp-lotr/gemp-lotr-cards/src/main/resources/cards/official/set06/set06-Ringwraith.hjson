@@ -86,9 +86,9 @@
 		        }
 		        effect: [
 		            {
-		                type: play
+		                type: PlayCardFromHand
 		                select: choose(or(culture(wraith),culture(sauron)),minion)
-		                cost: -8
+		                discount: -8
 		                memorize: playedMinion
 		            }
 		            {

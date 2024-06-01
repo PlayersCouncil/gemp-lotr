@@ -37,7 +37,7 @@
 	# 					filter: self
 	# 				}
 	# 				{
-	# 					type: play
+	# 					type: PlayCardFromHand
 	# 					select: choose(corsair)
 	# 				}
 	# 			]
@@ -110,7 +110,7 @@
 						select: self
 					}
 					{
-						type: play
+						type: PlayCardFromHand
 						select: choose(corsair)
 					}
 				]

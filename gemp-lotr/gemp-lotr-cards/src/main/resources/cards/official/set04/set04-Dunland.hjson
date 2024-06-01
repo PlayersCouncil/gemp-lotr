@@ -315,8 +315,8 @@
 				}
 				effect: [
 				    {
-				        type: play
-				        cost: -2
+				        type: PlayCardFromHand
+				        discount: -2
 				        select: choose(culture(dunland),man)
 				        memorize: playedMinion
 				    }
@@ -422,7 +422,7 @@
 				    type: playCardFromStacked
 						select: self
 						on: controlledSite
-						cost: -2
+						discount: -2
 				}
 			}
 		]
@@ -1062,8 +1062,8 @@
 		        }
 		        effect: [
 				    {
-				        type: play
-				        cost: -2
+				        type: PlayCardFromHand
+				        discount: -2
 				        select: choose(culture(dunland),man)
 				        memorize: playedMinion
 				    }
@@ -1137,7 +1137,7 @@
 				    type: playCardFromStacked
 						select: self
 						on: controlledSite
-						cost: -2
+						discount: -2
 				}
 			}
 		]
@@ -1853,8 +1853,8 @@
 		        }
 		        effect: [
 				    {
-				        type: play
-				        cost: -2
+				        type: PlayCardFromHand
+				        discount: -2
 				        select: choose(culture(dunland),man)
 				        memorize: playedMinion
 				    }

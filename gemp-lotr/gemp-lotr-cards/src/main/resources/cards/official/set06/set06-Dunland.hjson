@@ -353,7 +353,7 @@
 		        }
 		        effect: [
                     {
-                        type: play
+                        type: PlayCardFromHand
                         select: choose(culture(dunland),man)
                         memorize: playedMan
                     }

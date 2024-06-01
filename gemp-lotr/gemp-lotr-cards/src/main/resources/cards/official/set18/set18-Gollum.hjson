@@ -182,14 +182,14 @@
 				    ]
 				    effects: [
 				        {
-				            type: play
+				            type: PlayCardFromHand
 				            select: choose(not(roaming),minion)
-				            cost: -1
+				            discount: -1
 				        }
 				        {
-				            type: play
+				            type: PlayCardFromHand
 				            select: choose(roaming,minion)
-				            cost: -3
+				            discount: -3
 				        }
 				    ]
 				}

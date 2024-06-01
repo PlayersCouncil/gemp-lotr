@@ -405,9 +405,9 @@
 		        type: activated
 		        phase: fellowship
 		        effect: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(gondor),knight)
-		            cost: -2
+		            discount: -2
 		        }
 		    }
 		    {
@@ -759,7 +759,7 @@
 		        type: activated
 		        phase: fellowship
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(rohan),man)
 		        }
 		        effect: {
@@ -2694,7 +2694,7 @@
 		        text: Play a {gondor} Man to place a {gondor} token here
 		        phase: fellowship
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(gondor),man)
 		        }
 		        effect: {
@@ -2709,9 +2709,9 @@
 		        phase: fellowship
 		        effect: [
 		            {
-		                type: play
+		                type: PlayCardFromHand
 		                select: choose(culture(gondor),companion)
-		                cost: {
+		                discount: {
 		                    type: ForEachCultureToken
 		                    culture: gondor
 		                    filter: self

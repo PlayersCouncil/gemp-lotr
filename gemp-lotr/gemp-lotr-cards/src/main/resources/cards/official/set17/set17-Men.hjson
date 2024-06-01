@@ -902,7 +902,7 @@
                 effect: {
                     type: playCardFromDiscard
                     select: choose(culture(men),minion)
-                    cost: {
+                    discount: {
                         type: forEachInMemory
                         memory: discardedMinions
                         multiplier: -1
@@ -964,7 +964,7 @@
                 effect: {
                     type: playCardFromDrawDeck
                     select: choose(name(Stampeding Chief))
-                    cost: -8
+                    discount: -8
                     showAll: true
                     shuffle: true
                 }

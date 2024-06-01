@@ -1068,7 +1068,7 @@
 		        type: activated
 		        phase: shadow
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(urukHai)
 		        }
 		        effect: {

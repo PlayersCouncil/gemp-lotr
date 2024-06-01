@@ -128,9 +128,9 @@
 				select: self
 			}
 			effect: {
-				type: play
+				type: PlayCardFromHand
 				select: choose(uruk-hai)
-				cost: {
+				discount: {
 					type: forEachYouCanSpot
 					filter: not(self),uruk-hai
 					limit: 2

@@ -280,9 +280,9 @@
 				select: choose(hobbit)
 			}
 			effect: {
-				type: play
+				type: PlayCardFromHand
 				select: choose(or(companion,ally))
-				cost: -1
+				discount: -1
 			}
 		}
 	}
@@ -600,7 +600,7 @@
 			type: activated
 			phase: fellowship
 			cost: {
-				type: play
+				type: PlayCardFromHand
 				select: choose(hobbit)
 			}
 			effect: {
@@ -621,7 +621,7 @@
 			type: activated
 			phase: fellowship
 			cost: {
-				type: play
+				type: PlayCardFromHand
 				select: choose(man)
 			}
 			effect: {
@@ -642,7 +642,7 @@
 			type: activated
 			phase: fellowship
 			cost: {
-				type: play
+				type: PlayCardFromHand
 				select: choose(elf)
 			}
 			effect: {
@@ -890,14 +890,14 @@
 					{
 						type: playCardFromDrawDeck
 						select: choose(name(The Balrog))
-						cost: -6
+						discount: -6
                         showAll: true
                         shuffle: true
 					}
 					{
-						type: play
+						type: PlayCardFromHand
 						select: choose(name(The Balrog))
-						cost: -6
+						discount: -6
 					}
 				]
 			}

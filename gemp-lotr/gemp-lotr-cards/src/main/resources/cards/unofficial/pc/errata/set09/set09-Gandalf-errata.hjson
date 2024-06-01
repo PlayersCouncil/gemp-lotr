@@ -190,7 +190,7 @@
 					fellowship
 				]
 				effect: {
-					type: play
+					type: PlayCardFromHand
 					select: choose(wizard)
 					ignoreInDeadPile: true
 				}

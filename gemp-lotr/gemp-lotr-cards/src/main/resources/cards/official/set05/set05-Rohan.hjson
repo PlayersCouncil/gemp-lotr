@@ -224,7 +224,7 @@
 		        type: activated
 		        phase: skirmish
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(rohan),possession)
 		            on: self
 		        }
@@ -840,7 +840,7 @@
 		        type: activated
 		        phase: maneuver
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(rohan),possession)
 		            on: self
 		        }
@@ -956,7 +956,7 @@
 		        type: activated
 		        phase: maneuver
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(rohan),possession)
 		            on: self
 		        }

@@ -416,7 +416,7 @@
 			type: activated
 			phase: fellowship
 			cost: {
-				type: play
+				type: PlayCardFromHand
 				select: choose(culture(dwarven),possession)
 			}
 			effect: {
@@ -552,14 +552,14 @@
 				]
 				effects: [
 					{
-						type: play
+						type: PlayCardFromHand
 						select: choose(name(The Balrog))
-						cost: -6
+						discount: -6
 					}
 					{
 						type: playCardFromDrawDeck
 						select: choose(name(The Balrog))
-						cost: -6
+						discount: -6
                         showAll: true
                         shuffle: true
 					}
@@ -657,21 +657,21 @@
 				]
 				effects: [
 					{
-						type: play
+						type: PlayCardFromHand
 						select: choose(name(Saruman))
-						cost: -2
+						discount: -2
 					}
 					{
 						type: playCardFromDrawDeck
 						select: choose(name(Saruman))
-						cost: -2
+						discount: -2
                         showAll: true
                         shuffle: true
 					}
 					{
 						type: playCardFromDiscard
 						select: choose(name(Saruman))
-						cost: -2
+						discount: -2
 					}
 				]
 			}
@@ -912,14 +912,14 @@
 				]
 				effects: [
 					{
-						type: play
+						type: PlayCardFromHand
 						select: choose(name(The Witch-King))
-						cost: -4
+						discount: -4
 					}
 					{
 						type: playCardFromDrawDeck
 						select: choose(name(The Witch-King))
-						cost: -4
+						discount: -4
                         showAll: true
                         shuffle: true
 					}
@@ -1041,14 +1041,14 @@
             {
               type: playCardFromDrawDeck
               select: choose(name(The Great Eye))
-              cost: -3
+              discount: -3
                 showAll: true
                 shuffle: true
             }
             {
               type: playCardFromDiscard
               select: choose(name(The Great Eye))
-              cost: -3
+              discount: -3
             }
           ]
         }

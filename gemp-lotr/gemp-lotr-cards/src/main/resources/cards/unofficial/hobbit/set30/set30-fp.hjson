@@ -781,7 +781,7 @@
 				text: Play a [GANDALF] skirmish event
 				cost: [
 					{
-						type: play
+						type: PlayCardFromHand
 						select: choose(culture(gandalf),timeword(skirmish),event)
 					}
 					{
@@ -801,7 +801,7 @@
 				phase: skirmish
 				text: Play a [DWARVEN] skirmish event
 				cost: {
-					type: play
+					type: PlayCardFromHand
 					select: choose(culture(dwarven),timeword(skirmish),event)
 				}
 				effect: {
@@ -1253,7 +1253,7 @@
         type: activated
         phase: skirmish
         cost: {
-          type: play
+          type: PlayCardFromHand
           select: choose(culture(dwarven),timeword(skirmish),event)
         }
         effect: {

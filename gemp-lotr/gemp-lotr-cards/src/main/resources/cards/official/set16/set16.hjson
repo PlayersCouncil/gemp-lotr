@@ -32,9 +32,9 @@
 					type: removeBurdens
 				}
 				effect: {
-					type: play
+					type: PlayCardFromHand
 					select: choose(culture(wraith),wraith)
-					cost: -2
+					discount: -2
 				}
 			}
 		]

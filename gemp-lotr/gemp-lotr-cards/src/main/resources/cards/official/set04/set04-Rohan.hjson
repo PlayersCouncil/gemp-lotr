@@ -2037,7 +2037,7 @@
 		        type: activated
 		        phase: fellowship
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(rohan),possession)
 		            on: culture(rohan),companion
 		            memorize: playedCard

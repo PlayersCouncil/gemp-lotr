@@ -98,7 +98,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("negatewound", new NegateWound());
         effectAppenderProducers.put("optional", new Optional());
         effectAppenderProducers.put("placenowoundforexert", new PlaceNoWoundForExert());
-        effectAppenderProducers.put("play", new PlayCardFromHand());
+        effectAppenderProducers.put("playcardfromhand", new PlayCardFromHand());
         effectAppenderProducers.put("playcardfromdeadpile", new PlayCardFromDeadPile());
         effectAppenderProducers.put("playcardfromdiscard", new PlayCardFromDiscard());
         effectAppenderProducers.put("playcardfromdrawdeck", new PlayCardFromDrawDeck());

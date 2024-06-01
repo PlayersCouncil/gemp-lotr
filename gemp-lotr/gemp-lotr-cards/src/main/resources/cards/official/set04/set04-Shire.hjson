@@ -255,7 +255,7 @@
 		        type: activated
 		        phase: fellowship
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(ringBound,companion)
 		        }
 		        effect: {

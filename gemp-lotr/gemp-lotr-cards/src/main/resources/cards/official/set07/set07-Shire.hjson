@@ -540,7 +540,7 @@
 		        type: activated
 		        phase: fellowship
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(hobbit,companion)
 		        }
 		        effect: {

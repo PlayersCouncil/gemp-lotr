@@ -255,7 +255,7 @@
 				type: activated
 				phase: fellowship
 				cost: {
-					type: play
+					type: PlayCardFromHand
 					select: choose(artifact)
 					on: self
 				}
@@ -613,7 +613,7 @@
 				type: activated
 				phase: shadow
 				cost: {
-					type: play
+					type: PlayCardFromHand
 					select: choose(culture(isengard),minion)
 				}
 				effect: {
@@ -876,7 +876,7 @@
 			}
 			effect: [
 				{
-					type: play
+					type: PlayCardFromHand
 					select: choose(culture(rohan),man)
 					memorize: playedRohanMan
 				}
@@ -890,7 +890,7 @@
 							select: memory(playedRohanMan)
 						}
 						effect: {
-							type: play
+							type: PlayCardFromHand
 							select: choose(possession)
 							on: memory(playedRohanMan)
 						}
@@ -937,9 +937,9 @@
 					select: self
 				}
 				effect: {
-					type: play
+					type: PlayCardFromHand
 					select: choose(culture(sauron),minion)
-					cost: -3
+					discount: -3
 				}
 			}
 		]
@@ -1038,7 +1038,7 @@
 					type: addBurdens
 				}
 				effect: {
-					type: play
+					type: PlayCardFromHand
 					select: choose(culture(shire),tale)
 				}
 			}

@@ -22,11 +22,11 @@ import java.util.Collection;
 public class PlayCardFromStacked implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "on", "cost", "removedTwilight", "assumePlayable", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "removedTwilight", "assumePlayable", "memorize");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
-        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("cost"), 0, environment);
+        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("discount"), 0, environment);
         final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final boolean assumePlayable = FieldUtils.getBoolean(effectObject.get("assumePlayable"), "assumePlayable", false);
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");

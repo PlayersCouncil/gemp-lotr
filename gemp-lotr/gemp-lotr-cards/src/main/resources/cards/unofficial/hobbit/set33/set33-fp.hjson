@@ -877,7 +877,7 @@
         type: activated
         phase: skirmish
         cost: {
-          type: play
+          type: PlayCardFromHand
           select: choose(timeword(skirmish),event)
         }
         effect: {

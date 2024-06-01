@@ -890,9 +890,9 @@
       }
       effect: [
         {
-          type: play
+          type: PlayCardFromHand
           select: choose(spider)
-          cost: -2
+          discount: -2
           memorize: playedSpider
         }
         {
@@ -1083,7 +1083,7 @@
               {
                 type: playCardFromDrawDeck
                 select: choose(spider)
-                cost: {
+                discount: {
                   type: Conditional
                   requires: {
                     type: location
@@ -1098,7 +1098,7 @@
               {
                 type: playCardFromDiscard
                 select: choose(spider)
-                cost: {
+                discount: {
                   type: Conditional
                   requires: {
                     type: location

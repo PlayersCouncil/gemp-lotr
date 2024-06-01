@@ -440,9 +440,9 @@
 		        }
 		        effect: [
                     {
-                        type: play
+                        type: PlayCardFromHand
                         select: choose(or(nazgul,culture(sauron)),minion)
-                        cost: -4
+                        discount: -4
                         memorize: playedMinion
                     }
                     {

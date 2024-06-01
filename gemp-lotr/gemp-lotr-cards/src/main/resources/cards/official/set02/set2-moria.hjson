@@ -690,9 +690,9 @@
                 memorize: revealedCards
             }
             effect: {
-                type: play
+                type: PlayCardFromHand
                 select: choose(name(The Balrog))
-                cost: {
+                discount: {
                     type: forEachInMemory
                     memory: revealedCards
                     multiplier: -2

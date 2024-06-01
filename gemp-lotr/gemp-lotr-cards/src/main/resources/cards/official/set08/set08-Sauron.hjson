@@ -671,7 +671,7 @@
 		        type: activated
 		        phase: shadow
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(sauron),minion)
 		        }
 		        effect: {

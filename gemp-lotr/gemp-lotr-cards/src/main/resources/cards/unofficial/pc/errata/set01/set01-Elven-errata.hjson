@@ -346,9 +346,9 @@
 					times: 1
 				}
 				effect: {
-					type: play
+					type: PlayCardFromHand
 					select: choose(elf)
-					cost: -1
+					discount: -1
 				}
 			}
 		]

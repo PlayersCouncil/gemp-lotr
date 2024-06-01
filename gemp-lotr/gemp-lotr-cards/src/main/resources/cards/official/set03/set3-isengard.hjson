@@ -101,7 +101,7 @@
             effect: {
                 type: playCardFromDiscard
                 select: choose(culture(isengard),weather,condition)
-                cost: -2
+                discount: -2
             }
         }
     }

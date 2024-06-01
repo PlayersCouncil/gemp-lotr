@@ -89,7 +89,7 @@
 		        type: activated
 		        phase: shadow
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(urukHai)
 		        }
 		        effect: {
@@ -505,7 +505,7 @@
 		            type: controlsSite
 		        }
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(urukHai)
 		        }
 		        effect: {
@@ -1965,7 +1965,7 @@
 		        effect: {
 		            type: playCardFromDiscard
 		            select: choose(culture(isengard),minion)
-		            cost: -2
+		            discount: -2
 		        }
 		    }
 		]
@@ -2437,9 +2437,9 @@
                     }
                 ]
                 effect: {
-                    type: play
+                    type: PlayCardFromHand
                     select: choose(minion)
-                    cost: -3
+                    discount: -3
                 }
 		    }
 		]
@@ -2635,7 +2635,7 @@
 		        effect: {
 		            type: playCardFromStacked
 		            select: self
-		            cost: -1
+		            discount: -1
 		        }
 		    }
 		]
@@ -3365,9 +3365,9 @@
 		            select: self
 		        }
 		        effect: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(urukHai)
-		            cost: {
+		            discount: {
 		                type: forEachYouCanSpot
 		                filter: another,urukHai
 		                multiplier: -1
@@ -3773,7 +3773,7 @@
 		        effect: {
 		            type: playCardFromStacked
 		            select: self
-		            cost: -1
+		            discount: -1
 		        }
 		    }
 		]
@@ -3905,7 +3905,7 @@
 		        effect: {
 		            type: playCardFromStacked
 		            select: self
-		            cost: -1
+		            discount: -1
 		        }
 		    }
 		]
@@ -4382,7 +4382,7 @@
 		        type: activated
 		        phase: shadow
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(isengard),archer)
 		        }
 		        effect: {

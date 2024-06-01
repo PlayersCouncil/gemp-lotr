@@ -155,7 +155,7 @@
 			effect: {
 				type: playCardFromDiscard
 				select: choose(culture(moria),minion)
-				cost: -2
+				discount: -2
 			}
 		}
 	}
@@ -476,7 +476,7 @@
 				effect: {
 					type: playCardFromDiscard
 					select: choose(orc)
-					cost: -2
+					discount: -2
 				}
 			}
 		]
@@ -1032,7 +1032,7 @@
             {
               type: playCardFromDrawDeck
               select: choose(name(Smaug))
-              cost: -8
+              discount: -8
               memorize: playedSmaug
                 showAll: true
                 shuffle: true
@@ -1040,7 +1040,7 @@
             {
               type: playCardFromDiscard
               select: choose(name(Smaug))
-              cost: -8
+              discount: -8
               memorize: playedSmaug
             }
           ]
@@ -1169,14 +1169,14 @@
             {
               type: playCardFromDrawDeck
               select: choose(name(Smaug))
-              cost: -6
+              discount: -6
                 showAll: true
                 shuffle: true
             }
             {
               type: playCardFromDiscard
               select: choose(name(Smaug))
-              cost: -6
+              discount: -6
             }
           ]
         }
@@ -1549,7 +1549,7 @@
         effect: {
           type: playCardFromDiscard
           select: choose(culture(wraith),minion)
-          cost: -8
+          discount: -8
         }
       }
     ]

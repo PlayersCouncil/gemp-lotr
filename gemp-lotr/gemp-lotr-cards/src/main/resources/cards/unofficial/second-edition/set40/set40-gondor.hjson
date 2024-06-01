@@ -61,7 +61,7 @@
 			type: activated
 			phase: maneuver
 			cost: {
-				type: play
+				type: PlayCardFromHand
 				select: choose(or(artifact,possession))
 				on: self
 			}

@@ -1606,7 +1606,7 @@
 		        type: activated
 		        phase: fellowship
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(possession)
 		        }
 		        effect: {
@@ -1794,7 +1794,7 @@
 		        type: activated
 		        phase: shadow
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(dunland),minion)
 		        }
 		        effect: {
@@ -1958,7 +1958,7 @@
 		        effect: {
 		            type: playCardFromDiscard
 		            select: choose(name(Saruman))
-		            cost: -2
+		            discount: -2
 		        }
 		    }
 		]

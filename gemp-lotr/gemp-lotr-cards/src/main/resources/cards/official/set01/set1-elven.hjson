@@ -478,9 +478,9 @@
 					select: self
 				}
 				effect: {
-					type: play
+					type: PlayCardFromHand
 					select: choose(elf)
-					cost: -1000
+					discount: -1000
 				}
 			}
 		]

@@ -1038,9 +1038,9 @@
 			type: activated
 			phase: fellowship
 			effect: {
-				type: play
+				type: PlayCardFromHand
 				select: choose(culture(rohan),companion,minTwilight(3))
-				cost: -1
+				discount: -1
 			}
 		}
 	}

@@ -42,7 +42,7 @@
                     }
                 }
                 effect: {
-                    type: play
+                    type: PlayCardFromHand
                     select: choose(culture(dwarven),or(condition,possession))
                 }
             }

@@ -1047,7 +1047,7 @@
 			effect: {
 				type: playCardFromDiscard
 				select: choose(orc)
-				cost: {
+				discount: {
 					type: Conditional
 					requires: {
 						type: location

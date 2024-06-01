@@ -600,7 +600,7 @@
 		        type: activated
 		        phase: fellowship
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(ranger)
 		        }
 		        effect: {

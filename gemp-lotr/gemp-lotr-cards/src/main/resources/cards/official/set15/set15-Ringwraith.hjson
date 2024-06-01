@@ -30,9 +30,9 @@
 			}
 			effect: [
 				{
-				    type: play
+				    type: PlayCardFromHand
 				    select: choose(nazgul)
-				    cost: -2
+				    discount: -2
 				    memorize: playedNazgul
 				}
 				{

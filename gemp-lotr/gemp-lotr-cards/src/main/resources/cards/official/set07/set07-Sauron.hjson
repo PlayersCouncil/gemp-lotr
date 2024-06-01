@@ -1179,7 +1179,7 @@
 		        type: activated
 		        phase: shadow
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(besieger)
 		        }
 		        effect: {
@@ -2861,7 +2861,7 @@
 		            type: removeThreats
 		        }
 		        effect: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(sauron),orc)
 		            ignoreRoamingPenalty: true
 		        }
@@ -3029,7 +3029,7 @@
 		        type: activated
 		        phase: regroup
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(sauron),condition)
 		        }
 		        effect: {

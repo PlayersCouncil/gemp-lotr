@@ -574,9 +574,9 @@
 		            select: self
 		        }
 		        effect: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(uruk-hai),hunter)
-		            cost: -2
+		            discount: -2
 		        }
 		    }
 		]

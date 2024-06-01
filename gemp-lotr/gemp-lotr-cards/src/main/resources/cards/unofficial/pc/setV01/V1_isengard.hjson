@@ -500,7 +500,7 @@
 						{
 							type: PlayCardFromDrawDeck
 							select: choose(title(Saruman))
-							cost: {
+							discount: {
 								type: ForEachYouCanSpot
 								filter: Crow
 								multiplier: -1
@@ -511,7 +511,7 @@
 						{
 							type: PlayCardFromDiscard
 							select: choose(title(Saruman))
-							cost: {
+							discount: {
 								type: ForEachYouCanSpot
 								filter: Crow
 								multiplier: -1

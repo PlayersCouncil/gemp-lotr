@@ -259,7 +259,7 @@
 		            type: playCardFromStacked
 		            select: choose(lurker,minion)
 		            on: self
-		            cost: -3
+		            discount: -3
 		        }
 		    }
 		]

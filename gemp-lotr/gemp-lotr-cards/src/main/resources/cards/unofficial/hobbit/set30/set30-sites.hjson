@@ -9,7 +9,7 @@
 			type: activated
 			phase: fellowship
 			cost: {
-				type: play
+				type: PlayCardFromHand
 				select: choose(culture(dwarven),follower)
 			}
 			effect: {
@@ -468,7 +468,7 @@
 			effect: {
 				type: playCardFromDiscard
 				select: choose(minion)
-				cost: -2
+				discount: -2
 			}
 		}
 	}

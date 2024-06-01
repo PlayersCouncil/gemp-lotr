@@ -76,9 +76,9 @@
 			type: event
 			effect: [
 				{
-				    type: play
+				    type: PlayCardFromHand
 				    select: choose(nazgul)
-				    cost: {
+				    discount: {
 				        type: forEachYouCanSpot
 				        filter: forest,site
 				        limit: 4

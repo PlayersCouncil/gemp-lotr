@@ -109,7 +109,7 @@
 		            ]
 		            effects: [
 		                {
-		                    type: play
+		                    type: PlayCardFromHand
 		                    select: choose(culture(dwarven),condition)
 		                }
 		                {

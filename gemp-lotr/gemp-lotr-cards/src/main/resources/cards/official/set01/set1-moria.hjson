@@ -786,7 +786,7 @@
 			effect: {
 				type: playCardFromDiscard
 				select: choose(memory(discardedWeapon),your,culture(moria),weapon)
-				cost: -1
+				discount: -1
 			}
 		}
 	}

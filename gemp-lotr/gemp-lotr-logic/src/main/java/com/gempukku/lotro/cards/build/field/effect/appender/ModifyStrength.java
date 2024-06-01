@@ -37,7 +37,7 @@ public class ModifyStrength implements EffectAppenderProducer {
         final TimeResolver.Time time = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
         final int limit = FieldUtils.getInteger(effectObject.get("limitPerCardThisPhase"), "limitPerCardThisPhase", -1);
         if (limit > -1 && effectObject.get("until") != null)
-            throw new InvalidCardDefinitionException("If limitPerCardThisPhase is defined, the until should not be, as it can only be applied until current phase");
+            throw new InvalidCardDefinitionException("ModifyStrength: If limitPerCardThisPhase is defined, the until should not be, as it can only be applied until current phase");
 
         MultiEffectAppender result = new MultiEffectAppender();
 

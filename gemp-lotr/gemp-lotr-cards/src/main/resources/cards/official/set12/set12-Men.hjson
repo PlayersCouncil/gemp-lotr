@@ -911,9 +911,9 @@
                 }
                 effect: [
                     {
-                        type: play
+                        type: PlayCardFromHand
                         select: choose(culture(men),minion)
-                        cost: -2
+                        discount: -2
                         memorize: playedMinion
                     }
                     {

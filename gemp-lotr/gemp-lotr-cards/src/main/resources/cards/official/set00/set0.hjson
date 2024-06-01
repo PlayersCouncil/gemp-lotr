@@ -78,7 +78,7 @@
 			type: activated
 			phase: skirmish
 			cost: {
-				type: play
+				type: PlayCardFromHand
 				select: choose(culture(gondor),timeword(skirmish),event)
 			}
 			effect: {

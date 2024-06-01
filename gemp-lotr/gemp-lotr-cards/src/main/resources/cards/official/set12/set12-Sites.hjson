@@ -28,7 +28,7 @@
 		        text: Play a Nazgul to draw a card
 		        phase: shadow
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(nazgul)
 		        }
 		        effect: {

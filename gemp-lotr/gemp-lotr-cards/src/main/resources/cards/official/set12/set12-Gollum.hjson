@@ -109,7 +109,7 @@
 				{
 				    type: playCardFromDrawDeck
 				    select: choose(memory(revealedCards),minion)
-				    cost: -2
+				    discount: -2
                     showAll: false
                     shuffle: false
 				}

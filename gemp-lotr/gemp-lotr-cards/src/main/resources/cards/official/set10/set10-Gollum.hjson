@@ -40,13 +40,13 @@
 			        {
 			            type: playCardFromDiscard
 			            select: choose(name(Gollum))
-			            cost: -2
+			            discount: -2
 			            memorize: playedGollum
 			        }
 			        {
-			            type: play
+			            type: PlayCardFromHand
 			            select: choose(name(Gollum))
-			            cost: -2
+			            discount: -2
 			            memorize: playedGollum
 			        }
 			    ]

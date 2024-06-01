@@ -32,7 +32,7 @@
                         select: choose(nazgul)
                     }
                     {
-                        type: play
+                        type: PlayCardFromHand
                         select: choose(culture(wraith),minion)
                     }
                 ]

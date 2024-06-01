@@ -597,7 +597,7 @@
 		            type: playCardFromDiscard
 		            select: choose(mount)
 		            on: self
-		            cost: -2
+		            discount: -2
 		        }
 		    }
 		]
@@ -712,7 +712,7 @@
                         type: removeTwilight
                     }
                     {
-                        type: play
+                        type: PlayCardFromHand
                         select: choose(southron)
                         removedTwilight: 1
                     }

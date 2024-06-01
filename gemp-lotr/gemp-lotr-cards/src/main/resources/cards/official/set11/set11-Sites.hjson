@@ -174,7 +174,7 @@
 		        type: activated
 		        phase: shadow
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(nazgul)
 		        }
 		        effect:
@@ -549,9 +549,9 @@
                     secondNumber: 3
                 }
                 effect: {
-                    type: play
+                    type: PlayCardFromHand
                     select: choose(minion)
-                    cost: -3
+                    discount: -3
                 }
 		    }
 		]

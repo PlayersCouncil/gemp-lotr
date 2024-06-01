@@ -349,7 +349,7 @@
 		        type: activated
 		        phase: fellowship
 		        cost: {
-		            type: play
+		            type: PlayCardFromHand
 		            select: choose(culture(rohan),companion)
 		        }
 		        effect: {
@@ -2065,7 +2065,7 @@
 		        }
 		        cost: [
                     {
-                        type: play
+                        type: PlayCardFromHand
                         select: choose(culture(rohan),possession)
                         on: self
                     }

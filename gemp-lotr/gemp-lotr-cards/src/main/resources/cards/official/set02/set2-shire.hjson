@@ -133,10 +133,13 @@
                 filter: hobbit
             }
             effect: {
-                type: modifySiteNumber
-                select: all(site)
-                amount: -2
-                until: endOfTurn
+                type: AddModifier
+                until: EndOfTurn
+                modifier: {
+                    type: ModifyCost
+                    filter: site
+                    amount: -2
+                }
             }
         }
     }
@@ -506,9 +509,9 @@
             type: activated
             phase: fellowship
             effect: {
-                type: play
+                type: PlayCardFromHand
                 select: choose(or(name(Gandalf),name(Aragorn)))
-                cost: -2
+                discount: -2
             }
         }
     }
