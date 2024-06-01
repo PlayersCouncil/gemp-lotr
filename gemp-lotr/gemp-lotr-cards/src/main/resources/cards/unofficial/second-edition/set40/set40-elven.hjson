@@ -16,16 +16,32 @@
                 type: canSpot
                 filter: elf,archer,companion
             }
-			cost: {
-				type: reduceArcheryTotal
-				side: free people
-				memorize: reducedBy
-			}
+			cost: [
+			    {
+                    type: chooseANumber
+                    text: Choose X (reduce fellowship archery total)
+                    from: 0
+                    to: {
+                        type: archeryTotal
+                        side: free people
+                    }
+                    memorize: x
+                }
+                {
+                    type: modifyArcheryTotal
+                    side: free people
+                    amount: {
+                        type: fromMemory
+                        memory: x
+                        multiplier: -1
+                    }
+                }
+			]
 			effect: {
 				type: discard
 				count: {
 					type: fromMemory
-					memory: reducedBy
+					memory: x
 				}
 				select: choose(side(shadow),condition)
 			}

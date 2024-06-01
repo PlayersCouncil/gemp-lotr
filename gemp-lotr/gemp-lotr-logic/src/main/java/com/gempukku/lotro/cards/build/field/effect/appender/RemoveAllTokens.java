@@ -24,7 +24,7 @@ import java.util.Map;
 public class RemoveAllTokens implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "self");
 

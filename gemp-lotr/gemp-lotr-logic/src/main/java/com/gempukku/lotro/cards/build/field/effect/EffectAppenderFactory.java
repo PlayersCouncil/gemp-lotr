@@ -109,12 +109,12 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("preventaddingallburdens", new PreventAddingAllBurdens());
         effectAppenderProducers.put("preventallwounds", new PreventAllWounds());
         effectAppenderProducers.put("preventburden", new PreventEffect());
-        effectAppenderProducers.put("preventdiscard", new PreventCardEffectAppender());
         effectAppenderProducers.put("preventeffect", new PreventEffect());
-        effectAppenderProducers.put("preventexert", new PreventExert());
+        effectAppenderProducers.put("preventtwilight", new PreventEffect());
+        effectAppenderProducers.put("preventdiscard", new PreventCardEffectAppender());
+        effectAppenderProducers.put("preventexert", new PreventCardEffectAppender());
         effectAppenderProducers.put("preventheal", new PreventCardEffectAppender());
         effectAppenderProducers.put("preventspecialability", new PreventSpecialAbility());
-        effectAppenderProducers.put("preventtwilight", new PreventEffect());
         effectAppenderProducers.put("preventwound", new PreventWound());
         effectAppenderProducers.put("putcardsfromdeckintohand", new PutCardsFromDeckIntoHand());
         effectAppenderProducers.put("putcardsfromdeckontopofdeck", new PutCardsFromDeckOnTopOfDeck());
@@ -133,7 +133,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("putrandomcardfromhandbeneathdrawdeck", new PutRandomCardFromHandBeneathDrawDeck());
         effectAppenderProducers.put("putstackedcardsintohand", new PutStackedCardsIntoHand());
         effectAppenderProducers.put("reconcilehand", new ReconcileHand());
-        effectAppenderProducers.put("reducearcherytotal", new ReduceArcheryTotal());
         effectAppenderProducers.put("refreshself", new RefreshSelf());
         effectAppenderProducers.put("reinforcetokens", new ReinforceTokens());
         effectAppenderProducers.put("removealltokens", new RemoveAllTokens());

@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.build.field;
 
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.SitesBlock;
 import org.hjson.JsonValue;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -74,6 +75,16 @@ public class FieldUtils {
         } catch (IllegalArgumentException exp) {
             throw new InvalidCardDefinitionException("Unknown enum value - " + string + ", in " + key + " field");
         }
+    }
+
+    public static SitesBlock getBlock(Object value, String key) throws InvalidCardDefinitionException {
+        final String string = getString(value, key);
+        if (string == null)
+            throw new InvalidCardDefinitionException("Unknown block '" + string + "' in " + key + " field");
+        final SitesBlock block = SitesBlock.findBlock(string);
+        if (block == null)
+            throw new InvalidCardDefinitionException("Unknown block '" + string + "' in " + key + " field");
+        return block;
     }
 
     public static Side getSide(Object value, String key) throws InvalidCardDefinitionException {

@@ -128,10 +128,24 @@
 	# 			phase: archery
 	# 			cost: [
 	# 				{
-	# 					type: reduceArcheryTotal
-	# 					side: free people
-	# 					memorize: reducedBy
-	# 				}
+    #                   type: chooseANumber
+    #                   text: Choose X (reduce fellowship archery total)
+    #                   from: 0
+    #                   to: {
+    #                       type: archeryTotal
+    #                       side: free peoples
+    #                   }
+    #                   memorize: x
+    #               }
+    #               {
+    #                   type: modifyArcheryTotal
+    #                   side: free peoples
+    #                   amount: {
+    #                       type: fromMemory
+    #                       memory: x
+    #                       multiplier: -1
+    #                   }
+    #               }
 	# 			]
 	# 			effect: [
 	# 				{
@@ -139,7 +153,7 @@
 	# 					filter: self
 	# 					amount: {
 	# 						type: fromMemory
-	# 						memory: reducedBy
+	# 						memory: x
 	# 					}
 	# 					until:start(regroup)
 	# 				}
