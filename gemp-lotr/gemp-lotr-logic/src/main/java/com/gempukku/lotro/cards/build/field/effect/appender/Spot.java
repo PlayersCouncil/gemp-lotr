@@ -21,22 +21,31 @@ public class Spot implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "count", "filter", "select", "memorize", "text");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
-
-        if(StringUtils.isEmpty(filter)) {
-            filter = FieldUtils.getString(effectObject.get("select"), "select");
-        }
-
-        if(StringUtils.isEmpty(filter)) {
-            throw new InvalidCardDefinitionException("One of filter or select must be provided for Spot effect.");
-        }
-
+        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String text = FieldUtils.getString(effectObject.get("text"), "text", "Choose card to spot");
 
-        final boolean skipMemorize = memorize.equals("_temp");
+        final boolean selecting = !StringUtils.isEmpty(select);
 
-        if (skipMemorize) {
+        if(StringUtils.isEmpty(filter) && !selecting) {
+            throw new InvalidCardDefinitionException("One of 'filter' or 'select' must be provided for Spot effect.");
+        }
+
+        if(!StringUtils.isEmpty(filter) && selecting) {
+            throw new InvalidCardDefinitionException("Cannot set both 'filter' and 'select' in Spot effect; use filter if the specific cards matter, and select if you memorize the result for later.");
+        }
+
+        if(selecting && StringUtils.isEmpty(memorize)) {
+            throw new InvalidCardDefinitionException("If 'select' is set, 'memorize' must also be set in Spot effect.");
+        }
+
+
+        if (selecting) {
+            return CardResolver.resolveCards(
+                    select, valueSource, memorize, "you", text, environment);
+        }
+        else {
             final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
             return new DelayedAppender() {
@@ -56,9 +65,6 @@ public class Spot implements EffectAppenderProducer {
                     return PlayConditions.canSpot(actionContext.getGame(), count, filterable);
                 }
             };
-        } else {
-            return CardResolver.resolveCards(
-                    filter, valueSource, memorize, "you", text, environment);
         }
     }
 }

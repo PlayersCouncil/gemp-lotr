@@ -148,7 +148,7 @@
 			        }
 			        {
 			            type: spot
-			            select: name(Arwen)
+			            filter: name(Arwen)
 			        }
 			    ]
 			}
