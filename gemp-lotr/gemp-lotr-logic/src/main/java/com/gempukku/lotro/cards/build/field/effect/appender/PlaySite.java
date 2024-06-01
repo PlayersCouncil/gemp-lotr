@@ -21,7 +21,9 @@ public class PlaySite implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "block", "filter", "number", "memorize", "player");
-        final SitesBlock block = FieldUtils.getBlock(effectObject.get("block"), "block");
+
+        final String blockString = FieldUtils.getString(effectObject.get("block"), "block");
+        final SitesBlock block = blockString != null ? SitesBlock.findBlock(blockString) : null;
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "any");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("number"), environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
