@@ -409,7 +409,7 @@
 				    filter: self
 				}
 				effect: {
-				    type: stackCards
+				    type: StackCardsFromPlay
 				    select: self
 				    where: choose(controlledSite)
 				}
@@ -1124,7 +1124,7 @@
 				    filter: self
 				}
 				effect: {
-				    type: stackCards
+				    type: StackCardsFromPlay
 				    select: self
 				    where: choose(controlledSite)
 				}

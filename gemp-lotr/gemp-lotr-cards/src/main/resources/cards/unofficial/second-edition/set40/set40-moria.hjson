@@ -277,7 +277,7 @@
 				filter: self
 			}
 			effect: {
-				type: stackCards
+				type: StackCardsFromPlay
 				select: choose(goblin)
 				where: choose(culture(moria),condition)
 			}
@@ -570,7 +570,7 @@
 					filter: culture(moria),goblin,inSkirmish
 				}
 				effect: {
-					type: stackCards
+					type: StackCardsFromPlay
 					where: self
 					select: choose(culture(moria),goblin,inSkirmish)
 				}
@@ -806,7 +806,7 @@
 				amount: 3
 			}
 			effect: {
-				type: stackCards
+				type: StackCardsFromPlay
 				select: choose(culture(moria),goblin)
 				where: choose(culture(moria),support area,condition)
 			}

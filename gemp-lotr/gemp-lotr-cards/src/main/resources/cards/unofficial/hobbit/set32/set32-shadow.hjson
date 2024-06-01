@@ -609,7 +609,7 @@
 							times: 2
 						}
 						effect: {
-							type: stackCards
+							type: StackCardsFromPlay
 							select: memory(wiseCharacter)
 							where: self
 						}

@@ -1126,7 +1126,7 @@
 		            against: culture(isengard),man
 		        }
 		        effect: {
-		            type: stackCards
+		            type: StackCardsFromPlay
 		            select: choose(possession)
 		            where: self
 		        }

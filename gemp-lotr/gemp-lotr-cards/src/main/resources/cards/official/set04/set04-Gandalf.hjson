@@ -802,7 +802,7 @@
                     filter: unbound,hobbit
                 }
                 effect: {
-                    type: stackCards
+                    type: StackCardsFromPlay
                     select: choose(unbound,hobbit,gettingDiscarded)
                     where: self
                 }

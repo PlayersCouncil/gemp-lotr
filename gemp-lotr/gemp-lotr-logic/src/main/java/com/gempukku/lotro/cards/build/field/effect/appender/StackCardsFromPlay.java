@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class StackCards implements EffectAppenderProducer {
+public class StackCardsFromPlay implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "select", "where", "count");
@@ -28,7 +28,7 @@ public class StackCards implements EffectAppenderProducer {
         final String where = FieldUtils.getString(effectObject.get("where"), "where");
 
         if (where == null)
-            throw new InvalidCardDefinitionException("You need to define where to stack the cards");
+            throw new InvalidCardDefinitionException("You need to define where to stack the cards for StackCards effect");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
 

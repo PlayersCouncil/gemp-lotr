@@ -996,7 +996,7 @@
                     }
 		        ]
 		        effect: {
-		            type: stackCards
+		            type: StackCardsFromPlay
 		            select: memory(spottedOrc)
 		            where: self
 		        }

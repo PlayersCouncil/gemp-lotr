@@ -289,7 +289,7 @@
 				phase: fellowship
 
 				cost: {
-					type: stackcards
+					type: StackCardsFromPlay
 					select: choose(your,or(tale,artifact),not(self))
 					where: self
 				}

@@ -297,7 +297,7 @@
                     }
                 ]
                 effect: {
-                    type: stackCards
+                    type: StackCardsFromPlay
                     select: choose(your,culture(wraith),minion)
                     where: self
                 }

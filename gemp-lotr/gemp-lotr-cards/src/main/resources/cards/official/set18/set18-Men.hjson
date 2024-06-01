@@ -949,7 +949,7 @@
 		            select: self
 		        }
 		        effect: {
-		            type: stackCards
+		            type: StackCardsFromPlay
 		            select: choose(culture(men),man)
 		            where: choose(possession)
 		        }

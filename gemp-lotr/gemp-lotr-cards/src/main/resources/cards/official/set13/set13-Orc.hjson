@@ -244,7 +244,7 @@
 		            memorize: spottedMinion
 		        }
 		        effect: {
-		            type: stackCards
+		            type: StackCardsFromPlay
 		            select: memory(spottedMinion)
 		            where: self
 		        }

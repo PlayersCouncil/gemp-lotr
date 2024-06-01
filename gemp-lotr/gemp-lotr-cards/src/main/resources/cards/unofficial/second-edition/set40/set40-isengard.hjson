@@ -653,7 +653,7 @@
 				type: activated
 				phase: regroup
 				effect: {
-					type: stackCards
+					type: StackCardsFromPlay
 					select: choose(name(Saruman),not(exhausted))
 					where: self
 				}

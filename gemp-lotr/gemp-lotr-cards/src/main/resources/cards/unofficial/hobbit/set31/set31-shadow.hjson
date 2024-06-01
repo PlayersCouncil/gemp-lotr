@@ -617,7 +617,7 @@
           filter: your,orc,inSkirmish
         }
         effect: {
-          type: stackCards
+          type: StackCardsFromPlay
           select: choose(your,orc,inSkirmish)
           where: self
         }

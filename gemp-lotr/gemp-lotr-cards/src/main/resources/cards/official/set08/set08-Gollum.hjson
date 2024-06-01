@@ -553,7 +553,7 @@
 		            }
 		        ]
 		        effect: {
-		            type: stackCards
+		            type: StackCardsFromPlay
 		            select: choose(your,or(orc,and(culture(gollum),minion)))
 		            where: self
 		        }

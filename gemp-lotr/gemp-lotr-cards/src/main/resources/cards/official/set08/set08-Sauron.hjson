@@ -316,7 +316,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: stackCards
+		                    type: StackCardsFromPlay
 		                    select: self
 		                    where: choose(controlledSite)
 		                }
@@ -968,7 +968,7 @@
 		            type: removeThreats
 		        }
 		        effect: {
-		            type: stackCards
+		            type: StackCardsFromPlay
 		            select: choose(your,culture(sauron),minion)
 		            where: choose(controlledSite)
 		        }
@@ -1051,7 +1051,7 @@
                     select: self
 		        }
 		        effect: {
-		            type: stackCards
+		            type: StackCardsFromPlay
 		            select: choose(your,besieger)
 		            where: choose(controlledSite)
 		        }

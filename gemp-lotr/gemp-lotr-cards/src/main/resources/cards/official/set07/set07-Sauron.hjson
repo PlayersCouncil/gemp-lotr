@@ -709,7 +709,7 @@
                     count: 1
                 }
 		        effect: {
-		            type: stackCards
+		            type: StackCardsFromPlay
 		            select: choose(culture(sauron),orc,besieger)
 		            where: choose(controlledSite)
 		        }
@@ -724,7 +724,7 @@
                     count: 2
                 }
 		        effect: {
-		            type: stackCards
+		            type: StackCardsFromPlay
 		            select: choose(culture(sauron),orc,not(besieger))
 		            where: choose(controlledSite)
 		        }
@@ -1073,7 +1073,7 @@
 		        type: activated
 		        phase: skirmish
 		        cost: {
-		            type: stackCards
+		            type: StackCardsFromPlay
 		            select: choose(besieger)
 		            where: choose(controlledSite)
 		        }

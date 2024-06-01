@@ -481,7 +481,7 @@
 					filter: your,culture(moria),orc,inSkirmish
 				}
 				effect: {
-					type: stackCards
+					type: StackCardsFromPlay
 					select: choose(your,culture(moria),orc,inSkirmish)
 					where: self
 				}

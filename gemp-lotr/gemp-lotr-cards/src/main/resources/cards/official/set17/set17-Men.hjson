@@ -518,7 +518,7 @@
 		                checkTarget: true
 		            }
 		            effect: {
-		                type: stackCards
+		                type: StackCardsFromPlay
 		                select: choose(culture(men),minion)
 		                where: choose(culture(men),possession,zone(support))
 		            }
