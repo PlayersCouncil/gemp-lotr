@@ -25,7 +25,7 @@ public class RevealCardsFromAdventureDeck implements EffectAppenderProducer {
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         if (select == null)
-            throw new InvalidCardDefinitionException("Filter is required");
+            throw new InvalidCardDefinitionException("'select' is required for RevealCardsFromAdventureDeck effect.");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);

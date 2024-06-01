@@ -173,7 +173,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("shufflecardsfromdiscardintodrawdeck", new ShuffleCardsFromDiscardIntoDrawDeck());
         effectAppenderProducers.put("shufflecardsfromhandintodrawdeck", new ShuffleCardsFromHandIntoDrawDeck());
         effectAppenderProducers.put("shufflecardsfromplayintodrawdeck", new ShuffleCardsFromPlayIntoDrawDeck());
-        effectAppenderProducers.put("shufflecardsfromplayandstackedonthemintodrawdeck", new ShuffleCardsFromPlayAndStackedOnThemIntoDrawDeck());
         effectAppenderProducers.put("shuffledeck", new ShuffleDeck());
         effectAppenderProducers.put("shufflehandintodrawdeck", new ShuffleHandIntoDrawDeck());
         effectAppenderProducers.put("spot", new Spot());

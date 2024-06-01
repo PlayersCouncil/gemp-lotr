@@ -749,7 +749,7 @@
 			type: event
 			effect: [
 				{
-					type: shuffleCardsFromPlayAndStackedOnThemIntoDrawDeck
+					type: ShuffleCardsFromPlayIntoDrawDeck
 					select: choose(culture(dwarven),condition)
 					count: any
 				}
@@ -792,9 +792,9 @@
 			},
 			effect: [
 				{
-					type: shuffleCardsFromPlayAndStackedOnThemIntoDrawDeck
+					type: ShuffleCardsFromPlayIntoDrawDeck
 					select: choose(culture(dwarven),condition)
-					memorizeStackedCards: stackedCards
+					memorizeStacked: stackedCards
 				}
 				{
 				    type: repeat
