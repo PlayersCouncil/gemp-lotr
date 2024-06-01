@@ -890,7 +890,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: elven
 		                    select: self
 		                    count: 2

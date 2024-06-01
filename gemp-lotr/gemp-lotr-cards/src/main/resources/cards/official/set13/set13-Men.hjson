@@ -551,7 +551,7 @@
                         select: self
                     }
                     {
-                        type: removeTokens
+                        type: RemoveCultureTokens
                         select: choose(any)
                     }
                 ]
@@ -801,7 +801,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: men
 		                    select: self
 		                }
@@ -1128,7 +1128,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: men
 		                    select: self
 		                }

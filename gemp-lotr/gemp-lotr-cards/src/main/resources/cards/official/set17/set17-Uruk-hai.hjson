@@ -109,7 +109,7 @@
 		            filter: culture(uruk-hai),minion
 		        }
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: uruk-hai
 		            select: choose(any)
 		        }

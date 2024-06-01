@@ -261,7 +261,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    select: self
 		                }
 		            ]

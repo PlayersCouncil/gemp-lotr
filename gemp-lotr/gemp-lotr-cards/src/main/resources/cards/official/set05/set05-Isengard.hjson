@@ -108,7 +108,7 @@
 		        phase: skirmish
 		        cost: [
                     {
-                        type: removeTokens
+                        type: RemoveCultureTokens
                         select: choose(machine)
                         culture: isengard
                         count: 3
@@ -180,7 +180,7 @@
 		        phase: skirmish
 		        cost: [
                     {
-                        type: removeTokens
+                        type: RemoveCultureTokens
                         select: choose(machine)
                         culture: isengard
                         count: 4
@@ -253,7 +253,7 @@
 		        phase: skirmish
 		        cost: [
                     {
-                        type: removeTokens
+                        type: RemoveCultureTokens
                         select: choose(machine)
                         culture: isengard
                         count: 5

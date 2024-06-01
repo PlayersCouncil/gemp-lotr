@@ -385,7 +385,7 @@
 		        type: activated
 		        phase: shadow
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: wraith
 		            count: 3
 		            select: self

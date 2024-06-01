@@ -60,7 +60,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: dunland
 		                    select: self
 		                }

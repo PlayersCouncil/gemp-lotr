@@ -1744,7 +1744,7 @@
 		            memorize: playedCard
 		        }
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: gondor
 		            select: choose(your,condition)
 		        }
@@ -2049,7 +2049,7 @@
 		            ]
 		            effects: [
 		                {
-                            type: removeTokens
+                            type: RemoveCultureTokens
                             culture: gondor
                             select: self
                         }

@@ -1260,7 +1260,7 @@
 		        type: activated
 		        phase: skirmish
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            select: self
 		            count: 2
 		        }

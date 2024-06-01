@@ -504,7 +504,7 @@
 		                select: self
 		            }
 		            {
-		                type: removeTokens
+		                type: RemoveCultureTokens
 		                culture: elven
 		                select: choose(your,condition)
 		            }

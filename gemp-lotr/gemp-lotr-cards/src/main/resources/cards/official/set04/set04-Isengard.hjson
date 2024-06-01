@@ -103,7 +103,7 @@
 		        phase: regroup
 		        cost: [
                     {
-                        type: removeTokens
+                        type: RemoveCultureTokens
                         culture: isengard
                         select: self
                         count: 3
@@ -731,7 +731,7 @@
 		        type: activated
 		        phase: shadow
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: isengard
 		            count: 2
 		            select: self
@@ -4395,7 +4395,7 @@
 		        type: activated
 		        phase: archery
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: isengard
 		            count: 2
 		            select: self

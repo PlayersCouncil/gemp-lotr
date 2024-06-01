@@ -13,6 +13,20 @@ public class EffectAppenderFactory {
     private final Map<String, EffectAppenderProducer> effectAppenderProducers = new HashMap<>();
 
     public EffectAppenderFactory() {
+        // Control-flow / Meta effects
+        effectAppenderProducers.put("dowhile", new DoWhile());
+        effectAppenderProducers.put("choice", new Choice());
+        effectAppenderProducers.put("costtoeffect", new CostToEffect());
+        effectAppenderProducers.put("foreachplayer", new ForEachPlayer());
+        effectAppenderProducers.put("if", new IfEffect());
+        effectAppenderProducers.put("multiple", new Multiple());
+        effectAppenderProducers.put("optional", new Optional());
+        effectAppenderProducers.put("preventable", new PreventableAppenderProducer());
+        effectAppenderProducers.put("refreshself", new RefreshSelf());
+        effectAppenderProducers.put("repeat", new Repeat());
+        effectAppenderProducers.put("sendmessage", new SendMessage());
+
+        //Regular effects
         effectAppenderProducers.put("addburdens", new AddBurdens());
         effectAppenderProducers.put("addkeyword", new AddKeyword());
         effectAppenderProducers.put("addmodifier", new AddModifier());
@@ -28,7 +42,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("cancelskirmish", new CancelSkirmish());
         effectAppenderProducers.put("cancelspecialability", new CancelSpecialAbility());
         effectAppenderProducers.put("canplaynextaction", new CanPlayNextAction());
-        effectAppenderProducers.put("choice", new Choice());
         effectAppenderProducers.put("chooseactivecards", new ChooseActiveCards());
         effectAppenderProducers.put("chooseaculture", new ChooseACulture());
         effectAppenderProducers.put("chooseakeyword", new ChooseAKeyword());
@@ -46,7 +59,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("chooseyesorno", new ChooseYesOrNo());
         effectAppenderProducers.put("consumesurplusdamage", new ConsumeSurplusDamage());
         effectAppenderProducers.put("corruptringbearer", new CorruptRingBearer());
-        effectAppenderProducers.put("costtoeffect", new CostToEffect());
         effectAppenderProducers.put("disablearcherytotalcontribution", new DisableArcheryTotalContribution());
         effectAppenderProducers.put("disableskirmishassignment", new DisableSkirmishAssignment());
         effectAppenderProducers.put("disablewounds", new DisableWounds());
@@ -69,10 +81,8 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("exert", new Exert());
         effectAppenderProducers.put("exhaust", new Exhaust());
         effectAppenderProducers.put("filtercardsinmemory", new FilterCardsInMemory());
-        effectAppenderProducers.put("foreachplayer", new ForEachPlayer());
         effectAppenderProducers.put("getcardsfromtopofdeck", new GetCardsFromTopOfDeck());
         effectAppenderProducers.put("heal", new Heal());
-        effectAppenderProducers.put("if", new IfEffect());
         effectAppenderProducers.put("incrementperphaselimit", new IncrementPerPhaseLimit());
         effectAppenderProducers.put("incrementperturnlimit", new IncrementPerTurnLimit());
         effectAppenderProducers.put("incrementtoil", new IncrementToil());
@@ -94,9 +104,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("modifyresistance", new ModifyResistance());
         effectAppenderProducers.put("modifysitenumber", new ModifySiteNumber());
         effectAppenderProducers.put("modifystrength", new ModifyStrength());
-        effectAppenderProducers.put("multiple", new Multiple());
         effectAppenderProducers.put("negatewound", new NegateWound());
-        effectAppenderProducers.put("optional", new Optional());
         effectAppenderProducers.put("placenowoundforexert", new PlaceNoWoundForExert());
         effectAppenderProducers.put("playcardfromhand", new PlayCardFromHand());
         effectAppenderProducers.put("playcardfromdeadpile", new PlayCardFromDeadPile());
@@ -105,7 +113,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("playcardfromstacked", new PlayCardFromStacked());
         effectAppenderProducers.put("playnextsite", new PlayNextSite());
         effectAppenderProducers.put("playsite", new PlaySite());
-        effectAppenderProducers.put("preventable", new PreventableAppenderProducer());
         effectAppenderProducers.put("preventaddingallburdens", new PreventAddingAllBurdens());
         effectAppenderProducers.put("preventallwounds", new PreventAllWounds());
         effectAppenderProducers.put("preventburden", new PreventEffect());
@@ -133,7 +140,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("putrandomcardfromhandbeneathdrawdeck", new PutRandomCardFromHandBeneathDrawDeck());
         effectAppenderProducers.put("putstackedcardsintohand", new PutStackedCardsIntoHand());
         effectAppenderProducers.put("reconcilehand", new ReconcileHand());
-        effectAppenderProducers.put("refreshself", new RefreshSelf());
         effectAppenderProducers.put("reinforcetokens", new ReinforceTokens());
         effectAppenderProducers.put("removealltokens", new RemoveAllTokens());
         effectAppenderProducers.put("removeburdens", new RemoveBurdens());
@@ -145,12 +151,10 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("removekeyword", new RemoveKeyword());
         effectAppenderProducers.put("removetext", new RemoveText());
         effectAppenderProducers.put("removethreats", new RemoveThreats());
-        effectAppenderProducers.put("removetokens", new RemoveTokens());
+        effectAppenderProducers.put("removeculturetokens", new RemoveCultureTokens());
         effectAppenderProducers.put("removetokenscumulative", new RemoveTokensCumulative());
         effectAppenderProducers.put("removetwilight", new RemoveTwilight());
         effectAppenderProducers.put("reordertopcardsofdrawdeck", new ReorderTopCardsOfDrawDeck());
-        effectAppenderProducers.put("repeat", new Repeat());
-        effectAppenderProducers.put("dowhile", new DoWhile());
         effectAppenderProducers.put("replaceinassignment", new ReplaceInAssignment());
         effectAppenderProducers.put("replaceinskirmish", new ReplaceInSkirmish());
         effectAppenderProducers.put("resetwhileinzonedata", new ResetWhileInZoneData());
@@ -162,7 +166,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("revealhand", new RevealHand());
         effectAppenderProducers.put("revealrandomcardsfromhand", new RevealRandomCardsFromHand());
         effectAppenderProducers.put("revealtopcardsofdrawdeck", new RevealTopCardsOfDrawDeck());
-        effectAppenderProducers.put("sendmessage", new SendMessage());
         effectAppenderProducers.put("setfpstrengthoverride", new SetFPStrengthOverride());
         effectAppenderProducers.put("setshadowstrengthoverride", new SetShadowStrengthOverride());
         effectAppenderProducers.put("setupextraassignmentandskirmishes", new SetupExtraAssignmentAndSkirmishes());

@@ -696,7 +696,7 @@
                         memorize: tokenCount
                     }
                     {
-                        type: removeTokens
+                        type: RemoveCultureTokens
                         culture: sauron
                         count: memory(tokenCount)
                         select: self

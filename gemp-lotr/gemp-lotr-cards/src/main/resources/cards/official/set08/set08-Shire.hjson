@@ -241,7 +241,7 @@
 		        type: activated
 		        phase: skirmish
 		        cost: {
-                    type: removeTokens
+                    type: RemoveCultureTokens
                     culture: shire
                     select: self
 		        }

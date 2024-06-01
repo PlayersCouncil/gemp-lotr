@@ -244,7 +244,7 @@
 		        type: activated
 		        phase: skirmish
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            count: 3
 		            culture: gandalf
 		            select: self

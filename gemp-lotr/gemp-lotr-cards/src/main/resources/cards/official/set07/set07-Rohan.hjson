@@ -92,7 +92,7 @@
 				}
 				{
 				    type: doWhile
-				    condition: {
+				    check: {
 				        type: memoryMatches
 				        memory: exertedCharacter
 				        filter: character

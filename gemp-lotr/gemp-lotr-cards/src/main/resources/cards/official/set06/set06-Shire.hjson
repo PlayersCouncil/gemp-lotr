@@ -188,7 +188,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: shire
 		                    select: self
 		                }

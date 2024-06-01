@@ -1647,7 +1647,7 @@
 		        type: activated
 		        phase: maneuver
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: raider
 		            select: self
 		            count: 1

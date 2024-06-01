@@ -132,7 +132,7 @@
 				type: activated
 				phase: regroup
 				cost: {
-					type: removetokens
+					type: RemoveCultureTokens
 					select: choose(any)
 					count: 1
 					culture: elven

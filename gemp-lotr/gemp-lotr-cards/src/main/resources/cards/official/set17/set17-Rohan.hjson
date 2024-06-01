@@ -513,7 +513,7 @@
 		        }
 		        effect: {
 		            type: doWhile
-		            condition: {
+		            check: {
 		                type: memoryIs
 		                memory: choice
 		                value: yes

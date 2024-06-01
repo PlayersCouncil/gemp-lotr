@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class RemoveTokens implements EffectAppenderProducer {
+public class RemoveCultureTokens implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "count", "culture", "select", "memorize");

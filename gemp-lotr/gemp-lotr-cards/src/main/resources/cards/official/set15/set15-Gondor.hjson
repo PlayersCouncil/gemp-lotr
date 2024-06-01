@@ -521,7 +521,7 @@
 		            ]
 		            effects: [
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: gondor
 		                    select: choose(any)
 		                }

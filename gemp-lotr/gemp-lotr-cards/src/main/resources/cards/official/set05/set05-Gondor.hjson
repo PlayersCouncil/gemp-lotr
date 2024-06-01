@@ -564,7 +564,7 @@
                         on: companion,signet(Aragorn)
                         memorize: playedCard
 					}
-					condition: {
+					check: {
                         type: memoryMatches
                         memory: playedCard
                         filter: possession

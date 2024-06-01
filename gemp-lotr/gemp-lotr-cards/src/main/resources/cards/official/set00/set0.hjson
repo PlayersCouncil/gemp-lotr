@@ -164,7 +164,7 @@
 				type: activated
 				phase: fellowship
 				cost: {
-					type: removeTokens
+					type: RemoveCultureTokens
 					select: self
 					count: 2
 					culture: shire

@@ -387,7 +387,7 @@
 		        type: activated
 		        phase: regroup
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            count: 4
 		            culture: men
 		            select: self
@@ -454,7 +454,7 @@
 		        phase: regroup
 		        text: Remove a {men} token to add 2
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: men
 		            select: choose(any)
 		        }

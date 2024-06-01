@@ -751,7 +751,7 @@
 						filter: bearer
 					}
 					effect: {
-						type: removeTokens
+						type: RemoveCultureTokens
 						select: choose(any)
 					}
 				}
@@ -880,7 +880,7 @@
 							select: self
 						}
 						{
-							type: removeTokens
+							type: RemoveCultureTokens
 							culture: elven
 							select: self
 						}

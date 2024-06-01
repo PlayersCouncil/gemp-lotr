@@ -38,7 +38,7 @@
 		            side: shadow
 		        }
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: raider
 		            select: choose(any)
 		        }
@@ -121,7 +121,7 @@
                         memorize: tokenCount
                     }
                     {
-                        type: removeTokens
+                        type: RemoveCultureTokens
                         culture: raider
                         select: self
                         count: {
@@ -425,7 +425,7 @@
 		            side: shadow
 		        }
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            select: choose(any)
 		            culture: raider
 		        }
@@ -1073,7 +1073,7 @@
 		        type: activated
 		        phase: regroup
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: raider
 		            select: self
 		            count: 2

@@ -419,7 +419,7 @@
 			cost: [
                 {
                     type: doWhile
-                    condition: {
+                    check: {
                         type: isLessThan
                         firstNumber: {
                             type: forEachResistance
@@ -523,7 +523,7 @@
 		                        select: self
 		                    }
 		                    {
-		                        type: removeTokens
+		                        type: RemoveCultureTokens
 		                        culture: gondor
 		                        select: self
 		                    }

@@ -120,7 +120,7 @@
                             select: self
                         }
                         {
-                            type: removeTokens
+                            type: RemoveCultureTokens
                             culture: dwarven
                             select: self
                         }

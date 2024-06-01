@@ -63,7 +63,7 @@
                             select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: rohan
 		                    select: self
 		                }

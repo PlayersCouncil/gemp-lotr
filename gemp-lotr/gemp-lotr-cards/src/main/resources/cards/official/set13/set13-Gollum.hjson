@@ -368,7 +368,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    select: self
 		                    culture: gollum
 		                    count: 2

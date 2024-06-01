@@ -1324,7 +1324,7 @@
 		        phase: skirmish
 		        cost: [
 		            {
-		                type: removeTokens
+		                type: RemoveCultureTokens
 		                culture: dunland
 		                select: self
 		            }

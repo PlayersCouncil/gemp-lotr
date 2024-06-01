@@ -456,7 +456,7 @@
 		        type: activated
 		        phase: maneuver
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: gondor
 		            select: choose(any)
 		        }
@@ -699,7 +699,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: gondor
 		                    select: self
 		                }
@@ -1182,7 +1182,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    select: self
 		                    culture: gondor
 		                    count: 2

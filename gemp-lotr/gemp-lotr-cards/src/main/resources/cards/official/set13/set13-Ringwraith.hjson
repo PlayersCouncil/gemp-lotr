@@ -267,7 +267,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    select: self
 		                    count: 2
 		                }

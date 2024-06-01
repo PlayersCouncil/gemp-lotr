@@ -43,7 +43,7 @@
 		                ]
 		                effects: [
                             {
-                                type: removeTokens
+                                type: RemoveCultureTokens
                                 select: choose(machine)
                                 count: 2
                             }
@@ -483,7 +483,7 @@
 		                ]
 		                effects: [
 		                    {
-		                        type: removeTokens
+		                        type: RemoveCultureTokens
 		                        select: choose(machine)
 		                        count: 2
 		                    }

@@ -268,7 +268,7 @@
 		        type: activated
 		        phase: skirmish
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: gandalf
 		            select: self
 		        }

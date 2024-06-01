@@ -437,7 +437,7 @@
 		effects: {
 			type: event
 			cost: {
-			    type: removeTokens
+			    type: RemoveCultureTokens
 			    culture: dwarven
 			    select: choose(any)
 			},
@@ -521,7 +521,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: dwarven
 		                    count: 2
 		                    select: self

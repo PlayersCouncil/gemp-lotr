@@ -155,7 +155,7 @@
 		            filter: self,inSkirmish
 		        }
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            select: choose(any)
 		            culture: raider
 		        }

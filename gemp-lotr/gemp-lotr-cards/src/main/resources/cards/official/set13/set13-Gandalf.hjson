@@ -173,7 +173,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: gandalf
 		                    select: self
 		                }
@@ -916,7 +916,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: gandalf
 		                    select: self
 		                    count: 2

@@ -401,7 +401,7 @@
 		        type: activated
 		        phase: fellowship
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            select: choose(side(free people))
 		        }
 		        effect: {
@@ -414,7 +414,7 @@
 		        type: activated
 		        phase: skirmish
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: elven
 		            select: self
 		            count: 2
@@ -559,7 +559,7 @@
 		        type: activated
 		        phase: regroup
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: elven
 		            select: choose(any)
 		        }

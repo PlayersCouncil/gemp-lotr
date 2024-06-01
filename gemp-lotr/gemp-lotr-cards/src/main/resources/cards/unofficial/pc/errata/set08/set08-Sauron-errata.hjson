@@ -54,7 +54,7 @@
 					    memorize: numberOfTokens
 					}
 					{
-					    type: removeTokens
+					    type: RemoveCultureTokens
 					    select: self
 					    count: memory(numberOfTokens)
 					}

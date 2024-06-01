@@ -309,7 +309,7 @@
 		        type: activated
 		        phase: archery
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: elven
 		            select: self
 		        }

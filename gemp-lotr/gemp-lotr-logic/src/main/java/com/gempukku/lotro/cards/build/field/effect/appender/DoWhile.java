@@ -16,9 +16,9 @@ import org.json.simple.JSONObject;
 public class DoWhile implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "condition", "effect");
+        FieldUtils.validateAllowedFields(effectObject, "check", "effect");
 
-        final JSONObject[] conditionArray = FieldUtils.getObjectArray(effectObject.get("condition"), "condition");
+        final JSONObject[] conditionArray = FieldUtils.getObjectArray(effectObject.get("check"), "check");
 
         final Requirement[] conditions = environment.getRequirementFactory().getRequirements(conditionArray, environment);
         final JSONObject[] effectArray = FieldUtils.getObjectArray(effectObject.get("effect"), "effect");

@@ -234,7 +234,7 @@
 		        phase: maneuver
 		        cost: [
 		            {
-		                type: removeTokens
+		                type: RemoveCultureTokens
 		                culture: isengard
 		                select: choose(machine)
 		            }

@@ -55,7 +55,7 @@
 		        type: activated
 		        phase: skirmish
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: elven
 		            select: choose(any)
 		        }
@@ -352,7 +352,7 @@
 		            phase: maneuver
 		        }
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: elven
 		            select: self
 		        }

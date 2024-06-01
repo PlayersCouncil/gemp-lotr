@@ -408,7 +408,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: rohan
 		                    select: self
 		                }
@@ -722,7 +722,7 @@
                         type: addTwilight
                     }
                     {
-                        type: removeTokens
+                        type: RemoveCultureTokens
                         select: choose(side(free people))
                     }
                 ]

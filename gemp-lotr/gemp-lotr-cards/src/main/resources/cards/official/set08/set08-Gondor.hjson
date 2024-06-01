@@ -735,7 +735,7 @@
 		        type: activated
 		        phase: regroup
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: gondor
 		            select: self
 		        }

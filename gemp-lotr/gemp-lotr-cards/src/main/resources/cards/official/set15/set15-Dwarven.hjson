@@ -56,7 +56,7 @@
 		                    select: self
 		                }
 		                {
-		                    type: removeTokens
+		                    type: RemoveCultureTokens
 		                    culture: dwarven
 		                    select: self
 		                }
@@ -261,7 +261,7 @@
 		        type: activated
 		        phase: skirmish
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: dwarven
 		            select: choose(any)
 		        }
@@ -320,7 +320,7 @@
 		        type: activated
 		        phase: skirmish
 		        cost: {
-		            type: removeTokens
+		            type: RemoveCultureTokens
 		            culture: dwarven
 		            select: choose(any)
 		        }
