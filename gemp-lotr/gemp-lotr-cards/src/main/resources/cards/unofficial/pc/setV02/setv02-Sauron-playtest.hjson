@@ -113,7 +113,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timewords: Skirmish
 		/*requires: {
 			
 		}
@@ -255,10 +255,8 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		keywords: [
-			Search
-			Skirmish
-		]
+		timewords: Skirmish
+		keywords: Search
 		/*requires: {
 			
 		}

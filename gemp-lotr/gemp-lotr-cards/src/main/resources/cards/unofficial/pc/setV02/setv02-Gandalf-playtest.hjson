@@ -21,6 +21,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: [
 			Pipeweed
 			Support Area
@@ -162,7 +163,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		keywords: Maneuver
+		timewords: Maneuver
 		/*requires: {
 			
 		}

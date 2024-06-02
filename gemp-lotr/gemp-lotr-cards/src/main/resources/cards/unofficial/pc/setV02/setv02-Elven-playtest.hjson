@@ -106,7 +106,7 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		keywords: Archery
+		timewords: Archery
 		/*requires: {
 			
 		}
@@ -174,7 +174,7 @@
 				
 			}
 		]*/
-		gametext: Bearer must a valiant Elf.<br>Each time bearer wins a skirmish, you may exert bearer to heal another valiant Elf.
+		gametext: Bearer must be a valiant Elf.<br>Each time bearer wins a skirmish, you may exert bearer to heal another valiant Elf.
 		lore: "The great bow of Lórien sang..."
 		promotext: ""
 		alts: {
@@ -207,7 +207,7 @@
 		culture: Elven
 		twilight: 2
 		type: Ally
-		allyHome: fellowship,3
+		allyHome: 3F
 		race: Elf
 		strength: 6
 		vitality: 3
@@ -298,7 +298,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keywords: Maneuver
+		timewords: Maneuver
 		/*requires: {
 			
 		}
@@ -348,7 +348,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keywords: Fellowship
+		timewords: Fellowship
 		/*requires: {
 			
 		}

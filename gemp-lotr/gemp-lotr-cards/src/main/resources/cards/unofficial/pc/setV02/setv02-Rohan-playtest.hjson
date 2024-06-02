@@ -120,7 +120,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Ally
-		allyHome: towers,3
+		allyHome: 3T
 		race: Man
 		strength: 3
 		vitality: 3
@@ -346,7 +346,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		keywords: Assignment
+		timewords: Assignment
 		/*requires: {
 			
 		}
@@ -396,7 +396,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		keywords: Skirmish
+		timewords: Skirmish
 		/*requires: {
 			
 		}
@@ -491,7 +491,7 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		keywords: Skirmish
+		timewords: Skirmish
 		/*requires: {
 			
 		}

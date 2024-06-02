@@ -117,7 +117,7 @@
 		culture: Moria
 		twilight: 1
 		type: Event
-		keywords: Regroup
+		timewords: Regroup
 		/*requires: {
 			
 		}

@@ -202,6 +202,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		/*requires: {
 			
@@ -337,6 +338,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: [
 			Machine
 			Support Area
@@ -480,7 +482,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		keywords: Assignment
+		timewords: Assignment
 		/*requires: {
 			
 		}

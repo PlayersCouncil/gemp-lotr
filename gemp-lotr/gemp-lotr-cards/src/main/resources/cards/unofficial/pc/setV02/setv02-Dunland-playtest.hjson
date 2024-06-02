@@ -159,7 +159,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		keywords: Shadow
+		timewords: Shadow
 		/*requires: {
 			
 		}
