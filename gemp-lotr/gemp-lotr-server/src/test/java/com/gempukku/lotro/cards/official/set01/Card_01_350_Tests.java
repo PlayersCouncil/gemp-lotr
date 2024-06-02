@@ -18,10 +18,21 @@ public class Card_01_350_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "1_350");
-					// put other cards in here as needed for the test case
+					put("troop", "1_177");
+					put("flankers", "2_61");
+					put("redeye", "1_266");
 				}},
-				GenericCardTestHelper.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327");
+					put("site3", "1_338");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_350");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
 		);
@@ -45,9 +56,7 @@ public class Card_01_350_Tests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(6);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(6);
 
 		assertEquals("Dimrill Dale", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +67,43 @@ public class Card_01_350_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DimrillDaleTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void DimrillDaleOnlyDiscountsFirstMoriaOrc() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var dale = scn.GetShadowSite(6);
+
+		var troop = scn.GetShadowCard("troop");
+		var flankers = scn.GetShadowCard("flankers");
+		var redeye = scn.GetShadowCard("redeye");
+		scn.ShadowMoveCardToHand(troop, redeye);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		//Start our test on 5 so that moving to 6 is the first thing we do
+		scn.SkipToSite(5);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.SetTwilight(11);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(dale, scn.GetCurrentSite());
+
+		//11 manual + 4 from the fellowship moving
+		assertEquals(15, scn.GetTwilight());
+
+		scn.ShadowPlayCard(redeye);
+		//Orc Chieftain costs 2, should have had 0 discount
+		//15 - 2
+		assertEquals(13, scn.GetTwilight());
+
+		scn.ShadowPlayCard(troop);
+		//Troop costs 6 (no roaming), discounted by 2 to 4 total
+		//13 - 4
+		assertEquals(9, scn.GetTwilight());
+
+		scn.ShadowPlayCard(flankers);
+		//flankers costs 5, should have no discount
+		//9 - 5
+		assertEquals(4, scn.GetTwilight());
 	}
 }
