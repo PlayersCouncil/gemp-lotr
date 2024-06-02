@@ -1,0 +1,320 @@
+{
+
+	102_16: {
+		cardInfo: {
+			imagePath: sets/V2/V2_16.jpg
+			javaClass: false
+			//parentId: 102_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R16
+			rarity: R
+			setNum: "V2"
+			cardNum: 16
+			style: Standard
+		}
+		title: Aragorn
+		subtitle: Last Hope Of Men
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 4
+		signet: Theoden
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: FPCultureSpot
+					requires: {
+						type: canSpot
+						count: 3
+						filter: valiant,companion
+					}
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				requires: {
+					type: canSpot
+					count: 1
+					filter: valiant,companion,inSkirmish
+				}
+				phase: skirmish
+				cost: {
+					type: exert
+					filter: self
+				}
+				effect: {
+					type: modifyStrength
+					filter: choose(valiant,companion,inSkirmish)
+					memorize: chosenCompanion
+					amount: {
+						type: requires
+						requires: {
+							type: memoryMatches
+							memory: chosenCompanion
+							filter: Exhausted
+						}
+						true: 3
+						false: 2
+					}
+				}
+			}
+		]
+		gametext: Valiant.<br>While you can spot 3 valiant companions, the number of free peoples cultures that can be counted is-1.<br>Skirmish: If a valiant companion is skirmishing a minion with a strength of 12 or higher, exert Aragorn to make that companion strength +2 (or +3 if that companion is exhausted).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_17: {
+		cardInfo: {
+			imagePath: sets/V2/V2_17.jpg
+			javaClass: false
+			//parentId: 102_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2C17
+			rarity: C
+			setNum: "V2"
+			cardNum: 17
+			style: Standard
+		}
+		title: I Will Die as One of Them
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		keywords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				filter: choose(name(Aragorn))
+				memorize: exertedCompanion
+				times: 3
+			}
+			effect: [
+				{
+					type: modifyStrength
+					filter: all(valiant,companion)
+					until: start(regroup)
+					amount: 2
+				}
+				{
+					type: addTrigger
+					until: endOfTurn
+					trigger: {
+						type: killed
+						filter: name(Aragorn)
+					}
+					effect: {
+						type: modifyStrength
+						filter: all(valiant,companion)
+						until: endOfTurn
+						amount: 1
+					}
+				}
+			]
+		}
+		gametext: Exert Aragorn three times to make each valiant companion strength +2 until the regroup phase. <br>If Aragorn dies during this turn, make each valiant companion strength +1 for the rest of the turn. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_18: {
+		cardInfo: {
+			imagePath: sets/V2/V2_18.jpg
+			javaClass: false
+			//parentId: 102_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U18
+			rarity: U
+			setNum: "V2"
+			cardNum: 18
+			style: Standard
+		}
+		title: Denethor
+		subtitle: Formidable Father
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Ally
+		allyHome: king,3
+		race: Man
+		strength: 5
+		vitality: 3
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: culture(gondor),companion
+					amount: {
+						type: requires
+						requires: {
+							type: IsGreaterThanOrEqual
+							firstNumber: {
+								type: ForEachThreat
+							}
+							secondNumber: {
+								type: ForEachYouCanSpot
+								filter: companion
+							}
+						}
+						true: -2
+						false: 0
+					}
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				text: Would you like to add 2 threats to choose a Gondor companion to become strength +2 and Defender +1 until the regroup phase (1 threat if target is Boromir)?
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				cost: [
+					{
+						type: spot
+						filter: choose(culture(gondor),companion)
+						memorize: chosenGondorian
+					}
+					{
+						type: addThreats
+						amount: {
+							type: requires
+							requires: {
+								type: memoryMatches
+								memory: chosenGondorian
+								filter: name(Boromir)
+							}
+							true: 1
+							false: 2
+						}
+					}
+				]
+				effect: [
+					{
+						type: modifyStrength
+						filter: memory(chosenGondorian)
+						amount: 2
+						until: start(regroup)
+					}
+					{
+						type: addKeyword
+						filter: memory(chosenGondorian)
+						keyword: defender+1
+						until: start(regroup)
+					}
+				]
+			}
+		]
+		gametext: While you can spot the same number of threats as companions, each [gondor] companion is strength -2.<br>At the start of the maneuver phase, you may add 2 threats to make a [gondor] companion defender +1 and strength +2 until the regroup phase (or add 1 threat if that companion is Boromir).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_19: {
+		cardInfo: {
+			imagePath: sets/V2/V2_19.jpg
+			javaClass: false
+			//parentId: 102_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U19
+			rarity: U
+			setNum: "V2"
+			cardNum: 19
+			style: Standard
+		}
+		title: Dunadan of Ithilien
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		signet: Frodo
+		resistance: 6
+		keywords: Ranger
+		requires: {
+			type: canSpot
+			filter: ranger
+		}
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					count: 1
+					filter: choose(culture(gondor))
+					forced: false
+				}
+				effect: {
+					type: wound
+					filter: choose(minion,inSkirmishAgainst(self),roaming)
+					memorize: chosenMinion
+					times: {
+						type: requires
+						requires: {
+							type: memoryMatches
+							memory: chosenMinion
+							filter: man
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: Ranger. To play, spot a ranger.<br>Skirmish: Discard a [Gondor] card from hand to wound a roaming minion skirmishing this companion. If that minion is a Man, wound it again.
+		lore: "All had swords at their sides, and were clad in green and brown of varied hues, as if the better to walk unseen in the glades of Ithilien."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,190 @@
+{
+
+	102_1: {
+		cardInfo: {
+			imagePath: sets/V2/V2_01.jpg
+			javaClass: false
+			//parentId: 102_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U1
+			rarity: U
+			setNum: "V2"
+			cardNum: 1
+			style: Standard
+		}
+		title: Driven into the Hills
+		unique: true
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot a [Dunland] minion.<br>While the shadow has initiative, skip the archery phase.<br>If the Free-Peoples player liberates a site, discard this condition. 
+		lore: "'Not in half a thousand years have they forgotten their grievance that the lords of Gondor gave the Mark to Eorl the Young and made alliance with him.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_2: {
+		cardInfo: {
+			imagePath: sets/V2/V2_02.jpg
+			javaClass: false
+			//parentId: 102_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2C2
+			rarity: C
+			setNum: "V2"
+			cardNum: 2
+			style: Standard
+		}
+		title: Dunlending Raider
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you have initiative, this minion's twilight cost is -2.
+		lore: "'They bring fire...and are burning as they come, rick, cot, and tree.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_3: {
+		cardInfo: {
+			imagePath: sets/V2/V2_03.jpg
+			javaClass: false
+			//parentId: 102_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U3
+			rarity: U
+			setNum: "V2"
+			cardNum: 3
+			style: Standard
+		}
+		title: Dunlending Reaver
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 1
+		site: 3
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you have initiative, this minion is strength +1 and damage +1.
+		lore: "Now they could hear, borne over the dark, the sound of harsh singing..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_4: {
+		cardInfo: {
+			imagePath: sets/V2/V2_04.jpg
+			javaClass: false
+			//parentId: 102_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R4
+			rarity: R
+			setNum: "V2"
+			cardNum: 4
+			style: Standard
+		}
+		title: Horsemen Took Your Lands
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Event
+		keywords: Shadow
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: Play a non-unique [Dunland] minion from your discard pile. If you have initiative, you may play a [dunland] possession on that minion from your discard pile.
+		lore: "They will not give way now for dusk or dawn..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

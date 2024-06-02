@@ -1,0 +1,887 @@
+{
+
+	102_20: {
+		cardInfo: {
+			imagePath: sets/V2/V2_20.jpg
+			javaClass: false
+			//parentId: 102_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R20
+			rarity: R
+			setNum: "V2"
+			cardNum: 20
+			style: Standard
+		}
+		title: Isengard Foreman
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 3
+		site: 4
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion you may play an [isengard] orc from your discard pile, it is strength +1 until the regroup phase.<br>Regroup: Discard this minion to add two threats.
+		lore: "'He has taken up with foul folk, with the Orcs.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_21: {
+		cardInfo: {
+			imagePath: sets/V2/V2_21.jpg
+			javaClass: false
+			//parentId: 102_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U21
+			rarity: U
+			setNum: "V2"
+			cardNum: 21
+			style: Standard
+		}
+		title: Machinery of War
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this condition, spot an [isengard] Orc or a Wizard to add 2 [isengard] tokens here.<br>Each time an [isengard] Orc is defeated in a skirmish, you may discard this condition (or remove an [isengard] token here) to cancel a skirmish assignment involving another <br>[isengard] Orc.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_22: {
+		cardInfo: {
+			imagePath: sets/V2/V2_22.jpg
+			javaClass: false
+			//parentId: 102_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U22
+			rarity: U
+			setNum: "V2"
+			cardNum: 22
+			style: Standard
+		}
+		title: Fires of Industry
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this condition, spot 2 [Isengard] Orcs or a Wizard to add 2 [isengard] tokens here.<br>At the start of the regroup phase, you may discard this condition (or remove an [isengard] token here), to heal an [Isengard] Orc.
+		lore: "'For bole and bough are burning now, the furnace roars...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_23: {
+		cardInfo: {
+			imagePath: sets/V2/V2_23.jpg
+			javaClass: false
+			//parentId: 102_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2C23
+			rarity: C
+			setNum: "V2"
+			cardNum: 23
+			style: Standard
+		}
+		title: Isengard Grunt
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 5
+		vitality: 3
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Skirmish: Exert this minion to prevent an [isengard] Orc from being overwhelmed unless its strength is tripled.
+		lore: "...Saruman was mustering a great force on his own account, in rivalry of Sauron and not in his service yet."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_24: {
+		cardInfo: {
+			imagePath: sets/V2/V2_24.jpg
+			javaClass: false
+			//parentId: 102_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R24
+			rarity: R
+			setNum: "V2"
+			cardNum: 24
+			style: Standard
+		}
+		title: Wolf Pit
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this possession, you may stack two [isengard] mounts here from your draw deck or discard pile.<br>Shadow: Exert an [Isengard] minion to play an [Isengard] mount stacked here as if from hand. 
+		lore: "Horsemen were galloping on the grass of Rohan; wolves poured from Isengard."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_25: {
+		cardInfo: {
+			imagePath: sets/V2/V2_25.jpg
+			javaClass: false
+			//parentId: 102_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U25
+			rarity: U
+			setNum: "V2"
+			cardNum: 25
+			style: Standard
+		}
+		title: Strength of the Pack
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Mounted [Isengard] Orcs are strength +1.<br>While you can spot 2 mounted [isengard] Orcs, your [isengard] mounts are twilight cost -1. 
+		lore: "At a gap in the circle a great dark wolf-shape could be seen halted, gazing at them. A shuddering howl broke from him, as if he were a captain summoning his pack to the assault."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_26: {
+		cardInfo: {
+			imagePath: sets/V2/V2_26.jpg
+			javaClass: false
+			//parentId: 102_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2C26
+			rarity: C
+			setNum: "V2"
+			cardNum: 26
+			style: Standard
+		}
+		title: Hound of Isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Possession
+		strength: 1
+		vitality: 1
+		itemclass: Mount
+		target: Warg-rider
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a Warg-rider.<br>Shadow: Play this possession from hand on an [isengard] Orc to take an [isengard] skirmish event into hand from your discard pile.
+		lore: "'He has taken Orcs into his service, and Wolf-riders, and evil Men...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_27: {
+		cardInfo: {
+			imagePath: sets/V2/V2_27.jpg
+			javaClass: false
+			//parentId: 102_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U27
+			rarity: U
+			setNum: "V2"
+			cardNum: 27
+			style: Standard
+		}
+		title: Uruk Shield Wall
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		keywords: [
+			Machine
+			Support Area
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Machine.<br>While you can spot X [isengard] tokens here, each time an [isengard] Uruk-hai costing X is about to take a wound, exert it instead.<br>Maneuver: Exert an Uruk-hai to add an [isengard] token here.  
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_28: {
+		cardInfo: {
+			imagePath: sets/V2/V2_28.jpg
+			javaClass: false
+			//parentId: 102_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R28
+			rarity: R
+			setNum: "V2"
+			cardNum: 28
+			style: Standard
+		}
+		title: Berserk Deathseeker
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 10
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Damage +1.<br>This minion is strength +1 for each wound on each character in its skirmish.<br>When this minion is killed, add up to 3 [isengard] tokens to an [isengard] machine.
+		lore: "The foremost fell with Legolas' last arrow in his throat. but the rest sprang over him."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_29: {
+		cardInfo: {
+			imagePath: sets/V2/V2_29.jpg
+			javaClass: false
+			//parentId: 102_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2C29
+			rarity: C
+			setNum: "V2"
+			cardNum: 29
+			style: Standard
+		}
+		title: Berserk Fanatic
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Damage +1. <br>The minion is strength+1 for each wound on each character in its skirmish.<br>When this minion dies in a skirmish, you may remove 2 [isengard] tokens from a machine to wound a character it was skirmishing. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_30: {
+		cardInfo: {
+			imagePath: sets/V2/V2_30.jpg
+			javaClass: false
+			//parentId: 102_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U30
+			rarity: U
+			setNum: "V2"
+			cardNum: 30
+			style: Standard
+		}
+		title: Breaching Shot
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		keywords: Assignment
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: Remove X tokens from a machine to assign an Uruk-hai costing X or less to an ally or unbound companion. 
+		lore: "'They have crept in the culvert again, while we talked, and they have lit the fire of Orthanc beneath our feet.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_31: {
+		cardInfo: {
+			imagePath: sets/V2/V2_31.jpg
+			javaClass: false
+			//parentId: 102_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U31
+			rarity: U
+			setNum: "V2"
+			cardNum: 31
+			style: Standard
+		}
+		title: Uruk Occupier
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Damage +1.<br>This minion is strength +1 for each battleground you control.<br>Shadow: If you control 3 battlegrounds, you may discard a card from hand to play this minion from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_32: {
+		cardInfo: {
+			imagePath: sets/V2/V2_32.jpg
+			javaClass: false
+			//parentId: 102_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2C32
+			rarity: C
+			setNum: "V2"
+			cardNum: 32
+			style: Standard
+		}
+		title: Trail of Savagery
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each site you control gains <b>battleground</b>.<br>Skirmish: Remove 2 [isengard] tokens from a machine to cancel a skirmish involving an Uruk-hai.
+		lore: "'They are burning or despoiling all that is left in the vale.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_33: {
+		cardInfo: {
+			imagePath: sets/V2/V2_33.jpg
+			javaClass: false
+			//parentId: 102_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R33
+			rarity: R
+			setNum: "V2"
+			cardNum: 33
+			style: Standard
+		}
+		title: Legion of Isengard
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 8
+		type: Minion
+		race: Uruk-hai
+		strength: 15
+		vitality: 4
+		site: 5
+		keywords: Damage+1
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Damage +1.<br>While you control a battleground, this minion is damage +1.<br>While at a battleground, skirmish special abilities cannot be used during skirmishes involving this minion.
+		lore: "...blazoned upon every helm and shield the ghastly hand of Isengard was seen..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_34: {
+		cardInfo: {
+			imagePath: sets/V2/V2_34.jpg
+			javaClass: false
+			//parentId: 102_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U34
+			rarity: U
+			setNum: "V2"
+			cardNum: 34
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Mind of Metal and Wheels
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		site: 4
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.<br>Regroup: Exert Saruman and discard an [Isengard] Uruk-hai to take control of a site. The Free Peoples player may reinforce 2 [Isengard] tokens to prevent this.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_35: {
+		cardInfo: {
+			imagePath: sets/V2/V2_35.jpg
+			javaClass: false
+			//parentId: 102_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U35
+			rarity: U
+			setNum: "V2"
+			cardNum: 35
+			style: Standard
+		}
+		title: Back on the Menu
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Skirmish: Discard a [Sauron] tracker to make an [Isengard] tracker strength +2.<br>Skirmish: Exert an [isengard] tracker to make a [sauron] tracker fierce. 
+		lore: "Five dead Orcs lay there. They had been hewn with many cruel strokes, and two had been beheaded."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_36: {
+		cardInfo: {
+			imagePath: sets/V2/V2_36.jpg
+			javaClass: false
+			//parentId: 102_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2C36
+			rarity: C
+			setNum: "V2"
+			cardNum: 36
+			style: Standard
+		}
+		title: Uruk Prowler
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 1
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Tracker. Fierce.<br>Each time this minion is assigned to a skirmish, you may spot a [sauron] tracker and discard this minion to wound that companion. 
+		lore: "'We came out of Isengard, and led you here, and we shall lead you back by the way we choose.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_37: {
+		cardInfo: {
+			imagePath: sets/V2/V2_37.jpg
+			javaClass: false
+			//parentId: 102_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2C37
+			rarity: C
+			setNum: "V2"
+			cardNum: 37
+			style: Standard
+		}
+		title: Uneasy Alliance
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Search.<br>While you can spot an [Isengard] tracker and a [Sauron] tracker, trackers are strength +1.<br>Shadow: Discard a [sauron] tracker from hand to play an [isengard] tracker from your discard pile. Discard this condition.
+		lore: "...a quarrel seemed on the point of breaking out again between the Northerners and the Isengarders."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_72: {
+		cardInfo: {
+			imagePath: sets/V2/V2_72.jpg
+			javaClass: false
+			//parentId: 102_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R72
+			rarity: R
+			setNum: "V2"
+			cardNum: 72
+			style: Standard
+		}
+		title: Palantir of Orthanc
+		subtitle: Corrupted Relic
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Artifact
+		itemclass: Palantir
+		target: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Shadow: Discard two [isengard] cards from hand to play this card from your draw deck.<br>Each time the Fellowship moves you may draw a card for companion you can spot over 5.<br>Each time the fellowship moves, if you can spot more than (15), each [isengard] minion is strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,522 @@
+{
+
+	102_43: {
+		cardInfo: {
+			imagePath: sets/V2/V2_43.jpg
+			javaClass: false
+			//parentId: 102_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R43
+			rarity: R
+			setNum: "V2"
+			cardNum: 43
+			style: Standard
+		}
+		title: Theoden
+		subtitle: Last of his House
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		keywords: Valiant
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Valiant.<br>Theoden is strength +1 for each valiant companion assigned to a skirmish.
+		lore: "His beard was laid like snow upon his knees; but his eyes still burned with a bright light, glinting as he gazed..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_44: {
+		cardInfo: {
+			imagePath: sets/V2/V2_44.jpg
+			javaClass: false
+			//parentId: 102_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R44
+			rarity: R
+			setNum: "V2"
+			cardNum: 44
+			style: Standard
+		}
+		title: Erkenbrand
+		subtitle: Kinsman of the House of Eorl
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play Erkenbrand, remove up to 3 non-unique [rohan] companions in the dead pile from the game. <br>Each exhausted companion gains <b>valiant</b>.
+		lore: "'He was a mighty man. In him lived again the valour of Helm the Hammerhand.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_45: {
+		cardInfo: {
+			imagePath: sets/V2/V2_45.jpg
+			javaClass: false
+			//parentId: 102_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R45
+			rarity: R
+			setNum: "V2"
+			cardNum: 45
+			style: Standard
+		}
+		title: Royal Attendant
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Ally
+		allyHome: towers,3
+		race: Man
+		strength: 3
+		vitality: 3
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: To play, spot Theoden (or 3 [rohan] Men).<br>Skirmish: If a Hobbit companion is skirmishing, add this ally's strength to that Hobbit and make that Hobbit gain <b>valiant</b> until the regroup phase (limit once per phase). At the end of that skirmish, wound this ally.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_46: {
+		cardInfo: {
+			imagePath: sets/V2/V2_46.jpg
+			javaClass: false
+			//parentId: 102_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U46
+			rarity: U
+			setNum: "V2"
+			cardNum: 46
+			style: Standard
+		}
+		title: Now for Ruin
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time a minion is killed, spot 2 valiant companions to add a [rohan] token here.<br>Each time there are 3 [rohan] tokens here, remove all tokens here to play a [rohan] condition or event from your discard pile. The Shadow player may then play a minion from their discard pile. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_47: {
+		cardInfo: {
+			imagePath: sets/V2/V2_47.jpg
+			javaClass: false
+			//parentId: 102_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U47
+			rarity: U
+			setNum: "V2"
+			cardNum: 47
+			style: Standard
+		}
+		title: Now for Wrath
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Each time a [rohan] item or [rohan] ally is discarded or killed, add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove a [rohan] token here and exert a valiant companion to wound that minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_48: {
+		cardInfo: {
+			imagePath: sets/V2/V2_48.jpg
+			javaClass: false
+			//parentId: 102_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U48
+			rarity: U
+			setNum: "V2"
+			cardNum: 48
+			style: Standard
+		}
+		title: And the Red Dawn
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Maneuver: Spot 3 valiant companions to discard your hand. For every Shadow card discarded, exert a minion. For every Free Peoples card discarded, heal a valiant or [rohan] companion. You may not make any more Maneuver actions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_49: {
+		cardInfo: {
+			imagePath: sets/V2/V2_49.jpg
+			javaClass: false
+			//parentId: 102_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2R49
+			rarity: R
+			setNum: "V2"
+			cardNum: 49
+			style: Standard
+		}
+		title: Guthwine
+		subtitle: Eomer's Blade
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(rohan),companion
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] companion.<br>If bearer is Eomer, he is damage +1.<br>If bearer is Eomer, each time he wins a skirmish, you may reinforce a [rohan] token.
+		lore: "The swords flashed from the sheath as one."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_50: {
+		cardInfo: {
+			imagePath: sets/V2/V2_50.jpg
+			javaClass: false
+			//parentId: 102_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U50
+			rarity: U
+			setNum: "V2"
+			cardNum: 50
+			style: Standard
+		}
+		title: Let This Be the Hour
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		keywords: Assignment
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: Exert a valiant companion to make that companion defender +1. That companion is strength +1 for each minion skirmishing them until the regroup phase.
+		lore: "At his right hand was Aragorn, Elendil's heir, behind him rode the lords of the House of Eorl the Young."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_51: {
+		cardInfo: {
+			imagePath: sets/V2/V2_51.jpg
+			javaClass: false
+			//parentId: 102_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2C51
+			rarity: C
+			setNum: "V2"
+			cardNum: 51
+			style: Standard
+		}
+		title: To the King
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: Spot a valiant companion to have that companion replace a minion assigned to skirmish an unbound companion (and make them damage +1 if that unbound companion is Theoden). 
+		lore: "'Helm for Théoden King!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_52: {
+		cardInfo: {
+			imagePath: sets/V2/V2_52.jpg
+			javaClass: false
+			//parentId: 102_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2C52
+			rarity: C
+			setNum: "V2"
+			cardNum: 52
+			style: Standard
+		}
+		title: Do Not Trust to Hope
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		strength: 2
+		target: culture(rohan),companion
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Bearer must be a [rohan] companion.<br> Bearer is <b>valiant</b>.<br>At the start of the regroup phase, wound bearer or discard this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_53: {
+		cardInfo: {
+			imagePath: sets/V2/V2_53.jpg
+			javaClass: false
+			//parentId: 102_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U53
+			rarity: U
+			setNum: "V2"
+			cardNum: 53
+			style: Standard
+		}
+		title: An End Worthy of Remembrance
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		keywords: Skirmish
+		/*requires: {
+			
+		}
+		*/
+		effects: {
+			type: event
+			cost: {
+				type: SendMessage
+				text: Placeholder effect for development.
+			},
+			effect: [
+				{
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+			]
+		}
+		gametext: Remove 2 tokens from X [rohan] conditions to make 3 valiant companions strength +X until the regroup phase.
+		lore: "Captains and champions fell or fled before them. Neither orc nor man withstood them."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -1,0 +1,360 @@
+{
+
+	102_63: {
+		cardInfo: {
+			imagePath: sets/V2/V2_63.jpg
+			javaClass: false
+			//parentId: 102_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U63
+			rarity: U
+			setNum: "V2"
+			cardNum: 63
+			style: Standard
+		}
+		title: Eastemnet Hills
+		unique: false
+		twilight: 2
+		type: Site
+		site: 2
+		block: Towers
+		direction: Left
+		keywords: Mountain
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Mountain. When the Fellowship moves from here during the regroup phase, each player may discard 2 cards to draw 2 cards.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_64: {
+		cardInfo: {
+			imagePath: sets/V2/V2_64.jpg
+			javaClass: false
+			//parentId: 102_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U64
+			rarity: U
+			setNum: "V2"
+			cardNum: 64
+			style: Standard
+		}
+		title: Theodred's Tomb
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: Towers
+		direction: Left
+		keywords: Sanctuary
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Sanctuary. Fellowship: Play a valiant character to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_65: {
+		cardInfo: {
+			imagePath: sets/V2/V2_65.jpg
+			javaClass: false
+			//parentId: 102_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U65
+			rarity: U
+			setNum: "V2"
+			cardNum: 65
+			style: Standard
+		}
+		title: Westfold Plains
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4
+		block: Towers
+		direction: Left
+		keywords: Plains
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Plains. Each mount is twilight cost -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_66: {
+		cardInfo: {
+			imagePath: sets/V2/V2_66.jpg
+			javaClass: false
+			//parentId: 102_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U66
+			rarity: U
+			setNum: "V2"
+			cardNum: 66
+			style: Standard
+		}
+		title: Breached Wall
+		unique: false
+		twilight: 6
+		type: Site
+		site: 5
+		block: Towers
+		direction: Left
+		keywords: Battleground
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Battleground. While at this site, the count of sites the shadow player controls is +1. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_67: {
+		cardInfo: {
+			imagePath: sets/V2/V2_67.jpg
+			javaClass: false
+			//parentId: 102_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U67
+			rarity: U
+			setNum: "V2"
+			cardNum: 67
+			style: Standard
+		}
+		title: Isengard Gates
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: Towers
+		direction: Left
+		keywords: Sanctuary
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Sanctuary. Fellowship: Exert an unbound Hobbit to play a pipe or pipeweed from your draw deck (limit 1).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_68: {
+		cardInfo: {
+			imagePath: sets/V2/V2_68.jpg
+			javaClass: false
+			//parentId: 102_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U68
+			rarity: U
+			setNum: "V2"
+			cardNum: 68
+			style: Standard
+		}
+		title: Helm's Tower
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7
+		block: Towers
+		direction: Left
+		keywords: Battleground
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Battleground. While you can spot 6 companions, each character is damage +1. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_69: {
+		cardInfo: {
+			imagePath: sets/V2/V2_69.jpg
+			javaClass: false
+			//parentId: 102_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U69
+			rarity: U
+			setNum: "V2"
+			cardNum: 69
+			style: Standard
+		}
+		title: Desolation of Saruman
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: Towers
+		direction: Left
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When the fellowship moves to this site, each player may discard a card (except an artifact) from their opponent's support area. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_70: {
+		cardInfo: {
+			imagePath: sets/V2/V2_70.jpg
+			javaClass: false
+			//parentId: 102_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2U70
+			rarity: U
+			setNum: "V2"
+			cardNum: 70
+			style: Standard
+		}
+		title: Isengard Clefts
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: Towers
+		direction: Left
+		/*requires: {
+			
+		}
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: Shadow: Exert a minion to play a Shadow possession from your discard pile. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}
