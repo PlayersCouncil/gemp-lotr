@@ -37,7 +37,7 @@ public class WinConditionRule {
                                 game.playerWon(game.getGameState().getCurrentPlayerId(), "Surviving to Regroup phase on site 9");
                             }
                         } else if (game.getFormat().winOnControlling5Sites()
-                                && effectResults.getType() == EffectResult.Type.TAKE_CONTROL_OF_SITE) {
+                                && effectResults.getType() == EffectResult.Type.CONTROL_SITE) {
                             for (String opponent : GameUtils.getShadowPlayers(game)) {
                                 if (Filters.countActive(game, CardType.SITE, Filters.siteControlled(opponent)) >= 5)
                                     game.playerWon(opponent, "Controls 5 sites");

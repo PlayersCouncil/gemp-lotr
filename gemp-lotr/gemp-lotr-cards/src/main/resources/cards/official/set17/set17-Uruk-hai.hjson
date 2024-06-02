@@ -1493,7 +1493,7 @@
 		        type: trigger
 		        optional: true
 		        trigger: {
-		            type: takenControlOfSite
+		            type: SiteControlled
 		        }
 		        requires: {
 		            type: canSpot

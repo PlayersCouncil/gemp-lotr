@@ -1164,41 +1164,46 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: regroup
-		        }
-		        effect: {
-		            type: preventable
-		            player: shadow
-		            text: Would you like to spot 3 Men to prevent liberating site?
-		            cost: {
-		                type: spot
-		                filter: man
-		                count: 3
-		            }
-		            effect: {
-		                type: liberateSite
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(men),man
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: Optional
+					player: freeps
+					text: Would you like to liberate a site?
+					effect: {
+						type: preventable
+						player: shadow
+						text: Would you like to spot 3 Men to prevent liberating site?
+						cost: {
+							type: spot
+							filter: man
+							count: 3
+						}
+						effect: {
+							type: liberateSite
+						}
+					}
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: another,culture(men),man
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
 		]
 		gametext: At the start of the regroup phase, the Free People's player may liberate a site. You may spot 3 Men to prevent this.<br><b>Maneuver:</b> Spot another [men] Man and exert this minion to take control of a site.
 		lore: Dunlendings take delight in destruction.

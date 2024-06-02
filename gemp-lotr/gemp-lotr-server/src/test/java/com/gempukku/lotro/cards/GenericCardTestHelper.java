@@ -956,6 +956,10 @@ public class GenericCardTestHelper extends AbstractAtTest {
     }
 
 
+    public Boolean IsSiteControlled(PhysicalCardImpl card) {
+        return card.getCardController() != null;
+    }
+
 
 
     public void ApplyAdHocModifier(Modifier mod)

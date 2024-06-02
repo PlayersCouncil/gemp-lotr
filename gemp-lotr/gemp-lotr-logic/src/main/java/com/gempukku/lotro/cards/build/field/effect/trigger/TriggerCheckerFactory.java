@@ -65,9 +65,10 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("replacessite", new ReplacesSite());
         triggerCheckers.put("revealscardfromtopofdrawdeck", new RevealsCardFromTopOfDrawDeck());
         triggerCheckers.put("revealedcardfromhand", new RevealedCardFromHand());
+        triggerCheckers.put("siteliberated", new SiteLiberated());
+        triggerCheckers.put("sitecontrolled", new SiteControlled());
         triggerCheckers.put("skirmishabouttoend", new SkirmishAboutToEnd());
         triggerCheckers.put("startofskirmishinvolving", new StartOfSkirmishInvolving());
-        triggerCheckers.put("takencontrolofsite", new TakenControlOfSite());
         triggerCheckers.put("takesoffring", new TakesOffRing());
         triggerCheckers.put("takeswound", new TakesWound());
         triggerCheckers.put("transferred", new Transferred());

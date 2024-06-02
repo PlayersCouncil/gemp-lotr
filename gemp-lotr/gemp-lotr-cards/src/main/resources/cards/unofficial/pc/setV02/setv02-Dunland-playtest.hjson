@@ -22,18 +22,39 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
+		
 		effects: [
 			{
-				
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: culture(Dunland), minion
+				}
 			}
 			{
-				
+				type: Modifier
+				modifier: {
+					type: SkipPhase
+					phase: Archery
+					requires: {
+						type: HaveInitiative
+						side: Shadow
+					}
+				}
 			}
-		]*/
-		gametext: To play, spot a [Dunland] minion.<br>While the shadow has initiative, skip the archery phase.<br>If the Free-Peoples player liberates a site, discard this condition. 
+			{
+				type: trigger
+				optional: false
+				trigger: {
+					type: SiteLiberated
+				}
+				effect: {
+					type: Discard
+					select: self
+				}
+			}
+		]
+		gametext: To play, spot a [Dunland] minion.<br>While the shadow has initiative, skip the archery phase.<br>When the Free-Peoples player liberates a site, discard this condition. 
 		lore: "'Not in half a thousand years have they forgotten their grievance that the lords of Gondor gave the Mark to Eorl the Young and made alliance with him.'"
 		promotext: ""
 		alts: {

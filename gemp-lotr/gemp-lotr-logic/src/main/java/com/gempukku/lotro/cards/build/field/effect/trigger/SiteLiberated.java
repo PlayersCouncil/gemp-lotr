@@ -7,27 +7,20 @@ import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.logic.timing.EffectResult;
-import com.gempukku.lotro.logic.timing.results.TakeControlOfSiteResult;
+import com.gempukku.lotro.logic.timing.results.SiteControlledResult;
+import com.gempukku.lotro.logic.timing.results.SiteLiberatedResult;
 import org.json.simple.JSONObject;
 
-public class TakenControlOfSite implements TriggerCheckerProducer {
+public class SiteLiberated implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "player");
-
-        String player = FieldUtils.getString(value.get("player"), "player", "you");
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        FieldUtils.validateAllowedFields(value);
 
         return new TriggerChecker() {
             @Override
             public boolean accepts(ActionContext actionContext) {
-                String playerId = playerSource.getPlayer(actionContext);
                 EffectResult effectResult = actionContext.getEffectResult();
-                if (effectResult.getType() == EffectResult.Type.TAKE_CONTROL_OF_SITE) {
-                    TakeControlOfSiteResult takeResult = (TakeControlOfSiteResult) effectResult;
-                    return takeResult.getPlayerId().equals(playerId);
-                }
-                return false;
+                return effectResult.getType() == EffectResult.Type.LIBERATE_SITE;
             }
 
             @Override
