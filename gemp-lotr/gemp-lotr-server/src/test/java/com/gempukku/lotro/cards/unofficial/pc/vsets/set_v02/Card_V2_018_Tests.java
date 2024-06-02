@@ -63,7 +63,7 @@ public class Card_V2_018_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(KING, 3)));
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.KING, 3)));
 	}
 
 	@Test

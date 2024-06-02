@@ -53,7 +53,7 @@ public class Card_V2_059_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Keyword.SKIRMISH));
+		assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
 		assertTrue(scn.hasKeyword(card, Keyword.SEARCH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
