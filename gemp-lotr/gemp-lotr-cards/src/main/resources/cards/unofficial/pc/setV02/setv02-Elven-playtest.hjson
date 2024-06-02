@@ -59,18 +59,18 @@
 			# 	filter: Elf,valiant
 			# }
 			{
-				type: activatedtrigger
+				type: Response
 				trigger: {
 					type: abouttodiscard
 					filter: culture(elven),rangedWeapon
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: preventDiscard
-					filter: choose(culture(elven),rangedWeapon)
+					select: choose(culture(elven),rangedWeapon)
 				}
 			}
 		]

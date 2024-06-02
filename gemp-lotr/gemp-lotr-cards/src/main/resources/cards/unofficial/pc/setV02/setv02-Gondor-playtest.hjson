@@ -51,14 +51,14 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(valiant,companion,inSkirmish)
+					select: choose(valiant,companion,inSkirmish)
 					memorize: chosenCompanion
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: memoryMatches
 							memory: chosenCompanion
@@ -107,14 +107,14 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Aragorn))
+				select: choose(name(Aragorn))
 				memorize: exertedCompanion
 				times: 3
 			}
 			effect: [
 				{
 					type: modifyStrength
-					filter: all(valiant,companion)
+					select: all(valiant,companion)
 					until: start(regroup)
 					amount: 2
 				}
@@ -127,7 +127,7 @@
 					}
 					effect: {
 						type: modifyStrength
-						filter: all(valiant,companion)
+						select: all(valiant,companion)
 						until: endOfTurn
 						amount: 1
 					}
@@ -178,7 +178,7 @@
 					type: modifyStrength
 					filter: culture(gondor),companion
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: IsGreaterThanOrEqual
 							firstNumber: {
@@ -205,13 +205,13 @@
 				cost: [
 					{
 						type: spot
-						filter: choose(culture(gondor),companion)
+						select: choose(culture(gondor),companion)
 						memorize: chosenGondorian
 					}
 					{
 						type: addThreats
 						amount: {
-							type: requires
+							type: Conditional
 							requires: {
 								type: memoryMatches
 								memory: chosenGondorian
@@ -225,13 +225,13 @@
 				effect: [
 					{
 						type: modifyStrength
-						filter: memory(chosenGondorian)
+						select: memory(chosenGondorian)
 						amount: 2
 						until: start(regroup)
 					}
 					{
 						type: addKeyword
-						filter: memory(chosenGondorian)
+						select: memory(chosenGondorian)
 						keyword: defender+1
 						until: start(regroup)
 					}
@@ -276,26 +276,29 @@
 		signet: Frodo
 		resistance: 6
 		keywords: Ranger
-		requires: {
-			type: canSpot
-			filter: ranger
-		}
 		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: canSpot
+					filter: ranger
+				}
+			}
 			{
 				type: activated
 				phase: skirmish
 				cost: {
 					type: discardFromHand
 					count: 1
-					filter: choose(culture(gondor))
+					select: choose(culture(gondor))
 					forced: false
 				}
 				effect: {
 					type: wound
-					filter: choose(minion,inSkirmishAgainst(self),roaming)
+					select: choose(minion,inSkirmishAgainst(self),roaming)
 					memorize: chosenMinion
 					times: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: memoryMatches
 							memory: chosenMinion
