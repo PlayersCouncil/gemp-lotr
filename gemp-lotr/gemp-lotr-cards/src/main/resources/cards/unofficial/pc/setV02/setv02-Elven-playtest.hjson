@@ -49,15 +49,21 @@
 					amount: 1
 					requires: {
 						type: CanSpot
-						count: 1
 						filter: ranged weapon,attachedTo(self)
 					}
 				}
 			}
-			# {
-			# 	type: doesNotAddToArcheryTotal
-			# 	filter: Elf,valiant
-			# }
+			{
+				type: modifier
+				modifier: {
+					type: DoesNotAddToArcheryTotal
+					filter: Elf,valiant
+					requires: {
+						type: CanSpot
+						filter: ranged weapon,attachedTo(self)
+					}
+				}
+			}
 			{
 				type: Response
 				trigger: {

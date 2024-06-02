@@ -36,12 +36,12 @@
 			effect: [
 				{
 					type: shuffleCardsFromDiscardIntoDrawDeck
-					filter: choose(pipe)
+					select: choose(pipe)
 					count: 0-1
 				}
 				{
 					type: shuffleCardsFromDiscardIntoDrawDeck
-					filter: choose(pipeweed)
+					select: choose(pipeweed)
 					count: 0-1
 				}
 			]
