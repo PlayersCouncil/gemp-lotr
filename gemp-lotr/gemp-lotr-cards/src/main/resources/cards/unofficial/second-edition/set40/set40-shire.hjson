@@ -10,7 +10,7 @@
 		keyword: shire
 		strength: 3
 		vitality: 3
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: {
 			type: activated
 			phase: fellowship
@@ -90,7 +90,7 @@
 		keyword: shire
 		strength: 2
 		vitality: 2
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: [
 		    {
 		        type: toPlay
@@ -126,7 +126,7 @@
 		keyword: shire
 		strength: 2
 		vitality: 3
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: {
 			type: activated
 			phase: fellowship
@@ -291,7 +291,7 @@
 		keyword: shire
 		strength: 2
 		vitality: 2
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: {
 			type: activated
 			phase: fellowship
@@ -314,7 +314,7 @@
 		keyword: shire
 		strength: 2
 		vitality: 2
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: [
 			{
 				type: trigger
@@ -653,7 +653,7 @@
 		keyword: shire
 		strength: 2
 		vitality: 2
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: [
 		    {
 		        type: toPlay
@@ -709,7 +709,7 @@
 		keyword: shire
 		strength: 2
 		vitality: 2
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: [
 			{
 				type: activated

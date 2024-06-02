@@ -10,7 +10,7 @@
 		keyword: bree
 		strength: 3
 		vitality: 3
-		allyHome: second ed,2
+		allyHome: 2E
 		gametext: [
 			To play, spot Gandalf.
 			\[keyword]Maneuver:[/keyword] Exert Albert Dreary to discard an {isengard} or {moria} condition.
@@ -84,7 +84,7 @@
 		keyword: bree
 		strength: 1
 		vitality: 2
-		allyHome: second ed,2
+		allyHome: 2E
 		gametext: [
 			To play, spot Gandalf.
 			\[keyword]Maneuver or Regroup:[/keyword] Exert Barliman Butterbur to heal a companion.

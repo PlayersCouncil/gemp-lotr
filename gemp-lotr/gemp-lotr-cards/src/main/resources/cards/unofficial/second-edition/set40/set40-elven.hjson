@@ -212,7 +212,7 @@
 		keyword: lothlorien
 		strength: 6
 		vitality: 3
-		allyHome: second ed,3
+		allyHome: 3E
 		gametext: \[keyword]Maneuver:[/keyword] Exert celeborn to reveal the top card of your draw deck. If it is an {elven} card, you may discard it to wound a minion.
 		lore: “Every league you travel South the danger will increase.”
 		effects: [
@@ -334,7 +334,7 @@
 		keyword: rivendell
 		strength: 8
 		vitality: 4
-		allyHome: second ed,3
+		allyHome: 3E
 		gametext: [
 			At the start of each of your turns, heal each Rivendell ally.
 			\[keyword]Regroup:[/keyword] Exert Elrond twice to reveal the top card of your draw deck. If it is an {elven} card, you may discard it to heal a companion. If it is a Shadow card, you may discard it to discard a Shadow condition.
@@ -533,7 +533,7 @@
 		keyword: lothlorien
 		strength: 3
 		vitality: 3
-		allyHome: second ed,3
+		allyHome: 3E
 		gametext: [
 			At the start of each of your turns, heal each Lothlórien ally.
 			\[keyword]Skirmish:[/keyword] Exert Galadriel to reveal the top card of your draw deck. If it is an {elven} card, you may discard it to make a minion skirmishing an Elf strength -2.
@@ -687,7 +687,7 @@
 		keyword: rivendell
 		strength: 4
 		vitality: 3
-		allyHome: second ed,3
+		allyHome: 3E
 		gametext: [
 			To play, spot an Elf.
 			Each time you reveal an {elven} card from the top of your draw deck, you may exert Golradir to make an Orc strength -2 until the regroup phase.

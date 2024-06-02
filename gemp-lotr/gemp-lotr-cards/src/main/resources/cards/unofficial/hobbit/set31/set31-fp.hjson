@@ -303,7 +303,7 @@
 		culture: elven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,5
+		allyHome: 5H
 		race: elf
 		strength: 7
 		vitality: 4
@@ -340,7 +340,7 @@
 		culture: elven
 		twilight: 2
 		type: ally
-		allyHome: hobbit,5
+		allyHome: 5H
 		race: elf
 		strength: 6
 		vitality: 3
@@ -378,7 +378,7 @@
 		culture: elven
 		twilight: 2
 		type: ally
-		allyHome: hobbit,5
+		allyHome: 5H
 		race: elf
 		strength: 6
 		vitality: 3
@@ -435,7 +435,7 @@
 		culture: elven
 		twilight: 4
 		type: ally
-		allyHome: hobbit,5
+		allyHome: 5H
 		race: elf
 		strength: 9
 		vitality: 4
@@ -641,7 +641,7 @@
 		unique: true
 		culture: gandalf
 		type: ally
-		allyHome: hobbit,5
+		allyHome: 5H
 		race: wizard
 		twilight: 4
 		strength: 8

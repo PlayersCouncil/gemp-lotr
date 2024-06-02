@@ -11,6 +11,7 @@ import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.decisions.MultipleChoiceAwaitingDecision;
 import com.gempukku.lotro.logic.effects.PlayoutDecisionEffect;
 import com.gempukku.lotro.logic.timing.Effect;
+import org.apache.commons.lang3.ArrayUtils;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -22,10 +23,17 @@ public class ChooseAKeyword implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "memorize", "keywords", "text");
 
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
-        final String keywords = FieldUtils.getString(effectObject.get("keywords"), "keywords");
-        String text = FieldUtils.getString(effectObject.get("text"), "text", "Choose a keyword");
+        final String[] keywordStrings = FieldUtils.getStringArray(effectObject.get("keywords"), "keywords");
+        final String text = FieldUtils.getString(effectObject.get("text"), "text", "Choose a keyword");
 
-        String[] keywordSplit = keywords != null ? keywords.split(",") : getAllKeywords();
+        for (String key : keywordStrings) {
+            var keyword = FieldUtils.getEnum(Keyword.class, key, "keyword");
+            if(keyword == null)
+                throw new InvalidCardDefinitionException("Invalid keyword defined in 'keywords' field of ChooseAKeyword effect.");
+        }
+
+        final String[] keywords = ArrayUtils.isEmpty(keywordStrings) ? getAllKeywords() : keywordStrings;
+
 
         return new DelayedAppender() {
             @Override
@@ -33,7 +41,7 @@ public class ChooseAKeyword implements EffectAppenderProducer {
 
                 return new PlayoutDecisionEffect(
                         actionContext.getPerformingPlayer(),
-                        new MultipleChoiceAwaitingDecision(1, text, keywordSplit) {
+                        new MultipleChoiceAwaitingDecision(1, text, keywords) {
                             @Override
                             protected void validDecisionMade(int index, String result) {
                                 actionContext.setValueToMemory(memorize, result.toUpperCase().replace(' ', '_').replace('-', '_'));

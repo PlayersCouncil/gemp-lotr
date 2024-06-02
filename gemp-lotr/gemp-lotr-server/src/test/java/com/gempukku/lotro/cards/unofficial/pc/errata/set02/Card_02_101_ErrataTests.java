@@ -65,8 +65,7 @@ public class Card_02_101_ErrataTests
 		assertEquals(1, notfatty.getBlueprint().getTwilightCost());
 		assertEquals(1, notfatty.getBlueprint().getStrength());
 		assertEquals(2, notfatty.getBlueprint().getVitality());
-		assertEquals(1, notfatty.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, notfatty.getBlueprint().getAllyHomeSiteBlock());
+		assertTrue(notfatty.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 1)));
 	}
 
 	@Test

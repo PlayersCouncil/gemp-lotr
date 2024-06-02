@@ -789,7 +789,10 @@
 		culture: Gandalf
 		twilight: 4
 		type: Ally
-		allyHome: two towers,2,8
+		allyHome: [
+			2T
+			8T
+		]
 		race: Ent
 		strength: 12
 		vitality: 4
@@ -856,7 +859,10 @@
 		culture: Gandalf
 		twilight: 4
 		type: Ally
-		allyHome: two towers,2,8
+		allyHome: [
+			2T
+			8T
+		]
 		race: Ent
 		strength: 12
 		vitality: 4

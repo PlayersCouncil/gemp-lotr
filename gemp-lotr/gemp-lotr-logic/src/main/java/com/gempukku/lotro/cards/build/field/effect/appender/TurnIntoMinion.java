@@ -40,16 +40,18 @@ public class TurnIntoMinion implements EffectAppenderProducer {
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final ValueSource strength = ValueResolver.resolveEvaluator(effectObject.get("strength"), environment);
         final ValueSource vitality = ValueResolver.resolveEvaluator(effectObject.get("vitality"), environment);
-        String keywords = FieldUtils.getString(effectObject.get("keywords"), "keywords");
+        final String[] keywordStrings = FieldUtils.getStringArray(effectObject.get("keywords"), "keywords");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
 
         String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         List<Keyword> keywordsList = new ArrayList<>();
-        if (keywords != null) {
-            for (String key : keywords.split(",")) {
-                keywordsList.add(FieldUtils.getEnum(Keyword.class, key, "keyword"));
-            }
+        for (String key : keywordStrings) {
+            var keyword = FieldUtils.getEnum(Keyword.class, key, "keyword");
+            if(keyword == null)
+                throw new InvalidCardDefinitionException("Invalid keyword defined in 'keywords' field of TurnIntoMinion effect.");
+
+            keywordsList.add(keyword);
         }
 
         MultiEffectAppender result = new MultiEffectAppender();
@@ -73,11 +75,11 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                                             addModifier(action, new StrengthModifier(card, card, null, strengthValue), until);
                                             addModifier(action, new VitalityModifier(card, card, null, vitalityValue), until);
                                             addModifier(action, new IsAdditionalCardTypeModifier(card, card, null, CardType.MINION), until);
-                                            if (keywords != null) {
-                                                for (Keyword keyword : keywordsList) {
-                                                    addModifier(action, new AddKeywordModifier(card, card, null, keyword), until);
-                                                }
+
+                                            for (Keyword keyword : keywordsList) {
+                                                addModifier(action, new AddKeywordModifier(card, card, null, keyword), until);
                                             }
+
                                             addModifier(action, new MayNotBearModifier(card, card, null, Filters.any), until);
                                         }
                                     });

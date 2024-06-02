@@ -525,7 +525,7 @@
 		                }
 		                {
 		                    type: sendMessage
-		                    text: A {keyword} was chosen
+		                    text: '{player} chose "{keyword}"'
 		                }
 		                {
                             type: removeKeyword

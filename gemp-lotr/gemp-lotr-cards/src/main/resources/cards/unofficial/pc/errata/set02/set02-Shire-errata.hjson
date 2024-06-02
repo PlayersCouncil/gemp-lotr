@@ -20,7 +20,7 @@
 		culture: shire
 		twilight: 1
 		type: ally
-		allyHome: fellowship,1
+		allyHome: 1F
 		race: hobbit
 		strength: 1
 		vitality: 2

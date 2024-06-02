@@ -68,8 +68,7 @@ public class Card_V1_050_Tests
 		assertEquals(3, bilbo.getBlueprint().getVitality());
 		//assertEquals(, bilbo.getBlueprint().getResistance());
 		//assertEquals(Signet., bilbo.getBlueprint().getSignet());
-		assertEquals(3, bilbo.getBlueprint().getAllyHomeSiteNumbers()[0]); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertTrue(bilbo.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
 	@Test

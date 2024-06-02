@@ -1134,7 +1134,7 @@
 		culture: Gondor
 		twilight: 1
 		type: Ally
-		allyHome: two towers,3
+		allyHome: 3T
 		race: Man
 		strength: 6
 		vitality: 1

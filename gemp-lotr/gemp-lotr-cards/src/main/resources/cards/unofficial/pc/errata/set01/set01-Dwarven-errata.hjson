@@ -405,7 +405,7 @@
 		culture: dwarven
 		twilight: 1
 		type: ally
-		allyHome: fellowship,3
+		allyHome: 3F
 		race: dwarf
 		strength: 3
 		vitality: 3

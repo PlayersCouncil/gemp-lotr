@@ -41,8 +41,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private int siteNumber;
     private Set<PossessionClass> possessionClasses;
     private Direction direction;
-    private SitesBlock allyHomeBlock;
-    private int[] allyHomeSites = new int[0];
+    private final Set<AllyHome> allyHomeSites = new HashSet<>();
 
     private String gameText;
     private String formattedGameText;
@@ -110,9 +109,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         this.deckValidation = validation;
     }
 
-    public void setAllyHomeSites(SitesBlock block, int[] numbers) {
-        this.allyHomeBlock = block;
-        this.allyHomeSites = numbers;
+    public void setAllyHomeSites(AllyHome home) {
+        this.allyHomeSites.add(home);
     }
 
     public void setExtraPossessionClassTest(ExtraPossessionClassTest extraPossessionClassTest) {
@@ -480,13 +478,13 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     @Override
-    public int[] getAllyHomeSiteNumbers() {
+    public Set<AllyHome> getAllyHomes() {
         return allyHomeSites;
     }
 
     @Override
-    public SitesBlock getAllyHomeSiteBlock() {
-        return allyHomeBlock;
+    public boolean hasAllyHome(AllyHome home) {
+        return allyHomeSites.stream().anyMatch(x -> x.equals(home));
     }
 
     @Override

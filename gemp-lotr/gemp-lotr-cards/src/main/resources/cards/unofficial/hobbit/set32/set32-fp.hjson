@@ -50,7 +50,7 @@
 		culture: dwarven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,9
+		allyHome: 9H
 		race: dwarf
 		strength: 7
 		vitality: 3
@@ -123,7 +123,7 @@
 		culture: dwarven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,9
+		allyHome: 9H
 		race: dwarf
 		strength: 9
 		vitality: 3
@@ -447,7 +447,7 @@
 		culture: elven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,3
+		allyHome: 3H
 		race: elf
 		strength: 3
 		vitality: 3
@@ -547,7 +547,7 @@
 		culture: esgaroth
 		twilight: 2
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 4
 		vitality: 3
@@ -628,7 +628,7 @@
 		culture: esgaroth
 		twilight: 3
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 6
 		vitality: 4
@@ -683,7 +683,7 @@
 		culture: esgaroth
 		twilight: 2
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 6
 		vitality: 3
@@ -720,7 +720,7 @@
 		culture: esgaroth
 		twilight: 2
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 5
 		vitality: 3
@@ -862,7 +862,7 @@
 		unique: true
     culture: gandalf
     type: ally
-    allyHome: hobbit,3
+    allyHome: 3H
     race: wizard
     twilight: 4
     strength: 8

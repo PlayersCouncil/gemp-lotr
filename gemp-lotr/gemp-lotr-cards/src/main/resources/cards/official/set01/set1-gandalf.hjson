@@ -6,7 +6,7 @@
 		culture: gandalf
 		twilight: 1
 		type: ally
-		allyHome: fellowship,1
+		allyHome: 1F
 		race: man
 		strength: 3
 		vitality: 3
@@ -39,7 +39,7 @@
 		culture: gandalf
 		twilight: 0
 		type: ally
-		allyHome: fellowship,1
+		allyHome: 1F
 		race: man
 		strength: 1
 		vitality: 2
@@ -408,7 +408,7 @@
 		culture: gandalf
 		twilight: 1
 		type: ally
-		allyHome: fellowship,3
+		allyHome: 3F
 		race: man
 		strength: 2
 		vitality: 2

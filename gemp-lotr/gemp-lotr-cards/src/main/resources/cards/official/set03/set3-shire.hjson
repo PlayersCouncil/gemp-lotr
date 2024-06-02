@@ -128,7 +128,7 @@
         race: Hobbit
         strength: 2
         vitality: 2
-        allyHome: Fellowship,1
+        allyHome: 1F
         keyword: Support Area
         effects: {
             type: Response
@@ -156,7 +156,7 @@
         race: Hobbit
         strength: 1
         vitality: 2
-        allyHome: Fellowship,1
+        allyHome: 1F
         keyword: Support Area
         effects: {
             type: trigger

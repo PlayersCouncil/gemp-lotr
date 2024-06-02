@@ -102,8 +102,7 @@ public class Card_03_017_ErrataTests
 		assertEquals(3, galadriel.getBlueprint().getTwilightCost());
 		assertEquals(3, galadriel.getBlueprint().getStrength());
 		assertEquals(3, galadriel.getBlueprint().getVitality());
-		assertEquals(6, galadriel.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, galadriel.getBlueprint().getAllyHomeSiteBlock());
+		assertTrue(galadriel.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 6)));
 
 	}
 

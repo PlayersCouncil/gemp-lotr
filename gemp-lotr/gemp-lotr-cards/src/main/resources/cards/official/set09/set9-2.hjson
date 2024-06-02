@@ -1088,7 +1088,7 @@
 		culture: shire
 		twilight: 3
 		type: ally
-		allyHome: fellowship,2
+		allyHome: 2F
 		strength: 4
 		vitality: 6
 		effects: [
@@ -1129,7 +1129,7 @@
 		culture: shire
 		twilight: 5
 		type: ally
-		allyHome: fellowship,2
+		allyHome: 2F
 		strength: 14
 		vitality: 9
 		effects: [

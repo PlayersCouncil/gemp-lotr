@@ -11,7 +11,7 @@
         type: ally
         keyword: Support Area
         twilight: 2
-        allyHome: Fellowship,1
+        allyHome: 1F
         effects: {
             type: activated
             phase: fellowship
@@ -185,7 +185,7 @@
         type: ally
         keyword: Support Area
         twilight: 1
-        allyHome: Fellowship,1
+        allyHome: 1F
         effects: {
             type: activated
             phase: skirmish

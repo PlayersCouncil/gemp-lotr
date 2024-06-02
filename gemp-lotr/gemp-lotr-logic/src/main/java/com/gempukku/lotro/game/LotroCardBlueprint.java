@@ -62,9 +62,8 @@ public interface LotroCardBlueprint {
 
     int getResistance();
 
-    int[] getAllyHomeSiteNumbers();
-
-    SitesBlock getAllyHomeSiteBlock();
+    Set<AllyHome> getAllyHomes();
+    boolean hasAllyHome(AllyHome home);
 
     PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self);
 

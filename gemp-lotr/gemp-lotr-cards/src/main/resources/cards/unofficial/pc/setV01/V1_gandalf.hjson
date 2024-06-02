@@ -192,7 +192,7 @@
 		culture: gandalf
 		twilight: 4
 		type: ally
-		allyHome: fellowship,4
+		allyHome: 4F
 		race: eagle
 		strength: 8
 		vitality: 2

@@ -21,7 +21,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Ally
-		allyHome: two towers,3
+		allyHome: 3T
 		race: Man
 		strength: 4
 		vitality: 2
@@ -1060,7 +1060,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Ally
-		allyHome: two towers,3
+		allyHome: 3T
 		race: Man
 		strength: 4
 		vitality: 2
@@ -1517,7 +1517,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Ally
-		allyHome: two towers,3
+		allyHome: 3T
 		race: Man
 		strength: 4
 		vitality: 2

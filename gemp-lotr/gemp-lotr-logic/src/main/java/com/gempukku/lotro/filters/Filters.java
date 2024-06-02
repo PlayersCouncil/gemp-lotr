@@ -435,15 +435,15 @@ public class Filters {
         return Filters.and(
                 CardType.ALLY,
                 (Filter) (game, physicalCard) -> {
-                    LotroCardBlueprint blueprint = card.getBlueprint();
-                    if (blueprint.getCardType() == CardType.ALLY) {
-                        SitesBlock homeBlock = blueprint.getAllyHomeSiteBlock();
-                        int[] homeSites = blueprint.getAllyHomeSiteNumbers();
-                        for (int homeSite : homeSites) {
-                            if (RuleUtils.isAllyAtHome(physicalCard, homeSite, homeBlock)) {
-                                return true;
-                            }
-                        }
+                    var originalBP = card.getBlueprint();
+                    var newBP = physicalCard.getBlueprint();
+                    if (originalBP.getCardType() == CardType.ALLY) {
+
+                        var result = new HashSet(originalBP.getAllyHomes());
+                        //If there is an overlap in home sites, then that overlap should end up
+                        // in the result.  If result is empty, no overlaps in home sites.
+                        result.retainAll(newBP.getAllyHomes());
+                        return !result.isEmpty();
                     }
                     return false;
                 });

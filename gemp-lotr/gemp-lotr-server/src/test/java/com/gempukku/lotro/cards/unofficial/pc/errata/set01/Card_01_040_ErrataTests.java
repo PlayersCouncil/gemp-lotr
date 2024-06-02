@@ -78,8 +78,7 @@ public class Card_01_040_ErrataTests
         assertEquals(4, elrond.getBlueprint().getTwilightCost());
         assertEquals(8, elrond.getBlueprint().getStrength());
         assertEquals(4, elrond.getBlueprint().getVitality());
-        assertEquals(3, elrond.getBlueprint().getAllyHomeSiteNumbers()[0]);
-        assertEquals(SitesBlock.FELLOWSHIP, elrond.getBlueprint().getAllyHomeSiteBlock());
+		assertTrue(elrond.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
     }
 
     @Test

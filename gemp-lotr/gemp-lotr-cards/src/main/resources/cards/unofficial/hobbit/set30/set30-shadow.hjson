@@ -288,7 +288,12 @@
 				effect: [
 					{
 						type: chooseAKeyword
-						keywords: Battleground,Mountain,Forest,Underground
+						keywords: [
+							Battleground
+							Mountain
+							Forest
+							Underground
+						]
 						memorize: keywordSelected
 					}
 					{

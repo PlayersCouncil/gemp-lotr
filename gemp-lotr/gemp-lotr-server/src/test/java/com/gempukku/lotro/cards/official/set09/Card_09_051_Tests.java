@@ -58,8 +58,7 @@ public class Card_09_051_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getStrength());
 		assertEquals(6, card.getBlueprint().getVitality());
-		assertEquals(2, card.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, card.getBlueprint().getAllyHomeSiteBlock());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 2)));
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -518,7 +518,12 @@
 		        effect: [
                     {
                         type: chooseAKeyword
-                        keywords: forest,mountain,plains,river
+                        keywords: [
+                        	forest
+                        	mountain
+                        	plains
+                        	river
+                        ]
                         memorize: chosenKeyword
                     }
                     {
