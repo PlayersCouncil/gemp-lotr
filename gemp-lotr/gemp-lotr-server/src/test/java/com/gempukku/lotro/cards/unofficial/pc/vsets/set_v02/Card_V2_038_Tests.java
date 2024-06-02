@@ -58,8 +58,8 @@ public class Card_V2_038_Tests
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.BALROG, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(14, card.getBlueprint().getTwilightCost());
 		assertEquals(17, card.getBlueprint().getStrength());

@@ -57,8 +57,8 @@ public class Card_V2_036_Tests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
-		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
+		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(1, card.getBlueprint().getVitality());

@@ -59,7 +59,7 @@ public class Card_V2_060_Tests
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
+		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(11, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());

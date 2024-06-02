@@ -53,7 +53,7 @@ public class Card_V2_067_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
+		assertTrue(scn.hasKeyword(card, Keyword.SANCTUARY));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}

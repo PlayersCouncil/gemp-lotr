@@ -60,7 +60,7 @@ public class Card_V2_005_Tests
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.VALIANT));
+		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
