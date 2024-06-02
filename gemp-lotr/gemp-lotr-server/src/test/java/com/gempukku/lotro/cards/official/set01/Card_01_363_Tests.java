@@ -6,7 +6,6 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
@@ -63,7 +62,7 @@ public class Card_01_363_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.RIVER));
+		assertTrue(scn.hasKeyword(card, Keyword.RIVER));
 		assertEquals(9, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getSiteNumber());
 	}

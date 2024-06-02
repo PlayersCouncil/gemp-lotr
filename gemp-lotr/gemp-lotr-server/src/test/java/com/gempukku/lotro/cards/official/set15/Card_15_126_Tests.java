@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set15;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -56,8 +55,8 @@ public class Card_15_126_Tests
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.VALIANT));
-		assertTrue(scn.HasKeyword(card, Keyword.HUNTER));
+		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
+		assertTrue(scn.hasKeyword(card, Keyword.HUNTER));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.HUNTER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());

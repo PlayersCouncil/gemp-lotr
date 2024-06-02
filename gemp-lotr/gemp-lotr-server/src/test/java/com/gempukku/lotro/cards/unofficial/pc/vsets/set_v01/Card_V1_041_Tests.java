@@ -59,7 +59,7 @@ public class Card_V1_041_Tests
 		assertEquals(Culture.WRAITH, eyes.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, eyes.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(eyes, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(eyes, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, eyes.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());
 		//assertEquals(, card.getBlueprint().getVitality());

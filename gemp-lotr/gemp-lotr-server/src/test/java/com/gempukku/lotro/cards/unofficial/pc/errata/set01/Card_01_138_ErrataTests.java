@@ -55,8 +55,8 @@ public class Card_01_138_ErrataTests
         assertEquals(Culture.ISENGARD, snows.getBlueprint().getCulture());
         assertEquals(CardType.CONDITION, snows.getBlueprint().getCardType());
         assertEquals(Culture.ISENGARD, snows.getBlueprint().getCulture());
-        assertTrue(scn.HasKeyword(snows, Keyword.SPELL));
-        assertTrue(scn.HasKeyword(snows, Keyword.WEATHER));
+        assertTrue(scn.hasKeyword(snows, Keyword.SPELL));
+        assertTrue(scn.hasKeyword(snows, Keyword.WEATHER));
     }
 
     @Test

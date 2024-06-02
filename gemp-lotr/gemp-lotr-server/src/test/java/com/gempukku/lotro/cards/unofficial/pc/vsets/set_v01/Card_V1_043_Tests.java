@@ -112,13 +112,13 @@ public class Card_V1_043_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(14, scn.GetStrength(wk));
-		assertFalse(scn.HasKeyword(wk, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(wk, Keyword.DAMAGE));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.ShadowPlayAvailable(faces));
 
 		scn.ShadowPlayCard(faces);
 		assertEquals(14, scn.GetStrength(wk));
-		assertTrue(scn.HasKeyword(wk, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(wk, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(wk, Keyword.DAMAGE));
 	}
 }

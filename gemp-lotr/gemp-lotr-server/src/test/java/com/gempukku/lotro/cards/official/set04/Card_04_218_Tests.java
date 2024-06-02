@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -56,8 +55,8 @@ public class Card_04_218_Tests
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
-		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
+		assertTrue(scn.hasKeyword(card, Keyword.SOUTHRON));
+		assertTrue(scn.hasKeyword(card, Keyword.AMBUSH));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.AMBUSH));
 		assertEquals(6, card.getBlueprint().getTwilightCost());
 		assertEquals(13, card.getBlueprint().getStrength());

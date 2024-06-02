@@ -50,7 +50,7 @@ public class Card_V1_007_Tests
 		PhysicalCardImpl there = scn.GetFreepsCard("there");
 
 		assertFalse(there.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(there, Keyword.TALE)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(there, Keyword.TALE)); // test for keywords as needed
 		assertEquals(1, there.getBlueprint().getTwilightCost());
 		assertEquals(CardType.EVENT, there.getBlueprint().getCardType());
         assertTrue(scn.hasTimeword(there, Timeword.SKIRMISH));

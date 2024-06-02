@@ -49,7 +49,7 @@ public class Card_03_106_ErrataTests
         assertTrue(bill.getBlueprint().isUnique());
         assertEquals(0, bill.getBlueprint().getTwilightCost());
 
-        assertTrue(scn.HasKeyword(bill, Keyword.STEALTH));
+        assertTrue(scn.hasKeyword(bill, Keyword.STEALTH));
     }
 
     @Test

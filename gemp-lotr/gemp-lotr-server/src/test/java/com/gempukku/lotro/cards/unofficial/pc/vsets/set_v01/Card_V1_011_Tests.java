@@ -73,7 +73,7 @@ public class Card_V1_011_Tests
 		PhysicalCardImpl library = scn.GetFreepsCard("library");
 
 		assertTrue(library.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(library, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(library, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(3, library.getBlueprint().getTwilightCost());
 		assertEquals(CardType.ARTIFACT, library.getBlueprint().getCardType());
 		assertEquals(Culture.ELVEN, library.getBlueprint().getCulture());

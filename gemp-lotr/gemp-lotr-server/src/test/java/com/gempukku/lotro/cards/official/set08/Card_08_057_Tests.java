@@ -56,7 +56,7 @@ public class Card_08_057_Tests
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.CORSAIR));
+		assertTrue(scn.hasKeyword(card, Keyword.CORSAIR));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());

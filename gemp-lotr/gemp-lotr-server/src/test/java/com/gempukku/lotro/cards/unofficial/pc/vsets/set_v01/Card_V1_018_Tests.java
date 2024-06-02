@@ -59,7 +59,7 @@ public class Card_V1_018_Tests
 		assertEquals(Culture.GANDALF, council.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, council.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, council.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(council, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(council, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, council.getBlueprint().getTwilightCost());
 		//assertEquals(, council.getBlueprint().getStrength());
 		//assertEquals(, council.getBlueprint().getVitality());

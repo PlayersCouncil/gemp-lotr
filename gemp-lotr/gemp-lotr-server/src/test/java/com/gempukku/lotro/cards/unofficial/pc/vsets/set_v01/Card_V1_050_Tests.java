@@ -90,7 +90,7 @@ public class Card_V1_050_Tests
 		for(int i = 1; i < 8; i++)
 		{
 			PhysicalCardImpl site = scn.GetCurrentSite();
-			if(scn.HasKeyword(site, Keyword.SANCTUARY)) {
+			if(scn.hasKeyword(site, Keyword.SANCTUARY)) {
 				assertTrue(scn.FreepsActionAvailable(bilbo));
 			}
 			else {

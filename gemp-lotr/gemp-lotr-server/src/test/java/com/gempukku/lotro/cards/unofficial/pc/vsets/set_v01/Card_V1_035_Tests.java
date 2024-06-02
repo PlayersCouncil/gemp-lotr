@@ -52,7 +52,7 @@ public class Card_V1_035_Tests
 		PhysicalCardImpl darkness = scn.GetFreepsCard("darkness");
 
 		assertFalse(darkness.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(darkness, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(darkness, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, darkness.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, darkness.getBlueprint().getCardType());
 		assertEquals(Culture.MORIA, darkness.getBlueprint().getCulture());

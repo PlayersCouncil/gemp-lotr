@@ -53,7 +53,7 @@ public class Card_02_107_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, sunlight.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, sunlight.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, sunlight.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(sunlight, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(sunlight, Keyword.SUPPORT_AREA));
 		assertEquals(1, sunlight.getBlueprint().getTwilightCost());
 	}
 

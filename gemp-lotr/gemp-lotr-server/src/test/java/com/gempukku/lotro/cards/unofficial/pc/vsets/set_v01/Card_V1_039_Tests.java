@@ -64,7 +64,7 @@ public class Card_V1_039_Tests
 		assertEquals(Culture.WRAITH, crown.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, crown.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, crown.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(crown, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(crown, Keyword.SUPPORT_AREA));
 		assertEquals(PossessionClass.HELM, crown.getBlueprint().getPossessionClasses().stream().findFirst().get()); // test for keywords as needed
 		assertEquals(1, crown.getBlueprint().getTwilightCost());
 		//assertEquals(, crown.getBlueprint().getStrength());
@@ -102,24 +102,24 @@ public class Card_V1_039_Tests
 		scn.PassCurrentPhaseActions();
 
 		assertEquals(8, scn.GetStrength(arwen)); // 6 base, +2 sword
-		assertTrue(scn.HasKeyword(arwen, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(arwen, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(arwen, Keyword.DAMAGE));
 
 		assertEquals(8, scn.GetStrength(gimli)); // 6 base, +2 axe
-		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{arwen, twigul1}, new PhysicalCardImpl[]{gimli, twigul2});
 
 		scn.FreepsResolveSkirmish(arwen);
 		assertEquals(9, scn.GetStrength(arwen)); // 6 base, +3 from ability, no +2 from sword
-		assertFalse(scn.HasKeyword(arwen, Keyword.DAMAGE)); // damage bonus from sword negated
+		assertFalse(scn.hasKeyword(arwen, Keyword.DAMAGE)); // damage bonus from sword negated
 
 		scn.PassCurrentPhaseActions();
 
 		scn.FreepsResolveSkirmish(gimli);
 		assertEquals(6, scn.GetStrength(gimli)); // 6 base, no +2 from axe
-		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE)); // damage bonus from base
+		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE)); // damage bonus from base
 		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE)); // damage bonus from axe negated
 
 		scn.FreepsUseCardAction(gimli);
@@ -153,25 +153,25 @@ public class Card_V1_039_Tests
 		scn.PassCurrentPhaseActions();
 
 		assertEquals(8, scn.GetStrength(arwen)); // 6 base, +2 sword
-		assertTrue(scn.HasKeyword(arwen, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(arwen, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(arwen, Keyword.DAMAGE));
 
 		assertEquals(8, scn.GetStrength(gimli)); // 6 base, +2 axe
-		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{arwen, nazgul1}, new PhysicalCardImpl[]{gimli, nazgul2});
 
 		scn.FreepsResolveSkirmish(arwen);
 		assertEquals(11, scn.GetStrength(arwen)); // 6 base, +3 from ability, +2 from sword not negated
-		assertTrue(scn.HasKeyword(arwen, Keyword.DAMAGE)); // damage bonus from sword not negated
+		assertTrue(scn.hasKeyword(arwen, Keyword.DAMAGE)); // damage bonus from sword not negated
 		assertEquals(1, scn.GetKeywordCount(arwen, Keyword.DAMAGE));
 
 		scn.PassCurrentPhaseActions();
 
 		scn.FreepsResolveSkirmish(gimli);
 		assertEquals(8, scn.GetStrength(gimli)); // 6 base, +2 from axe not negated
-		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE)); // damage bonus from axe not negated
 
 		scn.FreepsUseCardAction(gimli);

@@ -59,7 +59,7 @@ public class Card_V1_031_Tests
 		PhysicalCardImpl purpose = scn.GetFreepsCard("purpose");
 
 		assertFalse(purpose.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(purpose, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(purpose, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(0, purpose.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, purpose.getBlueprint().getCardType());
 		assertEquals(Culture.MORIA, purpose.getBlueprint().getCulture());

@@ -59,7 +59,7 @@ public class Card_V1_045_Tests
 		assertEquals(Culture.SAURON, gaze.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, gaze.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, gaze.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(gaze, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(gaze, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, gaze.getBlueprint().getTwilightCost());
 		//assertEquals(, gaze.getBlueprint().getStrength());
 		//assertEquals(, gaze.getBlueprint().getVitality());

@@ -56,7 +56,7 @@ public class Card_09_004_Tests
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.DWARF, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
         assertTrue(card.getBlueprint().canStartWithRing());
 		assertEquals(2, card.getBlueprint().getTwilightCost());

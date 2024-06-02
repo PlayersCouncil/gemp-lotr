@@ -58,7 +58,7 @@ public class Card_01_154_ErrataTests
 		assertEquals(Culture.ISENGARD, soldier.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, soldier.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, soldier.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(soldier, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(soldier, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(soldier, Keyword.DAMAGE));
 		assertEquals(2, soldier.getBlueprint().getTwilightCost());
 		assertEquals(7, soldier.getBlueprint().getStrength());

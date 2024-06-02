@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set15;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -115,10 +114,10 @@ public class Card_15_112_Tests
 		scn.ShadowPlayCard(troll);
 
 		assertTrue(scn.ShadowDecisionAvailable("choose cards to discard"));
-		assertFalse(scn.HasKeyword(troll, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(troll, Keyword.FIERCE));
 
 		scn.ShadowChooseYes();
-		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
 		assertEquals(Zone.DISCARD, orc1.getZone());
 		assertEquals(Zone.DISCARD, orc2.getZone());
 		assertEquals(Zone.DISCARD, orc3.getZone());
@@ -127,15 +126,15 @@ public class Card_15_112_Tests
 		assertEquals(18, scn.GetTwilight()); //20 initial -2 for roaming, troll was otherwise free
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
 
 		scn.SkipToPhase(Phase.REGROUP);
-		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
 
 		scn.PassCurrentPhaseActions();
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
-		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
 	}
 
 	@Test

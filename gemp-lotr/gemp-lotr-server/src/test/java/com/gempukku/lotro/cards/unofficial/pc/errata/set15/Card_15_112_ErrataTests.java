@@ -119,11 +119,11 @@ public class Card_15_112_ErrataTests
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		assertEquals(13, scn.GetStrength(troll));
-		assertFalse(scn.HasKeyword(troll, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(troll, Keyword.FIERCE));
 
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(23, scn.GetStrength(troll));
-		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
 		assertEquals(Zone.DISCARD, orc1.getZone());
 		assertEquals(Zone.DISCARD, orc2.getZone());
 		assertEquals(Zone.DISCARD, orc3.getZone());
@@ -133,17 +133,17 @@ public class Card_15_112_ErrataTests
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		assertEquals(23, scn.GetStrength(troll));
-		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
 
 		scn.SkipToPhase(Phase.REGROUP);
 		assertEquals(23, scn.GetStrength(troll));
-		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
 
 		scn.PassCurrentPhaseActions();
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 		assertEquals(23, scn.GetStrength(troll));
-		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
 	}
 
 	@Test

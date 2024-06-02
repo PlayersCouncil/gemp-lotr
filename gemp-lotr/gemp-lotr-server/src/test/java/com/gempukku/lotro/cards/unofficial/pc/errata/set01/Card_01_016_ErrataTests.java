@@ -56,8 +56,8 @@ public class Card_01_016_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, kingdom.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, kingdom.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, kingdom.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(kingdom, Keyword.SUPPORT_AREA));
-		assertTrue(scn.HasKeyword(kingdom, Keyword.TALE));
+		assertTrue(scn.hasKeyword(kingdom, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(kingdom, Keyword.TALE));
 		assertEquals(1, kingdom.getBlueprint().getTwilightCost());
 	}
 

@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set19;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -56,8 +55,8 @@ public class Card_19_007_Tests
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.FELLOWSHIP));
-		assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
+		assertTrue(scn.hasKeyword(card, Keyword.FELLOWSHIP));
+		assertTrue(scn.hasKeyword(card, Keyword.ARCHER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());

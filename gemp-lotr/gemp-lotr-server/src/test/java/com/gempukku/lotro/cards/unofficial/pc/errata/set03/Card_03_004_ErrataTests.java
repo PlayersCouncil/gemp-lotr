@@ -58,7 +58,7 @@ public class Card_03_004_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, welcome.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, welcome.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, welcome.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(welcome, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(welcome, Keyword.SUPPORT_AREA));
 		assertEquals(2, welcome.getBlueprint().getTwilightCost());
 	}
 

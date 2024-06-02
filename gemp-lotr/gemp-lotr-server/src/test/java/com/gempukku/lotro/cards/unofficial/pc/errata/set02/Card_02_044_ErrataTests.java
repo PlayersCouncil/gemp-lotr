@@ -61,7 +61,7 @@ public class Card_02_044_ErrataTests
 		assertEquals(Side.SHADOW, business.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, business.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, business.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(business, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(business, Keyword.SUPPORT_AREA));
 		assertEquals(3, business.getBlueprint().getTwilightCost());
 	}
 

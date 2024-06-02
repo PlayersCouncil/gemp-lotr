@@ -59,7 +59,7 @@ public class Card_01_150_ErrataTests
 		assertEquals(Culture.ISENGARD, rager.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, rager.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, rager.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(rager, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(rager, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(rager, Keyword.DAMAGE));
 		assertEquals(4, rager.getBlueprint().getTwilightCost());
 		assertEquals(9, rager.getBlueprint().getStrength());

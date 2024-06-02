@@ -66,8 +66,8 @@ public class Card_01_198_ErrataTests
 		assertEquals(Side.SHADOW, ttmm.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, ttmm.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, ttmm.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(ttmm, Keyword.SEARCH));
-		assertTrue(scn.HasKeyword(ttmm, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(ttmm, Keyword.SEARCH));
+		assertTrue(scn.hasKeyword(ttmm, Keyword.SUPPORT_AREA));
 		assertEquals(1, ttmm.getBlueprint().getTwilightCost());
 	}
 

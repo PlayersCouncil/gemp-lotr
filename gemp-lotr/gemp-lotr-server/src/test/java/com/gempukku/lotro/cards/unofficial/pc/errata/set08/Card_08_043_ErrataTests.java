@@ -56,7 +56,7 @@ public class Card_08_043_ErrataTests
 		assertEquals(Culture.GONDOR, host.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, host.getBlueprint().getCardType());
 		assertEquals(Race.WRAITH, host.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(host, Keyword.ENDURING));
+		assertTrue(scn.hasKeyword(host, Keyword.ENDURING));
 		assertEquals(5, host.getBlueprint().getTwilightCost());
 		assertEquals(9, host.getBlueprint().getStrength());
 		assertEquals(3, host.getBlueprint().getVitality());
@@ -103,11 +103,11 @@ public class Card_08_043_ErrataTests
 
 		scn.StartGame();
 
-		assertFalse(scn.HasKeyword(host, Keyword.DEFENDER));
+		assertFalse(scn.hasKeyword(host, Keyword.DEFENDER));
 		scn.AddWoundsToChar(host, 1);
-		assertFalse(scn.HasKeyword(host, Keyword.DEFENDER));
+		assertFalse(scn.hasKeyword(host, Keyword.DEFENDER));
 		scn.AddWoundsToChar(host, 1);
-		assertTrue(scn.HasKeyword(host, Keyword.DEFENDER));
+		assertTrue(scn.hasKeyword(host, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(host, Keyword.DEFENDER));
 	}
 }

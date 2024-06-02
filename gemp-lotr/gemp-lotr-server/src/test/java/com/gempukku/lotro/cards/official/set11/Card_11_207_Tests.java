@@ -51,7 +51,7 @@ public class Card_11_207_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.TOIL));
+		assertTrue(scn.hasKeyword(card, Keyword.TOIL));
 		assertEquals(2, scn.GetKeywordCount(card, Keyword.TOIL));
         assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
 		assertEquals(6, card.getBlueprint().getTwilightCost());

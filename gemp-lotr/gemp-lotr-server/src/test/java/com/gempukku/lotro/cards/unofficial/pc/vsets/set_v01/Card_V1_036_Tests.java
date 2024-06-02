@@ -61,7 +61,7 @@ public class Card_V1_036_Tests
 		PhysicalCardImpl vile = scn.GetFreepsCard("vile");
 
 		assertFalse(vile.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(vile, Keyword.TENTACLE)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(vile, Keyword.TENTACLE)); // test for keywords as needed
 		assertEquals(2, vile.getBlueprint().getTwilightCost());
 		assertEquals(7, vile.getBlueprint().getStrength());
 		assertEquals(2, vile.getBlueprint().getVitality());
@@ -125,16 +125,16 @@ public class Card_V1_036_Tests
 		assertEquals(3, scn.GetStrength(vile));
 		assertEquals(0, scn.GetShadowDiscardCount());
 		assertEquals(1, scn.GetShadowHandCount());
-		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertFalse(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		scn.ShadowUseCardAction(vile);
 
 		assertEquals(7, scn.GetStrength(vile));
 		assertEquals(1, scn.GetShadowDiscardCount());
 		assertEquals(0, scn.GetShadowHandCount());
-		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertTrue(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 
 		scn.SkipToPhase(Phase.REGROUP);
-		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertTrue(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 	}
 
 }

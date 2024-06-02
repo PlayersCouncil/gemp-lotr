@@ -57,7 +57,7 @@ public class Card_08_102_ErrataTests
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(9, card.getBlueprint().getTwilightCost());
 		assertEquals(16, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());

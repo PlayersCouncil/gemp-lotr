@@ -925,7 +925,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         return siteNumber;
     }
 
-    public boolean HasKeyword(PhysicalCardImpl card, Keyword keyword)
+    public boolean hasKeyword(PhysicalCardImpl card, Keyword keyword)
     {
         return _game.getModifiersQuerying().hasKeyword(_game, card, keyword);
     }

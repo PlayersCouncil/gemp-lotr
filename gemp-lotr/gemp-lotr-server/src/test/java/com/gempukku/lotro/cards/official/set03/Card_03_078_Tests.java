@@ -51,7 +51,7 @@ public class Card_03_078_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SEARCH));
+		assertTrue(scn.hasKeyword(card, Keyword.SEARCH));
         assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}

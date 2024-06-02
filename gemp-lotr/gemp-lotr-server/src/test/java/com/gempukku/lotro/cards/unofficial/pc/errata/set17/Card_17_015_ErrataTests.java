@@ -60,7 +60,7 @@ public class Card_17_015_ErrataTests
 		assertEquals(Culture.GANDALF, light.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, light.getBlueprint().getCardType());
         assertTrue(scn.hasTimeword(light, Timeword.FELLOWSHIP));
-		assertTrue(scn.HasKeyword(light, Keyword.SPELL));
+		assertTrue(scn.hasKeyword(light, Keyword.SPELL));
 		assertEquals(1, light.getBlueprint().getTwilightCost());
 	}
 

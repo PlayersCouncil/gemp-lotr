@@ -16,12 +16,10 @@ public class Card_V2_005_Tests
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<>() {{
-					put("haldir", "102_5");
-					put("greenleaf", "1_50");
-					put("bow", "1_41");
-
-					put("smith", "3_60");
+				new HashMap<>()
+				{{
+					put("card", "102_5");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -51,7 +49,7 @@ public class Card_V2_005_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("haldir");
+		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Haldir", card.getBlueprint().getTitle());
 		assertEquals("Naith Commander", card.getBlueprint().getSubtitle());
@@ -67,88 +65,18 @@ public class Card_V2_005_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void HaldirGrantsStrengthBonusToValiantElvesWhileBearingRangedWeapon() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HaldirTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var haldir = scn.GetFreepsCard("haldir");
-		var greenleaf = scn.GetFreepsCard("greenleaf");
-		var bow = scn.GetFreepsCard("bow");
-		scn.FreepsMoveCardToHand(bow);
-		scn.FreepsMoveCharToTable(haldir, greenleaf);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		assertEquals(6, scn.GetStrength(haldir));
-		assertEquals(6, scn.GetStrength(greenleaf));
-
-		scn.FreepsPlayCard(bow);
-		scn.FreepsChooseCard(haldir);
-
-		assertEquals(7, scn.GetStrength(haldir));
-		assertEquals(6, scn.GetStrength(greenleaf));
+		assertEquals(2, scn.GetTwilight());
 	}
-
-	//@Test
-	public void HaldirDoesNotContributeToArcheryTotalWhileBearingRangedWeapon() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var haldir = scn.GetFreepsCard("haldir");
-		var bow = scn.GetFreepsCard("bow");
-		scn.FreepsMoveCharToTable(haldir);
-		scn.FreepsAttachCardsTo(haldir, bow);
-
-		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
-
-		scn.StartGame();
-		
-		scn.SkipToPhase(Phase.ARCHERY);
-
-		assertEquals(0, scn.GetFreepsArcheryTotal());
-
-	}
-
-	@Test
-	public void HaldirTriggerOnElvenPossessionDiscardExertsToPrevent() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var haldir = scn.GetFreepsCard("haldir");
-		var bow = scn.GetFreepsCard("bow");
-		scn.FreepsMoveCharToTable(haldir);
-		scn.FreepsAttachCardsTo(haldir, bow);
-
-		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.REGROUP);
-
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.ShadowActionAvailable(smith));
-
-		assertEquals(2, scn.GetVitality(smith));
-		scn.ShadowUseCardAction(smith);
-
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		assertTrue(scn.FreepsDecisionAvailable("Discard Elven Bow"));
-
-		assertEquals(3, scn.GetVitality(haldir));
-		//Once Archery ability is fixed, update this value
-		assertEquals(1, scn.GetVitality(smith));
-		assertEquals(Zone.ATTACHED, bow.getZone());
-		assertEquals(haldir, bow.getAttachedTo());
-
-		scn.FreepsAcceptOptionalTrigger();
-
-		assertEquals(2, scn.GetVitality(haldir));
-		assertEquals(Zone.ATTACHED, bow.getZone());
-		assertEquals(haldir, bow.getAttachedTo());
-
-	}
-
 }

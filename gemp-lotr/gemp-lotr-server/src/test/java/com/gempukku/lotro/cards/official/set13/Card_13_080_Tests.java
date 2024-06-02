@@ -51,7 +51,7 @@ public class Card_13_080_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
@@ -92,13 +92,13 @@ public class Card_13_080_Tests
 
 		assertEquals(0, scn.GetVitality(radagast));
 		assertEquals(0, scn.GetStrength(radagast));
-		assertFalse(scn.HasKeyword(radagast, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(radagast, Keyword.FIERCE));
 		assertFalse(scn.IsType(radagast, CardType.MINION));
 		scn.ShadowAcceptOptionalTrigger(); // mithrandir self-wounding and dying, saruman self-healing as a result
 
 		assertEquals(1, scn.GetVitality(radagast));
 		assertEquals(12, scn.GetStrength(radagast));
-		assertTrue(scn.HasKeyword(radagast, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(radagast, Keyword.FIERCE));
 		assertTrue(scn.IsType(radagast, CardType.MINION));
 		assertTrue(scn.IsType(radagast, CardType.CONDITION));
 

@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set11;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -56,9 +55,9 @@ public class Card_11_108_Tests
 		assertEquals(Culture.ORC, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.TROLL, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
 		assertEquals(6, card.getBlueprint().getTwilightCost());
 		assertEquals(13, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());

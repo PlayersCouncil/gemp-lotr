@@ -70,7 +70,7 @@ public class Card_17_140_Tests
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
 		assertEquals(6, card.getBlueprint().getTwilightCost());
 		assertEquals(11, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());

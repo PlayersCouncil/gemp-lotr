@@ -71,8 +71,8 @@ public class Card_01_126_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertTrue(scn.ShadowPlayAvailable(hunt));
-		assertFalse(scn.HasKeyword(uruk, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(uruk, Keyword.FIERCE));
 		scn.ShadowPlayCard(hunt);
-		assertTrue(scn.HasKeyword(uruk, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(uruk, Keyword.FIERCE));
 	}
 }

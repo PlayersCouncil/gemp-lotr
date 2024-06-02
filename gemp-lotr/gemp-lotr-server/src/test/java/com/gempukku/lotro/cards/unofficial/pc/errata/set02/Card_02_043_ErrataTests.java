@@ -170,7 +170,7 @@ public class Card_02_043_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertTrue(scn.ShadowPlayAvailable(sword));
-		assertTrue(scn.HasKeyword(lurtz, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(lurtz, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(lurtz, Keyword.DAMAGE));
 		scn.ShadowPlayCard(sword);
 		assertEquals(2, scn.GetKeywordCount(lurtz, Keyword.DAMAGE));
@@ -191,7 +191,7 @@ public class Card_02_043_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertTrue(scn.ShadowPlayAvailable(sword));
-		assertTrue(scn.HasKeyword(captain, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(captain, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(captain, Keyword.DAMAGE));
 		scn.ShadowPlayCard(sword);
 		assertEquals(1, scn.GetKeywordCount(captain, Keyword.DAMAGE));

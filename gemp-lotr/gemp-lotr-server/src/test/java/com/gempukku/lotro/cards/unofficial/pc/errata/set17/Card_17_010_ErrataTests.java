@@ -57,7 +57,7 @@ public class Card_17_010_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, namarie.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, namarie.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, namarie.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(namarie, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(namarie, Keyword.SUPPORT_AREA));
 		assertEquals(2, namarie.getBlueprint().getTwilightCost());
 	}
 

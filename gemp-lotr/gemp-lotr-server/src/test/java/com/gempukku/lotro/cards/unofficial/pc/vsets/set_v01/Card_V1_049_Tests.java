@@ -57,7 +57,7 @@ public class Card_V1_049_Tests
 		assertEquals(Culture.SAURON, past.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, past.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, past.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(past, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(past, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, past.getBlueprint().getTwilightCost());
 		//assertEquals(, past.getBlueprint().getStrength());
 		//assertEquals(, past.getBlueprint().getVitality());
@@ -81,13 +81,13 @@ public class Card_V1_049_Tests
 
 		scn.StartGame();
 
-		assertFalse(scn.HasKeyword(orc, Keyword.FIERCE));
-		assertFalse(scn.HasKeyword(runner, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(orc, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(runner, Keyword.FIERCE));
 
 		scn.AddBurdens(3); // 4 with the initial starting bid
 
-		assertTrue(scn.HasKeyword(orc, Keyword.FIERCE));
-		assertFalse(scn.HasKeyword(runner, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(orc, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(runner, Keyword.FIERCE));
 	}
 
 	@Test
@@ -104,16 +104,16 @@ public class Card_V1_049_Tests
 
 		scn.StartGame();
 
-		assertFalse(scn.HasKeyword(orc, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(runner, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(troll, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(orc, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(runner, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(troll, Keyword.DAMAGE));
 
 		scn.AddBurdens(5); // 6 with the initial starting bid
 
-		assertTrue(scn.HasKeyword(orc, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(orc, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(orc, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(runner, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(troll, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(runner, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(troll, Keyword.DAMAGE));
 	}
 
 	@Test

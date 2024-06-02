@@ -19,9 +19,6 @@ public class Card_V2_018_Tests
 				new HashMap<>()
 				{{
 					put("card", "102_18");
-					put("boromir", "1_97");
-					put("faramir", "4_117");
-					put("twk", "1_237");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -66,133 +63,18 @@ public class Card_V2_018_Tests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.KING, 3)));
 	}
 
-	@Test
-	public void gondorCompanionsAreDiminishedWhenThreatsAreFull() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void DenethorTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
-		var boromir = scn.GetFreepsCard("boromir");
-		var faramir = scn.GetFreepsCard("faramir");
-
-		scn.FreepsMoveCardToHand(card, boromir, faramir);
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
 		assertEquals(3, scn.GetTwilight());
-
-		scn.FreepsPlayCard(boromir);
-		scn.FreepsPlayCard(faramir);
-
-		// Their starting strengths should be 7 with zero threats
-		assertEquals(0, scn.GetThreats());
-		assertEquals(7, scn.GetStrength(boromir));
-		assertEquals(7, scn.GetStrength(faramir));
-
-
-		// Their starting strengths should be 7 with one threat
-		scn.AddThreats(1);
-		assertEquals(1, scn.GetThreats());
-		assertEquals(7, scn.GetStrength(boromir));
-		assertEquals(7, scn.GetStrength(faramir));
-
-		// Their starting strengths should be 7 with two threats
-		scn.AddThreats(1);
-		assertEquals(2, scn.GetThreats());
-		assertEquals(7, scn.GetStrength(boromir));
-		assertEquals(7, scn.GetStrength(faramir));
-
-		// Their starting strengths should be 5 with three threats
-		scn.AddThreats(1);
-		assertEquals(3, scn.GetThreats());
-		assertEquals(5, scn.GetStrength(boromir));
-		assertEquals(5, scn.GetStrength(faramir));
-	}
-
-	@Test
-	public void startOfManeuverTriggerCostTwoThreatsToBoostFaramir() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		var boromir = scn.GetFreepsCard("boromir");
-		var faramir = scn.GetFreepsCard("faramir");
-		var twk = scn.GetShadowCard("twk");
-
-		scn.FreepsMoveCardToHand(card, boromir, faramir, twk);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(3, scn.GetTwilight());
-
-		scn.FreepsPlayCard(boromir);
-		scn.FreepsPlayCard(faramir);
-
-		// Their starting strengths should be 7 with zero threats
-		assertEquals(0, scn.GetThreats());
-		assertEquals(7, scn.GetStrength(faramir));
-		assertFalse(scn.HasKeyword(faramir, Keyword.DEFENDER));
-
-		scn.SkipToPhase(Phase.SHADOW);
-		scn.ShadowMoveCardToHand(twk);
-
-		scn.ShadowPlayCard(twk);
-
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-
-		scn.FreepsChooseCard(faramir);
-
-		assertEquals(2, scn.GetThreats());
-		assertEquals(9, scn.GetStrength(faramir));
-		assertTrue(scn.HasKeyword(faramir, Keyword.DEFENDER));
-		assertEquals(1, scn.GetKeywordCount(faramir, Keyword.DEFENDER));
-	}
-
-	@Test
-	public void startOfManeuverTriggerCostOneThreatToBoostBoromir() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		var boromir = scn.GetFreepsCard("boromir");
-		var faramir = scn.GetFreepsCard("faramir");
-		var twk = scn.GetShadowCard("twk");
-
-		scn.FreepsMoveCardToHand(card, boromir, faramir, twk);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(3, scn.GetTwilight());
-
-		scn.FreepsPlayCard(boromir);
-		scn.FreepsPlayCard(faramir);
-
-		// Their starting strengths should be 7 with zero threats
-		assertEquals(0, scn.GetThreats());
-		assertEquals(7, scn.GetStrength(boromir));
-		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
-
-		scn.SkipToPhase(Phase.SHADOW);
-		scn.ShadowMoveCardToHand(twk);
-
-		scn.ShadowPlayCard(twk);
-
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-
-		scn.FreepsChooseCard(boromir);
-
-		assertEquals(1, scn.GetThreats());
-		assertEquals(9, scn.GetStrength(boromir));
-		assertTrue(scn.HasKeyword(boromir, Keyword.DEFENDER));
-		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 	}
 }

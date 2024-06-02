@@ -59,7 +59,7 @@ public class Card_V1_021_Tests
 		assertEquals(Culture.GONDOR, sons.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, sons.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, sons.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(sons, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(sons, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(2, sons.getBlueprint().getTwilightCost());
 		//assertEquals(, sons.getBlueprint().getStrength());
 		//assertEquals(, sons.getBlueprint().getVitality());

@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set03;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -54,7 +53,7 @@ public class Card_03_067_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
 		//Uncomment this once this has been converted to JSON; java cards don't support support area items with classes
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PALANTIR));
 		assertEquals(0, card.getBlueprint().getTwilightCost());

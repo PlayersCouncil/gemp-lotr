@@ -59,7 +59,7 @@ public class Card_V1_048_Tests
 		assertEquals(Culture.SAURON, troop.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, troop.getBlueprint().getCardType());
 		assertEquals(Race.ORC, troop.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(troop, Keyword.TRACKER)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(troop, Keyword.TRACKER)); // test for keywords as needed
 		assertEquals(3, troop.getBlueprint().getTwilightCost());
 		assertEquals(8, troop.getBlueprint().getStrength());
 		assertEquals(2, troop.getBlueprint().getVitality());
@@ -79,9 +79,9 @@ public class Card_V1_048_Tests
 
 		scn.StartGame();
 
-		assertFalse(scn.HasKeyword(troop, Keyword.ARCHER));
+		assertFalse(scn.hasKeyword(troop, Keyword.ARCHER));
 		scn.AddWoundsToChar(scn.GetRingBearer(), 3);
-		assertTrue(scn.HasKeyword(troop, Keyword.ARCHER));
+		assertTrue(scn.hasKeyword(troop, Keyword.ARCHER));
 	}
 
 	@Test

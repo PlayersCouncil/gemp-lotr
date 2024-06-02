@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set18;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -53,8 +52,8 @@ public class Card_18_137_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.BATTLEGROUND));
-		assertTrue(scn.HasKeyword(card, Keyword.PLAINS));
+		assertTrue(scn.hasKeyword(card, Keyword.BATTLEGROUND));
+		assertTrue(scn.hasKeyword(card, Keyword.PLAINS));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

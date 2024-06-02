@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set12;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -53,7 +52,7 @@ public class Card_12_136_Tests
 		assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertTrue(scn.HasKeyword(card, Keyword.TOIL));
+		assertTrue(scn.hasKeyword(card, Keyword.TOIL));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.TOIL));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}

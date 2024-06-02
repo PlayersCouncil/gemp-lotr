@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set14;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -56,14 +55,14 @@ public class Card_14_013_Tests
 		assertEquals(Culture.ORC, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.HALF_TROLL, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
+		assertTrue(scn.hasKeyword(card, Keyword.AMBUSH));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.AMBUSH));
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
-		assertTrue(scn.HasKeyword(card, Keyword.LURKER));
-		assertTrue(scn.HasKeyword(card, Keyword.MUSTER));
-		assertTrue(scn.HasKeyword(card, Keyword.TOIL));
+		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(card, Keyword.LURKER));
+		assertTrue(scn.hasKeyword(card, Keyword.MUSTER));
+		assertTrue(scn.hasKeyword(card, Keyword.TOIL));
 		assertEquals(2, scn.GetKeywordCount(card, Keyword.TOIL));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());

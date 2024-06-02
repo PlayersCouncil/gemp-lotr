@@ -55,7 +55,7 @@ public class Card_02_121_ErrataTests
         assertEquals(3, gimli.getBlueprint().getVitality());
         assertEquals(Signet.FRODO, gimli.getBlueprint().getSignet());
 
-        assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
+        assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE));
     }
 
 

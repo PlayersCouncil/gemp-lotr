@@ -58,7 +58,7 @@ public class Card_09_030_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
+		assertTrue(scn.hasKeyword(card, Keyword.RING_BOUND));
         assertTrue(card.getBlueprint().canStartWithRing());
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());

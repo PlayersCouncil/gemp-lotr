@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set09;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -56,10 +55,10 @@ public class Card_09_048_Tests
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAIA, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
-		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(card, Keyword.ENDURING));
+		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
 		assertEquals(18, card.getBlueprint().getTwilightCost());
 		assertEquals(24, card.getBlueprint().getStrength());
 		assertEquals(5, card.getBlueprint().getVitality());

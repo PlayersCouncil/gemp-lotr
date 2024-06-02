@@ -56,7 +56,7 @@ public class Card_V1_033_Tests
 		PhysicalCardImpl ttent = scn.GetFreepsCard("ttent");
 
 		assertFalse(ttent.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(ttent, Keyword.TENTACLE)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(ttent, Keyword.TENTACLE)); // test for keywords as needed
 		assertEquals(2, ttent.getBlueprint().getTwilightCost());
 		assertEquals(5, ttent.getBlueprint().getStrength());
 		assertEquals(2, ttent.getBlueprint().getVitality());

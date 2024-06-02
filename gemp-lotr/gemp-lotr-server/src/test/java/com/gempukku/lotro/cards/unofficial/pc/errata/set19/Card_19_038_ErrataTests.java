@@ -55,7 +55,7 @@ public class Card_19_038_ErrataTests
         assertEquals(CardType.MINION, nertea.getBlueprint().getCardType());
         assertEquals(Culture.WRAITH, nertea.getBlueprint().getCulture());
         assertEquals(Race.NAZGUL, nertea.getBlueprint().getRace());
-        assertTrue(scn.HasKeyword(nertea, Keyword.FIERCE));
+        assertTrue(scn.hasKeyword(nertea, Keyword.FIERCE));
         assertEquals(9, nertea.getBlueprint().getStrength());
         assertEquals(2, nertea.getBlueprint().getVitality());
         assertEquals(3, nertea.getBlueprint().getSiteNumber());

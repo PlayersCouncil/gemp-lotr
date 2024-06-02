@@ -57,7 +57,7 @@ public class Card_18_082_ErrataTests
 		assertEquals(Side.SHADOW, grond.getBlueprint().getSide());
 		assertEquals(Culture.ORC, grond.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, grond.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(grond, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(grond, Keyword.SUPPORT_AREA));
 		assertEquals(3, grond.getBlueprint().getTwilightCost());
 	}
 

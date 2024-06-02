@@ -56,7 +56,7 @@ public class Card_08_059_ErrataTests
 		assertEquals(Side.SHADOW, galley.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, galley.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, galley.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(galley, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(galley, Keyword.SUPPORT_AREA));
 		assertEquals(1, galley.getBlueprint().getTwilightCost());
 	}
 

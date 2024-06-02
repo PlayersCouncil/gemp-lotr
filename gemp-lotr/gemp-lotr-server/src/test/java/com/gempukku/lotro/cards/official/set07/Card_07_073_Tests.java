@@ -51,7 +51,7 @@ public class Card_07_073_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.STEALTH));
+		assertTrue(scn.hasKeyword(card, Keyword.STEALTH));
         assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}

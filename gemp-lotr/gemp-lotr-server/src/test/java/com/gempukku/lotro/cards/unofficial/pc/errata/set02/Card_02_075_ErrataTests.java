@@ -90,10 +90,10 @@ public class Card_02_075_ErrataTests
 
         //should be -5 for Black Rider, -2 for roaming
         assertEquals(7, scn.GetTwilight());
-        assertTrue(scn.HasKeyword(nazgul1, Keyword.ROAMING));
+        assertTrue(scn.hasKeyword(nazgul1, Keyword.ROAMING));
 
         scn.ShadowPlayCard(ferny);
-        assertFalse(scn.HasKeyword(nazgul1, Keyword.ROAMING));
+        assertFalse(scn.hasKeyword(nazgul1, Keyword.ROAMING));
         scn.ShadowPlayCard(nazgul2);
 
         //Should have been exactly enough twilight to play ferny + another black rider, if there are no roaming penalties.

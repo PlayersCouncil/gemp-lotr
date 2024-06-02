@@ -55,8 +55,8 @@ public class Card_18_118_Tests
         assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
         assertEquals(CardType.MINION, card.getBlueprint().getCardType());
         assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-        assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
-        assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+        assertTrue(scn.hasKeyword(card, Keyword.ARCHER));
+        assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
         assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
         assertEquals(7, card.getBlueprint().getTwilightCost());
         assertEquals(13, card.getBlueprint().getStrength());
