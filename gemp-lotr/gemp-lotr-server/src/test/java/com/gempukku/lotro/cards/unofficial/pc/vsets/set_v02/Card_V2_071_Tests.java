@@ -56,7 +56,7 @@ public class Card_V2_071_Tests
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertEquals(0, card.getBlueprint().getTwilightCost());
-		assertEquals(+2, card.getBlueprint().getResistance());
+		assertEquals(2, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

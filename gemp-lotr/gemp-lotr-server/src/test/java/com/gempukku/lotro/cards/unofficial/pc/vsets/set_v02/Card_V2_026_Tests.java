@@ -57,8 +57,8 @@ public class Card_V2_026_Tests
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(+1, card.getBlueprint().getStrength());
-		assertEquals(+1, card.getBlueprint().getVitality());
+		assertEquals(1, card.getBlueprint().getStrength());
+		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

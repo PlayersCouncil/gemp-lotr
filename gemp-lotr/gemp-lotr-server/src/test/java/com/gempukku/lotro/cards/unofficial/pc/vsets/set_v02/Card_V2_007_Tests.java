@@ -41,7 +41,7 @@ public class Card_V2_007_Tests
 		 * Subtype: Hand/ranged weapon
 		 * Strength: 2
 		 * Vitality: 1
-		 * Game Text: Bearer must a valiant Elf.
+		 * Game Text: Bearer must be a valiant Elf.
 		* 	Each time bearer wins a skirmish, you may exert bearer to heal another valiant Elf.
 		*/
 
@@ -58,8 +58,8 @@ public class Card_V2_007_Tests
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.RANGED_WEAPON));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(+2, card.getBlueprint().getStrength());
-		assertEquals(+1, card.getBlueprint().getVitality());
+		assertEquals(2, card.getBlueprint().getStrength());
+		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

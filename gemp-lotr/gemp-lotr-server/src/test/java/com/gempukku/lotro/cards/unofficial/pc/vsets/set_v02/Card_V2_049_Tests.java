@@ -57,7 +57,7 @@ public class Card_V2_049_Tests
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(+2, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

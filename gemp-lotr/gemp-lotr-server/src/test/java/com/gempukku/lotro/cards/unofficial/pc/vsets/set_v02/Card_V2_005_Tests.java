@@ -43,6 +43,7 @@ public class Card_V2_005_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Game Text: Valiant. 
 		* 	While Haldir bears a ranged weapon, each valiant Elf is strength +1 and does not add to the fellowship archery total.
 		* 	Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
@@ -63,6 +64,7 @@ public class Card_V2_005_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	//@Test

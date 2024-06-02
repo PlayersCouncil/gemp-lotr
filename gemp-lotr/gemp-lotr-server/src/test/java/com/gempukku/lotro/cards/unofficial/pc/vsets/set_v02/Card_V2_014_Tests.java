@@ -41,6 +41,7 @@ public class Card_V2_014_Tests
 		 * Subtype: Wizard
 		 * Strength: 7
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: Theoden is strength +1.
 		* 	Each mounted companion gains <b>valiant</b>.
@@ -61,6 +62,7 @@ public class Card_V2_014_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 

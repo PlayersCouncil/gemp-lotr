@@ -3,7 +3,7 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.var;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -47,6 +47,7 @@ public class Card_V2_016_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: Valiant.
 		* 	While you can spot 3 valiant companions, the number of free peoples cultures that can be counted is-1.
@@ -72,7 +73,7 @@ public class Card_V2_016_Tests
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 
-	// @Test
+	//@Test
 	public void ReducesFPsCulturesSpottedWhenThreeValiantCompanionsArePresent() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();

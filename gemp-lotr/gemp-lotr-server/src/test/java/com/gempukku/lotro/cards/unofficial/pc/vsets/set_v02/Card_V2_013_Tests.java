@@ -55,7 +55,7 @@ public class Card_V2_013_Tests
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(+1, card.getBlueprint().getStrength());
+		assertEquals(1, card.getBlueprint().getStrength());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -41,6 +41,7 @@ public class Card_V2_043_Tests
 		 * Subtype: Man
 		 * Strength: 6
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: Valiant.
 		* 	Theoden is strength +1 for each valiant companion assigned to a skirmish.
@@ -61,6 +62,7 @@ public class Card_V2_043_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 

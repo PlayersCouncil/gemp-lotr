@@ -41,7 +41,7 @@ public class Card_V2_008_Tests
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-		 * Site Number: 3
+		 * Site Number: 3F
 		 * Game Text: Aragorn is strength +1.
 		* 	If Aragorn is about to be killed you may exert Arwen to heal Aragorn.
 		* 	While Arwen is exhausted, Aragorn is defender +1.
@@ -61,8 +61,7 @@ public class Card_V2_008_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(3, card.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, card.getBlueprint().getAllyHomeSiteBlock());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(FELLOWSHIP, 3)));
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

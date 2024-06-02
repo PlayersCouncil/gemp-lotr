@@ -41,6 +41,7 @@ public class Card_V2_044_Tests
 		 * Subtype: Man
 		 * Strength: 7
 		 * Vitality: 3
+		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: When you play Erkenbrand, remove up to 3 non-unique [rohan] companions in the dead pile from the game. 
 		* 	Each exhausted companion gains <b>valiant</b>.
@@ -60,6 +61,7 @@ public class Card_V2_044_Tests
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
