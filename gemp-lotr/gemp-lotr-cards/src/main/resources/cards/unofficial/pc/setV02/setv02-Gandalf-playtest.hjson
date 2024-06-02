@@ -26,17 +26,26 @@
 			Pipeweed
 			Support Area
 		]
-		/*requires: {
-			
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			effect: [
+				{
+					type: shuffleCardsFromDiscardIntoDrawDeck
+					filter: choose(pipe)
+					count: 0-1
+				}
+				{
+					type: shuffleCardsFromDiscardIntoDrawDeck
+					filter: choose(pipeweed)
+					count: 0-1
+				}
+			]
 		}
-		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
 		gametext: Pipeweed.<br>When you play this possession, you may shuffle a pipe and a pipeweed into your deck from your discard pile. 
 		lore: "'How it came here, I can't imagine. For Saruman's private use, I fancy.'"
 		promotext: ""
