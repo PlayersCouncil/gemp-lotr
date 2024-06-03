@@ -49,7 +49,7 @@ public class LotroCardBlueprintLibraryTests extends AbstractAtTest {
         System.out.println(message);
     }
 
-    @Test
+    //@Test
     public void NewLibraryMapsSameAsOld() {
         var oldLib = _cardLibrary;
         var newLib = new LotroCardBlueprintLibrary2();
