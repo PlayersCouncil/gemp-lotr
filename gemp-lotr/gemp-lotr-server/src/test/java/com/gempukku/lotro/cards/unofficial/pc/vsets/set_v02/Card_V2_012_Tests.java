@@ -19,9 +19,9 @@ public class Card_V2_012_Tests
 				new HashMap<>()
 				{{
 					put("jetsam", "102_12");
-					put("pipe", "1_285");
-					put("pipeweed", "1_305");
-					put("pipe2", "1_285");
+					put("pipe1", "1_285");
+					put("pipeweed1", "1_300");
+					put("pipe2", "1_74");
 					put("pipeweed2", "1_305");
 					// put other cards in here as needed for the test case
 				}},
@@ -49,7 +49,7 @@ public class Card_V2_012_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("jetsam");
 
 		assertEquals("Jetsam", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -68,48 +68,39 @@ public class Card_V2_012_Tests
 		var scn = GetScenario();
 
 		var jetsam = scn.GetFreepsCard("jetsam");
-		var pipe = scn.GetFreepsCard("pipe");
-		var pipeweed = scn.GetFreepsCard("pipeweed");
-		// var pipe2 = scn.GetFreepsCard("pipe2");
-		// var pipeweed2 = scn.GetFreepsCard("pipeweed2");
+		var pipe1 = scn.GetFreepsCard("pipe1");
+		var pipeweed1 = scn.GetFreepsCard("pipeweed1");
+		var pipe2 = scn.GetFreepsCard("pipe2");
+		var pipeweed2 = scn.GetFreepsCard("pipeweed2");
 
 		scn.FreepsMoveCardToHand(jetsam);
-		scn.FreepsMoveCardToDiscard(pipe);
-		scn.FreepsMoveCardToDiscard(pipeweed);
+		scn.FreepsMoveCardToDiscard(pipe1, pipe2, pipeweed1, pipeweed2);
 
 		scn.StartGame();
 
-
-		assertEquals(2, scn.GetFreepsDeckCount());
-		assertEquals(2, scn.GetFreepsDiscardCount());
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertEquals(4, scn.GetFreepsDiscardCount());
 		assertEquals(0, scn.GetTwilight());
 
-
 		scn.FreepsPlayCard(jetsam);
-
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 
-		assertTrue(scn.FreepsDecisionAvailable(""));
-		assertEquals(1, scn.GetFreepsCardChoiceCount());
-		assertEquals(Zone.DISCARD, pipe.getZone());
+		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(Zone.DISCARD, pipe1.getZone());
 
-		scn.FreepsChooseCardIDFromSelection(pipe);
+		scn.FreepsChooseCardBPFromSelection(pipe1);
+		assertEquals(Zone.DECK, pipe1.getZone());
 
-		assertEquals(Zone.DECK, pipe.getZone());
+		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(Zone.DISCARD, pipeweed1.getZone());
 
+		scn.FreepsChooseCardBPFromSelection(pipeweed1);
+		assertEquals(Zone.DECK, pipeweed1.getZone());
 
-		assertEquals(1, scn.GetFreepsCardChoiceCount());
-
-		scn.FreepsChooseCardIDFromSelection(pipeweed);
-
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(4, scn.GetFreepsDeckCount());
-		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertEquals(2, scn.GetFreepsDeckCount());
+		assertEquals(2, scn.GetFreepsDiscardCount());
 		assertEquals(1, scn.GetTwilight());
 	}
 }

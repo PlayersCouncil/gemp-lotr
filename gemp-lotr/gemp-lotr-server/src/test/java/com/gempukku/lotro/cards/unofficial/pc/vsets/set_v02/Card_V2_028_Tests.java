@@ -44,7 +44,7 @@ public class Card_V2_028_Tests
 		 * Site Number: 5
 		 * Game Text: Damage +1.
 		* 	This minion is strength +1 for each wound on each character in its skirmish.
-		* 	When this minion is killed, add up to 3 [isengard] tokens to an [isengard] machine.
+		* 	When this minion is killed, add 3 [isengard] tokens to an [isengard] machine.
 		*/
 
 		var scn = GetScenario();

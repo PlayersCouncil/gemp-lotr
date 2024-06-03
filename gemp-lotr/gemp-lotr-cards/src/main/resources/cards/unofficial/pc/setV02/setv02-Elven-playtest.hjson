@@ -36,19 +36,6 @@
 					amount: 1
 					requires: {
 						type: CanSpot
-						count: 1
-						filter: ranged weapon,attachedTo(self)
-					}
-				}
-			}
-			{
-				type: modifier
-				modifier:{
-					type: modifyStrength
-					filter: elf, valiant
-					amount: 1
-					requires: {
-						type: CanSpot
 						filter: ranged weapon,attachedTo(self)
 					}
 				}
@@ -67,7 +54,7 @@
 			{
 				type: Response
 				trigger: {
-					type: abouttodiscard
+					type: AboutToDiscard
 					filter: culture(elven),rangedWeapon
 				}
 				cost: {
@@ -76,7 +63,7 @@
 				}
 				effect: {
 					type: preventDiscard
-					select: choose(culture(elven),rangedWeapon)
+					select: choose(culture(elven),rangedWeapon, GettingDiscarded)
 				}
 			}
 		]
@@ -120,13 +107,25 @@
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: Spot
+				count: 2
+				select: choose(elf, valiant)
+				memorize: spottedElves
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Wound
+					select: choose(minion)
+					times: {
+						type: Conditional
+						requires: {
+							type: CanSpot
+							count: 2
+							filter: elf, valiant, HasAttachedCount(1, ranged weapon)
+						}
+						true: 2
+						false: 1
+					}
 				}
 			]
 		}
@@ -169,17 +168,28 @@
 			Ranged Weapon
 		]
 		target: valiant,Elf
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: trigger
+				optional: true
+				trigger: {
+					type: WinsSkirmish
+					filter: bearer
+				}
+				requires: {
+					type: CanSpot
+					filter: another, wounded, valiant, elf
+				}
+				cost: {
+					type: Exert
+					select: bearer
+				}
+				effect: {
+					type: Heal
+					select: choose(another, valiant, elf)
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a valiant Elf.<br>Each time bearer wins a skirmish, you may exert bearer to heal another valiant Elf.
 		lore: "The great bow of Lórien sang..."
 		promotext: ""
@@ -217,17 +227,44 @@
 		race: Elf
 		strength: 6
 		vitality: 3
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: modifier
+				modifier: {
+					type: ModifyStrength
+					filter: name(Aragorn)
+					amount: 1
+				}
 			}
 			{
-				
+				type: modifier
+				modifier: {
+					type: AddKeyword
+					keyword: defender+1
+					filter: name(Aragorn)
+					requires: {
+						type: CanSpot
+						filter: exhausted,self
+					}
+				}
 			}
-		]*/
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: AboutToBeKilled
+					filter: name(Aragorn)
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(name(Aragorn))
+				}
+			}
+		]
 		gametext: Aragorn is strength +1.<br>If Aragorn is about to be killed you may exert Arwen to heal Aragorn.<br>While Arwen is exhausted, Aragorn is defender +1.
 		lore: "'Dark is the Shadow, and yet my heart rejoices; for you, Estel, shall be among the great whose valour will destroy it.'"
 		promotext: ""
@@ -261,17 +298,23 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: trigger
+				optional: false
+				trigger: {
+					type: WinsSkirmish
+					filter: your,or(man, elf, dwarf)
+					memorize: winner
+				}
+				effect: {
+					type: ModifyStrength
+					amount: 1
+					select: choose(another,or(man, elf, dwarf), not(race(memory(winner))))
+					until: start(regroup)
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time your Man, Elf, or Dwarf wins a skirmish, make your Man, Elf, or Dwarf of another race strength +1 until the regroup phase.
 		lore: "'Forth the Three Hunters!'"
 		promotext: ""
@@ -305,20 +348,76 @@
 		twilight: 2
 		type: Event
 		timewords: Maneuver
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: Spot
+				filter: elf, companion
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Choice
+					texts: [
+						Spot an {elven} companion to reinforce a {dwarven} token.
+						Spot a {dwarven} companion to reinforce an {elven} token.
+					]
+					effects: [
+						{
+							type: CostToEffect
+							requires: {
+								type: CanSpot
+								filter: HasCultureToken(dwarven)
+							}
+							cost: {
+								type: Spot
+								filter: elf, companion
+							}
+							effect: {
+								type: ReinforceTokens
+								culture: dwarven
+								select: choose(HasCultureToken(dwarven))
+							}
+						}
+						{
+							type: CostToEffect
+							requires: {
+								type: CanSpot
+								filter: HasCultureToken(elven)
+							}
+							cost: {
+								type: Spot
+								filter: dwarf, companion
+							}
+							effect: {
+								type: ReinforceTokens
+								culture: elven
+								select: choose(HasCultureToken(elven))
+							}
+						}
+					]
+				}
+				{
+					type: If
+					check: [
+						{
+							type: CanSpot
+							filter: name(Gimli)
+						}
+						{
+							type: CanSpot
+							filter: name(Legolas)
+						}
+					]
+					true: [
+						{
+							type: ReinforceTokens
+							culture: elven
+						}
+						{
+							type: ReinforceTokens
+							culture: dwarven
+						}
+					]
 				}
 			]
 		}
@@ -355,20 +454,21 @@
 		twilight: 1
 		type: Event
 		timewords: Fellowship
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: Exert
+				count: 2
+				select: choose(valiant, companion)
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: PutCardsFromDeckIntoHand
+					select: choose(or(and(valiant,culture(elven),companion), and(culture(elven),possession)))
+					count: 1
+					shuffle: true
+					reveal: true
+					showAll: true
 				}
 			]
 		}

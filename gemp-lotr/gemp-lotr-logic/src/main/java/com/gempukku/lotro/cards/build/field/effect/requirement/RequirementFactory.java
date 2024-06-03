@@ -33,6 +33,7 @@ public class RequirementFactory {
         requirementProducers.put("canspotculturetokens", new CanSpotCultureTokens());
         requirementProducers.put("canspotfpcultures", new CanSpotFPCultures());
         requirementProducers.put("cantspotfpcultures", new CantSpotFPCultures());
+        requirementProducers.put("canspotdifferentcultures", new CanSpotDifferentCultures());
         requirementProducers.put("canspotsameculture", new CanSpotSameCulture());
         requirementProducers.put("canspotshadowcultures", new CanSpotShadowCultures());
         requirementProducers.put("canspotthreats", new CanSpotThreats());

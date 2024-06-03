@@ -17,6 +17,7 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("activated", new ActivatedEffectProcessor());
         effectProcessors.put("activatedfromstacked", new ActivatedFromStackedEffectProcessor());
         effectProcessors.put("activatedindiscard", new ActivatedInDiscardEffectProcessor());
+        effectProcessors.put("activatedindrawdeck", new ActivatedInDrawDeckEffectProcessor());
         effectProcessors.put("aidcost", new AidCost());
         effectProcessors.put("assignmentcost", new AssignmentCost());
         effectProcessors.put("controlledsitemodifier", new ControlledSiteModifier());
@@ -50,7 +51,7 @@ public class EffectFieldProcessor implements FieldProcessor {
             final String effectType = FieldUtils.getString(effect.get("type"), "type");
             final EffectProcessor effectProcessor = effectProcessors.get(effectType.toLowerCase());
             if (effectProcessor == null)
-                throw new InvalidCardDefinitionException("Unable to find effect of type: " + effectType);
+                throw new InvalidCardDefinitionException("Unable to find top-level game text of type: " + effectType);
             effectProcessor.processEffect(effect, blueprint, environment);
         }
     }

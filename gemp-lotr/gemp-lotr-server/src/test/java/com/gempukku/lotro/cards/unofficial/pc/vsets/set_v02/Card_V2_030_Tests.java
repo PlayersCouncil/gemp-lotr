@@ -39,7 +39,7 @@ public class Card_V2_030_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Assignment
-		 * Game Text: Remove X tokens from a machine to assign an Uruk-hai costing X or less to an ally or unbound companion. 
+		 * Game Text: Remove X tokens from machines to assign an Uruk-hai costing X or less to an ally or unbound companion.
 		*/
 
 		var scn = GetScenario();

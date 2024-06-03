@@ -67,6 +67,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     private List<ActionSource> inPlayPhaseActions;
     private List<ActionSource> inDiscardPhaseActions;
+    private List<ActionSource> inDrawDeckPhaseActions;
     private List<ActionSource> fromStackedPhaseActions;
 
     private List<ModifierSource> inPlayModifiers;
@@ -247,6 +248,12 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (inDiscardPhaseActions == null)
             inDiscardPhaseActions = new LinkedList<>();
         inDiscardPhaseActions.add(actionSource);
+    }
+
+    public void appendInDrawDeckPhaseAction(ActionSource actionSource) {
+        if (inDrawDeckPhaseActions == null)
+            inDrawDeckPhaseActions = new LinkedList<>();
+        inDrawDeckPhaseActions.add(actionSource);
     }
 
     public void appendFromStackedPhaseAction(ActionSource actionSource) {
@@ -535,6 +542,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     @Override
     public List<? extends Action> getPhaseActionsFromDiscard(String playerId, LotroGame game, PhysicalCard self) {
         return getActivatedActions(playerId, game, self, inDiscardPhaseActions);
+    }
+
+    @Override
+    public List<? extends Action> getPhaseActionsFromDrawDeck(String playerId, LotroGame game, PhysicalCard self) {
+        return getActivatedActions(playerId, game, self, inDrawDeckPhaseActions);
     }
 
     @Override

@@ -132,9 +132,9 @@
 								type: PutCardsFromDeckIntoHand
 								select: choose(culture(isengard),weather)
 								count: 1
-                                reveal: true
-                                shuffle: true
-                                showAll: true
+								reveal: true
+								shuffle: true
+								showAll: true
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
@@ -335,9 +335,9 @@
 								type: PutCardsFromDeckIntoHand
 								select: choose(culture(isengard),item)
 								count: 1
-                                reveal: true
-                                shuffle: true
-                                showAll: true
+								reveal: true
+								shuffle: true
+								showAll: true
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
@@ -372,13 +372,13 @@
 		type: condition
 		target: companion,not(hasAttached(name(Frostbite)))
 		effects: [
-            {
-                type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: weather,condition
-                }
-            }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: weather,condition
+				}
+			}
 			{
 				type: trigger
 				trigger: {
@@ -505,8 +505,8 @@
 								filter: Crow
 								multiplier: -1
 							}
-                            showAll: true
-                            shuffle: true
+							showAll: true
+							shuffle: true
 						}
 						{
 							type: PlayCardFromDiscard
@@ -665,9 +665,9 @@
 								type: PutCardsFromDeckIntoHand
 								select: choose(culture(isengard),condition)
 								count: 1
-                                reveal: true
-                                shuffle: true
-                                showAll: true
+								reveal: true
+								shuffle: true
+								showAll: true
 							}
 							{
 								type: PutCardsFromDiscardIntoHand

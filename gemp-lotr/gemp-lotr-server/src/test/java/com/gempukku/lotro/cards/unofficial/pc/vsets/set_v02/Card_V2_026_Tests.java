@@ -42,7 +42,7 @@ public class Card_V2_026_Tests
 		 * Strength: 1
 		 * Vitality: 1
 		 * Game Text: Bearer must be a Warg-rider.
-		* 	Shadow: Play this possession from hand on an [isengard] Orc to take an [isengard] skirmish event into hand from your discard pile.
+		 * When you play this possession from hand, you may take an [isengard] skirmish event into hand from your discard pile.
 		*/
 
 		var scn = GetScenario();

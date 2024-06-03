@@ -1,13 +1,11 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
-import com.gempukku.lotro.cards.build.ActionContext;
-import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
-import com.gempukku.lotro.cards.build.FilterableSource;
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
+import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.filters.Filters;
@@ -26,7 +24,7 @@ public class RemoveTokensCumulative implements EffectAppenderProducer {
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "count", "culture", "filter");
 
-        final int requiredCount = FieldUtils.getInteger(effectObject.get("count"), "count");
+        final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 0, environment);
         final Culture culture = FieldUtils.getEnum(Culture.class, effectObject.get("culture"), "culture");
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "any");
 
@@ -59,6 +57,8 @@ public class RemoveTokensCumulative implements EffectAppenderProducer {
                 if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS))
                     return false;
 
+                final int requiredCount = valueSource.getEvaluator(actionContext).evaluateExpression(game, null);
+
                 int totalCount = 0;
                 for (PhysicalCard physicalCard : Filters.filterActive(actionContext.getGame(), Filters.hasToken(token), filterableSource.getFilterable(actionContext))) {
                     Integer count = actionContext.getGame().getGameState().getTokens(physicalCard).get(token);
@@ -75,6 +75,8 @@ public class RemoveTokensCumulative implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 SubAction subAction = new SubAction(action);
+                final LotroGame game = actionContext.getGame();
+                final int requiredCount = valueSource.getEvaluator(actionContext).evaluateExpression(game, null);
 
                 for (int i = 0; i < requiredCount; i++) {
                     resolveCardEffect.appendEffect(cost, subAction, actionContext);

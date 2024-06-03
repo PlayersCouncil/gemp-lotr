@@ -39,9 +39,9 @@ public class Card_V2_021_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: When you play this condition, spot an [isengard] Orc or a Wizard to add 2 [isengard] tokens here.
-		* 	Each time an [isengard] Orc is defeated in a skirmish, you may discard this condition (or remove an [isengard] token here) to cancel a skirmish assignment involving another 
-		* 	[isengard] Orc.
+		 * Game Text: When you play this condition, spot a Wizard to add 2 [isengard] tokens here.
+		 * Each time an [isengard] Orc is defeated in a skirmish, add an [isengard] token here.
+		 * Skirmish: Discard this condition (or remove an [isengard] token here) to cancel a skirmish involving an [isengard] Orc.
 		*/
 
 		var scn = GetScenario();

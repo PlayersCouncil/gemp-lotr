@@ -147,11 +147,11 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("removecardsindeckfromgame", new RemoveCardsInDeckFromGame());
         effectAppenderProducers.put("removecardsindiscardfromgame", new RemoveCardsInDiscardFromGame());
         effectAppenderProducers.put("removecharacterfromskirmish", new RemoveCharacterFromSkirmish());
+        effectAppenderProducers.put("removeculturetokens", new RemoveCultureTokens());
         effectAppenderProducers.put("removefromthegame", new RemoveFromTheGame());
         effectAppenderProducers.put("removekeyword", new RemoveKeyword());
         effectAppenderProducers.put("removetext", new RemoveText());
         effectAppenderProducers.put("removethreats", new RemoveThreats());
-        effectAppenderProducers.put("removeculturetokens", new RemoveCultureTokens());
         effectAppenderProducers.put("removetokenscumulative", new RemoveTokensCumulative());
         effectAppenderProducers.put("removetwilight", new RemoveTwilight());
         effectAppenderProducers.put("reordertopcardsofdrawdeck", new ReorderTopCardsOfDrawDeck());

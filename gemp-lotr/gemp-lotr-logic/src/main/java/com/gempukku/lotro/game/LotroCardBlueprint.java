@@ -82,6 +82,8 @@ public interface LotroCardBlueprint {
 
     List<? extends Action> getPhaseActionsFromDiscard(String playerId, LotroGame game, PhysicalCard self);
 
+    List<? extends Action> getPhaseActionsFromDrawDeck(String playerId, LotroGame game, PhysicalCard self);
+
     List<? extends ActivateCardAction> getPhaseActionsInPlay(String playerId, LotroGame game, PhysicalCard self);
 
     List<? extends ActivateCardAction> getPhaseActionsFromStacked(String playerId, LotroGame game, PhysicalCard self);

@@ -37,12 +37,12 @@
 				{
 					type: shuffleCardsFromDiscardIntoDrawDeck
 					select: choose(pipe)
-					count: 0-1
+					count: 1
 				}
 				{
 					type: shuffleCardsFromDiscardIntoDrawDeck
 					select: choose(pipeweed)
-					count: 0-1
+					count: 1
 				}
 			]
 		}
@@ -79,18 +79,34 @@
 		twilight: 1
 		type: Condition
 		strength: 1
-		target: Hobbit,companion
-		/*requires: {
-			
-		}
+		target: Hobbit,companion,oneperbearer
 		effects: [
 			{
-				
+				type: trigger
+				optional: false
+				trigger: {
+					type: Moves
+				}
+				requires: {
+					type: CanSpotDifferentCultures
+					count: 3
+					filter: pipe
+				}
+				cost: {
+					type: Spot
+					count: 3
+					filter: pipe
+				}
+				effect: {
+					type: AddModifier
+					until: start(regroup)
+					modifier: {
+						type: FPCultureSpot
+						amount: -1
+					}
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Bearer must be a Hobbit companion. Limit one per bearer. <br>Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase. 
 		lore: ""
 		promotext: ""
@@ -129,17 +145,61 @@
 		vitality: 4
 		signet: Theoden
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					amount: 1
+					filter: name(Theoden)
+				}
 			}
 			{
-				
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: valiant
+					filter: companion,mounted
+				}
 			}
-		]*/
+			{
+				type: Response
+				trigger: {
+					type: UsesSpecialAbility
+					filter: minion
+					memorize: activatedMinion
+				}
+				requires: {
+					type: not
+					requires: {
+						type: phase
+						phase: skirmish
+					}
+				}
+				cost: [
+					{
+						type: Spot
+						count: 3
+						filter: valiant, companion
+					}
+					{
+						type: Exert
+						select: self
+						times: 1
+					}
+				]
+				effect: [
+					{
+						type: cancelSpecialAbility
+					}
+					{
+						type: Wound
+						select: memory(activatedMinion)
+						times: 1
+					}
+				]
+			}
+		]
 		gametext: Theoden is strength +1.<br>Each mounted companion gains <b>valiant</b>.<br>Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and exert Gandalf to prevent that and wound that minion. 
 		lore: "'No counsel have I to give to those that despair. Yet counsel I could give, and words I could speak to you.'"
 		promotext: ""
@@ -173,20 +233,27 @@
 		twilight: 2
 		type: Event
 		timewords: Maneuver
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: Exert
+				select: choose(name(Gandalf))
+				times: 1
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: ModifyStrength
+					select: all(or(name(Theoden),and(valiant,companion)))
+					until: start(regroup)
+					amount: {
+						type: Conditional
+						requires: {
+							type: CantSpot
+							filter: unbound,companion,not(valiant)
+						}
+						true: 2
+						false: 1
+					}
 				}
 			]
 		}
