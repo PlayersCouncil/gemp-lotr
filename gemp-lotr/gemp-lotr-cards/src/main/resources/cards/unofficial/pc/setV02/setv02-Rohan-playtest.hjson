@@ -28,17 +28,19 @@
 		signet: Theoden
 		resistance: 6
 		keywords: Valiant
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachYouCanSpot
+						filter: valiant, companion, AssignedToSkirmish(any)
+					}
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Valiant.<br>Theoden is strength +1 for each valiant companion assigned to a skirmish.
 		lore: "His beard was laid like snow upon his knees; but his eyes still burned with a bright light, glinting as he gazed..."
 		promotext: ""
@@ -77,17 +79,28 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Trigger
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: RemoveCardsInDeadPileFromGame
+					count: 3
+					select: choose(culture(Rohan), companion, not(unique))
+				}
 			}
 			{
-				
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: valiant
+					filter: exhausted, companion
+				}
 			}
-		]*/
+		]
 		gametext: When you play Erkenbrand, remove up to 3 non-unique [rohan] companions in the dead pile from the game. <br>Each exhausted companion gains <b>valiant</b>.
 		lore: "'He was a mighty man. In him lived again the valour of Helm the Hammerhand.'"
 		promotext: ""
@@ -124,17 +137,68 @@
 		race: Man
 		strength: 3
 		vitality: 3
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: ToPlay
+				requires: [
+					{
+						type: CanSpot
+						filter: name(Theoden)
+					}
+					{
+						type: CanSpot
+						filter: culture(Rohan), Man
+						count: 3
+					}
+				]
 			}
 			{
-				
+				type: Activated
+				phase: Skirmish
+				requires: [
+					{
+						type: PerPhaseLimit
+						limit: 1
+					}
+					{
+						type: CanSpot
+						filter: InSkirmish, Hobbit, companion
+					}
+				]
+				cost: {
+					type: Spot
+					select: choose(InSkirmish, Hobbit, companion)
+					memorize: guardedHobbit
+				}
+				effect: [
+					{
+						type: ModifyStrength
+						select: memory(guardedHobbit)
+						amount: {
+							type: forEachStrength
+							filter: self
+						}
+					}
+					{
+						type: AddKeyword
+						keyword: valiant
+						select: memory(guardedHobbit)
+					}
+					{
+						type: AddTrigger
+						optional: false
+						trigger: {
+							type: SkirmishAboutToEnd
+							involving: memory(guardedHobbit)
+						}
+						effect: {
+							type: Wound
+							select: self
+						}
+					}
+				]
 			}
-		]*/
+		]
 		gametext: To play, spot Theoden (or 3 [rohan] Men).<br>Skirmish: If a Hobbit companion is skirmishing, add this ally's strength to that Hobbit and make that Hobbit gain <b>valiant</b> until the regroup phase (limit once per phase). At the end of that skirmish, wound this ally.
 		lore: ""
 		promotext: ""
@@ -168,17 +232,52 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Trigger
+				trigger: {
+					type: Killed
+					filter: minion
+				}
+				cost: {
+					type: Spot
+					filter: valiant, companion
+					count: 2
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: rohan
+					select: self
+				}
 			}
 			{
-				
+				type: Trigger
+				trigger: {
+					type: AddsCultureToken
+					on: self
+				}
+				requires: {
+					type: CanSpotCultureTokens
+					filter: self
+					amount: 3
+				}
+				cost: {
+					type: RemoveAllTokens
+				}
+				effect: [
+					{
+						type: PlayCardFromDiscard
+						select: choose(culture(rohan), or(condition, event))
+					}
+					{
+						type: PlayCardFromDiscard
+						player: shadow
+						optional: true
+						select: choose(minion)
+					}
+				]
 			}
-		]*/
+		]
 		gametext: Each time a minion is killed, spot 2 valiant companions to add a [rohan] token here.<br>Each time there are 3 [rohan] tokens here, remove all tokens here to play a [rohan] condition or event from your discard pile. The Shadow player may then play a minion from their discard pile. 
 		lore: ""
 		promotext: ""
@@ -212,17 +311,53 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Trigger
+				trigger: [
+					{
+						type: Discarded
+						filter: culture(rohan), or(item, ally)
+					}
+					{
+						type: Killed
+						filter: culture(rohan), ally
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: rohan
+					count: 1
+					select: self
+				}
 			}
 			{
-				
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Exerted
+					filter: minion
+					source: side(freeps)
+					memorize: hurtMinion
+				}
+				cost: [
+					{
+						type: RemoveCultureTokens
+						count: 1
+						select: self
+					}
+					{
+						type: Exert
+						select: choose(valiant, companion)
+						times: 1
+					}
+				]
+				effect: {
+					type: Wound
+					select: memory(hurtMinion)
+				}
 			}
-		]*/
+		]
 		gametext: Each time a [rohan] item or [rohan] ally is discarded or killed, add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove a [rohan] token here and exert a valiant companion to wound that minion.
 		lore: ""
 		promotext: ""
@@ -256,17 +391,65 @@
 		twilight: 2
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Activated
+				phase: Maneuver
+				cost: {
+					type: Spot
+					filter: valiant, companion
+					count: 3
+				}
+				effect: [
+					{
+						type: DiscardFromHand
+						forced: false
+						select: all(any)
+						memorize: discardedHand
+					}
+					{
+						type: Repeat
+						times: {
+							type: ForEachInMemory
+							memory: discardedHand
+							filter: side(freeps)
+						}
+						effect: {
+							type: Exert
+							select: choose(minion)
+						}
+					}
+					{
+						type: Repeat
+						times: {
+							type: ForEachInMemory
+							memory: discardedHand
+							filter: side(shadow)
+						}
+						effect: {
+							type: Heal
+							select: choose(companion,or(valiant,culture(rohan)))
+						}
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: CantUseSpecialAbilities
+							player: you
+							phase: maneuver
+						}
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: CantPlayPhaseEvents
+							player: you
+							phase: maneuver
+						}
+					}
+				]
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Maneuver: Spot 3 valiant companions to discard your hand. For every Shadow card discarded, exert a minion. For every Free Peoples card discarded, heal a valiant or [rohan] companion. You may not make any more Maneuver actions.
 		lore: ""
 		promotext: ""
@@ -303,17 +486,36 @@
 		strength: 2
 		itemclass: Hand weapon
 		target: culture(rohan),companion
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: damage+1
+					requires: {
+						type: CanSpot
+						filter: bearer, name(Eomer)
+					}
+					filter: bearer
+				}
 			}
 			{
-				
+				type: Trigger
+				trigger: {
+					type: WinsSkirmish
+					filter: bearer
+				}
+				requires: {
+					type: CanSpot
+					filter: bearer, name(Eomer)
+				}
+				effect: {
+					type: ReinforceTokens
+					culture: rohan
+					select: choose(any)
+				}
 			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] companion.<br>If bearer is Eomer, he is damage +1.<br>If bearer is Eomer, each time he wins a skirmish, you may reinforce a [rohan] token.
 		lore: "The swords flashed from the sheath as one."
 		promotext: ""
@@ -347,20 +549,27 @@
 		twilight: 2
 		type: Event
 		timewords: Assignment
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: Exert
+				select: choose(valiant, companion)
+				memorize: exertedComp
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: AddKeyword
+					keyword: defender+1
+					select: memory(exertedComp)
+				}
+				{
+					type: ModifyStrength
+					amount: {
+						type: ForEachYouCanSpot
+						filter: InSkirmishAgainst(memory(exertedComp))
+					}
+					select: memory(exertedComp)
+					until: start(regroup)
 				}
 			]
 		}
@@ -397,24 +606,44 @@
 		twilight: 0
 		type: Event
 		timewords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
+			requires: [
+				{
+					type: CanSpot 
+					filter: valiant, companion, not(AssignedToSkirmish(any))
+				}
+				{
+					type: CanSpot 
+					filter: unbound, companion, InSkirmish
+				}
+			]
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: Spot
+				select: choose(valiant, companion, not(AssignedToSkirmish(any)))
+				memorize: rescuer
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: If
+					check: {
+						type: CanSpot
+						filter: name(Theoden), InSkirmish
+					}
+					true: {
+						type: AddKeyword
+						keyword: damage+1
+						select: memory(rescuer)
+					}
+				}
+				{
+					type: ReplaceInSkirmish
+					filter: unbound, companion
+					with: memory(rescuer)
 				}
 			]
 		}
-		gametext: Spot a valiant companion to have that companion replace a minion assigned to skirmish an unbound companion (and make them damage +1 if that unbound companion is Theoden). 
+		gametext: Spot a valiant companion to have them replace an unbound companion in a skirmish (and make them damage +1 if that unbound companion is Theoden).
 		lore: "'Helm for Théoden King!'"
 		promotext: ""
 		alts: {
@@ -448,17 +677,48 @@
 		type: Condition
 		strength: 2
 		target: culture(rohan),companion
-		/*requires: {
-			
-		}
+
 		effects: [
 			{
-				
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: valiant
+					filter: bearer
+				}
 			}
 			{
-				
+				type: Trigger
+				trigger: {
+					type: StartOfPhase
+					phase: regroup
+				}
+				effect: [
+					{
+						type: Memorize
+						filter: bearer
+						memory: DNTHBearer
+					}
+					{
+						type: Choice
+						texts: [
+							Wound {DNTHBearer}
+							Discard {self}
+						]
+						effects: [
+							{
+								type: Wound
+								select: bearer
+							}
+							{
+								type: Discard
+								select: self
+							}
+						]
+					}
+				]
 			}
-		]*/
+		]
 		gametext: Bearer must be a [rohan] companion.<br> Bearer is <b>valiant</b>.<br>At the start of the regroup phase, wound bearer or discard this condition.
 		lore: ""
 		promotext: ""
@@ -498,14 +758,46 @@
 		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
+			requires: {
+				type: CanSpot
+				filter: HasCultureTokenCount(2,rohan)
+			}
+			cost: [
+				{
+					type: MemorizeNumber
+					amount: {
+						type: ForEachYouCanSpot
+						filter: HasCultureTokenCount(2,rohan)
+					}
+					memory: availableConditions
+				}
+				{
+					type: ChooseANumber
+					text: Choose how many {rohan} conditions to remove 2 tokens from.
+					from: 1
+					to: memory(availableConditions)
+					memorize: chosenNumber
+				}
+				{
+					type: Repeat
+					times: memory(chosenNumber)
+					effect: {
+						type: RemoveCultureTokens
+						select: choose(HasCultureTokenCount(2,rohan))
+						count: 2
+					}
+				}				
+			]
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: ModifyStrength
+					select: choose(valiant, companion)
+					count: 3
+					until: start(regroup)
+					amount: {
+						type: FromMemory
+						memory: chosenNumber
+					}
 				}
 			]
 		}

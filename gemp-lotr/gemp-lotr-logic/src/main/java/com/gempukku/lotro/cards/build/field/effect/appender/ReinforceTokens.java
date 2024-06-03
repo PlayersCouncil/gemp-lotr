@@ -62,11 +62,11 @@ public class ReinforceTokens implements EffectAppenderProducer {
                         List<Effect> result = new LinkedList<>();
                         for (PhysicalCard card : cardsFromMemory) {
                             if (token != null) {
-                                result.add(new AddTokenEffect(actionContext.getSource(), card, token, tokenCount));
+                                result.add(new AddTokenEffect(actionContext.getPerformingPlayer(), actionContext.getSource(), card, token, tokenCount));
                             } else {
                                 Token tokenOnCard = getFirstCultureToken(actionContext.getGame().getGameState().getTokens(card));
                                 if (tokenOnCard != null) {
-                                    result.add(new AddTokenEffect(actionContext.getSource(), card, tokenOnCard, tokenCount));
+                                    result.add(new AddTokenEffect(actionContext.getPerformingPlayer(), actionContext.getSource(), card, tokenOnCard, tokenCount));
                                 }
                             }
                         }

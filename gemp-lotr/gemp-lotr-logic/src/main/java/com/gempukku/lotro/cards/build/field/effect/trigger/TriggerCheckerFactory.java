@@ -36,6 +36,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("abouttotakecontrolofsite", new AboutToTakeControlOfSite());
         triggerCheckers.put("abouttotakewound", new AboutToTakeWound());
         triggerCheckers.put("addsburden", new AddsBurden());
+        triggerCheckers.put("addsculturetoken", new AddsCultureToken());
         triggerCheckers.put("addsthreat", new AddsThreat());
         triggerCheckers.put("afterallskirmishes", new AfterAllSkirmishes());
         triggerCheckers.put("assignedagainst", new AssignedAgainst());
@@ -62,6 +63,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("reconciles", new Reconciles());
         triggerCheckers.put("removedfromplay", new RemovedFromPlay());
         triggerCheckers.put("removesburden", new RemovesBurden());
+        triggerCheckers.put("removesculturetoken", new RemovesCultureToken());
         triggerCheckers.put("replacessite", new ReplacesSite());
         triggerCheckers.put("revealscardfromtopofdrawdeck", new RevealsCardFromTopOfDrawDeck());
         triggerCheckers.put("revealedcardfromhand", new RevealedCardFromHand());

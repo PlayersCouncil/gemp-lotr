@@ -59,6 +59,28 @@ public class TriggerConditions {
         return false;
     }
 
+    public static boolean addedCultureToken(LotroGame game, String playerId, EffectResult effectResult, Filterable from, Filterable... targetFilters) {
+        if (effectResult.getType() == EffectResult.Type.ADD_CULTURE_TOKEN) {
+            var tokenResult = (AddCultureTokenResult) effectResult;
+            if (playerId != null && !playerId.equals(tokenResult.getPerformingPlayer()))
+                return false;
+            return Filters.accepts(game, from, tokenResult.getSource())
+                    && Filters.and(targetFilters).accepts(game, tokenResult.getSource());
+        }
+        return false;
+    }
+
+    public static boolean removedCultureToken(LotroGame game, String playerId, EffectResult effectResult, Filterable from, Filterable... targetFilters) {
+        if (effectResult.getType() == EffectResult.Type.REMOVE_CULTURE_TOKEN) {
+            var tokenResult = (RemoveCultureTokenResult) effectResult;
+            if (playerId != null && !playerId.equals(tokenResult.getPerformingPlayer()))
+                return false;
+            return Filters.accepts(game, from, tokenResult.getSource())
+                    && Filters.and(targetFilters).accepts(game, tokenResult.getSource());
+        }
+        return false;
+    }
+
     public static boolean addedThreat(LotroGame game, EffectResult effectResult, Filterable... sourceFilters) {
         if (effectResult.getType() == EffectResult.Type.ADD_THREAT) {
             AddThreatResult threatResult = (AddThreatResult) effectResult;

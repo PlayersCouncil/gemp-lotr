@@ -30,17 +30,33 @@
 			Fierce
 			Damage+2
 		]
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Trigger
+				trigger: {
+					type: TakesWound
+					filter: minion
+				}
+				effect: {
+					type: AddThreats
+					amount: 1
+				}
 			}
 			{
-				
+				type: Trigger
+				optional: true
+				trigger: {
+					type: UsesSpecialAbility
+					phase: skirmish
+					filter: InSkirmishAgainst(self)
+				}
+				effect: {
+					type: Wound
+					select: choose(InSkirmishAgainst(self))
+					times: 1
+				}
 			}
-		]*/
+		]
 		gametext: Fierce. Damage +2.<br>Each time a minion takes a wound, add a threat.<br>Each time the Free Peoples player uses a skirmish special ability during a skirmish involving the Balrog, you may wound a companion it is skirmishing.
 		lore: ""
 		promotext: ""
@@ -74,17 +90,60 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Moves
+				}
+				cost: {
+					type: RevealCardsFromHand
+					select: choose(name(The Balrog))
+				}
+				effect: {
+					type: AddThreats
+					amount: 1
+				}
 			}
 			{
-				
+				type: Activated
+				phase: Shadow
+				requires: [
+					{
+						type: CanPlayFromDiscard
+						filter: name(The Balrog)
+					}
+					{
+						type: CanSpotThreats
+					}
+				]
+				cost: [
+					{
+						type: ChooseANumber
+						text: Choose how many threats to remove
+						from: 1
+						to: {
+							type: ForEachThreat
+						}
+						memorize: removedThreats
+					}
+					{
+						type: RemoveThreats
+						amount: memory(removedThreats)
+					}
+				]
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(name(The Balrog))
+					discount: {
+						type: FromMemory
+						memory: removedThreats
+						multiplier: -1
+					}
+				}
 			}
-		]*/
+		]
 		gametext: Each time the fellowship moves, you may reveal The Balrog from your hand to add a threat.<br>Shadow: Remove X threats to play the Balrog from your discard pile, its twilight cost is -1 for each threat removed. 
 		lore: "'Far, far below the deepest delving of the Dwarves, the world is gnawed by nameless things.'"
 		promotext: ""
@@ -118,22 +177,39 @@
 		twilight: 1
 		type: Event
 		timewords: Regroup
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
-			effect: [
+			cost: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+						type: ChooseANumber
+						text: Choose how many {moria} minions to discard
+						from: 1
+						to: {
+							type: ForEachYouCanSpot
+							filter: culture(moria), minion
+						}
+						memorize: discardedMinions
+					}
+				{
+					type: Discard
+					select: choose(culture(Moria), minion)
+					count: memory(discardedMinions)
 				}
 			]
+			effect: {
+				type: Preventable
+				text: Would you like to exert {discardedMinions} companions to prevent adding {discardedMinions} threats?
+				player: freeps
+				cost: {
+					type: Exert
+					select: choose(companion)
+					count: memory(discardedMinions)
+				}
+				effect: {
+					type: AddThreats
+					amount: memory(discardedMinions)
+				}
+			}
 		}
 		gametext: Discard X [Moria] minions to add X threats. The Free Peoples player may exert X companions to prevent this.
 		lore: "'There was none to see, or perhaps in after ages songs would still be sung of the Battle of the Peak.'"
@@ -168,17 +244,23 @@
 		twilight: 0
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Trigger
+				trigger: {
+					type: WinsSkirmish
+					filter: unique, culture(moria), minion	
+				}
+				cost: {
+					type: RemoveThreats
+					amount: 1
+				}
+				effect: {
+					type: Exert
+					select: choose(companion)
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Each time a unique [moria] minion wins a skirmish, you may remove a threat to exert a companion.
 		lore: "'His fire was quenched, but now he was a thing of slime, stronger than a strangling snake.'"
 		promotext: ""
@@ -212,18 +294,59 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Trigger
+				trigger: {
+					type: WinsSkirmish
+					filter: unique, culture(moria), minion	
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: choose(your,culture(moria),minion,inSkirmish)
+					where: self
+				}
 			}
 			{
-				
+				type: activated
+				phase: shadow
+				requires: [
+					{
+						type: HasCardStacked
+						filter: playable, unique, culture(moria), minion	
+						on: self
+					}
+				]
+				effect: [
+					{
+						type: ChooseCardsFromSingleStack
+						select: choose(playable, unique, culture(moria), minion)
+						count: 1
+						on: self
+						memorize: chosenMinion
+						text: Choose a minion to play.
+					}
+					{
+						type: MemorizeNumber
+						amount: {
+							type: ForEachStacked
+							filter: not(memory(chosenMinion))
+							on: self
+							multiplier: -1
+						}
+						memory: stackedDiscount
+					}
+					{
+						type: PlayCardFromStacked
+						select: memory(chosenMinion)
+						on: self
+						discount: memory(stackedDiscount)
+						assumePlayable: true
+					}
+				]
 			}
-		]*/
-		gametext: Each time a [moria] minion wins a skirmish, you may stack it here.<br>Shadow: Play a unique minion stacked here, it is twilight cost -1 for each card stacked here. Discard this condition.
+		]
+		gametext: Each time a [moria] minion wins a skirmish, you may stack it here.<br>Shadow: Play a unique minion stacked here, it is twilight cost -1 for each other card stacked here. Discard this condition.
 		lore: "'...I found myself suddenly faced by something that I have not met before.'"
 		promotext: ""
 		alts: {

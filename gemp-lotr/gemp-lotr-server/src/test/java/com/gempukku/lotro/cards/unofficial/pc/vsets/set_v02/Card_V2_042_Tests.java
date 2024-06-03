@@ -40,7 +40,7 @@ public class Card_V2_042_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Each time a [moria] minion wins a skirmish, you may stack it here.
-		* 	Shadow: Play a unique minion stacked here, it is twilight cost -1 for each card stacked here. Discard this condition.
+		* 	Shadow: Play a unique minion stacked here, it is twilight cost -1 for each other card stacked here. Discard this condition.
 		*/
 
 		var scn = GetScenario();

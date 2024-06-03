@@ -60,7 +60,7 @@ public class AddCultureTokens implements EffectAppenderProducer {
 
                         List<Effect> result = new LinkedList<>();
                         for (PhysicalCard card : cardsFromMemory)
-                            result.add(new AddTokenEffect(actionContext.getSource(), card, Token.findTokenForCulture(culture), tokenCount));
+                            result.add(new AddTokenEffect(actionContext.getPerformingPlayer(), actionContext.getSource(), card, Token.findTokenForCulture(culture), tokenCount));
 
                         return result;
                     }

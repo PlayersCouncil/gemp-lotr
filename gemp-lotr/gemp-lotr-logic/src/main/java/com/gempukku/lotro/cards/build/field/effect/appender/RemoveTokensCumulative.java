@@ -43,7 +43,7 @@ public class RemoveTokensCumulative implements EffectAppenderProducer {
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 PhysicalCard cardFromMemory = actionContext.getCardFromMemory(memory);
                 if (cardFromMemory != null) {
-                    return new RemoveTokenEffect(actionContext.getSource(), cardFromMemory, token, 1);
+                    return new RemoveTokenEffect(actionContext.getPerformingPlayer(), actionContext.getSource(), cardFromMemory, token, 1);
                 } else {
                     return null;
                 }

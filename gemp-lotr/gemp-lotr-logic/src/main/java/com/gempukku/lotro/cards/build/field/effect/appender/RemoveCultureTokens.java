@@ -70,9 +70,9 @@ public class RemoveCultureTokens implements EffectAppenderProducer {
                         List<Effect> result = new LinkedList<>();
                         for (PhysicalCard card : cardsFromMemory) {
                             if (token != null)
-                                result.add(new RemoveTokenEffect(actionContext.getSource(), card, token, tokenCount));
+                                result.add(new RemoveTokenEffect(actionContext.getPerformingPlayer(), actionContext.getSource(), card, token, tokenCount));
                             else {
-                                result.add(new RemoveTokenEffect(actionContext.getSource(), card, getCultureTokenOnCard(game, card), tokenCount));
+                                result.add(new RemoveTokenEffect(actionContext.getPerformingPlayer(), actionContext.getSource(), card, getCultureTokenOnCard(game, card), tokenCount));
                             }
                         }
 

@@ -39,7 +39,7 @@ public class Card_V2_051_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Spot a valiant companion to have that companion replace a minion assigned to skirmish an unbound companion (and make them damage +1 if that unbound companion is Theoden). 
+		 * Game Text: Spot a valiant companion to have them replace an unbound companion in a skirmish (and make them damage +1 if that unbound companion is Theoden).
 		*/
 
 		var scn = GetScenario();
