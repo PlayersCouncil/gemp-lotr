@@ -632,148 +632,148 @@ var PCCards = {
 	
 	//PC V2 - King of the Golden Hall
 	// Driven into the Hills (V2U1) [Playtest]
-	'102_1'  : 'https://i.lotrtcgpc.net/sets/V2/V2_01.jpg',
+	'102_1'  : 'https://i.lotrtcgpc.net/sets/vset2/V2_01.jpg',
 	// Dunlending Raider (V2C2) [Playtest]
-	'102_2'  : 'https://i.lotrtcgpc.net/sets/V2/V2_02.jpg',
+	'102_2'  : 'https://i.lotrtcgpc.net/sets/vset2/V2_02.jpg',
 	// Dunlending Reaver (V2U3) [Playtest]
-	'102_3'  : 'https://i.lotrtcgpc.net/sets/V2/V2_03.jpg',
+	'102_3'  : 'https://i.lotrtcgpc.net/sets/vset2/V2_03.jpg',
 	// Horsemen Took Your Lands (V2R4) [Playtest]
-	'102_4'  : 'https://i.lotrtcgpc.net/sets/V2/V2_04.jpg',
+	'102_4'  : 'https://i.lotrtcgpc.net/sets/vset2/V2_04.jpg',
 	// Haldir, Naith Commander (V2R5) [Playtest]
-	'102_5'  : 'https://i.lotrtcgpc.net/sets/V2/V2_05.jpg',
+	'102_5'  : 'https://i.lotrtcgpc.net/sets/vset2/V2_05.jpg',
 	// Leithio i Phillin! (V2C6) [Playtest]
-	'102_6'  : 'https://i.lotrtcgpc.net/sets/V2/V2_06.jpg',
+	'102_6'  : 'https://i.lotrtcgpc.net/sets/vset2/V2_06.jpg',
 	// Naith Armaments (V2U7) [Playtest]
-	'102_7'  : 'https://i.lotrtcgpc.net/sets/V2/V2_07.jpg',
+	'102_7'  : 'https://i.lotrtcgpc.net/sets/vset2/V2_07.jpg',
 	// Arwen, Lady of Rivendell (V2U8) [Playtest]
-	'102_8'  : 'https://i.lotrtcgpc.net/sets/V2/V2_08.jpg',
+	'102_8'  : 'https://i.lotrtcgpc.net/sets/vset2/V2_08.jpg',
 	// Your Friends Are With You (V2U9) [Playtest]
-	'102_9'  : 'https://i.lotrtcgpc.net/sets/V2/V2_09.jpg',
+	'102_9'  : 'https://i.lotrtcgpc.net/sets/vset2/V2_09.jpg',
 	// Deadly Contest (V2C10) [Playtest]
-	'102_10' : 'https://i.lotrtcgpc.net/sets/V2/V2_10.jpg',
+	'102_10' : 'https://i.lotrtcgpc.net/sets/vset2/V2_10.jpg',
 	// To Honor That Allegience (V2U11) [Playtest]
-	'102_11' : 'https://i.lotrtcgpc.net/sets/V2/V2_11.jpg',
+	'102_11' : 'https://i.lotrtcgpc.net/sets/vset2/V2_11.jpg',
 	// Jetsam (V2U12) [Playtest]
-	'102_12' : 'https://i.lotrtcgpc.net/sets/V2/V2_12.jpg',
+	'102_12' : 'https://i.lotrtcgpc.net/sets/vset2/V2_12.jpg',
 	// Saruman's Hospitality (V2R13) [Playtest]
-	'102_13' : 'https://i.lotrtcgpc.net/sets/V2/V2_13.jpg',
+	'102_13' : 'https://i.lotrtcgpc.net/sets/vset2/V2_13.jpg',
 	// Gandalf, Lathspell (V2R14) [Playtest]
-	'102_14' : 'https://i.lotrtcgpc.net/sets/V2/V2_14.jpg',
+	'102_14' : 'https://i.lotrtcgpc.net/sets/vset2/V2_14.jpg',
 	// Ride Out and Meet Them (V2C15) [Playtest]
-	'102_15' : 'https://i.lotrtcgpc.net/sets/V2/V2_15.jpg',
+	'102_15' : 'https://i.lotrtcgpc.net/sets/vset2/V2_15.jpg',
 	// Aragorn, Last Hope Of Men (V2R16) [Playtest]
-	'102_16' : 'https://i.lotrtcgpc.net/sets/V2/V2_16.jpg',
+	'102_16' : 'https://i.lotrtcgpc.net/sets/vset2/V2_16.jpg',
 	// I Will Die as One of Them (V2C17) [Playtest]
-	'102_17' : 'https://i.lotrtcgpc.net/sets/V2/V2_17.jpg',
+	'102_17' : 'https://i.lotrtcgpc.net/sets/vset2/V2_17.jpg',
 	// Denethor, Formidable Father (V2U18) [Playtest]
-	'102_18' : 'https://i.lotrtcgpc.net/sets/V2/V2_18.jpg',
+	'102_18' : 'https://i.lotrtcgpc.net/sets/vset2/V2_18.jpg',
 	// Dunadan of Ithilien (V2U19) [Playtest]
-	'102_19' : 'https://i.lotrtcgpc.net/sets/V2/V2_19.jpg',
+	'102_19' : 'https://i.lotrtcgpc.net/sets/vset2/V2_19.jpg',
 	// Isengard Foreman (V2R20) [Playtest]
-	'102_20' : 'https://i.lotrtcgpc.net/sets/V2/V2_20.jpg',
+	'102_20' : 'https://i.lotrtcgpc.net/sets/vset2/V2_20.jpg',
 	// Machinery of War (V2U21) [Playtest]
-	'102_21' : 'https://i.lotrtcgpc.net/sets/V2/V2_21.jpg',
+	'102_21' : 'https://i.lotrtcgpc.net/sets/vset2/V2_21.jpg',
 	// Fires of Industry (V2U22) [Playtest]
-	'102_22' : 'https://i.lotrtcgpc.net/sets/V2/V2_22.jpg',
+	'102_22' : 'https://i.lotrtcgpc.net/sets/vset2/V2_22.jpg',
 	// Isengard Grunt (V2C23) [Playtest]
-	'102_23' : 'https://i.lotrtcgpc.net/sets/V2/V2_23.jpg',
+	'102_23' : 'https://i.lotrtcgpc.net/sets/vset2/V2_23.jpg',
 	// Wolf Pit (V2R24) [Playtest]
-	'102_24' : 'https://i.lotrtcgpc.net/sets/V2/V2_24.jpg',
+	'102_24' : 'https://i.lotrtcgpc.net/sets/vset2/V2_24.jpg',
 	// Strength of the Pack (V2U25) [Playtest]
-	'102_25' : 'https://i.lotrtcgpc.net/sets/V2/V2_25.jpg',
+	'102_25' : 'https://i.lotrtcgpc.net/sets/vset2/V2_25.jpg',
 	// Hound of Isengard (V2C26) [Playtest]
-	'102_26' : 'https://i.lotrtcgpc.net/sets/V2/V2_26.jpg',
+	'102_26' : 'https://i.lotrtcgpc.net/sets/vset2/V2_26.jpg',
 	// Uruk Shield Wall (V2U27) [Playtest]
-	'102_27' : 'https://i.lotrtcgpc.net/sets/V2/V2_27.jpg',
+	'102_27' : 'https://i.lotrtcgpc.net/sets/vset2/V2_27.jpg',
 	// Berserk Deathseeker (V2R28) [Playtest]
-	'102_28' : 'https://i.lotrtcgpc.net/sets/V2/V2_28.jpg',
+	'102_28' : 'https://i.lotrtcgpc.net/sets/vset2/V2_28.jpg',
 	// Berserk Fanatic (V2C29) [Playtest]
-	'102_29' : 'https://i.lotrtcgpc.net/sets/V2/V2_29.jpg',
+	'102_29' : 'https://i.lotrtcgpc.net/sets/vset2/V2_29.jpg',
 	// Breaching Shot (V2U30) [Playtest]
-	'102_30' : 'https://i.lotrtcgpc.net/sets/V2/V2_30.jpg',
+	'102_30' : 'https://i.lotrtcgpc.net/sets/vset2/V2_30.jpg',
 	// Uruk Occupier (V2U31) [Playtest]
-	'102_31' : 'https://i.lotrtcgpc.net/sets/V2/V2_31.jpg',
+	'102_31' : 'https://i.lotrtcgpc.net/sets/vset2/V2_31.jpg',
 	// Trail of Savagery (V2C32) [Playtest]
-	'102_32' : 'https://i.lotrtcgpc.net/sets/V2/V2_32.jpg',
+	'102_32' : 'https://i.lotrtcgpc.net/sets/vset2/V2_32.jpg',
 	// Legion of Isengard (V2R33) [Playtest]
-	'102_33' : 'https://i.lotrtcgpc.net/sets/V2/V2_33.jpg',
+	'102_33' : 'https://i.lotrtcgpc.net/sets/vset2/V2_33.jpg',
 	// Saruman, Mind of Metal and Wheels (V2U34) [Playtest]
-	'102_34' : 'https://i.lotrtcgpc.net/sets/V2/V2_34.jpg',
+	'102_34' : 'https://i.lotrtcgpc.net/sets/vset2/V2_34.jpg',
 	// Back on the Menu (V2U35) [Playtest]
-	'102_35' : 'https://i.lotrtcgpc.net/sets/V2/V2_35.jpg',
+	'102_35' : 'https://i.lotrtcgpc.net/sets/vset2/V2_35.jpg',
 	// Uruk Prowler (V2C36) [Playtest]
-	'102_36' : 'https://i.lotrtcgpc.net/sets/V2/V2_36.jpg',
+	'102_36' : 'https://i.lotrtcgpc.net/sets/vset2/V2_36.jpg',
 	// Uneasy Alliance (V2C37) [Playtest]
-	'102_37' : 'https://i.lotrtcgpc.net/sets/V2/V2_37.jpg',
+	'102_37' : 'https://i.lotrtcgpc.net/sets/vset2/V2_37.jpg',
 	// The Balrog, Lieutenant of Morgoth (V2R38) [Playtest]
-	'102_38' : 'https://i.lotrtcgpc.net/sets/V2/V2_38.jpg',
+	'102_38' : 'https://i.lotrtcgpc.net/sets/vset2/V2_38.jpg',
 	// From Deepest Dungeon (V2U39) [Playtest]
-	'102_39' : 'https://i.lotrtcgpc.net/sets/V2/V2_39.jpg',
+	'102_39' : 'https://i.lotrtcgpc.net/sets/vset2/V2_39.jpg',
 	// To Highest Peak (V2U40) [Playtest]
-	'102_40' : 'https://i.lotrtcgpc.net/sets/V2/V2_40.jpg',
+	'102_40' : 'https://i.lotrtcgpc.net/sets/vset2/V2_40.jpg',
 	// Through Fire and Water (V2C41) [Playtest]
-	'102_41' : 'https://i.lotrtcgpc.net/sets/V2/V2_41.jpg',
+	'102_41' : 'https://i.lotrtcgpc.net/sets/vset2/V2_41.jpg',
 	// Ancient Evil (V2R42) [Playtest]
-	'102_42' : 'https://i.lotrtcgpc.net/sets/V2/V2_42.jpg',
+	'102_42' : 'https://i.lotrtcgpc.net/sets/vset2/V2_42.jpg',
 	// Theoden, Last of his House (V2R43) [Playtest]
-	'102_43' : 'https://i.lotrtcgpc.net/sets/V2/V2_43.jpg',
+	'102_43' : 'https://i.lotrtcgpc.net/sets/vset2/V2_43.jpg',
 	// Erkenbrand, Kinsman of the House of Eorl (V2R44) [Playtest]
-	'102_44' : 'https://i.lotrtcgpc.net/sets/V2/V2_44.jpg',
+	'102_44' : 'https://i.lotrtcgpc.net/sets/vset2/V2_44.jpg',
 	// Royal Attendant (V2R45) [Playtest]
-	'102_45' : 'https://i.lotrtcgpc.net/sets/V2/V2_45.jpg',
+	'102_45' : 'https://i.lotrtcgpc.net/sets/vset2/V2_45.jpg',
 	// Now for Ruin (V2U46) [Playtest]
-	'102_46' : 'https://i.lotrtcgpc.net/sets/V2/V2_46.jpg',
+	'102_46' : 'https://i.lotrtcgpc.net/sets/vset2/V2_46.jpg',
 	// Now for Wrath (V2U47) [Playtest]
-	'102_47' : 'https://i.lotrtcgpc.net/sets/V2/V2_47.jpg',
+	'102_47' : 'https://i.lotrtcgpc.net/sets/vset2/V2_47.jpg',
 	// And the Red Dawn (V2U48) [Playtest]
-	'102_48' : 'https://i.lotrtcgpc.net/sets/V2/V2_48.jpg',
+	'102_48' : 'https://i.lotrtcgpc.net/sets/vset2/V2_48.jpg',
 	// Guthwine, Eomer's Blade (V2R49) [Playtest]
-	'102_49' : 'https://i.lotrtcgpc.net/sets/V2/V2_49.jpg',
+	'102_49' : 'https://i.lotrtcgpc.net/sets/vset2/V2_49.jpg',
 	// Let This Be the Hour (V2U50) [Playtest]
-	'102_50' : 'https://i.lotrtcgpc.net/sets/V2/V2_50.jpg',
+	'102_50' : 'https://i.lotrtcgpc.net/sets/vset2/V2_50.jpg',
 	// To the King (V2C51) [Playtest]
-	'102_51' : 'https://i.lotrtcgpc.net/sets/V2/V2_51.jpg',
+	'102_51' : 'https://i.lotrtcgpc.net/sets/vset2/V2_51.jpg',
 	// Do Not Trust to Hope (V2C52) [Playtest]
-	'102_52' : 'https://i.lotrtcgpc.net/sets/V2/V2_52.jpg',
+	'102_52' : 'https://i.lotrtcgpc.net/sets/vset2/V2_52.jpg',
 	// An End Worthy of Remembrance (V2U53) [Playtest]
-	'102_53' : 'https://i.lotrtcgpc.net/sets/V2/V2_53.jpg',
+	'102_53' : 'https://i.lotrtcgpc.net/sets/vset2/V2_53.jpg',
 	// Marsh Wight (V2U54) [Playtest]
-	'102_54' : 'https://i.lotrtcgpc.net/sets/V2/V2_54.jpg',
+	'102_54' : 'https://i.lotrtcgpc.net/sets/vset2/V2_54.jpg',
 	// Down to Join the Dead Ones (V2R55) [Playtest]
-	'102_55' : 'https://i.lotrtcgpc.net/sets/V2/V2_55.jpg',
+	'102_55' : 'https://i.lotrtcgpc.net/sets/vset2/V2_55.jpg',
 	// Trapped in its Gaze (V2U56) [Playtest]
-	'102_56' : 'https://i.lotrtcgpc.net/sets/V2/V2_56.jpg',
+	'102_56' : 'https://i.lotrtcgpc.net/sets/vset2/V2_56.jpg',
 	// Shapes to See, Not to Touch (V2R57) [Playtest]
-	'102_57' : 'https://i.lotrtcgpc.net/sets/V2/V2_57.jpg',
+	'102_57' : 'https://i.lotrtcgpc.net/sets/vset2/V2_57.jpg',
 	// Orc Searcher (V2U58) [Playtest]
-	'102_58' : 'https://i.lotrtcgpc.net/sets/V2/V2_58.jpg',
+	'102_58' : 'https://i.lotrtcgpc.net/sets/vset2/V2_58.jpg',
 	// No One's Going To Save You Now (V2C59) [Playtest]
-	'102_59' : 'https://i.lotrtcgpc.net/sets/V2/V2_59.jpg',
+	'102_59' : 'https://i.lotrtcgpc.net/sets/vset2/V2_59.jpg',
 	// Grishnakh, Servant of Lugburz (V2R60) [Playtest]
-	'102_60' : 'https://i.lotrtcgpc.net/sets/V2/V2_60.jpg',
+	'102_60' : 'https://i.lotrtcgpc.net/sets/vset2/V2_60.jpg',
 	// Orc of Lugburz (V2U61) [Playtest]
-	'102_61' : 'https://i.lotrtcgpc.net/sets/V2/V2_61.jpg',
+	'102_61' : 'https://i.lotrtcgpc.net/sets/vset2/V2_61.jpg',
 	// Lugburz Spotter (V2C62) [Playtest]
-	'102_62' : 'https://i.lotrtcgpc.net/sets/V2/V2_62.jpg',
+	'102_62' : 'https://i.lotrtcgpc.net/sets/vset2/V2_62.jpg',
 	// Eastemnet Hills (V2U63) [Playtest]
-	'102_63' : 'https://i.lotrtcgpc.net/sets/V2/V2_63.jpg',
+	'102_63' : 'https://i.lotrtcgpc.net/sets/vset2/V2_63.jpg',
 	// Theodred's Tomb (V2U64) [Playtest]
-	'102_64' : 'https://i.lotrtcgpc.net/sets/V2/V2_64.jpg',
+	'102_64' : 'https://i.lotrtcgpc.net/sets/vset2/V2_64.jpg',
 	// Westfold Plains (V2U65) [Playtest]
-	'102_65' : 'https://i.lotrtcgpc.net/sets/V2/V2_65.jpg',
+	'102_65' : 'https://i.lotrtcgpc.net/sets/vset2/V2_65.jpg',
 	// Breached Wall (V2U66) [Playtest]
-	'102_66' : 'https://i.lotrtcgpc.net/sets/V2/V2_66.jpg',
+	'102_66' : 'https://i.lotrtcgpc.net/sets/vset2/V2_66.jpg',
 	// Isengard Gates (V2U67) [Playtest]
-	'102_67' : 'https://i.lotrtcgpc.net/sets/V2/V2_67.jpg',
+	'102_67' : 'https://i.lotrtcgpc.net/sets/vset2/V2_67.jpg',
 	// Helm's Tower (V2U68) [Playtest]
-	'102_68' : 'https://i.lotrtcgpc.net/sets/V2/V2_68.jpg',
+	'102_68' : 'https://i.lotrtcgpc.net/sets/vset2/V2_68.jpg',
 	// Desolation of Saruman (V2U69) [Playtest]
-	'102_69' : 'https://i.lotrtcgpc.net/sets/V2/V2_69.jpg',
+	'102_69' : 'https://i.lotrtcgpc.net/sets/vset2/V2_69.jpg',
 	// Isengard Clefts (V2U70) [Playtest]
-	'102_70' : 'https://i.lotrtcgpc.net/sets/V2/V2_70.jpg',
+	'102_70' : 'https://i.lotrtcgpc.net/sets/vset2/V2_70.jpg',
 	// Friendship of The Three Kindreds (V2R71) [Playtest]
-	'102_71' : 'https://i.lotrtcgpc.net/sets/V2/V2_71.jpg',
+	'102_71' : 'https://i.lotrtcgpc.net/sets/vset2/V2_71.jpg',
 	// Palantir of Orthanc, Corrupted Relic (V2R72) [Playtest]
-	'102_72' : 'https://i.lotrtcgpc.net/sets/V2/V2_72.jpg'
+	'102_72' : 'https://i.lotrtcgpc.net/sets/vset2/V2_72.jpg'
 }
 
