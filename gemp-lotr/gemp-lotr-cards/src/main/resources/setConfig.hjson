@@ -578,7 +578,7 @@
   {
     setId: 152
     setName: TEST-King of the Golden Hall
-    rarityFile: /set152-rarity.txt
+    rarityFile: /set102-rarity.txt
     originalSet: false
     merchantable: false
     needsLoading: false
