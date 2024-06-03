@@ -774,6 +774,50 @@ var PCCards = {
 	// Friendship of The Three Kindreds (V2R71) [Playtest]
 	'102_71' : 'https://i.lotrtcgpc.net/sets/vset2/V2_71.jpg',
 	// Palantir of Orthanc, Corrupted Relic (V2R72) [Playtest]
-	'102_72' : 'https://i.lotrtcgpc.net/sets/vset2/V2_72.jpg'
+	'102_72' : 'https://i.lotrtcgpc.net/sets/vset2/V2_72.jpg',
+	
+	//V2-associated Errata
+	// Erethon, Naith Lieutenant (4R65) [Errata]
+	'54_65'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E065.1_card.jpg',
+	// Fereveldir, Son of Thandronen (4C67) [Errata]
+	'54_67'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E067.1_card.jpg',
+	// Ferevellon, Son of Thandronen (4C68) [Errata]
+	'54_68'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E068.1_card.jpg',
+	// Haldir, Emissary of the Galadhrim (4C71) [Errata]
+	'54_71'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E071.1_card.jpg',
+	// Lorien Guardian (4C76) [Errata]
+	'54_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E076.1_card.jpg',
+	// Lorien Swordsman (4C78) [Errata]
+	'54_78'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E078.1_card.jpg',
+	// Ordulus, Young Warrior (4U80) [Errata]
+	'54_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E080.1_card.jpg',
+	// Pengedhel, Naith Warrior (4U81) [Errata]
+	'54_81'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E081.1_card.jpg',
+	// Thandronen, Veteran Protector (4C85) [Errata]
+	'54_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E085.1_card.jpg',
+	// Thonnas, Naith Captain (4U86) [Errata]
+	'54_86'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E086.1_card.jpg',
+	// Balglin, Elven Warrior (5U10) [Errata]
+	'55_10'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E010.1_card.jpg',
+	// Taurnil, Sharp-eyed Bowman (5U13) [Errata]
+	'55_13'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E013.1_card.jpg',
+	// Naith Troop (6U22) [Errata]
+	'56_22'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN06E022.1_card.jpg',
+	// Naith Warband (6R23) [Errata]
+	'56_23'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN06E023.1_card.jpg',
+	// Lorien Protector (13S20) [Errata]
+	'63_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN13E020.1_card.jpg',
+	// Shrouded Elf (13C23) [Errata]
+	'63_23'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN13E023.1_card.jpg',
+	// Elven Warrior (15C14) [Errata]
+	'65_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN15E014.1_card.jpg',
+	// Haldir, Sentry of the Golden Wood (15U17) [Errata]
+	'65_17'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN15E017.1_card.jpg',
+	// Elven Guardian (17S7) [Errata]
+	'67_7'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E007.1_card.jpg',
+	// Elven Defender (18C9) [Errata]
+	'68_9'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E009.1_card.jpg',
+	// Haldir, Warrior Messenger (18R14) [Errata]
+	'68_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E014.1_card.jpg'
 }
 
