@@ -26,17 +26,34 @@
 		vitality: 3
 		site: 4
 		keywords: Twilight
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: twilight, minion
+				}
 			}
 			{
-				
+				type: ModifyOwnCost
+				amount: {
+					type: ForEachBurden
+					multiplier: -1
+				}
 			}
-		]*/
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: damage+1
+					filter: self
+					requires: {
+						type: CanSpotBurdens
+						amount: 4
+					}
+				}
+			}
+		]
 		gametext: Twilight.<br>To play, spot a twilight minion.<br>This minion is twilight cost -1 for each burden you can spot.<br>While you can spot 4 burdens, this minion is damage +1.
 		lore: "'The Dead can't be really there! Is it some devilry hatched in the Dark Land?'"
 		promotext: ""
@@ -70,17 +87,36 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: Wraith
+				}
 			}
 			{
-				
+				type: Activated
+				phase: Regroup
+				cost: {
+					type: Discard
+					select: choose(twilight, minion)
+					count: 2
+				}
+				effect: {
+					type: Preventable
+					player: freeps
+					text: Would you like to wound the Ring-bearer to avoid adding a burden?
+					cost: {
+						type: Wound
+						select: choose(ring-bearer)
+					}
+					effect: {
+						type: AddBurdens
+					}
+				}
 			}
-		]*/
+		]
 		gametext: To play, spot a Wraith.<br>Regroup: Discard two twilight minions to add a burden. The Free Peoples player may wound the Ring-bearer to prevent this.
 		lore: "'They lie in all the pools, pale faces, deep deep under the dark water.'"
 		promotext: ""
@@ -114,20 +150,32 @@
 		twilight: 0
 		type: Event
 		timewords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: Exert
+				select: choose(Wraith)
 			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: ModifyStrength
+					amount: 2
+					select: choose(twilight, minion)
+					memorize: pumpedTwilight
+				}
+				{
+					type: AddTrigger
+					trigger: {
+						type: WinsSkirmish
+						filter: memory(pumpedTwilight)
+					}
+					cost: {
+						type: Exert
+						select: memory(pumpedTwilight)
+					}
+					effect: {
+						type: AddBurdens
+					}
 				}
 			]
 		}
@@ -164,17 +212,39 @@
 		twilight: 1
 		type: Condition
 		keywords: Support Area
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: Wraith
+				}
 			}
 			{
-				
+				type: Modifier
+				modifier: {
+					type: CantTakeWounds
+					filter: twilight
+					requires: {
+						type: Not 
+						requires: {
+							type: Phase
+							phase: Skirmish
+						}
+					}
+				}
 			}
-		]*/
+			{
+				type: Trigger
+				trigger: {
+					type: TakesOffRing
+ 				}
+				effect: {
+					type: Discard
+					select: self
+				}
+			}
+		]
 		gametext: To play, spot a Wraith.<br>While you can spot 3 twilight minions, twilight minions may not take wounds except during skirmishes.<br>When the ringbearer takes off the One Ring, discard this condition. 
 		lore: "'You cannot reach them, you cannot touch them.'"
 		promotext: ""
@@ -212,17 +282,28 @@
 		vitality: 2
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Modifier
+				modifier: {
+					type: ModifySiteNumber
+					filter: culture(sauron),orc
+					amount: -1
+				}
 			}
 			{
-				
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Discard
+					select: self
+				}
+				effect: {
+					type: CancelSkirmish
+					filter: culture(isengard), tracker
+				}
 			}
-		]*/
+		]
 		gametext: Tracker.<br>The site number of each [Sauron] orc is -1.<br>Skirmish: Discard this minion to cancel a skirmish involving an [isengard] tracker. 
 		lore: "'We'll find a use for your legs before long. You'll wish you had got none before we get home.'"
 		promotext: ""
@@ -257,20 +338,17 @@
 		type: Event
 		timewords: Skirmish
 		keywords: Search
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
-			cost: {
-				type: SendMessage
-				text: Placeholder effect for development.
-			},
 			effect: [
 				{
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: ModifyStrength
+					amount: {
+						type: ForEachYouCanSpot
+						filter: search
+						limit: 5
+					}
+					select: choose(culture(sauron), tracker)
 				}
 			]
 		}
@@ -312,17 +390,36 @@
 		vitality: 3
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(sauron),orc
+					amount: -3
+				}
 			}
 			{
-				
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: damage+1
+					filter: culture(sauron),minion,siteNumber(0-1)
+				}
 			}
-		]*/
+			{
+				type: Activated
+				phase: Regroup
+				cost: {
+					type: Discard
+					select: choose(or(culture(sauron), culture(isengard)), tracker)
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(culture(sauron), condition)
+				}
+			}
+		]
 		gametext: Tracker.<br>The site number of each [sauron] orc is -3. <br>Each [sauron] orc with a site number of 1 or less is damage +1.<br>Regroup: Discard a [sauron] or [isengard] tracker to play a [sauron] condition from your discard pile.
 		lore: ""
 		promotext: ""
@@ -360,17 +457,22 @@
 		vitality: 3
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Modifier
+				modifier: {
+					type: CantTakeWounds
+					filter: culture(sauron),minion,siteNumber(0-1)
+					requires: {
+						type: Not 
+						requires: {
+							type: Phase
+							phase: Skirmish
+						}
+					}
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Tracker. <br>Each [sauron] orc with a site number of 1 or less cannot take wounds except during the skirmish phase.
 		lore: "'Is Saruman the master or the Great Eye?' said the evil voice. 'We should go back at once to Lugbúrz.'"
 		promotext: ""
@@ -408,17 +510,16 @@
 		vitality: 2
 		site: 6
 		keywords: Tracker
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Modifier
+				modifier: {
+					type: modifystrength
+					filter: self,siteNumber(0-1)
+					amount: 4
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Tracker. <br>If this minion's site number is 1 or less, it is strength +4. 
 		lore: "'You're as bad as the other rabble: the maggots and the apes of Lugbúrz.'"
 		promotext: ""

@@ -32,7 +32,7 @@
 			{
 				type: modifier
 				modifier: {
-					type: FPCultureSpot
+					type: FPCultureCount
 					requires: {
 						type: canSpot
 						count: 3

@@ -319,4 +319,8 @@ public class GameUtils {
     public static int getSpottableShadowCulturesCount(LotroGame game, String playerId) {
         return game.getModifiersQuerying().getNumberOfSpottableShadowCultures(game, playerId);
     }
+
+    public static int getSpottableControlledSitesCount(LotroGame game, String playerId) {
+        return game.getModifiersQuerying().getNumberOfSpottableControlledSites(game, playerId);
+    }
 }

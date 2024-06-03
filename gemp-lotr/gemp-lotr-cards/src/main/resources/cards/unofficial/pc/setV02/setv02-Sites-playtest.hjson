@@ -23,17 +23,38 @@
 		block: Towers
 		direction: Left
 		keywords: Mountain
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Trigger
+				trigger: {
+					type: MovesFrom
+					filter: self
+				}
+				requires: {
+					type: Phase
+					phase: Regroup
+				}
+				effect: {
+					type: ForEachPlayer
+					effect: {
+						type: Optional
+						text: Would you like to discard 2 cards to draw 2?
+						effect: {
+							type: CostToEffect
+							cost: {
+								type: Discard
+								select: choose(any)
+								count: 2
+							}
+							effect: {
+								type: DrawCards
+								count: 2
+							}
+						}
+					}
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Mountain. When the Fellowship moves from here during the regroup phase, each player may discard 2 cards to draw 2 cards.
 		lore: ""
 		promotext: ""
@@ -68,17 +89,20 @@
 		block: Towers
 		direction: Left
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Activated
+				phase: Fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(valiant,character)
+				}
+				effect: {
+					type: DrawCards
+					count: 1
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Sanctuary. Fellowship: Play a valiant character to draw a card.
 		lore: ""
 		promotext: ""
@@ -113,17 +137,16 @@
 		block: Towers
 		direction: Left
 		keywords: Plains
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Modifier
+				modifier: {
+					type: ModifyCost
+					filter: mount
+					amount: -1
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Plains. Each mount is twilight cost -1.
 		lore: ""
 		promotext: ""
@@ -158,17 +181,21 @@
 		block: Towers
 		direction: Left
 		keywords: Battleground
-		/*requires: {
-			
-		}
+		# Things that need changed for this to be worth a damn:
+		# - Add ForEachSiteYouControl value
+		# - Add ForEachSiteOpponentControls value
+		# - Alter ControlsSite and OpponentDoesNotControlSite requirements
+		# - Redirect every use of ForEachYouCanSpot with a controlled site filter to use the above
+		# - 
 		effects: [
 			{
-				
+				type: modifier
+				modifier: {
+					type: SiteControlCount
+					amount: +1
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Battleground. While at this site, the count of sites the shadow player controls is +1. 
 		lore: ""
 		promotext: ""
@@ -203,17 +230,32 @@
 		block: Towers
 		direction: Left
 		keywords: Sanctuary
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Activated
+				phase: Fellowship
+				requires: {
+					type: PerPhaseLimit
+					limit: 1
+				}
+				cost: {
+					type: Exert
+					select: choose(unbound, Hobbit)
+				}
+				effect: [
+					{
+						type: PlayCardFromDrawDeck
+						select: choose(or(pipe,pipeweed))
+						shuffle: true
+						showAll: true
+					}
+					{
+						type: IncrementPerPhaseLimit
+						limit: 1
+					}
+				]
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Sanctuary. Fellowship: Exert an unbound Hobbit to play a pipe or pipeweed from your draw deck (limit 1).
 		lore: ""
 		promotext: ""
@@ -248,17 +290,21 @@
 		block: Towers
 		direction: Left
 		keywords: Battleground
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: damage+1
+					filter: character
+					requires: {
+						type: CanSpot
+						filter: companion
+						count: 6
+					}
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Battleground. While you can spot 6 companions, each character is damage +1. 
 		lore: ""
 		promotext: ""
@@ -292,17 +338,26 @@
 		site: 8
 		block: Towers
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Trigger
+				trigger: {
+					type: MovesTo
+					filter: self
+				}
+				effect: {
+					type: ForEachPlayer
+					effect: {
+						type: Optional
+						text: Would you like to discard a non-artifact card in your opponent's support area?
+						effect: {
+							type: Discard
+							select: choose(not(artifact),not(your),zone(SUPPORT))
+						}
+					}
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: When the fellowship moves to this site, each player may discard a card (except an artifact) from their opponent's support area. 
 		lore: ""
 		promotext: ""
@@ -336,17 +391,20 @@
 		site: 9
 		block: Towers
 		direction: Left
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Activated
+				phase: Shadow
+				cost: {
+					type: Exert
+					select: choose(minion)
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(side(shadow), possession)
+				}
 			}
-			{
-				
-			}
-		]*/
+		]
 		gametext: Shadow: Exert a minion to play a Shadow possession from your discard pile. 
 		lore: ""
 		promotext: ""

@@ -1014,6 +1014,17 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         return result;
     }
 
+    @Override
+    public int getNumberOfSpottableControlledSites(LotroGame game, String playerId) {
+        int result = Filters.filterActive(game, Filters.siteControlled(playerId)).size();
+
+        for (Modifier modifier : getModifiers(game, ModifierEffect.SPOT_MODIFIER)) {
+            result += modifier.getSiteControlledSpotCountModifier(game, playerId);
+        }
+
+        return result;
+    }
+
     private boolean canPlayerSpotCulture(LotroGame game, String playerId, Culture culture) {
         for (Modifier modifier : getModifiers(game, ModifierEffect.SPOT_MODIFIER))
             if (!modifier.canSpotCulture(game, culture, playerId))

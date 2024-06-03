@@ -469,7 +469,14 @@ public class ValueResolver {
                             Filterable filterable = filterableSource.getFilterable(actionContext);
                             return (game, cardAffected) -> GameUtils.getSpottableRacesCount(game, filterable);
                         });
-            }  else if (type.equalsIgnoreCase("forEachStacked")) {
+            }  else if (type.equalsIgnoreCase("forEachSiteYouControl")) {
+                FieldUtils.validateAllowedFields(object, "over", "limit", "multiplier", "divider");
+                return new SmartValueSource(environment, object,
+                        actionContext -> {
+                            String performingPlayer = actionContext.getPerformingPlayer();
+                            return (game, cardAffected) -> GameUtils.getSpottableControlledSitesCount(game, performingPlayer);
+                        });
+            } else if (type.equalsIgnoreCase("forEachStacked")) {
                 FieldUtils.validateAllowedFields(object, "on", "filter", "over", "limit", "multiplier", "divider");
                 final String on = FieldUtils.getString(object.get("on"), "on");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");

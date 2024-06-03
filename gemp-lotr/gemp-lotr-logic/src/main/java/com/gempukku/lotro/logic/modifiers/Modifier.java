@@ -156,6 +156,8 @@ public interface Modifier {
 
     int getFPCulturesSpotCountModifier(LotroGame game, String playerId);
 
+    int getSiteControlledSpotCountModifier(LotroGame game, String playerId);
+
     int getSanctuaryHealModifier(LotroGame game);
 
     int getPotentialDiscount(LotroGame game, PhysicalCard discountCard);

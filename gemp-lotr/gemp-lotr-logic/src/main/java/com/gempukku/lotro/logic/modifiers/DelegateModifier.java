@@ -195,6 +195,11 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
+    public int getSiteControlledSpotCountModifier(LotroGame game, String playerId) {
+        return delegate.getSiteControlledSpotCountModifier(game, playerId);
+    }
+
+    @Override
     public Evaluator getFpSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter) {
         return delegate.getFpSkirmishStrengthOverrideEvaluator(game, fpCharacter);
     }

@@ -59,7 +59,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("disablegametext", new DisableGameText());
         modifierProducers.put("doesnotaddtoarcherytotal", new DoesNotAddToArcheryTotal());
         modifierProducers.put("extracosttoplay", new ExtraCostToPlay());
-        modifierProducers.put("fpculturespot", new FPCultureSpot());
+        modifierProducers.put("fpculturecount", new FPCultureCount());
         modifierProducers.put("hastomoveifable", new AddModifierFlag(ModifierFlag.HAS_TO_MOVE_IF_POSSIBLE));
         modifierProducers.put("itemclassspot", new ItemClassSpot());
         modifierProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
@@ -82,6 +82,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("ringtextisinactive", new AddModifierFlag(ModifierFlag.RING_TEXT_INACTIVE));
         modifierProducers.put("sarumanfirstsentenceinactive", new AddModifierFlag(ModifierFlag.SARUMAN_FIRST_SENTENCE_INACTIVE));
         modifierProducers.put("shadowhasinitiative", new ShadowHasInitiative());
+        modifierProducers.put("sitecontrolcount", new SiteControlCount());
         modifierProducers.put("skipphase", new SkipPhase());
         modifierProducers.put("skirmishesresolvedinorderbyfirstshadowplayer", new AddModifierFlag(ModifierFlag.SKIRMISH_ORDER_BY_FIRST_SHADOW_PLAYER));
         modifierProducers.put("transferforfree", new AddModifierFlag(ModifierFlag.TRANSFERS_FOR_FREE));

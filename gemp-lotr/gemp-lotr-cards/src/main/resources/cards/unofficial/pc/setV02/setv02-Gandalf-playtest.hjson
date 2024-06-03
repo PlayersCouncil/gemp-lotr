@@ -101,7 +101,7 @@
 					type: AddModifier
 					until: start(regroup)
 					modifier: {
-						type: FPCultureSpot
+						type: FPCultureCount
 						amount: -1
 					}
 				}

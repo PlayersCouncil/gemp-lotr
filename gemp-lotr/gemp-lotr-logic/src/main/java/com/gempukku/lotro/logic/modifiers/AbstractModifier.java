@@ -386,6 +386,9 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public int getSiteControlledSpotCountModifier(LotroGame game, String playerId) { return 0; }
+
+    @Override
     public int getSanctuaryHealModifier(LotroGame game) {
         return 0;
     }

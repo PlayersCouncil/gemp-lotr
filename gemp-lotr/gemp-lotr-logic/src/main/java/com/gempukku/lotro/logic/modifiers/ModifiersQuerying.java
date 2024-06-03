@@ -148,6 +148,8 @@ public interface ModifiersQuerying {
 
     int getNumberOfSpottableShadowCultures(LotroGame game, String playerId);
 
+    int getNumberOfSpottableControlledSites(LotroGame game, String playerId);
+
     int getSpotBonus(LotroGame game, Filterable filter);
 
     boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag);
