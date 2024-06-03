@@ -1,0 +1,60 @@
+{
+
+	67_7: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN17E007.1_card.jpg
+			//parentId: 17_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 17S7
+			rarity: S
+			setNum: "17"
+			cardNum: 7
+			style: Standard
+		}
+		title: Elven Guardian
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(wounded,minion)
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(another,hunter)
+				}
+			}
+		]
+		gametext: <b>Valiant.</b> <br><b>Hunter 1.</b> <i>(While skirmishing a non-hunter character, this character is strength +1.)</i><br>While this companion is skirmishing a wounded minion, he is strength +2.<br><b>Maneuver:</b> Exert this companion to heal another hunter.
+		lore: We are proud to fight alongside Men, once more
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}
