@@ -290,16 +290,12 @@
 		        }
 		        effect: [
 		            {
-		                type: chooseActiveCards
-		                text: Choose unbound companion to assign Lurtz to
-		                select: choose(unbound,companion,assignableToSkirmishAgainst(self))
-		                memorize: chosenCompanion
-		            }
-		            {
-		                type: preventable
-		                player: free people
-		                text: Would you like to exert {chosenCompanion} or add a burden to prevent assigning it to Lurtz?
-		                cost: {
+		                type: assignFPCharacterToSkirmish
+		                fpCharacter: choose(unbound,companion)
+		                minion: self
+		                memorizeFPCharacter: chosenCompanion
+		                preventText: Would you like to exert {chosenCompanion} or add a burden to prevent assigning it to {self}?
+		                preventCost: {
 		                    type: choice
 		                    texts: [
 		                        Exert - {chosenCompanion}
@@ -314,11 +310,6 @@
 		                            type: addBurdens
 		                        }
 		                    ]
-		                }
-		                effect: {
-		                    type: assignFPCharacterToSkirmish
-		                    fpCharacter: memory(chosenCompanion)
-		                    minion: self
 		                }
 		            }
 		        ]

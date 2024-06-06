@@ -2052,21 +2052,16 @@
                     }
                 ]
                 effect: {
-                    type: preventable
-                    player: fp
-                    text: Would you like to discard an unbound companion to prevent Southron Commander from being assigned to the Ring-bearer?
-                    cost: {
+                    type: assignFpCharacterToSkirmish
+                    fpCharacter: choose(ringBearer)
+                    minion: self
+                    memorizeFPCharacter: ringBearer
+                    preventText: Would you like to discard an unbound companion to prevent {self} from being assigned to {ringBearer}?
+                    preventCost: {
                         type: discard
-                        player: fp
                         select: choose(unbound,companion)
                     }
-                    effect: {
-                        type: assignFpCharacterToSkirmish
-                        fpCharacter: choose(ringBearer)
-                        minion: self
-                    }
                 }
-
 		    }
 		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Assignment:</b> Spot 6 companions to assign this minion to the Ring-bearer. The Free Peoples player may discard an unbound companion to prevent this.
@@ -2439,18 +2434,15 @@
                     }
                 ]
 		        effect: {
-		            type: preventable
-		            player: fp
-		            text: Would you like to make opponent discard a companion to prevent assigning Southron Troop to the Ring-bearer?
-		            cost: {
+    		        type: assignFPCharacterToSkirmish
+    		        fpCharacter: choose(ringBearer)
+    		        minion: self
+    		        memorizeFPCharacter: ringBearer
+		            preventText: Would you like to make opponent discard a companion to prevent assigning {self} to {ringBearer}?
+		            preventCost: {
 		                type: discard
 		                player: shadow
 		                select: choose(companion,not(ringBearer))
-		            }
-		            effect: {
-		                type: assignFpCharacterToSkirmish
-		                fpCharacter: choose(ringBearer)
-		                minion: self
 		            }
 		        }
 		    }
@@ -2576,17 +2568,14 @@
 		            }
 		        ]
 		        effect: {
-		            type: preventable
-		            player: fp
-		            text: Would you like to add 4 twilight to prevent Southron Wanderer getting assigned to skirmish against the Ring-bearer
-		            cost: {
+		            type: assignFpCharacterToSkirmish
+		            fpCharacter: choose(ringBearer)
+		            minion: self
+		            memorizeFPCharacter: ringBearer
+		            preventText: Would you like to add 4 twilight to prevent {self} getting assigned to skirmish against {ringBearer}?
+		            preventCost: {
 		                type: addTwilight
 		                amount: 4
-		            }
-		            effect: {
-		                type: assignFpCharacterToSkirmish
-		                fpCharacter: choose(ringBearer)
-		                minion: self
 		            }
 		        }
 
@@ -2629,23 +2618,15 @@
 			type: event
 			effect: [
 				{
-					type: chooseActiveCards
-					text: Choose an Easterling to assign to Ring-bearer
-					select: choose(easterling,assignableToSkirmishAgainst(ringBearer))
-					memorize: chosenEasterling
-				}
-				{
-				    type: preventable
-				    player: fp
-				    text: Would you like to add burden to prevent assigning {chosenEasterling} to the Ring-bearer?
-				    cost: {
+				    type: assignFpCharacterToSkirmish
+				    fpCharacter: choose(ringBearer)
+				    minion: choose(easterling)
+				    memorizeFPCharacter: ringBearer
+				    memorizeMinion: chosenEasterling
+				    preventText: Would you like to add burden to prevent assigning {chosenEasterling} to {ringBearer}?
+				    preventCost: {
 				        type: addBurdens
 				        amount: 1
-				    }
-				    effect: {
-				        type: assignFpCharacterToSkirmish
-				        fpCharacter: choose(ringBearer)
-				        minion: memory(chosenEasterling)
 				    }
 				}
 			]

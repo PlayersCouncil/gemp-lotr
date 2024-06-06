@@ -624,28 +624,17 @@
 					type: exert
 					select: self
 				}
-				effect: [
-					{
-						type: chooseActiveCards
-						text: Choose unbound companion to assign Grima to
-						select: choose(unbound,companion,assignableToSkirmishAgainst(name(Grima)))
-						memorize: chosenCompanion
-					}
-					{
-						type: preventable
-						player: fp
-						text: Would you like to exert {chosenCompanion} to prevent Grima assigning to it
-						cost: {
-							type: exert
-							select: memory(chosenCompanion)
-						}
-						effect: {
-							type: assignFpCharacterToSkirmish
-							fpCharacter: memory(chosenCompanion)
-							minion: choose(name(Grima))
-						}
-					}
-				]
+				effect: {
+				    type: assignFPCharacterToSkirmish
+				    fpCharacter: choose(unbound,companion)
+				    minion: self
+				    memorizeFPCharacter: chosenCompanion
+				    preventText: Would you like to exert {chosenCompanion} to prevent {self} assigning to it?
+				    preventCost: {
+                        type: exert
+                        select: memory(chosenCompanion)
+				    }
+				}
 			}
 		]
 	}
