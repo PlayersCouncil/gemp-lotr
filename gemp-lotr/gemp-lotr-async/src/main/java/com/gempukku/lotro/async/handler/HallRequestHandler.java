@@ -189,8 +189,10 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
                     responseWriter.writeXmlResponse(null);
                     return;
                 }
-                catch (HallException ex) { }
-
+                catch (HallException ex) {
+                    _log.error(ex);
+                }
+                _log.error(e);
                 responseWriter.writeXmlResponse(marshalException(e));
             }
         }
