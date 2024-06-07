@@ -227,16 +227,16 @@
 			}
 			{
 				type: Trigger
+				optional: true
 				trigger: {
 					type: StartOfPhase
 					phase: regroup
 				}
-				
 				cost: {
 					type: If
 					check: {
-						type: CanSpotCultureTokens
-						filter: self
+						type: CanSpot
+						filter: HasAnyCultureTokens(self)
 					}
 					true: {
 						type: RemoveCultureTokens

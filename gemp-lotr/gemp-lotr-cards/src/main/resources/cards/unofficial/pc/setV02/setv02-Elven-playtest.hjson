@@ -506,18 +506,49 @@
 		type: Condition
 		resistance: 2
 		target:ring-bearer,or(culture(elven),culture(dwarven),culture(gondor))
-		/*requires: {
-			
-		}
 		effects: [
 			{
-				
+				type: Memorize
+				filter: bearer
+				memory: memorizedBearer
 			}
 			{
-				
+				type: Modifier
+				modifier: {
+					type: ModifyResistance
+					filter: bearer
+					amount: 2
+					requires: {
+						type: CanSpot
+						filter: companion,or(culture(gondor), culture(elven), culture(dwarven)), not(CultureFromMemory(memorizedBearer))
+					}
+				}
 			}
-		]*/
-		gametext: Bearer must be an [elven], [dwarven] or [gondor] ringbearer.<br>While you can spot an [elven], [dwarven] or [gondor] ringbearer, of a different culture to bearer, bearer is resistance +2.<br>At the end of each turn add a threat or discard this condition. 
+			{
+				type: Trigger
+				trigger: {
+					type: EndofTurn
+				}
+				effect: {
+					type: Choice
+					texts: [
+						"Add a threat"
+						"Discard {self}"
+					]
+					effects: [
+						{
+							type: AddThreats
+							amount: 1
+						}
+						{
+							type: Discard
+							select: self
+						}
+					]
+				}
+			}
+		]
+		gametext: Bearer must be an [elven], [dwarven] or [gondor] ringbearer.<br>While you can spot an [elven], [dwarven] or [gondor] companion of a different culture from bearer, bearer is resistance +2.<br>At the end of each turn add a threat or discard this condition. 
 		lore: ""
 		promotext: ""
 		alts: {
