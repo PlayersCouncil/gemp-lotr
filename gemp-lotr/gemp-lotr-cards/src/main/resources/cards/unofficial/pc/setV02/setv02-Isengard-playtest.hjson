@@ -115,7 +115,6 @@
 			}
 			{
 				type: trigger
-				optional: true
 				trigger: [
 					{
 						type: Killed
@@ -144,8 +143,8 @@
 				cost: {
 					type: If
 					check: {
-						type: CanSpotCultureTokens
-						filter: self
+						type: CanSpot
+						filter: self,HasAnyCultureTokens(1)
 					}
 					true: {
 						type: RemoveCultureTokens

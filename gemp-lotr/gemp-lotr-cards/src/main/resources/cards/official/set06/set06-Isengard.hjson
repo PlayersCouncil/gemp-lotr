@@ -356,7 +356,7 @@
 				{
 					type: wound
 					select: choose(companion,not(ringBearer))
-					count: 4
+					times: 4
 				}
 			]
 		}
