@@ -508,9 +508,16 @@
 		target:ring-bearer,or(culture(elven),culture(dwarven),culture(gondor))
 		effects: [
 			{
-				type: Memorize
-				filter: bearer
-				memory: memorizedBearer
+				type: Trigger
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: Memorize
+					filter: bearer
+					memory: memorizedBearer
+				}
 			}
 			{
 				type: Modifier

@@ -236,7 +236,7 @@
 					type: If
 					check: {
 						type: CanSpot
-						filter: HasAnyCultureTokens(self)
+						filter: self,HasAnyCultureTokens(1)
 					}
 					true: {
 						type: RemoveCultureTokens
