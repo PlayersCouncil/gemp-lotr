@@ -645,47 +645,18 @@
                     type: exert
                     select: self
                 }
-                effect: [
-                    {
-                        type: chooseActiveCards
-                        select: choose(culture(isengard),minion,assignableToSkirmishAgainst(companion,not(ringBearer)))
-                        text: Choose ISENGARD minion to assign
-                        memorize: assignedMinion
+                effect: {
+                    type: assignFpCharacterToSkirmish
+                    fpCharacter: choose(companion,not(ringBearer))
+                    minion: choose(culture(isengard),minion)
+                    memorizeFPCharacter: assignedCompanion
+                    memorizeMinion: assignedMinion
+                    preventText: Would you like to exert {assignedCompanion} to prevent it being assigned to {assignedMinion}
+                    preventCost: {
+                        type: exert
+                        select: memory(assignedCompanion)
                     }
-                    {
-                        type: chooseActiveCards
-                        select: choose(companion,not(ringBearer),assignableToSkirmishAgainst(memory(assignedMinion)))
-                        text: Choose companion (except Ring-Bearer) to assign
-                        memorize: assignedCompanion
-                    }
-                    {
-                        type: If
-                        check: [
-                            {
-                                type: hasInMemory
-                                memory: assignedMinion
-                            }
-                            {
-                                type: hasInMemory
-                                memory: assignedCompanion
-                            }
-                        ]
-                        true: {
-                            type: preventable
-                            player: fp
-                            text: Would you like to exert {assignedCompanion} to prevent it being assigned to {assignedMinion}
-                            cost: {
-                                type: exert
-                                select: memory(assignedCompanion)
-                            }
-                            effect: {
-                                type: assignFpCharacterToSkirmish
-                                fpCharacter: memory(assignedCompanion)
-                                minion: memory(assignedMinion)
-                            }
-                        }
-                    }
-                ]
+                }
             }
         ]
     }

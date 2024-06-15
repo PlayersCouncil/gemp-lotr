@@ -878,45 +878,31 @@
           select: self
         }
         effect: [
-          {
-            type: chooseActiveCards
-            select: choose(minion,or(culture(gundabad),culture(wraith)),assignableToSkirmishAgainst(companion,not(name(Bilbo))))
-            text: Choose minion to assign to a companion
-            memorize: chosenMinion
-          }
-          {
-            type: chooseActiveCards
-            select: choose(companion,not(name(Bilbo)),assignableToSkirmishAgainst(memory(chosenMinion)))
-            text: Choose companion
-            memorize: chosenCompanion
-          }
-          {
-            type: preventable
-            player: fp
-            text: Would you like to add 2 doubts or exert {chosenCompanion} to prevent it from being assigned to {chosenMinion}?
-            cost: {
-              type: choice
-              texts: [
-                Add 2 doubts
-                Exert the companion
-              ]
-              effects: [
-                {
-                  type: addBurdens
-                  amount: 2
+            {
+                type: assignFPCharacterToSkirmish
+                fpCharacter: choose(companion,not(name(Bilbo)))
+                minion: choose(minion,or(culture(gundabad),culture(wraith)))
+                memorizeFPCharacter: chosenCompanion
+                memorizeMinion: chosenMinion
+                preventText: Would you like to add 2 doubts or exert {chosenCompanion} to prevent it from being assigned to {chosenMinion}?
+                preventCost: {
+                    type: choice
+                    texts: [
+                        Add 2 doubts
+                        Exert the companion
+                    ]
+                    effects: [
+                        {
+                            type: addBurdens
+                            amount: 2
+                        }
+                        {
+                            type: exert
+                            select: memory(chosenCompanion)
+                        }
+                    ]
                 }
-                {
-                  type: exert
-                  select: choose(memory(chosenCompanion))
-                }
-              ]
             }
-            effect: {
-              type: assignFpCharacterToSkirmish
-              fpCharacter: choose(memory(chosenCompanion))
-              minion: choose(memory(chosenMinion))
-            }
-          }
         ]
       }
     ]

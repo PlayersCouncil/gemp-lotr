@@ -31,27 +31,19 @@
 					select: self
 				}
 				effect: [
-					{
-						type: ChooseActiveCards
-						text: Choose a {moria} creature to assign to the Ring-bearer.
-						select: choose(culture(moria),creature)
-						memorize: chosenCreature
-					}
-					{ 
-						type: Preventable
-						player: freeps
-						text: Would you like to exert the Ring-bearer twice to prevent {chosenCreature} being assigned to them?
-						cost: {
+				    {
+				        type: assignFPCharacterToSkirmish
+				        fpCharacter: choose(ringBearer)
+				        minion: choose(culture(moria),creature)
+				        memorizeFPCharacter: ringBearer
+				        memorizeMinion: chosenCreature
+				        preventText: Would you like to exert {ringBearer} twice to prevent {chosenCreature} being assigned to them?
+				        preventCost: {
 							type: Exert
-							select: choose(Ring-bearer)
+							select: memory(ringBearer)
 							times: 2
-						}
-						effect: {
-							type: assignFpCharacterToSkirmish
-							fpCharacter: choose(ringbearer)
-							minion: memory(chosenCreature)
-						}
-					}	
+					    }
+				    }
 				]
 			}
 		]

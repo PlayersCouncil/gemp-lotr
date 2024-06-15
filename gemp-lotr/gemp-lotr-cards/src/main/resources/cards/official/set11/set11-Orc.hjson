@@ -178,18 +178,14 @@
 		            select: self
 		        }
 		        effect: {
-		            type: preventable
-		            player: free people
-		            text: Would you like to discard an artifact to prevent the assignment?
-		            cost: {
+		            type: assignFpCharacterToSkirmish
+		            fpCharacter: choose(companion,hasAttached(artifact))
+		            minion: self
+		            memorizeFPCharacter: chosenCompanion
+		            preventText: Would you like to discard an artifact to prevent the assignment of {chosenCompanion} to {self}?
+		            preventCost: {
 		                type: discard
-		                player: free people
 		                select: choose(artifact)
-		            }
-		            effect: {
-		                type: assignFpCharacterToSkirmish
-		                fpCharacter: choose(companion,hasAttached(artifact))
-		                minion: self
 		            }
 		        }
 		    }

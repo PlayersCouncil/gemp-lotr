@@ -17,17 +17,25 @@ import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "minion", "memorizeMinion", "memorizeFPCharacter", "ignoreUnassigned");
+        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "minion", "memorizeMinion", "memorizeFPCharacter", "ignoreUnassigned", "preventCost", "preventText", "insteadEffect");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String fpCharacter = FieldUtils.getString(effectObject.get("fpCharacter"), "fpCharacter", "choose(any)");
         final String minion = FieldUtils.getString(effectObject.get("minion"), "minion", "choose(any)");
+
+        JSONObject[] preventCostArray = FieldUtils.getObjectArray(effectObject.get("preventCost"), "preventCost");
+        JSONObject[] insteadEffectArray = FieldUtils.getObjectArray(effectObject.get("insteadEffect"), "insteadEffect");
+        final String preventText = FieldUtils.getString(effectObject.get("preventText"), "preventText");
+        if ((preventCostArray.length > 0 && preventText == null) || (preventCostArray.length == 0 && preventText != null))
+            throw new InvalidCardDefinitionException("preventText and preventCost have to be specified (or not) together");
+        if (insteadEffectArray.length > 0 && preventCostArray.length == 0)
+            throw new InvalidCardDefinitionException("preventCost is required if insteadEffect is present");
+        EffectAppender[] preventEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(preventCostArray, environment);
+        EffectAppender[] insteadEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(insteadEffectArray, environment);
 
         final String minionMemory = FieldUtils.getString(effectObject.get("memorizeMinion"), "memorizeMinion", "_tempMinion");
         final String fpCharacterMemory = FieldUtils.getString(effectObject.get("memorizeFPCharacter"), "memorizeFPCharacter", "_tempFpCharacter");
@@ -38,7 +46,6 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
         final FilterableSource minionFilter = getSource(minion, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
-
         result.addEffectAppender(
                 CardResolver.resolveCard(fpCharacter,
                         (actionContext) -> {
@@ -52,28 +59,40 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                         (actionContext) -> {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
-                            final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory("_tempFpCharacter");
+                            final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
                             return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar), ignoreUnassigned, false);
                         }, minionMemory, player, "Choose minion to assign to character", environment));
-        result.addEffectAppender(
-                new DelayedAppender() {
-                    @Override
-                    protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                        final String assigningPlayer = playerSource.getPlayer(actionContext);
-                        final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
-                        final Collection<? extends PhysicalCard> minion = actionContext.getCardsFromMemory(minionMemory);
-                        if (fpChar.size() == 1 && minion.size() == 1) {
-                            AssignmentEffect effect = new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next());
-                            effect.setIgnoreSingleMinionRestriction(ignoreUnassigned);
-                            return Collections.singletonList(effect);
-                        }
-                        return null;
-                    }
-                });
+
+        DelayedAppender assignAppender = new DelayedAppender() {
+            @Override
+            protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                final String assigningPlayer = playerSource.getPlayer(actionContext);
+                final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
+                final Collection<? extends PhysicalCard> minion = actionContext.getCardsFromMemory(minionMemory);
+                if (fpChar.size() == 1 && minion.size() == 1) {
+                    AssignmentEffect effect = new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next());
+                    effect.setIgnoreSingleMinionRestriction(ignoreUnassigned);
+                    return effect;
+                } else {
+                    return null;
+                }
+            }
+        };
+
+        if (preventEffectAppenders.length > 0) {
+            result.addEffectAppender(
+                    new PreventableEffectAppender(new OpponentPlayerSource(playerSource), preventText,
+                            actionContext -> {
+                                final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
+                                final Collection<? extends PhysicalCard> minion1 = actionContext.getCardsFromMemory(minionMemory);
+                                return fpChar.size() == 1 && minion1.size() == 1;
+                            }, preventEffectAppenders, new EffectAppender[]{assignAppender}, insteadEffectAppenders));
+        } else {
+            result.addEffectAppender(assignAppender);
+        }
 
         return result;
     }
-
 
     private FilterableSource getSource(String filter, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         if (filter.startsWith("choose(") && filter.endsWith(")"))

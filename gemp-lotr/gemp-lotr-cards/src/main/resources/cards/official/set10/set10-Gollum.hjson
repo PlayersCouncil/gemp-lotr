@@ -240,24 +240,21 @@
 		        type: activated
 		        phase: assignment
 		        effect: {
-		            type: preventable
-		            player: free people
-		            text: Would you like to add a burden and assign Gollum?
-		            cost: [
-		                {
-		                    type: addBurdens
-		                }
-		                {
-		                    type: assignFpCharacterToSkirmish
-		                    fpCharacter: choose(any)
-		                    minion: choose(name(Gollum))
-		                }
-		            ]
-		            effect: {
-		                type: assignFpCharacterToSkirmish
-		                fpCharacter: choose(companion,hasAttached(artifact))
-		                minion: choose(name(Gollum))
+		            type: assignFpCharacterToSkirmish
+		            fpCharacter: choose(companion,hasAttached(artifact))
+		            minion: choose(name(Gollum))
+		            memorizeFPCharacter: chosenCompanion
+		            memorizeMinion: gollum
+		            preventText: Would you like to add a burden and assign Gollum to prevent assigning {chosenCompanion} to {gollum}?
+		            preventCost: {
+		                type: addBurdens
 		            }
+		            insteadEffect: {
+                        type: assignFpCharacterToSkirmish
+                        player: free people
+                        fpCharacter: choose(any)
+                        minion: choose(name(Gollum))
+                    }
 		        }
 		    }
 		    {

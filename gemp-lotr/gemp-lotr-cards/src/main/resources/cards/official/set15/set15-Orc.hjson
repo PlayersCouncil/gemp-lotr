@@ -1384,17 +1384,14 @@
 		                count: 6
 		            }
 		            true: {
-		                type: preventable
-		                player: free people
-		                text: Would you like to exert a companion to prevent assigning Tower Troll to skirmish?
-		                cost: {
+		                type: assignFPCharacterToSkirmish
+		                fpCharacter: choose(companion,not(ringBearer))
+		                minion: self
+		                memorizeFPCharacter: chosenCompanion
+		                preventText: Would you like to exert a companion to prevent assigning {chosenCompanion} to skirmish {self}?
+		                preventCost: {
 		                    type: exert
 		                    select: choose(companion)
-		                }
-                        effect: {
-                            type: assignFPCharacterToSkirmish
-                            fpCharacter: choose(companion,not(ringBearer))
-                            minion: self
 		                }
 		            }
 		            false: {

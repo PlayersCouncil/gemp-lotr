@@ -427,42 +427,17 @@
 				select: choose(culture(isengard),tracker)
 				memorize: exertedTracker
 			},
-			effect: [
-				{
-					type: chooseActiveCards
-					select: choose(unbound,companion,assignableToSkirmishAgainst(memory(exertedTracker)))
-					text: Choose companion to assign {exertedTracker} to
-					memorize: chosenCompanion
-				}
-				{
-				    type: if
-				    check: {
-				        type: memoryMatches
-				        memory: chosenCompanion
-				        filter: hobbit
-				    }
-				    true: {
-				        type: assignFPCharacterToSkirmish
-				        fpCharacter: memory(chosenCompanion)
-				        minion: memory(exertedTracker)
-				    }
-				    false: {
-                        type: preventable
-                        text: Would you like to exert {chosenCompanion} to prevent {exertedTracker} to be assigned to it?
-                        player: fp
-                        cost: {
-                            type: exert
-                            player: fp
-                            select: memory(chosenCompanion)
-                        }
-                        effect: {
-                            type: assignFPCharacterToSkirmish
-                            fpCharacter: memory(chosenCompanion)
-                            minion: memory(exertedTracker)
-                        }
-				    }
-				}
-			]
+			effect: {
+			    type: assignFPCharacterToSkirmish
+			    fpCharacter: choose(unbound,companion)
+			    minion: memory(exertedTracker)
+			    memorizeFPCharacter: chosenCompanion
+			    preventText: Would you like to exert {chosenCompanion} to prevent {exertedTracker} to be assigned to it?
+			    preventCost: {
+			        type: exert
+			        select: choose(memory(chosenCompanion),not(hobbit))
+			    }
+			}
 		}
 		gametext: <b>Search</b>.<br><b>Assignment:</b> Exert an [isengard] tracker to assign it to an unbound companion. That companion may exert to prevent this (unless that companion is a Hobbit).
 		lore: What are they wanted for?... Why alive? Do they give good sport?'
@@ -1319,17 +1294,13 @@
                     }
                 ]
                 effect: {
-                    type: preventable
-                    text: Would you like to exert bearer of Many Riddles to prevent {chosenTracker} being assigned to it?
-                    player: fp
-                    cost: {
+                    type: assignFPCharacterToSkirmish
+                    fpCharacter: bearer
+                    minion: memory(chosenTracker)
+                    preventText: Would you like to exert bearer of Many Riddles to prevent {chosenTracker} being assigned to it?
+                    preventCost: {
                         type: exert
                         select: bearer
-                    }
-                    effect: {
-                        type: assignFPCharacterToSkirmish
-                        fpCharacter: bearer
-                        minion: memory(chosenTracker)
                     }
                 }
 		    }
@@ -1591,28 +1562,17 @@
                         select: self
                     }
                 ]
-                effect: [
-                    {
-                        type: chooseActiveCards
-                        select: choose(unbound,companion,assignableToSkirmishAgainst(self))
-                        text: Choose companion to assign it to
-                        memorize: chosenCompanion
+                effect: {
+                    type: assignFPCharacterToSkirmish
+                    fpCharacter: choose(unbound,companion,assignableToSkirmishAgainst(self))
+                    minion: self
+                    memorizeFPCharacter: chosenCompanion
+                    preventText: Would you like to exert {chosenCompanion} to prevent {self} being assigned to it?
+                    preventCost: {
+                        type: exert
+                        select: memory(chosenCompanion)
                     }
-                    {
-                        type: preventable
-                        text: Would you like to exert {chosenCompanion} to prevent Orthanc Champion being assigned to it?
-                        player: fp
-                        cost: {
-                            type: exert
-                            select: memory(chosenCompanion)
-                        }
-                        effect: {
-                            type: assignFPCharacterToSkirmish
-                            fpCharacter: memory(chosenCompanion)
-                            minion: self
-                        }
-                    }
-                ]
+                }
             }
 		]
 		gametext: <b>Damage +1</b>.<br><b>Assignment:</b> Exert Orthanc Champion to assign it to an unbound companion. That companion may exert to prevent this.
