@@ -1,0 +1,6 @@
+.actionRow {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1em;
+    margin-top: 1em;
+}

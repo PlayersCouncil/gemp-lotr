@@ -1,617 +1,206 @@
-2023-07-05 23:57:06,218  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:57:06,881  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:57:06,883  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-Exception in thread "main" java.lang.RuntimeException: Unable to read card rarities: java.io.FileNotFoundException: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/setConfig.json (No such file or directory)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.loadSets(LotroCardBlueprintLibrary.java:164)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:63)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-2023-07-05 23:57:08,332  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:57:08,880  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:57:08,883  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-Exception in thread "main" java.lang.RuntimeException: Unable to read card rarities: java.io.FileNotFoundException: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/setConfig.json (No such file or directory)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.loadSets(LotroCardBlueprintLibrary.java:164)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:63)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-2023-07-05 23:57:10,047  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:57:10,501  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:57:10,503  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-Exception in thread "main" java.lang.RuntimeException: Unable to read card rarities: java.io.FileNotFoundException: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/setConfig.json (No such file or directory)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.loadSets(LotroCardBlueprintLibrary.java:164)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:63)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-2023-07-05 23:57:11,760  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:57:12,236  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:57:12,238  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-Exception in thread "main" java.lang.RuntimeException: Unable to read card rarities: java.io.FileNotFoundException: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/setConfig.json (No such file or directory)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.loadSets(LotroCardBlueprintLibrary.java:164)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:63)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-2023-07-05 23:57:13,928  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:57:14,410  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:57:14,412  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-Exception in thread "main" java.lang.RuntimeException: Unable to read card rarities: java.io.FileNotFoundException: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/setConfig.json (No such file or directory)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.loadSets(LotroCardBlueprintLibrary.java:164)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:63)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-2023-07-05 23:57:16,896  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:57:17,324  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:57:17,325  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-Exception in thread "main" java.lang.RuntimeException: Unable to read card rarities: java.io.FileNotFoundException: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/setConfig.json (No such file or directory)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.loadSets(LotroCardBlueprintLibrary.java:164)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:63)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-2023-07-05 23:57:21,404  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:57:21,860  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:57:21,861  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-Exception in thread "main" java.lang.RuntimeException: Unable to read card rarities: java.io.FileNotFoundException: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/setConfig.json (No such file or directory)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.loadSets(LotroCardBlueprintLibrary.java:164)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:63)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-2023-07-05 23:57:29,091  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:57:29,564  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:57:29,566  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-Exception in thread "main" java.lang.RuntimeException: Unable to read card rarities: java.io.FileNotFoundException: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/setConfig.json (No such file or directory)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.loadSets(LotroCardBlueprintLibrary.java:164)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:63)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-2023-07-05 23:57:43,179  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:57:43,590  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:57:43,592  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-Exception in thread "main" java.lang.RuntimeException: Unable to read card rarities: java.io.FileNotFoundException: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/setConfig.json (No such file or directory)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.loadSets(LotroCardBlueprintLibrary.java:164)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:63)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-2023-07-05 23:58:09,960  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:58:10,419  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:58:10,420  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-Exception in thread "main" java.lang.RuntimeException: Unable to read card rarities: java.io.FileNotFoundException: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/setConfig.json (No such file or directory)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.loadSets(LotroCardBlueprintLibrary.java:164)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:63)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-2023-07-05 23:59:02,939  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:59:03,586  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:59:03,588  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-2023-07-05 23:59:04,337 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set0.hjson
-2023-07-05 23:59:04,470 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-dwarven.hjson
-2023-07-05 23:59:04,549 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-elven.hjson
-2023-07-05 23:59:04,620 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-gandalf.hjson
-2023-07-05 23:59:04,682 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-gondor.hjson
-2023-07-05 23:59:04,759 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-isengard.hjson
-2023-07-05 23:59:04,820 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-moria.hjson
-2023-07-05 23:59:04,863 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-sauron.hjson
-2023-07-05 23:59:04,918 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-shire.hjson
-2023-07-05 23:59:04,998 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-wraith.hjson
-2023-07-05 23:59:05,113 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1.hjson
-2023-07-05 23:59:05,313 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-dwarven.hjson
-2023-07-05 23:59:05,393 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-elven.hjson
-2023-07-05 23:59:05,449 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-gandalf.hjson
-2023-07-05 23:59:05,500 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-gondor.hjson
-2023-07-05 23:59:05,548 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-isengard.hjson
-2023-07-05 23:59:05,586 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-moria.hjson
-2023-07-05 23:59:05,666 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set3-elven.hjson
-2023-07-05 23:59:05,763 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set4-dwarven.hjson
-2023-07-05 23:59:05,811 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set4.hjson
-2023-07-05 23:59:05,880 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set5.hjson
-2023-07-05 23:59:05,962 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set7-gollum-freeps.hjson
-2023-07-05 23:59:06,038 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-raider.hjson
-2023-07-05 23:59:06,145 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set9-1.hjson
-2023-07-05 23:59:06,241 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set9-2.hjson
-2023-07-05 23:59:06,345 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-gondor.hjson
-2023-07-05 23:59:06,405 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10.hjson
-2023-07-05 23:59:06,496 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-site.hjson
-2023-07-05 23:59:06,681 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set14.hjson
-2023-07-05 23:59:06,811 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-orc.hjson
-2023-07-05 23:59:06,905 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set16.hjson
-2023-07-05 23:59:06,998 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-gandalf.hjson
-2023-07-05 23:59:07,040 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-wraith.hjson
-2023-07-05 23:59:07,129 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-wraith.hjson
-2023-07-05 23:59:07,237 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set19.hjson
-2023-07-05 23:59:07,369 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set30-fp.hjson
-2023-07-05 23:59:07,404 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set30-shadow.hjson
-2023-07-05 23:59:07,445 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set30-sites.hjson
-2023-07-05 23:59:07,521 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set31-fp.hjson
-2023-07-05 23:59:07,569 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set31-shadow.hjson
-2023-07-05 23:59:07,603 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set31-sites.hjson
-2023-07-05 23:59:07,666 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set32-fp.hjson
-2023-07-05 23:59:07,714 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set32-shadow.hjson
-2023-07-05 23:59:07,743 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set32-site.hjson
-2023-07-05 23:59:07,803 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set33-fp.hjson
-2023-07-05 23:59:07,852 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set33-shadow.hjson
-2023-07-05 23:59:07,885 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set33-sites.hjson
-2023-07-05 23:59:08,017 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Dwarven-errata.hjson
-2023-07-05 23:59:08,073 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Elven-errata.hjson
-2023-07-05 23:59:08,105 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Gandalf-errata.hjson
-2023-07-05 23:59:08,142 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Gondor-errata.hjson
-2023-07-05 23:59:08,180 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Isengard-errata.hjson
-2023-07-05 23:59:08,206 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Moria-errata.hjson
-2023-07-05 23:59:08,236 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Ringwraith-errata.hjson
-2023-07-05 23:59:08,281 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Sauron-errata.hjson
-2023-07-05 23:59:08,320 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Shire-errata.hjson
-2023-07-05 23:59:08,355 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Sites-errata.hjson
-2023-07-05 23:59:08,422 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Dwarven-errata.hjson
-2023-07-05 23:59:08,457 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Gondor-errata.hjson
-2023-07-05 23:59:08,493 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Isengard-errata.hjson
-2023-07-05 23:59:08,524 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Moria-errata.hjson
-2023-07-05 23:59:08,561 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Ringwraith-errata.hjson
-2023-07-05 23:59:08,596 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Sauron-errata.hjson
-2023-07-05 23:59:08,633 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Shire-errata.hjson
-2023-07-05 23:59:08,701 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Dwarven-errata.hjson
-2023-07-05 23:59:08,741 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Elven-errata.hjson
-2023-07-05 23:59:08,778 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Gondor-errata.hjson
-2023-07-05 23:59:08,817 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Isengard-errata.hjson
-2023-07-05 23:59:08,853 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Moria-errata.hjson
-2023-07-05 23:59:08,888 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Ringwraith-errata.hjson
-2023-07-05 23:59:08,926 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Sauron-errata.hjson
-2023-07-05 23:59:08,972 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Shire-errata.hjson
-2023-07-05 23:59:09,013 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Sites-errata.hjson
-2023-07-05 23:59:09,077 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Dwarven-errata.hjson
-2023-07-05 23:59:09,116 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Elven-errata.hjson
-2023-07-05 23:59:09,154 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Isengard-errata.hjson
-2023-07-05 23:59:09,198 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Rohan-errata.hjson
-2023-07-05 23:59:09,244 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Shire-errata.hjson
-2023-07-05 23:59:09,350 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set05-Dwarven-errata.hjson
-2023-07-05 23:59:09,404 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set05-Isengard-errata.hjson
-2023-07-05 23:59:09,511 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Gandalf-errata.hjson
-2023-07-05 23:59:09,580 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Gondor-errata.hjson
-2023-07-05 23:59:09,640 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Ringwraith-errata.hjson
-2023-07-05 23:59:09,700 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Rohan-errata.hjson
-2023-07-05 23:59:09,765 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Sites-errata.hjson
-2023-07-05 23:59:09,880 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Dwarven-errata.hjson
-2023-07-05 23:59:09,937 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Gollum-errata.hjson
-2023-07-05 23:59:10,000 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Gondor-errata.hjson
-2023-07-05 23:59:10,085 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Raider-errata.hjson
-2023-07-05 23:59:10,150 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Rohan-errata.hjson
-2023-07-05 23:59:10,215 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Sauron-errata.hjson
-2023-07-05 23:59:10,328 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set09-Elven-errata-playtest.hjson
-2023-07-05 23:59:10,396 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set09-Gandalf-errata-playtest.hjson
-2023-07-05 23:59:10,529 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Dwarven-errata.hjson
-2023-07-05 23:59:10,596 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Elven-errata.hjson
-2023-07-05 23:59:10,655 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Gandalf-errata.hjson
-2023-07-05 23:59:10,716 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Raider-errata.hjson
-2023-07-05 23:59:10,778 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Ringwraith-errata.hjson
-2023-07-05 23:59:10,820 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Rohan-errata.hjson
-2023-07-05 23:59:10,871 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Sauron-errata.hjson
-2023-07-05 23:59:10,966 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Gandalf-errata.hjson
-2023-07-05 23:59:11,014 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Men-errata.hjson
-2023-07-05 23:59:11,068 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Orc-errata.hjson
-2023-07-05 23:59:11,127 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Sites-errata.hjson
-2023-07-05 23:59:11,225 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set13-Sites-errata.hjson
-2023-07-05 23:59:11,316 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Elven-errata.hjson
-2023-07-05 23:59:11,366 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Gondor-errata.hjson
-2023-07-05 23:59:11,421 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Orc-errata.hjson
-2023-07-05 23:59:11,463 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Shire-errata.hjson
-2023-07-05 23:59:11,543 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-elven-errata.hjson
-2023-07-05 23:59:11,582 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-gandalf-errata.hjson
-2023-07-05 23:59:11,665 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Elven-errata.hjson
-2023-07-05 23:59:11,708 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Gandalf-errata.hjson
-2023-07-05 23:59:11,751 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Gollum-errata.hjson
-2023-07-05 23:59:11,797 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Gondor-errata.hjson
-2023-07-05 23:59:11,849 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Orc-errata.hjson
-2023-07-05 23:59:11,891 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Rohan-errata.hjson
-2023-07-05 23:59:11,934 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Shire-errata.hjson
-2023-07-05 23:59:11,983 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Sites-errata.hjson
-2023-07-05 23:59:12,031 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Uruk-errata.hjson
-2023-07-05 23:59:12,132 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set19-errata.hjson
-2023-07-05 23:59:12,190 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set19-Ringwraith-errata.hjson
-2023-07-05 23:59:12,278 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V0-shadows-sites.hjson
-2023-07-05 23:59:12,359 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_dwarven.hjson
-2023-07-05 23:59:12,399 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_elven.hjson
-2023-07-05 23:59:12,434 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_gandalf.hjson
-2023-07-05 23:59:12,468 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_gondor.hjson
-2023-07-05 23:59:12,501 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_isengard.hjson
-2023-07-05 23:59:12,539 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_moria.hjson
-2023-07-05 23:59:12,584 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_ringwraith.hjson
-2023-07-05 23:59:12,622 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_sauron.hjson
-2023-07-05 23:59:12,653 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_shire.hjson
-2023-07-05 23:59:12,689 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_sites.hjson
-2023-07-05 23:59:12,794 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-dwarven.hjson
-2023-07-05 23:59:12,835 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-elven.hjson
-2023-07-05 23:59:12,877 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-gandalf.hjson
-2023-07-05 23:59:12,913 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-gondor.hjson
-2023-07-05 23:59:12,952 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-isengard.hjson
-2023-07-05 23:59:12,998 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-moria.hjson
-2023-07-05 23:59:13,044 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-sauron.hjson
-2023-07-05 23:59:13,082 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-shire.hjson
-2023-07-05 23:59:13,125 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-wraith.hjson
-2023-07-05 23:59:13,165 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40.hjson
-2023-07-05 23:59:13,167 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 2
-2023-07-05 23:59:13,342 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 3
-2023-07-05 23:59:13,550 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 4
-Exception in thread "main" java.lang.RuntimeException: Unable to start the server, due to invalid (missing) card definition - 4_263
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.cacheAllJavaBlueprints(LotroCardBlueprintLibrary.java:249)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:66)
-	at com.gempukku.lotro.game.LotroCardBlueprintLibrary.<init>(LotroCardBlueprintLibrary.java:51)
-	at com.gempukku.lotro.builder.ServerBuilder.CreatePrerequisites(ServerBuilder.java:25)
-	at com.gempukku.lotro.async.GempukkuServer.<init>(GempukkuServer.java:21)
-	at com.gempukku.lotro.async.LotroAsyncServer.main(LotroAsyncServer.java:25)
-Error: Invalid or corrupt jarfile /etc/gemp-lotr/gemp-lotr-async/target/web.jar
-Error: Invalid or corrupt jarfile /etc/gemp-lotr/gemp-lotr-async/target/web.jar
-Error: Invalid or corrupt jarfile /etc/gemp-lotr/gemp-lotr-async/target/web.jar
-Error: Invalid or corrupt jarfile /etc/gemp-lotr/gemp-lotr-async/target/web.jar
-log4j:WARN No such property [immediateFlush] in org.apache.log4j.PatternLayout.
-log4j:WARN No such property [bufferSize] in org.apache.log4j.PatternLayout.
-log4j:WARN No such property [immediateFlush] in org.apache.log4j.PatternLayout.
-log4j:WARN No such property [bufferSize] in org.apache.log4j.PatternLayout.
-log4j:WARN No such property [immediateFlush] in org.apache.log4j.PatternLayout.
-log4j:WARN No such property [bufferSize] in org.apache.log4j.PatternLayout.
-2023-07-05 23:59:20,045  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:59:20,485  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:59:20,487  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-2023-07-05 23:59:21,158 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set0.hjson
-2023-07-05 23:59:21,285 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-dwarven.hjson
-2023-07-05 23:59:21,334 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-elven.hjson
-2023-07-05 23:59:21,373 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-gandalf.hjson
-2023-07-05 23:59:21,410 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-gondor.hjson
-2023-07-05 23:59:21,452 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-isengard.hjson
-2023-07-05 23:59:21,505 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-moria.hjson
-2023-07-05 23:59:21,544 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-sauron.hjson
-2023-07-05 23:59:21,601 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-shire.hjson
-2023-07-05 23:59:21,655 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-wraith.hjson
-2023-07-05 23:59:21,690 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1.hjson
-2023-07-05 23:59:21,740 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-dwarven.hjson
-2023-07-05 23:59:21,765 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-elven.hjson
-2023-07-05 23:59:21,798 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-gandalf.hjson
-2023-07-05 23:59:21,820 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-gondor.hjson
-2023-07-05 23:59:21,843 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-isengard.hjson
-2023-07-05 23:59:21,875 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-moria.hjson
-2023-07-05 23:59:21,917 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set3-elven.hjson
-2023-07-05 23:59:21,963 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set4-dwarven.hjson
-2023-07-05 23:59:21,994 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set4.hjson
-2023-07-05 23:59:22,043 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set5.hjson
-2023-07-05 23:59:22,097 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set7-gollum-freeps.hjson
-2023-07-05 23:59:22,143 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-raider.hjson
-2023-07-05 23:59:22,223 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set9-1.hjson
-2023-07-05 23:59:22,265 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set9-2.hjson
-2023-07-05 23:59:22,326 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-gondor.hjson
-2023-07-05 23:59:22,352 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10.hjson
-2023-07-05 23:59:22,408 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-site.hjson
-2023-07-05 23:59:22,473 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set14.hjson
-2023-07-05 23:59:22,549 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-orc.hjson
-2023-07-05 23:59:22,605 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set16.hjson
-2023-07-05 23:59:22,648 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-gandalf.hjson
-2023-07-05 23:59:22,669 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-wraith.hjson
-2023-07-05 23:59:22,712 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-wraith.hjson
-2023-07-05 23:59:22,775 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set19.hjson
-2023-07-05 23:59:22,879 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set30-fp.hjson
-2023-07-05 23:59:22,904 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set30-shadow.hjson
-2023-07-05 23:59:22,934 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set30-sites.hjson
-2023-07-05 23:59:22,994 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set31-fp.hjson
-2023-07-05 23:59:23,033 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set31-shadow.hjson
-2023-07-05 23:59:23,060 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set31-sites.hjson
-2023-07-05 23:59:23,121 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set32-fp.hjson
-2023-07-05 23:59:23,167 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set32-shadow.hjson
-2023-07-05 23:59:23,199 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set32-site.hjson
-2023-07-05 23:59:23,286 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set33-fp.hjson
-2023-07-05 23:59:23,337 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set33-shadow.hjson
-2023-07-05 23:59:23,376 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set33-sites.hjson
-2023-07-05 23:59:23,489 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Dwarven-errata.hjson
-2023-07-05 23:59:23,529 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Elven-errata.hjson
-2023-07-05 23:59:23,552 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Gandalf-errata.hjson
-2023-07-05 23:59:23,575 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Gondor-errata.hjson
-2023-07-05 23:59:23,595 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Isengard-errata.hjson
-2023-07-05 23:59:23,614 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Moria-errata.hjson
-2023-07-05 23:59:23,636 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Ringwraith-errata.hjson
-2023-07-05 23:59:23,661 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Sauron-errata.hjson
-2023-07-05 23:59:23,684 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Shire-errata.hjson
-2023-07-05 23:59:23,707 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Sites-errata.hjson
-2023-07-05 23:59:23,756 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Dwarven-errata.hjson
-2023-07-05 23:59:23,779 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Gondor-errata.hjson
-2023-07-05 23:59:23,802 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Isengard-errata.hjson
-2023-07-05 23:59:23,825 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Moria-errata.hjson
-2023-07-05 23:59:23,848 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Ringwraith-errata.hjson
-2023-07-05 23:59:23,870 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Sauron-errata.hjson
-2023-07-05 23:59:23,894 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Shire-errata.hjson
-2023-07-05 23:59:23,943 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Dwarven-errata.hjson
-2023-07-05 23:59:23,967 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Elven-errata.hjson
-2023-07-05 23:59:23,992 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Gondor-errata.hjson
-2023-07-05 23:59:24,022 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Isengard-errata.hjson
-2023-07-05 23:59:24,049 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Moria-errata.hjson
-2023-07-05 23:59:24,075 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Ringwraith-errata.hjson
-2023-07-05 23:59:24,102 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Sauron-errata.hjson
-2023-07-05 23:59:24,130 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Shire-errata.hjson
-2023-07-05 23:59:24,157 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Sites-errata.hjson
-2023-07-05 23:59:24,209 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Dwarven-errata.hjson
-2023-07-05 23:59:24,231 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Elven-errata.hjson
-2023-07-05 23:59:24,253 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Isengard-errata.hjson
-2023-07-05 23:59:24,278 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Rohan-errata.hjson
-2023-07-05 23:59:24,303 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Shire-errata.hjson
-2023-07-05 23:59:24,360 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set05-Dwarven-errata.hjson
-2023-07-05 23:59:24,383 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set05-Isengard-errata.hjson
-2023-07-05 23:59:24,438 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Gandalf-errata.hjson
-2023-07-05 23:59:24,462 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Gondor-errata.hjson
-2023-07-05 23:59:24,484 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Ringwraith-errata.hjson
-2023-07-05 23:59:24,507 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Rohan-errata.hjson
-2023-07-05 23:59:24,532 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Sites-errata.hjson
-2023-07-05 23:59:24,574 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Dwarven-errata.hjson
-2023-07-05 23:59:24,595 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Gollum-errata.hjson
-2023-07-05 23:59:24,616 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Gondor-errata.hjson
-2023-07-05 23:59:24,646 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Raider-errata.hjson
-2023-07-05 23:59:24,668 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Rohan-errata.hjson
-2023-07-05 23:59:24,689 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Sauron-errata.hjson
-2023-07-05 23:59:24,746 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set09-Elven-errata-playtest.hjson
-2023-07-05 23:59:24,774 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set09-Gandalf-errata-playtest.hjson
-2023-07-05 23:59:24,825 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Dwarven-errata.hjson
-2023-07-05 23:59:24,856 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Elven-errata.hjson
-2023-07-05 23:59:24,882 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Gandalf-errata.hjson
-2023-07-05 23:59:24,910 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Raider-errata.hjson
-2023-07-05 23:59:24,934 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Ringwraith-errata.hjson
-2023-07-05 23:59:24,958 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Rohan-errata.hjson
-2023-07-05 23:59:24,980 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Sauron-errata.hjson
-2023-07-05 23:59:25,036 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Gandalf-errata.hjson
-2023-07-05 23:59:25,061 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Men-errata.hjson
-2023-07-05 23:59:25,084 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Orc-errata.hjson
-2023-07-05 23:59:25,108 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Sites-errata.hjson
-2023-07-05 23:59:25,165 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set13-Sites-errata.hjson
-2023-07-05 23:59:25,213 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Elven-errata.hjson
-2023-07-05 23:59:25,237 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Gondor-errata.hjson
-2023-07-05 23:59:25,262 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Orc-errata.hjson
-2023-07-05 23:59:25,288 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Shire-errata.hjson
-2023-07-05 23:59:25,337 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-elven-errata.hjson
-2023-07-05 23:59:25,359 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-gandalf-errata.hjson
-2023-07-05 23:59:25,404 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Elven-errata.hjson
-2023-07-05 23:59:25,425 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Gandalf-errata.hjson
-2023-07-05 23:59:25,447 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Gollum-errata.hjson
-2023-07-05 23:59:25,469 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Gondor-errata.hjson
-2023-07-05 23:59:25,495 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Orc-errata.hjson
-2023-07-05 23:59:25,519 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Rohan-errata.hjson
-2023-07-05 23:59:25,543 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Shire-errata.hjson
-2023-07-05 23:59:25,566 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Sites-errata.hjson
-2023-07-05 23:59:25,590 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Uruk-errata.hjson
-2023-07-05 23:59:25,635 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set19-errata.hjson
-2023-07-05 23:59:25,657 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set19-Ringwraith-errata.hjson
-2023-07-05 23:59:25,701 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V0-shadows-sites.hjson
-2023-07-05 23:59:25,748 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_dwarven.hjson
-2023-07-05 23:59:25,773 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_elven.hjson
-2023-07-05 23:59:25,795 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_gandalf.hjson
-2023-07-05 23:59:25,818 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_gondor.hjson
-2023-07-05 23:59:25,841 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_isengard.hjson
-2023-07-05 23:59:25,863 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_moria.hjson
-2023-07-05 23:59:25,887 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_ringwraith.hjson
-2023-07-05 23:59:25,909 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_sauron.hjson
-2023-07-05 23:59:25,931 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_shire.hjson
-2023-07-05 23:59:25,953 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_sites.hjson
-2023-07-05 23:59:26,041 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-dwarven.hjson
-2023-07-05 23:59:26,073 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-elven.hjson
-2023-07-05 23:59:26,106 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-gandalf.hjson
-2023-07-05 23:59:26,133 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-gondor.hjson
-2023-07-05 23:59:26,159 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-isengard.hjson
-2023-07-05 23:59:26,189 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-moria.hjson
-2023-07-05 23:59:26,218 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-sauron.hjson
-2023-07-05 23:59:26,255 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-shire.hjson
-2023-07-05 23:59:26,292 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-wraith.hjson
-2023-07-05 23:59:26,314 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40.hjson
-2023-07-05 23:59:26,316 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 2
-2023-07-05 23:59:26,444 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 3
-2023-07-05 23:59:26,601 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 4
-2023-07-05 23:59:27,159 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 5
-2023-07-05 23:59:27,311 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 6
-2023-07-05 23:59:27,445 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 7
-2023-07-05 23:59:27,808 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 8
-2023-07-05 23:59:27,935 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 10
-2023-07-05 23:59:28,092 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 11
-2023-07-05 23:59:28,373 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 12
-2023-07-05 23:59:28,570 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 13
-2023-07-05 23:59:28,765 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 15
-2023-07-05 23:59:28,992 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 17
-2023-07-05 23:59:29,158 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 18
-2023-07-05 23:59:30,717  INFO GempukkuServer:23 - GempukkuServer loading DAOs...
-2023-07-05 23:59:30,854  INFO GempukkuServer:25 - GempukkuServer loading services...
-2023-07-05 23:59:31,293 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/fellowshipDraft.json
-2023-07-05 23:59:31,473 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/hobbitDraft.json
-2023-07-05 23:59:31,524 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/hobbitRandomDraft.json
-2023-07-05 23:59:31,659 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/testDraft.json
-log4j:WARN No such property [immediateFlush] in org.apache.log4j.PatternLayout.
-log4j:WARN No such property [bufferSize] in org.apache.log4j.PatternLayout.
-log4j:WARN No such property [immediateFlush] in org.apache.log4j.PatternLayout.
-log4j:WARN No such property [bufferSize] in org.apache.log4j.PatternLayout.
-log4j:WARN No such property [immediateFlush] in org.apache.log4j.PatternLayout.
-log4j:WARN No such property [bufferSize] in org.apache.log4j.PatternLayout.
-2023-07-05 23:59:40,365  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
-2023-07-05 23:59:40,832  INFO LotroCardBlueprintLibrary:58 - Locking blueprint library in constructor
-2023-07-05 23:59:40,835  INFO LotroCardBlueprintLibrary:61 - Unlocking blueprint library in constructor
-2023-07-05 23:59:41,599 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set0.hjson
-2023-07-05 23:59:41,737 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-dwarven.hjson
-2023-07-05 23:59:41,815 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-elven.hjson
-2023-07-05 23:59:41,890 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-gandalf.hjson
-2023-07-05 23:59:41,941 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-gondor.hjson
-2023-07-05 23:59:42,025 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-isengard.hjson
-2023-07-05 23:59:42,103 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-moria.hjson
-2023-07-05 23:59:42,153 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-sauron.hjson
-2023-07-05 23:59:42,232 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-shire.hjson
-2023-07-05 23:59:42,290 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1-wraith.hjson
-2023-07-05 23:59:42,359 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set1.hjson
-2023-07-05 23:59:42,418 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-dwarven.hjson
-2023-07-05 23:59:42,457 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-elven.hjson
-2023-07-05 23:59:42,508 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-gandalf.hjson
-2023-07-05 23:59:42,546 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-gondor.hjson
-2023-07-05 23:59:42,580 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-isengard.hjson
-2023-07-05 23:59:42,622 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set2-moria.hjson
-2023-07-05 23:59:42,677 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set3-elven.hjson
-2023-07-05 23:59:42,737 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set4-dwarven.hjson
-2023-07-05 23:59:42,764 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set4.hjson
-2023-07-05 23:59:42,820 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set5.hjson
-2023-07-05 23:59:42,882 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set7-gollum-freeps.hjson
-2023-07-05 23:59:42,935 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-raider.hjson
-2023-07-05 23:59:42,997 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set9-1.hjson
-2023-07-05 23:59:43,058 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set9-2.hjson
-2023-07-05 23:59:43,111 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-gondor.hjson
-2023-07-05 23:59:43,137 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10.hjson
-2023-07-05 23:59:43,200 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-site.hjson
-2023-07-05 23:59:43,314 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set14.hjson
-2023-07-05 23:59:43,393 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-orc.hjson
-2023-07-05 23:59:43,462 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set16.hjson
-2023-07-05 23:59:43,521 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-gandalf.hjson
-2023-07-05 23:59:43,554 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-wraith.hjson
-2023-07-05 23:59:43,609 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-wraith.hjson
-2023-07-05 23:59:43,686 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set19.hjson
-2023-07-05 23:59:43,800 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set30-fp.hjson
-2023-07-05 23:59:43,830 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set30-shadow.hjson
-2023-07-05 23:59:43,868 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set30-sites.hjson
-2023-07-05 23:59:43,938 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set31-fp.hjson
-2023-07-05 23:59:43,983 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set31-shadow.hjson
-2023-07-05 23:59:44,009 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set31-sites.hjson
-2023-07-05 23:59:44,096 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set32-fp.hjson
-2023-07-05 23:59:44,141 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set32-shadow.hjson
-2023-07-05 23:59:44,171 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set32-site.hjson
-2023-07-05 23:59:44,234 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set33-fp.hjson
-2023-07-05 23:59:44,279 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set33-shadow.hjson
-2023-07-05 23:59:44,303 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set33-sites.hjson
-2023-07-05 23:59:44,413 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Dwarven-errata.hjson
-2023-07-05 23:59:44,450 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Elven-errata.hjson
-2023-07-05 23:59:44,475 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Gandalf-errata.hjson
-2023-07-05 23:59:44,500 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Gondor-errata.hjson
-2023-07-05 23:59:44,526 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Isengard-errata.hjson
-2023-07-05 23:59:44,553 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Moria-errata.hjson
-2023-07-05 23:59:44,580 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Ringwraith-errata.hjson
-2023-07-05 23:59:44,613 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Sauron-errata.hjson
-2023-07-05 23:59:44,640 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Shire-errata.hjson
-2023-07-05 23:59:44,663 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set01-Sites-errata.hjson
-2023-07-05 23:59:44,713 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Dwarven-errata.hjson
-2023-07-05 23:59:44,748 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Gondor-errata.hjson
-2023-07-05 23:59:44,779 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Isengard-errata.hjson
-2023-07-05 23:59:44,806 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Moria-errata.hjson
-2023-07-05 23:59:44,828 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Ringwraith-errata.hjson
-2023-07-05 23:59:44,851 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Sauron-errata.hjson
-2023-07-05 23:59:44,876 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set02-Shire-errata.hjson
-2023-07-05 23:59:44,927 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Dwarven-errata.hjson
-2023-07-05 23:59:44,952 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Elven-errata.hjson
-2023-07-05 23:59:44,974 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Gondor-errata.hjson
-2023-07-05 23:59:44,999 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Isengard-errata.hjson
-2023-07-05 23:59:45,022 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Moria-errata.hjson
-2023-07-05 23:59:45,046 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Ringwraith-errata.hjson
-2023-07-05 23:59:45,071 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Sauron-errata.hjson
-2023-07-05 23:59:45,101 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Shire-errata.hjson
-2023-07-05 23:59:45,133 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set03-Sites-errata.hjson
-2023-07-05 23:59:45,187 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Dwarven-errata.hjson
-2023-07-05 23:59:45,208 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Elven-errata.hjson
-2023-07-05 23:59:45,233 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Isengard-errata.hjson
-2023-07-05 23:59:45,253 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Rohan-errata.hjson
-2023-07-05 23:59:45,276 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set04-Shire-errata.hjson
-2023-07-05 23:59:45,334 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set05-Dwarven-errata.hjson
-2023-07-05 23:59:45,359 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set05-Isengard-errata.hjson
-2023-07-05 23:59:45,412 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Gandalf-errata.hjson
-2023-07-05 23:59:45,435 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Gondor-errata.hjson
-2023-07-05 23:59:45,460 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Ringwraith-errata.hjson
-2023-07-05 23:59:45,487 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Rohan-errata.hjson
-2023-07-05 23:59:45,511 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set07-Sites-errata.hjson
-2023-07-05 23:59:45,572 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Dwarven-errata.hjson
-2023-07-05 23:59:45,597 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Gollum-errata.hjson
-2023-07-05 23:59:45,623 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Gondor-errata.hjson
-2023-07-05 23:59:45,657 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Raider-errata.hjson
-2023-07-05 23:59:45,681 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Rohan-errata.hjson
-2023-07-05 23:59:45,702 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set08-Sauron-errata.hjson
-2023-07-05 23:59:45,756 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set09-Elven-errata-playtest.hjson
-2023-07-05 23:59:45,780 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set09-Gandalf-errata-playtest.hjson
-2023-07-05 23:59:45,830 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Dwarven-errata.hjson
-2023-07-05 23:59:45,854 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Elven-errata.hjson
-2023-07-05 23:59:45,879 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Gandalf-errata.hjson
-2023-07-05 23:59:45,909 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Raider-errata.hjson
-2023-07-05 23:59:45,939 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Ringwraith-errata.hjson
-2023-07-05 23:59:45,970 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Rohan-errata.hjson
-2023-07-05 23:59:46,000 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set10-Sauron-errata.hjson
-2023-07-05 23:59:46,065 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Gandalf-errata.hjson
-2023-07-05 23:59:46,107 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Men-errata.hjson
-2023-07-05 23:59:46,144 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Orc-errata.hjson
-2023-07-05 23:59:46,175 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set11-Sites-errata.hjson
-2023-07-05 23:59:46,223 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set13-Sites-errata.hjson
-2023-07-05 23:59:46,277 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Elven-errata.hjson
-2023-07-05 23:59:46,309 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Gondor-errata.hjson
-2023-07-05 23:59:46,339 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Orc-errata.hjson
-2023-07-05 23:59:46,367 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set15-Shire-errata.hjson
-2023-07-05 23:59:46,422 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-elven-errata.hjson
-2023-07-05 23:59:46,448 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set17-gandalf-errata.hjson
-2023-07-05 23:59:46,500 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Elven-errata.hjson
-2023-07-05 23:59:46,528 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Gandalf-errata.hjson
-2023-07-05 23:59:46,552 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Gollum-errata.hjson
-2023-07-05 23:59:46,578 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Gondor-errata.hjson
-2023-07-05 23:59:46,607 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Orc-errata.hjson
-2023-07-05 23:59:46,632 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Rohan-errata.hjson
-2023-07-05 23:59:46,660 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Shire-errata.hjson
-2023-07-05 23:59:46,689 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Sites-errata.hjson
-2023-07-05 23:59:46,714 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set18-Uruk-errata.hjson
-2023-07-05 23:59:46,776 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set19-errata.hjson
-2023-07-05 23:59:46,834 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set19-Ringwraith-errata.hjson
-2023-07-05 23:59:46,898 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V0-shadows-sites.hjson
-2023-07-05 23:59:46,963 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_dwarven.hjson
-2023-07-05 23:59:46,994 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_elven.hjson
-2023-07-05 23:59:47,016 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_gandalf.hjson
-2023-07-05 23:59:47,039 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_gondor.hjson
-2023-07-05 23:59:47,063 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_isengard.hjson
-2023-07-05 23:59:47,085 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_moria.hjson
-2023-07-05 23:59:47,105 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_ringwraith.hjson
-2023-07-05 23:59:47,126 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_sauron.hjson
-2023-07-05 23:59:47,147 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_shire.hjson
-2023-07-05 23:59:47,169 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file V1_sites.hjson
-2023-07-05 23:59:47,241 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-dwarven.hjson
-2023-07-05 23:59:47,268 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-elven.hjson
-2023-07-05 23:59:47,295 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-gandalf.hjson
-2023-07-05 23:59:47,322 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-gondor.hjson
-2023-07-05 23:59:47,346 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-isengard.hjson
-2023-07-05 23:59:47,372 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-moria.hjson
-2023-07-05 23:59:47,400 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-sauron.hjson
-2023-07-05 23:59:47,428 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-shire.hjson
-2023-07-05 23:59:47,458 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40-wraith.hjson
-2023-07-05 23:59:47,483 DEBUG LotroCardBlueprintLibrary:233 - Loaded JSON card file set40.hjson
-2023-07-05 23:59:47,485 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 2
-2023-07-05 23:59:47,623 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 3
-2023-07-05 23:59:47,776 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 4
-2023-07-05 23:59:48,299 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 5
-2023-07-05 23:59:48,448 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 6
-2023-07-05 23:59:48,598 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 7
-2023-07-05 23:59:49,040 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 8
-2023-07-05 23:59:49,175 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 10
-2023-07-05 23:59:49,360 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 11
-2023-07-05 23:59:49,686 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 12
-2023-07-05 23:59:49,884 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 13
-2023-07-05 23:59:50,126 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 15
-2023-07-05 23:59:50,347 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 17
-2023-07-05 23:59:50,543 DEBUG LotroCardBlueprintLibrary:239 - Loading Java cards for set 18
-2023-07-05 23:59:52,214  INFO GempukkuServer:23 - GempukkuServer loading DAOs...
-2023-07-05 23:59:52,359  INFO GempukkuServer:25 - GempukkuServer loading services...
-2023-07-05 23:59:52,789 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/fellowshipDraft.json
-2023-07-05 23:59:52,893 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/hobbitDraft.json
-2023-07-05 23:59:52,938 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/hobbitRandomDraft.json
-2023-07-05 23:59:53,013 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/testDraft.json
-2023-07-05 23:59:53,175 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/twoTowersDraft.json
-2023-07-05 23:59:53,274 TRACE Game Hall:103 - System: Welcome to room: Game Hall
-2023-07-05 23:59:53,306  INFO GempukkuServer:27 - GempukkuServer starting servers...
-2023-07-05 23:59:53,310 DEBUG ServerCleaner:15 - Adding server: class com.gempukku.lotro.hall.HallServer
-2023-07-05 23:59:53,315 DEBUG AbstractServer:18 - Started: HallServer
-2023-07-05 23:59:54,003  INFO LoggingProxy:32 - TournamentDAO::getUnfinishedTournaments(...) 677ms
-2023-07-05 23:59:54,004  INFO LoggingProxy:32 - TournamentDAO::getUnstartedScheduledTournamentQueues(...) 675ms
-2023-07-05 23:59:54,007 DEBUG ServerCleaner:15 - Adding server: class com.gempukku.lotro.game.LotroServer
-2023-07-05 23:59:54,008 DEBUG AbstractServer:18 - Started: LotroServer
-2023-07-05 23:59:54,010 DEBUG ServerCleaner:15 - Adding server: class com.gempukku.lotro.chat.ChatServer
-2023-07-05 23:59:54,011 DEBUG AbstractServer:18 - Started: ChatServer
-2023-07-05 23:59:54,013  INFO GempukkuServer:29 - GempukkuServer startup complete.
-2023-07-05 23:59:57,066 DEBUG LoggingProxy:34 - GameHistoryDAO::getGamesPlayedCount(...) 160ms
+2024-01-01 06:52:33,257  INFO GempukkuServer:20 - GempukkuServer loading prerequisites...
+2024-01-01 06:52:33,384  INFO LotroCardBlueprintLibrary:57 - Locking blueprint library in constructor
+2024-01-01 06:52:33,384  INFO LotroCardBlueprintLibrary:60 - Unlocking blueprint library in constructor
+2024-01-01 06:52:33,619 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set0.hjson
+2024-01-01 06:52:33,651 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set1-dwarven.hjson
+2024-01-01 06:52:33,673 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set1-elven.hjson
+2024-01-01 06:52:33,687 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set1-gandalf.hjson
+2024-01-01 06:52:33,699 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set1-gondor.hjson
+2024-01-01 06:52:33,713 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set1-isengard.hjson
+2024-01-01 06:52:33,725 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set1-moria.hjson
+2024-01-01 06:52:33,738 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set1-sauron.hjson
+2024-01-01 06:52:33,750 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set1-shire.hjson
+2024-01-01 06:52:33,763 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set1-wraith.hjson
+2024-01-01 06:52:33,773 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set1.hjson
+2024-01-01 06:52:33,784 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set2-dwarven.hjson
+2024-01-01 06:52:33,790 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set2-elven.hjson
+2024-01-01 06:52:33,797 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set2-gandalf.hjson
+2024-01-01 06:52:33,809 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set2-gondor.hjson
+2024-01-01 06:52:33,823 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set2-isengard.hjson
+2024-01-01 06:52:33,836 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set2-moria.hjson
+2024-01-01 06:52:33,864 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set3-elven.hjson
+2024-01-01 06:52:33,904 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set4-dwarven.hjson
+2024-01-01 06:52:33,923 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set4.hjson
+2024-01-01 06:52:33,957 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set5.hjson
+2024-01-01 06:52:33,989 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set7-gollum-freeps.hjson
+2024-01-01 06:52:34,017 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set08-raider.hjson
+2024-01-01 06:52:34,056 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set9-1.hjson
+2024-01-01 06:52:34,075 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set9-2.hjson
+2024-01-01 06:52:34,103 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set10-gondor.hjson
+2024-01-01 06:52:34,116 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set10.hjson
+2024-01-01 06:52:34,144 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set11-site.hjson
+2024-01-01 06:52:34,173 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set14.hjson
+2024-01-01 06:52:34,203 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set15-orc.hjson
+2024-01-01 06:52:34,232 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set16.hjson
+2024-01-01 06:52:34,260 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set17-gandalf.hjson
+2024-01-01 06:52:34,274 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set17-wraith.hjson
+2024-01-01 06:52:34,301 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set18-wraith.hjson
+2024-01-01 06:52:34,341 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set19.hjson
+2024-01-01 06:52:34,406 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set30-fp.hjson
+2024-01-01 06:52:34,423 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set30-shadow.hjson
+2024-01-01 06:52:34,441 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set30-sites.hjson
+2024-01-01 06:52:34,478 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set31-fp.hjson
+2024-01-01 06:52:34,496 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set31-shadow.hjson
+2024-01-01 06:52:34,510 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set31-sites.hjson
+2024-01-01 06:52:34,550 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set32-fp.hjson
+2024-01-01 06:52:34,570 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set32-shadow.hjson
+2024-01-01 06:52:34,587 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set32-site.hjson
+2024-01-01 06:52:34,626 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set33-fp.hjson
+2024-01-01 06:52:34,647 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set33-shadow.hjson
+2024-01-01 06:52:34,664 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set33-sites.hjson
+2024-01-01 06:52:34,729 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Dwarven-errata.hjson
+2024-01-01 06:52:34,748 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Elven-errata.hjson
+2024-01-01 06:52:34,764 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Gandalf-errata.hjson
+2024-01-01 06:52:34,779 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Gondor-errata.hjson
+2024-01-01 06:52:34,793 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Isengard-errata.hjson
+2024-01-01 06:52:34,806 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Moria-errata.hjson
+2024-01-01 06:52:34,820 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Ringwraith-errata.hjson
+2024-01-01 06:52:34,836 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Sauron-errata.hjson
+2024-01-01 06:52:34,851 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Shire-errata.hjson
+2024-01-01 06:52:34,863 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Sites-errata.hjson
+2024-01-01 06:52:34,893 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set02-Dwarven-errata.hjson
+2024-01-01 06:52:34,906 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set02-Gondor-errata.hjson
+2024-01-01 06:52:34,920 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set02-Isengard-errata.hjson
+2024-01-01 06:52:34,934 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set02-Moria-errata.hjson
+2024-01-01 06:52:34,947 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set02-Ringwraith-errata.hjson
+2024-01-01 06:52:34,959 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set02-Sauron-errata.hjson
+2024-01-01 06:52:34,974 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set02-Shire-errata.hjson
+2024-01-01 06:52:35,004 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Dwarven-errata.hjson
+2024-01-01 06:52:35,019 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Elven-errata.hjson
+2024-01-01 06:52:35,032 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Gondor-errata.hjson
+2024-01-01 06:52:35,046 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Isengard-errata.hjson
+2024-01-01 06:52:35,060 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Moria-errata.hjson
+2024-01-01 06:52:35,073 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Ringwraith-errata.hjson
+2024-01-01 06:52:35,088 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Sauron-errata.hjson
+2024-01-01 06:52:35,102 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Shire-errata.hjson
+2024-01-01 06:52:35,114 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Sites-errata.hjson
+2024-01-01 06:52:35,143 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set04-Dwarven-errata.hjson
+2024-01-01 06:52:35,157 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set04-Elven-errata.hjson
+2024-01-01 06:52:35,171 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set04-Isengard-errata.hjson
+2024-01-01 06:52:35,184 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set04-Rohan-errata.hjson
+2024-01-01 06:52:35,197 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set04-Shire-errata.hjson
+2024-01-01 06:52:35,225 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set05-Dwarven-errata.hjson
+2024-01-01 06:52:35,240 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set05-Isengard-errata.hjson
+2024-01-01 06:52:35,269 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set07-Gandalf-errata.hjson
+2024-01-01 06:52:35,282 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set07-Gondor-errata.hjson
+2024-01-01 06:52:35,295 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set07-Ringwraith-errata.hjson
+2024-01-01 06:52:35,308 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set07-Rohan-errata.hjson
+2024-01-01 06:52:35,320 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set07-Sites-errata.hjson
+2024-01-01 06:52:35,348 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set08-Dwarven-errata.hjson
+2024-01-01 06:52:35,360 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set08-Gollum-errata.hjson
+2024-01-01 06:52:35,373 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set08-Gondor-errata.hjson
+2024-01-01 06:52:35,390 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set08-Raider-errata.hjson
+2024-01-01 06:52:35,403 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set08-Rohan-errata.hjson
+2024-01-01 06:52:35,416 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set08-Sauron-errata.hjson
+2024-01-01 06:52:35,446 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set09-Elven-errata-playtest.hjson
+2024-01-01 06:52:35,459 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set09-Gandalf-errata-playtest.hjson
+2024-01-01 06:52:35,489 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set10-Dwarven-errata.hjson
+2024-01-01 06:52:35,503 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set10-Elven-errata.hjson
+2024-01-01 06:52:35,516 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set10-Gandalf-errata.hjson
+2024-01-01 06:52:35,529 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set10-Raider-errata.hjson
+2024-01-01 06:52:35,542 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set10-Ringwraith-errata.hjson
+2024-01-01 06:52:35,557 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set10-Rohan-errata.hjson
+2024-01-01 06:52:35,570 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set10-Sauron-errata.hjson
+2024-01-01 06:52:35,598 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set11-Gandalf-errata.hjson
+2024-01-01 06:52:35,611 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set11-Men-errata.hjson
+2024-01-01 06:52:35,624 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set11-Orc-errata.hjson
+2024-01-01 06:52:35,639 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set11-Sites-errata.hjson
+2024-01-01 06:52:35,669 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set13-Sites-errata.hjson
+2024-01-01 06:52:35,698 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set15-Elven-errata.hjson
+2024-01-01 06:52:35,713 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set15-Gondor-errata.hjson
+2024-01-01 06:52:35,727 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set15-Orc-errata.hjson
+2024-01-01 06:52:35,741 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set15-Shire-errata.hjson
+2024-01-01 06:52:35,778 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set17-elven-errata.hjson
+2024-01-01 06:52:35,791 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set17-gandalf-errata.hjson
+2024-01-01 06:52:35,818 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set18-Elven-errata.hjson
+2024-01-01 06:52:35,831 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set18-Gandalf-errata.hjson
+2024-01-01 06:52:35,843 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set18-Gollum-errata.hjson
+2024-01-01 06:52:35,856 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set18-Gondor-errata.hjson
+2024-01-01 06:52:35,871 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set18-Orc-errata.hjson
+2024-01-01 06:52:35,884 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set18-Rohan-errata.hjson
+2024-01-01 06:52:35,896 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set18-Shire-errata.hjson
+2024-01-01 06:52:35,909 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set18-Sites-errata.hjson
+2024-01-01 06:52:35,922 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set18-Uruk-errata.hjson
+2024-01-01 06:52:35,949 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set19-errata.hjson
+2024-01-01 06:52:35,963 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set19-Ringwraith-errata.hjson
+2024-01-01 06:52:35,991 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Dwarven-errata-playtest.hjson
+2024-01-01 06:52:36,004 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Gandalf-errata-playtest.hjson
+2024-01-01 06:52:36,016 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Gondor-errata-playtest.hjson
+2024-01-01 06:52:36,030 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Isengard-errata-playtest.hjson
+2024-01-01 06:52:36,043 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set01-Moria-errata-playtest.hjson
+2024-01-01 06:52:36,056 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set02-Elven-errata-playtest.hjson
+2024-01-01 06:52:36,069 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set02-Ringwraith-errata-playtest.hjson
+2024-01-01 06:52:36,084 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Elven-errata-playtest.hjson
+2024-01-01 06:52:36,096 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Gondor-errata-playtest.hjson
+2024-01-01 06:52:36,110 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Isengard-errata-playtest.hjson
+2024-01-01 06:52:36,122 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Moria-errata-playtest.hjson
+2024-01-01 06:52:36,135 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Ringwraith-errata-playtest.hjson
+2024-01-01 06:52:36,147 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set03-Sauron-errata-playtest.hjson
+2024-01-01 06:52:36,160 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set04-Sites-errata-playtest.hjson
+2024-01-01 06:52:36,174 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set06-Elven-errata-playtest.hjson
+2024-01-01 06:52:36,187 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set08-Raider-errata-playtest.hjson
+2024-01-01 06:52:36,200 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set09-Dwarven-errata-playtest.hjson
+2024-01-01 06:52:36,213 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set09-Elven-errata-playtest.hjson
+2024-01-01 06:52:36,225 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set09-Gollum-errata-playtest.hjson
+2024-01-01 06:52:36,236 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set09-Gondor-errata-playtest.hjson
+2024-01-01 06:52:36,249 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set09-Shire-errata-playtest.hjson
+2024-01-01 06:52:36,262 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set10-Elven-errata-playtest.hjson
+2024-01-01 06:52:36,274 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set101-Elven-errata-playtest.hjson
+2024-01-01 06:52:36,288 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set101-Gandalf-errata-playtest.hjson
+2024-01-01 06:52:36,301 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set101-Gondor-errata-playtest.hjson
+2024-01-01 06:52:36,314 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set101-Isengard-errata-playtest.hjson
+2024-01-01 06:52:36,328 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set11-Sites-errata-playtest.hjson
+2024-01-01 06:52:36,342 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set17-Gandalf-errata-playtest.hjson
+2024-01-01 06:52:36,367 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V0-shadows-sites.hjson
+2024-01-01 06:52:36,393 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V1_dwarven.hjson
+2024-01-01 06:52:36,407 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V1_elven.hjson
+2024-01-01 06:52:36,419 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V1_gandalf.hjson
+2024-01-01 06:52:36,432 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V1_gondor.hjson
+2024-01-01 06:52:36,446 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V1_isengard.hjson
+2024-01-01 06:52:36,459 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V1_moria.hjson
+2024-01-01 06:52:36,471 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V1_ringwraith.hjson
+2024-01-01 06:52:36,483 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V1_sauron.hjson
+2024-01-01 06:52:36,495 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V1_shire.hjson
+2024-01-01 06:52:36,508 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file V1_sites.hjson
+2024-01-01 06:52:36,551 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set40-dwarven.hjson
+2024-01-01 06:52:36,567 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set40-elven.hjson
+2024-01-01 06:52:36,583 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set40-gandalf.hjson
+2024-01-01 06:52:36,595 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set40-gondor.hjson
+2024-01-01 06:52:36,608 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set40-isengard.hjson
+2024-01-01 06:52:36,623 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set40-moria.hjson
+2024-01-01 06:52:36,637 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set40-sauron.hjson
+2024-01-01 06:52:36,651 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set40-shire.hjson
+2024-01-01 06:52:36,667 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set40-wraith.hjson
+2024-01-01 06:52:36,682 DEBUG LotroCardBlueprintLibrary:223 - Loaded JSON card file set40.hjson
+2024-01-01 06:52:36,682 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 2
+2024-01-01 06:52:36,730 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 3
+2024-01-01 06:52:36,800 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 4
+2024-01-01 06:52:36,994 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 5
+2024-01-01 06:52:37,064 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 6
+2024-01-01 06:52:37,129 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 7
+2024-01-01 06:52:37,310 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 8
+2024-01-01 06:52:37,373 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 10
+2024-01-01 06:52:37,434 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 11
+2024-01-01 06:52:37,568 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 12
+2024-01-01 06:52:37,663 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 13
+2024-01-01 06:52:37,763 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 15
+2024-01-01 06:52:37,872 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 17
+2024-01-01 06:52:37,945 DEBUG LotroCardBlueprintLibrary:231 - Loading Java cards for set 18
+2024-01-01 06:52:38,587  INFO GempukkuServer:23 - GempukkuServer loading DAOs...
+2024-01-01 06:52:38,649  INFO GempukkuServer:25 - GempukkuServer loading services...
+2024-01-01 06:52:38,835 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/fellowshipDraft.json
+2024-01-01 06:52:38,867 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/hobbitDraft.json
+2024-01-01 06:52:38,877 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/hobbitRandomDraft.json
+2024-01-01 06:52:38,897 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/testDraft.json
+2024-01-01 06:52:38,944 DEBUG SoloDraftDefinitions:90 - Loaded draft definition: /etc/gemp-lotr/gemp-lotr-cards/src/main/resources/draft/twoTowersDraft.json
+2024-01-01 06:52:38,970 TRACE Game Hall:103 - System: Welcome to room: Game Hall
+2024-01-01 06:52:38,978  INFO GempukkuServer:27 - GempukkuServer starting servers...
+2024-01-01 06:52:38,978 DEBUG ServerCleaner:15 - Adding server: class com.gempukku.lotro.hall.HallServer
+2024-01-01 06:52:38,980 DEBUG AbstractServer:18 - Started: HallServer
+2024-01-01 06:52:39,286 DEBUG LoggingProxy:34 - TournamentDAO::getUnstartedScheduledTournamentQueues(...) 304ms
+2024-01-01 06:52:39,300 DEBUG ServerCleaner:15 - Adding server: class com.gempukku.lotro.game.LotroServer
+2024-01-01 06:52:39,300 DEBUG AbstractServer:18 - Started: LotroServer
+2024-01-01 06:52:39,300 DEBUG ServerCleaner:15 - Adding server: class com.gempukku.lotro.chat.ChatServer
+2024-01-01 06:52:39,301 DEBUG AbstractServer:18 - Started: ChatServer
+2024-01-01 06:52:39,301  INFO GempukkuServer:29 - GempukkuServer startup complete.
+2024-01-01 06:58:04,300 DEBUG GempukkuHttpRequestHandler:99 - HTTP 401 response for 172.28.1.12: /gemp-lotr-server/login
