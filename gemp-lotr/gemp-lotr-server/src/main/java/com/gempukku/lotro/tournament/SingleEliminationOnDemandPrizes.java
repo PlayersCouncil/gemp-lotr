@@ -25,10 +25,10 @@ public class SingleEliminationOnDemandPrizes implements TournamentPrizes{
     @Override
     public CardCollection getPrizeForTournament(PlayerStanding playerStanding, int playersCount) {
         DefaultCardCollection tournamentPrize = new DefaultCardCollection();
-        if (playerStanding.opponentScore() == 4) {
+        if (playerStanding.points == 4) {
             tournamentPrize.addItem("(S)All Decipher Choice - Booster", 2);
             tournamentPrize.addItem(getRandom(_promos), 1);
-        } else if (playerStanding.points() == 3) {
+        } else if (playerStanding.points == 3) {
             tournamentPrize.addItem("(S)All Decipher Choice - Booster", 2);
         } else {
             tournamentPrize.addItem("(S)All Decipher Choice - Booster", 1);

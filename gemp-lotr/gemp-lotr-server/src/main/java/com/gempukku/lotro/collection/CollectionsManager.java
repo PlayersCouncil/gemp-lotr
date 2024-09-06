@@ -162,6 +162,10 @@ public class CollectionsManager {
         }
     }
 
+    public Map<Player, CardCollection> getPlayersCollection(long collectionCode) {
+        return getPlayersCollection(String.valueOf(collectionCode));
+    }
+
     public Map<Player, CardCollection> getPlayersCollection(String collectionType) {
         if (collectionType.contains("+"))
             throw new IllegalArgumentException("Invalid collection type: " + collectionType);

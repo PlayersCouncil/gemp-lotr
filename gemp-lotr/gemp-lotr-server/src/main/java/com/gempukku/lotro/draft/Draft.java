@@ -6,7 +6,7 @@ import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.tournament.TournamentCallback;
 
 public interface Draft {
-    public void advanceDraft(TournamentCallback draftCallback);
+    public void advanceDraft();
 
     public void playerChosenCard(String playerName, String cardId);
 

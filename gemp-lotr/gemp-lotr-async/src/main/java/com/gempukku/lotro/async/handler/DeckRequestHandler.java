@@ -1,6 +1,5 @@
 package com.gempukku.lotro.async.handler;
 
-import com.alibaba.fastjson.JSON;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.common.JSONDefs;
@@ -12,6 +11,7 @@ import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.league.SealedLeagueDefinition;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -106,7 +106,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                         .map(soloDraft -> new JSONDefs.ItemStub(soloDraft.getCode(), soloDraft.getFormat()))
                         .collect(Collectors.toMap(x-> x.code, x-> x));
 
-                json = JSON.toJSONString(data);
+                json = JsonUtils.Serialize(data);
             }
             else {
                 Map<String, LotroFormat> formats = _formatLibrary.getHallFormats();
@@ -115,7 +115,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                         .map(x -> new JSONDefs.ItemStub(x.getKey(), x.getValue().getName()))
                         .toArray();
 
-                json = JSON.toJSONString(output);
+                json = JsonUtils.Serialize(output);
             }
 
             responseWriter.writeJsonResponse(json);

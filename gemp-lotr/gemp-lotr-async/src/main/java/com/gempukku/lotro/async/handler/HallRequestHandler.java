@@ -1,6 +1,5 @@
 package com.gempukku.lotro.async.handler;
 
-import com.alibaba.fastjson.JSON;
 import com.gempukku.lotro.SubscriptionConflictException;
 import com.gempukku.lotro.SubscriptionExpiredException;
 import com.gempukku.lotro.async.HttpProcessingException;
@@ -12,11 +11,12 @@ import com.gempukku.lotro.draft.DraftChannelVisitor;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.*;
-import com.gempukku.lotro.league.LeagueSerieData;
+import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.polling.LongPollingResource;
 import com.gempukku.polling.LongPollingSystem;
+import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -150,7 +150,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
             if(isInviteOnly) {
-                if(desc.length()==0) {
+                if(desc.isEmpty()) {
                     responseWriter.writeXmlResponse(marshalException(new HallException("Invite-only games must have your intended opponent in the description")));
                     return;
                 }
@@ -369,7 +369,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void getErrataInfo(HttpRequest request, ResponseWriter responseWriter) throws CardNotFoundException {
 
         var errata = _library.getErrata();
-        String json = JSON.toJSONString(errata);
+        String json = JsonUtils.Serialize(errata);
 
         responseWriter.writeJsonResponse(json);
     }
@@ -404,10 +404,10 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
                 hall.appendChild(formatElem);
             }
             for (League league : _leagueService.getActiveLeagues()) {
-                final LeagueSerieData currentLeagueSerie = _leagueService.getCurrentLeagueSerie(league);
+                final LeagueSerieInfo currentLeagueSerie = _leagueService.getCurrentLeagueSerie(league);
                 if (currentLeagueSerie != null && _leagueService.isPlayerInLeague(league, resourceOwner)) {
                     Element formatElem = doc.createElement("format");
-                    formatElem.setAttribute("type", league.getType());
+                    formatElem.setAttribute("type", String.valueOf(league.getCode()));
                     formatElem.appendChild(doc.createTextNode(league.getName()));
                     hall.appendChild(formatElem);
                 }

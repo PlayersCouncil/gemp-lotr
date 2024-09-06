@@ -380,3 +380,15 @@ gl_theOneRing,1_2
 1_389,1_143
 #Gandalf's Staff MW
 2_127,2_22
+#Freca, Hungry Savage	FA
+9_60,9_2
+#Sting, Bane of the Eight Legs MW
+8_126,8_113
+#Dwarven Bracers FA
+2_128,2_3
+#Ulaire Cantea, Lieutenant of Dol Guldur MW
+1_390,1_230
+#Theoden, Tall and Proud FA
+8_127,8_92
+#Evil-smelling Fens FA
+5_129,5_22

@@ -120,6 +120,10 @@ public class GameUtils {
         return "<div class='cardHint' value='" + blueprintId + "'>" + (blueprint.isUnique() ? "·" : "") + GameUtils.getFullName(blueprint) + "</div>";
     }
 
+    public static String getProductLink(String blueprintId) {
+        return "<div class='cardHint' value='" + blueprintId + "'>" + blueprintId + "</div>";
+    }
+
     public static String getDeluxeCardLink(String blueprintId, LotroCardBlueprint blueprint) {
         var culture = blueprint.getCulture();
         var cultureString = "";

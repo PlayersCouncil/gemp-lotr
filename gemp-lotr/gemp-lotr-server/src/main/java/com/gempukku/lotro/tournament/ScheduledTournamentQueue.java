@@ -1,6 +1,6 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.DateUtils;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.vo.CollectionType;
@@ -9,9 +9,7 @@ import com.gempukku.lotro.packs.ProductLibrary;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Duration;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
 
 public class ScheduledTournamentQueue extends AbstractTournamentQueue implements TournamentQueue {
     private static final Duration _signupTimeBeforeStart = Duration.ofMinutes(60);
@@ -34,13 +32,12 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
         _scheduledTournamentId = info.tournament_id;
         _tournamentName = info.name;
         _startTime = info.GetUTCStartDate();
-        _startCondition = "at " + _startTime.format(DateUtils.DateHourMinuteFormatter);
+        _startCondition = "at " + _startTime.format(DateUtils.DateTimeFormat);
         _minimumPlayers = info.minimum_players;
 
-        if(info.manual_kickoff) {
+        if (info.manual_kickoff) {
             _stage = Tournament.Stage.AWAITING_KICKOFF;
-        }
-        else {
+        } else {
             _stage = Tournament.Stage.PLAYING_GAMES;
         }
     }
@@ -65,9 +62,8 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
         var now = ZonedDateTime.now();
         if (now.isAfter(_startTime)) {
             if (_players.size() >= _minimumPlayers) {
-
                 for (String player : _players)
-                    _tournamentService.addPlayer(_scheduledTournamentId, player, _playerDecks.get(player));
+                    _tournamentService.recordTournamentPlayer(_scheduledTournamentId, player, _playerDecks.get(player));
 
                 var info = new TournamentInfo(_scheduledTournamentId, null, _tournamentName, _format, ZonedDateTime.now(),
                         _collectionType, _stage, 0, false,
@@ -77,7 +73,7 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
 
                 tournamentQueueCallback.createTournament(tournament);
             } else {
-                _tournamentService.updateScheduledTournamentStarted(_scheduledTournamentId);
+                _tournamentService.recordScheduledTournamentStarted(_scheduledTournamentId);
                 leaveAllPlayers(collectionsManager);
             }
 
@@ -89,7 +85,7 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
     @Override
     public boolean isJoinable() {
         var window = _signupTimeBeforeStart;
-        if(_scheduledTournamentId.toLowerCase().contains("wc")) {
+        if (_scheduledTournamentId.toLowerCase().contains("wc")) {
             window = _wcSignupTimeBeforeStart;
         }
         return ZonedDateTime.now().isAfter(_startTime.minus(window));

@@ -4,18 +4,14 @@ import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.collection.DeckRenderer;
 import com.gempukku.lotro.competitive.PlayerStanding;
-import com.gempukku.lotro.game.CardCollection;
-import com.gempukku.lotro.game.DefaultCardCollection;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.SortAndFilterCards;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
-import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.tournament.Tournament;
 import com.gempukku.lotro.tournament.TournamentService;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
@@ -62,7 +58,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         } else if (uri.startsWith("/") && uri.endsWith("/html") && uri.contains("/deck/") && request.method() == HttpMethod.GET) {
             getTournamentDeck(request, uri.substring(1, uri.indexOf("/deck/")), uri.substring(uri.indexOf("/deck/") + 6, uri.lastIndexOf("/html")), responseWriter);
         } else if (uri.startsWith("/") && uri.endsWith("/html") && uri.contains("/report/") && request.method() == HttpMethod.GET) {
-            getTournamentReport(request, uri.substring(1, uri.indexOf("/report/")), uri.substring(uri.indexOf("/report/") + 6, uri.lastIndexOf("/html")), responseWriter);
+            getTournamentReport(request, uri.substring(1, uri.indexOf("/report/")), responseWriter);
         } else if (uri.startsWith("/") && request.method() == HttpMethod.GET) {
             getTournamentInfo(request, uri.substring(1), responseWriter);
         } else {
@@ -102,12 +98,14 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
     }
 
     private void setStandingAttributes(PlayerStanding standing, Element standingElem) {
-        standingElem.setAttribute("player", standing.playerName());
-        standingElem.setAttribute("standing", String.valueOf(standing.standing()));
-        standingElem.setAttribute("points", String.valueOf(standing.points()));
-        standingElem.setAttribute("gamesPlayed", String.valueOf(standing.gamesPlayed()));
+        standingElem.setAttribute("player", standing.playerName);
+        standingElem.setAttribute("standing", String.valueOf(standing.standing));
+        standingElem.setAttribute("points", String.valueOf(standing.points));
+        standingElem.setAttribute("gamesPlayed", String.valueOf(standing.gamesPlayed));
         DecimalFormat format = new DecimalFormat("##0.00%");
-        standingElem.setAttribute("opponentWin", format.format(standing.opponentScore()));
+        standingElem.setAttribute("opponentWin", format.format(standing.opponentWinRate));
+        standingElem.setAttribute("medianScore", String.valueOf(standing.medianScore));
+        standingElem.setAttribute("cumulativeScore", String.valueOf(standing.cumulativeScore));
     }
 
     private void getTournamentDeck(HttpRequest request, String tournamentId, String playerName, ResponseWriter responseWriter) throws Exception {
@@ -118,7 +116,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         if (tournament.getTournamentStage() != Tournament.Stage.FINISHED)
             throw new HttpProcessingException(403);
 
-        LotroDeck deck = _tournamentService.getPlayerDeck(tournamentId, playerName, tournament.getFormat());
+        LotroDeck deck = _tournamentService.retrievePlayerDeck(tournamentId, playerName, tournament.getFormat());
         if (deck == null)
             throw new HttpProcessingException(404);
 
@@ -127,7 +125,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         responseWriter.writeHtmlResponse(_deckRenderer.AddDeckReadoutHeaderAndFooter(fragment));
     }
 
-    private void getTournamentReport(HttpRequest request, String tournamentId, String playerName, ResponseWriter responseWriter) throws Exception {
+    private void getTournamentReport(HttpRequest request, String tournamentId, ResponseWriter responseWriter) throws Exception {
         Tournament tournament = _tournamentService.getTournamentById(tournamentId);
         if (tournament == null)
             throw new HttpProcessingException(404);

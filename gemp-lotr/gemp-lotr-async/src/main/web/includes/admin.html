@@ -13,10 +13,15 @@
 				$("#banTab").parent().hide();
 			}
 			
-			if(!hall.userInfo.type.includes("l"))
+			if(!(hall.userInfo.type.includes("l") ||
+			     hall.userInfo.type.includes("a")))
 			{
 				$("#leagueTab").parent().hide();
+				$("#tournamentTab").parent().hide();
 			}
+			
+			var index = $("#admin-tabs li").index($('#admin-tabs li:visible').eq(0));
+			$("#adminMain").tabs({active: index});
 		});
 	
 </script>
@@ -27,6 +32,7 @@
 			<li><a id="landingTab" href="#landing"></a></li>
 			<li><a id="generalTab" href="includes/admin/generalAdmin.html">General Admin</a></li>
 			<li><a id="leagueTab" href="includes/admin/leagueAdmin.html">League Admin</a></li>
+			<li><a id="tournamentTab" href="includes/admin/tournamentAdmin.html">Tournament Admin</a></li>
 			<li><a id="banTab" href="includes/admin/userAdmin.html">Manage Users</a></li>
 		</ol>
 	</div>  

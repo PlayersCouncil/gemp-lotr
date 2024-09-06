@@ -92,10 +92,10 @@ public class SwissPairingMechanismTest extends AbstractAtTest {
             }
             List<PlayerStanding> standings = BestOfOneStandingsProducer.produceStandings(players, matches, 1, 0, byes);
 
-            String firstSemi = getWinner(rnd, betterPlayers, worsePlayers, standings.get(0).playerName(), standings.get(7).playerName(), chanceToWin);
-            String secondSemi = getWinner(rnd, betterPlayers, worsePlayers, standings.get(1).playerName(), standings.get(6).playerName(), chanceToWin);
-            String thirdSemi = getWinner(rnd, betterPlayers, worsePlayers, standings.get(2).playerName(), standings.get(5).playerName(), chanceToWin);
-            String fourthSemi = getWinner(rnd, betterPlayers, worsePlayers, standings.get(3).playerName(), standings.get(4).playerName(), chanceToWin);
+            String firstSemi = getWinner(rnd, betterPlayers, worsePlayers, standings.get(0).playerName, standings.get(7).playerName, chanceToWin);
+            String secondSemi = getWinner(rnd, betterPlayers, worsePlayers, standings.get(1).playerName, standings.get(6).playerName, chanceToWin);
+            String thirdSemi = getWinner(rnd, betterPlayers, worsePlayers, standings.get(2).playerName, standings.get(5).playerName, chanceToWin);
+            String fourthSemi = getWinner(rnd, betterPlayers, worsePlayers, standings.get(3).playerName, standings.get(4).playerName, chanceToWin);
 
             String firstFinalist = getWinner(rnd, betterPlayers, worsePlayers, firstSemi, fourthSemi, chanceToWin);
             String secondFinalist = getWinner(rnd, betterPlayers, worsePlayers, secondSemi, thirdSemi, chanceToWin);
@@ -177,8 +177,8 @@ public class SwissPairingMechanismTest extends AbstractAtTest {
                 System.out.println("Pairing round " + i);
                 List<PlayerStanding> standings = BestOfOneStandingsProducer.produceStandings(players, matches, 1, 0, byes);
                 for (PlayerStanding standing : standings) {
-                    String player = standing.playerName();
-                    log(player + " points - " + standing.points() + " played against: " + StringUtils.join(previouslyPaired.get(player), ","));
+                    String player = standing.playerName;
+                    log(player + " points - " + standing.points + " played against: " + StringUtils.join(previouslyPaired.get(player), ","));
                 }
 
                 Map<String, String> newPairings = new LinkedHashMap<>();
@@ -217,8 +217,8 @@ public class SwissPairingMechanismTest extends AbstractAtTest {
         System.out.println("Final standings:");
         List<PlayerStanding> standings = BestOfOneStandingsProducer.produceStandings(players, matches, 1, 0, byes);
         for (PlayerStanding standing : standings) {
-            String player = standing.playerName();
-            System.out.println(standing.standing() + ". " + player + " points - " + standing.points() + " played against: " + StringUtils.join(previouslyPaired.get(player), ","));
+            String player = standing.playerName;
+            System.out.println(standing.standing + ". " + player + " points - " + standing.points + " played against: " + StringUtils.join(previouslyPaired.get(player), ","));
         }
     }
 
@@ -228,8 +228,8 @@ public class SwissPairingMechanismTest extends AbstractAtTest {
 
     private int getPlayerPoints(List<PlayerStanding> standings, String player) {
         for (PlayerStanding standing : standings) {
-            if (standing.playerName().equals(player))
-                return standing.points();
+            if (standing.playerName.equals(player))
+                return standing.points;
         }
         return -1;
     }

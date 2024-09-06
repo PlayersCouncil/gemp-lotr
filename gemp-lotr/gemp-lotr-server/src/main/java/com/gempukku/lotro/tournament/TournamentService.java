@@ -1,19 +1,20 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.DateUtils;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.GameHistoryDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
-import com.gempukku.lotro.draft.DraftPack;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.HallInfoVisitor;
 import com.gempukku.lotro.hall.HallServer;
+import com.gempukku.lotro.hall.TableHolder;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.DraftPackStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -31,6 +32,7 @@ public class TournamentService {
     private final TournamentMatchDAO _tournamentMatchDao;
     private final GameHistoryDAO _gameHistoryDao;
     private final LotroCardBlueprintLibrary _library;
+    private TableHolder _tables;
 
     private final CollectionsManager _collectionsManager;
 
@@ -53,7 +55,12 @@ public class TournamentService {
         _library = library;
     }
 
-    public void reloadTournaments() {
+    public PairingMechanism getPairingMechanism(String pairing) {
+        return Tournament.getPairingMechanism(pairing);
+    }
+
+    public void reloadTournaments(TableHolder tables) {
+        _tables = tables;
         clearCache();
         _tournamentQueues.clear();
 
@@ -142,7 +149,7 @@ public class TournamentService {
 
     }
 
-    public boolean cleanupTournamentQueues(HallServer hall) throws SQLException, IOException {
+    public boolean processTournamentQueues() throws SQLException, IOException {
         boolean queuesChanged = false;
         for (var entry : new HashMap<>(_tournamentQueues).entrySet()) {
             var queueID = entry.getKey();
@@ -163,13 +170,18 @@ public class TournamentService {
         return queuesChanged;
     }
 
-    public boolean cleanupTournaments(HallServer hall) throws SQLException, IOException {
+    public boolean processTournaments(HallServer hall) {
         boolean tournamentsChanged = false;
         for (var entry : new HashMap<>(_activeTournaments).entrySet()) {
             var tourneyID = entry.getKey();
             var tourney = entry.getValue();
 
-            tournamentsChanged |= tourney.advanceTournament(hall.getTournamentCallback(tourney), _collectionsManager);
+            TournamentCallback tournamentCallback = hall.getTournamentCallback(tourney);
+            List<TournamentProcessAction> actions =  tourney.advanceTournament(_collectionsManager);
+            tournamentsChanged |= !actions.isEmpty();
+            for (TournamentProcessAction action : actions) {
+                action.process(tournamentCallback);
+            }
             if (tourney.getTournamentStage() == Tournament.Stage.FINISHED)
                 _activeTournaments.remove(tourneyID);
         }
@@ -177,10 +189,9 @@ public class TournamentService {
         return tournamentsChanged;
     }
 
-    public boolean refreshQueues(HallServer hall) {
+    public boolean refreshQueues() {
         boolean queuesChanged = false;
-        var unstartedTournamentQueues = getUnstartedScheduledTournamentQueues(
-                ZonedDateTime.now().plusDays(_scheduledTournamentLoadTime));
+        var unstartedTournamentQueues = retrieveUnstartedScheduledTournamentQueues(ZonedDateTime.now().plusDays(_scheduledTournamentLoadTime));
         for (var unstartedTourney : unstartedTournamentQueues) {
             String id = unstartedTourney.tournament_id;
             if (!_tournamentQueues.containsKey(id)) {
@@ -193,43 +204,47 @@ public class TournamentService {
         return queuesChanged;
     }
 
-    public void addPlayer(String tournamentId, String playerName, LotroDeck deck) {
+    public DBDefs.Tournament retrieveTournamentData(String tournamentId) {
+        return _tournamentDao.getTournament(tournamentId);
+    }
+
+    public void recordTournamentPlayer(String tournamentId, String playerName, LotroDeck deck) {
         _tournamentPlayerDao.addPlayer(tournamentId, playerName, deck);
     }
 
-    public void dropPlayer(String tournamentId, String playerName) {
+    public void recordPlayerTournamentAbandon(String tournamentId, String playerName) {
         _tournamentPlayerDao.dropPlayer(tournamentId, playerName);
     }
 
-    public Set<String> getPlayers(String tournamentId) {
+    public Set<String> retrieveTournamentPlayers(String tournamentId) {
         return _tournamentPlayerDao.getPlayers(tournamentId);
     }
 
-    public Map<String, LotroDeck> getPlayerDecks(String tournamentId, String format) {
+    public Map<String, LotroDeck> retrievePlayerDecks(String tournamentId, String format) {
         return _tournamentPlayerDao.getPlayerDecks(tournamentId, format);
     }
 
-    public Set<String> getDroppedPlayers(String tournamentId) {
+    public Set<String> retrieveAbandonedPlayers(String tournamentId) {
         return _tournamentPlayerDao.getDroppedPlayers(tournamentId);
     }
 
-    public LotroDeck getPlayerDeck(String tournamentId, String player, String format) {
+    public LotroDeck retrievePlayerDeck(String tournamentId, String player, String format) {
         return _tournamentPlayerDao.getPlayerDeck(tournamentId, player, format);
     }
 
-    public void addMatch(String tournamentId, int round, String playerOne, String playerTwo) {
+    public void recordMatchup(String tournamentId, int round, String playerOne, String playerTwo) {
         _tournamentMatchDao.addMatch(tournamentId, round, playerOne, playerTwo);
     }
 
-    public void setMatchResult(String tournamentId, int round, String winner) {
+    public void recordMatchupResult(String tournamentId, int round, String winner) {
         _tournamentMatchDao.setMatchResult(tournamentId, round, winner);
     }
 
-    public void setPlayerDeck(String tournamentId, String player, LotroDeck deck) {
+    public void updateRecordedPlayerDeck(String tournamentId, String player, LotroDeck deck) {
         _tournamentPlayerDao.updatePlayerDeck(tournamentId, player, deck);
     }
 
-    public List<TournamentMatch> getMatches(String tournamentId) {
+    public List<TournamentMatch> retrieveMatchups(String tournamentId) {
         var dbMatches = _tournamentMatchDao.getMatches(tournamentId);
         var matches = new ArrayList<TournamentMatch>();
         for(var dbmatch : dbMatches) {
@@ -238,30 +253,38 @@ public class TournamentService {
         return matches;
     }
 
-    public List<DBDefs.GameHistory> getGames(String tournamentName) {
+    public List<DBDefs.GameHistory> getRecordedGames(String tournamentName) {
         return _gameHistoryDao.getGamesForTournament(tournamentName);
     }
 
     public Tournament addTournament(TournamentInfo info) {
-
         _tournamentDao.addTournament(info.ToDB());
-        return createTournamentAndStoreInCache(info);
+        return upsertTournamentInCache(info.tournamentId());
     }
 
-    public void updateTournamentStage(String tournamentId, Tournament.Stage stage) {
+    public boolean addScheduledTournament(DBDefs.ScheduledTournament info) {
+        if (_tournamentQueues.containsKey(info.tournament_id))
+            return false;
+
+        _tournamentDao.addScheduledTournament(info);
+        var scheduledTourney = new ScheduledTournamentQueue(info.tournament_id, this, _productLibrary, info);
+        _tournamentQueues.put(info.tournament_id, scheduledTourney);
+
+        return true;
+    }
+
+    public void recordTournamentStage(String tournamentId, Tournament.Stage stage) {
         _tournamentDao.updateTournamentStage(tournamentId, stage);
     }
 
-    public void updateTournamentRound(String tournamentId, int round) {
+    public void recordTournamentRound(String tournamentId, int round) {
         _tournamentDao.updateTournamentRound(tournamentId, round);
     }
 
     public List<Tournament> getOldTournaments(ZonedDateTime since) {
         List<Tournament> result = new ArrayList<>();
         for (var dbinfo : _tournamentDao.getFinishedTournamentsSince(since)) {
-            Tournament tournament = _activeTournaments.get(dbinfo.tournament_id);
-            if (tournament == null)
-                tournament = createTournamentAndStoreInCache(new TournamentInfo(_productLibrary, dbinfo));
+            var tournament = upsertTournamentInCache(dbinfo.tournament_id);
             result.add(tournament);
         }
         return result;
@@ -270,9 +293,7 @@ public class TournamentService {
     public List<Tournament> getLiveTournaments() {
         List<Tournament> result = new ArrayList<>();
         for (var dbinfo : _tournamentDao.getUnfinishedTournaments()) {
-            Tournament tournament = _activeTournaments.get(dbinfo.tournament_id);
-            if (tournament == null)
-                tournament = createTournamentAndStoreInCache(new TournamentInfo(_productLibrary, dbinfo));
+            var tournament = upsertTournamentInCache(dbinfo.tournament_id);
             result.add(tournament);
         }
         return result;
@@ -285,42 +306,42 @@ public class TournamentService {
             if (dbinfo == null)
                 return null;
 
-            tournament = createTournamentAndStoreInCache(new TournamentInfo(_productLibrary, dbinfo));
+            tournament = upsertTournamentInCache(dbinfo.tournament_id);
         }
         return tournament;
     }
 
-    private Tournament createTournamentAndStoreInCache(TournamentInfo info) {
+    private Tournament upsertTournamentInCache(String tournamentId) {
         Tournament tournament;
         try {
-            DraftPack draftPack = null;
-            //The below appears to be half-finished and completely pointless
-//            String draftType = info.getDraftType();
-//            if (draftType != null)
-//                _draftPackStorage.getDraftPack(draftType);
-
-            tournament = new DefaultTournament(this, _collectionsManager, _productLibrary, null, info);
-
+            tournament = _activeTournaments.get(tournamentId);
+            if (tournament == null) {
+                tournament = new DefaultTournament(this, _collectionsManager, _productLibrary, _tables, tournamentId);
+                _activeTournaments.put(tournamentId, tournament);
+            }
+            else {
+                tournament.RefreshTournamentInfo();;
+            }
         } catch (Exception exp) {
-            throw new RuntimeException("Unable to create Tournament", exp);
+            throw new RuntimeException("Unable to create/update Tournament", exp);
         }
-        _activeTournaments.put(tournament.getTournamentId(), tournament);
+
         return tournament;
     }
 
-    public void addRoundBye(String tournamentId, String player, int round) {
+    public void recordTournamentRoundBye(String tournamentId, String player, int round) {
         _tournamentMatchDao.addBye(tournamentId, player, round);
     }
 
-    public Map<String, Integer> getPlayerByes(String tournamentId) {
+    public Map<String, Integer> retrieveTournamentByes(String tournamentId) {
         return _tournamentMatchDao.getPlayerByes(tournamentId);
     }
 
-    public List<DBDefs.ScheduledTournament> getUnstartedScheduledTournamentQueues(ZonedDateTime tillDate) {
+    public List<DBDefs.ScheduledTournament> retrieveUnstartedScheduledTournamentQueues(ZonedDateTime tillDate) {
         return _tournamentDao.getUnstartedScheduledTournamentQueues(tillDate);
     }
 
-    public void updateScheduledTournamentStarted(String scheduledTournamentId) {
+    public void recordScheduledTournamentStarted(String scheduledTournamentId) {
         _tournamentDao.updateScheduledTournamentStarted(scheduledTournamentId);
     }
 }

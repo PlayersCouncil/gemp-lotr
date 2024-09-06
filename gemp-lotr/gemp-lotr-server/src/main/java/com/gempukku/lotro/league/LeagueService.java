@@ -1,6 +1,6 @@
 package com.gempukku.lotro.league;
 
-import com.gempukku.lotro.DateUtils;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.competitive.BestOfOneStandingsProducer;
 import com.gempukku.lotro.competitive.PlayerStanding;
@@ -19,6 +19,7 @@ import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,7 +39,7 @@ public class LeagueService {
     private final Map<String, List<PlayerStanding>> _leagueStandings = new ConcurrentHashMap<>();
     private final Map<String, List<PlayerStanding>> _leagueSerieStandings = new ConcurrentHashMap<>();
 
-    private int _activeLeaguesLoadedDate;
+    private ZonedDateTime _activeLeaguesLoadedDate;
     private List<League> _activeLeagues;
 
     public LeagueService(LeagueDAO leagueDao, LeagueMatchDAO leagueMatchDao,
@@ -57,15 +58,16 @@ public class LeagueService {
     public synchronized void clearCache() {
         _leagueSerieStandings.clear();
         _leagueStandings.clear();
-        _activeLeaguesLoadedDate = 0;
+        _activeLeaguesLoadedDate = DateUtils.MinDate();
 
         _leagueMatchDao.clearCache();
         _leagueParticipationDAO.clearCache();
     }
 
     private synchronized void ensureLoadedCurrentLeagues() {
-        int currentDate = DateUtils.getCurrentDate();
-        if (currentDate != _activeLeaguesLoadedDate) {
+        var currentDate = DateUtils.Today();
+
+        if (_activeLeagues == null || !DateUtils.IsSameDay(currentDate, _activeLeaguesLoadedDate)) {
             _leagueMatchDao.clearCache();
             _leagueParticipationDAO.clearCache();
 
@@ -80,7 +82,7 @@ public class LeagueService {
     }
 
     public synchronized List<League> getActiveLeagues() {
-        if (DateUtils.getCurrentDate() == _activeLeaguesLoadedDate)
+        if (_activeLeaguesLoadedDate != null && DateUtils.IsToday(_activeLeaguesLoadedDate))
             return Collections.unmodifiableList(_activeLeagues);
         else {
             ensureLoadedCurrentLeagues();
@@ -88,26 +90,34 @@ public class LeagueService {
         }
     }
 
-    private void processLoadedLeagues(int currentDate) {
+    private void processLoadedLeagues(ZonedDateTime currentDate) {
         for (League activeLeague : _activeLeagues) {
             int oldStatus = activeLeague.getStatus();
-            int newStatus = activeLeague.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).process(_collectionsManager, getLeagueStandings(activeLeague), oldStatus, currentDate);
+            int newStatus = activeLeague.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions)
+                    .process(_collectionsManager, getLeagueStandings(activeLeague), oldStatus, currentDate);
             if (newStatus != oldStatus)
                 _leagueDao.setStatus(activeLeague, newStatus);
         }
     }
 
     public synchronized boolean isPlayerInLeague(League league, Player player) {
-        return _leagueParticipationDAO.getUsersParticipating(league.getType()).contains(player.getName());
+        return _leagueParticipationDAO.getUsersParticipating(league.getCodeStr()).contains(player.getName());
     }
 
     public synchronized boolean playerJoinsLeague(League league, Player player, String remoteAddr) throws SQLException, IOException {
+        return playerJoinsLeague(league, player, remoteAddr, false, false);
+    }
+
+    public synchronized boolean playerJoinsLeague(League league, Player player, String remoteAddr, boolean skipCost, boolean addedByAdmin) throws SQLException, IOException {
         if (isPlayerInLeague(league, player))
             return false;
+        if (league.inviteOnly() && !addedByAdmin)
+            return false;
         int cost = league.getCost();
-        if (_collectionsManager.removeCurrencyFromPlayerCollection("Joining "+league.getName()+" league", player, CollectionType.MY_CARDS, cost)) {
-            league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).joinLeague(_collectionsManager, player, DateUtils.getCurrentDate());
-            _leagueParticipationDAO.userJoinsLeague(league.getType(), player, remoteAddr);
+
+        if (skipCost || _collectionsManager.removeCurrencyFromPlayerCollection("Joining "+league.getName()+" league", player, CollectionType.MY_CARDS, cost)) {
+            league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).createLeagueCollection(_collectionsManager, player, DateUtils.Now());
+            _leagueParticipationDAO.userJoinsLeague(league.getCodeStr(), player, remoteAddr);
             _leagueStandings.remove(LeagueMapKeys.getLeagueMapKey(league));
 
             return true;
@@ -118,7 +128,7 @@ public class LeagueService {
 
     public synchronized League getLeagueByType(String type) {
         for (League league : getActiveLeagues()) {
-            if (league.getType().equals(type))
+            if (league.getCodeStr().equals(type))
                 return league;
         }
         return null;
@@ -126,8 +136,8 @@ public class LeagueService {
 
     public synchronized CollectionType getCollectionTypeByCode(String collectionTypeCode) {
         for (League league : getActiveLeagues()) {
-            for (LeagueSerieData leagueSerieData : league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).getSeries()) {
-                CollectionType collectionType = leagueSerieData.getCollectionType();
+            for (LeagueSerieInfo leagueSerieInfo : league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).getSeries()) {
+                CollectionType collectionType = leagueSerieInfo.getCollectionType();
                 if (collectionType != null && collectionType.getCode().equals(collectionTypeCode))
                     return collectionType;
             }
@@ -135,19 +145,19 @@ public class LeagueService {
         return null;
     }
 
-    public synchronized LeagueSerieData getCurrentLeagueSerie(League league) {
-        final int currentDate = DateUtils.getCurrentDate();
+    public synchronized LeagueSerieInfo getCurrentLeagueSerie(League league) {
+        var currentDate = DateUtils.Now();
 
-        for (LeagueSerieData leagueSerieData : league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).getSeries()) {
-            if (currentDate >= leagueSerieData.getStart() && currentDate <= leagueSerieData.getEnd())
-                return leagueSerieData;
+        for (LeagueSerieInfo leagueSerieInfo : league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).getSeries()) {
+            if (currentDate.isAfter( leagueSerieInfo.getStart()) && currentDate.isBefore(leagueSerieInfo.getEnd()))
+                return leagueSerieInfo;
         }
 
         return null;
     }
 
-    public synchronized void reportLeagueGameResult(League league, LeagueSerieData serie, String winner, String loser) {
-        _leagueMatchDao.addPlayedMatch(league.getType(), serie.getName(), winner, loser);
+    public synchronized void reportLeagueGameResult(League league, LeagueSerieInfo serie, String winner, String loser) {
+        _leagueMatchDao.addPlayedMatch(league.getCodeStr(), serie.getName(), winner, loser);
 
         _leagueStandings.remove(LeagueMapKeys.getLeagueMapKey(league));
         _leagueSerieStandings.remove(LeagueMapKeys.getLeagueSerieMapKey(league, serie));
@@ -156,7 +166,7 @@ public class LeagueService {
         awardPrizesToPlayer(league, serie, loser, false);
     }
 
-    private void awardPrizesToPlayer(League league, LeagueSerieData serie, String player, boolean winner) {
+    private void awardPrizesToPlayer(League league, LeagueSerieInfo serie, String player, boolean winner) {
         int count = 0;
         Collection<LeagueMatchResult> playerMatchesPlayedOn = getPlayerMatchesInSerie(league, serie, player);
         for (LeagueMatchResult leagueMatch : playerMatchesPlayedOn) {
@@ -176,8 +186,8 @@ public class LeagueService {
 
     }
 
-    public synchronized Collection<LeagueMatchResult> getPlayerMatchesInSerie(League league, LeagueSerieData serie, String player) {
-        final Collection<LeagueMatchResult> allMatches = _leagueMatchDao.getLeagueMatches(league.getType());
+    public synchronized Collection<LeagueMatchResult> getPlayerMatchesInSerie(League league, LeagueSerieInfo serie, String player) {
+        final Collection<LeagueMatchResult> allMatches = _leagueMatchDao.getLeagueMatches(league.getCodeStr());
         Set<LeagueMatchResult> result = new HashSet<>();
         for (LeagueMatchResult match : allMatches) {
             if (match.getSerieName().equals(serie.getName()) && (match.getWinner().equals(player) || match.getLoser().equals(player)))
@@ -197,7 +207,7 @@ public class LeagueService {
         return leagueStandings;
     }
 
-    public synchronized List<PlayerStanding> getLeagueSerieStandings(League league, LeagueSerieData leagueSerie) {
+    public synchronized List<PlayerStanding> getLeagueSerieStandings(League league, LeagueSerieInfo leagueSerie) {
         List<PlayerStanding> serieStandings = _leagueSerieStandings.get(LeagueMapKeys.getLeagueSerieMapKey(league, leagueSerie));
         if (serieStandings == null) {
             synchronized (this) {
@@ -208,9 +218,9 @@ public class LeagueService {
         return serieStandings;
     }
 
-    private List<PlayerStanding> createLeagueSerieStandings(League league, LeagueSerieData leagueSerie) {
-        final Collection<String> playersParticipating = _leagueParticipationDAO.getUsersParticipating(league.getType());
-        final Collection<LeagueMatchResult> matches = _leagueMatchDao.getLeagueMatches(league.getType());
+    private List<PlayerStanding> createLeagueSerieStandings(League league, LeagueSerieInfo leagueSerie) {
+        final Collection<String> playersParticipating = _leagueParticipationDAO.getUsersParticipating(league.getCodeStr());
+        final Collection<LeagueMatchResult> matches = _leagueMatchDao.getLeagueMatches(league.getCodeStr());
 
         Set<LeagueMatchResult> matchesInSerie = new HashSet<>();
         for (LeagueMatchResult match : matches) {
@@ -222,8 +232,8 @@ public class LeagueService {
     }
 
     private List<PlayerStanding> createLeagueStandings(League league) {
-        final Collection<String> playersParticipating = _leagueParticipationDAO.getUsersParticipating(league.getType());
-        final Collection<LeagueMatchResult> matches = _leagueMatchDao.getLeagueMatches(league.getType());
+        final Collection<String> playersParticipating = _leagueParticipationDAO.getUsersParticipating(league.getCodeStr());
+        final Collection<LeagueMatchResult> matches = _leagueMatchDao.getLeagueMatches(league.getCodeStr());
 
         return createStandingsForMatchesAndPoints(playersParticipating, matches);
     }
@@ -232,7 +242,7 @@ public class LeagueService {
         return BestOfOneStandingsProducer.produceStandings(playersParticipating, matches, 2, 1, Collections.emptyMap());
     }
 
-    public synchronized boolean canPlayRankedGame(League league, LeagueSerieData season, String player) {
+    public synchronized boolean canPlayRankedGame(League league, LeagueSerieInfo season, String player) {
         int maxMatches = season.getMaxMatches();
         Collection<LeagueMatchResult> playedInSeason = getPlayerMatchesInSerie(league, season, player);
         if (playedInSeason.size() >= maxMatches)
@@ -240,7 +250,7 @@ public class LeagueService {
         return true;
     }
 
-    public synchronized boolean canPlayRankedGameAgainst(League league, LeagueSerieData season, String playerOne, String playerTwo) {
+    public synchronized boolean canPlayRankedGameAgainst(League league, LeagueSerieInfo season, String playerOne, String playerTwo) {
         Collection<LeagueMatchResult> playedInSeason = getPlayerMatchesInSerie(league, season, playerOne);
         int maxGames = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions)
                 .getMaxRepeatMatchesPerSerie();

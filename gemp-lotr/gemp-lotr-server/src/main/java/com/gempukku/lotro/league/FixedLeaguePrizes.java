@@ -1,5 +1,6 @@
 package com.gempukku.lotro.league;
 
+import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultCardCollection;
@@ -43,7 +44,7 @@ public class FixedLeaguePrizes implements LeaguePrizes {
     }
 
     @Override
-    public CardCollection getPrizeForLeague(int position, int playersCount, int gamesPlayed, int maxGamesPlayed, CollectionType collectionType) {
+    public CardCollection getPrizeForLeague(int position, int playersCount, int gamesPlayed, int maxGamesPlayed) {
         DefaultCardCollection prize = new DefaultCardCollection();
         prize.addAndOpenPack("Any Random Foil", getMinorPrizeCount(position), _productLibrary);
         prize.addItem("Event Chase Booster", getMajorPrizeCount(position), true);
@@ -54,7 +55,7 @@ public class FixedLeaguePrizes implements LeaguePrizes {
     }
 
     @Override
-    public CardCollection getTrophiesForLeague(int position, int playersCount, int gamesPlayed, int maxGamesPlayed, CollectionType collectionType) {
+    public CardCollection getTrophiesForLeague(PlayerStanding standing, List<PlayerStanding> allStandings, int maxGamesPlayed) {
         return null;
     }
 

@@ -1,13 +1,20 @@
 package com.gempukku.lotro.db;
 
 import com.gempukku.lotro.common.AppConfig;
+import com.gempukku.lotro.db.converters.LocalDateConverter;
 import org.apache.commons.dbcp2.ConnectionFactory;
 import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
 import org.apache.commons.dbcp2.PoolableConnectionFactory;
 import org.apache.commons.dbcp2.PoolingDataSource;
 import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.sql2o.Sql2o;
+import org.sql2o.converters.Converter;
+import org.sql2o.quirks.NoQuirks;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class DbAccess {
@@ -25,6 +32,14 @@ public class DbAccess {
         }
 
         _dataSource = setupDataSource(url, user, pass, batch);
+    }
+
+    public static final Map<Class, Converter> CustomMappers = new HashMap<>() {{
+       put(LocalDate.class, new LocalDateConverter());
+    }};
+
+    public Sql2o openDB() {
+        return new Sql2o(_dataSource, new NoQuirks(CustomMappers));
     }
 
     public DataSource getDataSource() {

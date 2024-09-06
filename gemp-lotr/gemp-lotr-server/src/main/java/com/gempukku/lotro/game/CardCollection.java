@@ -1,7 +1,6 @@
 package com.gempukku.lotro.game;
 
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public interface CardCollection {
     int getCurrency();
@@ -29,6 +28,27 @@ public interface CardCollection {
             _recursive = recursive;
         }
 
+        public static List<Item> createItems(String combined) {
+            List<Item> result = new LinkedList<>();
+            for (String item : combined.split("\n")) {
+                item = item.trim();
+                if (!item.isEmpty()) {
+                    result.add(createItem(item));
+                }
+            }
+            return result;
+        }
+
+        public static Item createItem(String combined) {
+            final String[] result = combined.split("x", 2);
+            if (result.length > 2)
+                throw new RuntimeException("Unable to parse product items: `" + combined + "`");
+            if(result.length == 1)
+                return createItem(result[0].trim(), 1);
+
+            return createItem(result[1].trim(), Integer.parseInt(result[0].trim()));
+        }
+
         public static Item createItem(String blueprintId, int count) {
             return createItem(blueprintId, count, false);
         }
@@ -40,11 +60,6 @@ public interface CardCollection {
                 return new Item(Item.Type.PACK, count, blueprintId, recursive);
             else
                 return new Item(Item.Type.CARD, count, blueprintId, recursive);
-        }
-
-        public static Item createItem(String combined) {
-            String[] result = combined.split("x", 2);
-            return createItem(result[1], Integer.parseInt(result[0]));
         }
 
         public Type getType() {

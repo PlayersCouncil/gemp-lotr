@@ -14,6 +14,8 @@ var GempLotrHallUI = Class.extend({
 	buttonsDiv:null,
 	adminTab:null,
 	userInfo:null,
+	
+	inTournament:false,
 
 	pocketDiv:null,
 	pocketValue:null,
@@ -23,6 +25,11 @@ var GempLotrHallUI = Class.extend({
 		var that = this;
 		
 		this.chat = chat;
+		this.chat.tournamentCallback = function(message) {
+			if(that.inTournament) {
+				that.showDialog("Tournament Update", message);
+			}
+		};
 		
 		$("#chat").resizable({
 			handles: "n",
@@ -80,13 +87,13 @@ var GempLotrHallUI = Class.extend({
 				{ 
 					that.userInfo = json;
 						if(that.userInfo.type.includes("a") || that.userInfo.type.includes("l"))
-			{
-				that.adminTab.show();
-			}
-			else
-			{
-				that.adminTab.hide();
-			}
+						{
+							that.adminTab.show();
+						}
+						else
+						{
+							that.adminTab.hide();
+						}
 				});
 		
 
@@ -397,6 +404,7 @@ var GempLotrHallUI = Class.extend({
 									that.comm.joinQueue(queueId, deck, function (xml) {
 										var result = that.processResponse(xml);
 										if(result) {
+											that.inTournament = true;
 											that.showDialog("Joined Tournament", "You have signed up to participate in the <b>" + queueName
 											 + "</b> tournament.<br><br>You will use a snapshot of your '<b>" + deck +"</b>' deck as it is right now.  " + 
 											 "If you need to change or update your deck, you will need to leave the queue and rejoin.<br><br>" +
@@ -408,6 +416,7 @@ var GempLotrHallUI = Class.extend({
 							)(queue));
 						actionsField.append(but);
 					} else if (joined == "true") {
+						that.inTournament = true;
 						var but = $("<button>Leave Queue</button>");
 						$(but).button().click((
 							function(queueInfo) {
@@ -419,6 +428,7 @@ var GempLotrHallUI = Class.extend({
 										var result = that.processResponse(xml);
 										
 										if(result) {
+											that.inTournament = false;
 											that.showDialog("Left Tournament", "You have been removed from the <b>" + queueName
 											 + "</b> tournament.<br><br>If you wish to rejoin, you will need to requeue before it starts at " + queueStart + ".", 230);
 										}
@@ -506,6 +516,7 @@ var GempLotrHallUI = Class.extend({
 
 					var joined = tournament.getAttribute("signedUp");
 					if (joined == "true") {
+						that.inTournament = true;
 						var but = $("<button>Abandon Tournament</button>");
 						$(but).button().click((
 							function(tourneyInfo) {
@@ -516,6 +527,7 @@ var GempLotrHallUI = Class.extend({
 									let isExecuted = confirm("Are you sure you want to resign from the " + tourneyName + " tournament? This cannot be undone.");
 									
 									if(isExecuted) {
+										that.inTournament = false;
 										that.comm.dropFromTournament(tourneyId, function (xml) {
 										that.processResponse(xml);
 									});
@@ -653,7 +665,7 @@ var GempLotrHallUI = Class.extend({
 					
 					//TODO: Replace this with an actual fix on the server side
 					if(name.includes("Casual - WC")) {
-						name = "<td><b>2023 World Championship - " + userDesc + "</b></td>"
+						name = "<td><b>2024 Format Championships" + userDesc + "</b></td>"
 					}
 					row.append(name);
 					row.append("<td>" + statusDescription + "</td>");

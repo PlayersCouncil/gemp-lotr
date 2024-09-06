@@ -380,6 +380,18 @@
 			1x1_389
 			#Gandalf's Staff MW
 			1x2_127
+			#Freca, Hungry Savage	FA
+			1x9_60
+			#Sting, Bane of the Eight Legs MW
+			1x8_126
+			#Dwarven Bracers FA
+			1x2_128
+			#Ulaire Cantea, Lieutenant of Dol Guldur MW
+			1x1_390
+			#Theoden, Tall and Proud FA
+			1x8_127
+			#Evil-smelling Fens FA
+			1x5_129
 		]
 	}
 	
@@ -467,7 +479,14 @@
 			1x10_128
 			#Troop of Uruk-hai FA
 			1x1_389
-			
+			#Freca, Hungry Savage	FA
+			1x9_60
+			#Dwarven Bracers FA
+			1x2_128
+			#Theoden, Tall and Proud FA
+			1x8_127
+			#Evil-smelling Fens FA
+			1x5_129
 		]
 	}
 	
@@ -593,6 +612,10 @@
 			1x9_58
 			#Gandalf's Staff MW
 			1x2_127
+			#Sting, Bane of the Eight Legs MW
+			1x8_126
+			#Ulaire Cantea, Lieutenant of Dol Guldur MW
+			1x1_390
 		]
 	}
 	
@@ -718,6 +741,8 @@
 			1x9_58
 			#Gandalf's Staff MW
 			1x2_127
+			#Sting, Bane of the Eight Legs MW
+			1x8_126
 		]
 	}
 ]

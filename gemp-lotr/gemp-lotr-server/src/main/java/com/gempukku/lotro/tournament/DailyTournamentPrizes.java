@@ -24,13 +24,13 @@ public class DailyTournamentPrizes implements TournamentPrizes {
     public CardCollection getPrizeForTournament(PlayerStanding playerStanding, int playersCount) {
 
         DefaultCardCollection prize = new DefaultCardCollection();
-        int hasBye = playerStanding.byeRound() > 0 ? 1 : 0;
-        if (playerStanding.playerWins() + hasBye >= 2) {
-            prize.addItem("Placement Random Chase Card Selector", getMajorPrizeCount(playerStanding.standing()), true);
-            prize.addItem("(S)Tengwar", getTengwarPrizeCount(playerStanding.standing()), true);
+        int hasBye = playerStanding.byeRound > 0 ? 1 : 0;
+        if (playerStanding.playerWins + hasBye >= 2) {
+            prize.addItem("Placement Random Chase Card Selector", getMajorPrizeCount(playerStanding.standing), true);
+            prize.addItem("(S)Tengwar", getTengwarPrizeCount(playerStanding.standing), true);
         }
 
-        prize.addAndOpenPack("Any Random Foil", getMinorPrizeCount(playerStanding.standing()), _productLibrary);
+        prize.addAndOpenPack("Any Random Foil", getMinorPrizeCount(playerStanding.standing), _productLibrary);
 
         if (prize.getAll().iterator().hasNext())
             return prize;

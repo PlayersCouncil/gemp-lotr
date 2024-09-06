@@ -52,6 +52,7 @@ var TournamentResultsUI = Class.extend({
             var tournamentStage = tournament.getAttribute("stage");
 
             $("#tournamentExtraInfo").append("<div class='tournamentName'>" + tournamentName + "</div>");
+            
             $("#tournamentExtraInfo").append("<div class='tournamentFormat'><b>Format:</b> " + tournamentFormat + "</div>");
             $("#tournamentExtraInfo").append("<div class='tournamentCollection'><b>Collection:</b> " + tournamentCollection + "</div>");
             if (tournamentStage == "Playing games")
@@ -81,6 +82,11 @@ var TournamentResultsUI = Class.extend({
                 var tournamentStage = tournament.getAttribute("stage");
 
                 $("#tournamentResults").append("<div class='tournamentName'>" + tournamentName + "</div>");
+                
+                if(hall.userInfo.type.includes("l") || hall.userInfo.type.includes("a")) {
+                    $("#tournamentResults").append("<span class='league-id'><a target='_blank' href='/gemp-lotr-server/tournament/" + tournamentId + "/report/html'>" + tournamentId + "</a></span>");
+                }
+            
                 $("#tournamentResults").append("<div class='tournamentRound'><b>Rounds:</b> " + tournamentRound + "</div>");
 
                 var detailsBut = $("<button>See details</button>").button();
@@ -106,7 +112,15 @@ var TournamentResultsUI = Class.extend({
     createStandingsTable:function (xmlstandings, tournamentId, tournamentStage) {
         var standingsTable = $("<table class='standings'></table>");
 
-        standingsTable.append("<tr><th>Standing</th><th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th><th></th><th>Standing</th><th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th></tr>");
+        standingsTable.append("<tr>"
+                            + "<th>Standing</th>"
+                            + "<th>Player</th>"
+                            + "<th>Points</th>"
+                            + "<th>Games played</th>"
+                            + "<th>Mod. Median Score</th>"
+                            + "<th>Cumulative Score</th>"
+                            + "<th>Opponent Win %</th>" 
+                            + "</tr>");
 
         var standings = [];
         for (var k = 0; k < xmlstandings.length; k++) {
@@ -118,6 +132,8 @@ var TournamentResultsUI = Class.extend({
             standing.points = parseInt(xmlstanding.getAttribute("points"));
             standing.gamesPlayed = parseInt(xmlstanding.getAttribute("gamesPlayed"));
             standing.opponentWinPerc = xmlstanding.getAttribute("opponentWin");
+            standing.medianScore = xmlstanding.getAttribute("medianScore");
+            standing.cumulativeScore = xmlstanding.getAttribute("cumulativeScore");
 
             if (tournamentStage == "Finished")
                 standing.playerStr = "<a target='_blank' href='/gemp-lotr-server/tournament/" + tournamentId + "/deck/" + standing.player + "/html'>" + standing.player + "</a>";
@@ -131,23 +147,18 @@ var TournamentResultsUI = Class.extend({
         
         var secondColumnBaseIndex = Math.ceil(standings.length / 2);
         
-        for (var k = 0; k < secondColumnBaseIndex; k++) {
+        for (var k = 0; k < standings.length; k++) {
             var standing = standings[k];
             
-            standingsTable.append("<tr><td>" + standing.currentStanding + "</td><td>" 
-                                  + standing.playerStr + "</td><td>" + standing.points 
-                                  + "</td><td>" + standing.gamesPlayed + "</td><td>" 
-                                  + standing.opponentWinPerc + "</td></tr>");
-        }
-
-        for (var k = secondColumnBaseIndex; k < standings.length; k++) {
-            var standing = standings[k];
-
-            $("tr:eq(" + (k - secondColumnBaseIndex + 1) + ")", standingsTable)
-                .append("<td></td><td>" + standing.currentStanding + "</td><td>" 
-                                  + standing.playerStr + "</td><td>" + standing.points 
-                                  + "</td><td>" + standing.gamesPlayed + "</td><td>" 
-                                  + standing.opponentWinPerc + "</td></tr>");
+            standingsTable.append("<tr>" + 
+                                  "<td>" + standing.currentStanding + "</td>" 
+                                  + "<td>" + standing.playerStr + "</td>"
+                                  + "<td>" + standing.points + "</td>"
+                                  + "<td>" + standing.gamesPlayed + "</td>" 
+                                  + "<td>" + standing.medianScore + "</td>" 
+                                  + "<td>" + standing.cumulativeScore + "</td>" 
+                                  + "<td>" + standing.opponentWinPerc + "</td>"
+                                  + "</tr>");
         }
 
         return standingsTable;

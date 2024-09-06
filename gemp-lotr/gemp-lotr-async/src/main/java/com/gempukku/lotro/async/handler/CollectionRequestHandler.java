@@ -1,6 +1,5 @@
 package com.gempukku.lotro.async.handler;
 
-import com.alibaba.fastjson.JSON;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.collection.CollectionsManager;
@@ -10,9 +9,10 @@ import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
-import com.gempukku.lotro.league.LeagueSerieData;
+import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -80,7 +80,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
 
             _collectionsManager.migratePlayerCollection(player);
 
-            responseWriter.writeJsonResponse(JSON.toJSONString(player.GetUserInfo()));
+            responseWriter.writeJsonResponse(JsonUtils.Serialize(player.GetUserInfo()));
         } finally {
             postDecoder.destroy();
         }
@@ -244,7 +244,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
         Element collectionsElem = doc.createElement("collections");
 
         for (League league : _leagueService.getActiveLeagues()) {
-            LeagueSerieData serie = _leagueService.getCurrentLeagueSerie(league);
+            LeagueSerieInfo serie = _leagueService.getCurrentLeagueSerie(league);
             if (serie != null && serie.isLimited() && _leagueService.isPlayerInLeague(league, resourceOwner)) {
                 CollectionType collectionType = serie.getCollectionType();
                 Element collectionElem = doc.createElement("collection");

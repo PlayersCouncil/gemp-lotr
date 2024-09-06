@@ -91,7 +91,7 @@ public class LotroServer extends AbstractServer {
                 throw new IllegalArgumentException("There has to be at least two players");
             final String gameId = String.valueOf(_nextGameId);
 
-            if (gameSettings.isCompetitive()) {
+            if (gameSettings.competitive()) {
                 Set<String> allowedUsers = new HashSet<>();
                 for (LotroGameParticipant participant : participants)
                     allowedUsers.add(participant.getPlayerId());
@@ -103,16 +103,16 @@ public class LotroServer extends AbstractServer {
             // Also: yes, yes, we're very proud that you found a way to assign this boolean in one line.
             // The point of the code setting it like this is to make each case painfully explicit.
             boolean spectate = true;
-            if(gameSettings.getLeague() != null) {
+            if(gameSettings.league() != null) {
                 spectate = true;
             }
-            else if(gameSettings.isPrivateGame() || gameSettings.isHiddenGame()) {
+            else if(gameSettings.privateGame() || gameSettings.hiddenGame()) {
                 spectate = false;
             }
 
-            LotroGameMediator lotroGameMediator = new LotroGameMediator(gameId, gameSettings.getLotroFormat(), participants, _lotroCardBlueprintLibrary,
-                    gameSettings.getTimeSettings(),
-                    spectate, !gameSettings.isCompetitive(), gameSettings.isHiddenGame(), tournamentName);
+            LotroGameMediator lotroGameMediator = new LotroGameMediator(gameId, gameSettings.format(), participants, _lotroCardBlueprintLibrary,
+                    gameSettings.timeSettings(),
+                    spectate, !gameSettings.competitive(), gameSettings.hiddenGame(), tournamentName);
             lotroGameMediator.addGameResultListener(
                 new GameResultListener() {
                     @Override
@@ -125,7 +125,7 @@ public class LotroServer extends AbstractServer {
                         _finishedGamesTime.put(gameId, new Date());
                     }
                 });
-            var formatName = gameSettings.getLotroFormat().getName();
+            var formatName = gameSettings.format().getName();
             lotroGameMediator.sendMessageToPlayers("You are starting a game of " + formatName);
             if(formatName.contains("PC")) {
                 lotroGameMediator.sendMessageToPlayers(LotroFormat.PCSummary);
@@ -143,7 +143,7 @@ public class LotroServer extends AbstractServer {
 
             lotroGameMediator.sendMessageToPlayers("Players in the game are: " + players);
 
-            final var gameRecordingInProgress = _gameRecorder.recordGame(lotroGameMediator, gameSettings.getLotroFormat(), tournamentName, decks);
+            final var gameRecordingInProgress = _gameRecorder.recordGame(lotroGameMediator, gameSettings.format(), tournamentName, decks);
             lotroGameMediator.addGameResultListener(
                 new GameResultListener() {
                     @Override

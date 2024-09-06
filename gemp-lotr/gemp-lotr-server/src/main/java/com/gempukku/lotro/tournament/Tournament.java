@@ -11,11 +11,12 @@ import com.gempukku.lotro.game.SortAndFilterCards;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 
 import java.util.List;
 
 public interface Tournament {
-    public enum Stage {
+    enum Stage {
         DRAFT("Drafting"),
         DECK_BUILDING("Deck building"),
         AWAITING_KICKOFF("Awaiting kickoff"),
@@ -47,16 +48,17 @@ public interface Tournament {
         }
     }
 
-    public static TournamentPrizes getTournamentPrizes(ProductLibrary productLibrary, String prizesScheme) {
+    static TournamentPrizes getTournamentPrizes(ProductLibrary productLibrary, String prizesScheme) {
         if (prizesScheme == null || prizesScheme.equals("none"))
             return new NoPrizes();
 
         return new DailyTournamentPrizes(prizesScheme, productLibrary);
     }
 
-    public static PairingMechanism getPairingMechanism(String pairingType) {
-        if (pairingType.equals("singleElimination"))
-            return new SingleEliminationPairing("singleElimination");
+    static PairingMechanism getPairingMechanism(String pairingType) {
+        pairingType = pairingType.toLowerCase().trim();
+        if (pairingType.equals("singleelimination"))
+            return new SingleEliminationPairing("singleelimination");
         if (pairingType.equals("swiss"))
             return new SwissPairingMechanism("swiss");
         if (pairingType.equals("swiss-3"))
@@ -67,31 +69,33 @@ public interface Tournament {
         return null;
     }
 
-    public String getTournamentId();
-    public String getFormat();
-    public CollectionType getCollectionType();
-    public String getTournamentName();
-    public String getPlayOffSystem();
+    String getTournamentId();
+    String getFormat();
+    CollectionType getCollectionType();
+    String getTournamentName();
+    String getPlayOffSystem();
 
-    public Stage getTournamentStage();
-    public int getCurrentRound();
-    public int getPlayersInCompetitionCount();
-    public String getPlayerList();
+    void RefreshTournamentInfo();
 
-    public boolean advanceTournament(TournamentCallback tournamentCallback, CollectionsManager collectionsManager);
+    Stage getTournamentStage();
+    int getCurrentRound();
+    int getPlayersInCompetitionCount();
+    String getPlayerList();
 
-    public void reportGameFinished(String winner, String loser);
+    List<TournamentProcessAction> advanceTournament(CollectionsManager collectionsManager);
 
-    public void playerChosenCard(String playerName, String cardId);
-    public void playerSubmittedDeck(String player, LotroDeck deck);
-    public LotroDeck getPlayerDeck(String player);
-    public boolean dropPlayer(String player);
+    void reportGameFinished(String winner, String loser);
 
-    public Draft getDraft();
+    void playerChosenCard(String playerName, String cardId);
+    void playerSubmittedDeck(String player, LotroDeck deck);
+    LotroDeck getPlayerDeck(String player);
+    boolean dropPlayer(String player);
 
-    public List<PlayerStanding> getCurrentStandings();
+    Draft getDraft();
 
-    public boolean isPlayerInCompetition(String player);
+    List<PlayerStanding> getCurrentStandings();
 
-    public String produceReport(DeckRenderer renderer) throws CardNotFoundException;
+    boolean isPlayerInCompetition(String player);
+
+    String produceReport(DeckRenderer renderer) throws CardNotFoundException;
 }

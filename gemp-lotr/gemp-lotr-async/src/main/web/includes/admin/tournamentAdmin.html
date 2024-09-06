@@ -1,0 +1,504 @@
+<script type="text/javascript">
+function gatherData(formElem) {
+	var data = {};
+
+	var inputs = $("input[type='text'], option:selected", formElem).each(
+		function () {
+			
+			var input = $(this);
+			var name = null;
+			var value = null;
+			if (input.prop("tagName") == "INPUT") {
+				name = input.attr("name");
+				value = input.val();
+			} else if (input.prop("tagName") == "OPTION") {
+				name = input.parents("select").attr("name");
+				value = input.attr("value");
+			}
+			if (name != null && value != null) {
+				if (data[name] == null)
+					data[name] = new Array();
+				data[name].push(value);
+			}
+		});
+
+	return data;
+}
+
+$(document).ready(
+	function () {
+		var previewDialog = $("<div></div>")
+				.dialog({
+					autoOpen:false,
+					closeOnEscape:true,
+					resizable:true,
+					modal:true,
+					title:"Preview window",
+					closeText: ''
+				});
+
+		var displayPreview = function (xml) {
+			var root = xml.documentElement;
+			if(root == null)
+			{
+				xml = new DOMParser().parseFromString(xml,"text/xml");
+				root = xml.documentElement;
+			}
+			if (root.tagName == 'league') {
+				var league = root;
+
+				var leagueName = league.getAttribute("name");
+				var cost = parseInt(league.getAttribute("cost"));
+
+				previewDialog.append("<div class='leagueName'>" + leagueName + "</div>");
+
+				var costStr = formatPrice(cost);
+				previewDialog.append("<div class='leagueCost'><b>Cost:</b> " + costStr + "</div>");
+
+				var series = league.getElementsByTagName("serie");
+				for (var j = 0; j < series.length; j++) {
+
+					var serie = series[j];
+					var serieName = serie.getAttribute("type");
+					var serieStart = serie.getAttribute("start");
+					var serieEnd = serie.getAttribute("end");
+					var maxMatches = serie.getAttribute("maxMatches");
+					var format = serie.getAttribute("format");
+					var collection = serie.getAttribute("collection");
+					var limited = serie.getAttribute("limited");
+
+					var serieText = serieName + " - " + getDateString(serieStart) + " to " + getDateString(serieEnd);
+					previewDialog.append("<div class='serieName'>" + serieText + "</div>");
+
+					previewDialog.append("<div><b>Format:</b> " + ((limited == "true") ? "Limited" : "Constructed") + " " + format + "</div>");
+					previewDialog.append("<div><b>Collection:</b> " + collection + "</div>");
+
+					previewDialog.append("<div>Maximum ranked matches in serie: " + maxMatches + "</div>");
+				}
+			}
+		};
+		
+		var now = new Date();
+		var dateStr = "" + now.getFullYear() + String(1 + now.getMonth()).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
+		var dateTimeStr = "" + now.getFullYear() + "-" + String(1 + now.getMonth()).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0');
+		$("#sch-tourney-start").val(dateTimeStr + "T17:00");
+
+		
+		$("#update-stage-button").button().click(
+			function () {
+				let resultdiv = $("#update-stage-result");
+				resultdiv.html("Processing...");
+				
+				hall.comm.setTournamentStage(
+			   		$("#update-stage-tourney-id").val(), 
+			   		$("#update-stage").val(),
+					function (xml) {
+						resultdiv.html("OK");
+					}, tourneyErrorMap(resultdiv));
+				});
+		
+		$("#preview-sch-tourney-button").button().click(
+			function () {
+				let resultdiv = $("#sch-tourney-result");
+				resultdiv.html("Processing...");
+
+				processScheduledTournament(true, resultdiv, function(json) {
+						previewDialog.html("");
+						//TODO: make this actually look pretty
+						previewDialog.html("<pre>" + JSON.stringify(json, null, 2) + "</pre>");
+						
+						resultdiv.html("OK");
+						previewDialog.dialog("open");
+					})
+				});
+		
+		$("#add-sch-tourney-button").button().click(
+			function () {
+				let resultdiv = $("#sch-tourney-result");
+				resultdiv.html("Processing...");
+
+				processScheduledTournament(false, resultdiv, function(json) {
+					resultdiv.html("Tournament scheduled successfully.");
+				})
+			});
+		
+		
+		
+		$("#add-additional-table-button").button().click(
+			function () {
+					$(".elim-table-entry").last().clone().appendTo("#elim-table-pairs");
+				});
+		
+		$("#add-tables-button").button().click(
+			function () {
+				let resultdiv = $("#elim-tables-result");
+				resultdiv.html("Processing...");
+				
+				var data = gatherData($(".elim-table-entry"))
+				
+				console.log(data);
+				
+				hall.comm.addTables(
+			   		$("#elim-table-name").val(), 
+			   		$("#elim-table-tournament").val(),
+			   		$("#elim-table-format").val(),
+			   		$("#elim-table-timer").val(),
+			   		data.playerone,
+			   		data.playertwo,
+					function (xml) {
+						resultdiv.html("OK");
+					}, tourneyErrorMap(resultdiv));
+				});
+		
+		
+		hall.comm.getFormats(true,
+			function (json) 
+			{
+				//console.log(json);
+				let drafts = json.DraftTemplates;
+				let formats = json.Formats;
+				let sealed = json.SealedTemplates
+
+				for (var prop in formats) {
+					if (Object.prototype.hasOwnProperty.call(formats, prop)) {
+						//console.log(prop);
+						
+						if(formats[prop].name.includes("Limited"))
+							continue;
+						
+						let num = ("0000" + formats[prop].order).substr(-4);
+						
+						var item = $("<option/>")
+							.attr("value", prop)
+							.text("" + num + " - " + formats[prop].name);
+						$("#sch-tourney-format").append(item);
+						$("#elim-table-format").append(item.clone());
+					}
+				}
+				sortOptionsByName("#elim-table-format");
+				sortOptionsByName("#sch-tourney-format");
+				
+				$("#elim-table-format option").each(function(index) {
+					//console.log(this);
+					let newText = $(this).text().replace(/\d+ - /, '');
+					//console.log(newText);
+					$(this).text(newText);
+				});
+				
+				$("#sch-tourney-format option").each(function(index) {
+					//console.log(this);
+					let newText = $(this).text().replace(/\d+ - /, '');
+					//console.log(newText);
+					$(this).text(newText);
+				});
+			}, 
+			tourneyErrorMap());
+	});
+
+function sortOptionsByName(selector) {
+	$(selector).html($(selector + " option").sort(function (a, b) {
+		return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+	}))
+	$(selector)[0].selectedIndex = 0;
+}
+
+function processScheduledTournament(preview, resultdiv, callback) {
+	hall.comm.processScheduledTournament(                          
+		preview, 
+		$("#sch-tourney-name").val(),
+		$("#sch-tourney-wc").prop('checked'),
+		$("#sch-tourney-id").val(),
+		$("#sch-tourney-format").val(),
+		$("#sch-tourney-start").val(),
+		$("#sch-tourney-cost").val(),
+		$("#sch-tourney-playoff").val(),
+		"", //tiebreaker method
+		"", //prize structure
+		$("#sch-tourney-min-players").val(),
+		$("#sch-tourney-kickoff").prop('checked'),
+		
+		callback, tourneyErrorMap(resultdiv));	
+}
+
+	
+function tourneyErrorMap(outputControl, callback=null) {
+	return {
+		"0":function() {
+			outputControl.html("0: Server has been shut down or there was a problem with your internet connection.", "warningMessage");
+			if(callback!=null)
+				callback();
+		},
+		"400":function(xhr, status, request) {
+			var message = xhr.getResponseHeader("message");
+			if(message != null) {
+				outputControl.html("400; malformed input: " + message);
+			}
+			else {
+				outputControl.html("400: One of the provided parameters was malformed.  Double-check your input and try again.");
+			}
+			if(callback!=null)
+				callback();
+		},
+		"401":function() {
+			outputControl.html("401: You are not logged in.");
+			if(callback!=null)
+				callback();
+		},
+		"403": function() {
+			outputControl.html("403: You do not have permission to perform such actions.");
+			if(callback!=null)
+				callback();
+		},
+		"404": function() {
+			outputControl.html("404: Info not found.  Check that your input is correct with removed whitespace and try again.");
+			if(callback!=null)
+				callback();
+		},
+		"410": function() {
+			outputControl.html("410: You have been inactive for too long and were loggedout. Refresh the page if you wish to re-stablish connection.");
+			if(callback!=null)
+				callback();
+		},
+		"500": function() {
+			outputControl.html("500: Server error. One of the provided parameters was probably malformed.  Double-check your input and try again.");
+			if(callback!=null)
+				callback();
+		}
+	};
+}
+</script>
+<div class="article">	
+	
+	
+	<div id="update-tourney-stage-section" class="league-form">
+		<h1>Update Tournament Stage</h1>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Tournament ID: </div>
+			<input type="text" id="update-stage-tourney-id" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">New Stage: </div>
+			<select id="update-stage" class="flex-fill">
+				<option value="AWAITING_KICKOFF">Awaiting Kickoff</option>
+				<option value="PAUSED">Paused</option>
+				<option value="PREPARING">Preparing</option>
+				<option value="PLAYING_GAMES">Playing games</option>
+				<option value="FINISHED">Finished</option>
+			</select>
+		</div>
+		
+		<ul>
+			<li><b>Awaiting Kickoff</b> - a scheduled tournament will idle until an admin sets the status here to Preparing.</li>
+			
+			<li><b>Preparing</b> - a tournament that has been kicked off or unpaused and is about to resume play.</li>
+			
+			<li><b>Playing Games</b> - the tournament will generate tables for the current round and then wait for them to complete.</li>
+			
+			<li><b>Paused</b> - the tournament will idle until an admin sets the status here to Preparing.</li>
+			
+			<li><b>Finished</b> - a tournament which has reached its final round and will present the results.</li>
+		</ul>
+		
+		<button id="update-stage-button">
+			Update Tournament Stage
+		</button>
+		
+		<div id="update-stage-result-label" class="flex-horiz result-label">
+			<div class="label">
+				<b>Result:</b>
+			</div>
+			<div id="update-stage-result" class="flex-fill result-box">
+				Ready.
+			</div>
+		</div>
+	</div>
+
+	<br/><br/><hr><br/><br/>
+	
+	<div id="sch-tourney-section" class="league-form">
+		<h1>Add Scheduled Tournament</h1>
+		<div class="flex-horiz">
+			<div class="label-column">Name: </div>
+			<input type="text" id="sch-tourney-name" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Tournament ID: </div>
+			<input type="text" id="sch-tourney-id" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">World Championship: </div>
+			<input type="checkbox" id="sch-tourney-wc" />
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Require Manual Admin Kickoff: </div>
+			<input type="checkbox" id="sch-tourney-kickoff" />
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Cost (in silver): </div>
+			<input type="number" min="1" id="sch-tourney-cost" value="0" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Start Time (UTC): </div>
+			<input type="datetime-local" id="sch-tourney-start" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Format: </div>
+			<select id="sch-tourney-format" class="flex-fill"></select>
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Playoff Type: </div>
+			<select id="sch-tourney-playoff" class="flex-fill">
+				<option value="swiss">Swiss</option>
+				<option value="singleelimination">Single Elimination</option>
+				<option value="swiss-3">3-round Swiss</option>
+				<option value="wc-swiss">WC Swiss (8 rounds)</option>
+				
+			</select>
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Minimum Participants to Start: </div>
+			<input type="number" min="2" id="sch-tourney-min-players" value="2" class="flex-fill">
+		</div>	
+		
+		
+		<div id="prize-info" style="display:none">
+			Prizes are defined in the following format:
+			
+			<pre>2x 9_1*</pre>
+			
+			<ul>
+				<li>
+					"2x" indicates 2 awarded copies (up to 4x, please)
+				</li>
+				<li>
+					"9_1" indicates "set 9, card 1" (you can think of it as the collector's info with the rarity replaced with _)
+				</li>
+				<li>
+					Last character is style; an optional "*" to make the copy foil or "T" to make it tengwar; omit this entirely for standard nonfoil. 
+				</li>
+			</ul> 
+		</div>
+		
+		<div style="display:none">
+		<div class="flex-horiz">
+			<div class="label-column">Top Prizes:</div>
+			<input type="text" id="sch-tourney-top-prize" value="" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz" style="display:none">
+			<div class="label-column">Top Prize Cutoff:</div>
+			<input type="number" min="1" id="sch-tourney-top-pos" value="10" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz" style="display:none">
+			<div class="label-column">Participation Prizes:</div>
+			<input type="text" id="sch-tourney-part-prize" value="" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz" style="display:none">
+			<div class="label-column">Participation Games:</div>
+			<input type="number" min="1" id="sch-tourney-part-games" value="3" class="flex-fill">
+		</div>
+		</div>
+		
+		<button id="preview-sch-tourney-button">
+			Preview Scheduled Tournament
+		</button>
+				
+		<button id="add-sch-tourney-button" >
+			Add Scheduled Tournament
+		</button> 
+		<div id="sch-tourney-result-label" class="flex-horiz result-label">
+			<div class="label">
+				<b>Result:</b>
+			</div>
+			<div id="sch-tourney-result" class="flex-fill result-box">
+				Ready.
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	<br/><br/><hr><br/><br/>
+	
+	<div id="elim-tables-section" class="league-form">
+		<h1>Manually Add Tables</h1>
+		<div class="flex-horiz">
+			<div class="label-column">Series Name: </div>
+			<input type="text" id="elim-table-name" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Tournament (for decks): </div>
+			<input type="text" id="elim-table-tournament" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Format: </div>
+			<select id="elim-table-format" class="flex-fill"></select>
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Timer (player clock / timeout): </div>
+			<select id="elim-table-timer" class="flex-fill">
+				<option value="Competitive">Competitive (40/5)</option>
+				<option value="WC">Championship (20/10)</option>
+				<option value="WC_Expanded">Championship Expanded (25/10)</option>
+				<option value="Blitz!">Blitz (30/5)</option>
+				<option value="Default">Default (80/5)</option>
+				<option value="Slow">Slow (120/10)</option>
+			</select><br/>
+		</div>
+		
+		<div id="elim-table-pairs">
+			<div class="elim-table-entry">
+				<div class="label-column">Table Players: </div>
+				<div class="flex-horiz">
+					<div class="label-column">Player 1: </div>
+					<input type="text" name="playerone" class="flex-fill">
+				</div>
+				<div class="flex-horiz">
+					<div class="label-column">Player 2: </div>
+					<input type="text" name="playertwo" class="flex-fill">
+				</div>
+			</div>
+		</div>
+				
+		<button id="add-additional-table-button" >
+			Add Another Table
+		</button> 
+		
+		<button id="add-tables-button">
+			Add Tables
+		</button>
+		
+		<div id="elim-tables-result-label" class="flex-horiz result-label">
+			<div class="label">
+				<b>Result:</b>
+			</div>
+			<div id="elim-tables-result" class="flex-fill result-box">
+				Ready.
+			</div>
+		</div>
+	</div>
+	
+	
+	<br/><br/><hr><br/><br/>
+	
+	
+	
+</div>
+
+	
+

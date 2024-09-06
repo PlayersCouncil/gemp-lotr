@@ -120,7 +120,6 @@ public class ServerBuilder {
                         extract(objectMap, TournamentService.class),
                         extract(objectMap, LotroCardBlueprintLibrary.class),
                         extract(objectMap, LotroFormatLibrary.class),
-                        extract(objectMap, ProductLibrary.class),
                         extract(objectMap, CollectionsManager.class),
                         extract(objectMap, AdminService.class)
                 ));

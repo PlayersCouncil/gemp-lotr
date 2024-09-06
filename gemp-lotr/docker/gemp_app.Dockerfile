@@ -15,6 +15,8 @@ RUN apk update; \
 	apk add --no-cache freetype; \
 	apk add --no-cache fontconfig; \
 	apk add --no-cache git; \
+	# Telnet etc
+	#apk add --no-cache busybox-extras; \
 	apk add --no-cache nano; 
 		
 		

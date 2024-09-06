@@ -22,7 +22,7 @@ public class ServerCleaner {
 
     public synchronized void removeServer(AbstractServer server) {
         _servers.remove(server);
-        if (_servers.size() == 0 && _thr != null) {
+        if (_servers.isEmpty() && _thr != null) {
             _thr.pleaseStop();
             _thr = null;
         }

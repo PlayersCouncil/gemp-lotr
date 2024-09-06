@@ -1,6 +1,7 @@
 package com.gempukku.lotro.db;
 
 import com.gempukku.lotro.common.DBDefs;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.game.Player;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
@@ -17,8 +18,6 @@ import java.util.Objects;
 
 public class DbGameHistoryDAO implements GameHistoryDAO {
     private final DbAccess _dbAccess;
-    private final DateTimeFormatter _dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private final DateTimeFormatter _dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public DbGameHistoryDAO(DbAccess dbAccess) {
         _dbAccess = dbAccess;
@@ -27,7 +26,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
     public int addGameHistory(String winner, int winnerId, String loser, int loserId, String winReason, String loseReason, String winRecordingId, String loseRecordingId,
                                String formatName, String tournament, String winnerDeckName, String loserDeckName, ZonedDateTime startDate, ZonedDateTime endDate, int replayVersion) {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             String sql = """
                         INSERT INTO game_history (winner, winnerId, loser, loserId, win_reason, lose_reason, win_recording_id, lose_recording_id, 
@@ -50,8 +49,8 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
                         .addParameter("tournament", tournament)
                         .addParameter("winner_deck_name", winnerDeckName)
                         .addParameter("loser_deck_name", loserDeckName)
-                        .addParameter("start_date", startDate.format(_dateTimeFormat))
-                        .addParameter("end_date", endDate.format(_dateTimeFormat))
+                        .addParameter("start_date", startDate.format(DateUtils.DateTimeFormat))
+                        .addParameter("end_date", endDate.format(DateUtils.DateTimeFormat))
                         .addParameter("version", replayVersion);
 
                 int id = query.executeUpdate()
@@ -69,7 +68,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
 
         try {
 
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -98,7 +97,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
     public DBDefs.GameHistory getGameHistory(String recordID) {
         try {
 
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -123,7 +122,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
     public boolean doesReplayIDExist(String id) {
         try {
 
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -147,7 +146,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
     public List<DBDefs.GameHistory> getGameHistoryForFormat(String format, int count)  {
         try {
 
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -174,7 +173,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
     public List<DBDefs.GameHistory> getGamesForTournament(String tournamentName)  {
         try {
 
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -198,7 +197,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
     public int getGameHistoryForPlayerCount(Player player) {
         try {
 
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -220,7 +219,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
 
     public int getActivePlayersCount(ZonedDateTime from, ZonedDateTime to) {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -239,8 +238,8 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
                         ) AS U
                         """;
                 Integer result = conn.createQuery(sql)
-                        .addParameter("from", from.format(_dateFormat))
-                        .addParameter("to", to.format(_dateFormat))
+                        .addParameter("from", from.format(DateUtils.DateFormat))
+                        .addParameter("to", to.format(DateUtils.DateFormat))
                         .executeScalar(Integer.class);
 
                 return Objects.requireNonNullElse(result, -1);
@@ -252,7 +251,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
 
     public int getGamesPlayedCount(ZonedDateTime from, ZonedDateTime to) {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -261,8 +260,8 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
                         WHERE end_date BETWEEN :from AND :to;
                         """;
                 Integer result = conn.createQuery(sql)
-                        .addParameter("from", from.format(_dateFormat))
-                        .addParameter("to", to.format(_dateFormat))
+                        .addParameter("from", from.format(DateUtils.DateFormat))
+                        .addParameter("to", to.format(DateUtils.DateFormat))
                         .executeScalar(Integer.class);
 
                 return Objects.requireNonNullElse(result, -1);
@@ -274,7 +273,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
 
     public List<DBDefs.FormatStats> GetAllGameFormatData(ZonedDateTime from, ZonedDateTime to) {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -287,8 +286,8 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
                         GROUP BY format_name, CASE WHEN tournament IS NULL OR tournament LIKE 'Casual %' THEN 1 ELSE 0 END
                         """;
                 List<DBDefs.FormatStats> result = conn.createQuery(sql)
-                        .addParameter("from", from.format(_dateFormat))
-                        .addParameter("to", to.format(_dateFormat))
+                        .addParameter("from", from.format(DateUtils.DateFormat))
+                        .addParameter("to", to.format(DateUtils.DateFormat))
                         .executeAndFetch(DBDefs.FormatStats.class);
 
                 return result;
@@ -327,7 +326,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
 
         try {
 
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """

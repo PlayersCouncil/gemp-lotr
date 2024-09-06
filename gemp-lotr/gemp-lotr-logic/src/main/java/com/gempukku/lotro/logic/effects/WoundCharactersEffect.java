@@ -70,7 +70,7 @@ public class WoundCharactersEffect extends AbstractPreventableCardEffect {
 
     @Override
     protected void playoutEffectOn(LotroGame game, Collection<PhysicalCard> cards) {
-        if (cards.size() > 0)
+        if (!cards.isEmpty())
             game.getGameState().sendMessage(getAppendedNames(cards) + " " + GameUtils.be(cards) + " wounded by " + _sourceText);
 
         for (PhysicalCard woundedCard : cards) {

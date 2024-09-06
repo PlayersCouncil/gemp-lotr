@@ -12,7 +12,7 @@ public record TournamentInfo(String tournamentId, String draftType, String name,
                              ZonedDateTime startDate, CollectionType collectionType,
                              Tournament.Stage tournamentStage, int round, boolean manualKickoff,
                              PairingMechanism pairingMechanism, TournamentPrizes prizesScheme
-    ) {
+) {
 
     public TournamentInfo(ProductLibrary library, DBDefs.Tournament info) {
         this(info.tournament_id, info.draft_type, info.name, info.format, info.GetUTCStartDate(),
@@ -21,7 +21,7 @@ public record TournamentInfo(String tournamentId, String draftType, String name,
                 Tournament.getTournamentPrizes(library, info.prizes));
     }
 
-    public TournamentInfo(ProductLibrary library,  DBDefs.ScheduledTournament info) {
+    public TournamentInfo(ProductLibrary library, DBDefs.ScheduledTournament info) {
         this(info.tournament_id, null, info.name, info.format, info.GetUTCStartDate(),
                 CollectionType.ALL_CARDS, info.manual_kickoff ? Tournament.Stage.AWAITING_KICKOFF : Tournament.Stage.PLAYING_GAMES,
                 0, info.manual_kickoff, Tournament.getPairingMechanism(info.playoff),
@@ -45,17 +45,17 @@ public record TournamentInfo(String tournamentId, String draftType, String name,
         return tourney;
     }
 
-    public static List<TournamentInfo> fromDB(ProductLibrary library,  List<DBDefs.Tournament> dbinfos) {
+    public static List<TournamentInfo> fromDB(ProductLibrary library, List<DBDefs.Tournament> dbinfos) {
         List<TournamentInfo> infos = new ArrayList<>();
-        for(var result : dbinfos) {
+        for (var result : dbinfos) {
             infos.add(new TournamentInfo(library, result));
         }
         return infos;
     }
 
-    public static List<TournamentInfo> fromSDB(ProductLibrary library,  List<DBDefs.ScheduledTournament> dbinfos) {
+    public static List<TournamentInfo> fromSDB(ProductLibrary library, List<DBDefs.ScheduledTournament> dbinfos) {
         List<TournamentInfo> infos = new ArrayList<>();
-        for(var result : dbinfos) {
+        for (var result : dbinfos) {
             infos.add(new TournamentInfo(library, result));
         }
         return infos;

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.DateUtils;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.db.vo.CollectionType;
 
@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.Date;
 
 public class RecurringScheduledQueue extends AbstractTournamentQueue implements TournamentQueue {
     private static final Duration _signupTimeBeforeStart = Duration.ofMinutes(60);
@@ -39,7 +37,7 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
         long intervals = (sinceOriginal.getSeconds() / repeatEvery.getSeconds()) + 1;
 
         _nextStart = originalStart.plus(intervals * repeatEvery.getSeconds(), ChronoUnit.SECONDS);
-        _nextStartText = DateUtils.FormatStandardDateTime(_nextStart);
+        _nextStartText = DateUtils.FormatDateTime(_nextStart);
     }
 
     @Override
@@ -70,7 +68,7 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
                 String tournamentName = _tournamentQueueName + " - " + DateUtils.getStringDateWithHour();
 
                 for (String player : _players)
-                    _tournamentService.addPlayer(tournamentId, player, _playerDecks.get(player));
+                    _tournamentService.recordTournamentPlayer(tournamentId, player, _playerDecks.get(player));
 
                 var info = new TournamentInfo(tournamentId, null, tournamentName, _format, ZonedDateTime.now(),
                         _collectionType, Tournament.Stage.PLAYING_GAMES, 0, false,
@@ -86,7 +84,7 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
                 leaveAllPlayers(collectionsManager);
             }
             _nextStart = _nextStart.plus(_repeatEvery);
-            _nextStartText = DateUtils.FormatStandardDateTime(_nextStart);
+            _nextStartText = DateUtils.FormatDateTime(_nextStart);
         }
         return false;
     }

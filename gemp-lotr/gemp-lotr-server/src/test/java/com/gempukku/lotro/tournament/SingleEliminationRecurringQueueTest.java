@@ -3,16 +3,12 @@ package com.gempukku.lotro.tournament;
 import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.db.vo.CollectionType;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
-import com.gempukku.lotro.packs.ProductLibrary;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.invocation.MatchersBinder;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.ZonedDateTime;
 
 import static org.junit.Assert.*;
 
@@ -142,8 +138,8 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
 //        Mockito.verify(tournamentService).addTournament(Mockito.anyString(), Mockito.eq(null), Mockito.anyString(), Mockito.eq("format"),
 //                Mockito.eq(CollectionType.MY_CARDS), Mockito.eq(Tournament.Stage.PLAYING_GAMES), Mockito.eq("singleElimination"), Mockito.nullable(String.class), Mockito.any());
 
-        Mockito.verify(tournamentService).addPlayer(Mockito.anyString(), Mockito.eq("p1"), Mockito.eq(null));
-        Mockito.verify(tournamentService).addPlayer(Mockito.anyString(), Mockito.eq("p2"), Mockito.eq(null));
+        Mockito.verify(tournamentService).recordTournamentPlayer(Mockito.anyString(), Mockito.eq("p1"), Mockito.eq(null));
+        Mockito.verify(tournamentService).recordTournamentPlayer(Mockito.anyString(), Mockito.eq("p2"), Mockito.eq(null));
         //Mockito.verify(tournamentService).addTournament(tournamentInfo);
         //Mockito.when(tournamentService.addTournament(tournamentInfo)).thenReturn(Mockito.any());
 
@@ -195,8 +191,8 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
 //                Mockito.eq(CollectionType.MY_CARDS), Mockito.eq(Tournament.Stage.PLAYING_GAMES), Mockito.eq("singleElimination"), Mockito.nullable(String.class), Mockito.any());
 
         //Mockito.verify(tournamentService).addTournament(tournamentInfo);
-        Mockito.verify(tournamentService).addPlayer(Mockito.anyString(), Mockito.eq("p1"), Mockito.eq(null));
-        Mockito.verify(tournamentService).addPlayer(Mockito.anyString(), Mockito.eq("p2"), Mockito.eq(null));
+        Mockito.verify(tournamentService).recordTournamentPlayer(Mockito.anyString(), Mockito.eq("p1"), Mockito.eq(null));
+        Mockito.verify(tournamentService).recordTournamentPlayer(Mockito.anyString(), Mockito.eq("p2"), Mockito.eq(null));
 
         //Mockito.verify(queueCallback).createTournament(tournament);
         //Mockito.verifyNoMoreInteractions(tournamentService, queueCallback);

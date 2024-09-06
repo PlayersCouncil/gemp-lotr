@@ -34,6 +34,8 @@ var ChatBoxUI = Class.extend({
     chatEmbed:null,
     displayDiscord:true,
     
+    tournamentCallback:null,
+    
     toggleChatButton:null,
 
 
@@ -397,8 +399,14 @@ var ChatBoxUI = Class.extend({
                 var text = message.childNodes[0].nodeValue;
 
                 var msgClass = "chatMessage";
-                if (from == "System")
+                if (from == "System") {
                     msgClass = "systemMessage";
+                }
+                else if(from == "TournamentSystem") {
+                    if(this.tournamentCallback) {
+                        this.tournamentCallback(text);
+                    }
+                }
                 var prefix = "<div class='msg-identifier'>";
                 if (this.showTimestamps) {
                     var date = new Date(parseInt(message.getAttribute("date")));

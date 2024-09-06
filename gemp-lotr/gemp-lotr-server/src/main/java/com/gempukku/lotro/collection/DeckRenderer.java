@@ -181,9 +181,9 @@ public class DeckRenderer {
             return null;
 
         StringBuilder result = new StringBuilder();
-        result.append("<div>")
-                .append("<h1>").append(StringEscapeUtils.escapeHtml3(deck.getDeckName())).append("</h1>")
-                .append("<h2>Format: ").append(StringEscapeUtils.escapeHtml3(deck.getTargetFormat())).append("</h2>");
+        result.append("<div>");
+                //.append("<h1>").append(StringEscapeUtils.escapeHtml3(deck.getDeckName())).append("</h1>")
+                //.append("<h2>Format: ").append(StringEscapeUtils.escapeHtml3(deck.getTargetFormat())).append("</h2>");
 
         if(author != null) {
             result.append("<h2>Author: ").append(StringEscapeUtils.escapeHtml3(author)).append("</h2>");
@@ -204,6 +204,8 @@ public class DeckRenderer {
 
             result.append(String.join(" • ", rounds));
         }
+
+        result.append("<br/><br/>");
 
         String ringBearer = deck.getRingBearer();
         if (ringBearer != null) {

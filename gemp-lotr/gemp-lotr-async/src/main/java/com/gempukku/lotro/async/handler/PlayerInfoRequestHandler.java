@@ -1,9 +1,10 @@
 package com.gempukku.lotro.async.handler;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.game.Player;
+import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -28,7 +29,7 @@ public class PlayerInfoRequestHandler extends LotroServerRequestHandler implemen
             String participantId = getQueryParameterSafely(queryDecoder, "participantId");
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-            responseWriter.writeJsonResponse(JSON.toJSONString(resourceOwner.GetUserInfo()));
+            responseWriter.writeJsonResponse(JsonUtils.Serialize(resourceOwner.GetUserInfo()));
 
         } else {
             throw new HttpProcessingException(404);

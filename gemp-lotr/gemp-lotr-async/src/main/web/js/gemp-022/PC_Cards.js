@@ -627,7 +627,25 @@ var PCCards = {
 	//Troop of Uruk-hai FA
 	'1_389': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U143.0_card.jpg',
 	//Gandalf's Staff MW
-	'2_127': 'https://i.lotrtcgpc.net/promos/LOTR-EN02O022.0_card.jpg',
+	'2_127': 'https://i.lotrtcgpc.net/promos/LOTR-EN02O022.0_card.jpg', 
+	
+	//May 2024 Weekend League
+	//Freca, Hungry Savage	FA
+	'9_60': 'https://i.lotrtcgpc.net/promos/LOTR-EN09U002.0_card.jpg',
+	//Sting, Bane of the Eight Legs MW
+	'8_126': 'https://i.lotrtcgpc.net/promos/LOTR-EN08O113.0_card.jpg',
+	
+	//June 2024 Weekend League
+	//Dwarven Bracers FA
+	'2_128': 'https://i.lotrtcgpc.net/promos/LOTR-EN02U003.0_card.jpg',
+	//Ulaire Cantea, Lieutenant of Dol Guldur MW
+	'1_390': 'https://i.lotrtcgpc.net/promos/LOTR-EN01O230.0_card.jpg',
+	
+	//July 2024 Weekend League
+	//Theoden, Tall and Proud FA
+	'8_127': 'https://i.lotrtcgpc.net/promos/LOTR-EN08U092.0_card.jpg',
+	//Evil-smelling Fens FA
+	'5_129': 'https://i.lotrtcgpc.net/promos/LOTR-EN05U022.0_card.jpg',
 	
 	
 	//PC V2 - King of the Golden Hall
@@ -819,5 +837,6 @@ var PCCards = {
 	'68_9'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E009.1_card.jpg',
 	// Haldir, Warrior Messenger (18R14) [Errata]
 	'68_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E014.1_card.jpg'
+
 }
 

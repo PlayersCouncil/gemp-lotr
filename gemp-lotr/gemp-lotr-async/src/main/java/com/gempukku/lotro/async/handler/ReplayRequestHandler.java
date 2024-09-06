@@ -112,11 +112,4 @@ public class ReplayRequestHandler extends LotroServerRequestHandler implements U
 
         responseWriter.writeByteResponse(baos.toByteArray(), headers);
     }
-
-    private void validateAdmin(HttpRequest request) throws HttpProcessingException {
-        Player player = getResourceOwnerSafely(request, null);
-
-        if (!player.hasType(Player.Type.ADMIN))
-            throw new HttpProcessingException(403);
-    }
 }

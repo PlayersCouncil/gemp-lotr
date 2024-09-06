@@ -61,18 +61,23 @@ var LeagueResultsUI = Class.extend({
             var league = root;
 
             var leagueName = league.getAttribute("name");
-            var leagueType = league.getAttribute("type");
+            var leagueType = league.getAttribute("code");
             var cost = parseInt(league.getAttribute("cost"));
             var start = league.getAttribute("start");
             var end = league.getAttribute("end");
             var member = league.getAttribute("member");
             var joinable = league.getAttribute("joinable");
             var draftable = league.getAttribute("draftable");
+            
+            var id = league.getAttribute("id");
+            var desc = league.getAttribute("desc");
+            var inviteOnly = league.getAttribute("inviteOnly");
 
             $("#leagueExtraInfo").append("<div class='leagueName'>" + leagueName + "</div>");
 
             var costStr = formatPrice(cost);
-            $("#leagueExtraInfo").append("<div class='leagueCost'><b>Cost:</b> " + costStr + "</div>");
+            $("#leagueExtraInfo").append("<div class='leagueCost'><b>Cost:</b> " + costStr + "</div><br>");
+            
 
             if (member == "true") {
                 var memberDiv = $("<div class='leagueMembership'>You are already a member of this league. </div>");
@@ -109,6 +114,16 @@ var LeagueResultsUI = Class.extend({
                 var joinDiv = $("<div class='leagueMembership'>You're not a member of this league. </div>");
                 joinDiv.append(joinBut);
                 $("#leagueExtraInfo").append(joinDiv);
+            } else if (inviteOnly == "true") {
+                var joinDiv = $("<div class='leagueMembership'><b>Invitation-only. See below for how to join.</b></div>");
+                $("#leagueExtraInfo").append(joinDiv);
+            }
+            
+            if(desc) {
+                let descDiv = $("<div></div>");
+                descDiv.html(desc);
+                $("#leagueExtraInfo").append(descDiv);
+                $("#leagueExtraInfo").append("<br><hr><br>");
             }
 
             var tabDiv = $("<div width='100%'></div>");
@@ -153,7 +168,7 @@ var LeagueResultsUI = Class.extend({
                 var collection = serie.getAttribute("collection");
                 var limited = serie.getAttribute("limited");
 
-                var serieText = serieName + " - " + getDateString(serieStart) + " to " + getDateString(serieEnd);
+                var serieText = serieName + " - " + serieStart + " to " + serieEnd;
                 $("#leagueExtraInfo").append("<div class='serieName'>" + serieText + "</div>");
 
                 var formatName = $("<span class='clickableFormat'>" + ((limited == "true") ? "" : "Constructed ") + format + "</span>");
@@ -200,13 +215,19 @@ var LeagueResultsUI = Class.extend({
             for (var i = 0; i < leagues.length; i++) {
                 var league = leagues[i];
                 var leagueName = league.getAttribute("name");
-                var leagueType = league.getAttribute("type");
+                var leagueType = league.getAttribute("code");
                 var start = league.getAttribute("start");
                 var end = league.getAttribute("end");
+                var desc = league.getAttribute("desc");
+                var inviteOnly = league.getAttribute("inviteOnly") === "true";
 
                 $("#leagueResults").append("<div class='leagueName'>" + leagueName + "</div>");
 
-                var duration = getDateString(start) + " to " + getDateString(end);
+                if(hall.userInfo.type.includes("l")) {
+                    $("#leagueResults").append("<span class='league-id'>" + leagueType + "</span>");
+                }
+
+                var duration = start + " to " + end;
                 $("#leagueResults").append("<div class='leagueDuration'><b>Duration (GMT+0):</b> " + duration + "</div>");
 
                 var detailsBut = $("<button>See details</button>").button();

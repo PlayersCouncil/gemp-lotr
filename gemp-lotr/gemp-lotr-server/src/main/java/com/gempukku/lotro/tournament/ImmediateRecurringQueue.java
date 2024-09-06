@@ -1,12 +1,10 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.DateUtils;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
-import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.vo.CollectionType;
 
 import java.time.ZonedDateTime;
-import java.util.Date;
 
 public class ImmediateRecurringQueue extends AbstractTournamentQueue implements TournamentQueue {
     private final String _tournamentQueueName;
@@ -43,7 +41,7 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
 
             for (int i=0; i<_playerCap; i++) {
                 String player = _players.poll();
-                _tournamentService.addPlayer(tournamentId, player, _playerDecks.get(player));
+                _tournamentService.recordTournamentPlayer(tournamentId, player, _playerDecks.get(player));
                 _playerDecks.remove(player);
             }
 
