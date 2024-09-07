@@ -563,12 +563,15 @@
 					select: memory(exertedComp)
 				}
 				{
-					type: ModifyStrength
-					amount: {
-						type: ForEachYouCanSpot
-						filter: InSkirmishAgainst(memory(exertedComp))
+					type: AddModifier
+					modifier: {
+						type: ModifyStrength
+						amount: {
+							type: ForEachYouCanSpot
+							filter: InSkirmishAgainst(memory(exertedComp))
+						}
+						filter: memory(exertedComp)
 					}
-					select: memory(exertedComp)
 					until: start(regroup)
 				}
 			]

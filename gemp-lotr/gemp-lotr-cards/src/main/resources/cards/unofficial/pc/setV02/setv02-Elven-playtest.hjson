@@ -178,7 +178,7 @@
 				}
 				requires: {
 					type: CanSpot
-					filter: another, wounded, valiant, elf
+					filter: not(bearer), wounded, valiant, elf
 				}
 				cost: {
 					type: Exert
@@ -186,7 +186,7 @@
 				}
 				effect: {
 					type: Heal
-					select: choose(another, valiant, elf)
+					select: choose(not(bearer), valiant, elf)
 				}
 			}
 		]
