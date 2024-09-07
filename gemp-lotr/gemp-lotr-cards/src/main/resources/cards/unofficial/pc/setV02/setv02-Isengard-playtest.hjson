@@ -144,11 +144,11 @@
 					type: If
 					check: {
 						type: CanSpot
-						filter: self,HasAnyCultureTokens(1)
+						filter: self,HasAnyCultureTokens(2)
 					}
 					true: {
 						type: RemoveCultureTokens
-						count: 1
+						count: 2
 						select: self
 					}
 					false: {
@@ -162,7 +162,7 @@
 				}
 			}
 		]
-		gametext: When you play this condition, spot a Wizard to add 2 [isengard] tokens here.<br>Each time an [isengard] Orc is defeated in a skirmish, add an [isengard] token here.<br><b>Skirmish<b>: Discard this condition (or remove an [isengard] token here) to cancel a skirmish involving an [isengard] Orc.
+		gametext: When you play this condition, spot a Wizard to add 2 [isengard] tokens here.<br>Each time an [isengard] Orc is defeated in a skirmish, add an [isengard] token here.<br><b>Skirmish<b>: Discard this condition (or remove 2 [isengard] tokens here) to cancel a skirmish involving an [isengard] Orc.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -983,7 +983,7 @@
 		twilight: 8
 		type: Minion
 		race: Uruk-hai
-		strength: 15
+		strength: 17
 		vitality: 4
 		site: 5
 		keywords: Damage+1
@@ -1054,22 +1054,6 @@
 			{
 				type: modifier
 				modifier: {
-					type: cantTakeWounds
-					requires: [
-						{
-							type: sarumanFirstSentenceActive
-						}
-						{
-							type: phase
-							phase: archery
-						}
-					]
-					filter: self
-				}
-			}
-			{
-				type: modifier
-				modifier: {
 					type: cantBeAssignedToSkirmish
 					requires: {
 						type: sarumanFirstSentenceActive
@@ -1078,36 +1062,31 @@
 				}
 			}
 			{
-				type: Activated
-				phase: Regroup
-				cost: [
-					{
-						type: Exert
-						select: self
-						times: 1
-					}
-					{
-						type: Discard
-						select: choose(uruk-hai)
-					}
-				]
-				effect: {
-					type: Preventable
-					text: Would you like to reinforce 2 {isengard} tokens on a machine to prevent {you} taking control of a site?
-					player: freeps
-					cost: {
-						type: ReinforceTokens
-						player: freeps
-						culture: isengard
-						select: choose(machine)
-					}
-					effect: {
-						type: TakeControlOfSite
-					}
+				type: modifier
+				modifier: {
+					type: cancelKeywordBonus
+					filter: companion,inSkirmishAgainst(culture(isengard),orc)
+					keyword: damage
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(isengard),orc
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect:
+				{
+					type: preventWound
+					select: choose(culture(isengard),orc)
 				}
 			}
 		]
-		gametext: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.<br>Regroup: Exert Saruman and discard an [Isengard] Uruk-hai to take control of a site. The Free Peoples player may reinforce 2 [Isengard] tokens to prevent this.
+		gametext: Saruman may not be assigned to a skirmish.<br/>Companions skirmishing [Isengard] Orcs lose all damage bonuses.</b>If an [isengard] Orc is about to take a wound, you may exert Saruman to prevent that wound. 
 		lore: ""
 		promotext: ""
 		alts: {

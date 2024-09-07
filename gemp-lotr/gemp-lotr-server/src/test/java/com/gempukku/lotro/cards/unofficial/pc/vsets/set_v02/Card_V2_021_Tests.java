@@ -40,8 +40,8 @@ public class Card_V2_021_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: When you play this condition, spot a Wizard to add 2 [isengard] tokens here.
-		 * Each time an [isengard] Orc is defeated in a skirmish, add an [isengard] token here.
-		 * Skirmish: Discard this condition (or remove an [isengard] token here) to cancel a skirmish involving an [isengard] Orc.
+		* 	Each time an [isengard] Orc is defeated in a skirmish, add an [isengard] token here.
+		* 	Skirmish: Discard this condition (or remove two [isengard] tokens here) to cancel a skirmish involving an [isengard] Orc.
 		*/
 
 		var scn = GetScenario();

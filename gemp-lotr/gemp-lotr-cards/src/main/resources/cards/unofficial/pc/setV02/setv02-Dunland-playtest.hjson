@@ -16,7 +16,7 @@
 			style: Standard
 		}
 		title: Driven into the Hills
-		unique: true
+		unique: false
 		side: Shadow
 		culture: Dunland
 		twilight: 1
@@ -32,29 +32,18 @@
 				}
 			}
 			{
-				type: Modifier
+				type: modifier
 				modifier: {
-					type: SkipPhase
-					phase: Archery
-					requires: {
-						type: HaveInitiative
-						side: Shadow
+					type: ModifyInitiativeHandSize
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
 					}
 				}
 			}
-			{
-				type: trigger
-				optional: false
-				trigger: {
-					type: SiteLiberated
-				}
-				effect: {
-					type: Discard
-					select: self
-				}
-			}
 		]
-		gametext: To play, spot a [Dunland] minion.<br>While the shadow has initiative, skip the archery phase.<br>When the Free-Peoples player liberates a site, discard this condition. 
+		gametext: To play, spot a [Dunland] minion.<br>To play, spot a [Dunland] minion.\For each companion you can spot over 4, the Free Peoples player must have an additional card in hand to have initiative.
 		lore: "'Not in half a thousand years have they forgotten their grievance that the lords of Gondor gave the Mark to Eorl the Young and made alliance with him.'"
 		promotext: ""
 		alts: {
@@ -140,7 +129,7 @@
 				modifier: {
 					type: ModifyStrength
 					filter: self
-					amount: 1
+					amount: 3
 					requires: {
 						type: HaveInitiative
 						side: Shadow
@@ -160,7 +149,7 @@
 				}
 			}
 		]
-		gametext: While you have initiative, this minion is strength +1 and damage +1.
+		gametext: While you have initiative, this minion is strength +3 and damage +1.
 		lore: "Now they could hear, borne over the dark, the sound of harsh singing..."
 		promotext: ""
 		alts: {

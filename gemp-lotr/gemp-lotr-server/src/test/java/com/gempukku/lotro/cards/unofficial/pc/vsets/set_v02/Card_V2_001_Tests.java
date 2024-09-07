@@ -27,6 +27,16 @@ public class Card_V2_001_Tests
 					put("hillman", "15_90");
 
 					put("runner", "1_178");
+
+					//Dwarf guards for companion count
+					put("fodder1", "1_7");
+					put("fodder2", "1_7");
+					put("fodder3", "1_7");
+					put("fodder4", "1_7");
+					put("fodder5", "1_7");
+					put("fodder6", "1_7");
+					put("fodder7", "1_7");
+					put("fodder8", "1_7");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -40,15 +50,14 @@ public class Card_V2_001_Tests
 		/**
 		 * Set: V2
 		 * Name: Driven into the Hills
-		 * Unique: True
+		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Dunland
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: To play, spot a [Dunland] minion.
-		* 	While the shadow has initiative, skip the archery phase.
-		* 	If the Free-Peoples player liberates a site, discard this condition. 
+		* 	For each companion you can spot over 4, the Free Peoples player must have an additional card in hand to have initiative.
 		*/
 
 		var scn = GetScenario();
@@ -57,7 +66,7 @@ public class Card_V2_001_Tests
 
 		assertEquals("Driven into the Hills", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.DUNLAND, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
@@ -88,97 +97,26 @@ public class Card_V2_001_Tests
 	}
 
 	@Test
-	public void DrivenSkipsArcheryPhaseIfShadowHasInitiative() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DrivenMakesInitiativeTake5CardsWith5Companions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var driven = scn.GetShadowCard("driven");
-		var madman = scn.GetShadowCard("madman");
 		scn.ShadowMoveCardToSupportArea(driven);
-		scn.ShadowMoveCharToTable(madman);
+
+		scn.FreepsMoveCharToTable("fodder1", "fodder2", "fodder3", "fodder4");
+		scn.FreepsMoveCardToHand("driven", "madman", "freca", "hillman");
 
 		scn.StartGame();
 
-		//cheating to give Shadow initiative
-		scn.ApplyAdHocModifier(new HasInitiativeModifier(null, null, Side.SHADOW));
-
-		scn.SkipToPhase(Phase.MANEUVER);
-
+		assertEquals(4, scn.GetFreepsHandCount());
 		assertTrue(scn.ShadowHasInitiative());
-		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
+		scn.FreepsMoveCardToHand("runner");
 
-		scn.PassCurrentPhaseActions();
-
-		//Skipped archery entirely
-		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
-	}
-
-	@Test
-	public void DrivenDoesNotSkipsArcheryPhaseIfFreepsHasInitiative() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var driven = scn.GetShadowCard("driven");
-		var madman = scn.GetShadowCard("madman");
-		scn.ShadowMoveCardToSupportArea(driven);
-		scn.ShadowMoveCharToTable(madman);
-
-		scn.StartGame();
-
-		//cheating to give Freeps initiative, since there are too few cards in hand
-		scn.ApplyAdHocModifier(new HasInitiativeModifier(null, null, Side.FREE_PEOPLE));
-
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertFalse(scn.ShadowHasInitiative());
-		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
-
-		scn.PassCurrentPhaseActions();
-
-		//Did not skip archery
-		assertEquals(Phase.ARCHERY, scn.GetCurrentPhase());
-	}
-
-	@Test
-	public void DrivenSelfDiscardsWhenASiteIsLiberated() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var driven = scn.GetShadowCard("driven");
-		var madman = scn.GetShadowCard("madman");
-		var hillman = scn.GetShadowCard("hillman");
-		var freca = scn.GetShadowCard("freca");
-		scn.ShadowMoveCardToSupportArea(driven);
-
-		var site1 = scn.GetFreepsSite(1);
-
-		scn.StartGame();
-
-		//Need to have sites controlled to liberate
-		scn.SkipToSite(3);
-
-		scn.ShadowMoveCharToTable(hillman, madman);
-		scn.ShadowMoveCardToHand(freca);
 		scn.FreepsPassCurrentPhaseAction();
-
-		scn.ShadowPlayCard(freca);
-		scn.ShadowAcceptOptionalTrigger();
-
-		assertTrue(scn.IsSiteControlled(site1));
-
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertTrue(scn.IsSiteControlled(site1));
-		assertEquals(Zone.SUPPORT, driven.getZone());
-
-		scn.SkipToPhase(Phase.REGROUP);
-
-		//Rapt Hillman gives Freeps the opportunity to liberate a site,
-		// and shadow can stop it (but we choose not to)
-		scn.FreepsAcceptOptionalTrigger();
-		scn.ShadowChooseNo();
-
-		assertFalse(scn.IsSiteControlled(site1));
-		assertEquals(Zone.DISCARD, driven.getZone());
+		assertEquals(5, scn.GetFreepsHandCount());
+		assertFalse(scn.ShadowHasInitiative());
 	}
+
+
 }

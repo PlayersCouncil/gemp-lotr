@@ -39,11 +39,11 @@ public class Card_V2_062_Tests
 		 * Twilight Cost: 2
 		 * Type: Minion
 		 * Subtype: Orc
-		 * Strength: 5
+		 * Strength: 6
 		 * Vitality: 2
 		 * Site Number: 6
 		 * Game Text: Tracker. 
-		* 	If this minion's site number is 1 or less, it is strength +4. 
+		* 	If this minion's site number is 1 or less, it is strength +5. 
 		*/
 
 		var scn = GetScenario();
@@ -59,7 +59,7 @@ public class Card_V2_062_Tests
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
 		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getStrength());
+		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}

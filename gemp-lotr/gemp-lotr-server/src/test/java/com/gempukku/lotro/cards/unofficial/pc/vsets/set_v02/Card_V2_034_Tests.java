@@ -42,8 +42,9 @@ public class Card_V2_034_Tests
 		 * Strength: 8
 		 * Vitality: 4
 		 * Site Number: 4
-		 * Game Text: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.
-		* 	Regroup: Exert Saruman and discard an [Isengard] Uruk-hai to take control of a site. The Free Peoples player may reinforce 2 [Isengard] tokens to prevent this.
+		 * Game Text: Saruman may not be assigned to a skirmish.
+		* 	Companions skirmishing [Isengard] orcs lose all damage bonuses.
+		* 	If an [isengard] orc is about to take a wound, you may exert Saruman to prevent this. 
 		*/
 
 		var scn = GetScenario();
