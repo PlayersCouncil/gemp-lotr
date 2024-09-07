@@ -102,8 +102,8 @@ public class GameRecorder {
 //            if(format.isPlaytest())
 //            {
                 String url = "https://docs.google.com/forms/d/e/1FAIpQLSdKJrCmjoyUqDTusDcpNoWAmvkGdzQqTxWGpdNIFX9biCee-A/viewform?usp=pp_url&entry.1592109986=";
-                String winnerURL = "https://play.lotrtcgpc.net/gemp-lotr/game.html%3FreplayId%3D" + winnerName + "$" + playerRecordingId.get(winnerName);
-                String loserURL = "https://play.lotrtcgpc.net/gemp-lotr/game.html%3FreplayId%3D" + loserName + "$" + playerRecordingId.get(loserName);
+                String winnerURL = "https://test.lotrtcgpc.net/gemp-lotr/game.html%3FreplayId%3D" + winnerName + "$" + playerRecordingId.get(winnerName);
+                String loserURL = "https://test.lotrtcgpc.net/gemp-lotr/game.html%3FreplayId%3D" + loserName + "$" + playerRecordingId.get(loserName);
                 url += winnerURL + "%20" + loserURL;
                 lotroGame.sendMessageToPlayers("Thank you for playtesting!  Please report how you feel about this match (good, bad, or neutral) as well as any bugs or other issues <a href= '" + url + "'>using the playtest feedback form here.</a>");
 //            }
