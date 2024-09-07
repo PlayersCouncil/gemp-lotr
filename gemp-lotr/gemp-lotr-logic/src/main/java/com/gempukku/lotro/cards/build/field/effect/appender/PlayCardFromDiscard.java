@@ -27,7 +27,7 @@ import java.util.Collection;
 public class PlayCardFromDiscard implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "maxDiscount", "removedTwilight", "optional", "extraEffects", "memorize");
+        FieldUtils.validateAllowedFields(effectObject,  "player", "select", "on", "discount", "maxDiscount", "removedTwilight", "optional", "extraEffects", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
