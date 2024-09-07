@@ -355,7 +355,7 @@
 							{
 								type: StackCardsFromDeck
 								select: choose(culture(isengard),mount)
-								count: 1
+								count: 0-1
 								where: self
 								shuffle: true
 								showAll: true
@@ -363,33 +363,41 @@
 							{
 								type: StackCardsFromDiscard
 								select: choose(culture(isengard),mount)
-								count: 1
+								count: 0-1
 								where: self
 							}
 						]
 					}
 					{
-						type: Choice
-						texts: [
-							Stack an {isengard} mount from your draw deck.
-							Stack an {isengard} mount from your discard pile.
-						]
-						effects: [
-							{
-								type: StackCardsFromDeck
-								select: choose(culture(isengard),mount)
-								count: 1
-								where: self
-								shuffle: true
-								showAll: true
-							}
-							{
-								type: StackCardsFromDiscard
-								select: choose(culture(isengard),mount)
-								count: 1
-								where: self
-							}
-						]
+						type: If
+						check: {
+							type: HasCardStacked
+							filter: any
+							on: self
+						}
+						true: {
+							type: Choice
+							texts: [
+								Stack an {isengard} mount from your draw deck.
+								Stack an {isengard} mount from your discard pile.
+							]
+							effects: [
+								{
+									type: StackCardsFromDeck
+									select: choose(culture(isengard),mount)
+									count: 0-1
+									where: self
+									shuffle: true
+									showAll: true
+								}
+								{
+									type: StackCardsFromDiscard
+									select: choose(culture(isengard),mount)
+									count: 0-1
+									where: self
+								}
+							]
+						}
 					}
 				]
 			}
@@ -418,6 +426,7 @@
 					{
 						type: PlayCardFromStacked
 						select: memory(chosenMount)
+						assumePlayable: true
 						on: self
 					}
 				]
