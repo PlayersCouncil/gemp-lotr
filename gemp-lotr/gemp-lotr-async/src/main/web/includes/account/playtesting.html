@@ -1,14 +1,7 @@
 <div class="article">
-	<p>The <a href="https://lotrtcgpc.net">Player's Council</a> is dedicated to breathing life into this old game, both through errata to old cards and the introduction of brand new ones. Although we spend weeks or months debating the finer points of card balancing, there is no argument as powerful as the result of dedicated playtesting.</p>
+	<p>After playing each playtest game, please leave feedback on bugs or balance <a href="https://docs.google.com/forms/d/e/1FAIpQLSdKJrCmjoyUqDTusDcpNoWAmvkGdzQqTxWGpdNIFX9biCee-A/viewform?usp=pp_url">using this form here</a>. (If you use the link in the pop-up at the end of the match, it will auto-fill the replay links in the form for you.)</p>
 	
-	<p>Opt-in or opt-out to PLAYTEST formats using the buttons below.  This will enable the PLAYTEST-PC-Fellowship, PLAYTEST-PC-Movie, and PLAYTEST-PC-Expanded formats and corresponding decklist filters.</p>
-	
-	<button id="btnEnableTesting" onclick="hall.AddTesterFlag()">Enable Playtesting</button>
-	<button id="btnDisableTesting" onclick="hall.RemoveTesterFlag()">Disable Playtesting</button>
-	
-	<p>After playing playtest games, you can leave feedback on bugs or balance <a href="https://docs.google.com/forms/d/e/1FAIpQLSdKJrCmjoyUqDTusDcpNoWAmvkGdzQqTxWGpdNIFX9biCee-A/viewform?usp=pp_url">using this form here</a>.</p>
-	
-	<p>If you have any questions or would like to discuss our card design decisions in-depth, then feel free to join us <a href="https://lotrtcgpc.net/discord">on the PC Discord server</a>.</p>
+	<p>If you have any questions, please bring them up in the #private-playtest channel <a href="https://lotrtcgpc.net/discord">on the PC Discord server</a>.</p>
 	
 	<br>
 	
@@ -60,7 +53,7 @@ function drawTable(json) {
 }
 
 
-hall.comm.getRecentReplays("Movie Block (PC)", 100, function(json){drawTable(json);}, hall.hallErrorMap());
+hall.comm.getRecentReplays("", 100, function(json){drawTable(json);}, hall.hallErrorMap());
 drawTable(); 
 
 </script>
