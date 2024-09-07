@@ -206,6 +206,7 @@ public class Card_V2_024_Tests
 		scn.SkipToPhase(Phase.SHADOW);
 		assertTrue(scn.ShadowActionAvailable(pit));
 		scn.ShadowUseCardAction(pit);
+		assertEquals(Zone.STACKED, warg1.getZone());
 		//choosing exert cost: 2 warg-riders and an uruk
 		assertEquals(3, scn.GetShadowCardChoiceCount());
 		assertEquals(3, scn.GetVitality(uruk));
@@ -217,9 +218,8 @@ public class Card_V2_024_Tests
 		scn.ShadowChooseCardBPFromSelection(warg1);
 
 		//choosing the warg-rider for it to go on
-		assertEquals(Zone.STACKED, warg1.getZone());
 		assertEquals(2, scn.GetShadowCardChoiceCount());
-		scn.ShadowChooseCardBPFromSelection(rider1);
+		scn.ShadowChooseCard(rider1);
 		assertEquals(Zone.ATTACHED, warg1.getZone());
 		assertSame(rider1, warg1.getAttachedTo());
 	}
