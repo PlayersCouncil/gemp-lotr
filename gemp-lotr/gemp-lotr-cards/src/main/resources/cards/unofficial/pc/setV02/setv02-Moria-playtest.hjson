@@ -113,35 +113,44 @@
 					{
 						type: CanPlayFromDiscard
 						filter: name(The Balrog)
-					}
-					{
-						type: CanSpotThreats
+						discount: {
+							type: ForEachThreat
+							multiplier: -1
+						}
 					}
 				]
-				cost: [
-					{
+				effect: {
+					type: CostToEffect
+					cost: {
 						type: ChooseANumber
 						text: Choose how many threats to remove
-						from: 1
+						from: 0
 						to: {
 							type: ForEachThreat
 						}
 						memorize: removedThreats
 					}
-					{
-						type: RemoveThreats
-						amount: memory(removedThreats)
+					effect: {
+						type: CostToEffect
+						cost: {
+							type: RemoveThreats
+							amount: memory(removedThreats)
+						}
+						effect: {
+							type: PlayCardFromDiscard
+							select: choose(name(The Balrog))
+							maxDiscount: {
+								type: ForEachThreat
+								multiplier: -1
+							}
+							discount: {
+								type: FromMemory
+								memory: removedThreats
+								multiplier: -1
+							}
+						}
 					}
-				]
-				effect: {
-					type: PlayCardFromDiscard
-					select: choose(name(The Balrog))
-					discount: {
-						type: FromMemory
-						memory: removedThreats
-						multiplier: -1
-					}
-				}
+				} 
 			}
 		]
 		gametext: Each time the fellowship moves, you may reveal The Balrog from your hand to add a threat.<br>Shadow: Remove X threats to play the Balrog from your discard pile, its twilight cost is -1 for each threat removed. 
