@@ -42,7 +42,7 @@ public class Card_V2_003_Tests
 		 * Strength: 8
 		 * Vitality: 1
 		 * Site Number: 3
-		 * Game Text: While you have initiative, this minion is strength +1 and damage +1.
+		 * Game Text: While you have initiative, this minion is strength +3 and damage +1.
 		*/
 
 		var scn = GetScenario();

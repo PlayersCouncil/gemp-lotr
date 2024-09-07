@@ -14,7 +14,7 @@ public class CancelKeywordBonus implements ModifierSourceProducer {
 
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
-        final String from = FieldUtils.getString(object.get("from"), "from");
+        final String from = FieldUtils.getString(object.get("from"), "from", "any");
 
         Keyword keyword = FieldUtils.getEnum(Keyword.class, object.get("keyword"), "keyword");
         if (keyword == null)

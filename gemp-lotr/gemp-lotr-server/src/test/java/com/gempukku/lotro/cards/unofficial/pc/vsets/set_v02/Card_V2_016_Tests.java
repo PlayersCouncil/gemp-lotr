@@ -50,8 +50,8 @@ public class Card_V2_016_Tests
 		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: Valiant.
-		* 	While you can spot 3 valiant companions, the number of free peoples cultures that can be counted is-1.
-		* 	Skirmish: If a valiant companion is skirmishing a minion with a strength of 12 or higher, exert Aragorn to make that companion strength +2 (or +3 if that companion is exhausted).
+		* 	At the start of each turn you may spot another valiant companion to draw a card.
+		* 	Skirmish: Exert Aragorn to make a valiant companion strength +2.
 		*/
 
 		var scn = GetScenario();
@@ -59,7 +59,7 @@ public class Card_V2_016_Tests
 		var card = scn.GetFreepsCard("aragorn");
 
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
-		assertEquals("Last Hope Of Men", card.getBlueprint().getSubtitle());
+		assertEquals("Last Hope of Men", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
@@ -74,67 +74,50 @@ public class Card_V2_016_Tests
 	}
 
 	@Test
-	public void AragornReducesSpottableCulturesIf3ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AragornDrawsCardAtStartOfTurnIfOtherValiantCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var veowyn = scn.GetFreepsCard("veowyn");
-		var vgamling = scn.GetFreepsCard("vgamling");
-		var vrscout = scn.GetFreepsCard("vrscout");
-		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(aragorn, veowyn, gandalf, vgamling, vrscout);
-
-		var grima = scn.GetShadowCard("grima");
-		scn.ShadowMoveCharToTable(grima);
+		scn.FreepsMoveCharToTable(aragorn, veowyn);
 
 		scn.StartGame();
 
-		scn.FreepsPlayCard(aragorn);
-		scn.FreepsPlayCard(veowyn);
-		scn.FreepsPlayCard(gandalf);
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetFreepsHandCount());
+	}
 
-		//Shire, Gandalf, Rohan, Gondor
-		assertEquals(4, scn.GetFreepsCultureCount());
+	@Test
+	public void AragornCannotDrawCardAtStartOfTurnIfNoOtherValiantCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
 
-		scn.FreepsPlayCard(vgamling); //Now there are 3 valiants
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(aragorn);
 
-		//Shire, Gandalf, Rohan, Gondor, -1
-		assertEquals(3, scn.GetFreepsCultureCount());
+		scn.StartGame();
 
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-
-		//Grima now can't see 4 cultures
-		assertFalse(scn.ShadowActionAvailable(grima));
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 	}
 
 
 	@Test
-	public void ExertsToBoostValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AragornExertsToBoostValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var veowyn = scn.GetFreepsCard("veowyn");
-		scn.FreepsMoveCardToHand(aragorn, veowyn);
+		scn.FreepsMoveCharToTable(aragorn, veowyn);
 
 		var twk = scn.GetShadowCard("twk");
-		scn.ShadowMoveCardToHand(twk);
+		scn.ShadowMoveCharToTable(twk);
 
 		scn.StartGame();
-
-		// Play Aragorn
-		scn.FreepsPlayCard(aragorn);
-		assertEquals(4, scn.GetTwilight());
-
-		// Play companions of two additional (non-gondor, non-shire) cultures to get to 4 total to spot
-		scn.FreepsPlayCard(veowyn);
-
-		// Get the game state to where Grima is on the table and it's the shadow player's turn during the maneuver phase
-		scn.SkipToPhase(Phase.SHADOW);
-
-		scn.ShadowPlayCard(twk);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
@@ -144,55 +127,26 @@ public class Card_V2_016_Tests
 
 		assertTrue(scn.FreepsActionAvailable(aragorn));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertEquals(0, scn.GetWoundsOn(veowyn));
 		assertEquals(6, scn.GetStrength(veowyn));
 
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertEquals(0, scn.GetWoundsOn(veowyn));
-		// strength +2 because Eowyn isn't exhausted
 		assertEquals(8, scn.GetStrength(veowyn));
-
-		// Wound Eowyn twice and have the shadow player pass their skirmish action
-		scn.AddWoundsToChar(veowyn, 2);
-		scn.ShadowPassCurrentPhaseAction();
-
-		assertTrue(scn.FreepsActionAvailable(aragorn));
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertEquals(2, scn.GetWoundsOn(veowyn));
-		assertEquals(8, scn.GetStrength(veowyn));
-
-		scn.FreepsUseCardAction(aragorn);
-		assertEquals(2, scn.GetWoundsOn(aragorn));
-		assertEquals(2, scn.GetWoundsOn(veowyn));
-		// strength +3 because Eowyn isn't exhausted, now all she needs is Merry with a dagger to help her out
-		assertEquals(11, scn.GetStrength(veowyn));
 	}
 
 	@Test
-	public void CantExertToBoostNonValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AragornCantExertToBoostNonValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(aragorn, gandalf);
+		scn.FreepsMoveCharToTable(aragorn, gandalf);
 
 		var twk = scn.GetShadowCard("twk");
-		scn.ShadowMoveCardToHand(twk);
+		scn.ShadowMoveCharToTable(twk);
 
 		scn.StartGame();
-
-		// Play Aragorn
-		scn.FreepsPlayCard(aragorn);
-		assertEquals(4, scn.GetTwilight());
-
-		scn.FreepsPlayCard(gandalf);
-
-		// Get the game state to where Grima is on the table and it's the shadow player's turn during the maneuver phase
-		scn.SkipToPhase(Phase.SHADOW);
-
-		scn.ShadowPlayCard(twk);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
@@ -201,6 +155,12 @@ public class Card_V2_016_Tests
 		scn.FreepsResolveSkirmish(gandalf);
 
 		// Despite all evidence to the contrary, Gandalf isn't valiant so shouldn't be boostable
-		assertFalse(scn.FreepsActionAvailable(aragorn));
+		assertTrue(scn.FreepsActionAvailable(aragorn));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(8, scn.GetStrength(gandalf));
+
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(8, scn.GetStrength(gandalf));
 	}
 }

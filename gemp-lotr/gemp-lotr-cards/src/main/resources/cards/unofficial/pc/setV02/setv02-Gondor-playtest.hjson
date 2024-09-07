@@ -16,7 +16,7 @@
 			style: Standard
 		}
 		title: Aragorn
-		subtitle: Last Hope Of Men
+		subtitle: Last Hope of Men
 		unique: true
 		side: Free Peoples
 		culture: Gondor
@@ -30,24 +30,22 @@
 		keywords: Valiant
 		effects: [
 			{
-				type: modifier
-				modifier: {
-					type: FPCultureCount
-					requires: {
-						type: canSpot
-						count: 3
-						filter: valiant,companion
-					}
-					amount: -1
+				type: Trigger
+				trigger: {
+					type: StartOfTurn
+				}
+				optional: true
+				requires: {
+					type: CanSpot
+					filter: another,valiant,companion
+				}
+				effect: {
+					type: DrawCards
+					count: 1
 				}
 			}
 			{
 				type: activated
-				requires: {
-					type: canSpot
-					count: 1
-					filter: valiant,companion,inSkirmish
-				}
 				phase: skirmish
 				cost: {
 					type: exert
@@ -57,20 +55,11 @@
 					type: modifyStrength
 					select: choose(valiant,companion,inSkirmish)
 					memorize: chosenCompanion
-					amount: {
-						type: Conditional
-						requires: {
-							type: memoryMatches
-							memory: chosenCompanion
-							filter: Exhausted
-						}
-						true: 3
-						false: 2
-					}
+					amount: 2
 				}
 			}
 		]
-		gametext: Valiant.<br>While you can spot 3 valiant companions, the number of free peoples cultures that can be counted is-1.<br>Skirmish: If a valiant companion is skirmishing a minion with a strength of 12 or higher, exert Aragorn to make that companion strength +2 (or +3 if that companion is exhausted).
+		gametext: Valiant.<br>At the start of each turn you may spot another valiant companion to draw a card. <b>Skirmish</b>: Exert Aragorn to make a skirmishing valiant companion strength +2.
 		lore: ""
 		promotext: ""
 		alts: {

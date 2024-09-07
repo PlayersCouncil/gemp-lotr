@@ -506,7 +506,7 @@
 		twilight: 2
 		type: Minion
 		race: Orc
-		strength: 5
+		strength: 6
 		vitality: 2
 		site: 6
 		keywords: Tracker
@@ -516,7 +516,7 @@
 				modifier: {
 					type: modifystrength
 					filter: self,siteNumber(0-1)
-					amount: 4
+					amount: 5
 				}
 			}
 		]

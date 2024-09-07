@@ -39,7 +39,7 @@ public class Card_V2_033_Tests
 		 * Twilight Cost: 8
 		 * Type: Minion
 		 * Subtype: Uruk-hai
-		 * Strength: 15
+		 * Strength: 17
 		 * Vitality: 4
 		 * Site Number: 5
 		 * Game Text: Damage +1.
@@ -61,7 +61,7 @@ public class Card_V2_033_Tests
 		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(8, card.getBlueprint().getTwilightCost());
-		assertEquals(15, card.getBlueprint().getStrength());
+		assertEquals(17, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
