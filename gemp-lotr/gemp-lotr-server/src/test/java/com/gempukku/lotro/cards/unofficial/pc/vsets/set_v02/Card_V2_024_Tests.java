@@ -18,7 +18,13 @@ public class Card_V2_024_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_24");
+					put("pit", "102_24");
+					put("warg1", "5_65");
+					put("warg2", "5_64");
+					put("warg3", "5_59");
+					put("rider1", "5_67");
+					put("rider2", "5_67");
+					put("uruk", "1_151");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -45,7 +51,7 @@ public class Card_V2_024_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pit");
 
 		assertEquals("Wolf Pit", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +63,164 @@ public class Card_V2_024_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WolfPitTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void WolfPitCanStack2MountsFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var pit = scn.GetShadowCard("pit");
+		var warg1 = scn.GetShadowCard("warg1");
+		var warg2 = scn.GetShadowCard("warg2");
+		var warg3 = scn.GetShadowCard("warg3");
+		scn.ShadowMoveCardToHand(pit);
+		scn.ShadowMoveCardToDiscard(warg1, warg2, warg3);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		scn.SkipToPhase(Phase.SHADOW);
+		assertTrue(scn.ShadowPlayAvailable(pit));
+		scn.ShadowPlayCard(pit);
+
+		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
+		scn.ShadowChooseMultipleChoiceOption("discard");
+
+		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(Zone.DISCARD, warg1.getZone());
+		scn.ShadowChooseCardBPFromSelection(warg1);
+		assertEquals(Zone.STACKED, warg1.getZone());
+		assertSame(pit, warg1.getStackedOn());
+
+		//We now optionally do it all again a second time
+		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
+		scn.ShadowChooseMultipleChoiceOption("discard");
+
+		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(Zone.DISCARD, warg2.getZone());
+		scn.ShadowChooseCardBPFromSelection(warg2);
+		assertEquals(Zone.STACKED, warg2.getZone());
+		assertSame(pit, warg2.getStackedOn());
+
+		assertEquals(Zone.DISCARD, warg3.getZone());
+	}
+
+	@Test
+	public void WolfPitCanStack2MountsFromDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var pit = scn.GetShadowCard("pit");
+		var warg1 = scn.GetShadowCard("warg1");
+		var warg2 = scn.GetShadowCard("warg2");
+		var warg3 = scn.GetShadowCard("warg3");
+		scn.ShadowMoveCardToHand(pit);
+		scn.ShadowMoveCardsToTopOfDeck(warg1, warg2, warg3);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.SHADOW);
+		assertTrue(scn.ShadowPlayAvailable(pit));
+		scn.ShadowPlayCard(pit);
+
+		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
+		scn.ShadowChooseMultipleChoiceOption("deck");
+
+		assertEquals(3, scn.ShadowGetSelectableCount());
+		assertEquals(Zone.DECK, warg1.getZone());
+		scn.ShadowChooseCardBPFromSelection(warg1);
+		assertEquals(Zone.STACKED, warg1.getZone());
+		assertSame(pit, warg1.getStackedOn());
+
+		//We now optionally do it all again a second time
+		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
+		scn.ShadowChooseMultipleChoiceOption("deck");
+
+		assertEquals(2, scn.ShadowGetSelectableCount());
+		assertEquals(Zone.DECK, warg2.getZone());
+		scn.ShadowChooseCardBPFromSelection(warg2);
+		assertEquals(Zone.STACKED, warg2.getZone());
+		assertSame(pit, warg2.getStackedOn());
+
+		assertEquals(Zone.DECK, warg3.getZone());
+	}
+
+	@Test
+	public void WolfPitCanStack1MountFromDrawDeckAnd1FromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var pit = scn.GetShadowCard("pit");
+		var warg1 = scn.GetShadowCard("warg1");
+		var warg2 = scn.GetShadowCard("warg2");
+		var warg3 = scn.GetShadowCard("warg3");
+		scn.ShadowMoveCardToHand(pit);
+		scn.ShadowMoveCardsToTopOfDeck(warg1);
+		scn.ShadowMoveCardToDiscard(warg2, warg3);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.SHADOW);
+		assertTrue(scn.ShadowPlayAvailable(pit));
+		scn.ShadowPlayCard(pit);
+
+		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
+		scn.ShadowChooseMultipleChoiceOption("deck");
+
+		assertEquals(1, scn.ShadowGetSelectableCount());
+		assertEquals(Zone.DECK, warg1.getZone());
+		scn.ShadowChooseCardBPFromSelection(warg1);
+		assertEquals(Zone.STACKED, warg1.getZone());
+		assertSame(pit, warg1.getStackedOn());
+
+		//We now optionally do it all again a second time
+		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
+		scn.ShadowChooseMultipleChoiceOption("discard");
+
+		assertEquals(2, scn.ShadowGetSelectableCount());
+		assertEquals(Zone.DISCARD, warg2.getZone());
+		scn.ShadowChooseCardBPFromSelection(warg2);
+		assertEquals(Zone.STACKED, warg2.getZone());
+		assertSame(pit, warg2.getStackedOn());
+
+		assertEquals(Zone.DISCARD, warg3.getZone());
+	}
+
+	@Test
+	public void WolfPitShadowExertIsengardMinionToPlayIsenMountFromStack() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var pit = scn.GetShadowCard("pit");
+		var warg1 = scn.GetShadowCard("warg1");
+		var warg2 = scn.GetShadowCard("warg2");
+		var rider1 = scn.GetShadowCard("rider1");
+		var rider2 = scn.GetShadowCard("rider2");
+		var uruk = scn.GetShadowCard("uruk");
+		scn.ShadowMoveCardToSupportArea(pit);
+		scn.ShadowMoveCharToTable(rider1, rider2, uruk);
+		scn.StackCardsOn(pit, warg1, warg2);
+
+		scn.StartGame();
+
+		scn.SetTwilight(50);
+
+		scn.SkipToPhase(Phase.SHADOW);
+		assertTrue(scn.ShadowActionAvailable(pit));
+		scn.ShadowUseCardAction(pit);
+		//choosing exert cost: 2 warg-riders and an uruk
+		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(3, scn.GetVitality(uruk));
+		scn.ShadowChooseCard(uruk);
+		assertEquals(2, scn.GetVitality(uruk));
+
+		//choosing the mount to play that's stacked on pit
+		assertEquals(2, scn.GetShadowCardChoiceCount());
+		scn.ShadowChooseCardBPFromSelection(warg1);
+
+		//choosing the warg-rider for it to go on
+		assertEquals(Zone.STACKED, warg1.getZone());
+		assertEquals(2, scn.GetShadowCardChoiceCount());
+		scn.ShadowChooseCardBPFromSelection(rider1);
+		assertEquals(Zone.ATTACHED, warg1.getZone());
+		assertSame(rider1, warg1.getAttachedTo());
 	}
 }
