@@ -160,8 +160,7 @@
 			},
 			effect: [
 				{
-					type: discardFromHand
-					forced: true
+					type: Discard
 					hand: shadow
 					player: shadow
 					count: {
