@@ -350,10 +350,6 @@
 		timewords: Maneuver
 		effects: {
 			type: event
-			cost: {
-				type: Spot
-				filter: elf, companion
-			},
 			effect: [
 				{
 					type: Choice
@@ -412,10 +408,12 @@
 						{
 							type: ReinforceTokens
 							culture: elven
+							select: choose(HasCultureToken(elven))
 						}
 						{
 							type: ReinforceTokens
 							culture: dwarven
+							select: choose(HasCultureToken(dwarven))
 						}
 					]
 				}
