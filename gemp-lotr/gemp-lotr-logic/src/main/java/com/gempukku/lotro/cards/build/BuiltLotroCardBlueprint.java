@@ -524,9 +524,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             return null;
 
         Filterable[] result = new Filterable[targetFilters.size()];
+        var actionContext = new DefaultActionContext(self.getOwner(), game, self, null, null);
         for (int i = 0; i < result.length; i++) {
             final FilterableSource filterableSource = targetFilters.get(i);
-            result[i] = filterableSource.getFilterable(null);
+            result[i] = filterableSource.getFilterable(actionContext);
         }
 
         return Filters.and(result);
