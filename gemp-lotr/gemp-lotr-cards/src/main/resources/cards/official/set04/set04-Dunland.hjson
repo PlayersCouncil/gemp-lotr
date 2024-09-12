@@ -21,17 +21,17 @@
 		effects: {
 			type: event
 			requires: {
-			    type: or
-			    requires: [
-			        {
-			            type: canSpot
-			            count: 3
-			            filter: culture(dunland),minion
-			        }
-			        {
-			            type: controlsSite
-			        }
-			    ]
+					type: or
+					requires: [
+							{
+									type: canSpot
+									count: 3
+									filter: culture(dunland),minion
+							}
+							{
+									type: controlsSite
+							}
+					]
 			}
 			effect: [
 				{
@@ -53,7 +53,7 @@
 		}
 	}
 
-    4_4: {
+		4_4: {
 		cardInfo: {
 			imagePath: decipher/LOTR04004.jpg
 			javaClass: true
@@ -79,14 +79,14 @@
 				type: trigger
 				optional: true
 				trigger: {
-				    type: winsSkirmish
-				    filter: self
+						type: winsSkirmish
+						filter: self
 				}
 				effect: {
-				    type: addKeyword
-				    select: self
-				    keyword: fierce
-				    until: start(regroup)
+						type: addKeyword
+						select: self
+						keyword: fierce
+						until: start(regroup)
 				}
 			}
 		]
@@ -126,12 +126,12 @@
 					type: modifyStrength
 					select: choose(culture(dunland),man)
 					amount: {
-					    type: Conditional
-					    requires: {
-					        type: controlsSite
-					    }
-					    true: 4
-					    false: 2
+							type: Conditional
+							requires: {
+									type: controlsSite
+							}
+							true: 4
+							false: 2
 					}
 				}
 			]
@@ -170,17 +170,17 @@
 				type: activated
 				phase: shadow
 				requires: {
-				    type: moveCountMinimum
-				    amount: 2
+						type: moveCountMinimum
+						amount: 2
 				}
 				cost: {
-				    type: removeTwilight
-				    amount: 2
+						type: removeTwilight
+						amount: 2
 				}
 				effect: {
-				    type: playCardFromDiscard
-				    removedTwilight: 2
-				    select: choose(culture(dunland),man)
+						type: playCardFromDiscard
+						removedTwilight: 2
+						select: choose(culture(dunland),man)
 				}
 			}
 		]
@@ -220,13 +220,13 @@
 					type: modifyStrength
 					select: choose(culture(dunland),man)
 					amount: {
-					    type: Conditional
-					    requires: {
-					        type: location
-					        filter: sanctuary
-					    }
-					    true: 4
-					    false: 2
+							type: Conditional
+							requires: {
+									type: location
+									filter: sanctuary
+							}
+							true: 4
+							false: 2
 					}
 				}
 			]
@@ -267,8 +267,8 @@
 					type: modifyStrength
 					select: choose(culture(dunland),man)
 					amount: {
-					    type: forEachYouCanSpot
-					    filter: companion
+							type: forEachYouCanSpot
+							filter: companion
 					}
 				}
 			]
@@ -310,29 +310,29 @@
 				type: trigger
 				optional: true
 				trigger: {
-				    type: winsSkirmish
-				    filter: self
+						type: winsSkirmish
+						filter: self
 				}
 				effect: [
-				    {
-				        type: PlayCardFromHand
-				        discount: -2
-				        select: choose(culture(dunland),man)
-				        memorize: playedMinion
-				    }
-				    {
-				        type: addKeyword
-				        select: memory(playedMinion)
-				        keyword: fierce
-				        until: start(regroup)
-				    }
-				    {
-				        type: addKeyword
-				        select: memory(playedMinion)
-				        keyword: damage
-				        amount: 1
-				        until: start(regroup)
-				    }
+						{
+								type: PlayCardFromHand
+								discount: -2
+								select: choose(culture(dunland),man)
+								memorize: playedMinion
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: fierce
+								until: start(regroup)
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: damage
+								amount: 1
+								until: start(regroup)
+						}
 				]
 			}
 		]
@@ -405,13 +405,13 @@
 				type: trigger
 				optional: true
 				trigger: {
-				    type: winsSkirmish
-				    filter: self
+						type: winsSkirmish
+						filter: self
 				}
 				effect: {
-				    type: StackCardsFromPlay
-				    select: self
-				    where: choose(controlledSite)
+						type: StackCardsFromPlay
+						select: self
+						where: choose(controlledSite)
 				}
 			}
 			{
@@ -419,7 +419,7 @@
 				phase: shadow
 				stackedOn: controlledSite
 				effect: {
-				    type: playCardFromStacked
+						type: playCardFromStacked
 						select: self
 						on: controlledSite
 						discount: -2
@@ -463,22 +463,22 @@
 				type: trigger
 				trigger: optional
 				trigger: {
-				    type: winsSkirmish
-				    filter: self
+						type: winsSkirmish
+						filter: self
 				}
 				effect: [
-				    {
-				        type: modifyStrength
-				        select: self
-				        amount: 2
-				        until: start(regroup)
-				    }
-				    {
-				        type: addKeyword
-				        select: self
-				        keyword: fierce
-				        until: start(regroup)
-				    }
+						{
+								type: modifyStrength
+								select: self
+								amount: 2
+								until: start(regroup)
+						}
+						{
+								type: addKeyword
+								select: self
+								keyword: fierce
+								until: start(regroup)
+						}
 				]
 			}
 		]
@@ -519,22 +519,22 @@
 				type: trigger
 				optional: true
 				trigger: {
-				    type: winsSkirmish
-				    filter: self
+						type: winsSkirmish
+						filter: self
 				}
 				effect: {
-				    type: discard
-				    select: choose(side(free),possession)
-				    count: {
-				        type: Conditional
-				        requires: {
-				            type: canSpot
-				            filter: companion
-				            count: 6
-				        }
-				        true: 2
-				        false: 1
-				    }
+						type: discard
+						select: choose(side(free),possession)
+						count: {
+								type: Conditional
+								requires: {
+										type: canSpot
+										filter: companion
+										count: 6
+								}
+								true: 2
+								false: 1
+						}
 				}
 			}
 		]
@@ -575,15 +575,15 @@
 				type: trigger
 				optional: true
 				trigger: {
-				    type: winsSkirmish
-				    filter: self
+						type: winsSkirmish
+						filter: self
 				}
 				requires: {
-				    type: canSpot
-				    filter: another,culture(dunland),man
+						type: canSpot
+						filter: another,culture(dunland),man
 				}
 				effect: {
-				    type: takeControlOfSite
+						type: takeControlOfSite
 				}
 			}
 		]
@@ -623,29 +623,29 @@
 			{
 				type: modifier
 				modifier: {
-				    type: modifyStrength
-				    filter: self,inSkirmishAgainst(culture(rohan),man)
-				    amount: 2
+						type: modifyStrength
+						filter: self,inSkirmishAgainst(culture(rohan),man)
+						amount: 2
 				}
 			}
 			{
 				type: activated
 				phase: assignment
 				requires: {
-				    type: canSpot
-				    filter: ally
+						type: canSpot
+						filter: ally
 				}
 				effect: [
-				    {
-				        type: enableParticipationInSkirmishes
-				        select: choose(ally)
-				        memorize: chosenAlly
-				    }
-				    {
-				        type: assignFPCharacterToSkirmish
-				        fpCharacter: memory(chosenAlly)
-				        minion: self
-				    }
+						{
+								type: enableParticipationInSkirmishes
+								select: choose(ally)
+								memorize: chosenAlly
+						}
+						{
+								type: assignFPCharacterToSkirmish
+								fpCharacter: memory(chosenAlly)
+								minion: self
+						}
 				]
 			}
 		]
@@ -686,22 +686,22 @@
 				type: trigger
 				optional: true
 				trigger: {
-				    type: winsSkirmish
-				    filter: self
+						type: winsSkirmish
+						filter: self
 				}
 				effect: [
-				    {
-				        type: modifyStrength
-				        select: self
-				        amount: 2
-				        until: start(regroup)
-				    }
-				    {
-				        type: addKeyword
-				        select: self
-				        keyword: fierce
-				        until: start(regroup)
-				    }
+						{
+								type: modifyStrength
+								select: self
+								amount: 2
+								until: start(regroup)
+						}
+						{
+								type: addKeyword
+								select: self
+								keyword: fierce
+								until: start(regroup)
+						}
 				]
 			}
 		]
@@ -774,20 +774,20 @@
 				type: activated
 				phase: assignment
 				requires: {
-				    type: canSpot
-				    filter: ally
+						type: canSpot
+						filter: ally
 				}
 				effect: [
-				    {
-				        type: enableParticipationInSkirmishes
-				        select: choose(ally)
-				        memorize: chosenAlly
-				    }
-				    {
-				        type: assignFPCharacterToSkirmish
-				        fpCharacter: memory(chosenAlly)
-				        minion: self
-				    }
+						{
+								type: enableParticipationInSkirmishes
+								select: choose(ally)
+								memorize: chosenAlly
+						}
+						{
+								type: assignFPCharacterToSkirmish
+								fpCharacter: memory(chosenAlly)
+								minion: self
+						}
 				]
 			}
 		]
@@ -821,33 +821,46 @@
 		type: Possession
 		keyword: support area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: drawCards
-		            count: 1
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: culture(dunland),man
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(culture(dunland),man)
-		        }
-		    }
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: played
+								filter: self
+						}
+						effect: {
+								type: drawCards
+								count: 1
+						}
+				}
+				{
+						type: Response
+						trigger: {
+								type: aboutToTakeWound
+								filter: culture(dunland),man
+						}
+						cost: {
+							type: Choice
+							texts: [
+								Remove (2)
+								Discard this possession
+							]
+							effects: [
+								{
+									type: removeTwilight
+									amount: 2
+								}
+								{
+									type: Discard
+									select: self
+								}
+							]
+						}
+						effect: {
+								type: preventWound
+								select: choose(culture(dunland),man)
+						}
+				}
 		]
 		gametext: Plays to your support area. When you play this possession, you may draw a card.<br><b>Response:</b> If a [dunland] Man is about to take a wound, remove (2) or discard this possession to prevent that wound.
 		lore: Only heavy animal skins armored the Dunlendings.
@@ -882,22 +895,22 @@
 		vitality: 2
 		site: 3
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: canSpot
-		            filter: controlledSite
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: drawCards
-		            count: 3
-		        }
-		    }
+				{
+						type: activated
+						phase: shadow
+						requires: {
+								type: canSpot
+								filter: controlledSite
+						}
+						cost: {
+								type: exert
+								select: self
+						}
+						effect: {
+								type: drawCards
+								count: 3
+						}
+				}
 		]
 		gametext: <b>Shadow:</b> Spot a site you control and exert Hill Chief to draw 3 cards.
 		lore: ...Saruman has armed the wild hillmen and herdfolk of Dunland beyond the rivers, and these also he loosed upon us.'
@@ -932,20 +945,20 @@
 		vitality: 1
 		site: 3
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: moves
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(dunland),man
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: moves
+						}
+						requires: {
+								type: canSpot
+								filter: another,culture(dunland),man
+						}
+						effect: {
+								type: takeControlOfSite
+						}
+				}
 		]
 		gametext: Each time the fellowship moves, you may spot another [dunland] Man to take control of a site.
 		lore: As in years past, the Dunlendings marched in force to the west.
@@ -980,45 +993,45 @@
 		vitality: 2
 		site: 3
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: skipPhase
-		            requires: {
-		                type: canSpot
-		                filter: controlledSite
-		                count: 2
-		            }
-		            phase: archery
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: controlledSite
-		                count: 3
-		            }
-		            filter: your,culture(dunland),man
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: controlledSite
-		                count: 3
-		            }
-		            filter: your,culture(dunland),man
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+				{
+						type: modifier
+						modifier: {
+								type: skipPhase
+								requires: {
+										type: canSpot
+										filter: controlledSite
+										count: 2
+								}
+								phase: archery
+						}
+				}
+				{
+						type: modifier
+						modifier: {
+								type: addKeyword
+								requires: {
+										type: canSpot
+										filter: controlledSite
+										count: 3
+								}
+								filter: your,culture(dunland),man
+								keyword: fierce
+						}
+				}
+				{
+						type: modifier
+						modifier: {
+								type: addKeyword
+								requires: {
+										type: canSpot
+										filter: controlledSite
+										count: 3
+								}
+								filter: your,culture(dunland),man
+								keyword: damage
+								amount: 1
+						}
+				}
 		]
 		gametext: While you control 2 sites, skip the archery phase.<br>While you control 3 sites, each of your [dunland] Men is <b>fierce</b>.<br>While you control 4 sites, each of your [dunland] Men is <b>damage +1</b>.
 		lore: They are fierce folk when roused.'
@@ -1053,35 +1066,35 @@
 		vitality: 1
 		site: 3
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: [
-				    {
-				        type: PlayCardFromHand
-				        discount: -2
-				        select: choose(culture(dunland),man)
-				        memorize: playedMinion
-				    }
-				    {
-				        type: addKeyword
-				        select: memory(playedMinion)
-				        keyword: fierce
-				        until: start(regroup)
-				    }
-				    {
-				        type: addKeyword
-				        select: memory(playedMinion)
-				        keyword: damage
-				        amount: 1
-				        until: start(regroup)
-				    }
-                ]
-		    }
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: winsSkirmish
+								filter: self
+						}
+						effect: [
+						{
+								type: PlayCardFromHand
+								discount: -2
+								select: choose(culture(dunland),man)
+								memorize: playedMinion
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: fierce
+								until: start(regroup)
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: damage
+								amount: 1
+								until: start(regroup)
+						}
+								]
+				}
 		]
 		gametext: Each time this minion wins a skirmish, you may play a [dunland] Man from hand; his twilight cost is -2. That Man is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
 		lore: That old hatred Saruman has inflamed.'
@@ -1120,13 +1133,13 @@
 				type: trigger
 				optional: true
 				trigger: {
-				    type: winsSkirmish
-				    filter: self
+						type: winsSkirmish
+						filter: self
 				}
 				effect: {
-				    type: StackCardsFromPlay
-				    select: self
-				    where: choose(controlledSite)
+						type: StackCardsFromPlay
+						select: self
+						where: choose(controlledSite)
 				}
 			}
 			{
@@ -1134,7 +1147,7 @@
 				phase: shadow
 				stackedOn: controlledSite
 				effect: {
-				    type: playCardFromStacked
+						type: playCardFromStacked
 						select: self
 						on: controlledSite
 						discount: -2
@@ -1178,15 +1191,15 @@
 				type: trigger
 				optional: true
 				trigger: {
-				    type: winsSkirmish
-				    filter: self
+						type: winsSkirmish
+						filter: self
 				}
 				requires: {
-				    type: canSpot
-				    filter: another,culture(dunland),man
+						type: canSpot
+						filter: another,culture(dunland),man
 				}
 				effect: {
-				    type: takeControlOfSite
+						type: takeControlOfSite
 				}
 			}
 		]
@@ -1251,30 +1264,30 @@
 		type: Condition
 		keyword: support area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: culture(dunland),man
-		            against: culture(rohan),man
-		            memorize: winner
-		        }
-		        effect: [
-                    {
-                        type: modifyStrength
-                        select: memory(winner)
-                        amount: 2
-                        until: regroup
-                    }
-                    {
-                        type: addKeyword
-                        select: memory(winner)
-                        keyword: fierce
-                        until: regroup
-                    }
-		        ]
-		    }
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: winsSkirmish
+								filter: culture(dunland),man
+								against: culture(rohan),man
+								memorize: winner
+						}
+						effect: [
+										{
+												type: modifyStrength
+												select: memory(winner)
+												amount: 2
+												until: regroup
+										}
+										{
+												type: addKeyword
+												select: memory(winner)
+												keyword: fierce
+												until: regroup
+										}
+						]
+				}
 		]
 		gametext: Plays to your support area.<br>Each time a [dunland] Man wins a skirmish involving a [rohan] Man, you may make that minion strength +2 and <b>fierce</b> until the regroup phase.
 		lore: The Horsemen took your land; they drove your people into the hills to scratch living off rock.'
@@ -1306,44 +1319,44 @@
 		type: Condition
 		keyword: support area
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: dunland
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-		            {
-		                type: RemoveCultureTokens
-		                culture: dunland
-		                select: self
-		            }
-		            {
-		                type: chooseActiveCards
-		                text: Choose DUNLAND Man
-		                select: choose(culture(dunland),man)
-		                memorize: chosenMan
-		            }
-		            {
-		                type: addModifier
-		                modifier: {
-		                    type: cancelStrengthBonus
-		                    filter: inSkirmishAgainst(memory(chosenMan))
-		                    from: possession
-		                }
-		            }
-		        ]
-		    }
+				{
+						type: activated
+						phase: shadow
+						cost: {
+								type: removeTwilight
+								amount: 3
+						}
+						effect: {
+								type: AddCultureTokens
+								culture: dunland
+								select: self
+						}
+				}
+				{
+						type: activated
+						phase: skirmish
+						cost: [
+								{
+										type: RemoveCultureTokens
+										culture: dunland
+										select: self
+								}
+								{
+										type: chooseActiveCards
+										text: Choose DUNLAND Man
+										select: choose(culture(dunland),man)
+										memorize: chosenMan
+								}
+								{
+										type: addModifier
+										modifier: {
+												type: cancelStrengthBonus
+												filter: inSkirmishAgainst(memory(chosenMan))
+												from: possession
+										}
+								}
+						]
+				}
 		]
 		gametext: Plays to your support area.<br><b>Shadow:</b> Remove (3) to place a [dunland] token here.<br><b>Skirmish:</b> Spot a [dunland] Man and remove a [dunland] token from this card. A character skirmishing that [dunland] Man does not gain strength bonuses from possessions.
 		lore: ""
@@ -1375,19 +1388,19 @@
 		type: Condition
 		keyword: support area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            requires: {
-		                type: hasCardStacked
-		                filter: culture(dunland),man
-		                on: site
-		            }
-		            filter: site
-		            amount: 5
-		        }
-		    }
+				{
+						type: modifier
+						modifier: {
+								type: modifyCost
+								requires: {
+										type: hasCardStacked
+										filter: culture(dunland),man
+										on: site
+								}
+								filter: site
+								amount: 5
+						}
+				}
 		]
 		gametext: Plays to your support area.<br>While a [dunland] Man is stacked on a site, the Shadow number of each site is +5.
 		lore: As their homes were ravaged by the wild men, refugees fled to the safety of Helm's Deep.
@@ -1419,25 +1432,25 @@
 		type: Condition
 		target: controlledSite
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: canSpot
-		            filter: culture(dunland),man
-		            count: 2
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-		                type: hasToMoveIfAble
-		            }
-		        }
-		    }
+				{
+						type: activated
+						phase: regroup
+						requires: {
+								type: canSpot
+								filter: culture(dunland),man
+								count: 2
+						}
+						cost: {
+								type: discard
+								select: self
+						}
+						effect: {
+								type: addModifier
+								modifier: {
+										type: hasToMoveIfAble
+								}
+						}
+				}
 		]
 		gametext: Plays on a site you control.<br><b>Regroup:</b> Spot 2 [dunland] Men and discard this condition to make the Free Peoples player choose to move again this turn (if the move limit allows).
 		lore: Hordes from Dunland laid waste to villages as their numbers grew.
@@ -1469,23 +1482,23 @@
 		type: Condition
 		keyword: support area
 		effects: [
-		    {
-		        type: activated
-		        phase: assignment
-		        requires: {
-		            type: canSpot
-		            filter: controlledSite
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: assignFPCharacterToSkirmish
-		            fpCharacter: choose(unbound,companion)
-		            minion: choose(culture(dunland),man)
-		        }
-		    }
+				{
+						type: activated
+						phase: assignment
+						requires: {
+								type: canSpot
+								filter: controlledSite
+						}
+						cost: {
+								type: removeTwilight
+								amount: 2
+						}
+						effect: {
+								type: assignFPCharacterToSkirmish
+								fpCharacter: choose(unbound,companion)
+								minion: choose(culture(dunland),man)
+						}
+				}
 		]
 		gametext: Plays to your support area.<br><b>Assignment:</b> Spot a site you control and remove (2) to assign a [dunland] Man to an unbound companion.
 		lore: Like their ancestors years before, the Dunlendings came down from Isengard.
@@ -1519,9 +1532,9 @@
 		effects: {
 			type: responseEvent
 			trigger: {
-			    type: winsSkirmish
-			    filter: your,culture(dunland),man
-			    memorizeLoser: loser
+					type: winsSkirmish
+					filter: your,culture(dunland),man
+					memorizeLoser: loser
 			}
 			effect: [
 				{
@@ -1564,44 +1577,44 @@
 		vitality: 4
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBeAssignedToSkirmish
-		            requires: {
-		                type: sarumanFirstSentenceActive
-		            }
-		            filter: self
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: moves
-		        }
-		        effect: {
-		            type: exert
-		            player: fp
-		            select: choose(companion)
-		            count: {
-		                type: forEachYouCanSpot
-		                filter: culture(dunland),man
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(dunland),man)
-		            amount: 2
-		        }
-		    }
+				{
+						type: modifier
+						modifier: {
+								type: cantBeAssignedToSkirmish
+								requires: {
+										type: sarumanFirstSentenceActive
+								}
+								filter: self
+						}
+				}
+				{
+						type: trigger
+						trigger: {
+								type: moves
+						}
+						effect: {
+								type: exert
+								player: fp
+								select: choose(companion)
+								count: {
+										type: forEachYouCanSpot
+										filter: culture(dunland),man
+								}
+						}
+				}
+				{
+						type: activated
+						phase: skirmish
+						cost: {
+								type: exert
+								select: self
+						}
+						effect: {
+								type: modifyStrength
+								select: choose(culture(dunland),man)
+								amount: 2
+						}
+				}
 		]
 		gametext: Saruman may not be assigned to a skirmish.<br>Each time the fellowship moves, the Free Peoples player must exert a companion for each [dunland] Man you can spot.<br><b>Skirmish:</b> Exert Saruman to make a [dunland] Man strength +2.
 		lore: ""
@@ -1633,40 +1646,40 @@
 		type: Condition
 		keyword: support area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-                    type: losesSkirmish
-                    filter: companion
-                    against: culture(dunland),man
-                }
-                effect: {
-                    type: AddCultureTokens
-                    culture: dunland
-                    select: self
-                }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        effect: [
-                    {
-                        type: discard
-                        select: choose(side(free),possession)
-                        count: {
-                            type: ForEachCultureToken
-                            filter: self
-                            culture: dunland
-                            limit: 3
-                        }
-                    }
-                    {
-                        type: discard
-                        select: self
-                    }
-                ]
-		    }
+				{
+						type: trigger
+						optional: true
+						trigger: {
+										type: losesSkirmish
+										filter: companion
+										against: culture(dunland),man
+								}
+								effect: {
+										type: AddCultureTokens
+										culture: dunland
+										select: self
+								}
+				}
+				{
+						type: activated
+						phase: maneuver
+						effect: [
+										{
+												type: discard
+												select: choose(side(free),possession)
+												count: {
+														type: ForEachCultureToken
+														filter: self
+														culture: dunland
+														limit: 3
+												}
+										}
+										{
+												type: discard
+												select: self
+										}
+								]
+				}
 		]
 		gametext: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving a [dunland] Man, you may place a [dunland] token on this card.<br><b>Maneuver:</b> Discard a Free Peoples possession for each [dunland] token here (limit 3). Discard this condition.
 		lore: ""
@@ -1700,9 +1713,9 @@
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: controlledSite
-			    count: 2
+					type: canSpot
+					filter: controlledSite
+					count: 2
 			}
 			effect: [
 				{
@@ -1745,19 +1758,19 @@
 		itemclass: Hand weapon
 		target: culture(dunland),man
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(side(free),possession)
-		            count: 2
-		        }
-		    }
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: winsSkirmish
+								filter: bearer
+						}
+						effect: {
+								type: discard
+								select: choose(side(free),possession)
+								count: 2
+						}
+				}
 		]
 		gametext: Bearer must be a [dunland] Man.<br>Each time bearer wins a skirmish, you may discard 2 Free Peoples possessions.
 		lore: The wooden weapons of the wild men slew scores of unarmed villagers.
@@ -1791,9 +1804,9 @@
 		effects: {
 			type: responseEvent
 			trigger: {
-			    type: winsSkirmish
-			    filter: culture(dunland),man
-			    memorize: winner
+					type: winsSkirmish
+					filter: culture(dunland),man
+					memorize: winner
 			}
 			text: Make {winner} Fierce and +4 Strength
 			effect: [
@@ -1804,10 +1817,10 @@
 					until: regroup
 				}
 				{
-				    type: modifyStrength
-				    select: memory(winner)
-				    amount: 4
-				    until: regroup
+						type: modifyStrength
+						select: memory(winner)
+						amount: 4
+						until: regroup
 				}
 			]
 		}
@@ -1844,35 +1857,35 @@
 		vitality: 1
 		site: 3
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: [
-				    {
-				        type: PlayCardFromHand
-				        discount: -2
-				        select: choose(culture(dunland),man)
-				        memorize: playedMinion
-				    }
-				    {
-				        type: addKeyword
-				        select: memory(playedMinion)
-				        keyword: fierce
-				        until: start(regroup)
-				    }
-				    {
-				        type: addKeyword
-				        select: memory(playedMinion)
-				        keyword: damage
-				        amount: 1
-				        until: start(regroup)
-				    }
-                ]
-		    }
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: winsSkirmish
+								filter: self
+						}
+						effect: [
+						{
+								type: PlayCardFromHand
+								discount: -2
+								select: choose(culture(dunland),man)
+								memorize: playedMinion
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: fierce
+								until: start(regroup)
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: damage
+								amount: 1
+								until: start(regroup)
+						}
+								]
+				}
 		]
 		gametext: Each time this minion wins a skirmish, you may play a [dunland] Man from hand; his twilight cost is -2. That Man is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
 		lore: By our blood... we swear to fight for you....'
@@ -1906,9 +1919,9 @@
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(dunland),man
-			    count: 3
+					type: canSpot
+					filter: culture(dunland),man
+					count: 3
 			}
 			effect: [
 				{
@@ -1952,20 +1965,20 @@
 		site: 3
 		keyword: fierce
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: winsSkirmish
-		            filter: another,culture(dunland),man
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
+				{
+						type: Response
+						trigger: {
+								type: winsSkirmish
+								filter: another,culture(dunland),man
+						}
+						cost: {
+								type: exert
+								select: self
+						}
+						effect: {
+								type: takeControlOfSite
+						}
+				}
 		]
 		gametext: <b>Fierce</b>.<br><b>Response:</b> If another [dunland] Man wins a skirmish, exert Wulf to take control of a site.
 		lore: Do you not hear their voices?'
