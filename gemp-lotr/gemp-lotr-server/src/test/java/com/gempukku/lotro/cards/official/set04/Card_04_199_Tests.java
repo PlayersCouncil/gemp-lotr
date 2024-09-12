@@ -17,8 +17,8 @@ public class Card_04_199_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "4_199");
-					// put other cards in here as needed for the test case
+					put("trooper", "4_199");
+					put("child", "4_148"); // source of easy site control
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -41,12 +41,13 @@ public class Card_04_199_Tests
 		 * Strength: 9
 		 * Vitality: 2
 		 * Site Number: 5
-		 * Game Text: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
+		 * Game Text: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.
+		 * 	<b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("trooper");
 
 		assertEquals("Uruk Trooper", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +64,70 @@ public class Card_04_199_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukTrooperTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void UrukTrooperRegroupActionStacksSelfOnControlledSite() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var trooper = scn.GetShadowCard("trooper");
+		var child = scn.GetShadowCard("child");
+		scn.ShadowMoveCardToHand(child, trooper);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		scn.SkipToSite(2);
+
+		scn.ShadowMoveCardToSupportArea(child);
+		scn.AddTokensToCard(child, 2);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowUseCardAction(child); //should take control of site
+
+		scn.ShadowMoveCharToTable(trooper);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPassCurrentPhaseAction();
+
+		var controlledSite = scn.GetFreepsSite(1);
+		assertTrue(scn.IsSiteControlled(controlledSite));
+		assertTrue(scn.ShadowActionAvailable(trooper));
+
+		scn.ShadowUseCardAction(trooper);
+		assertEquals(controlledSite, trooper.getStackedOn());
+		assertEquals(Zone.STACKED, trooper.getZone());
+	}
+
+	@Test
+	public void UrukTrooperShadowActionPlaysSelfFromControlledSite() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var trooper = scn.GetShadowCard("trooper");
+		var child = scn.GetShadowCard("child");
+		scn.ShadowMoveCardToHand(child, trooper);
+
+		scn.StartGame();
+
+		scn.SkipToSite(2);
+
+		scn.ShadowMoveCardToSupportArea(child);
+		scn.AddTokensToCard(child, 2);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowUseCardAction(child); //should take control of site
+
+		scn.SkipToSite(4);
+		var controlledSite = scn.GetFreepsSite(1);
+		assertTrue(scn.IsSiteControlled(controlledSite));
+		scn.StackCardsOn(controlledSite, trooper);
+		scn.SetTwilight(48);
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(controlledSite, trooper.getStackedOn());
+		assertEquals(Zone.STACKED, trooper.getZone());
+
+		assertTrue(scn.ShadowActionAvailable(trooper));
+		assertEquals(50, scn.GetTwilight());
+		scn.ShadowUseCardAction(trooper);
+		assertEquals(Zone.SHADOW_CHARACTERS, trooper.getZone());
+		// Trooper cost 4, but should have a -1 discount, so costs 3 + 2 for roaming
+		assertEquals(45, scn.GetTwilight());
 	}
 }
