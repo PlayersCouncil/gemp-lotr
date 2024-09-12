@@ -73,8 +73,14 @@ public class CardResolver {
     public static EffectAppender resolveStackedCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, FilterableSource stackedOn,
                                                      String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
-            final Filterable stackedOnFilter = stackedOn.getFilterable(actionContext);
-            return Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(stackedOnFilter));
+            if(stackedOn != null) {
+                final Filterable stackedOnFilter = stackedOn.getFilterable(actionContext);
+                return Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(stackedOnFilter));
+            }
+            else {
+                return Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(Filters.any));
+            }
+
         };
 
         if (type.startsWith("memory(") && type.endsWith(")")) {
