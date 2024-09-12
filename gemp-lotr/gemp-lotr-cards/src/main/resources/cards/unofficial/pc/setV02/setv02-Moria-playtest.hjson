@@ -190,15 +190,15 @@
 			type: event
 			cost: [
 				{
-						type: ChooseANumber
-						text: Choose how many {moria} minions to discard
-						from: 1
-						to: {
-							type: ForEachYouCanSpot
-							filter: culture(moria), minion
-						}
-						memorize: discardedMinions
+					type: ChooseANumber
+					text: Choose how many {moria} minions to discard
+					from: 0
+					to: {
+						type: ForEachYouCanSpot
+						filter: culture(moria), minion
 					}
+					memorize: discardedMinions
+				}
 				{
 					type: Discard
 					select: choose(culture(Moria), minion)
@@ -206,19 +206,28 @@
 				}
 			]
 			effect: {
-				type: Preventable
-				text: Would you like to exert {discardedMinions} companions to prevent adding {discardedMinions} threats?
-				player: freeps
-				cost: {
-					type: Exert
-					select: choose(companion)
-					count: memory(discardedMinions)
+				type: If
+				check: {
+					type: IsGreaterThan
+					firstNumber: memory(discardedMinions)
+					secondNumber: 0
 				}
-				effect: {
-					type: AddThreats
-					amount: memory(discardedMinions)
+				true: {
+					type: Preventable
+					text: Would you like to exert {discardedMinions} companions to prevent adding {discardedMinions} threats?
+					player: freeps
+					cost: {
+						type: Exert
+						select: choose(companion)
+						count: memory(discardedMinions)
+					}
+					effect: {
+						type: AddThreats
+						amount: memory(discardedMinions)
+					}
 				}
 			}
+				
 		}
 		gametext: Discard X [Moria] minions to add X threats. The Free Peoples player may exert X companions to prevent this.
 		lore: "'There was none to see, or perhaps in after ages songs would still be sung of the Battle of the Peak.'"
