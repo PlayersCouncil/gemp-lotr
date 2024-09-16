@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+    client:
+        image: client-dev-i
+        build:
+            dockerfile: Dockerfile.dev
+        container_name: gemp-v2-ui
+        volumes:
+            - ./client:/client
+            - node_modules:/client/node_modules/
+        ports:
+            - "8080:8080"
+        environment:
+            - NODE_ENV=development
+volumes:
+    node_modules:

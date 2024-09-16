@@ -47,6 +47,27 @@ services:
     tty: true
     command: nohup java -jar -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector /etc/gemp-lotr/gemp-lotr-async/target/web.jar &> /logs/nohup.out &
 
+# This block is commented out, but it contains the full v2 UI confliguration. With this commented out none of the react app will be deployed
+# with it enabled you can hit the v2 client at port 8080 
+  # client: 
+  #   image: gemp-client-v2
+  #   build:
+  #     context: ../v2-ui
+  #     dockerfile: gemp_ui.Dockerfile
+  #   container_name: gemp-v2-ui
+  #   volumes:
+  #       - ../v2-ui/client:/client
+  #       - node_modules:/client/node_modules/
+  #   ports:
+  #       - "8080:17001"
+  #   environment:
+  #       - NODE_ENV=development
+  #       - VITE_API=${APP_IP}
+  #   links:
+  #       - build
+  #   networks:
+  #     gemp_net_1:
+  #       ipv4_address: ${V2_UI_IP}
 
   db:
     env_file:
@@ -70,7 +91,9 @@ services:
       gemp_net_1:
         ipv4_address: ${DB_IP}
       
-  
+volumes:
+  node_modules:
+
 networks:
   gemp_net_1:
     ipam:
