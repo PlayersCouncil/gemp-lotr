@@ -383,7 +383,7 @@ public class HallServer extends AbstractServer {
 
             LotroDeck lotroDeck = null;
             if (tournamentQueue.isRequiresDeck())
-                lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournamentQueue.getFormat()), player, deckName, tournamentQueue.getCollectionType());
+                lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournamentQueue.getFormatCode()), player, deckName, tournamentQueue.getCollectionType());
 
             tournamentQueue.joinPlayer(_collectionsManager, player, lotroDeck);
 
@@ -469,15 +469,86 @@ public class HallServer extends AbstractServer {
         }
     }
 
-    public void dropFromTournament(String tournamentId, Player player) {
+    public String dropFromTournament(String tournamentId, Player player) {
         _hallDataAccessLock.writeLock().lock();
         try {
+            String result = "";
             Tournament tournament = _tournamentService.getTournamentById(tournamentId);
             if (tournament != null) {
-                tournament.dropPlayer(player.getName());
+                result = tournament.dropPlayer(player.getName());
                 hallChanged();
             }
+            else {
+                result = "That tournament is already over.";
+            }
+
+            return result;
         } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
+    public String joinTournamentLate(String tournamentId, Player player, String deckName) {
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            String result = "";
+            var tournament = _tournamentService.getTournamentById(tournamentId);
+            if (tournament != null) {
+                var stage = tournament.getInfo().Stage;
+                if(stage == Tournament.Stage.STARTING || stage == Tournament.Stage.DECK_BUILDING ||
+                        stage == Tournament.Stage.PAUSED || stage == Tournament.Stage.AWAITING_KICKOFF) {
+                    LotroDeck lotroDeck = null;
+                    if (tournament.getInfo().Parameters().requiresDeck) {
+                        lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), player, deckName, tournament.getCollectionType());
+                    }
+
+                    _tournamentService.recordTournamentPlayer(tournamentId, player.getName(), lotroDeck);
+                    tournament.issuePlayerMaterial(player.getName());
+                }
+                result = "Joined tournament <b>" + tournament.getTournamentName() + "</b> successfully.";
+                hallChanged();
+            }
+            else {
+                result = "That tournament is already over.";
+            }
+
+            return result;
+        }
+        catch(HallException ex) {
+            return ex.getMessage();
+        }
+        finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
+    public String registerSealedTournamentDeck(String tournamentId, Player player, String deckName) throws HallException {
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            String result = "";
+            var tournament = _tournamentService.getTournamentById(tournamentId);
+            if (tournament != null) {
+                var stage = tournament.getInfo().Stage;
+                if(stage == Tournament.Stage.STARTING || stage == Tournament.Stage.DECK_BUILDING ||
+                        stage == Tournament.Stage.PAUSED || stage == Tournament.Stage.AWAITING_KICKOFF) {
+                    LotroDeck lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), player, deckName, tournament.getCollectionType());
+
+                    tournament.playerSubmittedDeck(player.getName(), lotroDeck);
+                }
+                result = "Registered deck '" + deckName + "' with tournament <b>" + tournament.getTournamentName() + "</b> successfully."
+                        + "<br/><br/>If you make an update to your deck, you will need to register it here again for any changes to take effect.";
+                hallChanged();
+            }
+            else {
+                result = "Registration for that tournament has already closed.";
+            }
+
+            return result;
+        }
+        catch(HallException ex) {
+            return ex.getMessage();
+        }
+        finally {
             _hallDataAccessLock.writeLock().unlock();
         }
     }
@@ -788,11 +859,11 @@ public class HallServer extends AbstractServer {
         private HallTournamentCallback(Tournament tournament) {
             tournamentId = tournament.getTournamentId();
             tournamentName = tournament.getTournamentName();
-            tournamentGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormat()),
+            tournamentGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
                     tournamentId, null, null, true, true, false,
                     false, GameTimer.TOURNAMENT_TIMER, null);
 
-            wcGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormat()),
+            wcGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
                     tournamentId, null, null, true, true, false,
                     false, GameTimer.CHAMPIONSHIP_TIMER, null);
         }

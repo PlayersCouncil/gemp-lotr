@@ -161,8 +161,8 @@
 			effect: [
 				{
 					type: Discard
-					hand: shadow
 					player: shadow
+					select: choose(side(shadow))
 					count: {
 					    type: forEachKeywordOnCardInMemory
 					    memory: exertedDwarf

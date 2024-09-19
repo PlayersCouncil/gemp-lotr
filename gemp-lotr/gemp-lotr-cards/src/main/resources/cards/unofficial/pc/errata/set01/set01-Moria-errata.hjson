@@ -1,11 +1,59 @@
 {
+	# 51_177: {
+	# 	cardInfo: {
+	# 		imagePath: errata/LOTR-EN01E177.1_card.jpg
+	# 		javaClass: false
+	# 		parent: 1_177
+	# 		parentPath: errata/pc
+	# 		version: 1
+	# 		collInfo: 1C177
+	# 		rarity: C
+	# 		setNum: "1"
+	# 		cardNum: 177
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Goblin Patrol Troop
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Moria
+	# 	twilight: 6
+	# 	type: Minion
+	# 	race: Orc
+	# 	strength: 13
+	# 	vitality: 3
+	# 	site: 4
+	# 	effects: {
+	# 		type: Activated
+	# 		phase: Shadow
+	# 		cost: {
+	# 			type: exert
+	# 			filter: choose(culture(moria),orc)
+	# 			count: 1
+	# 			times: 1
+	# 		}
+	# 		effect: {
+	# 			type: DrawCards
+	# 			count: 1
+	# 		}
+	# 	}
+	# 	gametext: Shadow: Exert a [moria] Orc to draw a card.
+	# 	lore: “As they ran they heard the beat and echo of many hurrying feet behind. A shrill yell went up: they had been seen. There was a ring and clash of steel.”
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 	51_177: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E177.1_card.jpg
+			imagePath: errata/LOTR-EN01E177.2_card.jpg
 			javaClass: false
 			parent: 1_177
 			parentPath: errata/pc
-			version: 1
+			version: 2
 			collInfo: 1C177
 			rarity: C
 			setNum: "1"
@@ -28,7 +76,7 @@
 			phase: Shadow
 			cost: {
 				type: exert
-				select: choose(culture(moria),orc)
+				select: choose(or(self,and(unique,culture(moria),orc)))
 				count: 1
 				times: 1
 			}
@@ -37,7 +85,7 @@
 				count: 1
 			}
 		}
-		gametext: Shadow: Exert a [moria] Orc to draw a card.
+		gametext: Shadow: Exert this minion or a unique [moria] Orc to draw a card.
 		lore: “As they ran they heard the beat and echo of many hurrying feet behind. A shrill yell went up: they had been seen. There was a ring and clash of steel.”
 		promotext: ""
 		alts: {
@@ -47,6 +95,7 @@
 			}
 		}
 	}
+	
 	51_195: {
 		cardInfo: {
 			imagePath: errata/51_195.jpg

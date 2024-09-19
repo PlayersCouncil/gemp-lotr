@@ -17,10 +17,8 @@ public class Card_02_076_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("sam", "1_311");
-					put("helpless", "52_76");
-					put("toto", "10_68");
-					put("nelya","1_233");
+					put("card", "52_76");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -36,18 +34,18 @@ public class Card_02_076_ErrataTests
 		 * Name: Helpless
 		 * Unique: False
 		 * Side: Shadow
-		 * Culture: Ringwraith
-		 * Twilight Cost: 1
+		 * Culture: Wraith
+		 * Twilight Cost: 0
 		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Bearer's special abilities cannot be used.
-		 * Maneuver: Exert a non-enduring Nazgul to transfer this to a Ring-bound companion.
-		 * Response: If a burden is removed, spot or reveal a Nazgul from hand to transfer this to a Ring-bound companion.
+		 * Subtype: 
+		 * Game Text: To play, spot a Nazgûl.
+		* 	Plays on Sam.
+		* 	Bearer's special abilities may not be used. 
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("helpless");
+		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Helpless", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,165 +53,21 @@ public class Card_02_076_ErrataTests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void HelplessBlocksSpecialAbilities() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void HelplessTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var frodo = scn.GetRingBearer();
-		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
-
-		var helpless = scn.GetShadowCard("helpless");
-		var nelya = scn.GetShadowCard("nelya");
-		scn.ShadowAttachCardsTo(sam, helpless);
-		scn.ShadowMoveCharToTable(nelya);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
-		//The Fellowship burden-removing special ability should be blocked
-		assertFalse(scn.FreepsActionAvailable(sam));
+		scn.FreepsPlayCard(card);
 
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(frodo, nelya);
-		scn.FreepsResolveSkirmish(frodo);
-		scn.PassCurrentPhaseActions();
-
-		//The Response ring-bearer special ability should also be blocked
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-	}
-
-	@Test
-	public void HelplessDoesNotBlockAbilitiesWhileInSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var frodo = scn.GetRingBearer();
-		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
-
-		var helpless = scn.GetShadowCard("helpless");
-		var nelya = scn.GetShadowCard("nelya");
-		scn.ShadowMoveCardToSupportArea(helpless);
-		scn.ShadowMoveCharToTable(nelya);
-
-		scn.StartGame();
-		//The Fellowship burden-removing special ability should NOT be blocked
-		assertTrue(scn.FreepsActionAvailable(sam));
-
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(frodo, nelya);
-		scn.FreepsResolveSkirmish(frodo);
-		scn.PassCurrentPhaseActions();
-
-		//The Response ring-bearer special ability should also NOT be blocked
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-	}
-
-	@Test
-	public void HelplessManeuverActionTransfersToRingBoundCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var frodo = scn.GetRingBearer();
-		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
-
-		var helpless = scn.GetShadowCard("helpless");
-		var toto = scn.GetShadowCard("toto");
-		var nelya = scn.GetShadowCard("nelya");
-		scn.ShadowMoveCardToSupportArea(helpless);
-		scn.ShadowMoveCharToTable(toto, nelya);
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertTrue(scn.ShadowActionAvailable(helpless));
-		assertEquals(0, scn.GetWoundsOn(toto));
-		assertEquals(0, scn.GetWoundsOn(nelya));
-		assertEquals(Zone.SUPPORT, helpless.getZone());
-
-		scn.ShadowUseCardAction(helpless);
-		// Exert automatically put on Nelya as the only non-enduring nazgul option
-		assertEquals(0, scn.GetWoundsOn(toto));
-		assertEquals(1, scn.GetWoundsOn(nelya));
-
-		//Can go on either Sam or Frodo
-		assertEquals(2, scn.GetShadowCardChoiceCount());
-		scn.ShadowChooseCard(frodo);
-		assertEquals(Zone.ATTACHED, helpless.getZone());
-		assertEquals(frodo, helpless.getAttachedTo());
-	}
-
-	@Test
-	public void HelplessResponseCanSpotNazgulToTransfer() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
-
-		var helpless = scn.GetShadowCard("helpless");
-		var toto = scn.GetShadowCard("toto");
-		var nelya = scn.GetShadowCard("nelya");
-		scn.ShadowMoveCardToSupportArea(helpless);
-		scn.ShadowMoveCharToTable(nelya);
-		scn.ShadowMoveCardToDiscard(toto);
-
-		scn.StartGame();
-
-		//1 added from bid
-		assertEquals(1, scn.GetBurdens());
-
-		scn.FreepsUseCardAction(sam);
-
-		assertEquals(Zone.SUPPORT, helpless.getZone());
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowAcceptOptionalTrigger();
-
-		scn.ShadowChooseCard(sam);
-		assertEquals(Zone.ATTACHED, helpless.getZone());
-		assertEquals(sam, helpless.getAttachedTo());
-
-		assertFalse(scn.FreepsActionAvailable(sam));
-	}
-
-	@Test
-	public void HelplessResponseCanRevealNazgulToTransfer() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
-
-		var helpless = scn.GetShadowCard("helpless");
-		var toto = scn.GetShadowCard("toto");
-		var nelya = scn.GetShadowCard("nelya");
-		scn.ShadowMoveCardToSupportArea(helpless);
-		scn.ShadowMoveCardToHand(nelya);
-		scn.ShadowMoveCardToDiscard(toto);
-
-		scn.StartGame();
-
-		//1 added from bid
-		assertEquals(1, scn.GetBurdens());
-
-		scn.FreepsUseCardAction(sam);
-
-		assertEquals(Zone.SUPPORT, helpless.getZone());
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowAcceptOptionalTrigger();
-		scn.FreepsDismissRevealedCards();
-
-		scn.ShadowChooseCard(sam);
-		assertEquals(Zone.ATTACHED, helpless.getZone());
-		assertEquals(sam, helpless.getAttachedTo());
-
-		assertFalse(scn.FreepsActionAvailable(sam));
+		assertEquals(0, scn.GetTwilight());
 	}
 }

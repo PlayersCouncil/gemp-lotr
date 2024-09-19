@@ -150,6 +150,21 @@ $(document).ready(
 					}, tourneyErrorMap(resultdiv));
 				});
 		
+		$("#sch-tourney-type").on("change", function() {
+			let type = 	$("#sch-tourney-type").val();
+			if(type === "SEALED") {
+				$('.sealed-only').show();
+				$('.constructed-only').hide();
+			}
+			else {
+				$('.sealed-only').hide();
+				$('.constructed-only').show();
+			}
+		});
+		
+		$('.sealed-only').hide();
+		$('.constructed-only').show();
+		
 		
 		hall.comm.getFormats(true,
 			function (json) 
@@ -191,6 +206,25 @@ $(document).ready(
 					//console.log(newText);
 					$(this).text(newText);
 				});
+				
+				for (var prop in sealed) {
+					if (Object.prototype.hasOwnProperty.call(sealed, prop)) {
+						//console.log(prop);
+						
+						let code = sealed[prop].format;
+						let id = sealed[prop].id;
+						let serieCount = sealed[prop].seriesProduct.length;
+						
+						if(serieCount > 1)
+							continue;
+						
+						var item = $("<option/>")
+							.attr("value", id)
+							.text(prop + " - " + serieCount + " Series");
+						$("#sch-tourney-sealed-format").append(item);
+					}
+				}
+				sortOptionsByName("#sch-tourney-sealed-format");
 			}, 
 			tourneyErrorMap());
 	});
@@ -203,12 +237,19 @@ function sortOptionsByName(selector) {
 }
 
 function processScheduledTournament(preview, resultdiv, callback) {
+	
 	hall.comm.processScheduledTournament(                          
 		preview, 
 		$("#sch-tourney-name").val(),
+		$("#sch-tourney-type").val(),
 		$("#sch-tourney-wc").prop('checked'),
 		$("#sch-tourney-id").val(),
 		$("#sch-tourney-format").val(),
+		
+		$("#sch-tourney-sealed-format").val(),
+		$("#sch-tourney-sealed-deckbuild").val(),
+		$("#sch-tourney-sealed-registration").val(),
+		
 		$("#sch-tourney-start").val(),
 		$("#sch-tourney-cost").val(),
 		$("#sch-tourney-playoff").val(),
@@ -281,6 +322,10 @@ function tourneyErrorMap(outputControl, callback=null) {
 		<div class="flex-horiz">
 			<div class="label-column">New Stage: </div>
 			<select id="update-stage" class="flex-fill">
+				<option value="STARTING">Starting</option>
+				<option value="DRAFT">Drafting</option>
+				<option value="DECK_BUILDING">Deck-building</option>
+				<option value="DECK_REGISTRATION">Registering Decks</option>				
 				<option value="AWAITING_KICKOFF">Awaiting Kickoff</option>
 				<option value="PAUSED">Paused</option>
 				<option value="PREPARING">Preparing</option>
@@ -290,6 +335,14 @@ function tourneyErrorMap(outputControl, callback=null) {
 		</div>
 		
 		<ul>
+			<li><b>Starting</b> - first stage of a tournament, which handles any setup (such as issuing packs in a sealed event).</li>
+			
+			<li><b>Drafting</b> - a Draft tournament is actively issuing cards to players.</li>
+			
+			<li><b>Deck-building</b> - a Sealed or Draft tournament is permitting players to construct decks with their event material.</li>
+			
+			<li><b>Registering Decks</b> - a brief period of leeway for players to register the decks they have constructed during limited events.</li>
+			
 			<li><b>Awaiting Kickoff</b> - a scheduled tournament will idle until an admin sets the status here to Preparing.</li>
 			
 			<li><b>Preparing</b> - a tournament that has been kicked off or unpaused and is about to resume play.</li>
@@ -330,6 +383,35 @@ function tourneyErrorMap(outputControl, callback=null) {
 		</div>
 		
 		<div class="flex-horiz">
+			<div class="label-column">Tournament Type: </div>
+			<select id="sch-tourney-type" class="flex-fill">
+				<option value="CONSTRUCTED">Constructed</option>
+				<option value="SEALED">Sealed</option>
+				
+			</select>
+		</div>
+		
+		<div class="flex-horiz constructed-only">
+			<div class="label-column">Constructed Format: </div>
+			<select id="sch-tourney-format" class="flex-fill"></select>
+		</div>
+		
+		<div class="flex-horiz sealed-only">
+			<div class="label-column">Sealed Format: </div>
+			<select id="sch-tourney-sealed-format" name="format" class="flex-fill"></select>
+		</div>
+		
+		<div class="flex-horiz sealed-only">
+			<div class="label-column">Deckbuilding duration (in minutes): </div>
+			<input type="number" min="1" id="sch-tourney-sealed-deckbuild" value="25" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz sealed-only">
+			<div class="label-column">Deck registration grace period (in minutes): </div>
+			<input type="number" min="1" id="sch-tourney-sealed-registration" value="5" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
 			<div class="label-column">World Championship: </div>
 			<input type="checkbox" id="sch-tourney-wc" />
 		</div>
@@ -350,15 +432,10 @@ function tourneyErrorMap(outputControl, callback=null) {
 		</div>
 		
 		<div class="flex-horiz">
-			<div class="label-column">Format: </div>
-			<select id="sch-tourney-format" class="flex-fill"></select>
-		</div>
-		
-		<div class="flex-horiz">
 			<div class="label-column">Playoff Type: </div>
 			<select id="sch-tourney-playoff" class="flex-fill">
 				<option value="swiss">Swiss</option>
-				<option value="singleelimination">Single Elimination</option>
+				<option value="single-elimination">Single Elimination</option>
 				<option value="swiss-3">3-round Swiss</option>
 				<option value="wc-swiss">WC Swiss (8 rounds)</option>
 				

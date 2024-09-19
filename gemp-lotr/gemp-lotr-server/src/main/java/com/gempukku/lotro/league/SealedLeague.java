@@ -46,13 +46,12 @@ public class SealedLeague implements LeagueData {
     }
     public static SealedLeague fromRawParameters(ProductLibrary productLibrary, LotroFormatLibrary formatLibrary, String parameters) {
 
-        try {
-            if(parameters.contains("{")) {
-                var parsedParams = JsonUtils.Convert(parameters, LeagueParams.class);
-                return new SealedLeague(productLibrary, formatLibrary, parsedParams);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to parse raw parameters for Sealed league: " + parameters, e);
+        if(parameters.contains("{")) {
+            var parsedParams = JsonUtils.Convert(parameters, LeagueParams.class);
+            if(parsedParams == null)
+                throw new RuntimeException("Unable to parse raw parameters for Sealed league: " + parameters);
+
+            return new SealedLeague(productLibrary, formatLibrary, parsedParams);
         }
 
         return new SealedLeague(productLibrary, formatLibrary, parameters);
@@ -145,7 +144,7 @@ public class SealedLeague implements LeagueData {
             maxGamesTotal+=sery.getMaxMatches();
 
         if (status == _series.size()) {
-            LeagueSerieInfo lastSerie = _series.get(_series.size() - 1);
+            LeagueSerieInfo lastSerie = _series.getLast();
             if (DateUtils.IsAtLeastDayAfter(currentTime, lastSerie.getEnd())) {
                 for (PlayerStanding leagueStanding : leagueStandings) {
                     CardCollection leaguePrize = _leaguePrizes.getPrizeForLeague(leagueStanding.standing, leagueStandings.size(), leagueStanding.gamesPlayed, maxGamesTotal);

@@ -618,6 +618,34 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
+    joinTournamentLate:function(tournamentId, deckName, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/hall/tournament/" + tournamentId + "/join",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                deckName:deckName
+            },
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
+    registerSealedTournamentDeck:function(tournamentId, deckName, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/hall/tournament/" + tournamentId + "/registerdeck",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                deckName:deckName
+            },
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
     dropFromTournament:function(tournamentId, callback, errorMap) {
         $.ajax({
             type:"POST",
@@ -625,6 +653,7 @@ var GempLotrCommunication = Class.extend({
             cache:false,
             data:{
                 participantId:getUrlParam("participantId")},
+            success:this.deliveryCheck(callback),
             error:this.errorCheck(errorMap),
             dataType:"xml"
         });
@@ -1034,7 +1063,8 @@ var GempLotrCommunication = Class.extend({
     },
     
     
-    processScheduledTournament:function (preview, name, wc, tournamentId, formatCode, 
+    processScheduledTournament:function (preview, name, type, wc, tournamentId, 
+                                         formatCode, sealedFormatCode, deckbuildingDuration, turnInDuration,
                                          start, cost, playoff, tiebreaker, prizeStructure, minPlayers, manualKickoff,
                                        callback, errorMap) {
         $.ajax({
@@ -1044,9 +1074,13 @@ var GempLotrCommunication = Class.extend({
             data:{
                 preview:preview,
                 name:name,
+                type:type,
                 wc:wc,
                 tournamentId:tournamentId,
                 formatCode:formatCode,
+                sealedFormatCode:sealedFormatCode, 
+                deckbuildingDuration:deckbuildingDuration, 
+                turnInDuration:turnInDuration,
                 start:start,
                 cost:cost,
                 playoff:playoff,

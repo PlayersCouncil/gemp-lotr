@@ -23,9 +23,9 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.service.AdminService;
-import com.gempukku.lotro.tournament.Tournament;
-import com.gempukku.lotro.tournament.TournamentService;
+import com.gempukku.lotro.tournament.*;
 import com.gempukku.util.JsonUtils;
+import com.sun.jersey.core.util.StringIgnoreCaseKeyComparator;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
@@ -913,6 +913,12 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         boolean preview = Throw400IfNullOrNonBoolean("preview", previewStr);
 
         String name = getFormParameterSafely(postDecoder, "name");
+        String typeStr = getFormParameterSafely(postDecoder, "type");
+
+        String deckbuildingDurationStr = getFormParameterSafely(postDecoder, "deckbuildingDuration");
+        String turnInDurationStr = getFormParameterSafely(postDecoder, "turnInDuration");
+        String sealedFormatCodeStr = getFormParameterSafely(postDecoder, "sealedFormatCode");
+
         String wcStr = getFormParameterSafely(postDecoder, "wc");
         String tournamentId = getFormParameterSafely(postDecoder, "tournamentId");
         String formatStr = getFormParameterSafely(postDecoder, "formatCode");
@@ -930,23 +936,27 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         //String participationPrizeStr = getFormParameterSafely(postDecoder, "participationPrize");
         //String participationGamesStr = getFormParameterSafely(postDecoder, "participationGames");
 
+        Throw400IfStringNull("type", typeStr);
+        var type = Tournament.TournamentType.parse(typeStr);
+        Throw400IfValidationFails("type", typeStr, type != null);
         Throw400IfStringNull("name", name);
         boolean wc = ParseBoolean("wc", wcStr, false);
         Throw400IfStringNull("tournamentId", tournamentId);
         Throw400IfStringNull("format", formatStr);
         Throw400IfStringNull("start", startStr);
 
-        LocalDateTime start = null;
+        ZonedDateTime start = null;
         try {
-            start = DateUtils.ParseDate(startStr).toLocalDateTime();
+            start = DateUtils.ParseDate(startStr);
         }
         catch(DateTimeParseException ex) {
             Throw400IfValidationFails("start", startStr, false);
         }
 
+        Throw400IfValidationFails("start", startStr, DateUtils.Now().isBefore(start), "Start date/time must be in the future.");
+
         int cost = Throw400IfNullOrNonInteger("cost", costStr);
-        var format = _formatLibrary.getFormat(formatStr);
-        Throw400IfValidationFails("format", formatStr,format != null);
+
         Throw400IfValidationFails("playoff", playoff,Tournament.getPairingMechanism(playoff) != null);
         //Turns out prizes are busted at the moment and are always Daily.
         //var prizes = Tournament.getTournamentPrizes(_productLibrary, prizeStructure);
@@ -954,25 +964,58 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         boolean manualKickoff = ParseBoolean("manualKickoff", manualKickoffStr, false);
 
         if(wc) {
-            tournamentId = DateUtils.Now().getYear() + "_wc_" + tournamentId;
+            tournamentId = DateUtils.Now().getYear() + "-wc-" + tournamentId;
         }
 
-        var params = new DBDefs.ScheduledTournament();
-        params.name = name;
-        params.tournament_id = tournamentId;
-        params.format = formatStr;
-        params.start_date = start;
-        params.cost = cost;
-        params.playoff = playoff;
-        params.tiebreaker = "owr";
-        params.prizes = "daily";
-        params.minimum_players = minPlayers;
-        params.manual_kickoff = manualKickoff;
-        params.started = false;
+        Throw400IfValidationFails("tournamentId", tournamentId, _tournamentService.getTournamentById(tournamentId) == null, "Tournament with that Id already exists.");
+        Throw400IfValidationFails("tournamentId", tournamentId, _tournamentService.getScheduledTournamentById(tournamentId) == null, "Scheduled Tournament with that Id already exists.");
 
+        var params = new TournamentParams();
+
+        if(type == Tournament.TournamentType.SEALED) {
+            var sealedParams = new SealedTournamentParams();
+            sealedParams.type = Tournament.TournamentType.SEALED;
+
+            sealedParams.deckbuildingDuration = Throw400IfNullOrNonInteger("deckbuildingDuration", deckbuildingDurationStr);
+            sealedParams.turnInDuration = Throw400IfNullOrNonInteger("turnInDuration", turnInDurationStr);
+
+            Throw400IfStringNull("sealedFormatCode", sealedFormatCodeStr);
+            var sealedFormat = _formatLibrary.GetSealedTemplate(sealedFormatCodeStr);
+            Throw400IfValidationFails("sealedFormatCode", formatStr,sealedFormat != null);
+            sealedParams.sealedFormatCode = sealedFormatCodeStr;
+            sealedParams.format = sealedFormat.GetFormat().getCode();
+            sealedParams.requiresDeck = false;
+            params = sealedParams;
+        }
+        else {
+            params.type = Tournament.TournamentType.CONSTRUCTED;
+            var format = _formatLibrary.getFormat(formatStr);
+            Throw400IfValidationFails("format", formatStr,format != null);
+            params.format = formatStr;
+            params.requiresDeck = true;
+        }
+
+        params.name = name;
+        params.tournamentId = tournamentId;
+        params.startTime = start.toLocalDateTime();
+        params.cost = cost;
+        params.playoff = Tournament.PairingType.parse(playoff);
+        params.tiebreaker = "owr";
+        params.prizes = Tournament.PrizeType.DAILY;
+        params.minimumPlayers = minPlayers;
+        params.manualKickoff = manualKickoff;
+
+        TournamentInfo info;
+
+        if(type == Tournament.TournamentType.SEALED) {
+            info = new SealedTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, start, (SealedTournamentParams)params);
+        }
+        else {
+            info = new TournamentInfo(_tournamentService, _productLibrary, _formatLibrary, start, params);
+        }
 
         if(!preview) {
-            _tournamentService.addScheduledTournament(params);
+            _tournamentService.addScheduledTournament(info);
             responseWriter.sendJsonOK();
             return;
         }

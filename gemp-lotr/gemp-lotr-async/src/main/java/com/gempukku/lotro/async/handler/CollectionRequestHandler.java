@@ -12,6 +12,8 @@ import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.tournament.Tournament;
+import com.gempukku.lotro.tournament.TournamentService;
 import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
@@ -33,6 +35,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
     private final LeagueService _leagueService;
     private final CollectionsManager _collectionsManager;
     private final ProductLibrary _productLibrary;
+    private final TournamentService _tournamentService;
     private final LotroCardBlueprintLibrary _library;
     private final LotroFormatLibrary _formatLibrary;
     private final SortAndFilterCards _sortAndFilterCards;
@@ -47,6 +50,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
         _productLibrary = extractObject(context, ProductLibrary.class);
         _library = extractObject(context, LotroCardBlueprintLibrary.class);
         _formatLibrary = extractObject(context, LotroFormatLibrary.class);
+        _tournamentService = extractObject(context, TournamentService.class);
         _sortAndFilterCards = new SortAndFilterCards();
         _importCards = new ImportCards();
     }
@@ -254,17 +258,38 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
             }
         }
 
+        for (var tourney : _tournamentService.getLiveTournaments()) {
+            if(tourney.getInfo().Parameters().type != Tournament.TournamentType.SEALED)
+                continue;
+
+            CollectionType collectionType = tourney.getCollectionType();
+            Element collectionElem = doc.createElement("collection");
+            collectionElem.setAttribute("type", collectionType.getCode());
+            collectionElem.setAttribute("name", collectionType.getFullName());
+            collectionsElem.appendChild(collectionElem);
+        }
+
         doc.appendChild(collectionsElem);
 
         responseWriter.writeXmlResponse(doc);
     }
 
     private CollectionType createCollectionType(String collectionType) {
-        final CollectionType result = CollectionType.parseCollectionCode(collectionType);
+        CollectionType result = CollectionType.parseCollectionCode(collectionType);
         if (result != null)
             return result;
 
-        return _leagueService.getCollectionTypeByCode(collectionType);
+        result = _leagueService.getCollectionTypeByCode(collectionType);
+
+        if(result != null)
+            return result;
+
+        result = _tournamentService.getCollectionTypeByCode(collectionType);
+
+        if(result != null)
+            return result;
+
+        return null;
     }
 
     private void appendCardSide(Element card, LotroCardBlueprint blueprint) {

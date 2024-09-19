@@ -103,12 +103,13 @@ public class HallCommunicationChannel implements LongPollableResource {
                     }
 
                     @Override
-                    public void visitTournamentQueue(String tournamentQueueKey, int cost, String collectionName, String formatName, String tournamentQueueName,
+                    public void visitTournamentQueue(String tournamentQueueKey, int cost, String collectionName, String formatName, String type, String tournamentQueueName,
                                                      String tournamentPrizes, String pairingDescription, String startCondition, int playerCount, String playerList, boolean playerSignedUp, boolean joinable) {
                         Map<String, String> props = new HashMap<>();
                         props.put("cost", String.valueOf(cost));
                         props.put("collection", collectionName);
                         props.put("format", formatName);
+                        props.put("type", type);
                         props.put("queue", tournamentQueueName);
                         props.put("playerCount", String.valueOf(playerCount));
                         props.put("playerList", playerList);
@@ -122,18 +123,20 @@ public class HallCommunicationChannel implements LongPollableResource {
                     }
 
                     @Override
-                    public void visitTournament(String tournamentKey, String collectionName, String formatName, String tournamentName, String pairingDescription,
-                                                String tournamentStage, int round, int playerCount, String playerList, boolean playerInCompetition) {
+                    public void visitTournament(String tournamentKey, String collectionName, String formatName, String tournamentName, String type, String pairingDescription,
+                                                String tournamentStage, int round, int playerCount, String playerList, boolean playerInCompetition, boolean abandoned) {
                         Map<String, String> props = new HashMap<>();
                         props.put("collection", collectionName);
                         props.put("format", formatName);
                         props.put("name", tournamentName);
                         props.put("system", pairingDescription);
+                        props.put("type", type);
                         props.put("stage", tournamentStage);
                         props.put("round", String.valueOf(round));
                         props.put("playerCount", String.valueOf(playerCount));
                         props.put("playerList", playerList);
                         props.put("signedUp", String.valueOf(playerInCompetition));
+                        props.put("abandoned", String.valueOf(abandoned));
 
                         tournamentsOnServer.put(tournamentKey, props);
                     }

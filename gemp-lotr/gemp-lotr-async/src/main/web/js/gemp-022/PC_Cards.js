@@ -524,6 +524,7 @@ var PCCards = {
 	'1_383': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.2_card.jpg',
 	'1_384': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.3_card.jpg',
 	'1_385': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.4_card.jpg',
+	'1_392': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.5_card.jpg',
 	
 	//2023 Yuletide Errata
 	// Legolas, Keen-eyed (V1R9) [Errata]
@@ -561,25 +562,25 @@ var PCCards = {
 	// Strength of Kings (1R115) [Errata]
 	'51_115' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E115.1_card.jpg',
 	// Goblin Patrol Troop (1C177) [Errata]
-	'51_177' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E177.1_card.jpg',
+	//'51_177' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E177.1_card.jpg',
 	// Secret Sentinels (2R20) [Errata]
 	'52_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E020.1_card.jpg',
 	// Helpless (2U76) [Errata]
-	'52_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E076.1_card.jpg',
+	//'52_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E076.1_card.jpg',
 	// Elrond, Herald to Gil-galad (3R13) [Errata]
 	'53_13'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E013.1_card.jpg',
 	// Phial of Galadriel (3U24) [Errata]
 	'53_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E024.1_card.jpg',
 	// Can You Protect Me From Yourself? (3R50) [Errata]
-	'53_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E050.1_card.jpg',
+	//'53_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E050.1_card.jpg',
 	// Such a Little Thing (3R80) [Errata]
-	'53_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.1_card.jpg',
+	//'53_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.1_card.jpg',
 	// Too Great and Terrible (3R85) [Errata]
-	'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.1_card.jpg',
+	//'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.1_card.jpg',
 	// Terrible as the Dawn (3R103) [Errata]
-	'53_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.2_card.jpg',
+	//'53_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.2_card.jpg',
 	// Why Shouldn't I Keep It? (3R105) [Errata]
-	'53_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.1_card.jpg',
+	//'53_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.1_card.jpg',
 	// Forearmed (6U16) [Errata]
 	'56_16'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN06E016.1_card.jpg',
 	// Gimli, Bearer of Grudges (9R+4) [Errata]
@@ -647,7 +648,7 @@ var PCCards = {
 	//Evil-smelling Fens FA
 	'5_129': 'https://i.lotrtcgpc.net/promos/LOTR-EN05U022.0_card.jpg',
 	
-	
+
 	//PC V2 - King of the Golden Hall
 	// Driven into the Hills (V2U1) [Playtest]
 	'102_1'  : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S001.0_card.jpg',
@@ -837,6 +838,20 @@ var PCCards = {
 	'68_9'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E009.1_card.jpg',
 	// Haldir, Warrior Messenger (18R14) [Errata]
 	'68_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E014.1_card.jpg'
+
+	//September 2024 Walk-on Qualifiers
+	//Legolas, Greenleaf FA
+	'1_391': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U050.0_card.jpg',
+	
+	//September 2024 Post-FC Errata
+	'51_177' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E177.2_card.jpg',
+	'51_331' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E331.1_card.jpg',
+	'52_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E076.2_card.jpg',
+	'53_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E050.2_card.jpg',
+	'53_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.2_card.jpg',
+	'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.2_card.jpg',
+	'53_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.3_card.jpg',
+	'53_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.2_card.jpg'
 
 }
 

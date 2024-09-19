@@ -6,23 +6,23 @@ import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.Draft;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
-import com.gempukku.lotro.game.SortAndFilterCards;
-import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
+import com.gempukku.util.JsonUtils;
 
 import java.util.List;
 
 public interface Tournament {
     enum Stage {
+        STARTING("Starting"),
         DRAFT("Drafting"),
-        DECK_BUILDING("Deck building"),
-        AWAITING_KICKOFF("Awaiting kickoff"),
-        PAUSED("Paused"),
+        DECK_BUILDING("Deck-building"),
+        DECK_REGISTRATION("Registering Decks"),
+        AWAITING_KICKOFF("Awaiting Kickoff"),
         PREPARING("Preparing"),
-        PLAYING_GAMES("Playing games"),
+        PLAYING_GAMES("Playing Games"),
+        PAUSED("Paused Between Rounds"),
         FINISHED("Finished");
 
         private final String _humanReadable;
@@ -48,29 +48,122 @@ public interface Tournament {
         }
     }
 
-    static TournamentPrizes getTournamentPrizes(ProductLibrary productLibrary, String prizesScheme) {
-        if (prizesScheme == null || prizesScheme.equals("none"))
-            return new NoPrizes();
+    enum TournamentType {
+        CONSTRUCTED,
+        SEALED,
+        SOLODRAFT;
 
-        return new DailyTournamentPrizes(prizesScheme, productLibrary);
+        public static TournamentType parse(String name) {
+            String nameCaps = name.toUpperCase().trim().replace(' ', '_').replace('-', '_');
+
+            for (TournamentType type : values()) {
+                if (type.toString().equals(nameCaps))
+                    return type;
+            }
+            return null;
+        }
     }
 
-    static PairingMechanism getPairingMechanism(String pairingType) {
-        pairingType = pairingType.toLowerCase().trim();
-        if (pairingType.equals("singleelimination"))
-            return new SingleEliminationPairing("singleelimination");
-        if (pairingType.equals("swiss"))
-            return new SwissPairingMechanism("swiss");
-        if (pairingType.equals("swiss-3"))
-            return new SwissPairingMechanism("swiss-3", 3);
-        if (pairingType.equals("wc-swiss"))
-            return new ChampionshipSwissPairingMechanism("wc-swiss", 8);
+    enum PairingType {
+        SINGLE_ELIMINATION,
+        SWISS,
+        SWISS_3,
+        WC_SWISS,
+        TEST;
+
+        public static PairingType parse(String name) {
+            String nameCaps = name.toUpperCase().trim().replace(' ', '_').replace('-', '_');
+
+            for (PairingType type : values()) {
+                if (type.toString().equals(nameCaps))
+                    return type;
+            }
+            return null;
+        }
+    }
+
+    enum PrizeType {
+        NONE,
+        DAILY,
+        ON_DEMAND;
+
+        public static PrizeType parse(String name) {
+            String nameCaps = name.toUpperCase().trim().replace(' ', '_').replace('-', '_');
+
+            for (PrizeType type : values()) {
+                if (type.toString().equals(nameCaps))
+                    return type;
+            }
+            return PrizeType.NONE;
+        }
+    }
+
+    static TournamentPrizes getTournamentPrizes(ProductLibrary productLibrary, PrizeType prize) {
+
+        switch (prize) {
+            case DAILY -> {
+                return new DailyTournamentPrizes(prize.name(), productLibrary);
+            }
+            case ON_DEMAND -> {
+                //Currently busted, reverting to Daily for now
+                return new DailyTournamentPrizes(prize.name(), productLibrary);
+            }
+        }
+
+        return new NoPrizes();
+    }
+
+    static TournamentPrizes getTournamentPrizes(ProductLibrary productLibrary, String prizesScheme) {
+        return getTournamentPrizes(productLibrary, PrizeType.parse(prizesScheme));
+    }
+
+    static PairingMechanism getPairingMechanism(PairingType type) {
+        if(type == null)
+            return null;
+
+        switch (type) {
+            case SINGLE_ELIMINATION -> {
+                return new SingleEliminationPairing(PairingType.SINGLE_ELIMINATION.name());
+            }
+            case SWISS -> {
+                return new SwissPairingMechanism(PairingType.SWISS.name());
+            }
+            case SWISS_3 -> {
+                return new SwissPairingMechanism(PairingType.SWISS_3.name(), 3);
+            }
+            case WC_SWISS -> {
+                return new ChampionshipSwissPairingMechanism(PairingType.WC_SWISS.name(), 8);
+            }
+        }
 
         return null;
     }
 
+    static PairingMechanism getPairingMechanism(String pairingType) {
+        return getPairingMechanism(PairingType.parse(pairingType));
+    }
+
+    static TournamentParams parseInfo(TournamentType type, String unparsed) {
+        switch (type) {
+            case CONSTRUCTED -> {
+                return JsonUtils.Convert(unparsed, TournamentParams.class);
+            }
+            case SEALED -> {
+                return JsonUtils.Convert(unparsed, SealedTournamentParams.class);
+            }
+            case SOLODRAFT -> {
+            }
+        }
+
+        return null;
+    }
+
+    static TournamentParams parseInfo(String type, String unparsed) {
+        return parseInfo(TournamentType.parse(type), unparsed);
+    }
+
     String getTournamentId();
-    String getFormat();
+    String getFormatCode();
     CollectionType getCollectionType();
     String getTournamentName();
     String getPlayOffSystem();
@@ -88,14 +181,18 @@ public interface Tournament {
 
     void playerChosenCard(String playerName, String cardId);
     void playerSubmittedDeck(String player, LotroDeck deck);
+    void issuePlayerMaterial(String player);
     LotroDeck getPlayerDeck(String player);
-    boolean dropPlayer(String player);
+    String dropPlayer(String player);
 
     Draft getDraft();
 
     List<PlayerStanding> getCurrentStandings();
 
     boolean isPlayerInCompetition(String player);
+    boolean isPlayerAbandoned(String player);
 
     String produceReport(DeckRenderer renderer) throws CardNotFoundException;
+
+    TournamentInfo getInfo();
 }
