@@ -1,11 +1,11 @@
 package com.gempukku.lotro.async.handler;
 
-import com.alibaba.fastjson.JSON;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.game.GameHistoryService;
 import com.gempukku.lotro.game.Player;
+import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -64,7 +64,7 @@ public class ServerStatsRequestHandler extends LotroServerRequestHandler impleme
                 stats.EndDate = to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 stats.Stats = _gameHistoryService.getGameHistoryStatistics(from, to);
 
-                responseWriter.writeJsonResponse(JSON.toJSONString(stats));
+                responseWriter.writeJsonResponse(JsonUtils.Serialize(stats));
             } catch (Exception exp) {
                 logHttpError(_log, 400, request.uri(), exp);
                 throw new HttpProcessingException(400);

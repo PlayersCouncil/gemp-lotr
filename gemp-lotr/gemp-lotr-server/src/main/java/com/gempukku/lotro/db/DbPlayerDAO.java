@@ -113,7 +113,7 @@ public class DbPlayerDAO implements PlayerDAO {
     @Override
     public boolean resetUserPassword(String login) throws SQLException {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.beginTransaction()) {
                 String sql = """
@@ -168,7 +168,7 @@ public class DbPlayerDAO implements PlayerDAO {
     @Override
     public boolean addPlayerFlag(String login, Player.Type flag) throws SQLException {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.beginTransaction()) {
                 String sql = """
@@ -193,7 +193,7 @@ public class DbPlayerDAO implements PlayerDAO {
     @Override
     public boolean removePlayerFlag(String login, Player.Type flag) throws SQLException {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.beginTransaction()) {
                 String sql = """
@@ -219,7 +219,7 @@ public class DbPlayerDAO implements PlayerDAO {
     public Player loginUser(String login, String password) throws SQLException {
 
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = _selectPlayer +
@@ -309,7 +309,7 @@ public class DbPlayerDAO implements PlayerDAO {
 
             //Login exists but has a blank/null password, meaning this user is actually performing a password reset
             try {
-                Sql2o db = new Sql2o(_dbAccess.getDataSource());
+                var db = _dbAccess.openDB();
 
                 try (org.sql2o.Connection conn = db.beginTransaction()) {
                     String sql = """
@@ -332,7 +332,7 @@ public class DbPlayerDAO implements PlayerDAO {
 
 
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.beginTransaction()) {
                 String sql = """
@@ -373,7 +373,7 @@ public class DbPlayerDAO implements PlayerDAO {
     private boolean loginExists(String login) throws SQLException {
 
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = _selectPlayer +
@@ -394,7 +394,7 @@ public class DbPlayerDAO implements PlayerDAO {
 
     private boolean needsPasswordReset(String login) throws SQLException {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = _selectPlayer +
@@ -481,7 +481,7 @@ public class DbPlayerDAO implements PlayerDAO {
 
         try {
 
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = "SELECT id, name FROM player";

@@ -1,5 +1,3 @@
-version: "3.4"
-
 services:
 
   build:
@@ -26,18 +24,23 @@ services:
        - type: bind
          source: ../gemp-lotr-async/src/main/web
          target: /etc/gemp-lotr/web
+         consistency: consistent
        - type: bind
          source: ../../gemp-lotr
          target: /etc/gemp-lotr
+         consistency: consistent
        - type: bind
          source: ../../logs
          target: /logs
+         consistency: consistent
        - type: bind
          source: ../../replay
          target: /etc/gemp-lotr/replay
+         consistency: consistent
        - type: bind
          source: ../../logs/nohup.out
          target: /etc/gemp-lotr/nohup.out
+         consistency: consistent
     networks:
       gemp_net_1:
         ipv4_address: ${APP_IP}

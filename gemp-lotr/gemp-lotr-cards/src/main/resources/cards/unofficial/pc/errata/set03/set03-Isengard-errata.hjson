@@ -1,11 +1,100 @@
 {
+	# 53_50: {
+	# 	cardInfo: {
+	# 		imagePath: errata/LOTR-EN03E050.1_card.jpg
+	# 		javaClass: false
+	# 		parent: 3_50
+	# 		parentPath: errata/pc
+	# 		version: 1
+	# 		collInfo: 3R50
+	# 		rarity: R
+	# 		setNum: "3"
+	# 		cardNum: 50
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Can You Protect Me From Yourself?
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Isengard
+	# 	twilight: 1
+	# 	type: Condition
+	# 	target: or(companion,ally)
+	# 	effects: [
+	# 		{
+	# 			type: Trigger
+	# 			optional: false
+	# 			trigger: {
+	# 				type: WinsSkirmish
+	# 				filter: bearer
+	# 				against: culture(isengard),minion
+	# 			}
+	# 			effect: {
+	# 				type: AddBurdens
+	# 				amount: 1
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			trigger: {
+	# 				type: StartOfPhase
+	# 				phase: regroup
+	# 			}
+	# 			requires: {
+	# 				type: IsGreaterThanOrEqual
+	# 				firstNumber: {
+	# 					type: ForEachVitality
+	# 					filter: bearer
+	# 				}
+	# 				secondNumber: 3
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					# We do this just to make the option prompt a
+	# 					# little more elegant.
+	# 					type: Memorize
+	# 					filter: bearer
+	# 					memory: bearer
+	# 				}
+	# 				{
+	# 					type: Optional
+	# 					player: freeps
+	# 					text: Would you like to exert {bearer} twice to discard Can You Protect Me From Yourself?
+	# 					effect: {
+	# 						type: CostToEffect
+	# 						cost: {
+	# 							type: exert
+	# 							player: freeps
+	# 							times: 2
+	# 							select: bearer
+	# 						}
+	# 						effect: {
+	# 							type: Discard
+	# 							select: self
+	# 						}
+	# 					}
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: Bearer must be a companion or ally.<br>Each time bearer wins a skirmish against an [isengard] minion, add a burden.<br>At the start of the regroup phase, the Free Peoples player may exert bearer twice to discard this condition.
+	# 	lore: “‘Where is the Ring?'”
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_50: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E050.1_card.jpg
+			imagePath: errata/LOTR-EN03E050.2_card.jpg
 			javaClass: false
 			parent: 3_50
 			parentPath: errata/pc
-			version: 1
+			version: 2
 			collInfo: 3R50
 			rarity: R
 			setNum: "3"
@@ -17,67 +106,30 @@
 		unique: false
 		side: Shadow
 		culture: Isengard
-		twilight: 1
-		type: Condition
-		target: or(companion,ally)
-		effects: [
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: WinsSkirmish
-					filter: bearer
-					against: culture(isengard),minion
+		twilight: 0
+		type: Event
+		keyword: Maneuver
+		requires: {
+			type: canSpot
+			filter: culture(isengard),minion
+		}
+		effects: {
+			type: event
+			effect: {
+				type: preventable
+				text: Would you like to add 2 burdens to prevent exhausting Aragorn?
+				player: fp
+				cost: {
+					type: addBurdens
+					amount: 2
 				}
 				effect: {
-					type: AddBurdens
-					amount: 1
+					type: exhaust
+					filter: choose(name(Aragorn))
 				}
 			}
-			{
-				type: Trigger
-				trigger: {
-					type: StartOfPhase
-					phase: regroup
-				}
-				requires: {
-					type: IsGreaterThanOrEqual
-					firstNumber: {
-						type: ForEachVitality
-						filter: bearer
-					}
-					secondNumber: 3
-				}
-				effect: [
-					{
-						# We do this just to make the option prompt a
-						# little more elegant.
-						type: Memorize
-						filter: bearer
-						memory: bearer
-					}
-					{
-						type: Optional
-						player: freeps
-						text: Would you like to exert {bearer} twice to discard Can You Protect Me From Yourself?
-						effect: {
-							type: CostToEffect
-							cost: {
-								type: exert
-								player: freeps
-								times: 2
-								select: bearer
-							}
-							effect: {
-								type: Discard
-								select: self
-							}
-						}
-					}
-				]
-			}
-		]
-		gametext: Bearer must be a companion or ally.<br>Each time bearer wins a skirmish against an [isengard] minion, add a burden.<br>At the start of the regroup phase, the Free Peoples player may exert bearer twice to discard this condition.
+		}
+		gametext: Spot an [isengard] minion to exhaust Aragorn. The Free Peoples player may add 2 burdens to prevent this. 
 		lore: “‘Where is the Ring?'”
 		promotext: ""
 		alts: {

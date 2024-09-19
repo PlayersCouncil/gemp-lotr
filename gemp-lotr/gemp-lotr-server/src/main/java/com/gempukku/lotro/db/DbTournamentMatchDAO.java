@@ -26,7 +26,7 @@ public class DbTournamentMatchDAO implements TournamentMatchDAO {
     public int addMatch(String tournamentId, int round, String playerOne, String playerTwo) {
 
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             String sql = """
                         INSERT INTO tournament_match (tournament_id, round, player_one, player_two)
@@ -60,7 +60,7 @@ public class DbTournamentMatchDAO implements TournamentMatchDAO {
     public void setMatchResult(String tournamentId, int round, String winner) {
 
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             String sql = """
                         UPDATE tournament_match 
@@ -87,7 +87,7 @@ public class DbTournamentMatchDAO implements TournamentMatchDAO {
     @Override
     public List<DBDefs.TournamentMatch> getMatches(String tournamentId) {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -112,7 +112,7 @@ public class DbTournamentMatchDAO implements TournamentMatchDAO {
     @Override
     public Map<String, Integer> getPlayerByes(String tournamentId) {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """

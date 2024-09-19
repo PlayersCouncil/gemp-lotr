@@ -70,13 +70,108 @@
 		}
 	}
 	
+	# 53_85: {
+	# 	cardInfo: {
+	# 		imagePath: errata/LOTR-EN03E085.1_card.jpg
+	# 		javaClass: false
+	# 		parent: 3_85
+	# 		parentPath: errata/pc
+	# 		version: 1
+	# 		collInfo: 3R85
+	# 		rarity: R
+	# 		setNum: "3"
+	# 		cardNum: 85
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Too Great and Terrible
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Wraith
+	# 	twilight: 1
+	# 	type: Condition
+	# 	target: or(companion,ally)
+	# 	effects: [
+	# 		{
+	# 			type: ExtraCost
+	# 			cost: {
+	# 				type: exert
+	# 				select: choose(culture(ringwraith), minion)
+	# 			}
+	# 		}
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: CantBeExerted
+	# 				filter: bearer
+	# 				by: side(freeps)
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			trigger: {
+	# 				type: StartOfPhase
+	# 				phase: regroup
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					# We do this just to make the option prompt a
+	# 					# little more elegant.
+	# 					type: Memorize
+	# 					filter: bearer
+	# 					memory: bearer
+	# 				}
+	# 				{
+	# 					type: If
+	# 					check: {
+	# 						type: HasCardInHand
+	# 						player: freeps
+	# 						count: 1
+	# 						filter: CultureFromMemory(bearer)
+	# 					}
+	# 					true: {
+	# 						type: Optional
+	# 						player: freeps
+	# 						text: Would you like to discard 1 card from hand matching {bearer}'s culture to discard Too Great and Terrible?
+	# 						effect: {
+	# 							type: CostToEffect
+	# 							cost: {
+	# 								type: DiscardFromHand
+	# 								player: freeps
+	# 								hand: freeps
+	# 								forced: false
+	# 								count: 1
+	# 								select: choose(CultureFromMemory(bearer))
+	# 							}
+	# 							effect: {
+	# 								type: Discard
+	# 								select: self
+	# 							}
+	# 						}
+	# 					}
+	# 				}
+					
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: To play, exert a [ringwraith] minion.  Bearer must be a companion or ally. Bearer cannot be exerted by Free Peoples cards.<br>At the start of the regroup phase, the Free Peoples player may discard 1 card from hand of bearer's culture to discard this condition.
+	# 	lore: “‘I do not wish to become like the Dark Lord himself.'”
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_85: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E085.1_card.jpg
+			imagePath: errata/LOTR-EN03E085.2_card.jpg
 			javaClass: false
 			parent: 3_85
 			parentPath: errata/pc
-			version: 1
+			version: 2
 			collInfo: 3R85
 			rarity: R
 			setNum: "3"
@@ -87,74 +182,36 @@
 		title: Too Great and Terrible
 		unique: false
 		side: Shadow
-		culture: Wraith
-		twilight: 1
-		type: Condition
-		target: or(companion,ally)
-		effects: [
-			{
-				type: ExtraCost
+		culture: Ringwraith
+		twilight: 0
+		type: event
+		keyword: maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: nazgul
+			}
+			effect: {
+				type: preventable
+				text: Would you like to discard 2 GANDALF cards from hand to prevent wounding Gandalf twice?
+				player: fp
 				cost: {
-					type: exert
-					select: choose(culture(ringwraith), minion)
+					type: discardFromHand
+					forced: false
+					hand: fp
+					player: fp
+					filter: choose(culture(gandalf))
+					count: 2
+				}
+				effect: {
+					type: wound
+					filter: choose(name(Gandalf))
+					times: 2
 				}
 			}
-			{
-				type: modifier
-				modifier: {
-					type: CantBeExerted
-					filter: bearer
-					by: side(freeps)
-				}
-			}
-			{
-				type: Trigger
-				trigger: {
-					type: StartOfPhase
-					phase: regroup
-				}
-				effect: [
-					{
-						# We do this just to make the option prompt a
-						# little more elegant.
-						type: Memorize
-						filter: bearer
-						memory: bearer
-					}
-					{
-						type: If
-						check: {
-							type: HasCardInHand
-							player: freeps
-							count: 1
-							filter: CultureFromMemory(bearer)
-						}
-						true: {
-							type: Optional
-							player: freeps
-							text: Would you like to discard 1 card from hand matching {bearer}'s culture to discard Too Great and Terrible?
-							effect: {
-								type: CostToEffect
-								cost: {
-									type: DiscardFromHand
-									player: freeps
-									hand: freeps
-									forced: false
-									count: 1
-									select: choose(CultureFromMemory(bearer))
-								}
-								effect: {
-									type: Discard
-									select: self
-								}
-							}
-						}
-					}
-					
-				]
-			}
-		]
-		gametext: To play, exert a [ringwraith] minion.  Bearer must be a companion or ally. Bearer cannot be exerted by Free Peoples cards.<br>At the start of the regroup phase, the Free Peoples player may discard 1 card from hand of bearer's culture to discard this condition.
+		}
+		gametext: Spot a Nazgul to wound Gandalf twice. The Free Peoples player may discard 2 [gandalf] cards from hand to prevent this. 
 		lore: “‘I do not wish to become like the Dark Lord himself.'”
 		promotext: ""
 		alts: {

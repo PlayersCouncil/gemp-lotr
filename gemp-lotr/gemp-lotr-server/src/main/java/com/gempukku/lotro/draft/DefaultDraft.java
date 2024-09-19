@@ -56,7 +56,7 @@ public class DefaultDraft implements Draft {
     }
 
     @Override
-    public void advanceDraft(TournamentCallback draftCallback) {
+    public void advanceDraft() {
         if (haveAllPlayersPicked()) {
             if (haveAllCardsBeenChosen()) {
                 if (haveMorePacks()) {

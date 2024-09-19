@@ -1,6 +1,6 @@
 package com.gempukku.lotro.async.handler;
 
-import com.gempukku.lotro.DateUtils;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.collection.CollectionsManager;
@@ -15,7 +15,7 @@ import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.league.LeagueData;
 import com.gempukku.lotro.league.LeagueService;
-import com.gempukku.lotro.league.SoloDraftLeagueData;
+import com.gempukku.lotro.league.SoloDraftLeague;
 import com.gempukku.lotro.packs.ProductLibrary;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
@@ -28,6 +28,7 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.lang.reflect.Type;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class SoloDraftRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
@@ -71,13 +72,13 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
             throw new HttpProcessingException(404);
 
         LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
-        int leagueStart = leagueData.getSeries().get(0).getStart();
+        var leagueStart = leagueData.getSeries().getFirst().getStart();
 
-        if (!leagueData.isSoloDraftLeague() || DateUtils.getCurrentDate() < leagueStart)
+        if (!leagueData.isSoloDraftLeague() || DateUtils.Today().isBefore(leagueStart))
             throw new HttpProcessingException(404);
 
-        SoloDraftLeagueData soloDraftLeagueData = (SoloDraftLeagueData) leagueData;
-        CollectionType collectionType = soloDraftLeagueData.getCollectionType();
+        SoloDraftLeague soloDraftLeague = (SoloDraftLeague) leagueData;
+        CollectionType collectionType = soloDraftLeague.getCollectionType();
 
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
@@ -96,7 +97,7 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
                 for (String card : draftPoolList)
                     draftPool.addItem(card, 1);
 
-            SoloDraft soloDraft = soloDraftLeagueData.getSoloDraft();
+            SoloDraft soloDraft = soloDraftLeague.getSoloDraft();
             availableChoices = soloDraft.getAvailableChoices(playerSeed, stage, draftPool);
         } else {
             availableChoices = Collections.emptyList();
@@ -116,7 +117,7 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
 
     private League findLeagueByType(String leagueType) {
         for (League activeLeague : _leagueService.getActiveLeagues()) {
-            if (activeLeague.getType().equals(leagueType))
+            if (activeLeague.getCodeStr().equals(leagueType))
                 return activeLeague;
         }
         return null;
@@ -134,13 +135,13 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
             throw new HttpProcessingException(404);
 
         LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
-        int leagueStart = leagueData.getSeries().get(0).getStart();
+        var leagueStart = leagueData.getSeries().getFirst().getStart();
 
-        if (!leagueData.isSoloDraftLeague() || DateUtils.getCurrentDate() < leagueStart)
+        if (!leagueData.isSoloDraftLeague() || DateUtils.Today().isBefore(leagueStart))
             throw new HttpProcessingException(404);
 
-        SoloDraftLeagueData soloDraftLeagueData = (SoloDraftLeagueData) leagueData;
-        CollectionType collectionType = soloDraftLeagueData.getCollectionType();
+        SoloDraftLeague soloDraftLeague = (SoloDraftLeague) leagueData;
+        CollectionType collectionType = soloDraftLeague.getCollectionType();
 
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
@@ -158,7 +159,7 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
             for (String card : draftPoolList)
                 draftPool.addItem(card, 1);
 
-        SoloDraft soloDraft = soloDraftLeagueData.getSoloDraft();
+        SoloDraft soloDraft = soloDraftLeague.getSoloDraft();
         Iterable<SoloDraft.DraftChoice> possibleChoices = soloDraft.getAvailableChoices(playerSeed, stage, draftPool);
 
         SoloDraft.DraftChoice draftChoice = getSelectedDraftChoice(selectedChoiceId, possibleChoices);

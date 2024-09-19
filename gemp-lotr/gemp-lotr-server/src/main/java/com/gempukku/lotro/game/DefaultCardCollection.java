@@ -65,6 +65,11 @@ public class DefaultCardCollection implements MutableCardCollection {
         addItem(itemId, toAdd, false);
     }
 
+    @Override
+    public synchronized void addItem(CardCollection.Item item) {
+        addItem(item.getBlueprintId(), item.getCount(), false);
+    }
+
     public synchronized void addItem(String itemId, int toAdd, boolean recursive) {
         if (toAdd > 0) {
             Item oldCount = _counts.get(itemId);
@@ -74,6 +79,8 @@ public class DefaultCardCollection implements MutableCardCollection {
                 _counts.put(itemId, Item.createItem(itemId, toAdd + oldCount.getCount(), recursive));
         }
     }
+
+
 
     @Override
     public synchronized boolean removeItem(String itemId, int toRemove) {

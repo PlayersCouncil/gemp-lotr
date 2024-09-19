@@ -1,4 +1,52 @@
 {
+	51_331: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN01E331.1_card.jpg
+			//parentId: 1_331
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 1C331
+			rarity: C
+			setNum: "1"
+			cardNum: 331
+			style: Standard
+		}
+		title: Ettenmoors
+		unique: false
+		twilight: 2
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		keywords: Plains
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: exert
+				filter: choose(your,character,not(enduring))
+				memorize: exertedCharacter
+			}
+			effect: {
+				type: modifyStrength
+				filter: memory(exertedCharacter)
+				amount: 2
+			}
+		}
+		gametext: <b>Plains.</b> <b>Skirmish:</b> Exert your character (except an enduring character), to make it strength +2. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	
 	51_333: {
 		cardInfo: {
 			imagePath: errata/LOTR-EN01E333.1.jpg

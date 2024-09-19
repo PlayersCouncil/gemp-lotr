@@ -46,12 +46,12 @@ var StatsUI = Class.extend({
         
         var getPercentage = (num1, num2) => Number(num1 / num2).toLocaleString(undefined, {style: 'percent', minimumFractionDigits:2});
 
-        $("#startDateSpan").html(json["startDate"]);
-        $("#endDateSpan").html(json["endDate"]);
-        $("#activePlayersStat").html(json["activePlayers"]);
-        $("#gamesCountStat").html(json["gamesCount"]);
+        $("#startDateSpan").html(json["StartDate"]);
+        $("#endDateSpan").html(json["EndDate"]);
+        $("#activePlayersStat").html(json["ActivePlayers"]);
+        $("#gamesCountStat").html(json["GamesCount"]);
 
-        var formatStats = json["stats"];
+        var formatStats = json["Stats"];
         if (formatStats.length > 0) {
             
             var casualStats = $("#casualStatsTable");
@@ -63,36 +63,36 @@ var StatsUI = Class.extend({
             var comps = 0;
             var total = 0;
             
-            json.stats.sort((a,b) => { return b.count - a.count; })
+            json.Stats.sort((a,b) => { return b.Count - a.Count; })
             
-            json["stats"].forEach(item => {
-                if(item.casual) {
-                    casuals += item.count;
+            json["Stats"].forEach(item => {
+                if(item.Casual) {
+                    casuals += item.Count;
                 }
                 else {
-                    comps += item.count;
+                    comps += item.Count;
                 }
-                total += item.count;
+                total += item.Count;
             });
             
-            json["stats"].forEach(item => {
+            json["Stats"].forEach(item => {
                 
-                var test = getPercentage(item.count, total);
+                var test = getPercentage(item.Count, total);
                 
-                if(item.casual) {
+                if(item.Casual) {
                     casualStats.append("<tr>" 
-                    + "<td>" + item.format + "</td>"
-                    + "<td>" + item.count + "</td>"
-                    + "<td>" + getPercentage(item.count, casuals) + "</td>"
-                    + "<td>" + getPercentage(item.count, total) + "</td>"
+                    + "<td>" + item.Format + "</td>"
+                    + "<td>" + item.Count + "</td>"
+                    + "<td>" + getPercentage(item.Count, casuals) + "</td>"
+                    + "<td>" + getPercentage(item.Count, total) + "</td>"
                     + "</tr>");
                 }
                 else {
                     compStats.append("<tr>" 
-                    + "<td>" + item.format + "</td>"
-                    + "<td>" + item.count + "</td>"
-                    + "<td>" + getPercentage(item.count, comps) + "</td>"
-                    + "<td>" + getPercentage(item.count, total) + "</td>"
+                    + "<td>" + item.Format + "</td>"
+                    + "<td>" + item.Count + "</td>"
+                    + "<td>" + getPercentage(item.Count, comps) + "</td>"
+                    + "<td>" + getPercentage(item.Count, total) + "</td>"
                     + "</tr>");
                 } 
             });

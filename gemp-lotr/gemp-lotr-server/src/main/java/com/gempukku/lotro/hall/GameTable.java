@@ -14,7 +14,7 @@ public class GameTable {
 
     public GameTable(GameSettings gameSettings) {
         this.gameSettings = gameSettings;
-        this.capacity = gameSettings.getLotroFormat().getAdventure().isSolo() ? 1 : 2;
+        this.capacity = gameSettings.format().getAdventure().isSolo() ? 1 : 2;
     }
 
     public void startGame(LotroGameMediator lotroGameMediator) {

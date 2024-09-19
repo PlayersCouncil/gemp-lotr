@@ -1,6 +1,6 @@
 package com.gempukku.lotro.async;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.async.handler.UriRequestHandler;
 import com.gempukku.lotro.db.IpBanDAO;
 import io.netty.buffer.Unpooled;
@@ -244,6 +244,21 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
         @Override
         public void writeXmlResponse(Document document) {
             writeXmlResponse(document, null);
+        }
+
+        @Override
+        public void sendOK() {
+            writeHtmlResponse("OK");
+        }
+
+        @Override
+        public void sendXmlOK() {
+            writeXmlResponse(null, null);
+        }
+
+        @Override
+        public void sendJsonOK() {
+            writeJsonResponse("OK");
         }
 
         @Override

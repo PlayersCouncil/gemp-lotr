@@ -36,11 +36,10 @@ public class Card_03_080_ErrataTests
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Moria
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: 
-		 * Game Text: Bearer must be an unbound companion. Limit 1 per bearer.
-		* 	At the start of each skirmish involving bearer and a [moria] minion, discard a possession borne by bearer. The Free Peoples player may exert bearer or discard another Free Peoples item to prevent that.
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: Spot a [moria] minion to wound Boromir three times (or exhaust him if Boromir is the Ring-bearer). The Free Peoples player may discard two possessions to prevent this. 
 		*/
 
 		var scn = GetScenario();
@@ -52,8 +51,9 @@ public class Card_03_080_ErrataTests
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		//assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
@@ -68,6 +68,6 @@ public class Card_03_080_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

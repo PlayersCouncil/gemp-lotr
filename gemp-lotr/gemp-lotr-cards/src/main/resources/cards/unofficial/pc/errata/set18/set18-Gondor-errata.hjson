@@ -39,7 +39,7 @@
 			}
 			{
 				type: activated
-				phase: skirmish
+				phase: maneuver
 				requires: {
 					type: CanSpot
 					filter: another,wounded,companion,minResistance(5)

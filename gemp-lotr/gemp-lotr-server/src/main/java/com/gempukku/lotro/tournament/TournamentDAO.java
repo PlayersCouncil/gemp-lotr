@@ -8,19 +8,24 @@ import java.util.Date;
 import java.util.List;
 
 public interface TournamentDAO {
-    public void addTournament(DBDefs.Tournament info);
+    void addTournament(DBDefs.Tournament info);
 
-    public List<DBDefs.Tournament> getUnfinishedTournaments();
+    void addScheduledTournament(DBDefs.ScheduledTournament info);
 
-    public List<DBDefs.Tournament> getFinishedTournamentsSince(ZonedDateTime time);
+    List<DBDefs.Tournament> getUnfinishedTournaments();
 
-    public DBDefs.Tournament getTournamentById(String tournamentId);
+    DBDefs.Tournament getTournament(String tournamentId);
 
-    public void updateTournamentStage(String tournamentId, Tournament.Stage stage);
+    List<DBDefs.Tournament> getFinishedTournamentsSince(ZonedDateTime time);
 
-    public void updateTournamentRound(String tournamentId, int round);
+    DBDefs.Tournament getTournamentById(String tournamentId);
 
-    public List<DBDefs.ScheduledTournament> getUnstartedScheduledTournamentQueues(ZonedDateTime tillDate);
+    void updateTournamentStage(String tournamentId, Tournament.Stage stage);
 
-    public void updateScheduledTournamentStarted(String scheduledTournamentId);
+    void updateTournamentRound(String tournamentId, int round);
+
+    List<DBDefs.ScheduledTournament> getUnstartedScheduledTournamentQueues(ZonedDateTime tillDate);
+    DBDefs.ScheduledTournament getScheduledTournament(String tournamentId);
+
+    void updateScheduledTournamentStarted(String scheduledTournamentId);
 }

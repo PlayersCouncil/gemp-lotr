@@ -224,23 +224,23 @@
 
 			#Adventure Deck
 			#1 4U328 The Riddermark
-			#2 4U331 Eastfold
+			#2 4U335 Uruk Camp
 			#3 4U337 Barrows of Edoras
 			#4 4U343 Ered Nimrais
-			#5 4U347 Deep of Helm
+			#5 4U348 Deeping Wall
 			#6 4U354 Hornburg Armory
 			#7 5U118 Hornburg Wall
 			#8 4U359 Wizard's Vale
-			#9 6U120 Saruman's Laboratory
+			#9 5U120 Caverns of Isengard
 			1x4_328
-			1x4_331
+			1x4_335
 			1x4_337
 			1x4_343
-			1x4_347
+			1x4_348
 			1x4_354
 			1x5_118
 			1x4_359
-			1x6_120
+			1x5_120
 
 			#Free Peoples Draw Deck
 
@@ -289,32 +289,30 @@
 
 			#Shadow Draw Deck
 
-			#3x 4C181 Uruk Chaser
-			3x4_181
-			#2x 4U188 Uruk Hunter
-			2x4_188
-			#2x 4C189 Uruk Plains Runner
-			2x4_189
-			#2x 4C190 Uruk Pursuer
-			2x4_190
-			#3x 4C193 Uruk Runner
-			3x4_193
-			#3x 2C47 Uruk Scout
-			3x2_47
-			#2x 4U194 Uruk Searcher
-			2x4_194
-			#2x 4C195 Uruk Seeker
-			2x4_195
+			#3x 4C153 Grima, Son of Galmod
+			3x4_153
+			#2x 3U57 Isengard Retainer
+			2x3_57
+			#2x 3U58 Isengard Servant
+			2x3_58
+			#2x 3U60 Isengard Smith
+			2x3_60
+			#2x 3C62 Isengard Worker
+			2x3_62
+			#4x 6C72 Rohirrim Traitor
+			4x6_72
+			#3x 3C69 Saruman, Servant of the Eye
+			3x3_69
 			#1x 1U231 Ulaire Enquea, Lieutenant of Morgul
 			1x1_231
-			#2x 4C142 Broad-bladed Sword
-			2x4_142
-			#2x 4C156 Kill Them Now
-			2x4_156
-			#4x 4U159 Many Riddles
-			4x4_159
-			#2x 1C133 Saruman's Ambition
-			2x1_133
+			#3x 4C178 Unferth, Grima's Bodyguard
+			3x4_178
+			#3x 4U161 Men Will Fall
+			3x4_161
+			#4x 6U61 Desertion
+			4x6_61
+			#1x 6U75 Twisted Tales
+			1x6_75
 
 			#Shadow Total 30
 
@@ -640,23 +638,23 @@
 
 			#Adventure Deck
 			#1 4U324 Eastemnet Downs
-			#2 4U330 Derndingle
+			#2 4U331 Eastfold
 			#3 4U338 Golden Hall
 			#4 4U346 White Rocks
-			#5 4U348 Deeping Wall
+			#5 4U347 Deep of Helm
 			#6 4U354 Hornburg Armory
 			#7 4U356 Hornburg Causeway
 			#8 4U359 Wizard's Vale
-			#9 5U120 Caverns of Isengard
+			#9 6U120 Saruman's Laboratory
 			1x4_324
-			1x4_330
+			1x4_331
 			1x4_338
 			1x4_346
-			1x4_348
+			1x4_347
 			1x4_354
 			1x4_356
 			1x4_359
-			1x5_120
+			1x6_120
 
 			#Free Peoples Draw Deck
 
@@ -705,28 +703,30 @@
 
 			#Shadow Draw Deck
 
-			#3x 4C153 Grima, Son of Galmod
-			3x4_153
-			#2x 3U57 Isengard Retainer
-			2x3_57
-			#2x 3U58 Isengard Servant
-			2x3_58
-			#2x 3U60 Isengard Smith
-			2x3_60
-			#2x 3C62 Isengard Worker
-			2x3_62
-			#4x 6C72 Rohirrim Traitor
-			4x6_72
-			#3x 3C69 Saruman, Servant of the Eye
-			3x3_69
-			#3x 4C178 Unferth, Grima's Bodyguard
-			3x4_178
-			#4x 4U161 Men Will Fall
-			4x4_161
-			#4x 6U61 Desertion
-			4x6_61
-			#1x 6U75 Twisted Tales
-			1x6_75
+			#3x 4C181 Uruk Chaser
+			3x4_181
+			#2x 4U188 Uruk Hunter
+			2x4_188
+			#2x 4C189 Uruk Plains Runner
+			2x4_189
+			#2x 4C190 Uruk Pursuer
+			2x4_190
+			#4x 4C193 Uruk Runner
+			4x4_193
+			#3x 2C47 Uruk Scout
+			3x2_47
+			#2x 4U194 Uruk Searcher
+			2x4_194
+			#2x 4C195 Uruk Seeker
+			2x4_195
+			#2x 4C142 Broad-bladed Sword
+			2x4_142
+			#2x 4C156 Kill Them Now
+			2x4_156
+			#4x 4U159 Many Riddles
+			4x4_159
+			#2x 1C133 Saruman's Ambition
+			2x1_133
 
 			#Shadow Total 30
 

@@ -36,12 +36,10 @@ public class Card_03_050_ErrataTests
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: 
-		 * Game Text: Bearer must be a companion or ally.
-		* 	Each time bearer wins a skirmish against an [isengard] minion, add a burden.
-		* 	At the start of the regroup phase, the Free Peoples player may exert bearer twice to discard this condition.
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: Spot an [isengard] minion to exhaust Aragorn. The Free Peoples player may add 2 burdens to prevent this. 
 		*/
 
 		var scn = GetScenario();
@@ -53,8 +51,9 @@ public class Card_03_050_ErrataTests
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		//assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
@@ -69,6 +68,6 @@ public class Card_03_050_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

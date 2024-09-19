@@ -63,7 +63,7 @@ public class DbCollectionDAO implements CollectionDAO {
 
     private List<DBDefs.CollectionEntry> extractCollectionEntries(int collectionID) throws SQLException, IOException {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -92,13 +92,9 @@ public class DbCollectionDAO implements CollectionDAO {
         }
     }
 
-    private class intContainer {
-        public int ID;
-    }
-
     public boolean doesPlayerHaveCardsInCollection(int playerId, String type) {
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -126,7 +122,7 @@ public class DbCollectionDAO implements CollectionDAO {
     public List<DBDefs.Collection> getAllCollectionsForPlayer(int playerId) {
 
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -150,7 +146,7 @@ public class DbCollectionDAO implements CollectionDAO {
     public DBDefs.Collection getCollectionInfo(int playerId, String type) {
 
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -177,7 +173,7 @@ public class DbCollectionDAO implements CollectionDAO {
     public DBDefs.Collection getCollectionInfo(int collectionID) {
 
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -202,7 +198,7 @@ public class DbCollectionDAO implements CollectionDAO {
     public List<DBDefs.Collection> getCollectionInfosByType(String type) {
 
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
@@ -319,7 +315,7 @@ public class DbCollectionDAO implements CollectionDAO {
         int collID = getCollectionID(playerId, type);
 
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             try (org.sql2o.Connection conn = db.beginTransaction()) {
                 Query query = conn.createQuery(sql, true);
@@ -349,7 +345,7 @@ public class DbCollectionDAO implements CollectionDAO {
                         """;
         String json = "";
         try {
-            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+            var db = _dbAccess.openDB();
 
             var jsonObj = new JSONObject();
             jsonObj.putAll(extraInformation);

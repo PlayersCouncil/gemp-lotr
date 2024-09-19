@@ -1,14 +1,16 @@
 package com.gempukku.lotro.db;
 
+import com.gempukku.lotro.common.DBDefs;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.vo.League;
+import com.gempukku.lotro.league.LeagueParams;
+import org.sql2o.Query;
+import org.sql2o.Sql2o;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DbLeagueDAO implements LeagueDAO {
     private final DbAccess _dbAccess;
@@ -17,56 +19,93 @@ public class DbLeagueDAO implements LeagueDAO {
         _dbAccess = dbAccess;
     }
 
-    public void addLeague(int cost, String name, String type, String clazz, String parameters, int start, int endTime) throws SQLException {
-        try (Connection conn = _dbAccess.getDataSource().getConnection()) {
-            try (PreparedStatement statement = conn.prepareStatement("insert into league (name, type, class, parameters, start, end, status, cost) values (?, ?, ?, ?, ?, ?, ?, ?)")) {
-                statement.setString(1, name);
-                statement.setString(2, type);
-                statement.setString(3, clazz);
-                statement.setString(4, parameters);
-                statement.setInt(5, start);
-                statement.setInt(6, endTime);
-                statement.setInt(7, 0);
-                statement.setInt(8, cost);
-                statement.execute();
-            }
-        }
-    }
-
-    public List<League> loadActiveLeagues(int currentTime) throws SQLException {
-        try (Connection conn = _dbAccess.getDataSource().getConnection()) {
-            try (PreparedStatement statement = conn.prepareStatement("select name, type, class, parameters, status, cost from league where end>=? order by start desc")) {
-                statement.setInt(1, currentTime);
-                try (ResultSet rs = statement.executeQuery()) {
-                    List<League> activeLeagues = new ArrayList<>();
-                    while (rs.next()) {
-                        String name = rs.getString(1);
-                        String type = rs.getString(2);
-                        String clazz = rs.getString(3);
-                        String parameters = rs.getString(4);
-                        int status = rs.getInt(5);
-                        int cost = rs.getInt(6);
-                        activeLeagues.add(new League(cost, name, type, clazz, parameters, status));
-                    }
-                    return activeLeagues;
-                }
-            }
-        }
-    }
-
-    public void setStatus(League league, int newStatus) {
+    public int addLeague(String name, long code, League.LeagueType type, LeagueParams parameters, ZonedDateTime start, ZonedDateTime end, int cost) {
         try {
-            try (Connection connection = _dbAccess.getDataSource().getConnection()) {
-                String sql = "update league set status=? where type=?";
+            var db = _dbAccess.openDB();
 
-                try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                    statement.setInt(1, newStatus);
-                    statement.setString(2, league.getType());
-                    statement.execute();
-                }
+            String sql = """
+                        INSERT INTO gemp_db.league
+                            (name, code, `type`, parameters, start_date, end_date, status, cost)
+                        VALUES(:name, :code, :type, :parameters, :start, :end, :status, :cost);
+                        """;
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                Query query = conn.createQuery(sql, true);
+                query.addParameter("name", name)
+                    .addParameter("code", code)
+                    .addParameter("type", type.toString())
+                    .addParameter("parameters", parameters.toString())
+                    .addParameter("start", start.format(DateUtils.DateFormat))
+                    .addParameter("end", end.format(DateUtils.DateFormat))
+                    .addParameter("status", 0)
+                    .addParameter("cost", cost);
+
+                int id = query.executeUpdate()
+                        .getKey(Integer.class);
+                conn.commit();
+
+                return id;
             }
-        } catch (SQLException exp) {
-            throw new RuntimeException("Unable to update league status", exp);
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to insert league", ex);
         }
     }
+
+    public List<League> loadActiveLeagues(ZonedDateTime after)  {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT 
+                             id
+                            ,name
+                            ,code
+                            ,`type`
+                            ,parameters
+                            ,start_date
+                            ,end_date
+                            ,status
+                            ,cost
+                        FROM gemp_db.league
+                        WHERE end_date >= :after
+                        ORDER BY start_date DESC;        
+                        """;
+                List<DBDefs.League> result = conn.createQuery(sql)
+                        .addParameter("after", after)
+                        .executeAndFetch(DBDefs.League.class);
+
+                return result.stream().map(League::new).collect(Collectors.toList());
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve league entries", ex);
+        }
+    }
+
+
+    public boolean setStatus(League league, int newStatus)  {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                String sql = """
+                                UPDATE league
+                                SET status = :newStatus
+                                WHERE code = :code
+                            """;
+                conn.createQuery(sql)
+                        .addParameter("newStatus", newStatus)
+                        .addParameter("code", league.getCode())
+                        .executeUpdate();
+
+                conn.commit();
+
+                return conn.getResult() == 1;
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to update league status", ex);
+        }
+    }
+
+
 }

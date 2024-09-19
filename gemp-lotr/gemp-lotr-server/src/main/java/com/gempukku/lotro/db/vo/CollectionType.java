@@ -27,6 +27,10 @@ public final class CollectionType {
         return DEFINED_COLLECTION_TYPES.get(code);
     }
 
+    public CollectionType(long code, String fullName) {
+        this(String.valueOf(code), fullName);
+    }
+
     public CollectionType(String code, String fullName) {
         _code = code;
         _fullName = fullName;

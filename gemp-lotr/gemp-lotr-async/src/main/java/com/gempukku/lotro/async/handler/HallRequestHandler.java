@@ -1,6 +1,5 @@
 package com.gempukku.lotro.async.handler;
 
-import com.alibaba.fastjson.JSON;
 import com.gempukku.lotro.SubscriptionConflictException;
 import com.gempukku.lotro.SubscriptionExpiredException;
 import com.gempukku.lotro.async.HttpProcessingException;
@@ -12,11 +11,12 @@ import com.gempukku.lotro.draft.DraftChannelVisitor;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.*;
-import com.gempukku.lotro.league.LeagueSerieData;
+import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.polling.LongPollingResource;
 import com.gempukku.polling.LongPollingSystem;
+import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -75,6 +75,10 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             }
         } else if (uri.startsWith("/tournament/") && uri.endsWith("/leave") && request.method() == HttpMethod.POST) {
             dropFromTournament(request, uri.substring(12, uri.length() - 6), responseWriter);
+        } else if (uri.startsWith("/tournament/") && uri.endsWith("/join") && request.method() == HttpMethod.POST) {
+            joinTournamentLate(request, uri.substring(12, uri.length() - 5), responseWriter);
+        } else if (uri.startsWith("/tournament/") && uri.endsWith("/registerdeck") && request.method() == HttpMethod.POST) {
+            registerSealedTournamentDeck(request, uri.substring(12, uri.length() - 13), responseWriter);
         } else if (uri.startsWith("/") && uri.endsWith("/leave") && request.method() == HttpMethod.POST) {
             leaveTable(request, uri.substring(1, uri.length() - 6), responseWriter);
         } else if (uri.startsWith("/") && request.method() == HttpMethod.POST) {
@@ -140,9 +144,9 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             String timer = getFormParameterSafely(postDecoder, "timer");
             String desc = getFormParameterSafely(postDecoder, "desc").trim();
             String isPrivateVal = getFormParameterSafely(postDecoder, "isPrivate");
-            boolean isPrivate = (isPrivateVal != null ? Boolean.valueOf(isPrivateVal) : false);
+            boolean isPrivate = Boolean.parseBoolean(isPrivateVal);
             String isInviteOnlyVal = getFormParameterSafely(postDecoder, "isInviteOnly");
-            boolean isInviteOnly = (isInviteOnlyVal != null ? Boolean.valueOf(isInviteOnlyVal) : false);
+            boolean isInviteOnly = Boolean.parseBoolean(isInviteOnlyVal);
             //To prevent annoyance, super long glacial games are hidden from everyone except
             // the participants and admins.
             boolean isHidden = timer.toLowerCase().equals(GameTimer.GLACIAL_TIMER.name());
@@ -150,7 +154,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
             if(isInviteOnly) {
-                if(desc.length()==0) {
+                if(desc.isEmpty()) {
                     responseWriter.writeXmlResponse(marshalException(new HallException("Invite-only games must have your intended opponent in the description")));
                     return;
                 }
@@ -222,12 +226,42 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void dropFromTournament(HttpRequest request, String tournamentId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-        _hallServer.dropFromTournament(tournamentId, resourceOwner);
+            String response = _hallServer.dropFromTournament(tournamentId, resourceOwner);
 
-        responseWriter.writeXmlResponse(null);
+            responseWriter.writeXmlResponse(marshalResponse(response));
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    private void joinTournamentLate(HttpRequest request, String tournamentId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            String deckName = getFormParameterSafely(postDecoder, "deckName");
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+
+            String response = _hallServer.joinTournamentLate(tournamentId, resourceOwner, deckName);
+
+            responseWriter.writeXmlResponse(marshalResponse(response));
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    private void registerSealedTournamentDeck(HttpRequest request, String tournamentId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            String deckName = getFormParameterSafely(postDecoder, "deckName");
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+
+            String response = _hallServer.registerSealedTournamentDeck(tournamentId, resourceOwner, deckName);
+
+            responseWriter.writeXmlResponse(marshalResponse(response));
         } finally {
             postDecoder.destroy();
         }
@@ -279,6 +313,18 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         Element error = doc.createElement("error");
         error.setAttribute("message", e.getMessage());
         doc.appendChild(error);
+        return doc;
+    }
+
+    private Document marshalResponse(String message) throws ParserConfigurationException {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+
+        Document doc = documentBuilder.newDocument();
+
+        Element response = doc.createElement("response");
+        response.setAttribute("message", message);
+        doc.appendChild(response);
         return doc;
     }
 
@@ -356,10 +402,10 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     private void appendCards(StringBuilder result, List<String> additionalValidCards) throws CardNotFoundException {
-        if (additionalValidCards.size() > 0) {
+        if (!additionalValidCards.isEmpty()) {
             for (String blueprintId : additionalValidCards)
                 result.append(GameUtils.getCardLink(blueprintId, _library.getLotroCardBlueprint(blueprintId)) + ", ");
-            if (additionalValidCards.size() == 0)
+            if (additionalValidCards.isEmpty())
                 result.append("none,");
         }
     }
@@ -367,7 +413,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void getErrataInfo(HttpRequest request, ResponseWriter responseWriter) throws CardNotFoundException {
 
         var errata = _library.getErrata();
-        String json = JSON.toJSONString(errata);
+        String json = JsonUtils.Serialize(errata);
 
         responseWriter.writeJsonResponse(json);
     }
@@ -402,10 +448,10 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
                 hall.appendChild(formatElem);
             }
             for (League league : _leagueService.getActiveLeagues()) {
-                final LeagueSerieData currentLeagueSerie = _leagueService.getCurrentLeagueSerie(league);
+                final LeagueSerieInfo currentLeagueSerie = _leagueService.getCurrentLeagueSerie(league);
                 if (currentLeagueSerie != null && _leagueService.isPlayerInLeague(league, resourceOwner)) {
                     Element formatElem = doc.createElement("format");
-                    formatElem.setAttribute("type", league.getType());
+                    formatElem.setAttribute("type", String.valueOf(league.getCode()));
                     formatElem.appendChild(doc.createTextNode(league.getName()));
                     hall.appendChild(formatElem);
                 }

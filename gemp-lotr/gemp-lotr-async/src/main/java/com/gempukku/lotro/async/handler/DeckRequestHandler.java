@@ -1,6 +1,5 @@
 package com.gempukku.lotro.async.handler;
 
-import com.alibaba.fastjson.JSON;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.common.JSONDefs;
@@ -9,9 +8,10 @@ import com.gempukku.lotro.db.DeckDAO;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
-import com.gempukku.lotro.league.SealedLeagueDefinition;
+import com.gempukku.lotro.league.SealedEventDefinition;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -27,7 +27,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -100,13 +99,13 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                         .map(LotroFormat::Serialize)
                         .collect(Collectors.toMap(x-> x.code, x-> x));
                 data.SealedTemplates = _formatLibrary.GetAllSealedTemplates().values().stream()
-                        .map(SealedLeagueDefinition::Serialize)
+                        .map(SealedEventDefinition::Serialize)
                         .collect(Collectors.toMap(x-> x.name, x-> x));
                 data.DraftTemplates = _draftLibrary.getAllSoloDrafts().values().stream()
                         .map(soloDraft -> new JSONDefs.ItemStub(soloDraft.getCode(), soloDraft.getFormat()))
                         .collect(Collectors.toMap(x-> x.code, x-> x));
 
-                json = JSON.toJSONString(data);
+                json = JsonUtils.Serialize(data);
             }
             else {
                 Map<String, LotroFormat> formats = _formatLibrary.getHallFormats();
@@ -115,7 +114,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                         .map(x -> new JSONDefs.ItemStub(x.getKey(), x.getValue().getName()))
                         .toArray();
 
-                json = JSON.toJSONString(output);
+                json = JsonUtils.Serialize(output);
             }
 
             responseWriter.writeJsonResponse(json);

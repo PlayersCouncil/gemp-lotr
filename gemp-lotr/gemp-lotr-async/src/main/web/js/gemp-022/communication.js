@@ -618,6 +618,34 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
+    joinTournamentLate:function(tournamentId, deckName, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/hall/tournament/" + tournamentId + "/join",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                deckName:deckName
+            },
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
+    registerSealedTournamentDeck:function(tournamentId, deckName, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/hall/tournament/" + tournamentId + "/registerdeck",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                deckName:deckName
+            },
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
     dropFromTournament:function(tournamentId, callback, errorMap) {
         $.ajax({
             type:"POST",
@@ -625,6 +653,7 @@ var GempLotrCommunication = Class.extend({
             cache:false,
             data:{
                 participantId:getUrlParam("participantId")},
+            success:this.deliveryCheck(callback),
             error:this.errorCheck(errorMap),
             dataType:"xml"
         });
@@ -927,18 +956,33 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
-    previewSealedLeague:function (format, start, serieDuration, maxMatches, name, cost, callback, errorMap) {
+    processSealedLeague:function (preview, start, name, cost, format, serieDuration, maxMatches,
+                                       maxRepeatMatches, inviteOnly, description,
+                                       topPrize, topCutoff, participationPrize, participationGames,
+                                       callback, errorMap) {
+        let url = this.url + "/admin/addSealedLeague";
+        
+        if(preview) {
+            url = this.url + "/admin/previewSealedLeague";
+        }
         $.ajax({
             type:"POST",
-            url:this.url + "/admin/previewSealedLeague",
+            url:url,
             cache:false,
             data:{
-                format:format,
                 start:start,
+                name:name,
+                cost:cost,
+                format:format,
                 serieDuration:serieDuration,
                 maxMatches:maxMatches,
-                name:name,
-                cost:cost
+                maxRepeatMatches:maxRepeatMatches,
+                inviteOnly:inviteOnly,
+                description:description,
+                topPrize:topPrize,
+                topCutoff:topCutoff, 
+                participationPrize:participationPrize, 
+                participationGames:participationGames,
             },
             success:this.deliveryCheck(callback),
             error:this.errorCheck(errorMap),
@@ -946,18 +990,119 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
-    addSealedLeague:function (format, start, serieDuration, maxMatches, name, cost, callback, errorMap) {
+    processSoloDraftLeague:function (preview, start, name, cost, format, serieDuration, maxMatches,
+                                       maxRepeatMatches, inviteOnly, description,
+                                       topPrize, topCutoff, participationPrize, participationGames,
+                                       callback, errorMap) {
+        let url = this.url + "/admin/addSoloDraftLeague";
+        
+        if(preview) {
+            url = this.url + "/admin/previewSoloDraftLeague";
+        }
+        
         $.ajax({
             type:"POST",
-            url:this.url + "/admin/addSealedLeague",
+            url:url,
             cache:false,
             data:{
-                format:format,
                 start:start,
+                name:name,
+                cost:cost,
+                format:format,
                 serieDuration:serieDuration,
                 maxMatches:maxMatches,
+                maxRepeatMatches:maxRepeatMatches,
+                inviteOnly:inviteOnly,
+                description:description,
+                topPrize:topPrize,
+                topCutoff:topCutoff, 
+                participationPrize:participationPrize, 
+                participationGames:participationGames,
+            },
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
+        
+    processConstructedLeague:function (preview, start, collectionType, name, cost, maxRepeatMatches, 
+                                       inviteOnly, description,
+                                       topPrize, topCutoff, participationPrize, participationGames,
+                                       formats, serieDurations, maxMatches,
+                                       callback, errorMap) {
+        let url = this.url + "/admin/addConstructedLeague";
+        
+        if(preview) {
+            url = this.url + "/admin/previewConstructedLeague";
+        }
+        
+        $.ajax({
+            type:"POST",
+            url:url,
+            cache:false,
+            data:{
+                start:start,
+                collectionType:collectionType,
                 name:name,
-                cost:cost
+                cost:cost,
+                maxRepeatMatches:maxRepeatMatches,
+                topPrize:topPrize,
+                topCutoff:topCutoff, 
+                participationPrize:participationPrize, 
+                participationGames:participationGames,
+                format:formats,
+                serieDuration:serieDurations,
+                maxMatches:maxMatches,
+                inviteOnly:inviteOnly,
+                description:description
+            },
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
+    
+    
+    processScheduledTournament:function (preview, name, type, wc, tournamentId, 
+                                         formatCode, sealedFormatCode, deckbuildingDuration, turnInDuration,
+                                         start, cost, playoff, tiebreaker, prizeStructure, minPlayers, manualKickoff,
+                                       callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/processScheduledTournament",
+            cache:false,
+            data:{
+                preview:preview,
+                name:name,
+                type:type,
+                wc:wc,
+                tournamentId:tournamentId,
+                formatCode:formatCode,
+                sealedFormatCode:sealedFormatCode, 
+                deckbuildingDuration:deckbuildingDuration, 
+                turnInDuration:turnInDuration,
+                start:start,
+                cost:cost,
+                playoff:playoff,
+                tiebreaker:tiebreaker,
+                prizeStructure:prizeStructure,
+                minPlayers:minPlayers,
+                manualKickoff:manualKickoff
+            },
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+    
+    setTournamentStage:function(tournamentId, stage, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/setTournamentStage",
+            cache:false,
+            data:{
+                tournamentId:tournamentId,
+                stage:stage
             },
             success:this.deliveryCheck(callback),
             error:this.errorCheck(errorMap),
@@ -965,79 +1110,14 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
-    previewSoloDraftLeague:function (format, start, serieDuration, maxMatches, name, cost, callback, errorMap) {
+    addLeaguePlayers:function(code, players, callback, errorMap) {
         $.ajax({
             type:"POST",
-            url:this.url + "/admin/previewSoloDraftLeague",
+            url:this.url + "/admin/addLeaguePlayers",
             cache:false,
             data:{
-                format:format,
-                start:start,
-                serieDuration:serieDuration,
-                maxMatches:maxMatches,
-                name:name,
-                cost:cost
-            },
-            success:this.deliveryCheck(callback),
-            error:this.errorCheck(errorMap),
-            dataType:"xml"
-        });
-    },
-    
-    addSoloDraftLeague:function (format, start, serieDuration, maxMatches, name, cost, callback, errorMap) {
-        $.ajax({
-            type:"POST",
-            url:this.url + "/admin/addSoloDraftLeague",
-            cache:false,
-            data:{
-                format:format,
-                start:start,
-                serieDuration:serieDuration,
-                maxMatches:maxMatches,
-                name:name,
-                cost:cost
-            },
-            success:this.deliveryCheck(callback),
-            error:this.errorCheck(errorMap),
-            dataType:"html"
-        });
-    },
-    
-    previewConstructedLeague:function (start, collectionType, prizeMultiplier, name, cost, formats, serieDurations, maxMatches, callback, errorMap) {
-        $.ajax({
-            type:"POST",
-            url:this.url + "/admin/previewConstructedLeague",
-            cache:false,
-            data:{
-                start:start,
-                collectionType:collectionType,
-                prizeMultiplier:prizeMultiplier,
-                name:name,
-                cost:cost,
-                format:formats,
-                serieDuration:serieDurations,
-                maxMatches:maxMatches
-            },
-            success:this.deliveryCheck(callback),
-            error:this.errorCheck(errorMap),
-            dataType:"xml"
-        });
-    },
-    
-    addConstructedLeague:function (start, collectionType, prizeMultiplier, name, cost, formats, serieDurations, maxMatches, callback, errorMap) {
-        $.ajax({
-            type:"POST",
-            url:this.url + "/admin/addConstructedLeague",
-            cache:false,
-            data:{
-                start:start,
-                collectionType:collectionType,
-                prizeMultiplier:prizeMultiplier,
-                name:name,
-                cost:cost,
-                format:formats,
-                serieDuration:serieDurations,
-                maxMatches:maxMatches
+                code:code,
+                players:players
             },
             success:this.deliveryCheck(callback),
             error:this.errorCheck(errorMap),

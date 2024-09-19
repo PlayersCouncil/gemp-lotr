@@ -70,8 +70,8 @@ public class BestOfOneStandingsProducer {
                 score = opponentWins * 1f / opponentGames;
             }
 
-            var standing = new PlayerStanding(playerName, points, gamesPlayed, playerWins, playerLosses,
-                    byeRound, score, 0);
+            var standing = new PlayerStanding(playerName, points, gamesPlayed, playerWins, playerLosses, byeRound);
+            standing.opponentWinRate = score;
             standings.put(playerName, standing);
         }
 
@@ -85,8 +85,9 @@ public class BestOfOneStandingsProducer {
             if (lastStanding == null || LEAGUE_STANDING_COMPARATOR.compare(eventStanding, lastStanding) != 0) {
                 standing = position;
             }
-            var newStanding = eventStanding.WithStanding(standing);
-            standings.put(newStanding.playerName(), newStanding);
+            var newStanding = PlayerStanding.CopyStanding(eventStanding);
+            newStanding.standing = standing;
+            standings.put(newStanding.playerName, newStanding);
             position++;
             lastStanding = eventStanding;
         }
@@ -97,21 +98,21 @@ public class BestOfOneStandingsProducer {
     private static class PointsComparator implements Comparator<PlayerStanding> {
         @Override
         public int compare(PlayerStanding o1, PlayerStanding o2) {
-            return o1.points() - o2.points();
+            return o1.points - o2.points;
         }
     }
 
     private static class GamesPlayedComparator implements Comparator<PlayerStanding> {
         @Override
         public int compare(PlayerStanding o1, PlayerStanding o2) {
-            return o1.gamesPlayed() - o2.gamesPlayed();
+            return o1.gamesPlayed - o2.gamesPlayed;
         }
     }
 
     private static class OpponentsWinComparator implements Comparator<PlayerStanding> {
         @Override
         public int compare(PlayerStanding o1, PlayerStanding o2) {
-            final float diff = o1.opponentScore() - o2.opponentScore();
+            final float diff = o1.opponentWinRate - o2.opponentWinRate;
             if (diff < 0) {
                 return -1;
             }

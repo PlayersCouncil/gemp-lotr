@@ -1,19 +1,20 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.DateUtils;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.GameHistoryDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
-import com.gempukku.lotro.draft.DraftPack;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.HallInfoVisitor;
 import com.gempukku.lotro.hall.HallServer;
+import com.gempukku.lotro.hall.TableHolder;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.DraftPackStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,12 +26,14 @@ import java.util.*;
 
 public class TournamentService {
     private final ProductLibrary _productLibrary;
+    private final LotroFormatLibrary _formatLibrary;
     private final DraftPackStorage _draftPackStorage;
     private final TournamentDAO _tournamentDao;
     private final TournamentPlayerDAO _tournamentPlayerDao;
     private final TournamentMatchDAO _tournamentMatchDao;
     private final GameHistoryDAO _gameHistoryDao;
-    private final LotroCardBlueprintLibrary _library;
+    private final LotroCardBlueprintLibrary _blueprintLibrary;
+    private TableHolder _tables;
 
     private final CollectionsManager _collectionsManager;
 
@@ -42,7 +45,7 @@ public class TournamentService {
 
     public TournamentService(CollectionsManager collectionsManager, ProductLibrary productLibrary, DraftPackStorage draftPackStorage,
                              TournamentDAO tournamentDao, TournamentPlayerDAO tournamentPlayerDao, TournamentMatchDAO tournamentMatchDao,
-                             GameHistoryDAO gameHistoryDao, LotroCardBlueprintLibrary library) {
+                             GameHistoryDAO gameHistoryDao, LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary) {
         _collectionsManager = collectionsManager;
         _productLibrary = productLibrary;
         _draftPackStorage = draftPackStorage;
@@ -50,51 +53,49 @@ public class TournamentService {
         _tournamentPlayerDao = tournamentPlayerDao;
         _tournamentMatchDao = tournamentMatchDao;
         _gameHistoryDao = gameHistoryDao;
-        _library = library;
+        _blueprintLibrary = bpLibrary;
+        _formatLibrary = formatLibrary;
     }
 
-    public void reloadTournaments() {
+    public PairingMechanism getPairingMechanism(Tournament.PairingType pairing) {
+        return Tournament.getPairingMechanism(pairing);
+    }
+
+    private void addImmediateRecurringQueue(String queueId, String queueName, String prefix, String formatCode) {
+        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
+                new TournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
+                        new TournamentParams(prefix, queueName, formatCode, 1500, 4, Tournament.PairingType.SINGLE_ELIMINATION, Tournament.PrizeType.ON_DEMAND)))
+        );
+    }
+
+    private void addRecurringScheduledQueue(String queueId, String queueName, String time, String prefix, String formatCode) {
+        _tournamentQueues.put(queueId, new RecurringScheduledQueue(this, queueId, queueName,
+                new TournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.ParseStringDate(time),
+                        new TournamentParams(prefix, queueName, formatCode, 0, 4, Tournament.PairingType.SWISS_3, Tournament.PrizeType.DAILY)), _tournamentRepeatPeriod, 4));
+    }
+
+    public void reloadTournaments(TableHolder tables) {
+        _tables = tables;
         clearCache();
         _tournamentQueues.clear();
 
-        _tournamentQueues.put("fotr_queue", new ImmediateRecurringQueue("fotr_queue", 1500, "fotr_block",
-                CollectionType.ALL_CARDS, "fotrQueue-", "Fellowship Block", 4,
-                true, this, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("pc_fotr_queue", new ImmediateRecurringQueue("pc_fotr_queue", 1500, "pc_fotr_block",
-                CollectionType.ALL_CARDS, "pcfotrQueue-", "PC-Fellowship", 4,
-                true, this, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("ts_queue", new ImmediateRecurringQueue("ts_queue", 1500, "towers_standard",
-                CollectionType.ALL_CARDS, "tsQueue-", "Towers Standard", 4,
-                true, this, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("movie_queue", new ImmediateRecurringQueue("movie_queue", 1500, "movie",
-                CollectionType.ALL_CARDS, "movieQueue-", "Movie Block", 4,
-                true, this, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("pc_movie_queue", new ImmediateRecurringQueue("pc_movie_queue", 1500, "pc_movie",
-                CollectionType.ALL_CARDS, "pcmovieQueue-", "PC-Movie", 4,
-                true, this, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("expanded_queue", new ImmediateRecurringQueue("expanded_queue", 1500, "expanded",
-                CollectionType.ALL_CARDS, "expandedQueue-", "Expanded", 4,
-                true, this, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("pc_expanded_queue", new ImmediateRecurringQueue("pc_expanded_queue", 1500, "pc_expanded",
-                CollectionType.ALL_CARDS, "pcexpandedQueue-", "PC-Expanded", 4,
-                true, this, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
+        addImmediateRecurringQueue("fotr_queue", "Fellowship Block", "fotrQueue-", "fotr_block");
+        addImmediateRecurringQueue("pc_fotr_queue", "PC-Fellowship", "pcfotrQueue-", "pc_fotr_block");
+        addImmediateRecurringQueue("ts_queue", "Towers Standard", "tsQueue-", "towers_standard");
+        addImmediateRecurringQueue("movie_queue", "Movie Block", "movieQueue-", "movie");
+        addImmediateRecurringQueue("pc_movie_queue", "PC-Movie", "pcmovieQueue-", "pc_movie");
+        addImmediateRecurringQueue("expanded_queue", "Expanded", "expandedQueue-", "expanded");
+        addImmediateRecurringQueue("pc_expanded_queue", "PC-Expanded", "pcexpandedQueue-", "pc_expanded");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {
-            _tournamentQueues.put("fotr_daily_eu", new RecurringScheduledQueue("fotr_daily_eu", DateUtils.ParseStringDate("2013-01-15 19:30:00"), _tournamentRepeatPeriod, "fotrDailyEu-", "Daily Gondor Fellowship Block", 0,
-                    true, CollectionType.ALL_CARDS, this, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
-                    "fotr_block", 4));
-            _tournamentQueues.put("fotr_daily_us", new RecurringScheduledQueue("fotr_daily_us", DateUtils.ParseStringDate("2013-01-16 00:30:00"), _tournamentRepeatPeriod, "fotrDailyUs-", "Daily Rohan Fellowship Block", 0,
-                    true, CollectionType.ALL_CARDS, this, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
-                    "fotr_block", 4));
-            _tournamentQueues.put("movie_daily_eu", new RecurringScheduledQueue("movie_daily_eu", DateUtils.ParseStringDate("2013-01-16 19:30:00"), _tournamentRepeatPeriod, "movieDailyEu-", "Daily Gondor Movie Block", 0,
-                    true, CollectionType.ALL_CARDS, this, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
-                    "movie", 4));
-            _tournamentQueues.put("movie_daily_us", new RecurringScheduledQueue("movie_daily_us", DateUtils.ParseStringDate("2013-01-17 00:30:00"), _tournamentRepeatPeriod, "movieDailyUs-", "Daily Rohan Movie Block", 0,
-                    true, CollectionType.ALL_CARDS, this, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
-                    "movie", 4));
+            addRecurringScheduledQueue("fotr_daily_eu", "Daily Gondor Fellowship Block", "2013-01-15 19:30:00", "fotrDailyEu-", "fotr_block");
+            addRecurringScheduledQueue("fotr_daily_us", "Daily Rohan Fellowship Block", "2013-01-16 00:30:00", "fotrDailyEu-", "fotr_block");
+            addRecurringScheduledQueue("movie_daily_eu", "Daily Gondor Movie Block", "2013-01-16 19:30:00", "fotrDailyEu-", "movie");
+            addRecurringScheduledQueue("movie_daily_us", "Daily Rohan Fellowship Block", "2013-01-17 00:30:00", "fotrDailyEu-", "movie");
+
         } catch (DateTimeParseException exp) {
             // Ignore, can't happen
             System.out.println(exp);
@@ -126,7 +127,7 @@ public class TournamentService {
             var queueID = entry.getKey();
             var queue = entry.getValue();
             visitor.visitTournamentQueue(queueID, queue.getCost(), queue.getCollectionType().getFullName(),
-                    formatLibrary.getFormat(queue.getFormat()).getName(), queue.getTournamentQueueName(),
+                    formatLibrary.getFormat(queue.getFormatCode()).getName(), queue.getInfo().Parameters().type.toString(), queue.getTournamentQueueName(),
                     queue.getPrizesDescription(), queue.getPairingDescription(), queue.getStartCondition(),
                     queue.getPlayerCount(), queue.getPlayerList(), queue.isPlayerSignedUp(player.getName()), queue.isJoinable());
         }
@@ -135,14 +136,14 @@ public class TournamentService {
             var tourneyID = entry.getKey();
             var tournament = entry.getValue();
             visitor.visitTournament(tourneyID, tournament.getCollectionType().getFullName(),
-                    formatLibrary.getFormat(tournament.getFormat()).getName(), tournament.getTournamentName(), tournament.getPlayOffSystem(),
+                    formatLibrary.getFormat(tournament.getFormatCode()).getName(), tournament.getTournamentName(), tournament.getInfo().Parameters().type.toString(), tournament.getPlayOffSystem(),
                     tournament.getTournamentStage().getHumanReadable(),
-                    tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()));
+                    tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()), tournament.isPlayerAbandoned(player.getName()));
         }
 
     }
 
-    public boolean cleanupTournamentQueues(HallServer hall) throws SQLException, IOException {
+    public boolean processTournamentQueues() throws SQLException, IOException {
         boolean queuesChanged = false;
         for (var entry : new HashMap<>(_tournamentQueues).entrySet()) {
             var queueID = entry.getKey();
@@ -163,13 +164,18 @@ public class TournamentService {
         return queuesChanged;
     }
 
-    public boolean cleanupTournaments(HallServer hall) throws SQLException, IOException {
+    public boolean processTournaments(HallServer hall) {
         boolean tournamentsChanged = false;
         for (var entry : new HashMap<>(_activeTournaments).entrySet()) {
             var tourneyID = entry.getKey();
             var tourney = entry.getValue();
 
-            tournamentsChanged |= tourney.advanceTournament(hall.getTournamentCallback(tourney), _collectionsManager);
+            TournamentCallback tournamentCallback = hall.getTournamentCallback(tourney);
+            List<TournamentProcessAction> actions =  tourney.advanceTournament(_collectionsManager);
+            tournamentsChanged |= !actions.isEmpty();
+            for (TournamentProcessAction action : actions) {
+                action.process(tournamentCallback);
+            }
             if (tourney.getTournamentStage() == Tournament.Stage.FINISHED)
                 _activeTournaments.remove(tourneyID);
         }
@@ -177,14 +183,13 @@ public class TournamentService {
         return tournamentsChanged;
     }
 
-    public boolean refreshQueues(HallServer hall) {
+    public boolean refreshQueues() {
         boolean queuesChanged = false;
-        var unstartedTournamentQueues = getUnstartedScheduledTournamentQueues(
-                ZonedDateTime.now().plusDays(_scheduledTournamentLoadTime));
+        var unstartedTournamentQueues = retrieveUnstartedScheduledTournamentQueues(ZonedDateTime.now().plusDays(_scheduledTournamentLoadTime));
         for (var unstartedTourney : unstartedTournamentQueues) {
             String id = unstartedTourney.tournament_id;
             if (!_tournamentQueues.containsKey(id)) {
-                var scheduledTourney = new ScheduledTournamentQueue(id, this, _productLibrary, unstartedTourney);
+                var scheduledTourney = getTournamentQueue(unstartedTourney);
                 _tournamentQueues.put(id, scheduledTourney);
                 queuesChanged = true;
             }
@@ -193,43 +198,47 @@ public class TournamentService {
         return queuesChanged;
     }
 
-    public void addPlayer(String tournamentId, String playerName, LotroDeck deck) {
+    public DBDefs.Tournament retrieveTournamentData(String tournamentId) {
+        return _tournamentDao.getTournament(tournamentId);
+    }
+
+    public void recordTournamentPlayer(String tournamentId, String playerName, LotroDeck deck) {
         _tournamentPlayerDao.addPlayer(tournamentId, playerName, deck);
     }
 
-    public void dropPlayer(String tournamentId, String playerName) {
+    public void recordPlayerTournamentAbandon(String tournamentId, String playerName) {
         _tournamentPlayerDao.dropPlayer(tournamentId, playerName);
     }
 
-    public Set<String> getPlayers(String tournamentId) {
+    public Set<String> retrieveTournamentPlayers(String tournamentId) {
         return _tournamentPlayerDao.getPlayers(tournamentId);
     }
 
-    public Map<String, LotroDeck> getPlayerDecks(String tournamentId, String format) {
+    public Map<String, LotroDeck> retrievePlayerDecks(String tournamentId, String format) {
         return _tournamentPlayerDao.getPlayerDecks(tournamentId, format);
     }
 
-    public Set<String> getDroppedPlayers(String tournamentId) {
+    public Set<String> retrieveAbandonedPlayers(String tournamentId) {
         return _tournamentPlayerDao.getDroppedPlayers(tournamentId);
     }
 
-    public LotroDeck getPlayerDeck(String tournamentId, String player, String format) {
+    public LotroDeck retrievePlayerDeck(String tournamentId, String player, String format) {
         return _tournamentPlayerDao.getPlayerDeck(tournamentId, player, format);
     }
 
-    public void addMatch(String tournamentId, int round, String playerOne, String playerTwo) {
+    public void recordMatchup(String tournamentId, int round, String playerOne, String playerTwo) {
         _tournamentMatchDao.addMatch(tournamentId, round, playerOne, playerTwo);
     }
 
-    public void setMatchResult(String tournamentId, int round, String winner) {
+    public void recordMatchupResult(String tournamentId, int round, String winner) {
         _tournamentMatchDao.setMatchResult(tournamentId, round, winner);
     }
 
-    public void setPlayerDeck(String tournamentId, String player, LotroDeck deck) {
+    public void updateRecordedPlayerDeck(String tournamentId, String player, LotroDeck deck) {
         _tournamentPlayerDao.updatePlayerDeck(tournamentId, player, deck);
     }
 
-    public List<TournamentMatch> getMatches(String tournamentId) {
+    public List<TournamentMatch> retrieveMatchups(String tournamentId) {
         var dbMatches = _tournamentMatchDao.getMatches(tournamentId);
         var matches = new ArrayList<TournamentMatch>();
         for(var dbmatch : dbMatches) {
@@ -238,30 +247,66 @@ public class TournamentService {
         return matches;
     }
 
-    public List<DBDefs.GameHistory> getGames(String tournamentName) {
+    public List<DBDefs.GameHistory> getRecordedGames(String tournamentName) {
         return _gameHistoryDao.getGamesForTournament(tournamentName);
     }
 
     public Tournament addTournament(TournamentInfo info) {
-
         _tournamentDao.addTournament(info.ToDB());
-        return createTournamentAndStoreInCache(info);
+        return upsertTournamentInCache(info);
     }
 
-    public void updateTournamentStage(String tournamentId, Tournament.Stage stage) {
+    public boolean addScheduledTournament(TournamentInfo info) {
+        if (_tournamentQueues.containsKey(info._params.tournamentId))
+            return false;
+
+        if(_tournamentDao.getScheduledTournament(info._params.tournamentId) != null)
+            return false;
+
+        _tournamentDao.addScheduledTournament(info.ToScheduledDB());
+        var scheduledTourney = getTournamentQueue(info);
+        _tournamentQueues.put(info._params.tournamentId, scheduledTourney);
+
+        return true;
+    }
+
+    public TournamentQueue getTournamentQueue(TournamentInfo info) {
+        if(info.Parameters().type == Tournament.TournamentType.SEALED) {
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, (SealedTournamentInfo) info);
+        }
+        else if(info.Parameters().type == Tournament.TournamentType.CONSTRUCTED) {
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
+        }
+
+        return null;
+    }
+
+    public TournamentQueue getTournamentQueue(DBDefs.ScheduledTournament tourney) {
+        var type = Tournament.TournamentType.parse(tourney.type);
+        if(type == Tournament.TournamentType.SEALED) {
+            return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
+                    new SealedTournamentInfo(this, _productLibrary, _formatLibrary, tourney));
+        }
+        else if(type == Tournament.TournamentType.CONSTRUCTED) {
+            return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
+                    new TournamentInfo(this, _productLibrary, _formatLibrary, tourney));
+        }
+
+        return null;
+    }
+
+    public void recordTournamentStage(String tournamentId, Tournament.Stage stage) {
         _tournamentDao.updateTournamentStage(tournamentId, stage);
     }
 
-    public void updateTournamentRound(String tournamentId, int round) {
+    public void recordTournamentRound(String tournamentId, int round) {
         _tournamentDao.updateTournamentRound(tournamentId, round);
     }
 
     public List<Tournament> getOldTournaments(ZonedDateTime since) {
         List<Tournament> result = new ArrayList<>();
         for (var dbinfo : _tournamentDao.getFinishedTournamentsSince(since)) {
-            Tournament tournament = _activeTournaments.get(dbinfo.tournament_id);
-            if (tournament == null)
-                tournament = createTournamentAndStoreInCache(new TournamentInfo(_productLibrary, dbinfo));
+            var tournament = upsertTournamentInCache(dbinfo);
             result.add(tournament);
         }
         return result;
@@ -270,9 +315,7 @@ public class TournamentService {
     public List<Tournament> getLiveTournaments() {
         List<Tournament> result = new ArrayList<>();
         for (var dbinfo : _tournamentDao.getUnfinishedTournaments()) {
-            Tournament tournament = _activeTournaments.get(dbinfo.tournament_id);
-            if (tournament == null)
-                tournament = createTournamentAndStoreInCache(new TournamentInfo(_productLibrary, dbinfo));
+            var tournament = upsertTournamentInCache(dbinfo);
             result.add(tournament);
         }
         return result;
@@ -285,42 +328,93 @@ public class TournamentService {
             if (dbinfo == null)
                 return null;
 
-            tournament = createTournamentAndStoreInCache(new TournamentInfo(_productLibrary, dbinfo));
+            tournament = upsertTournamentInCache(dbinfo);
         }
         return tournament;
     }
 
-    private Tournament createTournamentAndStoreInCache(TournamentInfo info) {
+    public synchronized CollectionType getCollectionTypeByCode(String collectionTypeCode) {
+        for (var tourney : getLiveTournaments()) {
+            var collection = tourney.getInfo().Collection;
+            if(collection != null && collection.getCode().equals(collectionTypeCode))
+                return collection;
+        }
+        return null;
+    }
+
+    public DBDefs.ScheduledTournament getScheduledTournamentById(String tournamentId) {
+        try {
+            return _tournamentDao.getScheduledTournament(tournamentId);
+        }
+        catch(NoSuchElementException ex) {
+            return null;
+        }
+    }
+
+    private Tournament upsertTournamentInCache(TournamentInfo info) {
         Tournament tournament;
         try {
-            DraftPack draftPack = null;
-            //The below appears to be half-finished and completely pointless
-//            String draftType = info.getDraftType();
-//            if (draftType != null)
-//                _draftPackStorage.getDraftPack(draftType);
+            String tid = info.Parameters().tournamentId;
+            tournament = _activeTournaments.get(tid);
+            if (tournament == null) {
+                if(info.Parameters().type == Tournament.TournamentType.SEALED) {
+                    tournament = new SealedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                }
+                else if(info.Parameters().type == Tournament.TournamentType.CONSTRUCTED) {
+                    tournament = new ConstructedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                }
 
-            tournament = new DefaultTournament(this, _collectionsManager, _productLibrary, null, info);
-
+                _activeTournaments.put(tid, tournament);
+            }
+            else {
+                tournament.RefreshTournamentInfo();;
+            }
         } catch (Exception exp) {
-            throw new RuntimeException("Unable to create Tournament", exp);
+            throw new RuntimeException("Unable to create/update Tournament", exp);
         }
-        _activeTournaments.put(tournament.getTournamentId(), tournament);
+
         return tournament;
     }
 
-    public void addRoundBye(String tournamentId, String player, int round) {
+    private Tournament upsertTournamentInCache(DBDefs.Tournament data) {
+        Tournament tournament;
+        try {
+            String tid = data.tournament_id;
+            var type = Tournament.TournamentType.parse(data.type);
+            tournament = _activeTournaments.get(tid);
+            if (tournament == null) {
+                if(type == Tournament.TournamentType.SEALED) {
+                    tournament = new SealedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                }
+                else if(type == Tournament.TournamentType.CONSTRUCTED) {
+                    tournament = new ConstructedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                }
+
+                _activeTournaments.put(tid, tournament);
+            }
+            else {
+                tournament.RefreshTournamentInfo();;
+            }
+        } catch (Exception exp) {
+            throw new RuntimeException("Unable to create/update Tournament", exp);
+        }
+
+        return tournament;
+    }
+
+    public void recordTournamentRoundBye(String tournamentId, String player, int round) {
         _tournamentMatchDao.addBye(tournamentId, player, round);
     }
 
-    public Map<String, Integer> getPlayerByes(String tournamentId) {
+    public Map<String, Integer> retrieveTournamentByes(String tournamentId) {
         return _tournamentMatchDao.getPlayerByes(tournamentId);
     }
 
-    public List<DBDefs.ScheduledTournament> getUnstartedScheduledTournamentQueues(ZonedDateTime tillDate) {
+    public List<DBDefs.ScheduledTournament> retrieveUnstartedScheduledTournamentQueues(ZonedDateTime tillDate) {
         return _tournamentDao.getUnstartedScheduledTournamentQueues(tillDate);
     }
 
-    public void updateScheduledTournamentStarted(String scheduledTournamentId) {
+    public void recordScheduledTournamentStarted(String scheduledTournamentId) {
         _tournamentDao.updateScheduledTournamentStarted(scheduledTournamentId);
     }
 }

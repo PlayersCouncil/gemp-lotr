@@ -1,10 +1,6 @@
 package com.gempukku.lotro.common;
 
-import com.sun.source.doctree.IndexTree;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -30,11 +26,11 @@ public class DBDefs {
         public LocalDateTime end_date;
 
         public ZonedDateTime GetUTCStartDate() {
-            return ZonedDateTime.of(start_date, ZoneId.of("UTC"));
+            return DateUtils.ParseDate(start_date);
         }
 
         public ZonedDateTime GetUTCEndDate() {
-            return ZonedDateTime.of(end_date, ZoneId.of("UTC"));
+            return DateUtils.ParseDate(end_date);
         }
 
         public String format_name;
@@ -73,11 +69,11 @@ public class DBDefs {
         public LocalDateTime created_date;
         public LocalDateTime modified_date;
         public ZonedDateTime GetUTCCreatedDate() {
-            return ZonedDateTime.of(created_date, ZoneId.of("UTC"));
+            return ZonedDateTime.of(created_date, DateUtils.UTC);
         }
 
         public ZonedDateTime GetUTCModifiedDate() {
-            return ZonedDateTime.of(modified_date, ZoneId.of("UTC"));
+            return ZonedDateTime.of(modified_date, DateUtils.UTC);
         }
         public String notes;
     }
@@ -119,24 +115,21 @@ public class DBDefs {
     public static class Tournament {
         public int id;
         public String tournament_id; //255
+        public String name; //255
         public LocalDateTime start_date;
         public ZonedDateTime GetUTCStartDate() {
-            return ZonedDateTime.of(start_date, ZoneId.of("UTC"));
+            return ZonedDateTime.of(start_date, DateUtils.UTC);
         }
-        public String draft_type; //45
-        public String name; //255
-        public String format; //255
-        public String collection; //255
+        public String type; //45
+        public String parameters; //5000
+
         public String stage; //45
         public int round;
-        public boolean manual_kickoff;
-        public String pairing; //45
-        public String prizes; //45
-
-
     }
 
     public static class ScheduledTournament {
+
+        //id, tournament_id, name, start_date, parameters, started
         public int id;
         public String tournament_id; //45
         public String name; //255
@@ -144,15 +137,11 @@ public class DBDefs {
         public LocalDateTime start_date;
 
         public ZonedDateTime GetUTCStartDate() {
-            return ZonedDateTime.of(start_date, ZoneId.of("UTC"));
+            return ZonedDateTime.of(start_date, DateUtils.UTC);
         }
 
-        public int cost;
-        public String playoff; //45
-        public String tiebreaker; //45
-        public String prizes; //45
-        public int minimum_players;
-        public boolean manual_kickoff;
+        public String type; //45
+        public String parameters; //5000
         public boolean started;
     }
 
@@ -163,5 +152,24 @@ public class DBDefs {
         public String player_one; //45
         public String player_two; //45
         public String winner; //45
+    }
+
+    public static class League {
+        public int id;
+        public String name;
+        public long code;
+        public String type;
+        public String parameters;
+        public LocalDate start_date;
+        public LocalDate end_date;
+        public int status;
+        public int cost;
+
+        public ZonedDateTime GetUTCStart() {
+            return DateUtils.ParseDate(start_date);
+        }
+        public ZonedDateTime GetUTCEnd() {
+            return DateUtils.ParseDate(end_date);
+        }
     }
 }

@@ -1,8 +1,9 @@
+<link rel="stylesheet" type="text/css" href="css/gemp-001/hall.css">
 <script type="text/javascript">
 function gatherData(formElem) {
 	var data = {};
 
-	var inputs = $("input[type='text'], option:selected", formElem).each(
+	var inputs = $("input[type='text'], input[type='number'], option:selected", formElem).each(
 		function () {
 			
 			var input = $(this);
@@ -49,6 +50,7 @@ $(document).ready(
 
 				var leagueName = league.getAttribute("name");
 				var cost = parseInt(league.getAttribute("cost"));
+				var collection = league.getAttribute("collection");
 
 				previewDialog.append("<div class='leagueName'>" + leagueName + "</div>");
 
@@ -64,7 +66,6 @@ $(document).ready(
 					var serieEnd = serie.getAttribute("end");
 					var maxMatches = serie.getAttribute("maxMatches");
 					var format = serie.getAttribute("format");
-					var collection = serie.getAttribute("collection");
 					var limited = serie.getAttribute("limited");
 
 					var serieText = serieName + " - " + getDateString(serieStart) + " to " + getDateString(serieEnd);
@@ -75,32 +76,64 @@ $(document).ready(
 
 					previewDialog.append("<div>Maximum ranked matches in serie: " + maxMatches + "</div>");
 				}
+				
+				var maxRepeatMatches = parseInt(league.getAttribute("maxRepeatMatches"));
+				var topPrize = league.getAttribute("topPrize");
+				var topCutoff = parseInt(league.getAttribute("topCutoff"));
+				var participationPrize = league.getAttribute("participationPrize");
+				var participationGames = parseInt(league.getAttribute("participationGames"));
+				
+				if(maxRepeatMatches > 1) {
+					previewDialog.append("<div>Players may face the same opponent up to <b>" + maxRepeatMatches + "</b> times.</div>");
+				}
+				
+				if(topPrize != null && topPrize != "") {
+					previewDialog.append("<div>Top " + topCutoff + " players will receive " + topPrize + "</div>");
+				}
+				
+				if(participationPrize != null && participationPrize != "") {
+					previewDialog.append("<div>Any who play at least " + participationGames + " games will receive " + participationPrize + "</div>");
+				}
+				
 			}
 		};
 		
 		var now = new Date();
 		var nowStr = "" + now.getFullYear() + String(1 + now.getMonth()).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
-		$("#sealed-start").val(nowStr);
-		$("#solo-draft-start").val(nowStr);
-		$("#constructed-start").val(nowStr);
+		$("#sealed-start").val(now.toISOString().substr(0, 10));
+		$("#solo-draft-start").val(now.toISOString().substr(0, 10));
+		$("#constructed-start").val(now.toISOString().substr(0, 10));
 
 		var previewError = function (xhr) {
 			previewDialog.dialog("close");
 			alert("Invalid parameters specified - error code: " + xhr.status);
 		};
 		
+		updateDescPreview("#sealed-desc", "#sealed-desc-preview");
+		
 		$("#preview-sealed-league-button").button().click(
 			function () {
 				let resultdiv = $("#sealed-league-result");
 				resultdiv.html("Processing...");
-				
-				hall.comm.previewSealedLeague(
-					$("#sealed-format").val(), 
-					$("#sealed-start").val(), 
+						
+				hall.comm.processSealedLeague(
+					true,
+					$("#sealed-start").val().replaceAll("-",""), 
+					$("#sealed-name").val(),
+					$("#sealed-cost").val(),
+					$("#sealed-format").val(),
 					$("#sealed-duration").val(),
 					$("#sealed-matches").val(),
-					$("#sealed-name").val(),
-					$("#sealed-cost").val(), 
+					
+					$("#sealed-repeat-games").val(),
+					$("#sealed-invite-only").prop('checked'),
+					$("#sealed-desc").val(),
+					
+					$("#sealed-top-prize").val(),
+					$("#sealed-top-pos").val(),
+					$("#sealed-part-prize").val(),
+					$("#sealed-part-games").val(),
+					
 					function (xml) {
 						previewDialog.html("");
 						displayPreview(xml);
@@ -113,32 +146,55 @@ $(document).ready(
 			function () {
 				let resultdiv = $("#sealed-league-result");
 				resultdiv.html("Processing...");
-				
-				hall.comm.addSealedLeague(
-					$("#sealed-format").val(), 
-					$("#sealed-start").val(), 
+						
+				hall.comm.processSealedLeague(
+					false,
+					$("#sealed-start").val().replaceAll("-",""), 
+					$("#sealed-name").val(),
+					$("#sealed-cost").val(),
+					$("#sealed-format").val(),
 					$("#sealed-duration").val(),
 					$("#sealed-matches").val(),
-					$("#sealed-name").val(),
-					$("#sealed-cost").val(), 
+					
+					$("#sealed-repeat-games").val(),
+					$("#sealed-invite-only").prop('checked'),
+					$("#sealed-desc").val(),
+					
+					$("#sealed-top-prize").val(),
+					$("#sealed-top-pos").val(),
+					$("#sealed-part-prize").val(),
+					$("#sealed-part-games").val(),
+					
 					function (xml) {
-						resultdiv.html("OK");
+						resultdiv.html("League created successfully.");
 					}, leagueErrorMap(resultdiv));
 				});
 		
 		
+		updateDescPreview("#solo-draft-desc", "#solo-draft-desc-preview");
 		$("#preview-solo-draft-league-button").button().click(
 			function () {
 				let resultdiv = $("#solo-draft-league-result");
 				resultdiv.html("Processing...");
-				
-				hall.comm.previewSoloDraftLeague(
-					$("#solo-draft-format").val(), 
-					$("#solo-draft-start").val(), 
+						
+				hall.comm.processSoloDraftLeague(
+					true,
+					$("#solo-draft-start").val().replaceAll("-",""), 
+					$("#solo-draft-name").val(),
+					$("#solo-draft-cost").val(),
+					$("#solo-draft-format").val(),
 					$("#solo-draft-duration").val(),
 					$("#solo-draft-matches").val(),
-					$("#solo-draft-name").val(),
-					$("#solo-draft-cost").val(), 
+					
+					$("#solo-draft-repeat-games").val(),
+					$("#solo-draft-invite-only").prop('checked'),
+					$("#solo-draft-desc").val(),
+					
+					$("#solo-draft-top-prize").val(),
+					$("#solo-draft-top-pos").val(),
+					$("#solo-draft-part-prize").val(),
+					$("#solo-draft-part-games").val(),
+					
 					function (xml) {
 						previewDialog.html("");
 						displayPreview(xml);
@@ -151,19 +207,31 @@ $(document).ready(
 			function () {
 				let resultdiv = $("#solo-draft-league-result");
 				resultdiv.html("Processing...");
-				
-				hall.comm.addSoloDraftLeague(
-					$("#solo-draft-format").val(), 
-					$("#solo-draft-start").val(), 
+						
+				hall.comm.processSoloDraftLeague(
+					false,
+					$("#solo-draft-start").val().replaceAll("-",""), 
+					$("#solo-draft-name").val(),
+					$("#solo-draft-cost").val(),
+					$("#solo-draft-format").val(),
 					$("#solo-draft-duration").val(),
 					$("#solo-draft-matches").val(),
-					$("#solo-draft-name").val(),
-					$("#solo-draft-cost").val(), 
+					
+					$("#solo-draft-repeat-games").val(),
+					$("#solo-draft-invite-only").prop('checked'),
+					$("#solo-draft-desc").val(),
+					
+					$("#solo-draft-top-prize").val(),
+					$("#solo-draft-top-pos").val(),
+					$("#solo-draft-part-prize").val(),
+					$("#solo-draft-part-games").val(),
+					
 					function (xml) {
-						resultdiv.html("OK");
+						resultdiv.html("League created successfully.");
 					}, leagueErrorMap(resultdiv));
 				});
 		
+		updateDescPreview("#constructed-desc", "#constructed-desc-preview");
 		$("#preview-constructed-league-button").button().click(
 			function () {
 				let resultdiv = $("#constructed-league-result");
@@ -171,12 +239,21 @@ $(document).ready(
 				
 				var data = gatherData($(".series"))
 				
-				hall.comm.previewConstructedLeague(
-					$("#constructed-start").val(), 
+				hall.comm.processConstructedLeague(
+					true,
+					$("#constructed-start").val().replaceAll("-",""), 
 					$("#constructed-collection").val(),
-					$("#constructed-prize").val(),
 					$("#constructed-name").val(),
 					$("#constructed-cost").val(),
+					$("#constructed-repeat-games").val(),
+					$("#constructed-invite-only").prop('checked'),
+					$("#constructed-desc").val(),
+					
+					$("#constructed-top-prize").val(),
+					$("#constructed-top-pos").val(),
+					$("#constructed-part-prize").val(),
+					$("#constructed-part-games").val(),
+					
 					data.format,
 					data.serieDuration,
 					data.maxMatches,
@@ -195,26 +272,27 @@ $(document).ready(
 				
 				var data = gatherData($(".series"))
 				
-				hall.comm.addConstructedLeague(
-			   		$("#constructed-start").val(), 
-			   		$("#constructed-collection").val(),
-			   		$("#constructed-prize").val(),
-			   		$("#constructed-name").val(),
-			   		$("#constructed-cost").val(),
-			   		data.format,
-			   		data.serieDuration,
-			   		data.maxMatches,
+				hall.comm.processConstructedLeague(
+					false,
+					$("#constructed-start").val().replaceAll("-",""), 
+					$("#constructed-collection").val(),
+					$("#constructed-name").val(),
+					$("#constructed-cost").val(),
+					$("#constructed-repeat-games").val(),
+					$("#constructed-invite-only").prop('checked'),
+					$("#constructed-desc").val(),
+					
+					$("#constructed-top-prize").val(),
+					$("#constructed-top-pos").val(),
+					$("#constructed-part-prize").val(),
+					$("#constructed-part-games").val(),
+					
+					data.format,
+					data.serieDuration,
+					data.maxMatches,
 					function (xml) {
-						resultdiv.html("OK");
+						resultdiv.html("League created successfully.");
 					}, leagueErrorMap(resultdiv));
-				});
-
-
-		$("#previewConstructed").click(
-				function () {
-					submitFormToAddress("/gemp-lotr-server/admin/previewConstructedLeague", $("#addConstructedForm").eq(0), displayPreview, previewError);
-					previewDialog.html("");
-					previewDialog.dialog("open");
 				});
 
 		$("#add-constructed-series-button").button().click(
@@ -222,29 +300,17 @@ $(document).ready(
 					$(".serieData").last().clone().appendTo(".series");
 				});
 		
-		$("#add-additional-table-button").button().click(
-				function () {
-					$(".tabledata").last().clone().appendTo(".tablesgroup");
-				});
-		
-		$("#add-tables-button").button().click(
+		$("#add-league-players-button").button().click(
 			function () {
-				let resultdiv = $("#tables-result");
+				let resultdiv = $("#league-add-result");
 				resultdiv.html("Processing...");
-				
-				var data = gatherData($(".tablesgroup"))
-				
-				console.log(data);
-				
-				hall.comm.addTables(
-			   		$("#table-name").val(), 
-			   		$("#table-tournament").val(),
-			   		$("#table-format").val(),
-			   		$("#table-timer").val(),
-			   		data.playerone,
-			   		data.playertwo,
+						
+				hall.comm.addLeaguePlayers(
+					$("#league-to-add").val(),
+					$("#players-to-add").val().split('\n'),
+					
 					function (xml) {
-						resultdiv.html("OK");
+						resultdiv.html("Added players to league successfully.");
 					}, leagueErrorMap(resultdiv));
 				});
 		
@@ -253,9 +319,9 @@ $(document).ready(
 			function (json) 
 			{
 				//console.log(json);
-				let drafts = json.draftTemplates;
-				let formats = json.formats;
-				let sealed = json.sealedTemplates
+				let drafts = json.DraftTemplates;
+				let formats = json.Formats;
+				let sealed = json.SealedTemplates
 				//console.log(drafts);
 				for (var prop in drafts) {
 					if (Object.prototype.hasOwnProperty.call(drafts, prop)) {
@@ -310,29 +376,6 @@ $(document).ready(
 				}
 				sortOptionsByName("#sealed-format");
 				
-				for (var prop in formats) {
-					if (Object.prototype.hasOwnProperty.call(formats, prop)) {
-						//console.log(prop);
-						
-						if(formats[prop].name.includes("Limited"))
-							continue;
-						
-						let num = ("0000" + formats[prop].order).substr(-4);
-						
-						var item = $("<option/>")
-							.attr("value", prop)
-							.text("" + num + " - " + formats[prop].name);
-						$("#table-format").append(item);
-					}
-				}
-				sortOptionsByName("#table-format");
-				
-				$("#table-format option").each(function(index) {
-					//console.log(this);
-					let newText = $(this).text().replace(/\d+ - /, '');
-					//console.log(newText);
-					$(this).text(newText);
-				});
 			}, 
 			{
 				"400":function () 
@@ -341,6 +384,15 @@ $(document).ready(
 				}
 			});
 	});
+
+
+function updateDescPreview(text, preview) {
+	
+	$(text).on("input", function() {
+		$(preview).html($(text).val());
+	})
+	//oninput='$("#solo-draft-desc-preview").html($("#solo-draft-desc").val());'
+}
 
 function sortOptionsByName(selector) {
 	$(selector).html($(selector + " option").sort(function (a, b) {
@@ -397,131 +449,388 @@ function leagueErrorMap(outputControl, callback=null) {
 }
 </script>
 <div class="article">
-	<h1>Add Sealed League</h1>
 	
-	<div>
-		Name: <input type="text" id="sealed-name"><br/>
-		Cost (in silver): <input type="text" id="sealed-cost" value="50"><br/>
-		Start (YYYYMMDD): <input type="text" id="sealed-start"><br/>
-		Format:
-		<select id="sealed-format">
-			<!-- <option value="fotr_block">Fellowship block</option>
-			<option value="ttt_block">Towers block</option>
-			<option value="movie">King (Movie) block</option>
-			<option value="war_block">War of the Ring block</option>
-			<option value="hunters_block">Hunters block</option>
-			<option value="movie_special">Movie Special block</option>
-			<option value="ts_special">TS Special block</option> -->
-		</select><br/>
-		Series duration in days: <input type="text" id="sealed-duration" value="7"><br/>
-		Maximum matches in series: <input type="text" id="sealed-matches" value="5"><br/>
-		<button id="preview-sealed-league-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
-			Preview Sealed League
-		</button>
+	<div id="sealed-league-section" class="league-form">
+		<h1>Add Sealed League</h1>
+		<div class="flex-horiz">
+			<div class="label-column">Name: </div>
+			<input type="text" id="sealed-name" class="flex-fill">
+		</div>
 		
-		<button id="add-sealed-league-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
-			Add Sealed League
-		</button> <span id="sealed-league-result" style="display:inline-block;">Ready.</span>
-	</div>
-
-
-	<h1>Add Solo-Draft League</h1>
-	<div>
-		Name: <input type="text" id="solo-draft-name"><br/>
-		Cost (in silver): <input type="text" id="solo-draft-cost" value="50"><br/>
-		Start (YYYYMMDD): <input type="text" id="solo-draft-start"><br/>
-		Format:
-		<select id="solo-draft-format">
-			<!-- <option value="test_draft">Test Draft</option>
-			<option value="fotr_draft">Fellowship Draft</option>
-			<option value="ttt_draft">Two Towers Draft</option>
-			<option value="hobbit_random_draft">Hobbit Random Draft</option> -->
-		</select><br/>
-		Series duration in days: <input type="text" id="solo-draft-duration" value="7"><br/>
-		Maximum matches in series: <input type="text" id="solo-draft-matches" value="5"><br/>
-		<input id="previewSoloDraft" type="button" value="Preview solo draft league">
-		<input type="submit" value="Add solo draft league">
-		
-		<button id="preview-solo-draft-league-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
-			Preview Solo-Draft League
-		</button>
-		
-		<button id="add-solo-draft-league-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
-			Add Solo-Draft League
-		</button> <span id="solo-draft-league-result" style="display:inline-block;">Ready.</span>
-	</div>
-
-	<h1>Add Constructed League</h1>
-
-	<div>
-		Name: <input type="text" id="constructed-name"><br/>
-		Cost (in silver): <input type="text" id="constructed-cost" value="50"><br/>
-		Start (YYYYMMDD): <input type="text" id="constructed-start"><br/>
-		Prize multiplier (e.g. 0.7): <input type="text" id="constructed-prize" value="0.7"><br/>
-		Collection:
-		<select id="constructed-collection">
-			<option value="default">All cards</option>
-			<option value="permanent+trophy">My cards</option>
-		</select><br/>
-
-		<div class="series">
-			<div class="serieData">
-				<b>Series definition:</b><br/>
-				Format:
-				<select id="constructed-format" name="format">
-				</select><br/>
-				Serie duration in days: <input type="text" name="serieDuration" value="7"><br/>
-				Maximum matches per serie: <input type="text" name="maxMatches" value="5"><br/>
-
+		<div class="flex-horiz">
+			<div class="label-column">Description: </div>
+			<div class="label-column flex-horiz flex-fill desc-div">
+				<div class="flex-vert" style="flex-basis:50%;">
+					<textarea type="text" id="sealed-desc" class="desc-area"></textarea>
+				</div>
+				<div id="sealed-desc-preview" class="desc-preview"></div>
 			</div>
 		</div>
 		
-		<button id="add-constructed-series-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
+		<div class="flex-horiz">
+			<div class="label-column">Cost (in silver): </div>
+			<input type="number" min="1" id="sealed-cost" value="50" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Start Date: </div>
+			<input type="date" id="sealed-start" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Format: </div>
+			<select id="sealed-format" name="format" class="flex-fill"></select>
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Max games against same opponent: </div>
+			<input type="number" min="1" id="sealed-repeat-games" value="1" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Serie duration in days: </div>
+			<input type="number" min="1" id="sealed-duration" name="serieDuration" value="7" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Max matches per serie: </div>
+			<input type="number" min="1" id="sealed-matches" name="maxMatches" value="5" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Invite only: </div>
+			<input type="checkbox" id="sealed-invite-only" />
+		</div>
+		
+		<div id="prize-info" style="display:none">
+			Prizes are defined in the following format:
+			
+			<pre>2x 9_1*</pre>
+			
+			<ul>
+				<li>
+					"2x" indicates 2 awarded copies (up to 4x, please)
+				</li>
+				<li>
+					"9_1" indicates "set 9, card 1" (you can think of it as the collector's info with the rarity replaced with _)
+				</li>
+				<li>
+					Last character is style; an optional "*" to make the copy foil or "T" to make it tengwar; omit this entirely for standard nonfoil. 
+				</li>
+			</ul> 
+		</div>
+		
+		<div style="display:none">
+		<div class="flex-horiz">
+			<div class="label-column">Top Prizes:</div>
+			<input type="text" id="sealed-top-prize" value="" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Top Prize Cutoff:</div>
+			<input type="number" min="1" id="sealed-top-pos" value="10" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Participation Prizes:</div>
+			<input type="text" id="sealed-part-prize" value="" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Participation Games:</div>
+			<input type="number" min="1" id="sealed-part-games" value="3" class="flex-fill">
+		</div>
+		</div>
+		
+		<button id="preview-sealed-league-button">
+			Preview Sealed League
+		</button>
+				
+		<button id="add-sealed-league-button" >
+			Add Sealed League
+		</button> 
+		<div id="sealed-league-result-label" class="flex-horiz result-label">
+			<div class="label">
+				<b>Result:</b>
+			</div>
+			<div id="sealed-league-result" class="flex-fill result-box">
+				Ready.
+			</div>
+		</div>
+	</div>
+		
+	
+	<br/><br/><hr><br/><br/>
+	
+
+	<div id="solo-draft-league-section" class="league-form">
+		<h1>Add Solo-Draft League</h1>
+		<div class="flex-horiz">
+			<div class="label-column">Name: </div>
+			<input type="text" id="solo-draft-name" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Description: </div>
+			<div class="label-column flex-horiz flex-fill desc-div">
+				<div class="flex-vert" style="flex-basis:50%;">
+					<textarea type="text" id="solo-draft-desc" class="desc-area"></textarea>
+				</div>
+				<div id="solo-draft-desc-preview" class="desc-preview"></div>
+			</div>
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Cost (in silver): </div>
+			<input type="number" min="1" id="solo-draft-cost" value="50" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Start Date: </div>
+			<input type="date" id="solo-draft-start" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Format: </div>
+			<select id="solo-draft-format" name="format" class="flex-fill"></select>
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Max games against same opponent: </div>
+			<input type="number" min="1" id="solo-draft-repeat-games" value="1" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Serie duration in days: </div>
+			<input type="number" min="1" id="solo-draft-duration" name="serieDuration" value="7" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Max matches per serie: </div>
+			<input type="number" min="1" id="solo-draft-matches" name="maxMatches" value="5" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Invite only: </div>
+			<input type="checkbox" id="solo-draft-invite-only" />
+		</div>
+		
+		<div id="prize-info" style="display:none">
+			Prizes are defined in the following format:
+			
+			<pre>2x 9_1*</pre>
+			
+			<ul>
+				<li>
+					"2x" indicates 2 awarded copies (up to 4x, please)
+				</li>
+				<li>
+					"9_1" indicates "set 9, card 1" (you can think of it as the collector's info with the rarity replaced with _)
+				</li>
+				<li>
+					Last character is style; an optional "*" to make the copy foil or "T" to make it tengwar; omit this entirely for standard nonfoil. 
+				</li>
+			</ul> 
+		</div>
+		
+		<div style="display:none">
+		<div class="flex-horiz">
+			<div class="label-column">Top Prizes:</div>
+			<input type="text" id="solo-draft-top-prize" value="" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Top Prize Cutoff:</div>
+			<input type="number" min="1" id="solo-draft-top-pos" value="10" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Participation Prizes:</div>
+			<input type="text" id="solo-draft-part-prize" value="" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Participation Games:</div>
+			<input type="number" min="1" id="solo-draft-part-games" value="3" class="flex-fill">
+		</div>
+		</div>
+		
+		<button id="preview-solo-draft-league-button">
+			Preview Solo-Draft League
+		</button>
+				
+		<button id="add-solo-draft-league-button" >
+			Add Solo-Draft League
+		</button> 
+		<div id="solo-draft-league-result-label" class="flex-horiz result-label">
+			<div class="label">
+				<b>Result:</b>
+			</div>
+			<div id="solo-draft-league-result" class="flex-fill result-box">
+				Ready.
+			</div>
+		</div>
+	</div>
+
+		
+	<br/><br/><hr><br/><br/>
+	
+
+	<div id="constructed-league-section" class="league-form">
+		<h1>Add Constructed League</h1>
+		<div class="flex-horiz">
+			<div class="label-column">Name: </div>
+			<input type="text" id="constructed-name" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Description: </div>
+			<div class="label-column flex-horiz flex-fill desc-div">
+				<div class="flex-vert" style="flex-basis:50%;">
+					<textarea type="text" id="constructed-desc" class="desc-area"></textarea>
+				</div>
+				<div id="constructed-desc-preview" class="desc-preview"></div>
+			</div>
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Cost (in silver): </div>
+			<input type="number" min="1" id="constructed-cost" value="50" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Start Date: </div>
+			<input type="date" id="constructed-start" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Max games against same opponent: </div>
+			<input type="number" min="1" id="constructed-repeat-games" value="1" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Invite only: </div>
+			<input type="checkbox" id="constructed-invite-only" />
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Collection: </div>
+			<select id="constructed-collection" class="flex-fill">
+				<option value="default">All cards</option>
+				<option value="permanent+trophy">My cards</option>
+			</select>
+		</div>
+		
+		<div id="prize-info" style="display:none">
+			Prizes are defined in the following format:
+			
+			<pre>2x 9_1*</pre>
+			
+			<ul>
+				<li>
+					"2x" indicates 2 awarded copies (up to 4x, please)
+				</li>
+				<li>
+					"9_1" indicates "set 9, card 1" (you can think of it as the collector's info with the rarity replaced with _)
+				</li>
+				<li>
+					Last character is style; an optional "*" to make the copy foil or "T" to make it tengwar; omit this entirely for standard nonfoil. 
+				</li>
+			</ul> 
+		</div>
+		<div style="display:none">
+		<div class="flex-horiz">
+			<div class="label-column">Top Prizes:</div>
+			<input type="text" id="constructed-top-prize" value="" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Top Prize Cutoff:</div>
+			<input type="number" min="1" id="constructed-top-pos" value="10" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Participation Prizes:</div>
+			<input type="text" id="constructed-part-prize" value="" class="flex-fill">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Participation Games:</div>
+			<input type="number" min="1" id="constructed-part-games" value="3" class="flex-fill">
+		</div>
+		</div>
+		
+		<div class="series" class="flex-vert">
+			<div class="serieData" >
+				<div><b>Serie</b></div>
+				<div class="flex-horiz">
+					<div class="label-column">Format: </div>
+					<select id="constructed-format" name="format" class="flex-fill"></select>
+				</div>
+				
+				<div class="flex-horiz">
+					<div class="label-column">Serie duration in days: </div>
+					<input type="number" min="1" name="serieDuration" value="7" class="flex-fill">
+				</div>
+				
+				<div class="flex-horiz">
+					<div class="label-column">Max matches per serie: </div>
+					<input type="number" min="1" name="maxMatches" value="5" class="flex-fill">
+				</div>
+			</div>
+		</div>
+		
+		<button id="add-constructed-series-button">
 			Add Another Serie
 		</button>
 		
-		<button id="preview-constructed-league-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
+		<button id="preview-constructed-league-button">
 			Preview Constructed League
 		</button>
 				
-		<button id="add-constructed-league-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
+		<button id="add-constructed-league-button" >
 			Add Constructed League
-		</button> <span id="constructed-league-result" style="display:inline-block;">Ready.</span>
-	</div>
-	
-	<h1>Manually Add Elimination Tables</h1>
-	<div>
-		Series Name: 
-			<input type="text" id="table-name"><br/>
-		Tournament (for decks): 
-			<input type="text" id="table-tournament"><br/>
-		Format:
-			<select id="table-format" name="format">
-			</select><br/>
-		Timer (player clock / timeout):
-			<select id="table-timer">
-				<option value="Competitive">Competitive (40/5)</option>
-				<option value="WC">Championship (20/10)</option>
-				<option value="WC_Expanded">Championship Expanded (25/10)</option>
-				<option value="Blitz!">Blitz (30/5)</option>
-				<option value="Default">Default (80/5)</option>
-				<option value="Slow">Slow (120/10)</option>
-			</select><br/>
-		<div class="tablesgroup">
-			<div class="tabledata">
-				<br/><b>Table definition:</b><br/>
-				Player 1: <input type="text" name="playerone" ><br/>
-				Player 2: <input type="text" name="playertwo" ><br/>
+		</button> 
+		<div id="constructed-league-result-label" class="flex-horiz result-label">
+			<div class="label">
+				<b>Result:</b>
+			</div>
+			<div id="constructed-league-result" class="flex-fill result-box">
+				Ready.
 			</div>
 		</div>
+	</div>
+	
+	<br/><br/><hr><br/><br/>
+	
+	<div class="league-form">
+		<h1>Add Players to League</h1>
+		<p>
+			<i>This is intended to be used for use with invite-only leagues, but may have uses elsewhere.</i>
+		</p>
 		
-		<button id="add-additional-table-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
-			Add Another Table
+		<div class="flex-horiz">
+			<div class="label-column">League ID: </div>
+			<input type="text" id="league-to-add">
+		</div>
+		
+		<div class="flex-horiz">
+			<div class="label-column">Players (1 per line): </div>
+			<textarea rows="5" cols="20" id="players-to-add" class="flex-fill"></textarea>
+		</div>
+		
+		<button id="add-league-players-button">
+			Add Players to League
 		</button>
-				
-		<button id="add-tables-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
-			Add Tables
-		</button> <span id="tables-result" style="display:inline-block;">Ready.</span>
+		
+		<div id="league-add-result-label" class="flex-horiz result-label">
+			<div class="label">
+				<b>Result:</b>
+			</div>
+			<div id="league-add-result" class="flex-fill result-box">
+				Ready.
+			</div>
+		</div>
 	</div>
 </div>
 
