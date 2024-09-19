@@ -181,7 +181,7 @@
 		culture: Moria
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -194,7 +194,7 @@
 				player: fp
 				cost: {
 					type: discard
-					filter: choose(side(free),possession)
+					select: choose(side(free),possession)
 					count: 2
 				}
 				effect: 
@@ -206,11 +206,11 @@
 					}
 					true: {
 						type: Exhaust
-						filter: choose(name(Boromir))
+						select: choose(name(Boromir))
 					}
 					false: {
 						type: wound
-						filter: choose(name(Boromir))
+						select: choose(name(Boromir))
 						times: 3
 					}
 				}

@@ -190,13 +190,16 @@
 		twilight: 0
 		type: Condition
 		target: name(Sam)
-		requires: [
-			{
-				type: canSpot
-				filter: nazgul
-			}
-		]
 		effects: [
+			{
+				type: toPlay
+				requires: [
+					{
+						type: canSpot
+						filter: nazgul
+					}
+				]
+			}
 			{
 				type: modifier
 				modifier: {

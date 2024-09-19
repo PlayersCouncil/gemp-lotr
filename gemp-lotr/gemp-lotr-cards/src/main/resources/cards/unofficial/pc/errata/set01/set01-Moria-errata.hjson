@@ -76,7 +76,7 @@
 			phase: Shadow
 			cost: {
 				type: exert
-				filter: choose(or(self,and(unique,culture(moria),orc)))
+				select: choose(or(self,and(unique,culture(moria),orc)))
 				count: 1
 				times: 1
 			}

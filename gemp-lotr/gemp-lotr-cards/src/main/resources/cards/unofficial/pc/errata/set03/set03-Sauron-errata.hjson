@@ -673,7 +673,7 @@
 		culture: Sauron
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -686,7 +686,7 @@
 				player: fp
 				cost: {
 					type: discard
-					filter: choose(elf)
+					select: choose(elf)
 					count: 2
 				}
 				effect: {
@@ -697,11 +697,11 @@
 					}
 					true: {
 						type: Exhaust
-						filter: choose(name(Galadriel))
+						select: choose(name(Galadriel))
 					}
 					false: {
 						type: wound
-						filter: choose(name(Galadriel))
+						select: choose(name(Galadriel))
 						times: 3
 					}
 				}
@@ -873,7 +873,7 @@
 		culture: Sauron
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -886,12 +886,12 @@
 				player: fp
 				cost: {
 					type: discard
-					filter: choose(side(free),condition)
+					select: choose(side(free),condition)
 					count: 2
 				}
 				effect: {
 					type: discard
-					filter: choose(name(Bilbo))
+					select: choose(name(Bilbo))
 				}
 			}
 		}

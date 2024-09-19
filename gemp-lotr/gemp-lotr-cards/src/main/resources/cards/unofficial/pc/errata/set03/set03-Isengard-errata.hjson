@@ -108,27 +108,34 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: Maneuver
-		requires: {
-			type: canSpot
-			filter: culture(isengard),minion
-		}
-		effects: {
-			type: event
-			effect: {
-				type: preventable
-				text: Would you like to add 2 burdens to prevent exhausting Aragorn?
-				player: fp
-				cost: {
-					type: addBurdens
-					amount: 2
-				}
+		timeword: Maneuver
+		effects: [
+			{
+				type: toPlay
+				requires: [
+					{
+						type: canSpot
+						filter: culture(isengard),minion
+					}
+				]
+			}
+			{
+				type: event
 				effect: {
-					type: exhaust
-					filter: choose(name(Aragorn))
+					type: preventable
+					text: Would you like to add 2 burdens to prevent exhausting Aragorn?
+					player: fp
+					cost: {
+						type: addBurdens
+						amount: 2
+					}
+					effect: {
+						type: exhaust
+						select: choose(name(Aragorn))
+					}
 				}
 			}
-		}
+		]
 		gametext: Spot an [isengard] minion to exhaust Aragorn. The Free Peoples player may add 2 burdens to prevent this. 
 		lore: “‘Where is the Ring?'”
 		promotext: ""

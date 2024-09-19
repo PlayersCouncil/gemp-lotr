@@ -185,7 +185,7 @@
 		culture: Ringwraith
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -201,12 +201,12 @@
 					forced: false
 					hand: fp
 					player: fp
-					filter: choose(culture(gandalf))
+					select: choose(culture(gandalf))
 					count: 2
 				}
 				effect: {
 					type: wound
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 					times: 2
 				}
 			}

@@ -26,12 +26,12 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: choose(your,character,not(enduring))
+				select: choose(your,character,not(enduring))
 				memorize: exertedCharacter
 			}
 			effect: {
 				type: modifyStrength
-				filter: memory(exertedCharacter)
+				select: memory(exertedCharacter)
 				amount: 2
 			}
 		}

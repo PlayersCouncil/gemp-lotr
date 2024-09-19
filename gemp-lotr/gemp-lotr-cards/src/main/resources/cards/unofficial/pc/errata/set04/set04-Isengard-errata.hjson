@@ -58,7 +58,7 @@
 					}
 					{
 						type: Discard
-						filter: memory(targetFort)
+						select: memory(targetFort)
 					}
 				]
 			}
