@@ -12,9 +12,10 @@ public interface TournamentQueue {
     String getID();
     int getCost();
 
-    String getFormat();
+    String getFormatCode();
 
     CollectionType getCollectionType();
+    TournamentInfo getInfo();
 
     String getTournamentQueueName();
 

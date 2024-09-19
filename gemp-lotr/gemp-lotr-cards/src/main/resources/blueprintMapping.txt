@@ -392,3 +392,7 @@ gl_theOneRing,1_2
 8_127,8_92
 #Evil-smelling Fens FA
 5_129,5_22
+#Legolas, Greenleaf FA
+1_391,1_50
+#2023 WC - Non-branded Goblin Runner FA for general consumption
+1_392,1_178

@@ -9,13 +9,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SealedLeagueDefinition {
+public class SealedEventDefinition {
     private final String _name;
     private final String _id;
     private final LotroFormat _format;
     private final List<List<CardCollection.Item>> _seriesProduct = new ArrayList<>();
 
-    public SealedLeagueDefinition(String name, String id, LotroFormat format, List<List<String>> product) {
+    public SealedEventDefinition(String name, String id, LotroFormat format, List<List<String>> product) {
         _name = name;
         _id = id;
         _format = format;

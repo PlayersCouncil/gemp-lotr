@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.util.*;
 
 public class SingleEliminationPairingTest extends AbstractAtTest {
-    private final SingleEliminationPairing _pairing = new SingleEliminationPairing("singleElimination");
+    private final SingleEliminationPairing _pairing = new SingleEliminationPairing("single-elimination");
 
     @Test
     public void correctlyDetectsFinishedTournament() {

@@ -25,6 +25,7 @@ public interface TournamentDAO {
     void updateTournamentRound(String tournamentId, int round);
 
     List<DBDefs.ScheduledTournament> getUnstartedScheduledTournamentQueues(ZonedDateTime tillDate);
+    DBDefs.ScheduledTournament getScheduledTournament(String tournamentId);
 
     void updateScheduledTournamentStarted(String scheduledTournamentId);
 }

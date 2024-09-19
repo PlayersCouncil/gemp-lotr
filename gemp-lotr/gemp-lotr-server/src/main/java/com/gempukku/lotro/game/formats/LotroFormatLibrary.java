@@ -5,7 +5,7 @@ import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.game.AdventureLibrary;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
-import com.gempukku.lotro.league.SealedLeagueDefinition;
+import com.gempukku.lotro.league.SealedEventDefinition;
 import com.gempukku.util.JsonUtils;
 
 import java.io.*;
@@ -20,7 +20,7 @@ public class LotroFormatLibrary {
     private final Map<String, LotroFormat> _allFormats = new HashMap<>();
     private final Map<String, LotroFormat> _hallFormats = new LinkedHashMap<>();
 
-    private final Map<String, SealedLeagueDefinition> _sealedTemplates = new LinkedHashMap<>();
+    private final Map<String, SealedEventDefinition> _sealedTemplates = new LinkedHashMap<>();
 
     private final AdventureLibrary _adventureLibrary;
     private final LotroCardBlueprintLibrary _cardLibrary;
@@ -88,7 +88,7 @@ public class LotroFormatLibrary {
             for (var def : defs) {
                 if(def == null)
                     continue;
-                var sealed = new SealedLeagueDefinition(def.name, def.id, _allFormats.get(def.format), def.seriesProduct);
+                var sealed = new SealedEventDefinition(def.name, def.id, _allFormats.get(def.format), def.seriesProduct);
 
                 if(_sealedTemplates.containsKey(def.id)) {
                     System.out.println("Overwriting existing sealed definition '" + def.id + "'!");
@@ -188,7 +188,7 @@ public class LotroFormatLibrary {
         put("ts_special", "ts_special_sealed");
     }};
 
-    public SealedLeagueDefinition GetSealedTemplate(String leagueName) {
+    public SealedEventDefinition GetSealedTemplate(String leagueName) {
         try {
             collectionReady.acquire();
             var data = _sealedTemplates.get(leagueName);
@@ -207,7 +207,7 @@ public class LotroFormatLibrary {
         }
     }
 
-    public Map<String,SealedLeagueDefinition> GetAllSealedTemplates() {
+    public Map<String, SealedEventDefinition> GetAllSealedTemplates() {
         try {
             collectionReady.acquire();
             var data = Collections.unmodifiableMap(_sealedTemplates);
@@ -219,7 +219,7 @@ public class LotroFormatLibrary {
         }
     }
 
-    public SealedLeagueDefinition GetSealedTemplateByFormatCode(String formatCode) {
+    public SealedEventDefinition GetSealedTemplateByFormatCode(String formatCode) {
         try {
             collectionReady.acquire();
             var data = _sealedTemplates.values().stream()

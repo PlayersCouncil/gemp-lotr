@@ -33,14 +33,13 @@ public class Card_03_103_ErrataTests
 		/**
 		 * Set: 3
 		 * Name: Terrible as the Dawn
-		 * Unique: True
+		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Sauron
-		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype:
-		 * Game Text: To play, exert a [sauron] Orc.  Bearer must be a companion or ally.
-		* 	Each time one of bearer's special abilities are used, the Free Peoples player must discard a Free Peoples character or wound bearer.
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: Spot a [sauron] minion to wound Galadriel three times (or exhaust her if Galadriel is the Ring-bearer). The Free Peoples player may discard two elves to prevent this. 
 		*/
 
 		var scn = GetScenario();
@@ -49,11 +48,12 @@ public class Card_03_103_ErrataTests
 
 		assertEquals("Terrible as the Dawn", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		//assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
@@ -68,6 +68,6 @@ public class Card_03_103_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

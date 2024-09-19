@@ -115,24 +115,21 @@ public class DBDefs {
     public static class Tournament {
         public int id;
         public String tournament_id; //255
+        public String name; //255
         public LocalDateTime start_date;
         public ZonedDateTime GetUTCStartDate() {
             return ZonedDateTime.of(start_date, DateUtils.UTC);
         }
-        public String draft_type; //45
-        public String name; //255
-        public String format; //255
-        public String collection; //255
+        public String type; //45
+        public String parameters; //5000
+
         public String stage; //45
         public int round;
-        public boolean manual_kickoff;
-        public String pairing; //45
-        public String prizes; //45
-
-
     }
 
     public static class ScheduledTournament {
+
+        //id, tournament_id, name, start_date, parameters, started
         public int id;
         public String tournament_id; //45
         public String name; //255
@@ -143,12 +140,8 @@ public class DBDefs {
             return ZonedDateTime.of(start_date, DateUtils.UTC);
         }
 
-        public int cost;
-        public String playoff; //45
-        public String tiebreaker; //45
-        public String prizes; //45
-        public int minimum_players;
-        public boolean manual_kickoff;
+        public String type; //45
+        public String parameters; //5000
         public boolean started;
     }
 

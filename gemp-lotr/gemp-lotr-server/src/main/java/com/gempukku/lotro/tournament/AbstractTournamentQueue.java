@@ -10,43 +10,46 @@ import java.sql.SQLException;
 import java.util.*;
 
 public abstract class AbstractTournamentQueue implements TournamentQueue {
-    protected String _id;
-    protected int _cost;
+    protected final String _id;
+    protected final String _tournamentQueueName;
     protected Queue<String> _players = new LinkedList<>();
     protected String _playerList;
     protected Map<String, LotroDeck> _playerDecks = new HashMap<>();
-    protected boolean _requiresDeck;
 
     private final CollectionType _currencyCollection = CollectionType.MY_CARDS;
 
-    protected final PairingMechanism _pairingMechanism;
-    protected final CollectionType _collectionType;
-    protected final TournamentPrizes _tournamentPrizes;
-    protected String _format;
+    protected TournamentInfo _tournamentInfo;
 
-    public AbstractTournamentQueue(String id, int cost, boolean requiresDeck, CollectionType collectionType, TournamentPrizes tournamentPrizes, PairingMechanism pairingMechanism, String format) {
-        _id = id;
-        _cost = cost;
-        _requiresDeck = requiresDeck;
-        _collectionType = collectionType;
-        _tournamentPrizes = tournamentPrizes;
-        _pairingMechanism = pairingMechanism;
-        _format = format;
+    protected final TournamentService _tournamentService;
+
+    public AbstractTournamentQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info) {
+        _tournamentService = tournamentService;
+        _id = queueId;
+        _tournamentQueueName = queueName;
+        _tournamentInfo = info;
+    }
+
+    @Override
+    public TournamentInfo getInfo() { return _tournamentInfo; }
+
+    @Override
+    public String getTournamentQueueName() {
+        return _tournamentQueueName;
     }
 
     @Override
     public String getPairingDescription() {
-        return _pairingMechanism.getPlayOffSystem();
+        return _tournamentInfo.PairingMechanism.getPlayOffSystem();
     }
 
     @Override
     public final CollectionType getCollectionType() {
-        return _collectionType;
+        return _tournamentInfo.Collection;
     }
 
     @Override
     public final String getPrizesDescription() {
-        return _tournamentPrizes.getPrizeDescription();
+        return _tournamentInfo.Prizes.getPrizeDescription();
     }
 
     protected void regeneratePlayerList() {
@@ -56,10 +59,10 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     @Override
     public final synchronized void joinPlayer(CollectionsManager collectionsManager, Player player, LotroDeck deck) throws SQLException, IOException {
         if (!_players.contains(player.getName()) && isJoinable()) {
-            if (_cost <= 0 || collectionsManager.removeCurrencyFromPlayerCollection("Joined "+getTournamentQueueName()+" queue", player, _currencyCollection, _cost)) {
+            if (_tournamentInfo._params.cost <= 0 || collectionsManager.removeCurrencyFromPlayerCollection("Joined "+getTournamentQueueName()+" queue", player, _currencyCollection, _tournamentInfo._params.cost)) {
                 _players.add(player.getName());
                 regeneratePlayerList();
-                if (_requiresDeck)
+                if (_tournamentInfo._params.requiresDeck)
                     _playerDecks.put(player.getName(), deck);
             }
         }
@@ -68,8 +71,8 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     @Override
     public final synchronized void leavePlayer(CollectionsManager collectionsManager, Player player) throws SQLException, IOException {
         if (_players.contains(player.getName())) {
-            if (_cost > 0)
-                collectionsManager.addCurrencyToPlayerCollection(true, "Return for leaving "+getTournamentQueueName()+" queue", player, _currencyCollection, _cost);
+            if (_tournamentInfo._params.cost > 0)
+                collectionsManager.addCurrencyToPlayerCollection(true, "Return for leaving "+getTournamentQueueName()+" queue", player, _currencyCollection, _tournamentInfo._params.cost);
             _players.remove(player.getName());
             regeneratePlayerList();
             _playerDecks.remove(player.getName());
@@ -78,10 +81,14 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
 
     @Override
     public final synchronized void leaveAllPlayers(CollectionsManager collectionsManager) throws SQLException, IOException {
-        if (_cost > 0) {
+        if (_tournamentInfo._params.cost > 0) {
             for (String player : _players)
-                collectionsManager.addCurrencyToPlayerCollection(false, "Return for leaving "+getTournamentQueueName()+" queue", player, _currencyCollection, _cost);
+                collectionsManager.addCurrencyToPlayerCollection(false, "Return for leaving "+getTournamentQueueName()+" queue", player, _currencyCollection, _tournamentInfo._params.cost);
         }
+        clearPlayersInternal();
+    }
+
+    protected void clearPlayersInternal() {
         _players.clear();
         regeneratePlayerList();
         _playerDecks.clear();
@@ -109,16 +116,16 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
 
     @Override
     public final int getCost() {
-        return _cost;
+        return _tournamentInfo._params.cost;
     }
 
     @Override
     public final boolean isRequiresDeck() {
-        return _requiresDeck;
+        return _tournamentInfo._params.requiresDeck;
     }
 
     @Override
-    public final String getFormat() {
-        return _format;
+    public final String getFormatCode() {
+        return _tournamentInfo.Format.getCode();
     }
 }

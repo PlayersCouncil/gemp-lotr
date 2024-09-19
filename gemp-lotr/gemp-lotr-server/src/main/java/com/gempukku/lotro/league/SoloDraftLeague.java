@@ -46,13 +46,11 @@ public class SoloDraftLeague implements LeagueData {
 
     public static SoloDraftLeague fromRawParameters(ProductLibrary productLibrary, LotroFormatLibrary formatLibrary,  SoloDraftDefinitions soloDraftDefinitions, String parameters) {
 
-        try {
-            if(parameters.contains("{")) {
-                var parsedParams = JsonUtils.Convert(parameters, LeagueParams.class);
-                return new SoloDraftLeague(productLibrary, formatLibrary, soloDraftDefinitions, parsedParams);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to parse raw parameters for Solo Draft league: " + parameters, e);
+        if(parameters.contains("{")) {
+            var parsedParams = JsonUtils.Convert(parameters, LeagueParams.class);
+            if(parsedParams == null)
+                throw new RuntimeException("Unable to parse raw parameters for Solo Draft league: " + parameters);
+            return new SoloDraftLeague(productLibrary, formatLibrary, soloDraftDefinitions, parsedParams);
         }
 
         return new SoloDraftLeague(productLibrary, formatLibrary, soloDraftDefinitions, parameters);

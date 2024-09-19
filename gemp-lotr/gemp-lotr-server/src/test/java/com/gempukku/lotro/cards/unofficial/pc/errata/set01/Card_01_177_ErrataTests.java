@@ -42,7 +42,7 @@ public class Card_01_177_ErrataTests
 		 * Strength: 13
 		 * Vitality: 3
 		 * Site Number: 4
-		 * Game Text: Shadow: Exert a [moria] Orc to draw a card.
+		 * Game Text: Shadow: Exert this minion or a unique [moria] Orc to draw a card.
 		*/
 
 		var scn = GetScenario();

@@ -36,11 +36,10 @@ public class Card_03_105_ErrataTests
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Sauron
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: 
-		 * Game Text: To play, spot a [sauron] minion (or Gollum).  Bearer must be a companion or ally.
-		* 	Each time one of bearer's special abilities are used, the Free Peoples player must make you discard a Free Peoples condition or add a burden.
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: Spot a [sauron] minion to discard Bilbo. The Free Peoples player may discard 2 Free Peoples conditions to prevent this. 
 		*/
 
 		var scn = GetScenario();
@@ -52,8 +51,9 @@ public class Card_03_105_ErrataTests
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		//assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
@@ -68,6 +68,6 @@ public class Card_03_105_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

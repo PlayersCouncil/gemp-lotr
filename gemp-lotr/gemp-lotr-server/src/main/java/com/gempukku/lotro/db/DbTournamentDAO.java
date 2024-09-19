@@ -30,25 +30,19 @@ public class DbTournamentDAO implements TournamentDAO {
             var db = _dbAccess.openDB();
 
             String sql = """
-                        INSERT INTO tournament (tournament_id, start_date, draft_type, name, format, 
-                            collection, stage, pairing, round, manual_kickoff, prizes) 
-                        VALUES (:tid, :start, :draft, :name, :format,
-                            :collection, :stage, :pairing, :round, :kickoff, :prizes)
+                        INSERT INTO tournament (tournament_id, name, start_date, type, parameters, stage, round) 
+                        VALUES (:tid, :name, :start, :type, :parameters, :stage, :round)
                         """;
 
             try (org.sql2o.Connection conn = db.beginTransaction()) {
                 Query query = conn.createQuery(sql, true);
                 query.addParameter("tid", dbinfo.tournament_id)
-                        .addParameter("start", dbinfo.start_date)
-                        .addParameter("draft", dbinfo.draft_type)
                         .addParameter("name", dbinfo.name)
-                        .addParameter("format", dbinfo.format)
-                        .addParameter("collection", dbinfo.collection)
+                        .addParameter("start", dbinfo.start_date)
+                        .addParameter("type", dbinfo.type)
+                        .addParameter("parameters", dbinfo.parameters)
                         .addParameter("stage", dbinfo.stage)
-                        .addParameter("pairing", dbinfo.pairing)
-                        .addParameter("round", dbinfo.round)
-                        .addParameter("kickoff", dbinfo.manual_kickoff)
-                        .addParameter("prizes", dbinfo.prizes);
+                        .addParameter("round", dbinfo.round);
 
                 int id = query.executeUpdate()
                         .getKey(Integer.class);
@@ -67,10 +61,8 @@ public class DbTournamentDAO implements TournamentDAO {
             var db = _dbAccess.openDB();
 
             String sql = """
-                        INSERT INTO gemp_db.scheduled_tournament (tournament_id, name, format, 
-                            start_date, cost, playoff, tiebreaker, prizes, minimum_players, manual_kickoff, started)
-                        VALUES(:tid, :name, :format, 
-                            :start, :cost, :playoff, :tiebreaker, :prizes, :minimum_players, :manual_kickoff, :started);
+                        INSERT INTO gemp_db.scheduled_tournament (tournament_id, name, format, start_date, type, parameters, started)
+                        VALUES(:tid, :name, :format, :start, :type, :parameters, :started);
                         """;
 
             try (org.sql2o.Connection conn = db.beginTransaction()) {
@@ -79,12 +71,8 @@ public class DbTournamentDAO implements TournamentDAO {
                         .addParameter("name", dbinfo.name)
                         .addParameter("format", dbinfo.format)
                         .addParameter("start", dbinfo.start_date)
-                        .addParameter("cost", dbinfo.cost)
-                        .addParameter("playoff", dbinfo.playoff)
-                        .addParameter("tiebreaker", dbinfo.tiebreaker)
-                        .addParameter("prizes", dbinfo.prizes)
-                        .addParameter("minimum_players", dbinfo.minimum_players)
-                        .addParameter("manual_kickoff", dbinfo.manual_kickoff)
+                        .addParameter("type", dbinfo.type)
+                        .addParameter("parameters", dbinfo.parameters)
                         .addParameter("started", dbinfo.started);
 
                 int id = query.executeUpdate()
@@ -107,8 +95,7 @@ public class DbTournamentDAO implements TournamentDAO {
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
                         SELECT 
-                            tournament_id, start_date, draft_type, name, format, 
-                            collection, stage, pairing, round, manual_kickoff, prizes 
+                            tournament_id, name, start_date, type, parameters, stage, round
                         FROM tournament 
                         WHERE tournament_id = :id;
                         """;
@@ -131,8 +118,7 @@ public class DbTournamentDAO implements TournamentDAO {
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
                         SELECT 
-                            tournament_id, start_date, draft_type, name, format, 
-                            collection, stage, pairing, round, manual_kickoff, prizes 
+                            tournament_id, name, start_date, type, parameters, stage, round
                         FROM tournament 
                         WHERE stage <> :finished;
                         """;
@@ -155,8 +141,7 @@ public class DbTournamentDAO implements TournamentDAO {
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
                         SELECT 
-                            tournament_id, start_date, draft_type, name, format, 
-                            collection, stage, pairing, round, manual_kickoff, prizes 
+                            tournament_id, name, start_date, type, parameters, stage, round
                         FROM tournament 
                         WHERE tournament_id = :tid;
                         """;
@@ -179,8 +164,7 @@ public class DbTournamentDAO implements TournamentDAO {
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
                         SELECT 
-                            tournament_id, start_date, draft_type, name, format, 
-                            collection, stage, pairing, round, manual_kickoff, prizes 
+                            tournament_id, name, start_date, type, parameters, stage, round
                         FROM tournament 
                         WHERE stage = :finished 
                             AND start_date > :start;
@@ -235,8 +219,7 @@ public class DbTournamentDAO implements TournamentDAO {
 
             try (org.sql2o.Connection conn = db.open()) {
                 String sql = """
-                    SELECT id, tournament_id, name, format, start_date, cost, playoff,
-                        tiebreaker, prizes, minimum_players, manual_kickoff, started
+                    SELECT id, tournament_id, name, format, start_date, type, parameters, started
                     FROM scheduled_tournament
                     WHERE started = 0
                         AND start_date <= :start;
@@ -249,6 +232,29 @@ public class DbTournamentDAO implements TournamentDAO {
             }
         } catch (Exception ex) {
             throw new RuntimeException("Unable to retrieve Unstarted Scheduled Tournament Queues", ex);
+        }
+    }
+
+    @Override
+    public DBDefs.ScheduledTournament getScheduledTournament(String tournamentId) {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT 
+                            id, tournament_id, name, format, start_date, type, parameters, started
+                        FROM scheduled_tournament
+                        WHERE tournament_id = :tid;
+                        """;
+                List<DBDefs.ScheduledTournament> results = conn.createQuery(sql)
+                        .addParameter("tid", tournamentId)
+                        .executeAndFetch(DBDefs.ScheduledTournament.class);
+
+                return results.stream().findFirst().orElse(null);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve scheduled tournament '" + tournamentId + "'", ex);
         }
     }
 

@@ -80,7 +80,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
         tournamentElem.setAttribute("id", tournament.getTournamentId());
         tournamentElem.setAttribute("name", tournament.getTournamentName());
-        tournamentElem.setAttribute("format", _formatLibrary.getFormat(tournament.getFormat()).getName());
+        tournamentElem.setAttribute("format", _formatLibrary.getFormat(tournament.getFormatCode()).getName());
         tournamentElem.setAttribute("collection", tournament.getCollectionType().getFullName());
         tournamentElem.setAttribute("round", String.valueOf(tournament.getCurrentRound()));
         tournamentElem.setAttribute("stage", tournament.getTournamentStage().getHumanReadable());
@@ -116,7 +116,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         if (tournament.getTournamentStage() != Tournament.Stage.FINISHED)
             throw new HttpProcessingException(403);
 
-        LotroDeck deck = _tournamentService.retrievePlayerDeck(tournamentId, playerName, tournament.getFormat());
+        LotroDeck deck = _tournamentService.retrievePlayerDeck(tournamentId, playerName, tournament.getFormatCode());
         if (deck == null)
             throw new HttpProcessingException(404);
 
@@ -150,7 +150,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
             tournamentElem.setAttribute("id", tournament.getTournamentId());
             tournamentElem.setAttribute("name", tournament.getTournamentName());
-            tournamentElem.setAttribute("format", _formatLibrary.getFormat(tournament.getFormat()).getName());
+            tournamentElem.setAttribute("format", _formatLibrary.getFormat(tournament.getFormatCode()).getName());
             tournamentElem.setAttribute("collection", tournament.getCollectionType().getFullName());
             tournamentElem.setAttribute("round", String.valueOf(tournament.getCurrentRound()));
             tournamentElem.setAttribute("stage", tournament.getTournamentStage().getHumanReadable());
@@ -175,7 +175,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
             tournamentElem.setAttribute("id", tournament.getTournamentId());
             tournamentElem.setAttribute("name", tournament.getTournamentName());
-            tournamentElem.setAttribute("format", _formatLibrary.getFormat(tournament.getFormat()).getName());
+            tournamentElem.setAttribute("format", _formatLibrary.getFormat(tournament.getFormatCode()).getName());
             tournamentElem.setAttribute("collection", tournament.getCollectionType().getFullName());
             tournamentElem.setAttribute("round", String.valueOf(tournament.getCurrentRound()));
             tournamentElem.setAttribute("stage", tournament.getTournamentStage().getHumanReadable());

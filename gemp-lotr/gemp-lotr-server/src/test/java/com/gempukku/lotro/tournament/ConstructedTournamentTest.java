@@ -3,11 +3,11 @@ package com.gempukku.lotro.tournament;
 import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.DefaultAdventureLibrary;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
-import com.gempukku.lotro.hall.TableHolder;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
@@ -17,11 +17,13 @@ import org.mockito.internal.verification.Times;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.time.Duration;
 import java.util.*;
 
+import static com.gempukku.lotro.tournament.Tournament.getPairingMechanism;
 import static org.junit.Assert.assertEquals;
 
-public class DefaultTournamentTest extends AbstractAtTest {
+public class ConstructedTournamentTest extends AbstractAtTest {
     private final int _waitForPairingsTime = 100;
 
     static {
@@ -37,14 +39,17 @@ public class DefaultTournamentTest extends AbstractAtTest {
         var tourneyData = new DBDefs.Tournament();
         tourneyData.tournament_id = tournamentId;
         tourneyData.name = "Name";
-        //tournamentService, tournamentId, "Name", "format",
-        //                CollectionType.ALL_CARDS, 0, Tournament.Stage.PLAYING_GAMES, pairingMechanism,
-        //                new SingleEliminationOnDemandPrizes(_cardLibrary, "onDemand"),null, null, null
-        tourneyData.format = "format";
-        tourneyData.collection = "default";
         tourneyData.stage = "Playing Games";
-        tourneyData.prizes = "onDemand";
-        tourneyData.pairing = "testPairing";
+        tourneyData.type = Tournament.TournamentType.CONSTRUCTED.toString();
+        tourneyData.start_date = DateUtils.Now().plus(Duration.ofMinutes(10)).toLocalDateTime();
+        tourneyData.parameters = """
+                {
+                    format: fotr_block
+                    playoff: TEST
+                    type: CONSTRUCTED
+                    prizes: DAILY
+                }
+                """;
         var tables = Mockito.mock(com.gempukku.lotro.hall.TableHolder.class);
         Map<String, LotroDeck> playerDecks = new HashMap<>();
         Set<String> allPlayers = new HashSet<>(Arrays.asList("p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8"));
@@ -64,16 +69,19 @@ public class DefaultTournamentTest extends AbstractAtTest {
         PairingMechanism pairingMechanism = Mockito.mock(PairingMechanism.class);
         Mockito.when(pairingMechanism.shouldDropLoser()).thenReturn(true);
 
+        //Tournament tourney = Mockito.mock(Tournament.class);
+        //Mockito.when(tourney.getPairingMechanism("testPairing")).thenReturn(pairingMechanism);
+
         Mockito.when(tournamentService.retrieveTournamentData(tournamentId)).thenReturn(tourneyData);
         Mockito.when(tournamentService.retrieveTournamentPlayers(tournamentId)).thenReturn(allPlayers);
-        Mockito.when(tournamentService.retrievePlayerDecks(tournamentId, "format")).thenReturn(playerDecks);
-        Mockito.when(tournamentService.getPairingMechanism("testPairing")).thenReturn(pairingMechanism);
+        Mockito.when(tournamentService.retrievePlayerDecks(tournamentId, "fotr_block")).thenReturn(playerDecks);
+        Mockito.when(tournamentService.getPairingMechanism(Tournament.PairingType.TEST)).thenReturn(pairingMechanism);
 
         Mockito.when(tables.getTournamentTables(tournamentId)).thenReturn(new ArrayList<>());
 
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
-        var tournament = new DefaultTournament(tournamentService, null, _productLibrary, tables, tournamentId);
+        var tournament = new ConstructedTournament(tournamentService, null, _productLibrary, _formatLibrary, tables, tournamentId);
 
         tournament.setWaitForPairingsTime(_waitForPairingsTime);
 

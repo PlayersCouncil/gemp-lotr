@@ -51,13 +51,11 @@ public class ConstructedLeague implements LeagueData {
 
     public static ConstructedLeague fromRawParameters(ProductLibrary productLibrary, LotroFormatLibrary formatLibrary, String parameters) {
 
-        try {
-            if(parameters.contains("{")) {
-                var parsedParams = JsonUtils.Convert(parameters, LeagueParams.class);
-                return new ConstructedLeague(productLibrary, formatLibrary, parsedParams);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to parse raw parameters for Constructed league: " + parameters, e);
+        if(parameters.contains("{")) {
+            var parsedParams = JsonUtils.Convert(parameters, LeagueParams.class);
+            if(parsedParams == null)
+                throw new RuntimeException("Unable to parse raw parameters for Constructed league: " + parameters);
+            return new ConstructedLeague(productLibrary, formatLibrary, parsedParams);
         }
 
         return new ConstructedLeague(productLibrary, formatLibrary, parameters);

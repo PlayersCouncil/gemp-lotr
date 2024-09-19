@@ -26,8 +26,15 @@ public class DbTournamentPlayerDAO implements TournamentPlayerDAO {
                 try (PreparedStatement statement = conn.prepareStatement("insert into tournament_player (tournament_id, player, deck_name, deck) values (?, ?, ?, ?)")) {
                     statement.setString(1, tournamentId);
                     statement.setString(2, playerName);
-                    statement.setString(3, deck.getDeckName());
-                    statement.setString(4, DeckSerialization.buildContentsFromDeck(deck));
+                    if(deck == null) {
+                        statement.setString(3, "");
+                        statement.setString(4, "");
+                    }
+                    else {
+                        statement.setString(3, deck.getDeckName());
+                        statement.setString(4, DeckSerialization.buildContentsFromDeck(deck));
+                    }
+
                     statement.execute();
                 }
             }

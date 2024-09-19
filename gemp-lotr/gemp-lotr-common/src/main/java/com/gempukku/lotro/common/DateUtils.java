@@ -1,5 +1,7 @@
 package com.gempukku.lotro.common;
 
+import org.apache.commons.lang3.time.DurationFormatUtils;
+
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,8 +19,11 @@ public class DateUtils {
     public static final DateTimeFormatter DateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter IntDateFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
     public static final DateTimeFormatter DateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter TimeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
     public static final DateTimeFormatter APIDateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
     public static String FormatDateTime(ZonedDateTime dateTime) { return dateTime.format(DateTimeFormat); }
+
+    public static String FormatTime(ZonedDateTime dateTime) { return dateTime.format(TimeFormat); }
     public static String FormatDate(ZonedDateTime date) { return date.format(DateFormat); }
     public static ZonedDateTime ParseDate(LocalDateTime time) { return ZonedDateTime.of(time, UTC); }
 
@@ -31,12 +36,16 @@ public class DateUtils {
     public static ZonedDateTime DateOf(int year, int month, int day) { return ZonedDateTime.of(year, month, day, 0, 0, 0, 0, UTC); }
 
     public static boolean IsToday(ZonedDateTime date) { return DaysSince(date) == 0; }
-    public static boolean IsAtLeastDayAfter(ZonedDateTime a, ZonedDateTime b) { return DaysBetween(b, a) > 1; }
-    public static boolean IsAfterStart(ZonedDateTime date, ZonedDateTime start) { return DaysBetween(start, date) >= 0; }
+    public static boolean IsAtLeastDayAfter(ZonedDateTime a, ZonedDateTime b) { return DaysBetween(b, a) >= 1; }
+    public static boolean IsAfterStart(ZonedDateTime date, ZonedDateTime start) { return date.isEqual(start) || date.isAfter(start); }
     public static boolean IsBeforeEnd(ZonedDateTime date, ZonedDateTime end) { return DaysBetween(end, date) < 0; }
     public static boolean IsSameDay(ZonedDateTime a, ZonedDateTime b) { return DaysBetween(a, b) == 0; }
     public static long DaysBetween(ZonedDateTime a, ZonedDateTime b) { return Duration.between(a, b).toDays(); }
     public static long DaysSince(ZonedDateTime date) { return DaysBetween(date, Now()); }
+
+    public static String HumanDuration(Duration timespan) {
+        return DurationFormatUtils.formatDurationWords(timespan.toMillis(), true, true);
+    }
 
     public static ZonedDateTime ParseStringDate(String str) {
         return ZonedDateTime.of(LocalDateTime.parse(str, DateTimeFormat), DateUtils.UTC);

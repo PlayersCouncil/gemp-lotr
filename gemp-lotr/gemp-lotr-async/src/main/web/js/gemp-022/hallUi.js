@@ -27,7 +27,7 @@ var GempLotrHallUI = Class.extend({
 		this.chat = chat;
 		this.chat.tournamentCallback = function(message) {
 			if(that.inTournament) {
-				that.showDialog("Tournament Update", message);
+				that.showDialog("Tournament Update", message, 320);
 			}
 		};
 		
@@ -286,14 +286,20 @@ var GempLotrHallUI = Class.extend({
 
 	processResponse:function (xml) {
 		if (xml != null && xml != "OK") {
-			
 			var root = xml.documentElement;
 			if (root.tagName == "error") {
 				var message = root.getAttribute("message");
 				this.chat.appendMessage(message, "warningMessage");
 				
-				this.showDialog("Error", message);
+				this.showDialog("Error", message, 320);
 				return false;
+			}
+			else if(root.tagName == "response") {
+				var message = root.getAttribute("message");
+				this.chat.appendMessage(message, "warningMessage");
+				
+				this.showDialog("Response", message, 320);
+				return true;
 			}
 		}
 		return true;
@@ -399,16 +405,27 @@ var GempLotrHallUI = Class.extend({
 										return;
 									
 									var queueId = queueInfo.getAttribute("id");
+									var type = queueInfo.getAttribute("type");
+									if(type !== null)
+										type = type.toLowerCase();
 									var queueName = queueInfo.getAttribute("queue");
 									var queueStart = queueInfo.getAttribute("start");
 									that.comm.joinQueue(queueId, deck, function (xml) {
 										var result = that.processResponse(xml);
 										if(result) {
 											that.inTournament = true;
-											that.showDialog("Joined Tournament", "You have signed up to participate in the <b>" + queueName
+											let message = "You have signed up to participate in the <b>" + queueName
 											 + "</b> tournament.<br><br>You will use a snapshot of your '<b>" + deck +"</b>' deck as it is right now.  " + 
 											 "If you need to change or update your deck, you will need to leave the queue and rejoin.<br><br>" +
-											 "The first game begins at " + queueStart + ".	Good luck!", 320);
+											 "The first game begins at " + queueStart + ".	Good luck!";
+											 
+											if(type === "sealed") {
+												message = "You have signed up to participate in the <b>" + queueName
+											 + "</b> tournament.<br><br>When the event begins, you will be issued sealed packs to open and make a deck.  " + 
+											 "At any time during the deckbuilding phase and for a short time after it ends, you will need to lock-in your deck before the tournament begins.<br><br>" +
+											 "Deckbuilding begins at " + queueStart + ".	Good luck!";
+											}
+											that.showDialog("Joined Tournament", message, 320);
 										}
 									}, that.hallErrorMap());
 								};
@@ -511,12 +528,37 @@ var GempLotrHallUI = Class.extend({
 				var id = tournament.getAttribute("id");
 				var isWC = id.includes("wc");
 				var action = tournament.getAttribute("action");
+				var type = tournament.getAttribute("type");
+				if(type !== null)
+					type = type.toLowerCase();
+				var stage = tournament.getAttribute("stage");
+					if(stage !== null)
+						stage = stage.toLowerCase();
+				var abandoned = tournament.getAttribute("abandoned") === "true";
 				if (action == "add" || action == "update") {
 					var actionsField = $("<td></td>");
 
 					var joined = tournament.getAttribute("signedUp");
 					if (joined == "true") {
 						that.inTournament = true;
+						debugger;
+						if(type === "sealed" && (stage === "deck-building" || stage === "registering decks")) {
+								var but = $("<button>Register Deck</button>");
+								$(but).button().click((
+									function(tourneyInfo) {
+										var tourneyId = tournament.getAttribute("id");
+										var tourneyName = tournament.getAttribute("name");
+										
+										return function () {
+											that.comm.registerSealedTournamentDeck(tourneyId, that.decksSelect.val(), function (xml) {
+														that.processResponse(xml);
+												});
+										};
+									}
+									)(tournament));
+								actionsField.append(but);
+						}
+						
 						var but = $("<button>Abandon Tournament</button>");
 						$(but).button().click((
 							function(tourneyInfo) {
@@ -529,13 +571,32 @@ var GempLotrHallUI = Class.extend({
 									if(isExecuted) {
 										that.inTournament = false;
 										that.comm.dropFromTournament(tourneyId, function (xml) {
-										that.processResponse(xml);
+											that.processResponse(xml);
 									});
 									}
 								};
 							}
 							)(tournament));
 						actionsField.append(but);
+					}
+					else if(!abandoned){
+						if(stage === "deck-building" || stage === "drafting" || stage === "awaiting kickoff"
+						   || stage === "preparing" || stage === "paused between rounds") {
+							var but = $("<button>Join Tournament</button>");
+							$(but).button().click((
+								function(tourneyInfo) {
+									var tourneyId = tournament.getAttribute("id");
+									var tourneyName = tournament.getAttribute("name");
+									
+									return function () {
+											that.comm.joinTournamentLate(tourneyId, that.decksSelect.val(), function (xml) {
+												that.processResponse(xml);
+										});
+								};
+							}
+							)(tournament));
+							actionsField.append(but);
+						}
 					}
 
 					var rowstr = "";
@@ -550,14 +611,22 @@ var GempLotrHallUI = Class.extend({
 						"</tr>");
 					}
 					else {
-						rowstr = $("<tr class='tournament" + id + "'><td>" + tournament.getAttribute("format") + "</td>" +
-						"<td>" + tournament.getAttribute("collection") + "</td>" +
-						"<td>" + tournament.getAttribute("name") + "</td>" +
+						rowhtml = "<tr class='tournament" + id + "'><td>" + tournament.getAttribute("format") + "</td>";
+						if(type === "sealed") {
+							rowhtml += "<td>Limited</td>";
+						}
+						else {
+							rowhtml += "<td>" + tournament.getAttribute("collection") + "</td>";
+						}
+						
+						rowhtml += "<td>" + tournament.getAttribute("name") + "</td>" +
 						"<td>" + tournament.getAttribute("system") + "</td>" +
 						"<td>" + tournament.getAttribute("stage") + "</td>" +
 						"<td>" + tournament.getAttribute("round") + "</td>" +
 						"<td><div class='prizeHint' title='Competing Players' value='" + tournament.getAttribute("playerList") + "<br><br>* = abandoned'>" + tournament.getAttribute("playerCount") + "</div></td>" +
-						"</tr>");
+						"</tr>";
+						
+						rowstr = $(rowhtml);
 					}
 
 					var row = $(rowstr);
@@ -665,7 +734,7 @@ var GempLotrHallUI = Class.extend({
 					
 					//TODO: Replace this with an actual fix on the server side
 					if(name.includes("Casual - WC")) {
-						name = "<td><b>2024 Format Championships" + userDesc + "</b></td>"
+						name = "<td><b>2024 Last-chance Walk-on Qualifiers" + userDesc + "</b></td>"
 					}
 					row.append(name);
 					row.append("<td>" + statusDescription + "</td>");
