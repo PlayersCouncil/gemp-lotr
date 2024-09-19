@@ -837,7 +837,7 @@ var PCCards = {
 	// Elven Defender (18C9) [Errata]
 	'68_9'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E009.1_card.jpg',
 	// Haldir, Warrior Messenger (18R14) [Errata]
-	'68_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E014.1_card.jpg'
+	'68_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E014.1_card.jpg',
 
 	//September 2024 Walk-on Qualifiers
 	//Legolas, Greenleaf FA
