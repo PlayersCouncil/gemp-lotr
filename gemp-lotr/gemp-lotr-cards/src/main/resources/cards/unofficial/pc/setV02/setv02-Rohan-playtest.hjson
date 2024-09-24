@@ -412,7 +412,7 @@
 						times: {
 							type: ForEachInMemory
 							memory: discardedHand
-							filter: side(freeps)
+							filter: side(shadow)
 						}
 						effect: {
 							type: Exert
@@ -424,7 +424,7 @@
 						times: {
 							type: ForEachInMemory
 							memory: discardedHand
-							filter: side(shadow)
+							filter: side(freeps)
 						}
 						effect: {
 							type: Heal
