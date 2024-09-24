@@ -17,7 +17,7 @@ public class Reconciles implements TriggerCheckerProducer {
 
         final String player = FieldUtils.getString(value.get("player"), "player");
 
-        PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player, environment) : null;
+        PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player) : null;
 
         return new TriggerChecker() {
             @Override

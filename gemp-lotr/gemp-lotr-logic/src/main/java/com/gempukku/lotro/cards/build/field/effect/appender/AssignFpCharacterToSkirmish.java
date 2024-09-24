@@ -41,7 +41,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
         final String fpCharacterMemory = FieldUtils.getString(effectObject.get("memorizeFPCharacter"), "memorizeFPCharacter", "_tempFpCharacter");
         final boolean ignoreUnassigned = FieldUtils.getBoolean(effectObject.get("ignoreUnassigned"), "ignoreUnassigned", false);
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         final FilterableSource minionFilter = getSource(minion, environment);
 

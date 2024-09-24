@@ -26,7 +26,7 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
         if (player == null)
             throw new InvalidCardDefinitionException("Player is required for preventable effect");
 
-        final PlayerSource preventingPlayerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource preventingPlayerSource = PlayerResolver.resolvePlayer(player);
         final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
         final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
         final EffectAppender[] insteadAppenders = environment.getEffectAppenderFactory().getEffectAppenders(insteadArray, environment);

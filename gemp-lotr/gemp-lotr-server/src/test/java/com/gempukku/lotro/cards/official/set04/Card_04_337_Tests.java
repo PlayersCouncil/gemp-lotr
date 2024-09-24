@@ -123,6 +123,7 @@ public class Card_04_337_Tests
 		scn.SkipToSite(3);
 
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
+		assertEquals(barrows, scn.GetCurrentSite());
 		assertEquals(3, (long)scn.GetCurrentSite().getSiteNumber());
 
 		assertTrue(scn.FreepsActionAvailable(barrows));

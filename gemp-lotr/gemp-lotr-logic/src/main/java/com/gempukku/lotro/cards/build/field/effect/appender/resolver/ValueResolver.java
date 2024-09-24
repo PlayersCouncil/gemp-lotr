@@ -363,7 +363,7 @@ public class ValueResolver {
                 final String discard = FieldUtils.getString(object.get("discard"), "discard");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
-                PlayerSource discardSource = discard != null ? PlayerResolver.resolvePlayer(discard, environment) : null;
+                PlayerSource discardSource = discard != null ? PlayerResolver.resolvePlayer(discard) : null;
                 return new SmartValueSource(environment, object,
                         actionContext -> {
                             final Filterable filterable = filterableSource.getFilterable(actionContext);
@@ -385,7 +385,7 @@ public class ValueResolver {
                 FieldUtils.validateAllowedFields(object, "filter", "hand", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
                 final String hand = FieldUtils.getString(object.get("hand"), "hand", "you");
-                final PlayerSource player = PlayerResolver.resolvePlayer(hand, environment);
+                final PlayerSource player = PlayerResolver.resolvePlayer(hand);
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
                 return new SmartValueSource(environment, object,
@@ -441,7 +441,7 @@ public class ValueResolver {
             }    else if (type.equalsIgnoreCase("forEachTopCardOfDeckUntilMatching")) {
                 FieldUtils.validateAllowedFields(object, "filter", "deck", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
-                final PlayerSource deck = PlayerResolver.resolvePlayer(FieldUtils.getString(object.get("deck"), "deck", "you"), environment);
+                final PlayerSource deck = PlayerResolver.resolvePlayer(FieldUtils.getString(object.get("deck"), "deck", "you"));
 
                 FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 

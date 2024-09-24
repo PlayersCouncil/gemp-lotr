@@ -20,7 +20,7 @@ public class CantPlayPhaseEvents implements ModifierSourceProducer {
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
 
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
-        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player, environment) : null;
+        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player) : null;
 
         return new ModifierSource() {
             @Override

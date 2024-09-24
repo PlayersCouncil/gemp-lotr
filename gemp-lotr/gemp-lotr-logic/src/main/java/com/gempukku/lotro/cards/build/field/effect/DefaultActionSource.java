@@ -45,6 +45,11 @@ public class DefaultActionSource implements ActionSource {
     }
 
     @Override
+    public PlayerSource getPlayer() {
+        return playingPlayer;
+    }
+
+    @Override
     public boolean requiresRanger() {
         return requiresRanger;
     }

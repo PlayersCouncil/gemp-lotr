@@ -16,7 +16,7 @@ public class SiteControlled implements TriggerCheckerProducer {
         FieldUtils.validateAllowedFields(value, "player");
 
         String player = FieldUtils.getString(value.get("player"), "player", "you");
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         return new TriggerChecker() {
             @Override

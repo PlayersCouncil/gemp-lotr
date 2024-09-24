@@ -17,7 +17,7 @@ public class CantBeAssignedToSkirmish implements ModifierSourceProducer {
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(effectObject.get("requires"), "requires");
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
 
-        final PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player, environment) : null;
+        final PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player) : null;
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 

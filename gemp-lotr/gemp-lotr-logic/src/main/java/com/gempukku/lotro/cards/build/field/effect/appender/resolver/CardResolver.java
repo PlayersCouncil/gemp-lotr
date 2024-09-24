@@ -38,7 +38,7 @@ public class CardResolver {
             return resolveMemoryCards(select, null, null, countSource, memory, stackSource);
         }
         else if (select.startsWith("choose(") && select.endsWith(")")) {
-            final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
+            final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
                 String choicePlayerId = playerSource.getPlayer(actionContext);
                 return new ChooseCardsFromSingleStackEffect(action, choicePlayerId, min, max, stackedOnSource.apply(actionContext).iterator().next(), Filters.in(possibleCards)) {
@@ -88,7 +88,7 @@ public class CardResolver {
         } else if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
-            final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
+            final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
                 String choicePlayerId = playerSource.getPlayer(actionContext);
                 return new ChooseStackedCardsEffect(action, choicePlayerId, min, max, stackedOn.getFilterable(actionContext), Filters.in(possibleCards)) {
@@ -119,7 +119,7 @@ public class CardResolver {
     }
 
     public static EffectAppender resolveCardsInHand(String type, FilterableSource additionalFilter, ValueSource countSource, String memory, String choicePlayer, String handPlayer, String choiceText, boolean showMatchingOnly, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        final PlayerSource handSource = PlayerResolver.resolvePlayer(handPlayer, environment);
+        final PlayerSource handSource = PlayerResolver.resolvePlayer(handPlayer);
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
             String handPlayer1 = handSource.getPlayer(actionContext);
             return actionContext.getGame().getGameState().getHand(handPlayer1);
@@ -154,7 +154,7 @@ public class CardResolver {
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, additionalFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
-            final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
+            final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
                 String handId = handSource.getPlayer(actionContext);
                 String choicePlayerId = playerSource.getPlayer(actionContext);
@@ -187,7 +187,7 @@ public class CardResolver {
     }
 
     public static EffectAppender resolveCardsInAdventureDeck(String type, FilterableSource additionalFilter, ValueSource countSource, String memory, String adventureDeckPlayer, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        final PlayerSource handSource = PlayerResolver.resolvePlayer(adventureDeckPlayer, environment);
+        final PlayerSource handSource = PlayerResolver.resolvePlayer(adventureDeckPlayer);
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
             String handPlayer1 = handSource.getPlayer(actionContext);
             return actionContext.getGame().getGameState().getAdventureDeck(handPlayer1);
@@ -246,8 +246,8 @@ public class CardResolver {
     }
 
     public static EffectAppender resolveCardsInDiscard(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String targetPlayerDiscard, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
-        final PlayerSource targetPlayerDiscardSource = PlayerResolver.resolvePlayer(targetPlayerDiscard, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
+        final PlayerSource targetPlayerDiscardSource = PlayerResolver.resolvePlayer(targetPlayerDiscard);
 
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
             String targetPlayerId = targetPlayerDiscardSource.getPlayer(actionContext);
@@ -284,7 +284,7 @@ public class CardResolver {
     }
 
     public static EffectAppender resolveCardsInDeadPile(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
 
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
             String targetPlayerId = playerSource.getPlayer(actionContext);
@@ -321,8 +321,8 @@ public class CardResolver {
 
     public static EffectAppender resolveCardsInDeck(String type, FilterableSource choiceFilter, ValueSource countSource, String memory, String choicePlayer, String targetDeck,
                                                     boolean showAll, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
-        final PlayerSource deckSource = PlayerResolver.resolvePlayer(targetDeck, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
+        final PlayerSource deckSource = PlayerResolver.resolvePlayer(targetDeck);
 
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
             String deckId = deckSource.getPlayer(actionContext);
@@ -425,7 +425,7 @@ public class CardResolver {
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, additionalFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
-            final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
+            final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
                 String choicePlayerId = playerSource.getPlayer(actionContext);
                 return new ChooseActiveCardsEffect(actionContext.getSource(), choicePlayerId, GameUtils.substituteText(choiceText, actionContext), min, max, Filters.in(possibleCards)) {

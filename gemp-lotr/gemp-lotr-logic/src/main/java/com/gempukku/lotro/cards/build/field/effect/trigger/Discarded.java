@@ -25,8 +25,7 @@ public class Discarded implements TriggerCheckerProducer {
         final boolean ignoreVoluntary = FieldUtils.getBoolean(value.get("ignoreVoluntary"), "ignoreVoluntary", false);
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
 
-        final PlayerSource playerSource = (discardingPlayer != null) ? PlayerResolver.resolvePlayer(discardingPlayer,
-                environment) : null;
+        final PlayerSource playerSource = (discardingPlayer != null) ? PlayerResolver.resolvePlayer(discardingPlayer) : null;
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource bySource = source != null ? environment.getFilterFactory().generateFilter(source,

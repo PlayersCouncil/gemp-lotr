@@ -23,7 +23,7 @@ public class RevealBottomCardsOfDrawDeck implements EffectAppenderProducer {
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck);
 
         return new DelayedAppender() {
             @Override

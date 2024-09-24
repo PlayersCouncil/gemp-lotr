@@ -23,7 +23,7 @@ public class RemoveBurdens implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "player", "amount");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), 1, environment);
 
         String memorize = "_temp";

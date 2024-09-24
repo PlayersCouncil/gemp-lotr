@@ -19,7 +19,7 @@ public class CantBeDiscarded implements ModifierSourceProducer {
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource byFilterableSource = environment.getFilterFactory().generateFilter(byFilter, environment);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
-        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player, environment) : null;
+        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player) : null;
 
         return (actionContext) -> new CantDiscardFromPlayModifier(actionContext.getSource(),
                 "Can't be discarded",

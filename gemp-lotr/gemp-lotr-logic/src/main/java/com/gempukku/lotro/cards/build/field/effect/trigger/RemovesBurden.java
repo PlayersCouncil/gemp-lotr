@@ -14,7 +14,7 @@ public class RemovesBurden implements TriggerCheckerProducer {
         String player = FieldUtils.getString(value.get("player"), "player");
         String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
 
-        PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player, environment) : null;
+        PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player) : null;
         final FilterableSource sourceFilter = environment.getFilterFactory().generateFilter(filter, environment);
 
         return new TriggerChecker() {

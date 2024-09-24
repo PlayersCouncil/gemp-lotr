@@ -21,7 +21,7 @@ public class LookAtRandomCardsFromHand implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "hand", "count", "memorize");
 
         final String hand = FieldUtils.getString(effectObject.get("hand"), "hand");
-        final PlayerSource handSource = PlayerResolver.resolvePlayer(hand, environment);
+        final PlayerSource handSource = PlayerResolver.resolvePlayer(hand);
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String memorized = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
