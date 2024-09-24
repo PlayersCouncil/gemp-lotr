@@ -459,7 +459,7 @@
 		        }
 		        effect: {
 		            type: AddCultureTokens
-		            culture: raider
+		            culture: rohan
 		            select: self
 		            count: 2
 		        }
