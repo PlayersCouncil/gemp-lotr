@@ -5,9 +5,6 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.Zone;
-import com.gempukku.lotro.filters.Filters;
-import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.TriggerConditions;
 import com.gempukku.lotro.logic.timing.results.PlayCardResult;
 import com.gempukku.lotro.logic.timing.results.PlayEventResult;
@@ -41,7 +38,7 @@ public class PlayedTriggerCheckerProducer implements TriggerCheckerProducer {
         // Not sure about that assertion.  The vast majority are "when you play this" triggers, which has a "you" but
         // that's an instruction to the acting player and not an assertion that it isn't in force if your opponent
         // somehow plays the card for you.
-        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player, environment) : null;
+        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player) : null;
 
         return new TriggerChecker() {
             @Override

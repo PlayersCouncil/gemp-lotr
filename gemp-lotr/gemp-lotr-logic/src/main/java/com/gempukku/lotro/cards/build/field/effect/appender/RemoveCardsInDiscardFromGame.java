@@ -24,7 +24,7 @@ public class RemoveCardsInDiscardFromGame implements EffectAppenderProducer {
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
 
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         MultiEffectAppender result = new MultiEffectAppender();
 

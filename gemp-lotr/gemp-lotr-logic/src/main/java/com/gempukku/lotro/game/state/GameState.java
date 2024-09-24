@@ -497,7 +497,7 @@ public class GameState {
                 if (assignment.getFellowshipCharacter() == card)
                     removeAssignment(assignment);
                 if (assignment.getShadowCharacters().remove(card))
-                    if (assignment.getShadowCharacters().size() == 0)
+                    if (assignment.getShadowCharacters().isEmpty())
                         removeAssignment(assignment);
             }
 
@@ -534,7 +534,7 @@ public class GameState {
         if (end)
             zoneCards.add((PhysicalCardImpl) card);
         else
-            zoneCards.add(0, (PhysicalCardImpl) card);
+            zoneCards.addFirst((PhysicalCardImpl) card);
 
         if (card.getZone() != null)
             _log.error("Card was in " + card.getZone() + " when tried to add to zone: " + zone);

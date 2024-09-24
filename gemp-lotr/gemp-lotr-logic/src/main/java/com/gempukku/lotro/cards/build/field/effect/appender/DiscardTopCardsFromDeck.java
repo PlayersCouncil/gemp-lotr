@@ -25,7 +25,7 @@ public class DiscardTopCardsFromDeck implements EffectAppenderProducer {
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final boolean forced = FieldUtils.getBoolean(effectObject.get("forced"), "forced");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck);
 
         return new DelayedAppender() {
             @Override

@@ -20,7 +20,7 @@ public class CantUseSpecialAbilities implements ModifierSourceProducer {
         String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
-        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player, environment) : null;
+        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player) : null;
         FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
         return new ModifierSource() {

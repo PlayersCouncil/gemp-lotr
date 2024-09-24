@@ -20,7 +20,7 @@ public class LookAtHand implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "hand");
 
         final String player = FieldUtils.getString(effectObject.get("hand"), "hand", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         return new DelayedAppender() {
             @Override

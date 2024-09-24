@@ -83,7 +83,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("filtercardsinmemory", new FilterCardsInMemory());
         effectAppenderProducers.put("getcardsfromtopofdeck", new GetCardsFromTopOfDeck());
         effectAppenderProducers.put("heal", new Heal());
-        effectAppenderProducers.put("if", new IfEffect());
         effectAppenderProducers.put("incrementperphaselimit", new IncrementPerPhaseLimit());
         effectAppenderProducers.put("incrementperturnlimit", new IncrementPerTurnLimit());
         effectAppenderProducers.put("incrementtoil", new IncrementToil());

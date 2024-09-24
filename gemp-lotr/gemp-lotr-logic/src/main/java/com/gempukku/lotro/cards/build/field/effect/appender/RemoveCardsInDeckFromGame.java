@@ -29,7 +29,7 @@ public class RemoveCardsInDeckFromGame implements EffectAppenderProducer {
         boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
         boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
 
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         MultiEffectAppender result = new MultiEffectAppender();
 

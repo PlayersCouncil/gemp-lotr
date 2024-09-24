@@ -39,7 +39,7 @@ public class ChooseArbitraryCards implements EffectAppenderProducer {
             throw new InvalidCardDefinitionException("'text' field required for ChooseArbitraryCards effect.");
 
         FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         return new DelayedAppender() {
             @Override

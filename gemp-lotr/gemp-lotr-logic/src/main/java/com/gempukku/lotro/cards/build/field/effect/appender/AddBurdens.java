@@ -25,7 +25,7 @@ public class AddBurdens implements EffectAppenderProducer {
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), 1, environment);
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         String memorize = "_temp";
 

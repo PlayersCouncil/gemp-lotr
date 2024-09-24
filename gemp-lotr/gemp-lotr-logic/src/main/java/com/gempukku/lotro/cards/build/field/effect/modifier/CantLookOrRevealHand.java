@@ -16,8 +16,8 @@ public class CantLookOrRevealHand implements ModifierSourceProducer {
         final String player = FieldUtils.getString(object.get("player"), "player");
         final String hand = FieldUtils.getString(object.get("hand"), "hand");
 
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
-        PlayerSource handSource = PlayerResolver.resolvePlayer(hand, environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
+        PlayerSource handSource = PlayerResolver.resolvePlayer(hand);
 
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);

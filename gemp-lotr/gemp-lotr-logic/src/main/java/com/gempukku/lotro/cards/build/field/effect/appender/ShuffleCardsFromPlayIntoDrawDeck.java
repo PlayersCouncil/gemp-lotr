@@ -25,7 +25,7 @@ public class ShuffleCardsFromPlayIntoDrawDeck implements EffectAppenderProducer 
         FieldUtils.validateAllowedFields(effectObject, "player", "select", "count", "includeStacked", "memorize", "memorizeStacked");
 
         String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final boolean includeStacked = FieldUtils.getBoolean(effectObject.get("includeStacked"), "includeStacked", false);
