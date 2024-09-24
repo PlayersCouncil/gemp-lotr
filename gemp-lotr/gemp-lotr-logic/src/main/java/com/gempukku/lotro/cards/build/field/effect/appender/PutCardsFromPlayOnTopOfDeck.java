@@ -47,7 +47,9 @@ public class PutCardsFromPlayOnTopOfDeck implements EffectAppenderProducer {
                                         protected void cardsSelected(LotroGame game, Collection<PhysicalCard> selectedCards) {
                                             PhysicalCard card = selectedCards.iterator().next();
                                             // Removed from remaining
-                                            cards.remove(card);
+                                            for(var effect : result) {
+                                                ((ChooseArbitraryCardsEffect)effect).removeCard(card);
+                                            }
 
                                             GameState gameState = game.getGameState();
                                             gameState.sendMessage(card.getOwner() + " puts " + GameUtils.getCardLink(card) + " from play on the top of deck");

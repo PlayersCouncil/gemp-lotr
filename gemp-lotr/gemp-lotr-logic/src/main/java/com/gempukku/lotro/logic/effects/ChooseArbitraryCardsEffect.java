@@ -87,5 +87,9 @@ public abstract class ChooseArbitraryCardsEffect extends AbstractEffect {
         return new FullEffectResult(success);
     }
 
+    public void removeCard(PhysicalCard card) {
+        _cards.remove(card);
+    }
+
     protected abstract void cardsSelected(LotroGame game, Collection<PhysicalCard> selectedCards);
 }

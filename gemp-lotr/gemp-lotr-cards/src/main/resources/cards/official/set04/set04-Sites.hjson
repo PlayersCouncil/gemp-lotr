@@ -753,6 +753,13 @@
 			{
 				type: activated
 				phase: fellowship
+				requires: {
+					type: IsGreaterThan
+					firstNumber: {
+						type: ForEachInHand
+					}
+					secondNumber: 0
+				}
 				effect: [
 					{
 						type: putCardsFromHandOnBottomOfDeck
