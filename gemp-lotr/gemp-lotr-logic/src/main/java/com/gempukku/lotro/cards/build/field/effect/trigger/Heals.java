@@ -17,7 +17,7 @@ public class Heals implements TriggerCheckerProducer {
         final String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
         final String player = FieldUtils.getString(value.get("player"), "player", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 

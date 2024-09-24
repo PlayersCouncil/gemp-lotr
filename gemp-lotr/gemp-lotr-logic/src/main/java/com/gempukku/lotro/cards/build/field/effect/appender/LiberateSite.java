@@ -23,7 +23,7 @@ public class LiberateSite implements EffectAppenderProducer {
         String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize");
         String controller = FieldUtils.getString(effectObject.get("controller"), "controller");
 
-        PlayerSource controllerSource = controller != null ? PlayerResolver.resolvePlayer(controller, environment) : null;
+        PlayerSource controllerSource = controller != null ? PlayerResolver.resolvePlayer(controller) : null;
 
         return new DelayedAppender() {
             @Override

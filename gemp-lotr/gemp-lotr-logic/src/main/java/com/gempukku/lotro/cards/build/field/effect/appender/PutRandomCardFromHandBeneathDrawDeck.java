@@ -21,7 +21,7 @@ public class PutRandomCardFromHandBeneathDrawDeck implements EffectAppenderProdu
         FieldUtils.validateAllowedFields(effectObject, "hand", "count");
 
         final String player = FieldUtils.getString(effectObject.get("hand"), "hand", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
 
         return new DelayedAppender() {

@@ -26,7 +26,7 @@ public class Optional implements EffectAppenderProducer {
         if (text == null)
             throw new InvalidCardDefinitionException("There is a text required for optional effects");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
         final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
 
         return new DelayedAppender() {

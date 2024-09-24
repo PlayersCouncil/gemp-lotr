@@ -23,17 +23,17 @@
 		block: Towers
 		direction: Left
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesFrom
-		            filter: self
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
 		]
 		gametext: When the fellowship moves from East Wall of Rohan, add (2).
 		lore: ""
@@ -69,23 +69,23 @@
 		block: Towers
 		direction: Left
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: companion
-		        }
-		        requires: {
-		            type: location
-		            filter: self
-		        }
-		        player: fp
-		        effect: {
-		            type: discardFromHand
-		            forced: true
-		            count: 2
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: companion
+				}
+				requires: {
+					type: location
+					filter: self
+				}
+				player: fp
+				effect: {
+					type: discardFromHand
+					forced: true
+					count: 2
+				}
+			}
 		]
 		gametext: Each time you play a companion here, you must discard 2 cards from hand.
 		lore: ""
@@ -121,21 +121,21 @@
 		block: Towers
 		direction: Left
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: exert
-		            select: choose(unbound,companion)
-		            count: 2
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(name(Legolas))
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: choose(unbound,companion)
+					count: 2
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(name(Legolas))
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Fellowship:</b> Exert 2 unbound companions to play Legolas from your draw deck.
 		lore: ""
@@ -172,36 +172,36 @@
 		direction: Left
 		keywords: Plains
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: constantlyCheck
-		        }
-		        requires: [
-		            {
-		                type: perTurnLimit
-		                limit: 1
-		            }
-                    {
-                        type: canSpot
-                        filter: culture(rohan),mount
-                    }
-		        ]
-		        effect: [
-		            {
-		                type: incrementPerTurnLimit
-		                limit: 1
-		            }
-		            {
-		                type: addModifier
-		                modifier: {
-		                    type: modifyMoveLimit
-		                    amount: 1
-		                }
-		                until: endOfTurn
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+				}
+				requires: [
+					{
+						type: perTurnLimit
+						limit: 1
+					}
+					{
+						type: canSpot
+						filter: culture(rohan),mount
+					}
+				]
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: modifyMoveLimit
+							amount: 1
+						}
+						until: endOfTurn
+					}
+				]
+			}
 		]
 		gametext: <b>Plains</b>. While you can spot a [rohan] mount at Horse-country, the move limit is +1 for this turn.
 		lore: ""
@@ -238,21 +238,21 @@
 		direction: Left
 		keywords: Plains
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: exert
-		            select: choose(unbound,companion)
-		            count: 2
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(name(Gimli))
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: choose(unbound,companion)
+					count: 2
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(name(Gimli))
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Plains</b>. <b>Fellowship:</b> Exert 2 unbound companions to play Gimli from your draw deck.
 		lore: ""
@@ -289,21 +289,21 @@
 		direction: Left
 		keywords: Plains
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: exert
-		            select: choose(unbound,companion)
-		            count: 2
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(name(Aragorn))
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: choose(unbound,companion)
+					count: 2
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(name(Aragorn))
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Plains</b>. <b>Fellowship:</b> Exert 2 unbound companions to play Aragorn from your draw deck.
 		lore: ""
@@ -339,17 +339,17 @@
 		block: Towers
 		direction: Left
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesFrom
-		            filter: self
-		        }
-		        effect: {
-		            type: exert
-		            select: all(ringBound,companion)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				effect: {
+					type: exert
+					select: all(ringBound,companion)
+				}
+			}
 		]
 		gametext: When the Fellowship moves from Western Emyn Muil, each Ring-bound companion must exert.
 		lore: ""
@@ -386,36 +386,36 @@
 		direction: Left
 		keywords: Forest
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: constantlyCheck
-		        }
-		        requires: [
-		            {
-		                type: perTurnLimit
-		                limit: 1
-		            }
-                    {
-                        type: canSpot
-                        filter: unbound,hobbit
-                    }
-		        ]
-		        effect: [
-		            {
-		                type: incrementPerTurnLimit
-		                limit: 1
-		            }
-		            {
-		                type: addModifier
-		                modifier: {
-		                    type: modifyMoveLimit
-		                    amount: 1
-		                }
-		                until: endOfTurn
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+				}
+				requires: [
+					{
+						type: perTurnLimit
+						limit: 1
+					}
+					{
+						type: canSpot
+						filter: unbound,hobbit
+					}
+				]
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: modifyMoveLimit
+							amount: 1
+						}
+						until: endOfTurn
+					}
+				]
+			}
 		]
 		gametext: <b>Forest</b>. While you can spot an unbound Hobbit at Derndingle, the move limit is +1 for this turn.
 		lore: ""
@@ -452,21 +452,21 @@
 		direction: Left
 		keywords: Plains
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: canSpot
-		            filter: culture(isengard),tracker
-		            count: 3
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-		                type: cantMove
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: culture(isengard),tracker
+					count: 3
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: cantMove
+					}
+				}
+			}
 		]
 		gametext: <b>Plains</b>. <b>Shadow:</b> Spot 3 [isengard] trackers to prevent the fellowship from moving again this turn.
 		lore: ""
@@ -503,20 +503,20 @@
 		direction: Left
 		keywords: Forest
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        requires: {
-		            type: cantSpot
-		            filter: name(Treebeard)
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(name(Treebeard))
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: cantSpot
+					filter: name(Treebeard)
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(name(Treebeard))
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Forest</b>. <b>Fellowship:</b> Play Treebeard from your draw deck.
 		lore: ""
@@ -553,23 +553,23 @@
 		direction: Left
 		keywords: Plains
 		effects: [
-		    {
-		        type: trigger
-		        player: fp
-		        trigger: {
-		            type: startOfPhase
-		            phase: fellowship
-		        }
-		        effect: {
-		            type: repeat
-		            times: 3
-		            effect: {
-		                type: heal
-		                count: 0-1
-		                select: choose(companion)
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				player: fp
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				effect: {
+					type: repeat
+					times: 3
+					effect: {
+						type: heal
+						count: 0-1
+						select: choose(companion)
+					}
+				}
+			}
 		]
 		gametext: <b>Plains</b>. At the start of each fellowship phase, heal up to 3 wounds from companions.
 		lore: ""
@@ -605,17 +605,17 @@
 		block: Towers
 		direction: Left
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            filter: culture(dunland),man
-		            requires: {
-		                type: phase
-		                phase: archery
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					filter: culture(dunland),man
+					requires: {
+						type: phase
+						phase: archery
+					}
+				}
+			}
 		]
 		gametext: Each [dunland] Man may not take wounds during the archery phase.
 		lore: ""
@@ -655,18 +655,18 @@
 			Plains
 		]
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: urukHai
-		            memorize: playedUrukHai
-		        }
-		        effect: {
-		            type: exert
-		            select: memory(playedUrukHai)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: urukHai
+					memorize: playedUrukHai
+				}
+				effect: {
+					type: exert
+					select: memory(playedUrukHai)
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. <b>Plains</b>. Each time an Uruk-hai is played, that minion must exert.
 		lore: ""
@@ -703,17 +703,17 @@
 		direction: Left
 		keywords: Plains
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: assignedToSkirmish
-		            filter: or(companion,ally)
-		            side: free people
-		        }
-		        effect: {
-		            type: addTwilight
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: assignedToSkirmish
+					filter: or(companion,ally)
+					side: free people
+				}
+				effect: {
+					type: addTwilight
+				}
+			}
 		]
 		gametext: <b>Plains</b>. Each time the Free Peoples player assigns a companion or ally to a skirmish, add (1).
 		lore: ""
@@ -750,20 +750,27 @@
 		direction: Right
 		keywords: Sanctuary
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        effect: [
-		            {
-		                type: putCardsFromHandOnBottomOfDeck
-		                select: all(any)
-		            }
-		            {
-		                type: drawCards
-		                count: 4
-		            }
-		        ]
-		    }
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: IsGreaterThan
+					firstNumber: {
+						type: ForEachInHand
+					}
+					secondNumber: 0
+				}
+				effect: [
+					{
+						type: putCardsFromHandOnBottomOfDeck
+						select: all(any)
+					}
+					{
+						type: drawCards
+						count: 4
+					}
+				]
+			}
 		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Place your hand beneath your draw deck and draw 4 cards.
 		lore: ""
@@ -800,17 +807,17 @@
 		direction: Right
 		keywords: Sanctuary
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: {
-		            type: discard
-		            select: all(side(free),weapon)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: all(side(free),weapon)
+				}
+			}
 		]
 		gametext: <b>Sanctuary</b>. When the fellowship moves to Golden Hall, all Free Peoples weapons must be discarded.
 		lore: ""
@@ -847,30 +854,30 @@
 		direction: Right
 		keywords: Sanctuary
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        requires: {
-		            type: perTurnLimit
-		            limit: 1
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(culture(rohan),man)
-		        }
-		        effect: [
-		            {
-		                type: incrementPerTurnLimit
-		                limit: 1
-		            }
-                    {
-                        type: playCardFromDrawDeck
-                        select: choose(culture(rohan),mount)
-                        showAll: true
-                        shuffle: true
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: perTurnLimit
+					limit: 1
+				}
+				cost: {
+					type: exert
+					select: choose(culture(rohan),man)
+				}
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: playCardFromDrawDeck
+						select: choose(culture(rohan),mount)
+						showAll: true
+						shuffle: true
+					}
+				]
+			}
 		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Exert a [rohan] Man to play a [rohan] mount from your draw deck (limit once per turn).
 		lore: ""
@@ -907,13 +914,13 @@
 		direction: Right
 		keywords: Sanctuary
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: allyMayNotParticipateInArcheryFireOrSkirmishes
-		            filter: culture(rohan),ally
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: allyMayNotParticipateInArcheryFireOrSkirmishes
+					filter: culture(rohan),ally
+				}
+			}
 		]
 		gametext: <b>Sanctuary</b>. Each [rohan] ally may not participate in archery fire or skirmishes at Streets of Edoras.
 		lore: ""
@@ -950,20 +957,20 @@
 		direction: Right
 		keywords: Sanctuary
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        requires: {
-		            type: cantSpot
-		            filter: name(Théoden)
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(name(Théoden))
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: cantSpot
+					filter: name(Théoden)
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(name(Théoden))
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Play Théoden from your draw deck.
 		lore: ""
@@ -1003,17 +1010,17 @@
 			Sanctuary
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            filter: culture(dunland),man
-		            requires: {
-		                type: phase
-		                phase: archery
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					filter: culture(dunland),man
+					requires: {
+						type: phase
+						phase: archery
+					}
+				}
+			}
 		]
 		gametext: <b>Plains</b>. <b>Sanctuary</b>. Each [dunland] Man may not take wounds during the archery phase.
 		lore: ""
@@ -1050,14 +1057,14 @@
 		direction: Right
 		keywords: Mountain
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            filter: or(companion,ally)
-		            amount: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: or(companion,ally)
+					amount: 3
+				}
+			}
 		]
 		gametext: <b>Mountain</b>. The twilight cost of each companion and ally played at Ered Nimrais is +3.
 		lore: ""
@@ -1094,17 +1101,17 @@
 		direction: Right
 		keywords: Plains
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: {
-		            type: heal
-		            select: all(mounted,or(companion,ally))
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: heal
+					select: all(mounted,or(companion,ally))
+				}
+			}
 		]
 		gametext: <b>Plains</b>. When the fellowship moves to Westemnet Hills, heal each mounted companion and mounted ally.
 		lore: ""
@@ -1141,32 +1148,32 @@
 		direction: Right
 		keywords: Mountain
 		effects: [
-		    {
-		        type: trigger
-		        player: fp
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Exert Théoden
-		                Exert 2 companions
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    select: choose(name(Théoden))
-		                }
-		                {
-		                    type: exert
-		                    select: choose(companion)
-		                    count: 2
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: trigger
+				player: fp
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: choice
+					texts: [
+						Exert Théoden
+						Exert 2 companions
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(name(Théoden))
+						}
+						{
+							type: exert
+							select: choose(companion)
+							count: 2
+						}
+					]
+				}
+			}
 		]
 		gametext: <b>Mountain</b>. When the fellowship moves to White Mountains, Théoden or 2 other companions must exert.
 		lore: ""
@@ -1203,17 +1210,17 @@
 		direction: Right
 		keywords: Battleground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: mounted,companion
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: mounted,companion
+					}
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. The Shadow number of this site is +1 for each mounted companion.
 		lore: ""
@@ -1253,21 +1260,21 @@
 			Plains
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            filter: urukHai
-		            requires: {
-		                type: not
-		                requires: {
-		                    type: playedCardThisPhase
-		                    filter: urukHai
-		                }
-		            }
-		            amount: -3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: urukHai
+					requires: {
+						type: not
+						requires: {
+							type: playedCardThisPhase
+							filter: urukHai
+						}
+					}
+					amount: -3
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. <b>Plains</b>. The twilight cost of the first Uruk-hai played at Deep of Helm each turn is -3.
 		lore: ""
@@ -1304,20 +1311,20 @@
 		direction: Left
 		keywords: Battleground
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: cantSpot
-		            filter: name(Saruman)
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(name(Saruman))
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: cantSpot
+					filter: name(Saruman)
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(name(Saruman))
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. <b>Shadow:</b> Play Saruman from your draw deck.
 		lore: ""
@@ -1354,14 +1361,14 @@
 		direction: Left
 		keywords: Battleground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: or(companion,minion),hasAttached(hand weapon)
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: or(companion,minion),hasAttached(hand weapon)
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. Each companion and minion bearing a hand weapon is strength +2.
 		lore: ""
@@ -1398,18 +1405,18 @@
 		direction: Left
 		keywords: Battleground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            filter: self
-		            requires: {
-		                type: canSpot
-		                filter: name(Aragorn)
-		            }
-		            amount: -2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: self
+					requires: {
+						type: canSpot
+						filter: name(Aragorn)
+					}
+					amount: -2
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. While you can spot Aragorn, the Shadow number of Hornburg Courtyard is -2.
 		lore: ""
@@ -1446,22 +1453,22 @@
 		direction: Left
 		keywords: Battleground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: free
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            amount: -1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: free
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -1
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. The fellowship archery total is +1. The minion archery total is -1.
 		lore: ""
@@ -1501,25 +1508,25 @@
 			Sanctuary
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: your,urukHai
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: choose(your,urukHai)
-		            keyword: fierce
-		            until: regroup
-		        }
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: your,urukHai
+				}
+				cost: {
+					type: removeTwilight
+					amount: 2
+				}
+				effect: {
+					type: addKeyword
+					select: choose(your,urukHai)
+					keyword: fierce
+					until: regroup
+				}
 
-		    }
+			}
 		]
 		gametext: <b>Underground</b>. <b>Sanctuary</b>. <b>Maneuver:</b> Remove (2) and spot your Uruk-hai to make it <b>fierce</b> until the regroup phase.
 		lore: ""
@@ -1559,13 +1566,13 @@
 			Sanctuary
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: allyCanParticipateInArcheryFireAndSkirmishes
-		            filter: culture(rohan),ally
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: allyCanParticipateInArcheryFireAndSkirmishes
+					filter: culture(rohan),ally
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. <b>Sanctuary</b>. Each [rohan] ally may participate in archery fire and skirmishes at Great Hall.
 		lore: ""
@@ -1602,17 +1609,17 @@
 		direction: Left
 		keywords: Sanctuary
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: PlayCardFromHand
-		            select: choose(possession)
-		        }
-		        effect: {
-		            type: drawCards
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(possession)
+				}
+				effect: {
+					type: drawCards
+				}
+			}
 		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Play a possession to draw a card.
 		lore: ""
@@ -1649,13 +1656,13 @@
 		direction: Right
 		keywords: Underground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantPlayPhaseEventsOrPhaseSpecialAbilities
-		            phase: skirmish
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantPlayPhaseEventsOrPhaseSpecialAbilities
+					phase: skirmish
+				}
+			}
 		]
 		gametext: <b>Underground</b>. Skirmish events may not be played and skirmish special abilities may not be used.
 		lore: ""
@@ -1692,19 +1699,19 @@
 		direction: Right
 		keywords: Battleground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: unbound,companion
-		                over: 3
-		                multiplier: 2
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: {
+						type: forEachYouCanSpot
+						filter: unbound,companion
+						over: 3
+						multiplier: 2
+					}
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. The minion archery total is +2 for each unbound companion over 3.
 		lore: ""
@@ -1740,21 +1747,21 @@
 		block: Towers
 		direction: Right
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        requires: {
-		            type: cantSpot
-		            filter: culture(rohan),companion
-		        }
-		        effect: {
-		            type: exert
-		            select: all(unbound,companion)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				requires: {
+					type: cantSpot
+					filter: culture(rohan),companion
+				}
+				effect: {
+					type: exert
+					select: all(unbound,companion)
+				}
+			}
 		]
 		gametext: When the fellowship moves to King's Room without a [rohan] companion, each unbound companion must exert.
 		lore: ""
@@ -1790,17 +1797,17 @@
 		block: Towers
 		direction: Right
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: PlayCardFromHand
-		            select: choose(culture(dunland),minion)
-		        }
-		        effect: {
-		            type: drawCards
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: PlayCardFromHand
+					select: choose(culture(dunland),minion)
+				}
+				effect: {
+					type: drawCards
+				}
+			}
 		]
 		gametext: <b>Shadow:</b> Play a [dunland] minion to draw a card.
 		lore: ""
@@ -1836,33 +1843,33 @@
 		block: Towers
 		direction: Right
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: shadow
-		        }
-		        requires: [
-		            {
-		                type: perTurnLimit
-		                limit: 1
-		            }
-		            {
-		                type: twilightPoolLessThan
-		                amount: 9
-		            }
-		        ]
-		        effect: [
-		            {
-		                type: incrementPerTurnLimit
-		                limit: 1
-		            }
-		            {
-		                type: addTwilight
-		                amount: 4
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: shadow
+				}
+				requires: [
+					{
+						type: perTurnLimit
+						limit: 1
+					}
+					{
+						type: twilightPoolLessThan
+						amount: 9
+					}
+				]
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: addTwilight
+						amount: 4
+					}
+				]
+			}
 		]
 		gametext: At the start of the first Shadow phase, if the twilight pool has fewer than 9 twilight tokens, add (4) (limit once per turn).
 		lore: ""
@@ -1899,19 +1906,19 @@
 		direction: Left
 		keywords: Battleground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: companion
-		                over: 4
-		                multiplier: 2
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+						multiplier: 2
+					}
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. The Shadow number of Fortress of Orthanc is +2 for each companion over 4.
 		lore: ""
@@ -1948,19 +1955,19 @@
 		direction: Left
 		keywords: Battleground
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: cantSpot
-		            filter: name(Saruman)
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(name(Saruman))
-		            discount: -2
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: cantSpot
+					filter: name(Saruman)
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(name(Saruman))
+					discount: -2
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. <b>Shadow:</b> Play Saruman from your discard pile; his twilight cost is -2.
 		lore: ""
@@ -1996,23 +2003,23 @@
 		block: Towers
 		direction: Left
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        player: shadow
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: {
-		            type: drawCards
-		            count: {
-		                type: forEachYouCanSpot
-		                filter: companion
-		                over: 4
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				player: shadow
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: drawCards
+					count: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
+				}
+			}
 		]
 		gametext: When the fellowship moves to Orthanc Library, each Shadow player may draw a card for each companion over 4.
 		lore: ""
@@ -2048,18 +2055,18 @@
 		block: Towers
 		direction: Left
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: removeBurdens
-		            amount: 2
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(minion)
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeBurdens
+					amount: 2
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: <b>Shadow:</b> Remove 2 burdens to play a minion from your discard pile.
 		lore: ""

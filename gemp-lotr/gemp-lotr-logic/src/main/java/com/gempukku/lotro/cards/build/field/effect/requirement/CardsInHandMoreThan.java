@@ -16,7 +16,7 @@ public class CardsInHandMoreThan implements RequirementProducer {
         final int count = FieldUtils.getInteger(object.get("count"), "count");
         final String player = FieldUtils.getString(object.get("player"), "player", "you");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         return (actionContext) -> {
             final String playerId = playerSource.getPlayer(actionContext);

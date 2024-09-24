@@ -528,19 +528,26 @@ public class HallServer extends AbstractServer {
             String result = "";
             var tournament = _tournamentService.getTournamentById(tournamentId);
             if (tournament != null) {
-                var stage = tournament.getInfo().Stage;
-                if(stage == Tournament.Stage.STARTING || stage == Tournament.Stage.DECK_BUILDING ||
-                        stage == Tournament.Stage.PAUSED || stage == Tournament.Stage.AWAITING_KICKOFF) {
-                    LotroDeck lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), player, deckName, tournament.getCollectionType());
+                LotroDeck lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), player, deckName, tournament.getCollectionType());
+                var submitted = tournament.playerSubmittedDeck(player.getName(), lotroDeck);
 
-                    tournament.playerSubmittedDeck(player.getName(), lotroDeck);
+                if(submitted) {
+                    result = "Registered deck '" + deckName + "' with tournament <b>" + tournament.getTournamentName() + "</b> successfully."
+                            + "<br/><br/>If you make an update to your deck, you will need to register it here again for any changes to take effect.";
+                    _log.trace("Player '" + player.getName() + "' registered deck '" + deckName + "' for tournament '" + tournament.getTournamentName() + "' successfully.");
                 }
-                result = "Registered deck '" + deckName + "' with tournament <b>" + tournament.getTournamentName() + "</b> successfully."
-                        + "<br/><br/>If you make an update to your deck, you will need to register it here again for any changes to take effect.";
+                else {
+                    result = "Could not register deck with tournament <b>" + tournament.getTournamentName() + "</b>."
+                            + "<br/><br/>Please contact an administrator if you think this was in error.";
+
+                    _log.trace("Player '" + player.getName() + "' failed to register deck '" + deckName + "' for tournament '" + tournament.getTournamentName() + "'.");
+                }
+
                 hallChanged();
             }
             else {
                 result = "Registration for that tournament has already closed.";
+                _log.trace("Player '" + player.getName() + "' attempted to register deck '" + deckName + "' for tournament '" + tournament.getTournamentName() + "' after registration closed.");
             }
 
             return result;

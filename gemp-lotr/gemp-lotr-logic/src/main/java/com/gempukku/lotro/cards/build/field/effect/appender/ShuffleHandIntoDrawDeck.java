@@ -24,7 +24,7 @@ public class ShuffleHandIntoDrawDeck implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "player");
 
         String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         return new DelayedAppender() {
             @Override

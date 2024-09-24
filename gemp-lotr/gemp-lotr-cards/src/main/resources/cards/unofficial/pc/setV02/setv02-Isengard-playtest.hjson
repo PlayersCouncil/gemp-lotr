@@ -340,6 +340,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: true
 				trigger: {
 					type: Played
 					filter: self
@@ -1191,6 +1192,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: true
 				trigger: {
 					type: AssignedAgainst
 					filter: self

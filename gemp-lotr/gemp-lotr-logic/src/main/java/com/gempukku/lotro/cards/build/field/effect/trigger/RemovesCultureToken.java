@@ -15,7 +15,7 @@ public class RemovesCultureToken implements TriggerCheckerProducer {
         String onFilter = FieldUtils.getString(value.get("on"), "on", "any");
         String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
 
-        PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player, environment) : null;
+        PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player) : null;
         final FilterableSource sourceFilter = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource onSourceFilter = environment.getFilterFactory().generateFilter(onFilter, environment);
 

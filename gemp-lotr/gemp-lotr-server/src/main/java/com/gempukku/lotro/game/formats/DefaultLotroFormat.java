@@ -7,6 +7,7 @@ import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -715,8 +716,13 @@ public class DefaultLotroFormat implements LotroFormat {
                 sites.add(new PhysicalCardImpl(0, bp, "", _library.getLotroCardBlueprint(bp)));
             }
 
-            var rb = new PhysicalCardImpl(0, deck.getRingBearer(), "", _library.getLotroCardBlueprint(deck.getRingBearer()));
-            var ring = new PhysicalCardImpl(0, deck.getRing(), "", _library.getLotroCardBlueprint(deck.getRing()));
+            PhysicalCardImpl rb = null, ring = null;
+            if(!StringUtils.isEmpty(deck.getRingBearer())) {
+                rb = new PhysicalCardImpl(0, deck.getRingBearer(), "", _library.getLotroCardBlueprint(deck.getRingBearer()));
+            }
+            if(!StringUtils.isEmpty(deck.getRing())) {
+                ring = new PhysicalCardImpl(0, deck.getRing(), "", _library.getLotroCardBlueprint(deck.getRing()));
+            }
 
             var result = map.validatePreGameDeckCheck(freeps, shadow, sites, rb, ring, new PhysicalCardImpl(0, mapBP, "", map));
             if(!result.success())

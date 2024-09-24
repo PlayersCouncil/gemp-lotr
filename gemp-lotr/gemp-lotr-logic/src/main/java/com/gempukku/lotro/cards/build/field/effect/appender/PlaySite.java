@@ -30,7 +30,7 @@ public class PlaySite implements EffectAppenderProducer {
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         return new DelayedAppender() {
             @Override

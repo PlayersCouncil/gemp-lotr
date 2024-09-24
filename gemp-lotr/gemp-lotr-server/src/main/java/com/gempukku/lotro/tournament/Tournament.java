@@ -180,7 +180,7 @@ public interface Tournament {
     void reportGameFinished(String winner, String loser);
 
     void playerChosenCard(String playerName, String cardId);
-    void playerSubmittedDeck(String player, LotroDeck deck);
+    boolean playerSubmittedDeck(String player, LotroDeck deck);
     void issuePlayerMaterial(String player);
     LotroDeck getPlayerDeck(String player);
     String dropPlayer(String player);

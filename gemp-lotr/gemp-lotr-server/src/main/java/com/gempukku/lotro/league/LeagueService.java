@@ -149,7 +149,7 @@ public class LeagueService {
         var currentDate = DateUtils.Now();
 
         for (LeagueSerieInfo leagueSerieInfo : league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).getSeries()) {
-            if (currentDate.isAfter( leagueSerieInfo.getStart()) && currentDate.isBefore(leagueSerieInfo.getEnd()))
+            if (currentDate.isAfter( leagueSerieInfo.getStart()) && DateUtils.IsBeforeEnd(currentDate, leagueSerieInfo.getEnd()))
                 return leagueSerieInfo;
         }
 

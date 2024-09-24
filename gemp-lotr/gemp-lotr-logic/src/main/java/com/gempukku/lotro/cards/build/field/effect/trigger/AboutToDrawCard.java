@@ -16,7 +16,7 @@ public class AboutToDrawCard implements TriggerCheckerProducer {
 
         String player = FieldUtils.getString(value.get("player"), "player");
 
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         return new TriggerChecker() {
             @Override

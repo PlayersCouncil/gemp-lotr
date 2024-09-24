@@ -17,7 +17,7 @@ public class CantReplaceSite implements ModifierSourceProducer {
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
-        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player, environment) : null;
+        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player) : null;
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return new ModifierSource() {

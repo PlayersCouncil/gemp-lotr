@@ -28,8 +28,8 @@ public class DiscardFromHand implements EffectAppenderProducer {
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
-        final PlayerSource handSource = PlayerResolver.resolvePlayer(hand, environment);
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource handSource = PlayerResolver.resolvePlayer(hand);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();

@@ -265,9 +265,14 @@
 		effects: [
 			{
 				type: Trigger
+				optional: true
 				trigger: {
 					type: WinsSkirmish
 					filter: unique, culture(moria), minion	
+				}
+				requires: {
+					type: CanSpotThreats
+					amount: 1
 				}
 				cost: {
 					type: RemoveThreats

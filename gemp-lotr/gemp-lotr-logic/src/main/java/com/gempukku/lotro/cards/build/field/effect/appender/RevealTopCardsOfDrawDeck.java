@@ -26,7 +26,7 @@ public class RevealTopCardsOfDrawDeck implements EffectAppenderProducer {
         if (memorize == null)
             throw new InvalidCardDefinitionException("You need to define what memory to use to store revealed cards");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck);
 
         return new DelayedAppender() {
             @Override

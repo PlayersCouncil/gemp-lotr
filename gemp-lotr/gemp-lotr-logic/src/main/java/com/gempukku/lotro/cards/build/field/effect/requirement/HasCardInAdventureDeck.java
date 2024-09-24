@@ -17,7 +17,7 @@ public class HasCardInAdventureDeck implements RequirementProducer {
         final int count = FieldUtils.getInteger(object.get("count"), "count", 1);
         final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         return (actionContext) -> {

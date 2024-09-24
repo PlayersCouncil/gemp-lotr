@@ -59,9 +59,9 @@ public class Card_V1_062_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl site7 = scn.GetFreepsSite(7);
+		var site7 = scn.GetFreepsSite(7);
 
 		assertFalse(site7.getBlueprint().isUnique());
 		//assertEquals(Side.FREE_PEOPLE, site7.getBlueprint().getSide());
@@ -81,14 +81,15 @@ public class Card_V1_062_Tests
 	@Test
 	public void EveryUnwoundedCharacterGetsWoundedAtStartOfSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl frodo = scn.GetRingBearer();
+		var frodo = scn.GetRingBearer();
+		var valley = scn.GetShadowSite(7);
 
-		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
-		PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
-		PhysicalCardImpl savage1 = scn.GetShadowCard("savage1");
-		PhysicalCardImpl savage2 = scn.GetShadowCard("savage2");
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
+		var savage1 = scn.GetShadowCard("savage1");
+		var savage2 = scn.GetShadowCard("savage2");
 		scn.ShadowMoveCardToHand(runner1, runner2, savage1, savage2);
 
 		//Max out the move limit so we don't have to juggle play back and forth
@@ -96,38 +97,14 @@ public class Card_V1_062_Tests
 
 		scn.StartGame();
 
-		// 1 -> 3
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-
-		// 3 -> 4
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-
-		// 4 -> 5
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-
-		// 5 -> 6
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-
-		// 6 -> 7
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
+		scn.SkipToSite(6);
 
 		scn.ShadowMoveCharToTable(runner1, runner2, savage1, savage2);
 		scn.AddWoundsToChar(savage1, 1);
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(valley, scn.GetCurrentSite());
+		assertEquals(7, (long)scn.GetCurrentSite().getSiteNumber());
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();

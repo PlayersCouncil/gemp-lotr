@@ -18,8 +18,12 @@ public class Card_V2_050_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_50");
-					// put other cards in here as needed for the test case
+					put("hour", "102_50");
+					put("eowyn", "4_270");
+
+					put("runner1", "1_178");
+					put("runner2", "1_178");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -39,12 +43,13 @@ public class Card_V2_050_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Assignment
-		 * Game Text: Exert a valiant companion to make that companion defender +1. That companion is strength +1 for each minion skirmishing them until the regroup phase.
+		 * Game Text: Exert a valiant companion to make that companion defender +1.
+		 * That companion is strength +1 for each minion skirmishing them until the regroup phase.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("hour");
 
 		assertEquals("Let This Be the Hour", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +61,50 @@ public class Card_V2_050_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LetThisBetheHourTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void LetThisBetheHourAppliesDefenderAndMultiOpponentStrengthBonus() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var hour = scn.GetFreepsCard("hour");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		scn.FreepsMoveCardToHand(hour);
+		scn.FreepsMoveCharToTable(eowyn);
+
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
+		scn.ShadowMoveCharToTable(runner1, runner2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertTrue(scn.FreepsPlayAvailable(hour));
+		assertEquals(3, scn.GetVitality(eowyn));
+		assertEquals(6, scn.GetStrength(eowyn));
+		assertFalse(scn.hasKeyword(eowyn, Keyword.DEFENDER));
+
+		scn.FreepsPlayCard(hour);
+
+		assertEquals(2, scn.GetVitality(eowyn));
+		assertEquals(6, scn.GetStrength(eowyn));
+		assertTrue(scn.hasKeyword(eowyn, Keyword.DEFENDER));
+
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.FreepsAssignToMinions(eowyn, runner1, runner2);
+
+		scn.FreepsResolveSkirmish(eowyn);
+
+		assertEquals(8, scn.GetStrength(eowyn));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+
+		assertEquals(6, scn.GetStrength(eowyn));
+		assertFalse(scn.hasKeyword(eowyn, Keyword.DEFENDER));
 	}
 }

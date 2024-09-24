@@ -20,8 +20,8 @@ public class ReorderTopCardsOfDrawDeck implements EffectAppenderProducer {
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String deck = FieldUtils.getString(effectObject.get("deck"), "deck", "you");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
-        final PlayerSource deckSource = PlayerResolver.resolvePlayer(deck, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
+        final PlayerSource deckSource = PlayerResolver.resolvePlayer(deck);
 
         return new DelayedAppender() {
             @Override

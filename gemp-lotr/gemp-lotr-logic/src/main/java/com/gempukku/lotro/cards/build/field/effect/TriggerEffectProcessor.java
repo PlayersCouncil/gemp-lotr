@@ -29,7 +29,7 @@ public class TriggerEffectProcessor implements EffectProcessor {
         final Phase phase = FieldUtils.getEnum(Phase.class, value.get("phase"), "phase");
 
         final String player = FieldUtils.getString(value.get("player"), "player");
-        PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player, environment) : null;
+        PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player) : null;
         final String identifierSuffix = FieldUtils.getString(value.get("identifierSuffix"), "identifierSuffix");
 
         for (JSONObject trigger : triggerArray) {

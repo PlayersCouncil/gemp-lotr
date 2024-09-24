@@ -27,7 +27,7 @@ public class ChooseANumber implements EffectAppenderProducer {
 
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         if (memorize == null)
             throw new InvalidCardDefinitionException("ChooseANumber requires a field to memorize the value");

@@ -254,6 +254,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
                 Element collectionElem = doc.createElement("collection");
                 collectionElem.setAttribute("type", collectionType.getCode());
                 collectionElem.setAttribute("name", collectionType.getFullName());
+                collectionElem.setAttribute("format", serie.getFormat().getCode());
                 collectionsElem.appendChild(collectionElem);
             }
         }
@@ -266,6 +267,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
             Element collectionElem = doc.createElement("collection");
             collectionElem.setAttribute("type", collectionType.getCode());
             collectionElem.setAttribute("name", collectionType.getFullName());
+            collectionElem.setAttribute("format", tourney.getFormatCode());
             collectionsElem.appendChild(collectionElem);
         }
 

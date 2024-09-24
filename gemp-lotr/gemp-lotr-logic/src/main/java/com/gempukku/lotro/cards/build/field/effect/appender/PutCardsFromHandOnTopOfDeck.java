@@ -50,7 +50,9 @@ public class PutCardsFromHandOnTopOfDeck implements EffectAppenderProducer {
                                         protected void cardsSelected(LotroGame game, Collection<PhysicalCard> selectedCards) {
                                             PhysicalCard card = selectedCards.iterator().next();
                                             // Removed from remaining
-                                            cards.remove(card);
+                                            for(var effect : result) {
+                                                ((ChooseArbitraryCardsEffect)effect).removeCard(card);
+                                            }
 
                                             GameState gameState = game.getGameState();
                                             if (reveal) {

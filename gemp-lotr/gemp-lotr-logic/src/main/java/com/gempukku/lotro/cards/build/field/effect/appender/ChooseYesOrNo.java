@@ -26,7 +26,7 @@ public class ChooseYesOrNo implements EffectAppenderProducer {
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
         final String yesAnswer = FieldUtils.getString(effectObject.get("yes"), "yes", "yes");
         final String noAnswer = FieldUtils.getString(effectObject.get("no"), "no", "no");
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(FieldUtils.getString(effectObject.get("player"), "player", "you"), environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(FieldUtils.getString(effectObject.get("player"), "player", "you"));
 
         return new DelayedAppender() {
             @Override

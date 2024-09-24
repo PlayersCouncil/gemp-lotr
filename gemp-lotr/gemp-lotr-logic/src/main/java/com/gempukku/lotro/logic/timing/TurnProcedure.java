@@ -150,7 +150,7 @@ public class TurnProcedure {
             if (!_initialized) {
                 _initialized = true;
                 List<Action> requiredResponses = _game.getActionsEnvironment().getRequiredAfterTriggers(_effectResults);
-                if (requiredResponses.size() > 0)
+                if (!requiredResponses.isEmpty())
                     appendEffect(new PlayoutAllActionsIfEffectNotCancelledEffect(this, requiredResponses));
 
                 appendEffect(

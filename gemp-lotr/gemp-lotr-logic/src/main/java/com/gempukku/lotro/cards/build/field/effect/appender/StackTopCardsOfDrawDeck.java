@@ -25,7 +25,7 @@ public class StackTopCardsOfDrawDeck implements EffectAppenderProducer {
         final String where = FieldUtils.getString(effectObject.get("where"), "where");
         final int count = FieldUtils.getInteger(effectObject.get("count"), "count", 1);
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck);
 
         MultiEffectAppender result = new MultiEffectAppender();
         String cardMemory = "_temp";

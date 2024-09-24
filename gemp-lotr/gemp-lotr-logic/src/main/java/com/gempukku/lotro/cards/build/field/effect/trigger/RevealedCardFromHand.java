@@ -18,7 +18,7 @@ public class RevealedCardFromHand implements TriggerCheckerProducer {
         String player = FieldUtils.getString(value.get("player"), "player");
         final String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
 
-        final PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player, environment) : null;
+        final PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player) : null;
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 

@@ -17,7 +17,7 @@ public class CantPlaySite implements ModifierSourceProducer {
             throw new InvalidCardDefinitionException("Player is required for \"can't play site\" modifier");
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
 
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return new ModifierSource() {

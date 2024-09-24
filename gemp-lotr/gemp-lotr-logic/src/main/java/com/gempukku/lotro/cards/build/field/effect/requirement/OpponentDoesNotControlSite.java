@@ -15,7 +15,7 @@ public class OpponentDoesNotControlSite implements RequirementProducer {
         FieldUtils.validateAllowedFields(object, "player");
 
         final String player = FieldUtils.getString(object.get("player"), "player", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         return (actionContext) ->
                 Filters.countActive(actionContext.getGame(), Filters.siteControlledByOtherPlayer(playerSource.getPlayer(actionContext))) == 0;

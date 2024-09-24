@@ -16,7 +16,7 @@ public class ReplacesSite implements TriggerCheckerProducer {
         String player = FieldUtils.getString(value.get("player"), "player");
         ValueSource numberResolver = ValueResolver.resolveEvaluator(value.get("number"), 0, environment);
 
-        PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player, environment) : null;
+        PlayerSource playerSource = (player != null) ? PlayerResolver.resolvePlayer(player) : null;
 
         return new TriggerChecker() {
             @Override
