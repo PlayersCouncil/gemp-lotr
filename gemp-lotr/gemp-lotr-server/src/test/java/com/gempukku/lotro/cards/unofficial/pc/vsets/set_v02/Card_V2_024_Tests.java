@@ -81,6 +81,9 @@ public class Card_V2_024_Tests
 		assertTrue(scn.ShadowPlayAvailable(pit));
 		scn.ShadowPlayCard(pit);
 
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
 		scn.ShadowChooseMultipleChoiceOption("discard");
 
@@ -120,6 +123,9 @@ public class Card_V2_024_Tests
 		scn.SkipToPhase(Phase.SHADOW);
 		assertTrue(scn.ShadowPlayAvailable(pit));
 		scn.ShadowPlayCard(pit);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
 		scn.ShadowChooseMultipleChoiceOption("deck");
@@ -161,6 +167,9 @@ public class Card_V2_024_Tests
 		scn.SkipToPhase(Phase.SHADOW);
 		assertTrue(scn.ShadowPlayAvailable(pit));
 		scn.ShadowPlayCard(pit);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
 		scn.ShadowChooseMultipleChoiceOption("deck");
