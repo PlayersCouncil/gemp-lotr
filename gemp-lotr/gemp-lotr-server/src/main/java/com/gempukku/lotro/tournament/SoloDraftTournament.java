@@ -35,13 +35,18 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
 
 
     @Override
-    public void playerSubmittedDeck(String player, LotroDeck deck) {
+    public boolean playerSubmittedDeck(String player, LotroDeck deck) {
         writeLock.lock();
         try {
-            if (getTournamentStage() == Stage.DECK_BUILDING && _players.contains(player)) {
+            var stage = getTournamentStage();
+            if ((stage == Tournament.Stage.DECK_BUILDING || stage == Tournament.Stage.DECK_REGISTRATION ||
+                    stage == Tournament.Stage.PAUSED || stage == Tournament.Stage.AWAITING_KICKOFF)
+                    && _players.contains(player)) {
                 _tournamentService.updateRecordedPlayerDeck(_tournamentId, player, deck);
                 _playerDecks.put(player, deck);
+                return true;
             }
+            return false;
         } finally {
             writeLock.unlock();
         }
