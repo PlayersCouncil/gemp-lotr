@@ -157,6 +157,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             if(format == null || targetFormat == null)
             {
                 responseWriter.writeHtmlResponse("Invalid format: " + targetFormat);
+                return;
             }
 
             List<String> validation = format.validateDeck(deck);

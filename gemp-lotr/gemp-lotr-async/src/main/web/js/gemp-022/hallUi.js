@@ -542,7 +542,7 @@ var GempLotrHallUI = Class.extend({
 					if (joined == "true") {
 						that.inTournament = true;
 						debugger;
-						if(type === "sealed" && (stage === "deck-building" || stage === "registering decks")) {
+						if(type === "sealed" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff" || stage === "paused between rounds")) {
 								var but = $("<button>Register Deck</button>");
 								$(but).button().click((
 									function(tourneyInfo) {

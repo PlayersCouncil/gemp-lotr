@@ -37,13 +37,18 @@ public class SealedTournament extends BaseTournament implements Tournament {
 
 
     @Override
-    public void playerSubmittedDeck(String player, LotroDeck deck) {
+    public boolean playerSubmittedDeck(String player, LotroDeck deck) {
         writeLock.lock();
         try {
-            if (getTournamentStage() == Stage.DECK_BUILDING && _players.contains(player)) {
+            var stage = getTournamentStage();
+            if ((stage == Stage.DECK_BUILDING || stage == Stage.DECK_REGISTRATION ||
+                    stage == Tournament.Stage.PAUSED || stage == Tournament.Stage.AWAITING_KICKOFF)
+                    && _players.contains(player)) {
                 _tournamentService.updateRecordedPlayerDeck(_tournamentId, player, deck);
                 _playerDecks.put(player, deck);
+                return true;
             }
+            return false;
         } finally {
             writeLock.unlock();
         }
@@ -150,7 +155,7 @@ public class SealedTournament extends BaseTournament implements Tournament {
                             + "<br/><br/>Remember to return to the game hall and register your deck before " + DateUtils.FormatTime(_sealedInfo.RegistrationDeadline) + "."));
                 }
                 else if (getTournamentStage() == Stage.DECK_BUILDING) {
-                    if (DateUtils.Now().isAfter(_sealedInfo.DeckbuildingDeadline) && _playerDecks.values().stream().anyMatch(x -> StringUtils.isEmpty(x.getDeckName()))) {
+                    if (DateUtils.Now().isAfter(_sealedInfo.DeckbuildingDeadline)) {
                         _tournamentInfo.Stage = Stage.DECK_REGISTRATION;
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
 
@@ -158,16 +163,12 @@ public class SealedTournament extends BaseTournament implements Tournament {
                         result.add(new BroadcastAction("Deck building in tournament <b>" + getTournamentName() + "</b> has finished.  Players now have "
                                 + duration + " to finish registering their decks.  Any player who has not turned in their deck by the deadline at "
                                 + DateUtils.FormatTime(_sealedInfo.RegistrationDeadline) + " will be auto-disqualified."
-                                + "<br/><br/>Once all players have turned in decks or the deadline has passed, the tournament will begin."));
-                    }
-                    else if (DateUtils.Now().isAfter(_sealedInfo.DeckbuildingDeadline) && _playerDecks.values().stream().noneMatch(x -> StringUtils.isEmpty(x.getDeckName()))) {
-                        _tournamentInfo.Stage = _sealedInfo.PostRegistrationStage();
-                        _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
+                                + "<br/><br/>Once the deadline has passed, the tournament will begin."));
                     }
                 }
 
                 if (getTournamentStage() == Stage.DECK_REGISTRATION) {
-                    if (DateUtils.Now().isAfter(_sealedInfo.RegistrationDeadline) || _playerDecks.values().stream().noneMatch(x -> StringUtils.isEmpty(x.getDeckName()))) {
+                    if (DateUtils.Now().isAfter(_sealedInfo.RegistrationDeadline)) {
                         disqualifyUnregisteredPlayers();
 
                         _tournamentInfo.Stage = _sealedInfo.PostRegistrationStage();

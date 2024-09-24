@@ -393,6 +393,7 @@ var GempLotrDeckBuildingUI = Class.extend({
                         for (var i = 0; i < collections.length; i++) {
                             var collection = collections[i];
                             $("#collectionSelect").append("<option value='" + collection.getAttribute("type") + "'>" + collection.getAttribute("name") + "</option>");
+                            $("#formatSelect").append("<option value='" + collection.getAttribute("format") + "'>" + collection.getAttribute("name") + "</option>");
                         }
                     }
                 });

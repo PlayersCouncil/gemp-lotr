@@ -39,8 +39,9 @@ public class ConstructedTournament extends BaseTournament implements Tournament 
     }
 
     @Override
-    public void playerSubmittedDeck(String player, LotroDeck deck) {
+    public boolean playerSubmittedDeck(String player, LotroDeck deck) {
         //Constructed has all decks submitted upon signup, so nothing to do here
+        return false;
     }
 
 
