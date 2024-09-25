@@ -288,6 +288,7 @@
 		race: Orc
 		strength: 5
 		vitality: 3
+		site: 4
 		effects: [
 			{
 				type: Activated
