@@ -116,14 +116,14 @@
 				type: activated
 				phase: maneuver
 				requires: {
-                    type: ringIsActive
-                }
+					type: ringIsActive
+				}
 				cost: {
-				    type: addBurdens
+					type: addBurdens
 				}
 				effect: {
-                    type: putOnRing
-                }
+					type: putOnRing
+				}
 			}
 			{
 				type: trigger

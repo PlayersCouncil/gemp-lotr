@@ -42,6 +42,10 @@
                     {
                         type: ringIsActive
                     }
+                    {
+                    	type: Phase
+                    	phase: skirmish
+                    }
                 ]
                 trigger: {
                     type: aboutToTakeWound
