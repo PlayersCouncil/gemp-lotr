@@ -24,9 +24,17 @@
 		effects: [
 			{
 				type: Response
-				requires: {
-					type: ringIsActive
-				}
+				requires: [
+					{
+						type: ringIsActive
+					}
+					{
+						type: Not
+						requires: {
+							type: RingIsOn
+						}
+					}
+				]
 				trigger: {
 					type: aboutToTakeWound
 					filter: bearer
