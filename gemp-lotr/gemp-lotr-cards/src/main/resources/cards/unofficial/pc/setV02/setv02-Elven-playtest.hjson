@@ -455,10 +455,22 @@
 		effects: {
 			type: event
 			cost: {
-				type: Exert
-				count: 2
-				select: choose(valiant, companion)
-			},
+				type: If
+				check: {
+					type: CanSpot
+					count: 2
+					filter: valiant, Elf
+				}
+				true: {
+					type: Spot
+					count: 2
+					filter: valiant, Elf
+				}
+				false: {
+					type: Exert
+					select: choose(valiant, companion)
+				}
+			}
 			effect: [
 				{
 					type: PutCardsFromDeckIntoHand
@@ -470,7 +482,7 @@
 				}
 			]
 		}
-		gametext: Exert 2 valiant companions to take a valiant (elven) companion or (elven) possession into hand from your draw deck.
+		gametext: Exert a valiant companion (or spot 2 valiant Elves) to take a valiant [elven] companion or [elven] possession into hand from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {

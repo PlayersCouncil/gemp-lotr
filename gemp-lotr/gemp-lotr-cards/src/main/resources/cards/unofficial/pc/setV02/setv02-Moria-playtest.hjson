@@ -28,7 +28,7 @@
 		site: 4
 		keywords: [
 			Fierce
-			Damage+2
+			Damage+1
 		]
 		effects: [
 			{
@@ -36,6 +36,10 @@
 				trigger: {
 					type: TakesWound
 					filter: minion
+				}
+				cost: {
+					type: RemoveTwilight
+					amount: 1
 				}
 				effect: {
 					type: AddThreats
@@ -57,7 +61,7 @@
 				}
 			}
 		]
-		gametext: Fierce. Damage +2.<br>Each time a minion takes a wound, add a threat.<br>Each time the Free Peoples player uses a skirmish special ability during a skirmish involving the Balrog, you may wound a companion it is skirmishing.
+		gametext: Fierce. Damage +1.<br/>Each time a minion takes a wound, you may remove (1) to add a threat.</br>Each time the Free Peoples player uses a skirmish special ability during a skirmish involving the Balrog, you may wound a companion it is skirmishing.
 		lore: ""
 		promotext: ""
 		alts: {

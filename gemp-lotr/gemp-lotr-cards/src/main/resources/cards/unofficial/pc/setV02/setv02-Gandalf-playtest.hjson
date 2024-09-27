@@ -149,14 +149,6 @@
 			{
 				type: Modifier
 				modifier: {
-					type: ModifyStrength
-					amount: 1
-					filter: name(Theoden)
-				}
-			}
-			{
-				type: Modifier
-				modifier: {
 					type: AddKeyword
 					keyword: valiant
 					filter: companion,mounted
@@ -179,7 +171,7 @@
 				cost: [
 					{
 						type: Spot
-						count: 3
+						count: 2
 						filter: valiant, companion
 					}
 					{
@@ -200,7 +192,7 @@
 				]
 			}
 		]
-		gametext: Theoden is strength +1.<br>Each mounted companion gains <b>valiant</b>.<br>Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and exert Gandalf to prevent that and wound that minion. 
+		gametext: Each mounted companion gains <b>valiant</b>.\Response: If a minion's special ability is used (except during a skirmish), spot 2 valiant companions and exert Gandalf to prevent that and wound that minion. 
 		lore: "'No counsel have I to give to those that despair. Yet counsel I could give, and words I could speak to you.'"
 		promotext: ""
 		alts: {

@@ -44,7 +44,8 @@ public class Card_V2_043_Tests
 		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: Valiant.
-		* 	Theoden is strength +1 for each valiant companion assigned to a skirmish.
+		 * While 2 other valiant companions assigned to skirmishes, Theoden is strength +1.
+		 * Regroup: Exert Theoden and spot 2 other valiant companions to liberate a site.
 		*/
 
 		var scn = GetScenario();

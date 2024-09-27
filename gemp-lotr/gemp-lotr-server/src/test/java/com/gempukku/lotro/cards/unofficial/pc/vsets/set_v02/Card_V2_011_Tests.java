@@ -39,7 +39,8 @@ public class Card_V2_011_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-		 * Game Text: Exert 2 valiant companions to take a valiant (elven) companion or (elven) possession into hand from your draw deck.
+		 * Game Text: Exert a valiant companion (or spot 2 valiant Elves) to take a valiant [elven] companion
+		 * or [elven] possession into hand from your draw deck.
 		*/
 
 		var scn = GetScenario();
