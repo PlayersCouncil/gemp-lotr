@@ -33,6 +33,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: true
 				trigger: {
 					type: TakesWound
 					filter: minion
