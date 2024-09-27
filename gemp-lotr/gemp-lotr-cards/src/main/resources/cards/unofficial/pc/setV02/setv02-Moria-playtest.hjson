@@ -320,6 +320,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: true
 				trigger: {
 					type: WinsSkirmish
 					filter: unique, culture(moria), minion	
@@ -365,6 +366,10 @@
 						on: self
 						discount: memory(stackedDiscount)
 						assumePlayable: true
+					}
+					{
+						type: Discard
+						select: choose(self)
 					}
 				]
 			}
