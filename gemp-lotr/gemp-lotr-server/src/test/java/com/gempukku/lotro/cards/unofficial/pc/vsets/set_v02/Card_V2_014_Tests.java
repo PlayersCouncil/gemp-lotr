@@ -43,9 +43,9 @@ public class Card_V2_014_Tests
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Signet: Theoden
-		 * Game Text: Theoden is strength +1.
-		* 	Each mounted companion gains <b>valiant</b>.
-		* 	Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and exert Gandalf to prevent that and wound that minion. 
+		 * Game Text: Each mounted companion gains <b>valiant</b>.
+		 * 	Response: If a minion's special ability is used (except during a skirmish), spot 2 valiant companions
+		 * 	and exert Gandalf to prevent that and wound that minion.
 		*/
 
 		var scn = GetScenario();

@@ -43,9 +43,8 @@ public class Card_V2_060_Tests
 		 * Vitality: 3
 		 * Site Number: 6
 		 * Game Text: Tracker.
-		* 	The site number of each [sauron] orc is -3. 
-		* 	Each [sauron] orc with a site number of 1 or less is damage +1.
-		* 	Regroup: Discard a [sauron] or [isengard] tracker to play a [sauron] condition from your discard pile.
+		 *  The site number of each [sauron] orc is -3.
+		 *  Skirmish: Exert Grishnakh to make a [sauron] Orc with a site number of 1 or less damage +1.
 		*/
 
 		var scn = GetScenario();

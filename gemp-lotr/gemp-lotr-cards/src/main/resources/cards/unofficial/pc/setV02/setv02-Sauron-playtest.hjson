@@ -400,27 +400,21 @@
 				}
 			}
 			{
-				type: Modifier
-				modifier: {
-					type: AddKeyword
-					keyword: damage+1
-					filter: culture(sauron),minion,siteNumber(0-1)
-				}
-			}
-			{
 				type: Activated
-				phase: Regroup
+				phase: Skirmish
 				cost: {
-					type: Discard
-					select: choose(or(culture(sauron), culture(isengard)), tracker)
+					type: Exert
+					times: 1
+					select: self
 				}
 				effect: {
-					type: PlayCardFromDiscard
-					select: choose(culture(sauron), condition)
+					type: AddKeyword
+					keyword: damage+1
+					select: choose(InSkirmish, culture(Sauron), Orc, SiteNumber(0-1))
 				}
 			}
 		]
-		gametext: Tracker.<br>The site number of each [sauron] orc is -3. <br>Each [sauron] orc with a site number of 1 or less is damage +1.<br>Regroup: Discard a [sauron] or [isengard] tracker to play a [sauron] condition from your discard pile.
+		gametext: Tracker.\The site number of each [sauron] orc is -3. \Skirmish: Exert Grishnakh to make a skirmishing [sauron] Orc with a site number of 1 or less damage +1.
 		lore: ""
 		promotext: ""
 		alts: {

@@ -16,7 +16,7 @@
 			style: Standard
 		}
 		title: Theoden
-		subtitle: Last of his House
+		subtitle: Last of His House
 		unique: true
 		side: Free Peoples
 		culture: Rohan
@@ -34,14 +34,35 @@
 				modifier: {
 					type: ModifyStrength
 					filter: self
-					amount: {
-						type: ForEachYouCanSpot
-						filter: valiant, companion, AssignedToSkirmish(any)
+					requires: {
+						type: CanSpot
+						count: 2
+						filter: other, valiant, companion, AssignedToSkirmish(any)
 					}
+					amount: 1
+				}
+			}
+			{
+				type: Activated
+				phase: Regroup
+				cost: [
+					{
+						type: Exert
+						times: 1
+						select: self
+					}
+					{
+						type: Spot
+						count: 2
+						filter: other, valiant, companion, AssignedToSkirmish(any)
+					}
+				]
+				effect: {
+					type: LiberateSite
 				}
 			}
 		]
-		gametext: Valiant.<br>Theoden is strength +1 for each valiant companion assigned to a skirmish.
+		gametext: Valiant.<br/>While 2 other valiant companions assigned to skirmishes, Theoden is strength +1.\Regroup: Exert Theoden and spot 2 other valiant companions to liberate a site.
 		lore: "His beard was laid like snow upon his knees; but his eyes still burned with a bright light, glinting as he gazed..."
 		promotext: ""
 		alts: {

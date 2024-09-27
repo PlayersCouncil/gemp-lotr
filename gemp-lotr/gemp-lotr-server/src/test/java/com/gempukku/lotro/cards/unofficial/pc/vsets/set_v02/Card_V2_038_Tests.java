@@ -42,9 +42,9 @@ public class Card_V2_038_Tests
 		 * Strength: 17
 		 * Vitality: 5
 		 * Site Number: 4
-		 * Game Text: Fierce. Damage +2.
-		* 	Each time a minion takes a wound, add a threat.
-		* 	Each time the Free Peoples player uses a skirmish special ability during a skirmish involving the Balrog, you may wound a companion it is skirmishing.
+		 * Game Text: Fierce. Damage +1.
+		 * Each time a minion takes a wound you may remove (1) to add a threat.
+		 * Each time the Free Peoples player uses a skirmish special ability during a skirmish involving the Balrog, you may wound a companion it is skirmishing.
 		*/
 
 		var scn = GetScenario();
