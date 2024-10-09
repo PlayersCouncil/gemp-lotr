@@ -52,22 +52,22 @@ public class TimingAtTest extends AbstractAtTest {
     @Test
     public void playStartingFellowshipWithDiscountFromCardItself() throws DecisionResultInvalidException {
         Map<String, Collection<String>> extraCards = new HashMap<>();
-        extraCards.put(P1, Arrays.asList("40_17", "40_20"));
+        extraCards.put(P1, Arrays.asList("4_265", "4_267"));
         initializeSimplestGame(extraCards);
 
         // Play first character
         AwaitingDecision firstCharacterDecision = _userFeedback.getAwaitingDecision(P1);
         assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, firstCharacterDecision.getDecisionType());
-        validateContents(new String[]{"40_17", "40_20"}, ((String[]) firstCharacterDecision.getDecisionParameters().get("blueprintId")));
+        validateContents(new String[]{"4_265", "4_267"}, (firstCharacterDecision.getDecisionParameters().get("blueprintId")));
 
-        playerDecided(P1, getArbitraryCardId(firstCharacterDecision, "40_17"));
+        playerDecided(P1, getArbitraryCardId(firstCharacterDecision, "4_265"));
 
         // Play second character with discount
         AwaitingDecision secondCharacterDecision = _userFeedback.getAwaitingDecision(P1);
         assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, secondCharacterDecision.getDecisionType());
-        validateContents(new String[]{"40_20"}, ((String[]) secondCharacterDecision.getDecisionParameters().get("blueprintId")));
+        validateContents(new String[]{"4_267"}, ( secondCharacterDecision.getDecisionParameters().get("blueprintId")));
 
-        playerDecided(P1, getArbitraryCardId(secondCharacterDecision, "40_20"));
+        playerDecided(P1, getArbitraryCardId(secondCharacterDecision, "4_267"));
     }
 
     @Test
