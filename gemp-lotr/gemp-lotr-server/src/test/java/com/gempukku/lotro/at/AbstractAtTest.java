@@ -1,5 +1,6 @@
 package com.gempukku.lotro.at;
 
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -12,6 +13,7 @@ import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -35,6 +37,58 @@ public abstract class AbstractAtTest {
 
     public PhysicalCardImpl createCard(String owner, String blueprintId) throws CardNotFoundException {
         return (PhysicalCardImpl) _game.getGameState().createPhysicalCard(owner, _cardLibrary, blueprintId);
+    }
+
+    public void addToZone(PhysicalCard card, Zone zone) {
+        _game.getGameState().addCardToZone(_game, card, zone);
+    }
+
+    public void selectArbitraryCards(String player, String[] blueprintIds) throws DecisionResultInvalidException {
+        playerDecided(player, StringUtils.join(blueprintIds, ","));
+    }
+
+    public void selectCardAction(String player, PhysicalCard card) throws DecisionResultInvalidException {
+        playerDecided(player, getCardActionId(player, card.getCardId()));
+    }
+
+    public void selectCard(String player, PhysicalCard card) throws DecisionResultInvalidException {
+        playerDecided(player, String.valueOf(card.getCardId()));
+    }
+
+    public void selectYes(String player) throws DecisionResultInvalidException {
+        playerDecided(player, "0");
+    }
+
+    public void selectNo(String player) throws DecisionResultInvalidException {
+        playerDecided(player, "1");
+    }
+
+    public int getWounds(PhysicalCard card) {
+        return _game.getGameState().getWounds(card);
+    }
+
+    public int getTwilightPool() {
+        return _game.getGameState().getTwilightPool();
+    }
+
+    public void setTwilightPool(int twilightPool) {
+        _game.getGameState().setTwilight(twilightPool);
+    }
+
+    public void addThreats(int threats) {
+        _game.getGameState().addThreats(_game.getGameState().getCurrentPlayerId(), threats);
+    }
+
+    public int getThreats() {
+        return _game.getGameState().getThreats();
+    }
+
+    public Phase getPhase() {
+        return _game.getGameState().getCurrentPhase();
+    }
+
+    public void pass(String player) throws DecisionResultInvalidException {
+        playerDecided(player, "");
     }
 
     public void initializeSimplestGame() throws DecisionResultInvalidException {
@@ -116,6 +170,10 @@ public abstract class AbstractAtTest {
             if (cardIds[i].equals(String.valueOf(card.getCardId())))
                 return ((String[]) awaitingDecision.getDecisionParameters().get("actionId"))[i];
         return null;
+    }
+
+    public String getCardActionId(String playerId, PhysicalCard carD) {
+        return getCardActionId(playerId, carD.getCardId());
     }
 
     public String getCardActionId(String playerId, int cardId) {
