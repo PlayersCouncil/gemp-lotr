@@ -42,6 +42,12 @@ public class GameUtils {
         return blueprint.getTitle();
     }
 
+    public static String getFullSanitizedName(LotroCardBlueprint blueprint) {
+        if (blueprint.getSubtitle() != null)
+            return blueprint.getSanitizedTitle() + ", " + Names.SanitizeName(blueprint.getSubtitle());
+        return blueprint.getSanitizedTitle();
+    }
+
     public static String getFirstShadowPlayer(LotroGame game) {
         if (game.isSolo())
             throw new InvalidSoloAdventureException("Shadow player requested");

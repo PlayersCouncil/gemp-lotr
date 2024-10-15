@@ -25,7 +25,7 @@ public class Names {
                 .replaceAll("‘", "'")
                 .replaceAll("”", "\"")
                 .replaceAll("“", "\"")
-                .replaceAll("\\p{M}", "")
+                .replaceAll("\\p{M}", "") //Matches all accents or diacritical marks and removes them
                 .replaceAll(" ", "")
                 .replaceAll("_", "")
                 .toLowerCase();

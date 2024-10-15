@@ -451,9 +451,18 @@ ul.ui-tabs-nav {
 #auto-zoom-toggle {
     width: 25px;
     height: 20px;
-    padding: 0px;
     margin-top:-5px;
     margin-right: -5px;
+}
+
+#auto-zoom-message {
+    position: relative;
+    bottom: 0em;
+    color: #FFFF00;
+    background-color: #000000;
+    text-align: center;
+    width: fit-content;
+    margin: 0 auto;
 }
 
 .ui-button-icon-primary.ui-icon.ui-icon-search,

@@ -40,6 +40,7 @@ public interface LotroFormat {
     int getOrder();
 
     String validateCard(String cardId);
+    String validateSite(String cardId);
 
     List<String> validateDeck(LotroDeck deck);
     String validateDeckForHall(LotroDeck deck);

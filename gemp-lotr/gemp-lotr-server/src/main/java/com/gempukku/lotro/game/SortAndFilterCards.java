@@ -5,71 +5,201 @@ import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.game.packs.SetDefinition;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.util.MultipleComparator;
+import org.apache.commons.lang3.StringUtils;
 
-import java.text.Normalizer;
 import java.util.*;
 
 public class SortAndFilterCards {
     public <T extends CardItem> List<T> process(String filter, Iterable<T> items, LotroCardBlueprintLibrary cardLibrary, LotroFormatLibrary formatLibrary) {
         if (filter == null)
             filter = "";
-        String[] filterParams = filter.split(" ");
+        var params = parseFilterParams(filter);
 
-        Side side = getSideFilter(filterParams);
-        String type = getTypeFilter(filterParams);
-        String[] rarity = getRarityFilter(filterParams);
-        String[] sets = getSetFilter(filterParams);
-        List<String> words = getWords(filterParams);
-        Set<CardType> cardTypes = getEnumFilter(CardType.values(), CardType.class, "cardType", null, filterParams);
-        Set<Culture> cultures = getEnumFilter(Culture.values(), Culture.class, "culture", null, filterParams);
-        Set<Keyword> keywords = getEnumFilter(Keyword.values(), Keyword.class, "keyword", Collections.emptySet(), filterParams);
-        Integer siteNumber = getSiteNumber(filterParams);
-        Set<Race> races = getEnumFilter(Race.values(), Race.class, "race", null, filterParams);
-        Set<PossessionClass> itemClasses = getEnumFilter(PossessionClass.values(), PossessionClass.class, "itemClass", Collections.emptySet(), filterParams);
-        Set<Keyword> phases = getEnumFilter(Keyword.values(),Keyword.class, "phase", Collections.emptySet(), filterParams);
+        var product = getSingleton(params.getOrDefault("product", new ArrayList<>()));
+        var rarities = params.getOrDefault("rarity", new ArrayList<>());
+        var side = Side.Parse(getSingleton(params.get("side")));
+        var sort = params.getOrDefault("sort", new ArrayList<>());
+        var sets = params.getOrDefault("set", new ArrayList<>());
+        var cardTypes = getEnumFilter(CardType.values(), CardType.class, params.get("cardtype"), false);
+
+        var cultures = getEnumFilter(Culture.values(), Culture.class, params.get("culture"), true);
+
+        var nameWords = getWords(params.get("name"), true);
+        var textWords = getWords(params.get("gametext"));
+
+        var keywords = getEnumFilter(Keyword.values(), Keyword.class, params.get("keyword"), true);
+        var phases = getEnumFilter(Keyword.values(),Keyword.class, params.get("phase"), true);
+        var races = getEnumFilter(Race.values(), Race.class, params.get("race"), true);
+        var itemClasses = getEnumFilter(PossessionClass.values(), PossessionClass.class, params.get("itemclass"), true);
+
+        var twilight = getStat(params.get("sitenumber"));
+        var twilightComparator = getSingleton(params.get("twilightcompare"));
+        var siteNumber = getStat(params.get("sitenumber"));
+        var siteNumberComparator = getSingleton(params.get("sitenumbercompare"));
+        var strength = getStat(params.get("strength"));
+        var strengthComparator = getSingleton(params.get("strengthcompare"));
+        var vitality = getStat(params.get("vitality"));
+        var vitalityComparator = getSingleton(params.get("vitalitycompare"));
+        var resistance = getStat(params.get("resistance"));
+        var resistanceComparator = getSingleton(params.get("resistancecompare"));
+        var signets = getEnumFilter(Signet.values(), Signet.class, params.get("signet"), true);
 
         List<T> result = new ArrayList<>();
-        Map<String, LotroCardBlueprint> cardBlueprintMap = new HashMap<>();
+        var cardBPCache = new HashMap<String, LotroCardBlueprint>();
+        var setDefs = cardLibrary.getSetDefinitions();
 
+        //In this giant loop, we will go through every item handed to us and see if it matches all of the above filter
+        // conditions.  Whenever we fail a filter, we hit "continue" and move on to the next item to check.
         for (T item : items) {
             String blueprintId = item.getBlueprintId();
+            String strippedId = BlueprintUtils.stripModifiers(blueprintId);
+
             if (isPack(blueprintId)) {
-                if (acceptsFilters(cardLibrary, cardBlueprintMap, formatLibrary, blueprintId, side, type, rarity, sets, cardTypes, cultures, keywords, words, siteNumber, races, itemClasses, phases))
+                if (product == null || product.equals("pack")) {
                     result.add(item);
-            } else {
-                try {
-                    cardBlueprintMap.put(blueprintId, cardLibrary.getLotroCardBlueprint(blueprintId));
-                    if (acceptsFilters(cardLibrary, cardBlueprintMap, formatLibrary, blueprintId, side, type, rarity, sets, cardTypes, cultures, keywords, words, siteNumber, races, itemClasses, phases))
-                        result.add(item);
-                } catch (CardNotFoundException e) {
-                    // Ignore the card
+                }
+                continue;
+            }
+
+            //Cache our looked-up blueprints so we're not always re-searching; also used later for sorting
+            try {
+                if(!cardBPCache.containsKey(blueprintId)) {
+                    cardBPCache.putIfAbsent(blueprintId, cardLibrary.getLotroCardBlueprint(blueprintId));
+                }
+            } catch (CardNotFoundException ignored) {
+                // Ignore the card
+                continue;
+            }
+
+            var card = cardBPCache.get(blueprintId);
+            boolean valid = true;
+
+            if(product != null) {
+                switch(product.toLowerCase()) {
+                    case "foil" -> {
+                        if (!blueprintId.contains("*"))
+                            continue;
+                    }
+                    case "nonfoil" -> {
+                        if (blueprintId.contains("*"))
+                            continue;
+                    }
+                    case "tengwar" -> {
+                        if (!blueprintId.contains("T"))
+                            continue;
+                    }
+                    case "pack" -> {
+                        continue;
+                    }
+
                 }
             }
+
+            if(side != null) {
+                if(side == Side.NONE) {
+                    // The filter is looking for cards with no side, i.e. The One Ring, Sites, or Maps.
+                    if(card.getSide() != null)
+                        continue;
+                }
+                //Now compare for Freeps or Shadow
+                else if(!side.equals(card.getSide()))
+                    continue;
+            }
+
+            if(!rarities.isEmpty()) {
+                var setDef = setDefs.get(BlueprintUtils.getSet(blueprintId));
+                if(setDef != null) {
+                    var rarity = setDef.getCardRarity(strippedId);
+                    if(rarity == null || !rarities.contains(rarity))
+                        continue;
+                }
+            }
+
+            if(!sets.isEmpty() && !isInSets(blueprintId, card, sets, cardLibrary, formatLibrary))
+                continue;
+
+            if(!cardTypes.isEmpty() && !cardTypes.contains(card.getCardType()))
+                continue;
+
+            if(!cultures.isEmpty() && !cultures.contains(card.getCulture()))
+                continue;
+
+            if(!keywords.isEmpty() && !containsAnyKeywords(card, keywords))
+                continue;
+
+            if(!isAttributeValueAccepted(twilight, twilightComparator, card.getTwilightCost()))
+                continue;
+
+            if(card.getCardType() == CardType.ALLY) {
+                for(int home : card.getAllyHomeSiteNumbers()) {
+                    if(!isAttributeValueAccepted(siteNumber, siteNumberComparator, home)) {
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if(!valid)
+                    continue;
+            }
+            else if(!isAttributeValueAccepted(siteNumber, siteNumberComparator, card.getSiteNumber()))
+                continue;
+
+            if(!isAttributeValueAccepted(strength, strengthComparator, card.getStrength()))
+                continue;
+
+            if(!isAttributeValueAccepted(vitality, vitalityComparator, card.getVitality()))
+                continue;
+
+            if(!isAttributeValueAccepted(resistance, resistanceComparator, card.getResistance()))
+                continue;
+
+            if(!signets.isEmpty() && !signets.contains(card.getSignet()))
+                continue;
+
+            if(!races.isEmpty() && !races.contains(card.getRace()))
+                continue;
+
+            if(!phases.isEmpty()) {
+                if(card.getCardType() != CardType.EVENT || !containsAnyKeywords(card, phases))
+                    continue;
+            }
+
+            if(!itemClasses.isEmpty() && !containsAnyClasses(card, itemClasses))
+                continue;
+
+            if(!nameWords.isEmpty() && !containsAllWords(GameUtils.getFullSanitizedName(card), nameWords))
+                continue;
+
+            //Oops...don't have game text available anywhere yet.
+//            if(!textWords.isEmpty() && !containsAllWords(GameUtils.getFullSanitizedName(card), nameWords))
+//                continue;
+
+            //Reached the end of the gauntlet and nothing filtered it out.
+            result.add(item);
+
         }
 
-        String sort = getSort(filterParams);
-        if (sort == null || sort.equals(""))
-            sort = "name";
-
-        final String[] sortSplit = sort.split(",");
+        if (sort.isEmpty() || sort.stream().noneMatch(StringUtils::isBlank)) {
+            sort.add("name");
+        }
 
         MultipleComparator<CardItem> comparators = new MultipleComparator<>();
-        for (String oneSort : sortSplit) {
+        for (String oneSort : sort) {
             switch (oneSort) {
                 case "twilight" ->
-                        comparators.addComparator(new PacksFirstComparator(new TwilightComparator(cardBlueprintMap)));
+                        comparators.addComparator(new PacksFirstComparator(new TwilightComparator(cardBPCache)));
                 case "siteNumber" ->
-                        comparators.addComparator(new PacksFirstComparator(new SiteNumberComparator(cardBlueprintMap)));
+                        comparators.addComparator(new PacksFirstComparator(new SiteNumberComparator(cardBPCache)));
                 case "strength" ->
-                        comparators.addComparator(new PacksFirstComparator(new StrengthComparator(cardBlueprintMap)));
+                        comparators.addComparator(new PacksFirstComparator(new StrengthComparator(cardBPCache)));
                 case "vitality" ->
-                        comparators.addComparator(new PacksFirstComparator(new VitalityComparator(cardBlueprintMap)));
+                        comparators.addComparator(new PacksFirstComparator(new VitalityComparator(cardBPCache)));
                 case "cardType" ->
-                        comparators.addComparator(new PacksFirstComparator(new CardTypeComparator(cardBlueprintMap)));
+                        comparators.addComparator(new PacksFirstComparator(new CardTypeComparator(cardBPCache)));
                 case "culture" ->
-                        comparators.addComparator(new PacksFirstComparator(new CultureComparator(cardBlueprintMap)));
+                        comparators.addComparator(new PacksFirstComparator(new CultureComparator(cardBPCache)));
                 case "name" ->
-                        comparators.addComparator(new PacksFirstComparator(new NameComparator(cardBlueprintMap)));
+                        comparators.addComparator(new PacksFirstComparator(new NameComparator(cardBPCache)));
             }
         }
 
@@ -78,231 +208,202 @@ public class SortAndFilterCards {
         return result;
     }
 
-    private boolean acceptsFilters(
-            LotroCardBlueprintLibrary library, Map<String, LotroCardBlueprint> cardBlueprint, LotroFormatLibrary formatLibrary, String blueprintId, Side side, String type, String[] rarity, String[] sets,
-            Set<CardType> cardTypes, Set<Culture> cultures, Set<Keyword> keywords, List<String> words, Integer siteNumber, Set<Race> races, Set<PossessionClass> itemClasses, Set<Keyword> phases) {
-        if (isPack(blueprintId)) {
-            if (type == null || type.equals("pack"))
-                return true;
-        } else {
-            if (type == null
-                    || type.equals("card")
-                    || (type.equals("foil") && blueprintId.endsWith("*"))
-                    || (type.equals("nonFoil") && !blueprintId.endsWith("*"))
-                    || (type.equals("tengwar") && (blueprintId.endsWith("T*") || blueprintId.endsWith("T")))) {
-                final LotroCardBlueprint blueprint = cardBlueprint.get(blueprintId);
-                if (side == null || blueprint.getSide() == side)
-                    if (rarity == null || isRarity(blueprintId, rarity, library, library.getSetDefinitions()))
-                        if (sets == null || isInSets(blueprintId, sets, library, formatLibrary, cardBlueprint))
-                            if (cardTypes == null || cardTypes.contains(blueprint.getCardType()))
-                                if (cultures == null || cultures.contains(blueprint.getCulture()))
-                                    if (containsAllKeywords(blueprint, keywords))
-                                        if (containsAllWords(blueprint, words))
-                                            if (siteNumber == null || blueprint.getSiteNumber() == siteNumber)
-                                                if (races == null || races.contains(blueprint.getRace()))
-                                                    if (containsAllClasses(blueprint, itemClasses))
-                                                        if (containsAllKeywords(blueprint, phases))
-                                                            return true;
+    //Key: a particular filter parameter label
+    //Value: List of individual arguments for that parameter, which may have been part of multiple different instances
+    // of that parameter (e.g. "name:foo name:bar") or a comma-separated batch of instances (e.g. "name:foo,bar") or
+    // any combination of the two.
+    //Note that this coerces the key into lowercase
+    private Map<String, List<String>> parseFilterParams(String filter) {
+        String[] params = filter.split(" ");
+        Map<String, List<String>> result = new HashMap<>();
+
+        for (String param : params) {
+            if(!param.contains(":"))
+                continue;
+
+            var parts = param.split(":");
+            String key = parts[0].toLowerCase();
+
+            if(!result.containsKey(key)) {
+                var list = new ArrayList<>(Arrays.stream(parts[1].split(",")).toList());
+                result.put(key, list);
+            }
+            else {
+                result.get(key).addAll(Arrays.asList(parts[1].split(",")));
             }
         }
-        return false;
+
+        return result;
     }
 
-    private Side getSideFilter(String[] filterParams) {
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("side:"))
-                return Side.valueOf(filterParam.substring("side:".length()));
-        }
-        return null;
-    }
-
-    private String getTypeFilter(String[] filterParams) {
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("type:"))
-                return filterParam.substring("type:".length());
-        }
-        return null;
-    }
-
-    private String[] getRarityFilter(String[] filterParams) {
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("rarity:"))
-                return filterParam.substring("rarity:".length()).split(",");
-        }
-        return null;
-    }
-
-    private String[] getSetFilter(String[] filterParams) {
-        String setStr = getSetNumber(filterParams);
-        String[] sets = null;
-        if (setStr != null)
-            sets = setStr.split(",");
-        return sets;
-    }
-
-    private boolean isRarity(String blueprintId, String[] rarity, LotroCardBlueprintLibrary library, Map<String, SetDefinition> rarities) {
-        if (blueprintId.contains("_")) {
-            SetDefinition setRarity = rarities.get(blueprintId.substring(0, blueprintId.indexOf("_")));
-            if (setRarity != null) {
-                String cardRarity = setRarity.getCardRarity(library.stripBlueprintModifiers(blueprintId));
-                if(cardRarity == null) {
-                    //TODO: log that the rarity was not set
-                    //real TODO: put the rarity in the friggin json
-                    return false;
-                }
-                for (String r : rarity) {
-                    if (cardRarity.equals(r))
-                        return true;
-                }
-            }
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isInSets(String blueprintId, String[] sets, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, Map<String, LotroCardBlueprint> cardBlueprint) {
-        for (String set : sets) {
+    private boolean isInSets(String blueprintId, LotroCardBlueprint card, List<String> setFilters, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
+        for (String set : setFilters) {
             LotroFormat format = formatLibrary.getFormat(set);
 
             if (format != null) {
-                String valid = format.validateCard(blueprintId);
-                if(valid != null && !valid.isEmpty())
-                    return false;
-
-                final LotroCardBlueprint blueprint = cardBlueprint.get(blueprintId);
-                if (blueprint.getCardType() == CardType.SITE) {
-                    if (blueprint.getSiteBlock() == SitesBlock.FELLOWSHIP) {
-                        if ("fotr_block,pc_fotr_block,test_pc_fotr_block".contains(set)) {
-                            return true;
-                        }
+                if (card.getCardType() == CardType.SITE) {
+                    String invalid = format.validateSite(blueprintId);
+                    if(!StringUtils.isEmpty(invalid))
                         return false;
-                    }
-                    if (blueprint.getSiteBlock() == SitesBlock.TWO_TOWERS) {
-                        if ("towers_standard,ttt_block".contains(set)) {
-                            return true;
-                        }
-                        return false;
-                    }
-                    if (blueprint.getSiteBlock() == SitesBlock.KING) {
-                        if ("king_block,rotk_sta,movie,pc_movie_block,test_pc_movie_block".contains(set)) {
-                            return true;
-                        }
-                        return false;
-                    }
-                    return true;
-                } else {
-                    return true;
                 }
-            } else {
-                if (set.contains("-")) {
-                    final String[] split = set.split("-", 2);
-                    int min = Integer.parseInt(split[0]);
-                    int max = Integer.parseInt(split[1]);
-                    for (int setNo = min; setNo <= max; setNo++) {
-                        if (blueprintId.startsWith(setNo + "_") || library.hasAlternateInSet(blueprintId, setNo))
-                            return true;
-                    }
-                } else {
-                    if (blueprintId.startsWith(set + "_") || library.hasAlternateInSet(blueprintId, Integer.parseInt(set)))
+
+                String invalid = format.validateCard(blueprintId);
+                return StringUtils.isEmpty(invalid);
+            }
+
+            if (set.contains("-")) {
+                final String[] split = set.split("-", 2);
+                int min = Integer.parseInt(split[0]);
+                int max = Integer.parseInt(split[1]);
+                for (int setNo = min; setNo <= max; setNo++) {
+                    if (blueprintId.startsWith(setNo + "_") || library.hasAlternateInSet(blueprintId, setNo))
                         return true;
                 }
+            } else {
+                if (blueprintId.startsWith(set + "_") || library.hasAlternateInSet(blueprintId, Integer.parseInt(set)))
+                    return true;
             }
         }
 
         return false;
     }
 
-    private String getSetNumber(String[] filterParams) {
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("set:"))
-                return filterParam.substring("set:".length());
-        }
-        return null;
-    }
+    private List<String> getWords(List<String> params) { return getWords(params, false); }
 
-    private List<String> getWords(String[] filterParams) {
-        List<String> result = new LinkedList<>();
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("name:"))
-                result.add(Names.SanitizeName(filterParam.substring("name:".length()).toLowerCase()));
+    private List<String> getWords(List<String> params, boolean sanitize) {
+        var result = new ArrayList<String>();
+        if(params == null)
+            return result;
+
+        for (String str : params) {
+            //The client usually does some pre-processing and chops these up into words, but we will check to make sure
+            for(String word : str.split(" ")) {
+                if(sanitize) {
+                    result.add(Names.SanitizeName(word));
+                }
+                else {
+                    result.add(word);
+                }
+            }
         }
         return result;
     }
 
-    private Integer getSiteNumber(String[] filterParams) {
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("siteNumber:"))
-                return Integer.parseInt(filterParam.substring("siteNumber:".length()));
+    private Integer getStat(List<String> params) {
+        var statStr = getSingleton(params);
+        try {
+            return Integer.parseInt(statStr);
         }
-        return null;
+        catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 
-    private String getSort(String[] filterParams) {
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("sort:"))
-                return filterParam.substring("sort:".length());
-        }
-        return null;
+    private String getSingleton(List<String> params) {
+        if(params == null)
+            return null;
+        var statStr = params.stream().filter(x -> !StringUtils.isBlank(x)).findFirst();
+        return statStr.orElse(null);
     }
 
-    private boolean containsAllKeywords(LotroCardBlueprint blueprint, Set<Keyword> keywords) {
+    private boolean containsAnyKeywords(LotroCardBlueprint blueprint, Set<Keyword> keywords) {
         for (Keyword keyword : keywords) {
-            if (blueprint == null || !blueprint.hasKeyword(keyword))
-                return false;
+            if (blueprint.hasKeyword(keyword))
+                return true;
         }
-        return true;
+        return false;
     }
 
-    private boolean containsAllClasses(LotroCardBlueprint blueprint, Set<PossessionClass> possessionClasses) {
-        for (PossessionClass filterPossessionClass : possessionClasses) {
-            if (blueprint == null)
-                return false;
-            else {
-                if (blueprint.getPossessionClasses() == null) {
-                    if (filterPossessionClass == PossessionClass.CLASSLESS)
-                        return true;
-                    return false;
-                }            
-                for (PossessionClass blueprintPossessionClass : blueprint.getPossessionClasses()) {
-                    if (filterPossessionClass == blueprintPossessionClass)
-                        return true;
-                }
-                return false;
-            }
+    private boolean containsAnyClasses(LotroCardBlueprint blueprint, Set<PossessionClass> itemClassFilters) {
+        if (blueprint.getPossessionClasses() == null) {
+            return itemClassFilters.contains(PossessionClass.CLASSLESS);
         }
-        return true;
+
+        //disjoint is true if there's zero overlap between both collections;
+        // thus, false means there is at least one shared item between both.
+        return !Collections.disjoint(itemClassFilters, blueprint.getPossessionClasses());
     }
 
-    private boolean containsAllWords(LotroCardBlueprint blueprint, List<String> words) {
+    private boolean containsAllWords(String cardData, List<String> words) {
         for (String word : words) {
-            if (blueprint == null || !Names.SanitizeName(GameUtils.getFullName(blueprint).toLowerCase()).contains(word))
+            if (!cardData.contains(word))
                 return false;
         }
         return true;
     }
 
-    private <T extends Enum> Set<T> getEnumFilter(T[] enumValues, Class<T> enumType, String prefix, Set<T> defaultResult, String[] filterParams) {
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith(prefix + ":")) {
-                String values = filterParam.substring((prefix + ":").length());
-                if (values.startsWith("-")) {
-                    values = values.substring(1);
-                    Set<T> cardTypes = new HashSet<>(Arrays.asList(enumValues));
-                    for (String v : values.split(",")) {
-                        T t = (T) Enum.valueOf(enumType, v);
-                        if (t != null)
-                            cardTypes.remove((T) t);
-                    }
-                    return cardTypes;
-                } else {
-                    Set<T> cardTypes = new HashSet<>();
-                    for (String v : values.split(","))
-                        cardTypes.add((T) Enum.valueOf(enumType, v));
-                    return cardTypes;
+    // Converts a provided list of consolidated filter parameters into their associated enums.
+    private <T extends Enum> Set<T> getEnumFilter(T[] enumValues, Class<T> enumType, List<String> args, boolean startEmpty) {
+
+        //By default we assume the passed filters are negative and pre-populate our set of valid enums with every possible
+        // value.  When we detect negative filters, we will remove them from this set later.
+        Set<T> result;
+        if(startEmpty) {
+            result = new HashSet<>();
+        }
+        else {
+            result = new HashSet<>(Arrays.asList(enumValues));
+        }
+        if(args == null)
+            return result;
+
+        if(args.stream().anyMatch(x -> !x.startsWith("-"))) {
+            //Some of the passed in filters are positive filters, meaning we want to by default only show the positives
+            // (while leaving room for compatible negative filters to remove themselves, canceling out any incompatible filter.)
+            result.clear();
+        }
+
+        for (String arg : args) {
+            if (arg.startsWith("-")) { //Negative filter
+                arg = arg.substring(1);
+
+                try {
+                    T t = (T) Enum.valueOf(enumType, arg);
+                    result.remove(t);
                 }
+                //We don't care about the null case so we squelch it, but we do want IllegalArgument to be passed up
+                // so it gets logged that a bad value has been passed
+                catch (NullPointerException ignored) { }
+            } else {
+                try {
+                    T t = (T) Enum.valueOf(enumType, arg);
+                    result.add(t);
+                }
+                catch (NullPointerException ignored) { }
             }
         }
-        return defaultResult;
+
+        return result;
+    }
+
+
+    /**
+     * Determines if the blueprint attribute value is accepted by the filter comparison.
+     * @param compareType the compare type
+     * @param filterValue the filter value
+     * @param blueprintValue the card blueprint value
+     * @return true or false
+     */
+    private static boolean isAttributeValueAccepted(Integer filterValue, String compareType, Integer blueprintValue) {
+        if(filterValue == null || compareType == null)
+            return true;
+
+        if (blueprintValue == null)
+            return false;
+
+        if ("EQUALS".equals(compareType) || "GREATER_THAN_OR_EQUAL_TO".equals(compareType) || "LESS_THAN_OR_EQUAL_TO".equals(compareType)) {
+            if (blueprintValue.equals(filterValue))
+                return true;
+        }
+        if ("GREATER_THAN".equals(compareType) || "GREATER_THAN_OR_EQUAL_TO".equals(compareType)) {
+            if (blueprintValue > filterValue)
+                return true;
+        }
+        if ("LESS_THAN".equals(compareType) || "LESS_THAN_OR_EQUAL_TO".equals(compareType)) {
+            if (blueprintValue < filterValue)
+                return true;
+        }
+        return false;
     }
 
     private static boolean isPack(String blueprintId) {

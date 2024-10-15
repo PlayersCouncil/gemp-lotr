@@ -296,19 +296,19 @@ public class DefaultLotroFormat implements LotroFormat {
                 return null;
 
             if (!_validSets.isEmpty() && !isValidInSets(blueprintId))
-                return "Deck contains card not from valid set: " + GameUtils.getFullName(_library.getLotroCardBlueprint(blueprintId));
+                return "Card not from valid set: " + GameUtils.getFullName(_library.getLotroCardBlueprint(blueprintId));
 
             // Banned cards
             Set<String> allAlternates = _library.getAllAlternates(blueprintId);
             for (String bannedBlueprintId : _bannedCards) {
                 if (bannedBlueprintId.equals(blueprintId) || (allAlternates != null && allAlternates.contains(bannedBlueprintId)))
-                    return "Deck contains a copy of an X-listed card: " + GameUtils.getFullName(_library.getLotroCardBlueprint(bannedBlueprintId));
+                    return "Card is X-listed: " + GameUtils.getFullName(_library.getLotroCardBlueprint(bannedBlueprintId));
             }
 
             // Errata
             for (String originalBlueprintId : _errataCardMap.keySet()) {
                 if (originalBlueprintId.equals(blueprintId) || (allAlternates != null && allAlternates.contains(originalBlueprintId)))
-                    return "Deck contains non-errata of an errata'd card: " + GameUtils.getFullName(_library.getLotroCardBlueprint(originalBlueprintId));
+                    return "Non-errata version of an errata'd card: " + GameUtils.getFullName(_library.getLotroCardBlueprint(originalBlueprintId));
             }
 
         } catch (CardNotFoundException e) {
@@ -613,30 +613,10 @@ public class DefaultLotroFormat implements LotroFormat {
             result += "Deck has " + sites.size() + " sites instead of 9.\n";
         }
         for (String site : sites) {
-            try {
-                LotroCardBlueprint siteBlueprint = _library.getLotroCardBlueprint(site);
-
-                if (siteBlueprint.getCardType() != CardType.SITE) {
-                    result += "Card assigned as Site is not really a site.\n";
-                }
-                else if (siteBlueprint.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.MULTIPATH) {
-                    result += "Site does not match block: " + GameUtils.getFullName(siteBlueprint) + "\n";
-                }
-                else if (_siteBlock == SitesBlock.MULTIPATH && siteBlueprint.getSiteBlock() == SitesBlock.SHADOWS) {
-                    result += "Post-Shadows site not allowed: " + GameUtils.getFullName(siteBlueprint) + "\n";
-                }
-                else {
-                    String valid = validateCard(site);
-                    if(valid != null && !valid.isEmpty()) {
-                        result += valid + "\n";
-                    }
-                }
+            var valid = validateSite(site);
+            if(valid != null) {
+                result += valid;
             }
-            catch(CardNotFoundException ex)
-            {
-                result += CardRemovedError + "\n";
-            }
-
         }
         if (_siteBlock == SitesBlock.MULTIPATH) {
             SitesBlock usedBlock = null;
@@ -659,6 +639,36 @@ public class DefaultLotroFormat implements LotroFormat {
         }
 
         return result;
+    }
+
+    @Override
+    public String validateSite(String blueprintId) {
+        LotroCardBlueprint bp;
+        try {
+            bp = _library.getLotroCardBlueprint(blueprintId);
+        }
+        catch(CardNotFoundException ex)
+        {
+            return CardRemovedError;
+        }
+
+        if (bp.getCardType() != CardType.SITE) {
+            return "Card assigned as Site is not really a site.";
+        }
+        else if (bp.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.MULTIPATH) {
+            return "Site does not use supported block: " + GameUtils.getFullName(bp);
+        }
+        else if (_siteBlock == SitesBlock.MULTIPATH && bp.getSiteBlock() == SitesBlock.SHADOWS) {
+            return "Post-Shadows site not allowed in Multipath: " + GameUtils.getFullName(bp);
+        }
+        else {
+            String invalid = validateCard(blueprintId);
+            if(invalid != null && !invalid.isEmpty()) {
+                return invalid;
+            }
+        }
+
+        return null;
     }
 
     private String validateRing(LotroDeck deck) {
@@ -686,7 +696,7 @@ public class DefaultLotroFormat implements LotroFormat {
         if (!_usesMaps)
             return null;
         if (mapBP == null)
-            return "Deck doesn't have a Map (try the King map if converting a Movie deck).";
+            return "Deck doesn't have a Map (try 'Journey of the King' if converting a Movie deck).";
         try {
             var map = _library.getLotroCardBlueprint(mapBP);
             if (map.getCardType() != CardType.MAP)

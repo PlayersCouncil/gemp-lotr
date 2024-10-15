@@ -3,6 +3,7 @@ package com.gempukku.lotro.game;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.common.AppConfig;
+import com.gempukku.lotro.common.BlueprintUtils;
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.game.packs.DefaultSetDefinition;
 import com.gempukku.lotro.game.packs.SetDefinition;
@@ -247,7 +248,7 @@ public class LotroCardBlueprintLibrary {
     }
 
     public String getBaseBlueprintId(String blueprintId) {
-        blueprintId = stripBlueprintModifiers(blueprintId);
+        blueprintId = BlueprintUtils.stripModifiers(blueprintId);
         String base = _blueprintMapping.get(blueprintId);
         if (base != null)
             return base;
@@ -370,7 +371,7 @@ public class LotroCardBlueprintLibrary {
     }
 
     public LotroCardBlueprint getLotroCardBlueprint(String blueprintId) throws CardNotFoundException {
-        blueprintId = stripBlueprintModifiers(blueprintId);
+        blueprintId = BlueprintUtils.stripModifiers(blueprintId);
         LotroCardBlueprint bp = null;
         
         try {
@@ -387,14 +388,6 @@ public class LotroCardBlueprintLibrary {
         } catch (InterruptedException exp) {
             throw new RuntimeException("LotroCardBlueprintLibrary.getLotroCardBlueprint() interrupted: ", exp);
         }
-    }
-
-    public String stripBlueprintModifiers(String blueprintId) {
-        if (blueprintId.endsWith("*"))
-            blueprintId = blueprintId.substring(0, blueprintId.length() - 1);
-        if (blueprintId.endsWith("T"))
-            blueprintId = blueprintId.substring(0, blueprintId.length() - 1);
-        return blueprintId;
     }
 
     private LotroCardBlueprint findJavaBlueprint(String blueprintId) throws CardNotFoundException {

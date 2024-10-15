@@ -25,11 +25,7 @@ public class DefaultSetDefinition implements SetDefinition {
 
     public void addCard(String blueprintId, String rarity) {
         _cardsRarity.put(blueprintId, rarity);
-        var cardsOfRarity = _rarityList.get(rarity);
-        if (cardsOfRarity == null) {
-            cardsOfRarity = new LinkedList<>();
-            _rarityList.put(rarity, cardsOfRarity);
-        }
+        var cardsOfRarity = _rarityList.computeIfAbsent(rarity, k -> new LinkedList<>());
         cardsOfRarity.add(blueprintId);
     }
 
