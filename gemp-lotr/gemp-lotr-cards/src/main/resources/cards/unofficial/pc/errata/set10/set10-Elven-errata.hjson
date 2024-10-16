@@ -305,6 +305,7 @@
 		}
 		effects: {
 			type: trigger
+			optional: true
 			trigger: {
 				type: losesInitiative
 				side: free peoples
