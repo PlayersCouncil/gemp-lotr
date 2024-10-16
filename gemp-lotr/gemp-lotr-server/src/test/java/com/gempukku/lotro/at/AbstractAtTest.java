@@ -1,9 +1,6 @@
 package com.gempukku.lotro.at;
 
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Token;
-import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
@@ -13,6 +10,7 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 import org.apache.commons.lang3.StringUtils;
@@ -41,8 +39,12 @@ public abstract class AbstractAtTest {
         return (PhysicalCardImpl) _game.getGameState().createPhysicalCard(owner, _cardLibrary, blueprintId);
     }
 
-    public void addCultureTokens(PhysicalCard elvenDefender, Token token, int count) {
-        _game.getGameState().addTokens(elvenDefender, token, count);
+    public void addCultureTokens(PhysicalCard card, Token token, int count) {
+        _game.getGameState().addTokens(card, token, count);
+    }
+
+    public int getArcheryTotal(Side side) {
+        return RuleUtils.calculateArcheryTotal(_game, side);
     }
 
     public PhysicalCard getRingBearer(String player) {
@@ -148,6 +150,10 @@ public abstract class AbstractAtTest {
 
     public int getBurdens() {
         return _game.getGameState().getBurdens();
+    }
+
+    public void addBurdens(int count) {
+        _game.getGameState().addBurdens(count);
     }
 
     public void removeBurdens(int count) {
