@@ -2,6 +2,7 @@ package com.gempukku.lotro.at;
 
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -44,5 +45,33 @@ public class ExtraCostToPlayAtTest extends AbstractAtTest {
 
         String[] actionIds = (String[]) _userFeedback.getAwaitingDecision(P1).getDecisionParameters().get("actionId");
         assertEquals(0, actionIds.length);
+    }
+
+    @Test
+    public void windowsInAStoneWallExertsTarget() throws DecisionResultInvalidException, CardNotFoundException {
+        initializeSimplestGame();
+
+        PhysicalCard windowsInAStoneWall = addToZone(createCard(P1, "4_107"), Zone.HAND);
+        PhysicalCard treebeard = addToZone(createCard(P1, "4_103"), Zone.FREE_CHARACTERS);
+
+        skipMulligans();
+
+        // Fellowship
+        selectCardAction(P1, windowsInAStoneWall);
+        assertEquals(1, getWounds(treebeard));
+    }
+
+    @Test
+    public void windowsInAStoneWallCantPlayOnExhaustedEnt() throws DecisionResultInvalidException, CardNotFoundException {
+        initializeSimplestGame();
+
+        PhysicalCard windowsInAStoneWall = addToZone(createCard(P1, "4_107"), Zone.HAND);
+        PhysicalCard treebeard = addToZone(createCard(P1, "4_103"), Zone.FREE_CHARACTERS);
+        addWounds(treebeard, 3);
+
+        skipMulligans();
+
+        // Fellowship
+        assertNoCardAction(P1, windowsInAStoneWall);
     }
 }

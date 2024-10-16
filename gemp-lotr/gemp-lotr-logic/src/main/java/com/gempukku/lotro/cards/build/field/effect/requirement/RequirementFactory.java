@@ -22,8 +22,6 @@ public class RequirementFactory {
         requirementProducers.put("isgreaterthanorequal", new IsGreaterThanOrEqual());
         requirementProducers.put("islessthan", new IsLessThan());
         requirementProducers.put("islessthanorequal", new IsLessThanOrEqual());
-
-        requirementProducers.put("canmove", new CanMove());
         requirementProducers.put("canplayfromdiscard", new CanPlayFromDiscard());
         requirementProducers.put("canselfbeplayed", new CanSelfBePlayed());
         requirementProducers.put("canspot", new CanSpot());

@@ -305,4 +305,234 @@ public class TriggersAtTest extends AbstractAtTest {
 
         assertEquals(siteOne, _game.getGameState().getSite(1));
     }
+
+    @Test
+    public void startOfSkirmishInvolving() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+        PhysicalCard hopelessGollum = addToZone(createCard(P2, "15_43"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+
+        playerDecided(P1, gimli.getCardId() + " " + hopelessGollum.getCardId());
+
+        assertEquals(0, getStrength(hopelessGollum));
+        selectCard(P1, gimli);
+        assertEquals(4, getStrength(hopelessGollum));
+    }
+
+    @Test
+    public void skirmishAboutToEnd() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+        PhysicalCard attea = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard loathsome = addToZone(createCard(P2, "7_182"), Zone.HAND);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, gimli.getCardId() + " " + attea.getCardId());
+
+        selectCard(P1, gimli);
+        pass(P1);
+        pass(P2);
+
+        selectCardAction(P2, loathsome);
+        assertEquals(Zone.DISCARD, loathsome.getZone());
+    }
+
+    @Test
+    public void revealedCardFromHand() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard eyeOfBaradDur = addToZone(createCard(P2, "5_96"), Zone.HAND);
+        PhysicalCard gandalf = addToZone(createCard(P1, "1_72"), Zone.FREE_CHARACTERS);
+        PhysicalCard glamdring = attachTo(createCard(P1, "1_75"), gandalf);
+
+        passUntil(Phase.FELLOWSHIP);
+        selectCardAction(P1, glamdring);
+        pass(P1);
+
+        assertEquals(1, getBurdens());
+        selectCardAction(P2, eyeOfBaradDur);
+        assertEquals(3, getBurdens());
+    }
+
+    @Test
+    public void playerDrawsCard() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard verilyICome = attachTo(createCard(P2, "2_94"), _game.getGameState().getRingBearer(P1));
+        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
+
+        passUntil(Phase.FELLOWSHIP);
+
+        putOnTopOfDeck(createCard(P1, "1_40"));
+
+        assertEquals(1, getBurdens());
+        selectCardAction(P1, elrond);
+        assertEquals(2, getBurdens());
+    }
+
+    @Test
+    public void beforeToil() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard enqueaBlackThirst = addToZone(createCard(P2, "12_175"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard minasMorgulAnswers = addToZone(createCard(P2, "12_167"), Zone.HAND);
+
+        passUntil(Phase.SHADOW);
+        assertEquals(2, getTwilightPool());
+        selectCardAction(P2, minasMorgulAnswers);
+        selectCardAction(P2, enqueaBlackThirst);
+        pass(P2);
+        selectCard(P2, enqueaBlackThirst);
+        assertEquals(2, getTwilightPool());
+        assertEquals(2, getWounds(enqueaBlackThirst));
+        assertEquals(Zone.DISCARD, minasMorgulAnswers.getZone());
+    }
+
+    @Test
+    public void usesSpecialAbility() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard hauntingHerSteps = addToZone(createCard(P2, "4_155"), Zone.HAND);
+        PhysicalCard grimaWormtongue = addToZone(createCard(P2, "4_154"), Zone.SHADOW_CHARACTERS);
+
+        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
+
+        passUntil(Phase.FELLOWSHIP);
+
+        PhysicalCard cardInDeck = putOnTopOfDeck(createCard(P1, "1_40"));
+
+        selectCardAction(P1, elrond);
+        selectCardAction(P2, hauntingHerSteps);
+
+        assertEquals(1, getWounds(grimaWormtongue));
+        assertEquals(Zone.DECK, cardInDeck.getZone());
+    }
+
+    @Test
+    public void takesWound() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard promiseKeeping = addToZone(createCard(P2, "8_24"), Zone.SUPPORT);
+        PhysicalCard gollum = addToZone(createCard(P2, "7_58"), Zone.SHADOW_CHARACTERS);
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, ringBearer.getCardId() + " " + gollum.getCardId());
+        selectCard(P1, ringBearer);
+        pass(P1);
+        pass(P2);
+
+        // Don't use Ring
+        pass(P1);
+        assertEquals(2, getWounds(ringBearer));
+    }
+
+    @Test
+    public void takesOffRing() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard iSeeYou = addToZone(createCard(P2, "101_46"), Zone.SUPPORT);
+        PhysicalCard gollum = addToZone(createCard(P2, "7_58"), Zone.SHADOW_CHARACTERS);
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+        PhysicalCard ring = getRing(P1);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, ringBearer.getCardId() + " " + gollum.getCardId());
+        selectCard(P1, ringBearer);
+        pass(P1);
+        pass(P2);
+        assertEquals(Zone.SUPPORT, iSeeYou.getZone());
+        selectCardAction(P1, ring);
+        assertEquals(Zone.DISCARD, iSeeYou.getZone());
+    }
+
+    @Test
+    public void siteLiberated() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard drivenIntoTheHills = addToZone(createCard(P2, "102_1"), Zone.SUPPORT);
+        PhysicalCard theodenSonOfThengel = addToZone(createCard(P1, "4_292"), Zone.FREE_CHARACTERS);
+        PhysicalCard guma = addToZone(createCard(P1, "4_277"), Zone.SUPPORT);
+
+        passUntil(Phase.SHADOW);
+        _game.getGameState().takeControlOfCard(P2, _game, _game.getGameState().getSite(1), Zone.SUPPORT);
+        _game.getGameState().setPlayerPosition(P2, 2);
+
+        passUntil(Phase.REGROUP);
+        assertEquals(Zone.SUPPORT, drivenIntoTheHills.getZone());
+        selectCardAction(P1, theodenSonOfThengel);
+        assertEquals(Zone.DISCARD, drivenIntoTheHills.getZone());
+    }
+
+    @Test
+    public void siteControlled() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard youDoNotKnowPain = addToZone(createCard(P2, "17_138"), Zone.SUPPORT);
+        PhysicalCard whiteHandIntruder = addToZone(createCard(P2, "17_127"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+        for (int i = 0; i < 2; i++) {
+            addToZone(createCard(P2, "17_119"), Zone.SHADOW_CHARACTERS);
+        }
+
+        passUntil(Phase.SHADOW);
+        _game.getGameState().setPlayerPosition(P2, 2);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, gimli.getCardId() + " " + whiteHandIntruder.getCardId());
+        pass(P2);
+        selectCard(P1, gimli);
+
+        pass(P1);
+        pass(P2);
+        selectCardAction(P2, whiteHandIntruder);
+        assertEquals(2, getWounds(gimli));
+        removeWounds(gimli, 1);
+        assertEquals(1, getWounds(gimli));
+        selectCardAction(P2, youDoNotKnowPain);
+        assertEquals(2, getWounds(gimli));
+    }
+
+    @Test
+    public void replacesSite() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard riddermarkTactician = addToZone(createCard(P1, "13_133"), Zone.FREE_CHARACTERS);
+        PhysicalCard theoden = addToZone(createCard(P1, "13_137"), Zone.FREE_CHARACTERS);
+        PhysicalCard nelya = addToZone(createCard(P2, "11_222"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.SHADOW);
+        replaceSite(_game.getGameState().getAdventureDeck(P1).get(0), 2);
+        selectCardAction(P2, nelya);
+        hasCardAction(P1, riddermarkTactician);
+    }
+
+    @Test
+    public void removesBurden() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard theShireCountryside = addToZone(createCard(P1, "3_113"), Zone.SUPPORT);
+        PhysicalCard elfSong = addToZone(createCard(P1, "1_39"), Zone.HAND);
+        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.FREE_CHARACTERS);
+
+        passUntil(Phase.FELLOWSHIP);
+        selectCardAction(P1, elfSong);
+        hasCardAction(P1, theShireCountryside);
+    }
 }

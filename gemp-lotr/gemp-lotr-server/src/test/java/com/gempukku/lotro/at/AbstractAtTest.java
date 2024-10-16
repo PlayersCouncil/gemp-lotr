@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public abstract class AbstractAtTest {
     public static LotroCardBlueprintLibrary _cardLibrary;
@@ -39,8 +39,28 @@ public abstract class AbstractAtTest {
         return (PhysicalCardImpl) _game.getGameState().createPhysicalCard(owner, _cardLibrary, blueprintId);
     }
 
-    public void addToZone(PhysicalCard card, Zone zone) {
+    public PhysicalCard getRingBearer(String player) {
+        return _game.getGameState().getRingBearer(player);
+    }
+
+    public PhysicalCard getRing(String player) {
+        return _game.getGameState().getRing(player);
+    }
+
+    public PhysicalCard addToZone(PhysicalCard card, Zone zone) {
         _game.getGameState().addCardToZone(_game, card, zone);
+        return card;
+    }
+
+    public PhysicalCard attachTo(PhysicalCard card, PhysicalCard toCard) {
+        addToZone(card, Zone.ATTACHED);
+        ((PhysicalCardImpl) card).attachTo((PhysicalCardImpl) toCard);
+        return card;
+    }
+
+    public PhysicalCard putOnTopOfDeck(PhysicalCard card) {
+        _game.getGameState().putCardOnTopOfDeck(card);
+        return card;
     }
 
     public void selectArbitraryCards(String player, String[] blueprintIds) throws DecisionResultInvalidException {
@@ -49,6 +69,14 @@ public abstract class AbstractAtTest {
 
     public void selectCardAction(String player, PhysicalCard card) throws DecisionResultInvalidException {
         playerDecided(player, getCardActionId(player, card.getCardId()));
+    }
+
+    public void hasCardAction(String player, PhysicalCard card) {
+        assertNotNull(getCardActionId(player, card));
+    }
+
+    public void assertNoCardAction(String player, PhysicalCard card) {
+        assertNull(getCardActionId(player, card));
     }
 
     public void selectCard(String player, PhysicalCard card) throws DecisionResultInvalidException {
@@ -67,6 +95,31 @@ public abstract class AbstractAtTest {
         return _game.getGameState().getWounds(card);
     }
 
+    public void addWounds(PhysicalCard card, int count) {
+        for (int i = 0; i < count; i++) {
+            _game.getGameState().addWound(card);
+        }
+    }
+
+    public void removeWounds(PhysicalCard card, int count) {
+        for (int i = 0; i < count; i++) {
+            if (getWounds(card) > 0) {
+                _game.getGameState().removeWound(card);
+            }
+        }
+    }
+
+    public void replaceSite(PhysicalCard newSite, int siteNumber) {
+        PhysicalCard oldSite = _game.getGameState().getSite(siteNumber);
+        _game.getGameState().removeCardsFromZone(oldSite.getOwner(), Collections.singleton(oldSite));
+        oldSite.setSiteNumber(null);
+        _game.getGameState().addCardToZone(_game, oldSite, Zone.ADVENTURE_DECK);
+
+        _game.getGameState().removeCardsFromZone(newSite.getOwner(), Collections.singleton(newSite));
+        newSite.setSiteNumber(siteNumber);
+        _game.getGameState().addCardToZone(_game, newSite, Zone.ADVENTURE_PATH);
+    }
+
     public int getTwilightPool() {
         return _game.getGameState().getTwilightPool();
     }
@@ -83,12 +136,20 @@ public abstract class AbstractAtTest {
         return _game.getGameState().getThreats();
     }
 
+    public int getBurdens() {
+        return _game.getGameState().getBurdens();
+    }
+
     public Phase getPhase() {
         return _game.getGameState().getCurrentPhase();
     }
 
     public void pass(String player) throws DecisionResultInvalidException {
         playerDecided(player, "");
+    }
+
+    public int getStrength(PhysicalCard card) {
+        return _game.getModifiersQuerying().getStrength(_game, card);
     }
 
     public void initializeSimplestGame() throws DecisionResultInvalidException {
@@ -129,6 +190,23 @@ public abstract class AbstractAtTest {
         // Mulligans
         playerDecided(P1, "0");
         playerDecided(P2, "0");
+    }
+
+    public void passUntil(Phase phase) throws DecisionResultInvalidException {
+        while (true) {
+            Phase currentPhase = _game.getGameState().getCurrentPhase();
+            if (currentPhase == phase)
+                break;
+            switch (currentPhase) {
+                case BETWEEN_TURNS -> skipMulligans();
+                case FELLOWSHIP -> pass(P1);
+                case SHADOW -> pass(P2);
+                case MANEUVER, ARCHERY, ASSIGNMENT -> {
+                    pass(P1);
+                    pass(P2);
+                }
+            }
+        }
     }
 
     public void validateContents(String[] array1, String[] array2) {
