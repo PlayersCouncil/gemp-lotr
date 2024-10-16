@@ -739,7 +739,6 @@ public class TriggersAtTest extends AbstractAtTest {
         PhysicalCard mordorAssassin = addToZone(createCard(P2, "7_284"), Zone.SHADOW_CHARACTERS);
         PhysicalCard attea = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
         PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
-        addWounds(gimli, 2);
         addThreats(P1, 2);
         PhysicalCard ringBearer = getRingBearer(P1);
 
@@ -886,5 +885,93 @@ public class TriggersAtTest extends AbstractAtTest {
         selectCardAction(P1, extraordinaryResilience);
         assertEquals(1, getWounds(frodo));
         assertEquals(0, getBurdens());
+    }
+
+    @Test
+    public void aboutToExert() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard gandalf = addToZone(createCard(P1, "1_72"), Zone.FREE_CHARACTERS);
+        PhysicalCard glamdring = attachTo(createCard(P1, "1_75"), gandalf);
+        PhysicalCard strengthOfSpirit = addToZone(createCard(P1, "1_85"), Zone.HAND);
+
+        passUntil(Phase.FELLOWSHIP);
+        selectCardAction(P1, glamdring);
+        selectCardAction(P1, strengthOfSpirit);
+        assertEquals(0, getWounds(gandalf));
+    }
+
+    @Test
+    public void aboutToDrawCard() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard mirrorDangerousGuide = addToZone(createCard(P1, "15_22"), Zone.SUPPORT);
+        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
+
+        passUntil(Phase.FELLOWSHIP);
+        PhysicalCard elrondCopy = putOnTopOfDeck(createCard(P1, "1_40"));
+        selectCardAction(P1, elrond);
+        hasCardAction(P1, mirrorDangerousGuide);
+    }
+
+    @Test
+    public void aboutToBeOverwhelmed() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard attea1 = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard attea2 = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+        PhysicalCard footmansArmor = attachTo(createCard(P1, "7_93"), gimli);
+
+        passUntil(Phase.FELLOWSHIP);
+        PhysicalCard footmansArmorInHand = addToZone(createCard(P1, "7_93"), Zone.HAND);
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, gimli.getCardId() + " " + attea1.getCardId());
+        playerDecided(P2, gimli.getCardId() + " " + attea2.getCardId());
+        selectCard(P1, gimli);
+        pass(P1);
+        pass(P2);
+        hasCardAction(P1, footmansArmor);
+    }
+
+    @Test
+    public void aboutToAddTwilight() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard threeMonstrousTrolls = addToZone(createCard(P1, "3_114"), Zone.SUPPORT);
+        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.HAND);
+        PhysicalCard theGaffer = addToZone(createCard(P1, "1_291"), Zone.SUPPORT);
+
+        passUntil(Phase.FELLOWSHIP);
+        setTwilightPool(1);
+
+        passUntil(Phase.SHADOW);
+        selectCardAction(P2, goblinRunner);
+        assertEquals(0, getTwilightPool());
+        selectCardAction(P1, threeMonstrousTrolls);
+        assertEquals(1, getWounds(theGaffer));
+        assertEquals(0, getTwilightPool());
+        assertEquals(Zone.SHADOW_CHARACTERS, goblinRunner.getZone());
+    }
+
+    @Test
+    public void aboutToAddBurden() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard melilotBrandybuck = addToZone(createCard(P1, "3_110"), Zone.SUPPORT);
+        PhysicalCard ringBearer = getRingBearer(P1);
+        PhysicalCard desperateDefenseOfTheRing = attachTo(createCard(P2, "1_244"), ringBearer);
+        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        assertEquals(1, getBurdens());
+        playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
+        selectCardAction(P1, melilotBrandybuck);
+        assertEquals(1, getBurdens());
+        assertEquals(1, getWounds(melilotBrandybuck));
     }
 }

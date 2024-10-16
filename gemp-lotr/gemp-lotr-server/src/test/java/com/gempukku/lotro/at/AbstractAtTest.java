@@ -41,6 +41,10 @@ public abstract class AbstractAtTest {
         return (PhysicalCardImpl) _game.getGameState().createPhysicalCard(owner, _cardLibrary, blueprintId);
     }
 
+    public void addCultureTokens(PhysicalCard elvenDefender, Token token, int count) {
+        _game.getGameState().addTokens(elvenDefender, token, count);
+    }
+
     public PhysicalCard getRingBearer(String player) {
         return _game.getGameState().getRingBearer(player);
     }
