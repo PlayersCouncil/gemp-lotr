@@ -140,6 +140,10 @@ public abstract class AbstractAtTest {
         return _game.getGameState().getBurdens();
     }
 
+    public void removeBurdens(int count) {
+        _game.getGameState().removeBurdens(count);
+    }
+
     public Phase getPhase() {
         return _game.getGameState().getCurrentPhase();
     }
@@ -190,6 +194,10 @@ public abstract class AbstractAtTest {
         // Mulligans
         playerDecided(P1, "0");
         playerDecided(P2, "0");
+    }
+
+    public void playerAnswersNo(String player) throws DecisionResultInvalidException {
+        playerDecided(player, "1");
     }
 
     public void passUntil(Phase phase) throws DecisionResultInvalidException {

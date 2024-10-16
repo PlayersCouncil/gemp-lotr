@@ -58,7 +58,6 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("playerdrawscard", new PlayerDrawsCard());
         triggerCheckers.put("putsonring", new PutsOnRing());
         triggerCheckers.put("reconciles", new Reconciles());
-        triggerCheckers.put("removedfromplay", new RemovedFromPlay());
         triggerCheckers.put("removesburden", new RemovesBurden());
         triggerCheckers.put("replacessite", new ReplacesSite());
         triggerCheckers.put("revealscardfromtopofdrawdeck", new RevealsCardFromTopOfDrawDeck());

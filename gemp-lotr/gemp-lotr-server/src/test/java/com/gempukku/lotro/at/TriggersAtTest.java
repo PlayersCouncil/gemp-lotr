@@ -10,6 +10,7 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
+import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -17,8 +18,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TriggersAtTest extends AbstractAtTest {
     @Test
@@ -534,5 +534,180 @@ public class TriggersAtTest extends AbstractAtTest {
         passUntil(Phase.FELLOWSHIP);
         selectCardAction(P1, elfSong);
         hasCardAction(P1, theShireCountryside);
+    }
+
+    @Test
+    public void reconciles() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard isildur = addToZone(createCard(P1, "13_71"), Zone.FREE_CHARACTERS);
+
+        for (int i = 0; i < 5; i++) {
+            addToZone(createCard(P1, "13_71"), Zone.HAND);
+        }
+
+        passUntil(Phase.REGROUP);
+        pass(P1);
+        pass(P2);
+        assertEquals(Zone.FREE_CHARACTERS, isildur.getZone());
+        playerAnswersNo(P1);
+        pass(P1);
+        hasCardAction(P1, isildur);
+    }
+
+    @Test
+    public void putsOnRing() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard theTwilightWorld = addToZone(createCard(P2, "1_228"), Zone.HAND);
+        PhysicalCard nelya = addToZone(createCard(P2, "11_222"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+        PhysicalCard ring = getRing(P1);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
+        pass(P2);
+        selectCard(P1, ringBearer);
+        pass(P1);
+        pass(P2);
+        selectCardAction(P1, ring);
+        assertEquals(1, getBurdens());
+        selectCardAction(P2, theTwilightWorld);
+        assertEquals(4, getBurdens());
+        assertEquals(1, getWounds(nelya));
+    }
+
+    @Test
+    public void movesTo() throws Exception {
+        Map<String, LotroDeck> decks = new HashMap<>();
+        decks.put(P1, createSpecialMovesToDeck());
+        decks.put(P2, createSpecialMovesToDeck());
+        initializeGameWithDecks(decks);
+
+        passUntil(Phase.SHADOW);
+        assertEquals(1, getWounds(getRingBearer(P1)));
+    }
+
+    public LotroDeck createSpecialMovesToDeck() {
+        LotroDeck lotroDeck = new LotroDeck("Some deck");
+        lotroDeck.setRingBearer("10_121");
+        lotroDeck.setRing("1_2");
+        lotroDeck.addSite("7_330");
+        lotroDeck.addSite("1_332");
+        lotroDeck.addSite("8_117");
+        lotroDeck.addSite("7_342");
+        lotroDeck.addSite("7_345");
+        lotroDeck.addSite("7_350");
+        lotroDeck.addSite("8_120");
+        lotroDeck.addSite("10_120");
+        lotroDeck.addSite("7_360");
+        return lotroDeck;
+    }
+
+    @Test
+    public void movesFrom() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard councilCourtyard = addToZone(createCard(P1, "1_337"), Zone.ADVENTURE_DECK);
+
+        passUntil(Phase.FELLOWSHIP);
+        replaceSite(councilCourtyard, 1);
+        setTwilightPool(2);
+
+        passUntil(Phase.SHADOW);
+        assertEquals(2, getTwilightPool());
+    }
+
+    @Test
+    public void losesInitiative() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard glimpseOfFate = addToZone(createCard(P1, "10_12"), Zone.SUPPORT);
+        PhysicalCard legolas1 = addToZone(createCard(P1, "1_50"), Zone.HAND);
+        PhysicalCard legolas2 = addToZone(createCard(P1, "1_50"), Zone.HAND);
+        PhysicalCard legolas3 = addToZone(createCard(P1, "1_50"), Zone.HAND);
+        PhysicalCard legolas4 = addToZone(createCard(P1, "1_50"), Zone.HAND);
+        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.FELLOWSHIP);
+        assertEquals(5, getStrength(goblinRunner));
+        selectCardAction(P1, legolas1);
+        assertEquals(1, getStrength(goblinRunner));
+    }
+
+    @Test
+    public void heals() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard frodo = getRingBearer(P1);
+
+        PhysicalCard lingeringShadow = attachTo(createCard(P2, "12_166"), frodo);
+        PhysicalCard theGaffer = addToZone(createCard(P1, "1_291"), Zone.SUPPORT);
+
+        addWounds(frodo, 1);
+
+        passUntil(Phase.FELLOWSHIP);
+        assertEquals(1, getBurdens());
+        selectCardAction(P1, theGaffer);
+        assertEquals(0, getWounds(frodo));
+        assertEquals(2, getBurdens());
+    }
+
+    @Test
+    public void fpStartedAssigning() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard nerteaDarkHorseman = addToZone(createCard(P2, "69_38"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        assertNotNull(getMultipleDecisionIndex(getAwaitingDecision(P1), "Yes"));
+    }
+
+    @Test
+    public void fpDecidedToStay() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard veryNiceFriends = addToZone(createCard(P1, "7_76"), Zone.HAND);
+        PhysicalCard smeagol = addToZone(createCard(P1, "7_71"), Zone.DISCARD);
+        PhysicalCard legolas1 = addToZone(createCard(P1, "1_50"), Zone.HAND);
+
+        passUntil(Phase.REGROUP);
+        selectCardAction(P1, veryNiceFriends);
+        pass(P2);
+        pass(P1);
+        selectNo(P1);
+        assertEquals(Zone.DISCARD, legolas1.getZone());
+    }
+
+    @Test
+    public void exerted() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard demandsOfSackvilleBagginses = addToZone(createCard(P2, "2_40"), Zone.SUPPORT);
+        PhysicalCard theGaffer = addToZone(createCard(P1, "1_291"), Zone.SUPPORT);
+
+        passUntil(Phase.FELLOWSHIP);
+        assertEquals(0, getTwilightPool());
+        selectCardAction(P1, theGaffer);
+        assertEquals(1, getTwilightPool());
+    }
+
+    @Test
+    public void endOfTurn() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard sarumansChill = addToZone(createCard(P2, "1_134"), Zone.SUPPORT);
+
+        passUntil(Phase.REGROUP);
+        pass(P1);
+        pass(P2);
+        selectNo(P1);
+        assertEquals(Zone.DISCARD, sarumansChill.getZone());
     }
 }
