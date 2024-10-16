@@ -243,7 +243,6 @@ public class Filters {
                                 || game.getModifiersQuerying().isUnhastyCompanionAllowedToParticipateInSkirmishes(game, physicalCard)),
                 Filters.and(
                         CardType.MINION,
-                        Filters.notAssignedToSkirmish,
                         (Filter) (game, physicalCard) -> (!game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE)));
 
         return Filters.and(

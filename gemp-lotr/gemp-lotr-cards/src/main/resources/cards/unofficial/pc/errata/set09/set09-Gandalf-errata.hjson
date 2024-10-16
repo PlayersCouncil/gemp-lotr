@@ -30,8 +30,10 @@
 		effects: [
 			{
 			    type: modifier
-			    modifier: modifyMoveLimit
-			    amount: 1
+			    modifier: {
+			        type: modifyMoveLimit
+			        amount: 1
+			    }
 			}
 			{
 				type: trigger

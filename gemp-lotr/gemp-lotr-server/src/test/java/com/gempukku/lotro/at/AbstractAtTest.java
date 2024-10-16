@@ -1,6 +1,8 @@
 package com.gempukku.lotro.at;
 
+import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -61,6 +63,10 @@ public abstract class AbstractAtTest {
     public PhysicalCard putOnTopOfDeck(PhysicalCard card) {
         _game.getGameState().putCardOnTopOfDeck(card);
         return card;
+    }
+
+    public int getCultureTokens(PhysicalCard tomBombadilsHat, Culture culture) {
+        return _game.getGameState().getTokenCount(tomBombadilsHat, Token.findTokenForCulture(culture));
     }
 
     public void selectArbitraryCards(String player, String[] blueprintIds) throws DecisionResultInvalidException {
@@ -128,8 +134,8 @@ public abstract class AbstractAtTest {
         _game.getGameState().setTwilight(twilightPool);
     }
 
-    public void addThreats(int threats) {
-        _game.getGameState().addThreats(_game.getGameState().getCurrentPlayerId(), threats);
+    public void addThreats(String player, int threats) {
+        _game.getGameState().addThreats(player, threats);
     }
 
     public int getThreats() {

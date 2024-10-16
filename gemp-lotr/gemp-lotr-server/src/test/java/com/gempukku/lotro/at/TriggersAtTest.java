@@ -1,5 +1,6 @@
 package com.gempukku.lotro.at;
 
+import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
@@ -709,5 +710,181 @@ public class TriggersAtTest extends AbstractAtTest {
         pass(P2);
         selectNo(P1);
         assertEquals(Zone.DISCARD, sarumansChill.getZone());
+    }
+
+    @Test
+    public void discardedFromPlay() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard swordRack = addToZone(createCard(P1, "11_158"), Zone.SUPPORT);
+        PhysicalCard beyondTheHeightOfMen = addToZone(createCard(P2, "2_39"), Zone.HAND);
+        PhysicalCard urukScout = addToZone(createCard(P2, "2_47"), Zone.SHADOW_CHARACTERS);
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+        PhysicalCard heavyChain = attachTo(createCard(P1, "4_278"), ringBearer);
+
+        passUntil(Phase.MANEUVER);
+        pass(P1);
+        assertEquals(Zone.ATTACHED, heavyChain.getZone());
+        selectCardAction(P2, beyondTheHeightOfMen);
+        assertEquals(Zone.DISCARD, heavyChain.getZone());
+        selectCardAction(P1, swordRack);
+        assertEquals(Zone.STACKED, heavyChain.getZone());
+    }
+
+    @Test
+    public void beforeThreatWounds() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard mordorAssassin = addToZone(createCard(P2, "7_284"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard attea = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+        addWounds(gimli, 2);
+        addThreats(P1, 2);
+        PhysicalCard ringBearer = getRingBearer(P1);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, gimli.getCardId() + " " + attea.getCardId());
+        playerDecided(P2, gimli.getCardId() + " " + mordorAssassin.getCardId());
+        selectCard(P1, gimli);
+        pass(P1);
+        pass(P2);
+        selectCardAction(P2, mordorAssassin);
+        assertTrue(_game.getGameState().getAssignments().stream().anyMatch(assignment ->
+                assignment.getFellowshipCharacter() == ringBearer && assignment.getShadowCharacters().stream().anyMatch(shadowCharacter -> shadowCharacter == mordorAssassin)));
+    }
+
+    @Test
+    public void assignedToSkirmish() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+        PhysicalCard desperateDefenseOfTheRing = attachTo(createCard(P2, "1_244"), ringBearer);
+        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        assertEquals(1, getBurdens());
+        playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
+        assertEquals(2, getBurdens());
+    }
+
+    @Test
+    public void assignedAgainst() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+        PhysicalCard unferth = addToZone(createCard(P2, "4_178"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        assertEquals(0, getWounds(ringBearer));
+        playerDecided(P1, ringBearer.getCardId() + " " + unferth.getCardId());
+        assertEquals(1, getWounds(ringBearer));
+    }
+
+    @Test
+    public void afterAllSkirmishes() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard witchKing = addToZone(createCard(P2, "12_183"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard witchKingsBeast = attachTo(createCard(P2, "12_184"), witchKing);
+
+        passUntil(Phase.ASSIGNMENT);
+        // Normal Assignment actions
+        pass(P1);
+        pass(P2);
+        // Normal Assignments
+        pass(P1);
+        pass(P2);
+        // Fierce Assignment actions
+        pass(P1);
+        pass(P2);
+        // Fierce Assignments
+        pass(P1);
+        pass(P2);
+        hasCardAction(P2, witchKingsBeast);
+    }
+
+    @Test
+    public void addsThreat() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard tomBombadilsHat = addToZone(createCard(P1, "0_60"), Zone.SUPPORT);
+        PhysicalCard warTowers = addToZone(createCard(P2, "7_173"), Zone.HAND);
+        PhysicalCard desertNomad = addToZone(createCard(P2, "7_132"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.MANEUVER);
+        pass(P1);
+        selectCardAction(P2, warTowers);
+        assertEquals(1, getCultureTokens(tomBombadilsHat, Culture.SHIRE));
+    }
+
+    @Test
+    public void addsBurden() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+        PhysicalCard tomBombadilsHat = addToZone(createCard(P1, "0_60"), Zone.SUPPORT);
+        PhysicalCard desperateDefenseOfTheRing = attachTo(createCard(P2, "1_244"), ringBearer);
+        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
+        assertEquals(1, getCultureTokens(tomBombadilsHat, Culture.SHIRE));
+    }
+
+
+    @Test
+    public void aboutToTakeControlOfSite() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard whiteHandIntruder = addToZone(createCard(P2, "17_127"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+        for (int i = 0; i < 2; i++) {
+            addToZone(createCard(P2, "17_119"), Zone.SHADOW_CHARACTERS);
+        }
+        PhysicalCard ceorl = addToZone(createCard(P1, "4_264"), Zone.SUPPORT);
+        PhysicalCard guma = addToZone(createCard(P1, "4_277"), Zone.SUPPORT);
+
+        passUntil(Phase.SHADOW);
+        _game.getGameState().setPlayerPosition(P2, 2);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, gimli.getCardId() + " " + whiteHandIntruder.getCardId());
+        pass(P2);
+        selectCard(P1, gimli);
+
+        pass(P1);
+        pass(P2);
+        selectCardAction(P2, whiteHandIntruder);
+        hasCardAction(P1, ceorl);
+    }
+
+    @Test
+    public void aboutToHeal() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard frodo = getRingBearer(P1);
+
+        PhysicalCard extraordinaryResilience = addToZone(createCard(P1, "1_287"), Zone.HAND);
+        PhysicalCard theGaffer = addToZone(createCard(P1, "1_291"), Zone.SUPPORT);
+
+        addWounds(frodo, 1);
+
+        passUntil(Phase.FELLOWSHIP);
+        assertEquals(1, getBurdens());
+        selectCardAction(P1, theGaffer);
+        selectCardAction(P1, extraordinaryResilience);
+        assertEquals(1, getWounds(frodo));
+        assertEquals(0, getBurdens());
     }
 }

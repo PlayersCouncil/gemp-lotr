@@ -72,7 +72,7 @@ public class DiscountAtTest extends AbstractAtTest {
         skipMulligans();
 
         setTwilightPool(9);
-        addThreats(1);
+        addThreats(P1, 1);
 
         // End fellowship phase
         assertEquals(Phase.FELLOWSHIP, getPhase());

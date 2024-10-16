@@ -17,7 +17,6 @@ public class RequirementFactory {
         requirementProducers.put("not", new NotRequirementProducer());
         requirementProducers.put("or", new OrRequirementProducer());
         requirementProducers.put("isequal", new IsEqual());
-        requirementProducers.put("isnotequal", new IsNotEqual());
         requirementProducers.put("isgreaterthan", new IsGreaterThan());
         requirementProducers.put("isgreaterthanorequal", new IsGreaterThanOrEqual());
         requirementProducers.put("islessthan", new IsLessThan());
