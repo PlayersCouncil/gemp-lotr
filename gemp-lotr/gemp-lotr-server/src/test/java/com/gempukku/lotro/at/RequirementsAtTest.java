@@ -215,4 +215,155 @@ public class RequirementsAtTest extends AbstractAtTest {
         assertTrue(requirement.accepts(new DefaultActionContext(P1, _game, ownerByP1, null, null)));
         assertFalse(requirement.accepts(new DefaultActionContext(P1, _game, ownerByP2, null, null)));
     }
+
+    @Test
+    public void didWinSkirmish() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+        PhysicalCard stillTwitching = attachTo(createCard(P1, "19_3"), gimli);
+
+        passUntil(Phase.REGROUP);
+        pass(P1);
+        pass(P2);
+        selectNo(P1);
+        assertInZone(stillTwitching, Zone.DISCARD);
+    }
+
+    @Test
+    public void hasCardInAdventureDeck() throws Exception {
+        initializeSimplestGame();
+
+        passUntil(Phase.FELLOWSHIP);
+
+        JSONObject obj = new JSONObject();
+        obj.put("player", "fp");
+        obj.put("filter", "any");
+
+        Requirement requirement = new HasCardInAdventureDeck().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertTrue(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
+    }
+
+    @Test
+    public void hasCardInRemoved() throws Exception {
+        initializeSimplestGame();
+
+        passUntil(Phase.FELLOWSHIP);
+
+        JSONObject obj = new JSONObject();
+        obj.put("player", "fp");
+        obj.put("filter", "any");
+
+        Requirement requirement = new HasCardInRemoved().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertFalse(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
+        addToZone(createCard(P1, "1_3"), Zone.REMOVED);
+        assertTrue(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
+    }
+
+    @Test
+    public void hasInMemory() throws Exception {
+        initializeSimplestGame();
+
+        passUntil(Phase.FELLOWSHIP);
+
+        JSONObject obj = new JSONObject();
+        obj.put("memory", "m");
+
+        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
+        Requirement requirement = new HasInMemory().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertFalse(requirement.accepts(actionContext));
+        actionContext.setCardMemory("m", createCard(P1, "1_3"));
+        assertTrue(requirement.accepts(actionContext));
+    }
+
+
+    @Test
+    public void loseSkirmishThisTurn() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+        PhysicalCard citadelOfMinasTirith = addToZone(createCard(P1, "3_40"), Zone.SUPPORT);
+
+        passUntil(Phase.FELLOWSHIP);
+        addWounds(gimli, 1);
+
+        passUntil(Phase.REGROUP);
+        pass(P1);
+        pass(P2);
+        selectNo(P1);
+        selectCardAction(P1, citadelOfMinasTirith);
+        assertEquals(0, getWounds(gimli));
+    }
+
+    @Test
+    public void opponentDoesNotControlSite() throws Exception {
+        initializeSimplestGame();
+
+        passUntil(Phase.FELLOWSHIP);
+
+        JSONObject obj = new JSONObject();
+
+        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
+        Requirement requirement = new OpponentDoesNotControlSite().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertTrue(requirement.accepts(actionContext));
+        _game.getGameState().takeControlOfCard(P2, _game, _game.getGameState().getSite(1), Zone.SUPPORT);
+        assertFalse(requirement.accepts(actionContext));
+    }
+
+    @Test
+    public void playedCardThisPhase() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.HAND);
+
+        passUntil(Phase.FELLOWSHIP);
+
+        JSONObject obj = new JSONObject();
+        obj.put("filter", "companion");
+
+        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
+        Requirement requirement = new PlayedCardThisPhase().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertFalse(requirement.accepts(actionContext));
+        selectCardAction(P1, gimli);
+        assertTrue(requirement.accepts(actionContext));
+    }
+
+    @Test
+    public void shadowPlayerReplacedCurrentSite() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard nelya = addToZone(createCard(P2, "11_222"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.SHADOW);
+
+        JSONObject obj = new JSONObject();
+
+        replaceSite(_game.getGameState().getAdventureDeck(P1).get(0), 2);
+        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
+        Requirement requirement = new ShadowPlayerReplacedCurrentSite().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertFalse(requirement.accepts(actionContext));
+        selectCardAction(P2, nelya);
+        assertTrue(requirement.accepts(actionContext));
+    }
+
+    @Test
+    public void wasAssignedToSkirmish() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard ringBearer = getRingBearer(P1);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+
+        JSONObject obj = new JSONObject();
+        obj.put("filter", "companion");
+
+        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
+        Requirement requirement = new WasAssignedToSkirmish().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertFalse(requirement.accepts(actionContext));
+        playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
+        assertTrue(requirement.accepts(actionContext));
+    }
 }

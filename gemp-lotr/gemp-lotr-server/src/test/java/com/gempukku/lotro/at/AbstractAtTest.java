@@ -233,6 +233,10 @@ public abstract class AbstractAtTest {
         }
     }
 
+    public void assertInZone(PhysicalCard card, Zone zone) {
+        assertEquals(zone, card.getZone());
+    }
+
     public void validateContents(String[] array1, String[] array2) {
         if (array1.length != array2.length)
             fail("Array sizes differ");
