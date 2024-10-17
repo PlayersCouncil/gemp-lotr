@@ -185,6 +185,40 @@ public class Card_01_234_Tests
 	}
 
 	@Test
+	public void NerteaStopsPlayingMinionsIfUserDeclinesPartwayThrough() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+
+		var twk = scn.GetShadowCard("twk");
+		var attea = scn.GetShadowCard("attea");
+		var nertea = scn.GetShadowCard("nertea");
+		scn.ShadowMoveCardToDiscard("runner", "rit", "twk", "attea");
+		scn.ShadowMoveCardToDiscard(twk);
+		scn.ShadowMoveCardToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(30);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(nertea);
+		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
+		scn.ShadowChooseYes();
+		assertEquals(4, scn.GetShadowCardChoiceCount());
+		assertEquals(Zone.DISCARD, twk.getZone());
+		scn.ShadowChooseCardBPFromSelection(twk);
+		assertEquals(Zone.SHADOW_CHARACTERS, twk.getZone());
+
+		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
+		assertEquals(Zone.DISCARD, attea.getZone());
+		scn.ShadowChooseNo();
+		assertEquals(Zone.DISCARD, attea.getZone());
+
+		assertFalse(scn.ShadowDecisionAvailable("play a minion"));
+	}
+
+	@Test
 	public void NerteaDoesNotPromptIfNoMinionsInDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();

@@ -51,7 +51,7 @@
 			30%1xRandom Ultra Rare Foil
 			10%1xRandom Masterwork
 			10%1xRandom Alt Image Promo
-			10%1xRandom PC Full Art
+			30%1xRandom PC Full Art
 			5%1xRandom Tengwar
 			1%1x(S)Masterwork Selection
 			1%1x(S)PC Promo Art Selection
@@ -77,13 +77,14 @@
 		name: Placement Random Chase Card Selector
 		type: random
 		items: [
-			50%1x(S)Alt Image Promo Selection
+			40%1x(S)Alt Image Promo Selection
+			40%1xRandom PC Full Art
 			10%1x(S)FotR - Tengwar
 			10%1x(S)TTT - Tengwar
 			10%1x(S)RotK - Tengwar
 			10%1x(S)SH - Tengwar
-			30%1x(S)Masterwork Selection
-			5%1x(S)PC Promo Art Selection
+			40%1x(S)Masterwork Selection
+			40%1x(S)PC Promo Art Selection
 		]
 	}
 	{
