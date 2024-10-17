@@ -135,6 +135,15 @@
 	}
 	
 	{
+		name: 2024 World Championship Invitation
+		type: pack
+		recursive: false
+		items: [
+			1x2024 World Championship Invitation
+		]
+	}
+	
+	{
 		name: The Nine Riders Collection
 		type: pack
 		recursive: false

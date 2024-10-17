@@ -201,7 +201,9 @@ var packBlueprints = {
     "SHELBI - Aragorn Starter":"/gemp-lotr/images/boosters/shelbi-aragorn.jpg",
     "SHELBI - Gandalf Starter":"/gemp-lotr/images/boosters/shelbi-gandalf.jpg",
     "SHELBI - Gimli Starter":"/gemp-lotr/images/boosters/shelbi-gimli.jpg",
-    "SHELBI - Treebeard Starter":"/gemp-lotr/images/boosters/shelbi-treebeard.jpg"
+    "SHELBI - Treebeard Starter":"/gemp-lotr/images/boosters/shelbi-treebeard.jpg",
+    
+    "2024 World Championship Invitation":"https://i.lotrtcgpc.net/other/2024-wc-invite.jpg"
 };
 
 class Card {

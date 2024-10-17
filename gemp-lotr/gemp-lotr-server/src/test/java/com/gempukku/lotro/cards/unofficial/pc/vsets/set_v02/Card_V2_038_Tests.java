@@ -60,7 +60,7 @@ public class Card_V2_038_Tests
 		assertEquals(Race.BALROG, card.getBlueprint().getRace());
 		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
 		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
-		assertEquals(2, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(14, card.getBlueprint().getTwilightCost());
 		assertEquals(17, card.getBlueprint().getStrength());
 		assertEquals(5, card.getBlueprint().getVitality());

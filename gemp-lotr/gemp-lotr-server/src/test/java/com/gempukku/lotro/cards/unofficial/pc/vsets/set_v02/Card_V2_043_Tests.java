@@ -53,7 +53,7 @@ public class Card_V2_043_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Theoden", card.getBlueprint().getTitle());
-		assertEquals("Last of his House", card.getBlueprint().getSubtitle());
+		assertEquals("Last of His House", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());

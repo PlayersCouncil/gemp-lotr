@@ -993,6 +993,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public void FreepsDeclineOptionalTrigger() throws DecisionResultInvalidException { playerDecided(P1, ""); }
     public void ShadowAcceptOptionalTrigger() throws DecisionResultInvalidException { playerDecided(P2, "0"); }
     public void ShadowDeclineOptionalTrigger() throws DecisionResultInvalidException { playerDecided(P2, ""); }
+    public void FreepsDeclineChoosing() throws DecisionResultInvalidException { playerDecided(P1, ""); }
+    public void ShadowDeclineChoosing() throws DecisionResultInvalidException { playerDecided(P2, ""); }
 
     public void FreepsDeclineReconciliation() throws DecisionResultInvalidException { FreepsPassCurrentPhaseAction(); }
     public void ShadowDeclineReconciliation() throws DecisionResultInvalidException { ShadowPassCurrentPhaseAction(); }

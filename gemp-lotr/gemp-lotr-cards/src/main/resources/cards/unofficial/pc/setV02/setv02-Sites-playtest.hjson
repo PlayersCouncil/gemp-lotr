@@ -42,7 +42,8 @@
 						effect: {
 							type: CostToEffect
 							cost: {
-								type: Discard
+								type: DiscardFromHand
+								forced: false
 								select: choose(any)
 								count: 2
 							}
