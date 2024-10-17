@@ -1023,12 +1023,22 @@
 								{
 									type: chooseYesOrNo
 									player: you
-									text: Would you like to play a minion from your discard pile?
+									text: Would you like to play a minion from your discard?
 									memorize: choice
 								}
 								{
-									type: playCardFromDiscard
-									select: choose(minion)
+									type: conditional
+									requires: [
+										{
+											type: MemoryIs
+											memory: choice
+											value: yes
+										}
+									]
+									effect: {
+										type: playCardFromDiscard
+										select: choose(minion)
+									}
 								}
 							]
 						}

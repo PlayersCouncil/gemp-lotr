@@ -1190,12 +1190,114 @@
 					effect: {
 						type: playCardFromDiscard
 						select: choose(tracker)
+						//This should be updated to "optional" 
+						nocheck: true
 					}
 				}
 				{
 					type: endPhase
 				}
 			]
+			
+			/*
+			// A less obnoxious version that short-circuits the loop if the 
+			// player ever chooses 0 cards at the prompt.  Unfortunately, it
+			// turns out that "memoryIs" does not check card memory, so this
+			// is useless until those are unified.
+			effect: [
+				{
+					type: MemorizeValue
+					memory: choice
+					value: default
+				}
+				{
+					type: repeat
+					amount: 3
+					effect: {
+						type: conditional
+						requires: [
+							{
+								type: Not
+								requires: {
+									type: MemoryIs
+									memory: choice
+									value: ""
+								}
+							}
+							{
+								type: HasCardInDiscard
+								filter: playable,tracker
+							}
+						]
+						effect: {
+							type: playCardFromDiscard
+							filter: choose(tracker)
+							memorize: choice
+							//Forces the choice to allow 0 options
+							nocheck: true
+						}
+					}
+				}
+				{
+					type: endPhase
+				}
+			]
+			*/
+			
+			/*
+			// An obnoxious version that prompts the user with a question
+			// for each individual tracker played
+			effect: [
+				{
+					type: MemorizeValue
+					memory: choice
+					value: yes
+				}
+				{
+					type: repeat
+					amount: 3
+					effect: {
+						type: conditional
+						requires: [
+							{
+								type: MemoryIs
+								memory: choice
+								value: yes
+							}
+							{
+								type: HasCardInDiscard
+								filter: playable,tracker
+							}
+						]
+						effect: [
+							{
+								type: chooseYesOrNo
+								player: you
+								text: Would you like to play a tracker from your discard pile?
+								memorize: choice
+							}
+							{
+								type: conditional
+								requires: [
+									{
+										type: MemoryIs
+										memory: choice
+										value: yes
+									}
+								]
+								effect: {
+									type: playCardFromDiscard
+									filter: choose(tracker)
+								}
+							}
+						]
+					}
+				}
+				{
+					type: endPhase
+				}
+			]
+			*/
 		}
 	}
 }

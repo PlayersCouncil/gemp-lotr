@@ -77,8 +77,18 @@
 									memorize: choice
 								}
 								{
-									type: playCardFromDiscard
-									select: choose(unique,culture(wraith),minion)
+									type: conditional
+									requires: [
+										{
+											type: MemoryIs
+											memory: choice
+											value: yes
+										}
+									]
+									effect: {
+										type: playCardFromDiscard
+										select: choose(unique,culture(wraith),minion)
+									}
 								}
 							]
 						}

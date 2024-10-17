@@ -302,38 +302,39 @@
 		type: condition
 		keyword: support area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: CanSpot
-                    filter: Elf
-                    count: 2
-                }
-		    }
-            {
-                type: trigger
-                trigger: {
-                    type: losesInitiative
-                    side: free peoples
-                }
-                requires: {
-                    type: perTurnLimit
-                    limit: 1
-                }
-                effect: [
-                    {
-                        type: incrementPerTurnLimit
-                        limit: 1
-                    }
-                    {
-                        type: modifyStrength
-                        select: choose(minion)
-                        amount: -3
-                        until: start(regroup)
-                    }
-                ]
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: CanSpot
+					filter: Elf
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: losesInitiative
+					side: free peoples
+				}
+				requires: {
+					type: perTurnLimit
+					limit: 1
+				}
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: modifyStrength
+						select: choose(minion)
+						amount: -3
+						until: start(regroup)
+					}
+				]
+			}
+		]
 		gametext: To play, spot 2 Elves. <br>When you lose initiative, you may make a minion strength –3 until the regroup phase (limit once per turn).
 		lore: "'The uttermost choice is before you: to repent and go to the Havens... or else to abide the Doom of Men.'"
 		promotext: ""
@@ -344,6 +345,4 @@
 			}
 		}
 	}
-	
-	
 }
