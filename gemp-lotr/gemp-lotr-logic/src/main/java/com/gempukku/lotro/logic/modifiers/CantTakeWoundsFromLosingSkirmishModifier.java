@@ -11,6 +11,6 @@ public class CantTakeWoundsFromLosingSkirmishModifier extends AbstractModifier {
 
     @Override
     public boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard physicalCard) {
-        return true;
+        return false;
     }
 }

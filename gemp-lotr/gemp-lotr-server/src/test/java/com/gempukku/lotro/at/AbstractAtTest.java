@@ -7,6 +7,7 @@ import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -47,6 +48,18 @@ public abstract class AbstractAtTest {
         return RuleUtils.calculateArcheryTotal(_game, side);
     }
 
+    public boolean hasKeyword(PhysicalCard card, Keyword keyword) {
+        return _game.getModifiersQuerying().hasKeyword(_game, card, keyword);
+    }
+
+    public boolean hasSignet(PhysicalCard card, Signet signet) {
+        return _game.getModifiersQuerying().hasSignet(_game, card, signet);
+    }
+
+    public void addModifier(Modifier modifier) {
+        _game.getModifiersEnvironment().addAlwaysOnModifier(modifier);
+    }
+
     public PhysicalCard getRingBearer(String player) {
         return _game.getGameState().getRingBearer(player);
     }
@@ -63,6 +76,12 @@ public abstract class AbstractAtTest {
     public PhysicalCard attachTo(PhysicalCard card, PhysicalCard toCard) {
         addToZone(card, Zone.ATTACHED);
         ((PhysicalCardImpl) card).attachTo((PhysicalCardImpl) toCard);
+        return card;
+    }
+
+    public PhysicalCard stackOn(PhysicalCard card, PhysicalCard toCard) {
+        addToZone(card, Zone.STACKED);
+        ((PhysicalCardImpl) card).stackOn((PhysicalCardImpl) toCard);
         return card;
     }
 
