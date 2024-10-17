@@ -28,11 +28,11 @@ public class Card_V2_011_Tests
 	}
 
 	@Test
-	public void ToHonorThatAllegienceStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ToHonorThatAllegianceStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: To Honor That Allegience
+		 * Name: To Honor That Allegiance
 		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Elven
@@ -47,7 +47,7 @@ public class Card_V2_011_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("To Honor That Allegience", card.getBlueprint().getTitle());
+		assertEquals("To Honor That Allegiance", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
@@ -59,7 +59,7 @@ public class Card_V2_011_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void ToHonorThatAllegienceTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ToHonorThatAllegianceTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
