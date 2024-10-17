@@ -350,16 +350,16 @@
 					type: ForEachPlayer
 					effect: {
 						type: Optional
-						text: Would you like to discard a non-artifact card in your opponent's support area?
+						text: Would you like to discard a card in your opponent's support area?
 						effect: {
 							type: Discard
-							select: choose(not(artifact),not(your),zone(SUPPORT))
+							select: choose(not(your),zone(SUPPORT))
 						}
 					}
 				}
 			}
 		]
-		gametext: When the fellowship moves to this site, each player may discard a card (except an artifact) from their opponent's support area. 
+		gametext: When the fellowship moves to this site, each player may discard a card from their opponent's support area. 
 		lore: ""
 		promotext: ""
 		alts: {

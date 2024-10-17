@@ -1197,6 +1197,7 @@
 				trigger: {
 					type: AssignedAgainst
 					filter: self
+					against: companion
 					memorizeAgainst: comp
 				}
 				cost: [
@@ -1215,7 +1216,7 @@
 				}
 			}
 		]
-		gametext: Tracker. Fierce.<br>Each time this minion is assigned to a skirmish, you may spot a [sauron] tracker and discard this minion to wound that companion. 
+		gametext: Tracker. Fierce.<br>Each time this minion is assigned to skirmish a companion, you may spot a [sauron] tracker and discard this minion to wound that companion. 
 		lore: "'We came out of Isengard, and led you here, and we shall lead you back by the way we choose.'"
 		promotext: ""
 		alts: {
