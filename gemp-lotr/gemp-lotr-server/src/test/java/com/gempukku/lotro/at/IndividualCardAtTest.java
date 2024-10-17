@@ -17,10 +17,6 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 public class IndividualCardAtTest extends AbstractAtTest {
-
-
-
-
     @Test
     public void bilboRingBearerWithConsortingAndMorgulBrute() throws DecisionResultInvalidException, CardNotFoundException {
         Map<String, LotroDeck> decks = new HashMap<>();
@@ -1283,5 +1279,42 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(Zone.DISCARD, morgulBlade.getZone());
         assertEquals(Zone.ATTACHED, bladeTip.getZone());
+    }
+
+    @Test
+    public void sarumanOfManyColors() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard sarumanOfManyColors = addToZone(createCard(P2, "12_54"), Zone.HAND);
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+
+        passUntil(Phase.FELLOWSHIP);
+        setTwilightPool(10);
+        passUntil(Phase.SHADOW);
+        assertEquals(4, getStrength(ringBearer));
+        selectCardAction(P2, sarumanOfManyColors);
+        playerDecided(P2, getMultipleDecisionIndex(getAwaitingDecision(P2), "Shire"));
+        assertEquals(3, getStrength(ringBearer));
+    }
+
+    @Test
+    public void putForthItsStrength() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard putForthHisStrength = addToZone(createCard(P2, "7_205"), Zone.SUPPORT);
+        PhysicalCard attea = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
+        for (int i = 0; i < 3; i++) {
+            addToZone(createCard(P1, "1_12"), Zone.DEAD);
+        }
+
+        passUntil(Phase.FELLOWSHIP);
+        addBurdens(3);
+        addThreats(P1, 3);
+
+        passUntil(Phase.SHADOW);
+        selectCardAction(P2, putForthHisStrength);
+        assertTrue(_game.isFinished());
+        assertEquals(P2, _game.getWinnerPlayerId());
     }
 }

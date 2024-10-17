@@ -648,4 +648,28 @@ public class AssignmentAtTest extends AbstractAtTest {
         selectNo(P1);
         validateContents(new String[]{String.valueOf(attea.getCardId())}, getAwaitingDecision(P1).getDecisionParameters().get("minions"));
     }
+
+    @Test
+    public void toldeaDarkShadowCantBeAssignedTwiceToSameCompanion() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard toldeaDarkShadow = addToZone(createCard(P2, "19_39"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard aragorn = addToZone(createCard(P1, "1_89"), Zone.FREE_CHARACTERS);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, aragorn.getCardId() + " " + toldeaDarkShadow.getCardId());
+        selectCard(P1, aragorn);
+        pass(P1);
+        pass(P2);
+        // Fierce assignment
+        pass(P1);
+        pass(P2);
+        try {
+            playerDecided(P1, aragorn.getCardId() + " " + toldeaDarkShadow.getCardId());
+            fail();
+        } catch (DecisionResultInvalidException e) {
+        }
+    }
 }

@@ -1,9 +1,11 @@
 package com.gempukku.lotro.at.effects;
 
 import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
@@ -257,5 +259,32 @@ public class WoundEffectAtTest extends AbstractAtTest {
 
         assertEquals(1, triggerCount.get());
         assertEquals(1, preventCount.get());
+    }
+
+    @Test
+    public void disableWoundsOver() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard valiantManOfTheWest = addToZone(createCard(P1, "1_118"), Zone.HAND);
+        PhysicalCard aragorn = addToZone(createCard(P1, "1_89"), Zone.FREE_CHARACTERS);
+        PhysicalCard lurtz = addToZone(createCard(P2, "1_127"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.MANEUVER);
+        selectCardAction(P1, valiantManOfTheWest);
+        pass(P2);
+        pass(P1);
+        passUntil(Phase.ARCHERY);
+        pass(P1);
+        pass(P2);
+        selectCard(P1, aragorn);
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        playerDecided(P1, aragorn.getCardId() + " " + lurtz.getCardId());
+        selectCard(P1, aragorn);
+        pass(P1);
+        assertEquals(1, getWounds(aragorn));
+        pass(P2);
+        assertEquals(2, getWounds(aragorn));
     }
 }

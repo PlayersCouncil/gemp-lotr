@@ -377,4 +377,19 @@ public class ModifiersAtTest extends AbstractAtTest {
         addModifier(modifierSource.getModifier(actionContext));
         assertTrue(Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false).accepts(_game, birchseed));
     }
+
+    @Test
+    public void modifyResistance() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+        PhysicalCard stingWeaponOfHeritage = attachTo(createCard(P1, "11_173"), ringBearer);
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.MANEUVER);
+        assertEquals(5, getResistance(gimli));
+        selectCardAction(P1, stingWeaponOfHeritage);
+        assertEquals(7, getResistance(gimli));
+    }
 }

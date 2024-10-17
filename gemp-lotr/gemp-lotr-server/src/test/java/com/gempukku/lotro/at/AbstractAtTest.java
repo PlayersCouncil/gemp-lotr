@@ -68,6 +68,10 @@ public abstract class AbstractAtTest {
         return _game.getGameState().getRing(player);
     }
 
+    public PhysicalCard getSite(int siteNumber) {
+        return _game.getGameState().getSite(siteNumber);
+    }
+
     public PhysicalCard addToZone(PhysicalCard card, Zone zone) {
         _game.getGameState().addCardToZone(_game, card, zone);
         return card;
@@ -189,6 +193,10 @@ public abstract class AbstractAtTest {
 
     public int getStrength(PhysicalCard card) {
         return _game.getModifiersQuerying().getStrength(_game, card);
+    }
+
+    public int getResistance(PhysicalCard card) {
+        return _game.getModifiersQuerying().getResistance(_game, card);
     }
 
     public void initializeSimplestGame() throws DecisionResultInvalidException {
