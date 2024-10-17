@@ -28,11 +28,11 @@ public class Card_V2_015_Tests
 	}
 
 	@Test
-	public void RideOutandMeetThemStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RememberYourOldStrengthStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Ride Out and Meet Them
+		 * Name: Remember Your Old Strength
 		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Gandalf
@@ -46,7 +46,7 @@ public class Card_V2_015_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Ride Out and Meet Them", card.getBlueprint().getTitle());
+		assertEquals("Remember Your Old Strength", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
@@ -58,7 +58,7 @@ public class Card_V2_015_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void RideOutandMeetThemTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RememberYourOldStrengthTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
