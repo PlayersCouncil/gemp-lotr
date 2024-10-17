@@ -1189,9 +1189,8 @@
 					times: 3
 					effect: {
 						type: playCardFromDiscard
-						select: choose(tracker)
-						//This should be updated to "optional" 
-						nocheck: true
+						select: choose(tracker) 
+						optional: true
 					}
 				}
 				{

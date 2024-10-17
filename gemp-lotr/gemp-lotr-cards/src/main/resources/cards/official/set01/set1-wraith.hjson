@@ -1027,15 +1027,15 @@
 									memorize: choice
 								}
 								{
-									type: conditional
-									requires: [
+									type: if
+									check: [
 										{
 											type: MemoryIs
 											memory: choice
 											value: yes
 										}
 									]
-									effect: {
+									true: {
 										type: playCardFromDiscard
 										select: choose(minion)
 									}
