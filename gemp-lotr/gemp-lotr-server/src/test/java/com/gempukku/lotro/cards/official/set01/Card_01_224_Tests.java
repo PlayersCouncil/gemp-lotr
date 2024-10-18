@@ -83,15 +83,13 @@ public class Card_01_224_Tests
         //Enquea is the twilight version, who is not fierce.  He should still be a valid target
         // when RTIM triggers during a fierce skirmish.
 
-        scn.SkipToAssignments();
-        //We will skip the non-fierce skirmishes
-        scn.FreepsDeclineAssignments();
+        scn.SkipToShadowAssignments();
         assertEquals(2, scn.ShadowGetShadowAssignmentTargetCount()); // both enquea and TWK
+        //We will skip the non-fierce skirmishes
         scn.ShadowDeclineAssignments();
 
         //Fierce skirmish assignment phase
-        scn.PassCurrentPhaseActions();
-        scn.FreepsDeclineAssignments();
+        scn.SkipToShadowAssignments();
         assertEquals(1, scn.ShadowGetShadowAssignmentTargetCount()); // TWK, but not enquea
         scn.ShadowAssignToMinions(guard, twk);
         scn.FreepsResolveSkirmish(guard);
@@ -104,10 +102,11 @@ public class Card_01_224_Tests
         assertTrue(scn.ShadowPlayAvailable(rtim));
         scn.ShadowPlayCard(rtim);
 
-        //Can't quite get the rest
-
         assertEquals(2, scn.GetShadowCardChoiceCount()); // both enquea and TWK
         scn.ShadowChooseCard(enquea);
+
+        assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+        assertTrue(scn.IsCharAssigned(enquea));
     }
 
 

@@ -644,6 +644,11 @@ public class GenericCardTestHelper extends AbstractAtTest {
         SkipToPhase(Phase.ASSIGNMENT);
         PassCurrentPhaseActions();
     }
+
+    public void SkipToShadowAssignments() throws DecisionResultInvalidException {
+        SkipToAssignments();
+        FreepsDeclineAssignments();
+    }
     public void SkipToMovementDecision() throws DecisionResultInvalidException {
         SkipToPhase(Phase.REGROUP);
         PassCurrentPhaseActions();
