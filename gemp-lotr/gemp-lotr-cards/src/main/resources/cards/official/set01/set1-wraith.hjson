@@ -976,10 +976,22 @@
 		site: 3
 		effects: {
 			type: trigger
+			optional: true
 			trigger: {
 				type: played
 				filter: self
 			}
+			requires: [
+				{
+					type: CanSpot
+					filter: companion
+					count: 5
+				}
+				{
+					type: PlayableFromDiscard
+					filter: minion
+				}
+			]
 			effect: [
 				{
 					type: MemorizeInfo
@@ -987,61 +999,47 @@
 					info: yes
 				}
 				{
-					type: If
-					check: [
-						{
-							type: CanSpot
-							filter: companion
-							count: 5
-						}
-						{
-							type: PlayableFromDiscard
-							filter: minion
-						}
-					]
-					true: {
-						type: Repeat
-						times: {
-							type: forEachYouCanSpot
-							filter: companion
-							over: 4
-						}
-						effect: {
-							type: If
-							check: [
-								{
-									type: MemoryIs
-									memory: choice
-									value: yes
-								}
-								{
-									type: HasCardInDiscard
-									filter: playable,minion
-								}
-							]
-							true: [
-								{
-									type: chooseYesOrNo
-									player: you
-									text: Would you like to play a minion from your discard?
-									memorize: choice
-								}
-								{
-									type: if
-									check: [
-										{
-											type: MemoryIs
-											memory: choice
-											value: yes
-										}
-									]
-									true: {
-										type: playCardFromDiscard
-										select: choose(minion)
+					type: Repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
+					effect: {
+						type: if
+						check: [
+							{
+								type: MemoryIs
+								memory: choice
+								value: yes
+							}
+							{
+								type: HasCardInDiscard
+								filter: playable,minion
+							}
+						]
+						true: [
+							{
+								type: chooseYesOrNo
+								player: you
+								text: Would you like to play a minion from your discard?
+								memorize: choice
+							}
+							{
+								type: if
+								check: [
+									{
+										type: MemoryIs
+										memory: choice
+										value: yes
 									}
+								]
+								true: {
+									type: playCardFromDiscard
+									select: choose(minion)
 								}
-							]
-						}
+							}
+						]
 					}
 				}
 			]
