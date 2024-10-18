@@ -307,9 +307,19 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                 return true;
 
             for (Modifier modifier : getKeywordModifiersAffectingCard(game, ModifierEffect.GIVE_KEYWORD_MODIFIER, keyword, physicalCard)) {
-                if (appliesKeywordModifier(game, physicalCard, modifier.getSource(), keyword))
-                    if (modifier.hasKeyword(game, physicalCard, keyword))
-                        return true;
+                if (appliesKeywordModifier(game, physicalCard, modifier.getSource(), keyword)) {
+                    if (!_skipSet.contains(modifier)) {
+                        _skipSet.add(modifier);
+                        try {
+                            if (modifier.hasKeyword(game, physicalCard, keyword))
+                                return true;
+                        } finally {
+                            _skipSet.remove(modifier);
+                        }
+                    } else {
+                        return false;
+                    }
+                }
             }
             return false;
         } finally {

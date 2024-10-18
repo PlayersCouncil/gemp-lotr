@@ -80,7 +80,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("exchangesite", new ExchangeSite());
         effectAppenderProducers.put("exert", new Exert());
         effectAppenderProducers.put("exhaust", new Exhaust());
-        effectAppenderProducers.put("filtercardsinmemory", new FilterCardsInMemory());
         effectAppenderProducers.put("getcardsfromtopofdeck", new GetCardsFromTopOfDeck());
         effectAppenderProducers.put("heal", new Heal());
         effectAppenderProducers.put("incrementperphaselimit", new IncrementPerPhaseLimit());
@@ -148,6 +147,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("removecardsindiscardfromgame", new RemoveCardsInDiscardFromGame());
         effectAppenderProducers.put("removecharacterfromskirmish", new RemoveCharacterFromSkirmish());
         effectAppenderProducers.put("removefromthegame", new RemoveFromTheGame());
+        effectAppenderProducers.put("removeplayedeventfromthegame", new RemovePlayedEventFromTheGame());
         effectAppenderProducers.put("removekeyword", new RemoveKeyword());
         effectAppenderProducers.put("removetext", new RemoveText());
         effectAppenderProducers.put("removethreats", new RemoveThreats());
@@ -155,7 +155,6 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("removetokenscumulative", new RemoveTokensCumulative());
         effectAppenderProducers.put("removetwilight", new RemoveTwilight());
         effectAppenderProducers.put("reordertopcardsofdrawdeck", new ReorderTopCardsOfDrawDeck());
-        effectAppenderProducers.put("replaceinassignment", new ReplaceInAssignment());
         effectAppenderProducers.put("replaceinskirmish", new ReplaceInSkirmish());
         effectAppenderProducers.put("resetwhileinzonedata", new ResetWhileInZoneData());
         effectAppenderProducers.put("returntohand", new ReturnToHand());

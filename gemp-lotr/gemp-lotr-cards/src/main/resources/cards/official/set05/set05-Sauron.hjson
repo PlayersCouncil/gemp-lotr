@@ -118,11 +118,6 @@
                     player: fp
                     filter: self
                 }
-                cost: {
-                    type: discardFromHand
-                    forced: false
-                    select: self
-                }
                 effect: {
                     type: addBurdens
                     amount: 2

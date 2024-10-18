@@ -14,13 +14,19 @@ import java.util.Objects;
 
 public class TriggerConditions {
     public static boolean startOfPhase(LotroGame game, EffectResult effectResult, Phase phase) {
-        return (effectResult.getType() == EffectResult.Type.START_OF_PHASE
-                && ((StartOfPhaseResult) effectResult).getPhase() == phase || phase == null);
+        if (effectResult.getType() == EffectResult.Type.START_OF_PHASE) {
+            StartOfPhaseResult startOfPhaseResult = (StartOfPhaseResult) effectResult;
+            return (startOfPhaseResult.getPhase() == phase || phase == null);
+        }
+        return false;
     }
 
     public static boolean endOfPhase(LotroGame game, EffectResult effectResult, Phase phase) {
-        return (effectResult.getType() == EffectResult.Type.END_OF_PHASE
-                && ((EndOfPhaseResult) effectResult).getPhase() == phase || phase == null);
+        if (effectResult.getType() == EffectResult.Type.END_OF_PHASE) {
+            EndOfPhaseResult endOfPhaseResult = (EndOfPhaseResult) effectResult;
+            return (endOfPhaseResult.getPhase() == phase || phase == null);
+        }
+        return false;
     }
 
     public static boolean startOfTurn(LotroGame game, EffectResult effectResult) {

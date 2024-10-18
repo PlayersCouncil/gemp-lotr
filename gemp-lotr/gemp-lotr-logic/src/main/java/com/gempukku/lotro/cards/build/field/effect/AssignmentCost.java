@@ -60,6 +60,14 @@ public class AssignmentCost implements EffectProcessor {
         DefaultActionSource payAssignmentCostActionSource = new DefaultActionSource();
         payAssignmentCostActionSource.setText("Pay assignment cost");
 
+        payAssignmentCostActionSource.addPlayRequirement(
+                new Requirement() {
+                    @Override
+                    public boolean accepts(ActionContext actionContext) {
+                        return !actionContext.getGame().getModifiersQuerying().assignmentCostWasPaid(actionContext.getGame(), actionContext.getSource());
+                    }
+                }
+        );
         for (Requirement requirement : requirements) {
             payAssignmentCostActionSource.addPlayRequirement(requirement);
         }
@@ -116,5 +124,7 @@ public class AssignmentCost implements EffectProcessor {
                     }
                 }
         );
+
+        blueprint.appendRequiredAfterTrigger(payAssignmentCostActionSource);
     }
 }

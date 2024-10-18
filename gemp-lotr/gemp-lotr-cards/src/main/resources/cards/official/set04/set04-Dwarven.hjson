@@ -751,6 +751,7 @@
 				{
 					type: ShuffleCardsFromPlayIntoDrawDeck
 					select: choose(culture(dwarven),condition)
+					includeStacked: true
 					count: any
 				}
 			]
@@ -794,6 +795,7 @@
 				{
 					type: ShuffleCardsFromPlayIntoDrawDeck
 					select: choose(culture(dwarven),condition)
+					includeStacked: true
 					memorizeStacked: stackedCards
 				}
 				{

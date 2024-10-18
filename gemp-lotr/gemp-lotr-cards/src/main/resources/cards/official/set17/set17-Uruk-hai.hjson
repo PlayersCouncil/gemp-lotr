@@ -539,7 +539,7 @@
 		                filter: self,assignedToSkirmish(any)
 		            }
 		            filter: site,zone(adventure path)
-		            from: site,youControl
+		            from: siteYouControl
 		        }
 		    }
 		]

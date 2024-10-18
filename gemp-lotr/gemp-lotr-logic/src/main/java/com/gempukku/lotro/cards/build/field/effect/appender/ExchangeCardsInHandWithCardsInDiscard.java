@@ -59,7 +59,7 @@ public class ExchangeCardsInHandWithCardsInDiscard implements EffectAppenderProd
                                 for (PhysicalCard handCard : handCards) {
                                     game.getGameState().addCardToZone(game, handCard, Zone.DISCARD);
                                 }
-                                return null;
+                                return new FullEffectResult(true);
                             }
 
                             @Override

@@ -1436,7 +1436,7 @@
 					trigger: {
 						type: FPDecidedToStay
 					}
-					until: endOfTurn
+					until: end(regroup)
 					effect: {
 						type: discardFromHand
 						count: 100

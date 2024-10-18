@@ -61,7 +61,7 @@ public class ExchangeCardsInHandWithCardsInDeadPile implements EffectAppenderPro
                                 for (PhysicalCard handCard : handCards) {
                                     game.getGameState().addCardToZone(game, handCard, Zone.DEAD);
                                 }
-                                return null;
+                                return new FullEffectResult(true);
                             }
 
                             @Override

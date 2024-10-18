@@ -64,7 +64,7 @@ public class ExchangeCardsInHandWithCardsStacked implements EffectAppenderProduc
                                 for (PhysicalCard handCard : handCards) {
                                     game.getGameState().stackCard(game, handCard, stackedCard);
                                 }
-                                return null;
+                                return new FullEffectResult(true);
                             }
 
                             @Override

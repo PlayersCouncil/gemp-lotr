@@ -16,8 +16,8 @@ public class Heals implements TriggerCheckerProducer {
 
         final String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
-        final String player = FieldUtils.getString(value.get("player"), "player", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
+        final String player = FieldUtils.getString(value.get("player"), "player");
+        final PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player) : null;
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
@@ -30,7 +30,7 @@ public class Heals implements TriggerCheckerProducer {
             @Override
             public boolean accepts(ActionContext actionContext) {
                 final Filterable filterable = filterableSource.getFilterable(actionContext);
-                final boolean result = TriggerConditions.forEachHealed(actionContext.getGame(), actionContext.getEffectResult(), playerSource.getPlayer(actionContext), filterable);
+                final boolean result = TriggerConditions.forEachHealed(actionContext.getGame(), actionContext.getEffectResult(), playerSource != null ? playerSource.getPlayer(actionContext) : null, filterable);
                 if (result && memorize != null) {
                     final PhysicalCard healedCard = ((HealResult) actionContext.getEffectResult()).getHealedCard();
                     actionContext.setCardMemory(memorize, healedCard);

@@ -139,7 +139,7 @@
 			    type: choice
 			    texts: [
 			        Exert an {elven} companion
-			        Spot Arwern
+			        Spot Arwen
 			    ]
 			    effects: [
 			        {
@@ -163,6 +163,7 @@
 				    fromMemory: topCards
 				    text: Choose cards to set aside
 				    memorize: setAsideCards
+				    count: 0-5
 				}
 				{
 				    type: shuffleDeck

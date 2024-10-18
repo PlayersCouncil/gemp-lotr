@@ -32,7 +32,7 @@ public class RevealedCardFromHand implements TriggerCheckerProducer {
             public boolean accepts(ActionContext actionContext) {
                 if (TriggerConditions.forEachCardRevealedFromHand(actionContext.getEffectResult())) {
                     RevealCardFromHandResult revealCardFromHandResult = (RevealCardFromHandResult) actionContext.getEffectResult();
-                    if (playerSource != null && !playerSource.getPlayer(actionContext).equals(actionContext.getPerformingPlayer()))
+                    if (playerSource != null && !playerSource.getPlayer(actionContext).equals(revealCardFromHandResult.getSource().getOwner()))
                         return false;
                     final Filterable filterable = filterableSource.getFilterable(actionContext);
                     final PhysicalCard revealedCard = revealCardFromHandResult.getRevealedCard();

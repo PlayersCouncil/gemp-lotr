@@ -29,80 +29,12 @@
 		resistance: 6,
 		effects: [
 			{
-				type: trigger
-				trigger: [
-					{
-						type: played
-						filter: self
-					}
-					{
-						type: startOfTurn
-					}
-				]
-				requires: {
-					type: perTurnLimit
-					limit: 1
-				}
-				effect: [
-					{
-						type: incrementPerTurnLimit
-						limit: 1
-					}
-					{
-						type: addModifier
-						until: endOfTurn
-						modifier: {
-							type: modifyMoveLimit
-							amount: 1
-						}
-					}
-					{
-						type: AddTrigger
-						until: endOfTurn
-						optional: false
-						trigger: {
-							type: RemovedFromPlay
-							filter: title(Radagast)
-						}
-						effect: {
-							type: addModifier
-							until: endOfTurn
-							modifier: {
-								type: modifyMoveLimit
-								amount: -1
-							}
-						}
-					}
-				]
+			    type: modifier
+			    modifier: {
+			        type: modifyMoveLimit
+			        amount: 1
+			    }
 			}
-			# {
-			# 	type: DiscardedFromPlayTrigger
-			# 	optional: false
-			# 	effect: [
-			# 		{
-			# 			type: addModifier
-			# 			until: endOfTurn
-			# 			modifier: {
-			# 				type: modifyMoveLimit
-			# 				amount: -1
-			# 			}
-			# 		}
-			# 	]
-			# }
-			# {
-			# 	type: KilledTrigger
-			# 	optional: false
-			# 	effect: [
-			# 		{
-			# 			type: addModifier
-			# 			until: endOfTurn
-			# 			modifier: {
-			# 				type: modifyMoveLimit
-			# 				amount: -1
-			# 			}
-			# 		}
-			# 	]
-			# }
 			{
 				type: trigger
 				trigger: {

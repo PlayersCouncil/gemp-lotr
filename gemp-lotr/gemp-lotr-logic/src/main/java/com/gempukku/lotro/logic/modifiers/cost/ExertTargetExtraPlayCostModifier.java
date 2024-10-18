@@ -15,7 +15,7 @@ public class ExertTargetExtraPlayCostModifier extends AbstractExtraPlayCostModif
     }
 
     @Override
-    public boolean canPayExtraCostsToPlay(LotroGame game, PhysicalCard card) {
+    public boolean canPayExtraCostsToPlay(LotroGame game, PhysicalCard target) {
         return true;
     }
 

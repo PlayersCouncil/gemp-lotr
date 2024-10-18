@@ -13,7 +13,7 @@ public class AddKeywordFromCards implements ModifierSourceProducer {
 
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
-        final String from = FieldUtils.getString(object.get("filter"), "filter");
+        final String from = FieldUtils.getString(object.get("from"), "from");
         boolean terrainOnly = FieldUtils.getBoolean(object.get("terrain"), "terrain", false);
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);

@@ -20,7 +20,7 @@ public class CanSpotCultureTokens implements RequirementProducer {
         final int count = FieldUtils.getInteger(object.get("amount"), "amount", 1);
         final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
         final Culture culture = FieldUtils.getEnum(Culture.class, object.get("culture"), "culture");
-        final Token tokenForCulture = Token.findTokenForCulture(culture);
+        final Token tokenForCulture = culture != null ? Token.findTokenForCulture(culture) : null;
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
