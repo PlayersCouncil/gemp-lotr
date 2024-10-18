@@ -243,7 +243,13 @@ public class Filters {
                                 || game.getModifiersQuerying().isUnhastyCompanionAllowedToParticipateInSkirmishes(game, physicalCard)),
                 Filters.and(
                         CardType.MINION,
-                        (Filter) (game, physicalCard) -> (!game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE)));
+                        Filters.notAssignedToSkirmish,
+                        new Filter() {
+                            @Override
+                            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
+                                return (game.getGameState().getCurrentPhase() != Phase.ASSIGNMENT || !game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE);
+                            }
+                        }));
 
         return Filters.and(
                 assignableFilter,
