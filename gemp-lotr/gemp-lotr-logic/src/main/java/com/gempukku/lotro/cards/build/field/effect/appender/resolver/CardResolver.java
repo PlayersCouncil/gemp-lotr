@@ -187,9 +187,9 @@ public class CardResolver {
     }
 
     public static EffectAppender resolveCardsInAdventureDeck(String type, FilterableSource additionalFilter, ValueSource countSource, String memory, String adventureDeckPlayer, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        final PlayerSource handSource = PlayerResolver.resolvePlayer(adventureDeckPlayer);
+        final PlayerSource playerDeckSource = PlayerResolver.resolvePlayer(adventureDeckPlayer);
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
-            String handPlayer1 = handSource.getPlayer(actionContext);
+            String handPlayer1 = playerDeckSource.getPlayer(actionContext);
             return actionContext.getGame().getGameState().getAdventureDeck(handPlayer1);
         };
 
@@ -198,19 +198,19 @@ public class CardResolver {
             return new DelayedAppender() {
                 @Override
                 public boolean isPlayableInFull(ActionContext actionContext) {
-                    final String handPlayer = handSource.getPlayer(actionContext);
-                    return actionContext.getGame().getGameState().getHand(handPlayer).size() >= count;
+                    final String playerDeck = playerDeckSource.getPlayer(actionContext);
+                    return actionContext.getGame().getGameState().getHand(playerDeck).size() >= count;
                 }
 
                 @Override
                 protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                    final String handPlayer = handSource.getPlayer(actionContext);
+                    final String playerDeck = playerDeckSource.getPlayer(actionContext);
                     return new UnrespondableEffect() {
                         @Override
                         protected void doPlayEffect(LotroGame game) {
-                            List<? extends PhysicalCard> hand = game.getGameState().getHand(handPlayer);
-                            List<PhysicalCard> randomCardsFromHand = GameUtils.getRandomCards(hand, 2);
-                            actionContext.setCardMemory(memory, randomCardsFromHand);
+                            List<? extends PhysicalCard> adventureDeck = game.getGameState().getAdventureDeck(playerDeck);
+                            List<PhysicalCard> randomCardsFromAdventureDeck = GameUtils.getRandomCards(adventureDeck, count);
+                            actionContext.setCardMemory(memory, randomCardsFromAdventureDeck);
                         }
                     };
                 }

@@ -672,4 +672,28 @@ public class AssignmentAtTest extends AbstractAtTest {
         } catch (DecisionResultInvalidException e) {
         }
     }
+
+    @Test
+    public void setupExtraAssignmentAndSkirmishes() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard witchKing = addToZone(createCard(P2, "12_183"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard fellBeast = attachTo(createCard(P2, "12_184"), witchKing);
+
+        passUntil(Phase.ASSIGNMENT);
+        // Normal skirmishes
+        pass(P1);
+        pass(P2);
+        pass(P1);
+        pass(P2);
+        // Fierce skirmishes
+        pass(P1);
+        pass(P2);
+        pass(P1);
+        pass(P2);
+        selectCardAction(P2, fellBeast);
+        assertEquals(2, getWounds(witchKing));
+        assertEquals(Phase.ASSIGNMENT, getPhase());
+        assertTrue(_game.getGameState().isExtraSkirmishes());
+    }
 }

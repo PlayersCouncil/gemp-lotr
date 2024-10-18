@@ -16,6 +16,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ConcealedExposedAtTest extends AbstractAtTest {
     protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -159,5 +160,41 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
         passUntil(Phase.FELLOWSHIP);
         selectCardAction(P1, questionsThatNeedAnswering);
         assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, getAwaitingDecision(P1).getDecisionType());
+    }
+
+    @Test
+    public void revealBottomCardsOfDrawDeck() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard shepherdOfTheTrees = addToZone(createCard(P1, "15_36"), Zone.FREE_CHARACTERS);
+        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.FELLOWSHIP);
+        PhysicalCard topCard = addToZone(createCard(P1, "1_3"), Zone.DECK);
+        PhysicalCard middleCard = addToZone(createCard(P1, "1_4"), Zone.DECK);
+        PhysicalCard bottomCard = addToZone(createCard(P1, "1_5"), Zone.DECK);
+
+        passUntil(Phase.MANEUVER);
+        selectCardAction(P1, shepherdOfTheTrees);
+        assertNotNull(getArbitraryCardId(P1, "1_5"));
+        assertNotNull(getArbitraryCardId(P2, "1_5"));
+    }
+
+    @Test
+    public void revealCardsFromAdventureDeck() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard destroyedHomestead = addToZone(createCard(P2, "15_76"), Zone.HAND);
+        PhysicalCard easterlingScout1 = addToZone(createCard(P2, "15_77"), Zone.SHADOW_CHARACTERS);
+        PhysicalCard easterlingScout2 = addToZone(createCard(P2, "15_77"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.FELLOWSHIP);
+        setTwilightPool(10);
+        passUntil(Phase.SHADOW);
+        selectCardAction(P2, destroyedHomestead);
+        assertEquals("Revealed card(s)", getAwaitingDecision(P1).getText());
+        assertEquals(1, getAwaitingDecision(P1).getDecisionParameters().get("cardId").length);
+        assertEquals("Revealed card(s)", getAwaitingDecision(P2).getText());
+        assertEquals(1, getAwaitingDecision(P2).getDecisionParameters().get("cardId").length);
     }
 }
