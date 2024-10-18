@@ -106,9 +106,8 @@ public class Card_01_224_Tests
 
         //Can't quite get the rest
 
-        //assertEquals(2, scn.GetShadowCardChoiceCount()); // both enquea and TWK
-        //scn.ShadowChooseCard(enquea);
-        //We should now be asking freeps to choose the next skirmish to resolve and in a skirmish phase
+        assertEquals(2, scn.GetShadowCardChoiceCount()); // both enquea and TWK
+        scn.ShadowChooseCard(enquea);
     }
 
 

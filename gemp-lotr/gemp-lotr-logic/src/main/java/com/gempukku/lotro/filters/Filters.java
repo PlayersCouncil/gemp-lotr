@@ -366,7 +366,7 @@ public class Filters {
                         new Filter() {
                             @Override
                             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                                return (!game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE);
+                                return (game.getGameState().getCurrentPhase() != Phase.ASSIGNMENT || !game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE);
                             }
                         }));
 
