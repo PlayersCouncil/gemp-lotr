@@ -49,7 +49,7 @@ public class ChooseAndDoAssignmentEffect extends AbstractSubActionEffect {
     }
 
     private Collection<PhysicalCard> getAssignableMinions(LotroGame game) {
-        return Filters.filterActive(game, CardType.MINION, _minionFilter, Filters.assignableToSkirmishAgainst(getDecidingPlayerSide(game), _fpFilter));
+        return Filters.filterActive(game, CardType.MINION, _minionFilter, Filters.assignableToSkirmishAgainst(getDecidingPlayerSide(game), _fpFilter, false, false));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ChooseAndDoAssignmentEffect extends AbstractSubActionEffect {
     }
 
     private void minionSelected(final LotroGame game, final PhysicalCard minion) {
-        Collection<PhysicalCard> assignableFpCharacters = Filters.filterActive(game, Filters.or(CardType.COMPANION, CardType.ALLY), _fpFilter, Filters.assignableToSkirmishAgainst(getDecidingPlayerSide(game), minion));
+        Collection<PhysicalCard> assignableFpCharacters = Filters.filterActive(game, Filters.or(CardType.COMPANION, CardType.ALLY), _fpFilter, Filters.assignableToSkirmishAgainst(getDecidingPlayerSide(game), minion, false, false));
         if (assignableFpCharacters.size() == 1)
             assignmentSelected(game, assignableFpCharacters.iterator().next(), minion);
         else
