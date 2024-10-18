@@ -268,6 +268,12 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public List<String> ShadowGetBPChoices() { return GetADParamAsList(P2, "blueprintId"); }
     public List<String> FreepsGetMultipleChoices() { return GetADParamAsList(P1, "results"); }
     public List<String> ShadowGetMultipleChoices() { return GetADParamAsList(P2, "results"); }
+
+    public List<String> FreepsGetFreepsAssignmentTargets() { return GetADParamAsList(P1, "freeCharacters"); }
+    public List<String> FreepsGetShadowAssignmentTargets() { return GetADParamAsList(P1, "minions"); }
+
+    public List<String> ShadowGetFreepsAssignmentTargets() { return GetADParamAsList(P2, "freeCharacters"); }
+    public List<String> ShadowGetShadowAssignmentTargets() { return GetADParamAsList(P2, "minions"); }
     public List<String> FreepsGetADParamAsList(String paramName) { return GetADParamAsList(P1, paramName); }
     public List<String> ShadowGetADParamAsList(String paramName) { return GetADParamAsList(P2, paramName); }
     public List<String> GetADParamAsList(String playerID, String paramName) { return Arrays.asList(GetAwaitingDecisionParam(playerID, paramName)); }
@@ -629,6 +635,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public int GetMoveCount() { return _game.getGameState().getMoveCount(); }
 
     public PhysicalCardImpl GetRingBearer() { return (PhysicalCardImpl)_game.getGameState().getRingBearer(P1); }
+    public PhysicalCardImpl GetOneRing() { return (PhysicalCardImpl)_game.getGameState().getRing(P1); }
 
     public boolean RBWearingOneRing() { return _game.getGameState().isWearingRing(); }
     public PhysicalCardImpl GetCurrentSite() { return (PhysicalCardImpl)_game.getGameState().getCurrentSite(); }
@@ -795,6 +802,11 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public int GetFreepsCardChoiceCount() { return FreepsGetCardChoices().size(); }
     public int GetShadowCardChoiceCount() { return ShadowGetCardChoices().size(); }
+
+    public int FreepsGetFreepsAssignmentTargetCount() { return FreepsGetFreepsAssignmentTargets().size(); }
+    public int FreepsGetShadowAssignmentTargetCount() { return FreepsGetShadowAssignmentTargets().size(); }
+    public int ShadowGetFreepsAssignmentTargetCount() { return ShadowGetFreepsAssignmentTargets().size(); }
+    public int ShadowGetShadowAssignmentTargetCount() { return ShadowGetShadowAssignmentTargets().size(); }
 
     public void FreepsChooseCardBPFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCardBPFromSelection(P1, cards);}
     public void ShadowChooseCardBPFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCardBPFromSelection(P2, cards);}
