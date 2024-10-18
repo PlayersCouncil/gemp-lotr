@@ -530,7 +530,7 @@ public class TriggersAtTest extends AbstractAtTest {
 
         PhysicalCard theShireCountryside = addToZone(createCard(P1, "3_113"), Zone.SUPPORT);
         PhysicalCard elfSong = addToZone(createCard(P1, "1_39"), Zone.HAND);
-        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.FREE_CHARACTERS);
+        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
 
         passUntil(Phase.FELLOWSHIP);
         selectCardAction(P1, elfSong);

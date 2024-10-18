@@ -156,7 +156,7 @@ public class ModifiersAtTest extends AbstractAtTest {
         initializeSimplestGame();
 
         PhysicalCard elfSong = addToZone(createCard(P1, "1_39"), Zone.HAND);
-        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.FREE_CHARACTERS);
+        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
 
         JSONObject obj = new JSONObject();
         obj.put("phase", "fellowship");
@@ -242,7 +242,7 @@ public class ModifiersAtTest extends AbstractAtTest {
     public void cantUseSpecialAbilities() throws Exception {
         initializeSimplestGame();
 
-        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.FREE_CHARACTERS);
+        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
 
         JSONObject obj = new JSONObject();
         obj.put("phase", "fellowship");
@@ -260,7 +260,7 @@ public class ModifiersAtTest extends AbstractAtTest {
     public void disableGameText() throws Exception {
         initializeSimplestGame();
 
-        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.FREE_CHARACTERS);
+        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
 
         JSONObject obj = new JSONObject();
         obj.put("filter", "elf");

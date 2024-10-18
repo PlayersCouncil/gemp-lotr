@@ -254,6 +254,11 @@ public class FilterFactory {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return (actionContext) -> Filters.attachedTo(filterableSource.getFilterable(actionContext));
                 });
+        parameterFilters.put("stackedon",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.stackedOn(filterableSource.getFilterable(actionContext));
+                });
         parameterFilters.put("culture", (parameter, environment) -> {
             final Culture culture = Culture.findCulture(parameter);
             if (culture == null)
