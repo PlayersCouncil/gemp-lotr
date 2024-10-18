@@ -5,6 +5,7 @@ import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
@@ -20,11 +21,11 @@ public class Card_01_363_Tests
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
                 new HashMap<>() {{
-                    put("greenleaf", "1_50");
-					put("moriatroop1", "1_177");
-					put("moriatroop2", "1_177");
-					put("moriatroop3", "1_177");
+					put("tracker1", "1_261");
+					put("tracker2", "1_262");
+					put("tracker3", "1_270");
 					put("shelob", "8_26");
+					put("hollowing", "3_54");
                 }},
                 new HashMap<>() {{
                     put("site1", "1_319");
@@ -72,60 +73,168 @@ public class Card_01_363_Tests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var moriatroop1 = scn.GetShadowCard("moriatroop1");
-		var moriatroop2 = scn.GetShadowCard("moriatroop2");
-		var moriatroop3 = scn.GetShadowCard("moriatroop3");
-		var shelob = scn.GetShadowCard("shelob");
-		scn.ShadowMoveCardToHand(moriatroop1, moriatroop2, moriatroop3, shelob);
-
-		//Max out the move limit so we don't have to juggle play back and forth
-		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
+		var tolbrandir = scn.GetShadowSite(9);
+		var tracker1 = scn.GetShadowCard("tracker1");
+		var tracker2 = scn.GetShadowCard("tracker2");
+		var tracker3 = scn.GetShadowCard("tracker3");
+		var hollowing = scn.GetShadowCard("hollowing");
+		scn.ShadowMoveCardToSupportArea(hollowing);
+		scn.ShadowMoveCardToDiscard(tracker1, tracker2, tracker3);
+		scn.ShadowMoveCardToDiscard("shelob");
 
 		scn.StartGame();
 
-		// 1 -> 3
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
+		scn.SkipToSite(8);
+		scn.FreepsPassCurrentPhaseAction();
 
-		// 3 -> 4
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
+		assertSame(tolbrandir, scn.GetCurrentSite());
+		assertTrue(scn.ShadowActionAvailable(tolbrandir));
+		assertTrue(scn.ShadowActionAvailable(hollowing));
+		assertEquals(Zone.DISCARD, tracker1.getZone());
+		assertEquals(Zone.DISCARD, tracker2.getZone());
+		assertEquals(Zone.DISCARD, tracker3.getZone());
+		assertEquals(10, scn.GetTwilight());
 
-		// 4 -> 5
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
+		scn.ShadowUseCardAction(tolbrandir);
+		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
+		//Should not have the non-tracker in the choice pool
+		assertEquals(3, scn.ShadowGetBPChoices().size());
 
-		// 5 -> 6
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
+		scn.ShadowChooseCardBPFromSelection(tracker1);
+		assertEquals(Zone.SHADOW_CHARACTERS, tracker1.getZone());
+		assertEquals(9, scn.GetTwilight());
+		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
 
-		// 6 -> 7
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
+		scn.ShadowChooseCardBPFromSelection(tracker2);
+		assertEquals(Zone.SHADOW_CHARACTERS, tracker2.getZone());
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
 
-		// 7 -> 8
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
+		scn.ShadowChooseCardBPFromSelection(tracker3);
+		assertEquals(Zone.SHADOW_CHARACTERS, tracker3.getZone());
+		assertEquals(4, scn.GetTwilight());
 
-		// 8 -> 9
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
+		//No more shadow actions should be permitted (but Shadow is still required to pass manually)
+		assertFalse(scn.ShadowActionAvailable(hollowing));
+	}
 
-		//TODO: actually finish this
+	@Test
+	public void TolBrandirActionCanPlay0TrackersAndDecline3() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
 
+		var tolbrandir = scn.GetShadowSite(9);
+		var tracker1 = scn.GetShadowCard("tracker1");
+		var tracker2 = scn.GetShadowCard("tracker2");
+		var tracker3 = scn.GetShadowCard("tracker3");
+		scn.ShadowMoveCardToDiscard(tracker1, tracker2, tracker3);
+
+		scn.StartGame();
+
+		scn.SkipToSite(8);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertSame(tolbrandir, scn.GetCurrentSite());
+		assertTrue(scn.ShadowActionAvailable(tolbrandir));
+		assertEquals(Zone.DISCARD, tracker1.getZone());
+		assertEquals(Zone.DISCARD, tracker2.getZone());
+		assertEquals(Zone.DISCARD, tracker3.getZone());
+		assertEquals(10, scn.GetTwilight());
+
+		scn.ShadowUseCardAction(tolbrandir);
+		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
+		//Should not have the non-tracker in the choice pool
+		assertEquals(3, scn.ShadowGetBPChoices().size());
+
+		scn.ShadowDeclineChoosing();
+		scn.ShadowDeclineChoosing();
+		scn.ShadowDeclineChoosing();
+		assertEquals(Zone.DISCARD, tracker1.getZone());
+		assertEquals(Zone.DISCARD, tracker2.getZone());
+		assertEquals(Zone.DISCARD, tracker3.getZone());
+		assertTrue(scn.ShadowDecisionAvailable("Play Shadow action or pass"));
+	}
+
+	@Test
+	public void TolBrandirActionCanPlay1TrackerAndDecline2() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var tolbrandir = scn.GetShadowSite(9);
+		var tracker1 = scn.GetShadowCard("tracker1");
+		var tracker2 = scn.GetShadowCard("tracker2");
+		var tracker3 = scn.GetShadowCard("tracker3");
+		scn.ShadowMoveCardToDiscard(tracker1, tracker2, tracker3);
+
+		scn.StartGame();
+
+		scn.SkipToSite(8);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertSame(tolbrandir, scn.GetCurrentSite());
+		assertTrue(scn.ShadowActionAvailable(tolbrandir));
+		assertEquals(Zone.DISCARD, tracker1.getZone());
+		assertEquals(Zone.DISCARD, tracker2.getZone());
+		assertEquals(Zone.DISCARD, tracker3.getZone());
+		assertEquals(10, scn.GetTwilight());
+
+		scn.ShadowUseCardAction(tolbrandir);
+		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
+		//Should not have the non-tracker in the choice pool
+		assertEquals(3, scn.ShadowGetBPChoices().size());
+
+		scn.ShadowChooseCardBPFromSelection(tracker1);
+		assertEquals(Zone.SHADOW_CHARACTERS, tracker1.getZone());
+		assertEquals(9, scn.GetTwilight());
+		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
+
+		scn.ShadowDeclineChoosing();
+		scn.ShadowDeclineChoosing();
+		assertEquals(Zone.DISCARD, tracker2.getZone());
+		assertEquals(Zone.DISCARD, tracker3.getZone());
+		assertTrue(scn.ShadowDecisionAvailable("Play Shadow action or pass"));
+	}
+
+	@Test
+	public void TolBrandirActionCanPlay2TrackersAndDecline1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var tolbrandir = scn.GetShadowSite(9);
+		var tracker1 = scn.GetShadowCard("tracker1");
+		var tracker2 = scn.GetShadowCard("tracker2");
+		var tracker3 = scn.GetShadowCard("tracker3");
+		scn.ShadowMoveCardToDiscard(tracker1, tracker2, tracker3);
+
+		scn.StartGame();
+
+		scn.SkipToSite(8);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertSame(tolbrandir, scn.GetCurrentSite());
+		assertTrue(scn.ShadowActionAvailable(tolbrandir));
+		assertEquals(Zone.DISCARD, tracker1.getZone());
+		assertEquals(Zone.DISCARD, tracker2.getZone());
+		assertEquals(Zone.DISCARD, tracker3.getZone());
+		assertEquals(10, scn.GetTwilight());
+
+		scn.ShadowUseCardAction(tolbrandir);
+		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
+		//Should not have the non-tracker in the choice pool
+		assertEquals(3, scn.ShadowGetBPChoices().size());
+
+		scn.ShadowChooseCardBPFromSelection(tracker1);
+		assertEquals(Zone.SHADOW_CHARACTERS, tracker1.getZone());
+		assertEquals(9, scn.GetTwilight());
+		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
+
+		scn.ShadowChooseCardBPFromSelection(tracker2);
+		assertEquals(Zone.SHADOW_CHARACTERS, tracker2.getZone());
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
+
+		scn.ShadowDeclineChoosing();
+		assertEquals(Zone.DISCARD, tracker3.getZone());
+		assertTrue(scn.ShadowDecisionAvailable("Play Shadow action or pass"));
 	}
 }
