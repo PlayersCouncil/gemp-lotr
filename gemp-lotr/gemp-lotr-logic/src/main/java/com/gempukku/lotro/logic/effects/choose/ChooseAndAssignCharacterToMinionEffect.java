@@ -33,7 +33,7 @@ public class ChooseAndAssignCharacterToMinionEffect extends ChooseActiveCardEffe
     @Override
     protected Filter getExtraFilterForPlaying(final LotroGame game) {
         final Side side = game.getGameState().getCurrentPlayerId().equals(_playerId) ? Side.FREE_PEOPLE : Side.SHADOW;
-        return Filters.assignableToSkirmishAgainst(side, _minion, false, false, _skipAllyLocationCheck);
+        return Filters.assignableToSkirmishAgainst(side, _minion, false, _skipAllyLocationCheck);
     }
 
     @Override

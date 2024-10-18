@@ -282,11 +282,7 @@ public class Filters {
     }
 
     public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter) {
-        return assignableToSkirmishAgainst(assignedBySide, againstFilter, false);
-    }
-
-    public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter, boolean ignoreFierce) {
-        return assignableToSkirmishAgainst(assignedBySide, againstFilter, ignoreFierce, false, false);
+        return assignableToSkirmishAgainst(assignedBySide, againstFilter, false, false);
     }
 
     public static Filter notPreventedByEffectToAssign(final Side assignedBySide, final PhysicalCard againstCard) {
@@ -306,15 +302,15 @@ public class Filters {
         };
     }
 
-    public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter, final boolean ignoreFierce, final boolean ignoreUnassigned, final boolean allowAllyToSkirmish) {
+    public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter, final boolean ignoreUnassigned, final boolean allowAllyToSkirmish) {
         return Filters.and(
-                assignableToSkirmish(assignedBySide, ignoreFierce, ignoreUnassigned, allowAllyToSkirmish),
+                assignableToSkirmish(assignedBySide, ignoreUnassigned, allowAllyToSkirmish),
                 new Filter() {
                     @Override
                     public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                         for (PhysicalCard card : Filters.filterActive(game, againstFilter)) {
                             if (card.getBlueprint().getSide() != physicalCard.getBlueprint().getSide()
-                                    && Filters.assignableToSkirmish(assignedBySide, ignoreFierce, ignoreUnassigned, allowAllyToSkirmish).accepts(game, card)) {
+                                    && Filters.assignableToSkirmish(assignedBySide, ignoreUnassigned, allowAllyToSkirmish).accepts(game, card)) {
                                 Map<PhysicalCard, Set<PhysicalCard>> thisAssignment = new HashMap<>();
                                 if (card.getBlueprint().getSide() == Side.FREE_PEOPLE) {
                                     if (thisAssignment.containsKey(card))
@@ -337,7 +333,7 @@ public class Filters {
                 });
     }
 
-    public static Filter assignableToSkirmish(final Side assignedBySide, final boolean ignoreFierce, final boolean ignoreUnassigned, final boolean allowAllyToSkirmish) {
+    public static Filter assignableToSkirmish(final Side assignedBySide, final boolean ignoreUnassigned, final boolean allowAllyToSkirmish) {
         Filter assignableFilter = Filters.or(
                 Filters.and(
                         CardType.ALLY,
@@ -370,7 +366,7 @@ public class Filters {
                         new Filter() {
                             @Override
                             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                                return (ignoreFierce || !game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE);
+                                return (game.getGameState().getCurrentPhase() != Phase.ASSIGNMENT || !game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE);
                             }
                         }));
 
