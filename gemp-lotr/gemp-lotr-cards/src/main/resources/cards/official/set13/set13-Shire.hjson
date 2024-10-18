@@ -316,8 +316,8 @@
                    type: playCardFromDiscard
                    select: self
                    extraEffects: {
-                       type: removeFromTheGame
-                       select: self
+                       type: removePlayedEventFromTheGame
+                       filter: self
                    }
                 }
 		    }

@@ -287,8 +287,7 @@ public class CardResolver {
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
 
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
-            String targetPlayerId = playerSource.getPlayer(actionContext);
-            return actionContext.getGame().getGameState().getDeadPile(targetPlayerId);
+            return actionContext.getGame().getGameState().getDeadPile(actionContext.getGame().getGameState().getCurrentPlayerId());
         };
 
         if (type.equals("self")) {

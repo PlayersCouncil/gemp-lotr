@@ -98,8 +98,8 @@ public abstract class AbstractAtTest {
         return _game.getGameState().getTokenCount(tomBombadilsHat, Token.findTokenForCulture(culture));
     }
 
-    public void selectArbitraryCards(String player, String[] blueprintIds) throws DecisionResultInvalidException {
-        playerDecided(player, StringUtils.join(blueprintIds, ","));
+    public void selectArbitraryCards(String player, String... cardId) throws DecisionResultInvalidException {
+        playerDecided(player, StringUtils.join(cardId, ","));
     }
 
     public void selectCardAction(String player, PhysicalCard card) throws DecisionResultInvalidException {
@@ -335,6 +335,15 @@ public abstract class AbstractAtTest {
         for (int i = 0; i < actionTexts.length; i++)
             if (actionTexts[i].equals(result))
                 return String.valueOf(i);
+        return null;
+    }
+
+    public String getArbitraryCardId(String playerId, String blueprintId) {
+        String[] blueprintIds = getAwaitingDecision(playerId).getDecisionParameters().get("blueprintId");
+        for (int i=0; i<blueprintIds.length; i++) {
+            if (blueprintIds[i].equals(blueprintId))
+                return getAwaitingDecision(playerId).getDecisionParameters().get("cardId")[i];
+        }
         return null;
     }
 

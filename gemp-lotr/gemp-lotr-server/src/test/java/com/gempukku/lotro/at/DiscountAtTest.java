@@ -157,7 +157,7 @@ public class DiscountAtTest extends AbstractAtTest {
 
         assertEquals(Phase.SKIRMISH, getPhase());
         selectCardAction(P2, defiled);
-        selectArbitraryCards(P2, new String[]{"temp0", "temp1", "temp2", "temp3"});
+        selectArbitraryCards(P2, "temp0", "temp1", "temp2", "temp3");
 
         assertEquals(0, getTwilightPool());
         assertEquals(Zone.DISCARD, defiled.getZone());
