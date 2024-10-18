@@ -44,14 +44,14 @@ public class FreePeoplePlayerAssignsMinionsGameProcess implements GameProcess {
                     protected void doPlayEffect(final LotroGame game) {
                         final GameState gameState = game.getGameState();
 
-                        final Collection<PhysicalCard> minions = Filters.filterActive(game, CardType.MINION, Filters.assignableToSkirmish(Side.FREE_PEOPLE, true, false));
+                        final Collection<PhysicalCard> minions = Filters.filterActive(game, CardType.MINION, Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, true, false));
                         if (minions.size() > 0) {
                             final Collection<PhysicalCard> freePeopleTargets =
                                     Filters.filterActive(game,
                                             Filters.and(
                                                     Filters.or(
                                                             CardType.COMPANION, CardType.ALLY),
-                                                    Filters.assignableToSkirmish(Side.FREE_PEOPLE, true, false)));
+                                                    Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, true, false)));
 
 
                             game.getUserFeedback().sendAwaitingDecision(gameState.getCurrentPlayerId(),

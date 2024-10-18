@@ -47,7 +47,7 @@ public class AssignmentEffect extends AbstractEffect {
     @Override
     public boolean isPlayableInFull(LotroGame game) {
         Side side = _playerId.equals(game.getGameState().getCurrentPlayerId()) ? Side.FREE_PEOPLE : Side.SHADOW;
-        return Filters.assignableToSkirmishAgainst(side, _fpChar, _ignoreSingleMinionRestriction, _skipAllyLocationCheck).accepts(game, _minion);
+        return Filters.assignableToSkirmishAgainst(side, _fpChar, false, _ignoreSingleMinionRestriction, _skipAllyLocationCheck).accepts(game, _minion);
     }
 
     @Override

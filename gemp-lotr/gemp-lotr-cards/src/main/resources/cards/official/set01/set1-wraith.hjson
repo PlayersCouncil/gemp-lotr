@@ -695,6 +695,7 @@
 					type: assignFpCharacterToSkirmish
 					fpCharacter: choose(ring bearer)
 					against: choose(nazgul)
+					ignoreFierce: true
 				}
 				{
 					type: addTrigger

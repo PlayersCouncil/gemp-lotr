@@ -23,11 +23,12 @@ import java.util.List;
 public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "against");
+        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "against", "ignoreFierce");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String fpCharacter = FieldUtils.getString(effectObject.get("fpCharacter"), "fpCharacter");
         final String against = FieldUtils.getString(effectObject.get("against"), "against");
+        final boolean ignoreFierce = FieldUtils.getBoolean(effectObject.get("ignoreFierce"), "ignoreFierce", false);
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
 
@@ -41,7 +42,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Filterable filter = minionFilter.getFilterable(actionContext);
-                            return Filters.assignableToSkirmishAgainst(assigningSide, filter);
+                            return Filters.assignableToSkirmishAgainst(assigningSide, filter, ignoreFierce);
                         }, "_tempFpCharacter", player, "Choose character to assign to skirmish", environment));
         result.addEffectAppender(
                 CardResolver.resolveCard(against,
@@ -49,7 +50,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory("_tempFpCharacter");
-                            return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar));
+                            return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar), ignoreFierce);
                         }, "_tempMinion", player, "Choose minion to assign to character", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
