@@ -108,6 +108,8 @@ public class Card_01_234_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseYes();
 		//twk, attea, rit, and runner
@@ -139,6 +141,8 @@ public class Card_01_234_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseYes();
 		//twk, attea, rit, and runner
@@ -176,6 +180,8 @@ public class Card_01_234_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseNo();
 
@@ -201,6 +207,8 @@ public class Card_01_234_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseYes();
 		assertEquals(4, scn.GetShadowCardChoiceCount());

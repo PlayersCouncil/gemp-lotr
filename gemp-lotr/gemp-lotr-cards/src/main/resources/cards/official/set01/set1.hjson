@@ -526,7 +526,10 @@
 		type: site
 		site: 3
 		block: fellowship
-		keyword: river
+		keywords: [
+			river
+			Sanctuary
+		]
 		direction: right
 		effects: [
 			{
@@ -534,11 +537,8 @@
 				modifier: {
 					type: modifyCost
 					requires: {
-						type: not
-						requires: {
-							type: hasInZoneData
-							filter: self
-						}
+						type: perTurnLimit
+						limit: 1
 					}
 					filter: nazgul
 					amount: -5
@@ -549,41 +549,10 @@
 				trigger: {
 					type: played
 					filter: nazgul
-					memorize: playedNazgul
-				}
-				requires: {
-					type: not
-					requires: {
-						type: hasInZoneData
-						filter: self
-					}
 				}
 				effect: {
-					type: appendCardIdsToWhileInZone
-					memory: playedNazgul
-				}
-			}
-			{
-				type: trigger
-				trigger: {
-					type: endOfTurn
-				}
-				effect: {
-					type: resetWhileInZoneData
-				}
-			}
-			{
-				type: trigger
-				trigger: {
-					type: movesFrom
-					filter: self
-				}
-				requires: {
-					type: phase
-					phase: regroup
-				}
-				effect: {
-					type: resetWhileInZoneData
+					type: incrementPerTurnLimit
+					limit: 1
 				}
 			}
 		]
@@ -900,17 +869,15 @@
 		site: 6
 		block: fellowship
 		direction: left
+		keywords: Sanctuary
 		effects: [
 			{
 				type: modifier
 				modifier: {
 					type: modifyCost
 					requires: {
-						type: not
-						requires: {
-							type: hasInZoneData
-							filter: self
-						}
+						type: perPhaseLimit
+						limit: 1
 					}
 					filter: culture(moria),orc
 					amount: -2
@@ -923,26 +890,9 @@
 					filter: culture(moria),orc
 					memorize: playedOrc
 				}
-				requires: {
-					type: not
-					requires: {
-						type: hasInZoneData
-						filter: self
-					}
-				}
 				effect: {
-					type: appendCardIdsToWhileInZone
-					memory: playedOrc
-				}
-			}
-			{
-				type: trigger
-				trigger: {
-					type: endOfPhase
-					phase: shadow
-				}
-				effect: {
-					type: resetWhileInZoneData
+					type: incrementPerPhaseLimit
+					limit: 1
 				}
 			}
 		]
