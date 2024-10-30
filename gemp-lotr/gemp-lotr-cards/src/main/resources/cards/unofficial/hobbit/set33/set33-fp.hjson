@@ -592,11 +592,11 @@
         ]
         effects: [
           {
-            type: putCardsFromDiscardIntoHand
+            type: putCardsFromDeckIntoHand
             filter: choose(or(culture(elven),culture(mirkwood)))
           }
           {
-            type: putCardsFromDeckIntoHand
+            type: putCardsFromDiscardIntoHand
             filter: choose(or(culture(elven),culture(mirkwood)))
           }
         ]
