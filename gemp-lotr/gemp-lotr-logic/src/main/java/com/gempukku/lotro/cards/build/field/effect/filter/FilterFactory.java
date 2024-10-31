@@ -152,25 +152,31 @@ public class FilterFactory {
                     return lostSkirmish.getLoser();
                 });
         simpleFilters.put("storedculture",
-                (actionContext) -> {
+                (actionContext) -> (Filter) (game, physicalCard) -> {
                     PhysicalCard.WhileInZoneData data = actionContext.getSource().getWhileInZoneData();
-                    if (data == null)
-                        return Filters.none;
-                    return Culture.valueOf(data.getValue());
+                    if (data != null) {
+                        return physicalCard.getBlueprint().getCulture() == Culture.findCultureByHumanReadable(data.getHumanReadable());
+                    }
+                    return false;
                 });
         simpleFilters.put("storedkeyword",
-                (actionContext) -> {
+                (actionContext) -> (Filter) (game, physicalCard) -> {
                     PhysicalCard.WhileInZoneData data = actionContext.getSource().getWhileInZoneData();
-                    if (data == null)
-                        return Filters.none;
-                    return Keyword.valueOf(data.getValue());
+                    if (data != null) {
+                        Keyword keyword = Keyword.valueOf(data.getValue());
+                        if (keyword != null) {
+                            return game.getModifiersQuerying().hasKeyword(game, physicalCard, keyword);
+                        }
+                    }
+                    return false;
                 });
         simpleFilters.put("storedtitle",
-                (actionContext) -> {
+                (actionContext) -> (Filter) (game, physicalCard) -> {
                     PhysicalCard.WhileInZoneData data = actionContext.getSource().getWhileInZoneData();
-                    if (data == null)
-                        return Filters.none;
-                    return Filters.name(data.getValue());
+                    if (data != null) {
+                        return physicalCard.getBlueprint().getTitle().equals(data.getValue());
+                    }
+                    return false;
                 });
         simpleFilters.put("unbound",
                 (actionContext) -> Filters.unboundCompanion);
@@ -181,7 +187,6 @@ public class FilterFactory {
         simpleFilters.put("weapon", (actionContext) -> Filters.weapon);
         simpleFilters.put("wounded", (actionContext) -> Filters.wounded);
         simpleFilters.put("your", (actionContext) -> Filters.owner(actionContext.getPerformingPlayer()));
-
 
         parameterFilters.put("and",
                 (parameter, environment) -> {
@@ -248,6 +253,11 @@ public class FilterFactory {
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return (actionContext) -> Filters.attachedTo(filterableSource.getFilterable(actionContext));
+                });
+        parameterFilters.put("stackedon",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.stackedOn(filterableSource.getFilterable(actionContext));
                 });
         parameterFilters.put("culture", (parameter, environment) -> {
             final Culture culture = Culture.findCulture(parameter);

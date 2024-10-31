@@ -9,6 +9,7 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Test;
 
@@ -17,10 +18,6 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 public class IndividualCardAtTest extends AbstractAtTest {
-
-
-
-
     @Test
     public void bilboRingBearerWithConsortingAndMorgulBrute() throws DecisionResultInvalidException, CardNotFoundException {
         Map<String, LotroDeck> decks = new HashMap<>();
@@ -1199,5 +1196,98 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(Zone.DISCARD, morgulBlade.getZone());
         assertEquals(Zone.ATTACHED, bladeTip.getZone());
+    }
+
+    @Test
+    public void sarumanOfManyColors() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard sarumanOfManyColors = addToZone(createCard(P2, "12_54"), Zone.HAND);
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+
+        passUntil(Phase.FELLOWSHIP);
+        setTwilightPool(10);
+        passUntil(Phase.SHADOW);
+        assertEquals(4, getStrength(ringBearer));
+        selectCardAction(P2, sarumanOfManyColors);
+        playerDecided(P2, getMultipleDecisionIndex(getAwaitingDecision(P2), "Shire"));
+        assertEquals(3, getStrength(ringBearer));
+    }
+
+    @Test
+    public void putForthItsStrength() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard putForthHisStrength = addToZone(createCard(P2, "7_205"), Zone.SUPPORT);
+        PhysicalCard attea = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
+        for (int i = 0; i < 3; i++) {
+            addToZone(createCard(P1, "1_12"), Zone.DEAD);
+        }
+
+        passUntil(Phase.FELLOWSHIP);
+        addBurdens(3);
+        addThreats(P1, 3);
+
+        passUntil(Phase.SHADOW);
+        selectCardAction(P2, putForthHisStrength);
+        assertTrue(_game.isFinished());
+        assertEquals(P2, _game.getWinnerPlayerId());
+    }
+
+    @Test
+    public void reorderTopCardsOfDrawDeck() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard gandalf = addToZone(createCard(P1, "1_72"), Zone.FREE_CHARACTERS);
+        PhysicalCard discoveries = addToZone(createCard(P1, "12_26"), Zone.HAND);
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+
+        passUntil(Phase.FELLOWSHIP);
+        PhysicalCard topCard = addToZone(createCard(P1, "1_3"), Zone.DECK);
+        PhysicalCard middleCard = addToZone(createCard(P1, "1_4"), Zone.DECK);
+        PhysicalCard bottomCard = addToZone(createCard(P1, "1_5"), Zone.DECK);
+        selectCardAction(P1, discoveries);
+        pass(P1);
+        playerDecided(P1, "3");
+        selectArbitraryCards(P1, getArbitraryCardId(P1, "1_3"));
+
+        List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P1);
+        assertEquals(middleCard, deck.get(0));
+        assertEquals(topCard, deck.get(1));
+        assertEquals(bottomCard, deck.get(2));
+    }
+
+    @Test
+    public void setStrengthOverride() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+        PhysicalCard finalTriumph = addToZone(createCard(P2, "18_115"), Zone.HAND);
+        PhysicalCard whiteHandExorciser = addToZone(createCard(P2, "18_125"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        setTwilightPool(4);
+        playerDecided(P1, ringBearer.getCardId()+" "+whiteHandExorciser.getCardId());
+        selectCard(P1, ringBearer);
+        pass(P1);
+        selectCardAction(P2, finalTriumph);
+        assertEquals(4, RuleUtils.getFellowshipSkirmishStrength(_game));
+        assertEquals(1, RuleUtils.getShadowSkirmishStrength(_game));
+    }
+
+    @Test
+    public void shuffleCardsFromPlayIntoDrawDeck() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard restByBlindNight = addToZone(createCard(P1, "4_54"), Zone.HAND);
+        PhysicalCard stoutAndStrong = addToZone(createCard(P1, "4_57"), Zone.SUPPORT);
+
+        passUntil(Phase.REGROUP);
+        selectCardAction(P1, restByBlindNight);
+        selectCard(P1, stoutAndStrong);
+        assertEquals(Zone.DECK, stoutAndStrong.getZone());
     }
 }
