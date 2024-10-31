@@ -613,7 +613,7 @@
           }
           {
             type: putCardsFromDiscardIntoHand
-            filter: choose(or(culture(elven),culture(mirkwood)))
+            select: choose(or(culture(elven),culture(mirkwood)))
           }
         ]
       }
