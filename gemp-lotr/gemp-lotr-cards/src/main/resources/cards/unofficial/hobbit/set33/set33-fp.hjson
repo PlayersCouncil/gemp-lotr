@@ -605,15 +605,15 @@
         ]
         effects: [
           {
-            type: putCardsFromDiscardIntoHand
-            select: choose(or(culture(elven),culture(mirkwood)))
-          }
-          {
             type: putCardsFromDeckIntoHand
             select: choose(or(culture(elven),culture(mirkwood)))
             reveal: true
             shuffle: true
             showAll: true
+          }
+          {
+            type: putCardsFromDiscardIntoHand
+            filter: choose(or(culture(elven),culture(mirkwood)))
           }
         ]
       }
