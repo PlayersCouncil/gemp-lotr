@@ -1015,7 +1015,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Condition
-		target: ent
+		target: ent,canExert
 		effects: [
 		    {
                 type: exertTargetExtraCost

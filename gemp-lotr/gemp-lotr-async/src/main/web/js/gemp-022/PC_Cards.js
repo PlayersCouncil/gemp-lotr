@@ -851,7 +851,15 @@ var PCCards = {
 	'53_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.2_card.jpg',
 	'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.2_card.jpg',
 	'53_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.3_card.jpg',
-	'53_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.2_card.jpg'
-
+	'53_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.2_card.jpg',
+	
+	//2024 World Championship promos
+	//Unbranded - Do not release until 2025 WC has concluded.
+	//'1_393': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.0_card.jpg',
+	'1_394': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.1_card.jpg',
+	'1_395': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.2_card.jpg',
+	'1_396': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.3_card.jpg',
+	'1_397': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.4_card.jpg'
+	
 }
 

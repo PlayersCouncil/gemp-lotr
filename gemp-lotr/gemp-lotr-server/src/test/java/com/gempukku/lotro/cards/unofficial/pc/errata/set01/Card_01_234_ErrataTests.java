@@ -108,6 +108,8 @@ public class Card_01_234_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
 		scn.ShadowChooseYes();
 		//twk and attea, but not rit or runner
@@ -138,6 +140,8 @@ public class Card_01_234_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
 		scn.ShadowChooseYes();
 		//twk and attea, but not rit or runner
@@ -174,6 +178,8 @@ public class Card_01_234_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
 		scn.ShadowChooseNo();
 
@@ -199,6 +205,8 @@ public class Card_01_234_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
 		scn.ShadowChooseYes();
 		//twk and attea, but not rit or runner

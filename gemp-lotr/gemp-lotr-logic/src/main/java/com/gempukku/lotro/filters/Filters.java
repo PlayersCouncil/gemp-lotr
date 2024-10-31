@@ -244,7 +244,12 @@ public class Filters {
                 Filters.and(
                         CardType.MINION,
                         Filters.notAssignedToSkirmish,
-                        (Filter) (game, physicalCard) -> (!game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE)));
+                        new Filter() {
+                            @Override
+                            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
+                                return (game.getGameState().getCurrentPhase() != Phase.ASSIGNMENT || !game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE);
+                            }
+                        }));
 
         return Filters.and(
                 assignableFilter,

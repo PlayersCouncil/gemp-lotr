@@ -161,7 +161,7 @@
 		            filter: culture(men)
 		        }
 		        cost: {
-		            type: revealCards
+		            type: revealCardsFromHand
 		            select: self
 		        }
 		        effect: {

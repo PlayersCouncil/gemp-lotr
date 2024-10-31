@@ -58,7 +58,7 @@ public class ChooseArbitraryCards implements EffectAppenderProducer {
                                 cards, selectableCards, minimum, maximum) {
                             @Override
                             public void decisionMade(String result) throws DecisionResultInvalidException {
-                                actionContext.setValueToMemory(memorize, String.valueOf(getSelectedCardsByResponse(result)));
+                                actionContext.setCardMemory(memorize, getSelectedCardsByResponse(result));
                             }
                         });
             }

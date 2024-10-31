@@ -1,9 +1,11 @@
 package com.gempukku.lotro.at.effects;
 
 import com.gempukku.lotro.at.AbstractAtTest;
-import com.gempukku.lotro.logic.timing.TriggerConditions;
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
@@ -13,10 +15,14 @@ import com.gempukku.lotro.logic.effects.PreventEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.Preventable;
+import com.gempukku.lotro.logic.timing.TriggerConditions;
+import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.*;
@@ -189,5 +195,38 @@ public class DrawEffectAtTest extends AbstractAtTest {
 
         assertEquals(0, triggerCount.get());
         assertEquals(1, preventCount.get());
+    }
+
+    @Test
+    public void forEachPlayer() throws Exception {
+        Map<String, LotroDeck> decks = new HashMap<>();
+        decks.put(P1, createDeckWithIsengardRuined());
+        decks.put(P2, createDeckWithIsengardRuined());
+        initializeGameWithDecks(decks);
+
+        PhysicalCard gandalf = addToZone(createCard(P1, "1_72"), Zone.FREE_CHARACTERS);
+
+        passUntil(Phase.FELLOWSHIP);
+        selectCardAction(P1, getSite(1));
+        selectNo(P1);
+        selectNo(P2);
+    }
+
+    private LotroDeck createDeckWithIsengardRuined() {
+        LotroDeck lotroDeck = new LotroDeck("Some deck");
+        // 10_121,1_2
+        lotroDeck.setRingBearer("10_121");
+        lotroDeck.setRing("1_2");
+        // 7_330,7_336,8_117,7_342,7_345,7_350,8_120,10_120,7_360
+        lotroDeck.addSite("7_331");
+        lotroDeck.addSite("7_335");
+        lotroDeck.addSite("8_117");
+        lotroDeck.addSite("7_342");
+        lotroDeck.addSite("7_345");
+        lotroDeck.addSite("7_350");
+        lotroDeck.addSite("8_120");
+        lotroDeck.addSite("10_120");
+        lotroDeck.addSite("7_360");
+        return lotroDeck;
     }
 }
