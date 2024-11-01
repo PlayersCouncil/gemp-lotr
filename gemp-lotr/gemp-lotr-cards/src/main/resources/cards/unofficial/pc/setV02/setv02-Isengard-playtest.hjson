@@ -117,11 +117,6 @@
 				type: trigger
 				trigger: [
 					{
-						type: Killed
-						inSkirmish: true
-						filter: culture(isengard), orc
-					}
-					{
 						type: LosesSkirmish
 						filter: culture(isengard), orc
 					}

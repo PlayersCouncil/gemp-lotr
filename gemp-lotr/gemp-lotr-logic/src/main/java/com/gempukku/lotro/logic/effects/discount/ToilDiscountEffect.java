@@ -69,7 +69,7 @@ public class ToilDiscountEffect extends AbstractSubActionEffect implements Disco
             if (_minimalDiscount == 0) {
                 minimalExerts = 0;
             } else {
-                minimalExerts = _minimalDiscount / _toilCount + ((_minimalDiscount % _toilCount > 0) ? 1 : 0);
+                minimalExerts = (_minimalDiscount - _paidToil * _toilCount) / _toilCount + (((_minimalDiscount - _paidToil * _toilCount) % _toilCount > 0) ? 1 : 0);
             }
 
             SubAction subAction = new SubAction(_action);

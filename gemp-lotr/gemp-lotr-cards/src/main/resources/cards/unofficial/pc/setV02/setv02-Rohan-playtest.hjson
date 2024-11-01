@@ -165,11 +165,17 @@
 						filter: InSkirmish, Hobbit, companion
 					}
 				]
-				cost: {
-					type: Spot
-					select: choose(InSkirmish, Hobbit, companion)
-					memorize: guardedHobbit
-				}
+				cost: [
+					{
+						type: Exert
+						select: self	
+					}
+					{
+						type: Spot
+						select: choose(InSkirmish, Hobbit, companion)
+						memorize: guardedHobbit
+					}
+				]
 				effect: [
 					{
 						type: ModifyStrength
@@ -184,22 +190,10 @@
 						keyword: valiant
 						select: memory(guardedHobbit)
 					}
-					{
-						type: AddTrigger
-						optional: false
-						trigger: {
-							type: SkirmishAboutToEnd
-							involving: memory(guardedHobbit)
-						}
-						effect: {
-							type: Wound
-							select: self
-						}
-					}
 				]
 			}
 		]
-		gametext: To play, spot Theoden (or 3 [rohan] Men).<br>Skirmish: If a Hobbit companion is skirmishing, add this ally's strength to that Hobbit and make that Hobbit gain <b>valiant</b> until the regroup phase (limit once per phase). At the end of that skirmish, wound this ally.
+		gametext: To play, spot Theoden (or 3 [rohan] Men).\Skirmish: Exert this ally to add his strength to a skirmishing Hobbit and make that Hobbit gain <b>valiant</b> until the regroup phase (limit once per phase).
 		lore: ""
 		promotext: ""
 		alts: {

@@ -606,7 +606,7 @@
 		            against: culture(orc),minion
 		        }
 		        cost: {
-		            type: revealCards
+		            type: revealCardsFromHand
 		            select: self
 		        }
 		        effect: {

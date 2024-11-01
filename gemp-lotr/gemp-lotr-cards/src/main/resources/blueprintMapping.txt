@@ -396,3 +396,13 @@ gl_theOneRing,1_2
 1_391,1_50
 #2023 WC - Non-branded Goblin Runner FA for general consumption
 1_392,1_178
+#Unbranded - They Are Coming FA - Do not release until 2025 WC has concluded
+1_393,1_196
+#2024 World Championship - They Are Coming FA
+1_394,1_196
+#2024 WC Top 8 - They Are Coming FA
+1_395,1_196
+#2024 WC World Challenger - They Are Coming FA
+1_396,1_196
+#2024 WC World Champion - They Are Coming FA
+1_397,1_196

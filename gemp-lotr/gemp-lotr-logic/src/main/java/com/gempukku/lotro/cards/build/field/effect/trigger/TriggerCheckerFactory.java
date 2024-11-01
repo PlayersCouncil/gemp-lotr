@@ -49,8 +49,6 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("exerted", new Exerted());
         triggerCheckers.put("exertsforspecialability", new ExertsForSpecialAbility());
         triggerCheckers.put("exertstoplay", new ExertsToPlay());
-        triggerCheckers.put("fpdecidedifmoving", new FPDecidedIfMoving());
-        triggerCheckers.put("fpdecidedtomove", new FPDecidedToMove());
         triggerCheckers.put("fpdecidedtostay", new FPDecidedToStay());
         triggerCheckers.put("fpstartedassigning", new FPStartedAssigning());
         triggerCheckers.put("heals", new Heals());
@@ -61,7 +59,6 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("playerdrawscard", new PlayerDrawsCard());
         triggerCheckers.put("putsonring", new PutsOnRing());
         triggerCheckers.put("reconciles", new Reconciles());
-        triggerCheckers.put("removedfromplay", new RemovedFromPlay());
         triggerCheckers.put("removesburden", new RemovesBurden());
         triggerCheckers.put("removesculturetoken", new RemovesCultureToken());
         triggerCheckers.put("replacessite", new ReplacesSite());

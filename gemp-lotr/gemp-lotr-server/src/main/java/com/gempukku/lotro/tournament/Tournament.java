@@ -132,7 +132,7 @@ public interface Tournament {
                 return new SwissPairingMechanism(PairingType.SWISS_3.name(), 3);
             }
             case WC_SWISS -> {
-                return new ChampionshipSwissPairingMechanism(PairingType.WC_SWISS.name(), 8);
+                return new ChampionshipSwissPairingMechanism(PairingType.WC_SWISS.name(), 10);
             }
         }
 

@@ -33,7 +33,7 @@
 
 
 
-SET @player = 'Axter', @rank=0;
+SET @player = 'sempolPL', @rank=0;
 
 SELECT 
 	 @player AS player
@@ -41,14 +41,14 @@ SELECT
 		CASE 
 			WHEN winner = @player THEN CONCAT(REPLACE(winner, '_', '%5F'), '$', win_recording_id)  
 			ELSE CONCAT(REPLACE(loser, '_', '%5F'), '$', lose_recording_id) 
-		END, ']',  @rank:=@rank+1,'[/url] • ') AS URL
+		END, ']',  @rank:=@rank+1,'[/url] â€¢ ') AS URL
 FROM game_history gh 
 INNER JOIN player p 
 	ON p.name = @player
 INNER JOIN deck d 
 	ON d.player_id = p.id 
 	AND (d.name = winner_deck_name OR d.name = loser_deck_name OR d.name = 'denethor / tentacle V2') 
-WHERE tournament = '2023 PC-Expanded Championship'
+WHERE tournament = '2024 Championship Tournament - PC-Fellowship Deck Registration'
 	AND start_date > '2023-07-20'
 	AND (winner = @player OR loser = @player)
 ORDER BY gh.id;
@@ -60,7 +60,8 @@ SELECT winner, loser, win_reason, lose_reason, start_date, end_date
 	,CONCAT('https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=',REPLACE(winner, '_', '%5F'), '$', win_recording_id) AS winner_replay
 	,CONCAT('https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=',REPLACE(loser, '_', '%5F'), '$', lose_recording_id) AS loser_replay
 FROM game_history gh 
-WHERE tournament = '2023 WC Group Stage'
+WHERE tournament = '2024 Championship Tournament - PC-Movie Deck Registration'
+ORDER BY start_date ASC 
 
 
 
