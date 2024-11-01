@@ -252,7 +252,7 @@
 				type: trigger
 				optional: true
 				trigger: {
-					type: AboutToBeKilled
+					type: AboutToTakeWound
 					filter: name(Aragorn)
 				}
 				cost: {
@@ -265,7 +265,7 @@
 				}
 			}
 		]
-		gametext: Aragorn is strength +1.<br>If Aragorn is about to be killed you may exert Arwen to heal Aragorn.<br>While Arwen is exhausted, Aragorn is defender +1.
+		gametext: Aragorn is strength +1.<br>Each time Aragorn is about to take a wound, you may exert Arwen to heal Aragorn.<br>While Arwen is exhausted, Aragorn is defender +1.
 		lore: "'Dark is the Shadow, and yet my heart rejoices; for you, Estel, shall be among the great whose valour will destroy it.'"
 		promotext: ""
 		alts: {
