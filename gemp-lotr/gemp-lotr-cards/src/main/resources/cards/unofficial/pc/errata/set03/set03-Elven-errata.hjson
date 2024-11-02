@@ -210,7 +210,7 @@
 			//One of: Variant, Errata, Reprint
 			//parentType: Errata
 			//parentPath: errata/pc
-			version: 1?
+			version: 1
 			collInfo: 3C14
 			rarity: C
 			setNum: "3"
@@ -224,7 +224,7 @@
 		culture: Elven
 		twilight: 2
 		type: Ally
-		allyHome: 3
+		allyHome: 3F
 		race: Elf
 		strength: 5
 		vitality: 3
@@ -348,7 +348,7 @@
 			//One of: Variant, Errata, Reprint
 			//parentType: Errata
 			//parentPath: errata/pc
-			version: 1?
+			version: 1
 			collInfo: 3U20
 			rarity: U
 			setNum: "3"
@@ -362,7 +362,7 @@
 		culture: Elven
 		twilight: 2
 		type: Ally
-		allyHome: 3
+		allyHome: 3F
 		race: Elf
 		strength: 4
 		vitality: 3
@@ -476,7 +476,7 @@
 			//One of: Variant, Errata, Reprint
 			//parentType: Errata
 			//parentPath: errata/pc
-			version: 1?
+			version: 1
 			collInfo: 3U25
 			rarity: U
 			setNum: "3"
@@ -490,7 +490,7 @@
 		culture: Elven
 		twilight: 2
 		type: Ally
-		allyHome: 3
+		allyHome: 3F
 		race: Elf
 		strength: 4
 		vitality: 3

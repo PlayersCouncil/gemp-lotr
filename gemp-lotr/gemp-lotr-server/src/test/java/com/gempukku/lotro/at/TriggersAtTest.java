@@ -461,23 +461,24 @@ public class TriggersAtTest extends AbstractAtTest {
         assertEquals(Zone.DISCARD, iSeeYou.getZone());
     }
 
-    @Test
-    public void siteLiberated() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard drivenIntoTheHills = addToZone(createCard(P2, "102_1"), Zone.SUPPORT);
-        PhysicalCard theodenSonOfThengel = addToZone(createCard(P1, "4_292"), Zone.FREE_CHARACTERS);
-        PhysicalCard guma = addToZone(createCard(P1, "4_277"), Zone.SUPPORT);
-
-        passUntil(Phase.SHADOW);
-        _game.getGameState().takeControlOfCard(P2, _game, _game.getGameState().getSite(1), Zone.SUPPORT);
-        _game.getGameState().setPlayerPosition(P2, 2);
-
-        passUntil(Phase.REGROUP);
-        assertEquals(Zone.SUPPORT, drivenIntoTheHills.getZone());
-        selectCardAction(P1, theodenSonOfThengel);
-        assertEquals(Zone.DISCARD, drivenIntoTheHills.getZone());
-    }
+    // The card used in this example was reworked
+//    @Test
+//    public void siteLiberated() throws Exception {
+//        initializeSimplestGame();
+//
+//        PhysicalCard drivenIntoTheHills = addToZone(createCard(P2, "102_1"), Zone.SUPPORT);
+//        PhysicalCard theodenSonOfThengel = addToZone(createCard(P1, "4_292"), Zone.FREE_CHARACTERS);
+//        PhysicalCard guma = addToZone(createCard(P1, "4_277"), Zone.SUPPORT);
+//
+//        passUntil(Phase.SHADOW);
+//        _game.getGameState().takeControlOfCard(P2, _game, _game.getGameState().getSite(1), Zone.SUPPORT);
+//        _game.getGameState().setPlayerPosition(P2, 2);
+//
+//        passUntil(Phase.REGROUP);
+//        assertEquals(Zone.SUPPORT, drivenIntoTheHills.getZone());
+//        selectCardAction(P1, theodenSonOfThengel);
+//        assertEquals(Zone.DISCARD, drivenIntoTheHills.getZone());
+//    }
 
     @Test
     public void siteControlled() throws Exception {

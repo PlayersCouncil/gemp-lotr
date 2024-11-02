@@ -298,7 +298,7 @@ public class ModifiersAtTest extends AbstractAtTest {
         JSONObject obj = new JSONObject();
         obj.put("amount", 1);
 
-        ModifierSource modifierSource = new FPCultureSpot().getModifierSource(obj, lotroCardBlueprintBuilder);
+        ModifierSource modifierSource = new FPCultureCount().getModifierSource(obj, lotroCardBlueprintBuilder);
         DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
 
         passUntil(Phase.FELLOWSHIP);
