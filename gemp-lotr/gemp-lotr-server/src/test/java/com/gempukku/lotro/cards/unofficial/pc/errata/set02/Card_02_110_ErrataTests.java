@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_V1_052_Tests
+public class Card_02_110_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "101_52");
+					put("card", "52_110");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,11 +28,11 @@ public class Card_V1_052_Tests
 	}
 
 	@Test
-	public void MerryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PippinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: V1
-		 * Name: Merry, Of Buckland
+		 * Set: 2
+		 * Name: Pippin, Mr. Took
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Shire
@@ -42,16 +42,16 @@ public class Card_V1_052_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 6
-		 * Signet: Frodo
-		 * Game Text: Assignment: Exert Merry twice to prevent a minion from being assigned to a skirmish until the regroup phase.  The Shadow player may exhaust that minion to prevent this.
+		 * Signet: Aragorn
+		 * Game Text: Each time you play a companion, you may play an item on them from your discard pile (at twilight cost -2 if that companion is Gandalf or Aragorn).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Merry", card.getBlueprint().getTitle());
-		assertEquals("Of Buckland", card.getBlueprint().getSubtitle());
+		assertEquals("Pippin", card.getBlueprint().getTitle());
+		assertEquals("Mr. Took", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
@@ -61,12 +61,12 @@ public class Card_V1_052_Tests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void MerryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PippinTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

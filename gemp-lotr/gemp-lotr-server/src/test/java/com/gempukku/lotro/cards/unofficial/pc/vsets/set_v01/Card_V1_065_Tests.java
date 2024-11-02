@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
+package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_03_103_ErrataTests
+public class Card_V1_065_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "53_103");
+					put("card", "101_65");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,37 +28,39 @@ public class Card_03_103_ErrataTests
 	}
 
 	@Test
-	public void TerribleastheDawnStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SirannonDamStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 3
-		 * Name: Terrible as the Dawn
-		 * Unique: False
+		 * Set: V1
+		 * Name: Sirannon Dam
+		 * Unique: True
 		 * Side: Shadow
-		 * Culture: Sauron
+		 * Culture: Moria
 		 * Twilight Cost: 0
-		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: If a companion or ally's special ability is used, you may spot a [sauron] card to wound that character.  The Free Peoples player may discard a companion to prevent this.
+		 * Type: Artifact
+		 * Subtype: Support area
+		 * Game Text: Rivers and sites with no other terrain keywords gain <b>marsh</b>.
+		* 	Companions are <b>defender +1</b>.
+		* 	Skirmish: Remove 2 burdens to have Watcher in the Water replace a tentacle skirmishing an unbound companion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Terrible as the Dawn", card.getBlueprint().getTitle());
+		assertEquals("Sirannon Dam", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TerribleastheDawnTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SirannonDamTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

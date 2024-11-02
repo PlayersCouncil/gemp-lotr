@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_V1_052_Tests
+public class Card_01_303_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "101_52");
+					put("card", "51_303");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -31,8 +31,8 @@ public class Card_V1_052_Tests
 	public void MerryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: V1
-		 * Name: Merry, Of Buckland
+		 * Set: 1
+		 * Name: Merry, From O'er the Brandywine
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Shire
@@ -42,8 +42,9 @@ public class Card_V1_052_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 6
-		 * Signet: Frodo
-		 * Game Text: Assignment: Exert Merry twice to prevent a minion from being assigned to a skirmish until the regroup phase.  The Shadow player may exhaust that minion to prevent this.
+		 * Signet: Aragorn
+		 * Game Text: While Merry bears a weapon, he is strength +2.
+		* 	Skirmish: Exert Merry to make him strength +1 for each hand weapon you can spot (limit +3).
 		*/
 
 		var scn = GetScenario();
@@ -51,7 +52,7 @@ public class Card_V1_052_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Merry", card.getBlueprint().getTitle());
-		assertEquals("Of Buckland", card.getBlueprint().getSubtitle());
+		assertEquals("From O'er the Brandywine", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
@@ -61,7 +62,7 @@ public class Card_V1_052_Tests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -653,18 +653,83 @@
 	# 		}
 	# 	}
 	# }
+	# 53_103: {
+	# 	cardInfo: {
+	# 		imagePath: errata/LOTR-EN03E103.3_card.jpg
+	# 		javaClass: false
+	# 		parent: 3_103
+	# 		parentPath: errata/pc
+	# 		version: 3
+	# 		collInfo: 3R103
+	# 		rarity: R
+	# 		setNum: "3"
+	# 		cardNum: 103
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Terrible as the Dawn
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Sauron
+	# 	twilight: 0
+	# 	type: event
+	# 	timeword: maneuver
+	# 	effects: {
+	# 		type: event
+	# 		requires: {
+	# 			type: canSpot
+	# 			filter: culture(sauron),minion
+	# 		}
+	# 		effect: {
+	# 			type: preventable
+	# 			text: Would you like to discard 2 Elves to prevent wounding Galadriel 3 times?
+	# 			player: fp
+	# 			cost: {
+	# 				type: discard
+	# 				select: choose(elf)
+	# 				count: 2
+	# 			}
+	# 			effect: {
+	# 				type: If
+	# 				check: {
+	# 					type: CanSpot
+	# 					filter: name(Galadriel),Ring-bearer
+	# 				}
+	# 				true: {
+	# 					type: Exhaust
+	# 					select: choose(name(Galadriel))
+	# 				}
+	# 				false: {
+	# 					type: wound
+	# 					select: choose(name(Galadriel))
+	# 					times: 3
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+	# 	gametext: Spot a [sauron] minion to wound Galadriel three times (or exhaust her if Galadriel is the Ring-bearer). The Free Peoples player may discard two elves to prevent this. 
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_103: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E103.3_card.jpg
-			javaClass: false
-			parent: 3_103
-			parentPath: errata/pc
+			imagePath: errata/LOTR-EN03E103.4_card.jpg
+			//parentId: 3_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
 			version: 3
 			collInfo: 3R103
 			rarity: R
 			setNum: "3"
 			cardNum: 103
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Terrible as the Dawn
@@ -672,43 +737,36 @@
 		side: Shadow
 		culture: Sauron
 		twilight: 0
-		type: event
-		timeword: maneuver
+		type: Event
+		timewords: Response
 		effects: {
-			type: event
-			requires: {
-				type: canSpot
-				filter: culture(sauron),minion
+			type: responseEvent
+			trigger: {
+				type: UsesSpecialAbility
+				filter: or(ally,companion)
+				memorize: target
+			}
+			cost: {
+				type: Spot
+				filter: culture(sauron)
 			}
 			effect: {
-				type: preventable
-				text: Would you like to discard 2 Elves to prevent wounding Galadriel 3 times?
-				player: fp
-				cost: {
-					type: discard
-					select: choose(elf)
-					count: 2
-				}
+				type: Preventable
+				text: Would you like to discard a companion to prevent wounding {target}?
+				player: freeps
 				effect: {
-					type: If
-					check: {
-						type: CanSpot
-						filter: name(Galadriel),Ring-bearer
-					}
-					true: {
-						type: Exhaust
-						select: choose(name(Galadriel))
-					}
-					false: {
-						type: wound
-						select: choose(name(Galadriel))
-						times: 3
-					}
+					type: Wound
+					select: memory(target)
+				}
+				cost: {
+					type: Discard
+					player: freeps
+					select: choose(companion,not(ring-bearer))
 				}
 			}
 		}
-		gametext: Spot a [sauron] minion to wound Galadriel three times (or exhaust her if Galadriel is the Ring-bearer). The Free Peoples player may discard two elves to prevent this. 
-		lore: ""
+		gametext: If a companion or ally's special ability is used, you may spot a [sauron] card to wound that character.  The Free Peoples player may discard a companion to prevent this.
+		lore: “‘In the place of the Dark Lord, you would have a Queen... All shall love me and despair!'”
 		promotext: ""
 		alts: {
 			promos: {

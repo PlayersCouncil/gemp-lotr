@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_V1_052_Tests
+public class Card_03_007_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "101_52");
+					put("card", "53_7");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,45 +28,46 @@ public class Card_V1_052_Tests
 	}
 
 	@Test
-	public void MerryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ArwenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: V1
-		 * Name: Merry, Of Buckland
+		 * Set: 3
+		 * Name: Arwen, Elven Rider
 		 * Unique: True
 		 * Side: Free Peoples
-		 * Culture: Shire
-		 * Twilight Cost: 1
+		 * Culture: Elven
+		 * Twilight Cost: 2
 		 * Type: Companion
-		 * Subtype: Hobbit
-		 * Strength: 3
-		 * Vitality: 4
+		 * Subtype: Elf
+		 * Strength: 6
+		 * Vitality: 3
 		 * Resistance: 6
 		 * Signet: Frodo
-		 * Game Text: Assignment: Exert Merry twice to prevent a minion from being assigned to a skirmish until the regroup phase.  The Shadow player may exhaust that minion to prevent this.
+		 * Game Text: <b>Ranger</b>.<br><b>Response:</b> If the Ring-bearer is about to take a wound, discard X cards from hand to prevent that wound, where X is the current region number.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Merry", card.getBlueprint().getTitle());
-		assertEquals("Of Buckland", card.getBlueprint().getSubtitle());
+		assertEquals("Arwen", card.getBlueprint().getTitle());
+		assertEquals("Elven Rider", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
-		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(3, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.RANGER));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void MerryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ArwenTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -76,6 +77,6 @@ public class Card_V1_052_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

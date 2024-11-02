@@ -74,17 +74,78 @@
 		]
 	}
 	
+	# 101_52: {
+	# 	title: Merry
+	# 	subtitle: Of Buckland
+	# 	unique: true
+	# 	culture: shire
+	# 	twilight: 1
+	# 	type: companion
+	# 	race: hobbit
+	# 	strength: 3
+	# 	vitality: 4
+	# 	signet: frodo
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: activated
+	# 			phase: assignment
+	# 			cost: [
+	# 				{
+	# 					type: exert
+	# 					select: self
+	# 					times: 3
+	# 				}
+	# 				{
+	# 					type: chooseActiveCards
+	# 					text: Choose minion to prevent from skirmishing
+	# 					select: choose(minion)
+	# 					memorize: chosenMinion
+	# 				}
+	# 			]
+	# 			effect: {
+	# 				type: preventable
+	# 				player: shadowPlayer
+	# 				text: Would you like to exhaust {chosenMinion} to permit it to skirmish?
+	# 				cost: {
+	# 					type: exhaust
+	# 					select: memory(chosenMinion)
+	# 				}
+	# 				effect: {
+    #     		        type: disableSkirmishAssignment
+    #                     select: memory(chosenMinion)
+	# 					until: regroup
+	# 				}
+	# 			}
+	# 		}
+	# 	]
+	# }
+	
 	101_52: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1E052.1_card.jpg
+			//parentId: 101_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 2
+			collInfo: V1R52
+			rarity: R
+			setNum: "V1"
+			cardNum: 52
+			style: Standard
+		}
 		title: Merry
 		subtitle: Of Buckland
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: companion
-		race: hobbit
+		type: Companion
+		race: Hobbit
 		strength: 3
 		vitality: 4
-		signet: frodo
+		signet: Frodo
 		resistance: 6
 		effects: [
 			{
@@ -94,7 +155,7 @@
 					{
 						type: exert
 						select: self
-						times: 3
+						times: 2
 					}
 					{
 						type: chooseActiveCards
@@ -119,6 +180,15 @@
 				}
 			}
 		]
+		gametext: Assignment: Exert Merry twice to prevent a minion from being assigned to a skirmish until the regroup phase.  The Shadow player may exhaust that minion to prevent this.
+		lore: "'...we are going to do our best to help you against the Enemy.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 	
 	101_53: {
@@ -165,17 +235,88 @@
 		]
 	}
 	
+	# 101_54: {
+	# 	title: Sam
+	# 	subtitle: Of Bagshot Row
+	# 	unique: true
+	# 	culture: shire
+	# 	twilight: 2
+	# 	type: companion
+	# 	race: hobbit
+	# 	strength: 3
+	# 	vitality: 4
+	# 	signet: frodo
+	# 	resistance: 5
+	# 	effects: [
+	# 		{
+	# 			type: trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: winsSkirmish
+	# 				filter: companion,signet(frodo)
+	# 				memorize: winner
+	# 			}
+	# 			cost: {
+	# 				type: choice
+	# 				texts: [
+	# 					Exert Sam
+	# 					Add a burden
+	# 				]
+	# 				effects: [
+	# 					{
+	# 						type: exert
+	# 						select: self
+	# 					}
+	# 					{
+	# 						type: addBurdens
+	# 						amount: 1
+	# 					}
+	# 				]
+	# 			}
+	# 			effect: {
+	# 				type: heal
+	# 				select: choose(memory(winner))
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Response
+	# 			trigger: {
+	# 				type: killed
+	# 				filter: name(Frodo),ring bearer
+	# 			}
+	# 			effect: {
+	# 				type: makeSelfRingBearer
+	# 			}
+	# 		}
+	# 	]
+	# }
+	
+	
 	101_54: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1E054.1_card.jpg
+			//parentId: 101_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 2
+			collInfo: V1U54
+			rarity: U
+			setNum: "V1"
+			cardNum: 54
+			style: Standard
+		}
 		title: Sam
 		subtitle: Of Bagshot Row
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 2
-		type: companion
-		race: hobbit
+		type: Companion
+		race: Hobbit
 		strength: 3
 		vitality: 4
-		signet: frodo
+		signet: Frodo
 		resistance: 5
 		effects: [
 			{
@@ -185,23 +326,6 @@
 					type: winsSkirmish
 					filter: companion,signet(frodo)
 					memorize: winner
-				}
-				cost: {
-					type: choice
-					texts: [
-						Exert Sam
-						Add a burden
-					]
-					effects: [
-						{
-							type: exert
-							select: self
-						}
-						{
-							type: addBurdens
-							amount: 1
-						}
-					]
 				}
 				effect: {
 					type: heal
@@ -219,6 +343,15 @@
 				}
 			}
 		]
+		gametext: Each time a companion with the Frodo signet wins a skirmish, heal that companion.<br>Response: If Frodo is killed, make Sam the Ring-bearer (resistance 5).
+		lore: "'Don't turn me into anything... unnatural.'" 
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 	
 	101_55: {

@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_V1_052_Tests
+public class Card_01_310_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "101_52");
+					put("card", "51_310");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,45 +28,45 @@ public class Card_V1_052_Tests
 	}
 
 	@Test
-	public void MerryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SamStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: V1
-		 * Name: Merry, Of Buckland
+		 * Set: 1
+		 * Name: Sam, Faithful Companion
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Shire
-		 * Twilight Cost: 1
+		 * Twilight Cost: 2
 		 * Type: Companion
 		 * Subtype: Hobbit
 		 * Strength: 3
 		 * Vitality: 4
-		 * Resistance: 6
+		 * Resistance: 5
 		 * Signet: Frodo
-		 * Game Text: Assignment: Exert Merry twice to prevent a minion from being assigned to a skirmish until the regroup phase.  The Shadow player may exhaust that minion to prevent this.
+		 * Game Text: <b>Fellowship:</b> Exert Sam to take a [shire] item into hand from your draw deck (limit once per turn).<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Merry", card.getBlueprint().getTitle());
-		assertEquals("Of Buckland", card.getBlueprint().getSubtitle());
+		assertEquals("Sam", card.getBlueprint().getTitle());
+		assertEquals("Faithful Companion", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(5, card.getBlueprint().getResistance());
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void MerryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SamTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -76,6 +76,6 @@ public class Card_V1_052_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

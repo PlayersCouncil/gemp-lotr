@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set09;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_V1_052_Tests
+public class Card_09_032_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "101_52");
+					put("card", "59_32");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,45 +28,43 @@ public class Card_V1_052_Tests
 	}
 
 	@Test
-	public void MerryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ElendilStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: V1
-		 * Name: Merry, Of Buckland
+		 * Set: 9
+		 * Name: Elendil, The Tall
 		 * Unique: True
 		 * Side: Free Peoples
-		 * Culture: Shire
-		 * Twilight Cost: 1
+		 * Culture: Gondor
+		 * Twilight Cost: 5
 		 * Type: Companion
-		 * Subtype: Hobbit
-		 * Strength: 3
-		 * Vitality: 4
+		 * Subtype: Man
+		 * Strength: 8
+		 * Vitality: 5
 		 * Resistance: 6
-		 * Signet: Frodo
-		 * Game Text: Assignment: Exert Merry twice to prevent a minion from being assigned to a skirmish until the regroup phase.  The Shadow player may exhaust that minion to prevent this.
+		 * Game Text: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> Play an artifact on Elendil to make the move limit +1 for this turn.<br><b>Regroup:</b> Discard a [gondor] artifact borne by a companion to liberate a site.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Merry", card.getBlueprint().getTitle());
-		assertEquals("Of Buckland", card.getBlueprint().getSubtitle());
+		assertEquals("Elendil", card.getBlueprint().getTitle());
+		assertEquals("The Tall", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
-		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(3, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getStrength());
+		assertEquals(5, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void MerryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ElendilTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -76,6 +74,6 @@ public class Card_V1_052_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(5, scn.GetTwilight());
 	}
 }

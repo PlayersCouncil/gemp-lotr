@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set09;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_02_076_ErrataTests
+public class Card_09_035_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "52_76");
+					put("card", "59_35");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,38 +28,37 @@ public class Card_02_076_ErrataTests
 	}
 
 	@Test
-	public void HelplessStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SaplingoftheWhiteTreeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 2
-		 * Name: Helpless
-		 * Unique: False
-		 * Side: Shadow
-		 * Culture: Wraith
+		 * Set: 9
+		 * Name: Sapling of the White Tree
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
 		 * Twilight Cost: 1
-		 * Type: Condition
+		 * Type: Artifact
 		 * Subtype: Support area
-		 * Game Text: Bearer's special abilities cannot be used.
-		* 	Maneuver: Exert a Nazgul to transfer this from your support area to a Ring-bound companion.
+		 * Game Text: To play, spot an unbound [gondor] Man.<br><b>Response:</b> If a [gondor] Man is about to take a wound, discard this artifact to prevent that wound and heal that Man.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Helpless", card.getBlueprint().getTitle());
+		assertEquals("Sapling of the White Tree", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
 		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void HelplessTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SaplingoftheWhiteTreeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

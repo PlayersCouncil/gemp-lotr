@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_03_103_ErrataTests
+public class Card_01_063_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "53_103");
+					put("card", "51_63");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,37 +28,37 @@ public class Card_03_103_ErrataTests
 	}
 
 	@Test
-	public void TerribleastheDawnStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StandAgainstDarknessStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 3
-		 * Name: Terrible as the Dawn
+		 * Set: 1
+		 * Name: Stand Against Darkness
 		 * Unique: False
-		 * Side: Shadow
-		 * Culture: Sauron
-		 * Twilight Cost: 0
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 1
 		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: If a companion or ally's special ability is used, you may spot a [sauron] card to wound that character.  The Free Peoples player may discard a companion to prevent this.
+		 * Subtype: Maneuver
+		 * Game Text: <b>Maneuver:</b> Exert an Elf to wound a [sauron] minion twice or discard a [sauron] condition or possession.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Terrible as the Dawn", card.getBlueprint().getTitle());
+		assertEquals("Stand Against Darkness", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TerribleastheDawnTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StandAgainstDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -68,6 +68,6 @@ public class Card_03_103_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

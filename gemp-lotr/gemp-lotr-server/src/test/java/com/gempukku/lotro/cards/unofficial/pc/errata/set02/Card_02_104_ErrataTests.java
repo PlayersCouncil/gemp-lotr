@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_V1_052_Tests
+public class Card_02_104_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "101_52");
+					put("card", "52_104");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -31,8 +31,8 @@ public class Card_V1_052_Tests
 	public void MerryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: V1
-		 * Name: Merry, Of Buckland
+		 * Set: 2
+		 * Name: Merry, Horticulturalist
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Shire
@@ -42,8 +42,8 @@ public class Card_V1_052_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 6
-		 * Signet: Frodo
-		 * Game Text: Assignment: Exert Merry twice to prevent a minion from being assigned to a skirmish until the regroup phase.  The Shadow player may exhaust that minion to prevent this.
+		 * Signet: Gandalf
+		 * Game Text: <b>Fellowship:</b> Exert Merry to take a [shire] ally into hand from your draw deck (limit once per turn).
 		*/
 
 		var scn = GetScenario();
@@ -51,7 +51,7 @@ public class Card_V1_052_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Merry", card.getBlueprint().getTitle());
-		assertEquals("Of Buckland", card.getBlueprint().getSubtitle());
+		assertEquals("Horticulturalist", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
@@ -61,7 +61,7 @@ public class Card_V1_052_Tests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
