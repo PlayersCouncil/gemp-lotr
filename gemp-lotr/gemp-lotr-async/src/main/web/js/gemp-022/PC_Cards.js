@@ -859,7 +859,7 @@ var PCCards = {
 	'1_394': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.1_card.jpg',
 	'1_395': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.2_card.jpg',
 	'1_396': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.3_card.jpg',
-	'1_397': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.4_card.jpg'
+	'1_397': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.4_card.jpg',
 	
 	//2024 Post-WC Errata
 	/// Helpless (2U76) [Errata]
