@@ -794,6 +794,8 @@ var PCCards = {
 	'102_71' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S071.0_card.jpg',
 	// Palantir of Orthanc, Corrupted Relic (V2R72) [Playtest]
 	'102_72' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S072.0_card.jpg',
+	// Fortress of My Fathers (V249)
+	'102_73' : 'https://i.lotrtcgpc.net/sets/V2/LOTR-ENV2S073.0_card.jpg',
 	
 	//V2-associated Errata
 	// Erethon, Naith Lieutenant (4R65) [Errata]
