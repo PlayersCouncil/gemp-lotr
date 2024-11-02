@@ -620,7 +620,7 @@
                     type: canSpot
                     filter: another,culture(moria),archer
                 }
-                side: free people
+                side: shadow
                 amount: 1
             }
         }
