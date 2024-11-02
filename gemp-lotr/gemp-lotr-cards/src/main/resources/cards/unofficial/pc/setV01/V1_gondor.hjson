@@ -40,18 +40,110 @@
 	# 		}
 	# 	]
 	# }
+	# 101_19: {
+	# 	cardInfo: {
+	# 		imagePath: sets/vset1/LOTR-ENV1S019.1_card.jpg
+	# 		javaClass: false
+	# 		parent: 101_19 
+	# 		parentPath: errata/pc
+	# 		version: 1
+	# 		collInfo: V1R19
+	# 		rarity: R
+	# 		setNum: "V1"
+	# 		cardNum: 19
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Aragorn
+	# 	subtitle: Estel
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Gondor
+	# 	twilight: 4
+	# 	type: Companion
+	# 	race: Man
+	# 	strength: 8
+	# 	vitality: 4
+	# 	signet: Gandalf
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: played
+	# 				filter: self
+	# 			}
+	# 			effect: {
+	# 				type: putCardsFromDeckIntoHand
+	# 				select: choose(elf,maxTwilight(2))
+	# 				reveal: true
+	# 				shuffle: true
+	# 				showAll: true
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: maneuver
+	# 			cost: {
+	# 				type: discardFromHand
+	# 				forced: false
+	# 				select: choose(culture(elven))
+	# 			}
+	# 			effect: {
+	# 				type: Choice
+	# 				texts: [
+	# 					Make Aragorn damage +1
+	# 					Make Aragorn an archer
+	# 					Make Aragorn strength +2
+	# 				]
+	# 				effects: [
+	# 					{
+	# 						type: AddKeyword
+	# 						select: self
+	# 						keyword: damage
+	# 						amount: 1
+	# 						until: start(regroup)
+	# 					}
+	# 					{
+	# 						type: AddKeyword
+	# 						select: self
+	# 						keyword: archer
+	# 						until: start(regroup)
+	# 					}
+	# 					{
+	# 						type: ModifyStrength
+	# 						select: self
+	# 						amount: 2
+	# 						until: start(regroup)
+	# 					}
+	# 				]
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Maneuver: Discard an [elven] card from hand to make Aragorn <b>damage +1</b>, <b>archer</b>, or strength +2 until the regroup phase.
+	# 	lore: "'I gave Hope to the Dúnedain, I have kept no hope for myself.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	101_19: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S019.1_card.jpg
-			javaClass: false
-			parent: 101_19 
-			parentPath: errata/pc
-			version: 1
+			imagePath: sets/vset1/LOTR-ENV1S019.2_card.jpg
+			//parentId: 101_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 2
 			collInfo: V1R19
 			rarity: R
 			setNum: "V1"
 			cardNum: 19
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Aragorn
@@ -84,45 +176,21 @@
 			}
 			{
 				type: activated
-				phase: maneuver
+				phase: skirmish
 				cost: {
 					type: discardFromHand
 					forced: false
 					select: choose(culture(elven))
 				}
 				effect: {
-					type: Choice
-					texts: [
-						Make Aragorn damage +1
-						Make Aragorn an archer
-						Make Aragorn strength +2
-					]
-					effects: [
-						{
-							type: AddKeyword
-							select: self
-							keyword: damage
-							amount: 1
-							until: start(regroup)
-						}
-						{
-							type: AddKeyword
-							select: self
-							keyword: archer
-							until: start(regroup)
-						}
-						{
-							type: ModifyStrength
-							select: self
-							amount: 2
-							until: start(regroup)
-						}
-					]
+					type: ModifyStrength
+					select: self
+					amount: 1
 				}
 			}
 		]
-		gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Maneuver: Discard an [elven] card from hand to make Aragorn <b>damage +1</b>, <b>archer</b>, or strength +2 until the regroup phase.
-		lore: "'I gave Hope to the Dúnedain, I have kept no hope for myself.'"
+		gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Skirmish: Discard an [elven] card from hand to make Aragorn strength +1.
+		lore: "'I gave Hope to the Dúnedain, I have kept no<br>hope for myself.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -131,6 +199,7 @@
 			}
 		}
 	}
+	
 	101_20: {
 		title: Boromir
 		unique: true

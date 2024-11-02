@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -35,12 +36,11 @@ public class Card_02_076_ErrataTests
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Wraith
-		 * Twilight Cost: 0
+		 * Twilight Cost: 1
 		 * Type: Condition
-		 * Subtype: 
-		 * Game Text: To play, spot a Nazgûl.
-		* 	Plays on Sam.
-		* 	Bearer's special abilities may not be used. 
+		 * Subtype: Support area
+		 * Game Text: Bearer's special abilities cannot be used.
+		* 	Maneuver: Exert a Nazgul to transfer this from your support area to a Ring-bound companion.
 		*/
 
 		var scn = GetScenario();
@@ -53,7 +53,8 @@ public class Card_02_076_ErrataTests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
@@ -68,6 +69,6 @@ public class Card_02_076_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

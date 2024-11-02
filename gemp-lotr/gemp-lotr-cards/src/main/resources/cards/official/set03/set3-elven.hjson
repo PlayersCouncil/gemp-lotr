@@ -208,11 +208,27 @@
                 trigger: {
                     type: startOfTurn
                 }
-                effect: {
-                    type: heal
-                    select: choose(ally,allyHome(Fellowship,3))
-                    times: 2
-                }
+                effect: [
+                    {
+                        type: ChooseActiveCards
+                        text: Choose an ally to heal up to 2 times
+                        select: choose(ally,allyHome(Fellowship,3))
+                        memorize: healingAlly
+                    }
+                    {
+                        type: ChooseANumber
+                        text: Choose how many times to heal {healingAlly}
+                        from: 0
+                        to: 2
+                        memorize: healing
+                    }
+                    {
+                        type: heal
+                        select: choose(ally,allyHome(Fellowship,3))
+                        times: memory(healing)
+                    }
+                ]
+                
             }
             {
                 type: activated

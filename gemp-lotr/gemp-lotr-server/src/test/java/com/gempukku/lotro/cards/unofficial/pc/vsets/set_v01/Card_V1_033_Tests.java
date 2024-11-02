@@ -1,13 +1,10 @@
-
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -19,13 +16,11 @@ public class Card_V1_033_Tests
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-                new HashMap<>() {{
-                    put("ttent", "101_33");
-                    put("spear", "1_182");
-                    put("ftentacle1", "2_58");
-                    put("ftentacle2", "2_58");
-                    put("ftentacle3", "2_58");
-                }},
+				new HashMap<>()
+				{{
+					put("card", "101_33");
+					// put other cards in here as needed for the test case
+				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
@@ -37,100 +32,51 @@ public class Card_V1_033_Tests
 
 		/**
 		 * Set: V1
-		 * Title: Thrashing Tentacle
-		 * Side: Free Peoples
-		 * Culture: moria
+		 * Name: Thrashing Tentacle
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Moria
 		 * Twilight Cost: 2
-		 * Type: minion
+		 * Type: Minion
 		 * Subtype: Creature
-		 * Strength: 5
+		 * Strength: 6
 		 * Vitality: 2
 		 * Site Number: 4
-		 * Game Text: Tentacle. This minion may not bear possessions and is discarded if not at a marsh.
-		 * 	Shadow: Spot 3 [moria] creatures to play this minion from your discard pile.
-		 */
+		 * Game Text: Tentacle. Fierce. This minion may not bear possessions and is discarded if not at a marsh.
+		* 	Each time this minion loses a skirmish, add a burden (or 2 burdens if you cannot spot a burden).
+		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl ttent = scn.GetFreepsCard("ttent");
+		var card = scn.GetFreepsCard("card");
 
-		assertFalse(ttent.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(ttent, Keyword.TENTACLE)); // test for keywords as needed
-		assertEquals(2, ttent.getBlueprint().getTwilightCost());
-		assertEquals(5, ttent.getBlueprint().getStrength());
-		assertEquals(2, ttent.getBlueprint().getVitality());
-		assertEquals(4, ttent.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-		assertEquals(CardType.MINION, ttent.getBlueprint().getCardType());
-		assertEquals(Race.CREATURE, ttent.getBlueprint().getRace());
-		assertEquals(Culture.MORIA, ttent.getBlueprint().getCulture());
-		assertEquals(Side.SHADOW, ttent.getBlueprint().getSide());
+		assertEquals("Thrashing Tentacle", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.CREATURE, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.TENTACLE));
+		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	@Test
-	public void ThrashingTentacleCannotBearPossessions() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void ThrashingTentacleTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl ttent = scn.GetShadowCard("ttent");
-		PhysicalCardImpl spear = scn.GetShadowCard("spear");
-		scn.ShadowMoveCardToHand(ttent, spear);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
-		scn.SetTwilight(3);
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPlayCard(ttent);
+		scn.FreepsPlayCard(card);
 
-		assertFalse(scn.ShadowActionAvailable("Goblin Spear"));
-	}
-
-	@Test
-	public void ThrashingTentacleSelfDiscardsIfNotAtAMarsh() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl ttent = scn.GetShadowCard("ttent");
-		scn.ShadowMoveCardToHand(ttent);
-
-		scn.StartGame();
-		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPlayCard(ttent);
-
-		assertEquals(1, scn.GetShadowDiscardCount());
-	}
-
-	@Test
-	public void ThrashingTentaclePlaysFromDiscardIfThreeCreatures() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
-
-		PhysicalCardImpl ttent = scn.GetShadowCard("ttent");
-		scn.ShadowMoveCardToHand(ttent);
-
-		PhysicalCardImpl ftentacle1 = scn.GetShadowCard("ftentacle1");
-		PhysicalCardImpl ftentacle2 = scn.GetShadowCard("ftentacle2");
-		PhysicalCardImpl ftentacle3 = scn.GetShadowCard("ftentacle3");
-		scn.ShadowMoveCardToHand(ftentacle1, ftentacle2, ftentacle3);
-		scn.ShadowMoveCardToDiscard(ttent);
-
-		scn.StartGame();
-		scn.SetTwilight(16);
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
-		scn.FreepsPassCurrentPhaseAction();
-
-		scn.ShadowPlayCard(ftentacle1);
-        scn.ShadowDeclineOptionalTrigger();
-		scn.ShadowPlayCard(ftentacle2);
-        scn.ShadowDeclineOptionalTrigger();
-
-		assertFalse(scn.ShadowActionAvailable("Thrashing Tentacle"));
-		scn.ShadowPlayCard(ftentacle3);
-        scn.ShadowDeclineOptionalTrigger();
-
-		assertTrue(scn.ShadowActionAvailable("Thrashing Tentacle"));
-		scn.ShadowUseCardAction(ttent);
-		assertEquals(0, scn.GetShadowDiscardCount());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

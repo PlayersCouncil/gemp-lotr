@@ -161,62 +161,149 @@
 	# 	}
 	# }
 	
+	# 53_80: {
+	# 	cardInfo: {
+	# 		imagePath: errata/LOTR-EN03E080.2_card.jpg
+	# 		javaClass: false
+	# 		parent: 3_80
+	# 		parentPath: errata/pc
+	# 		version: 2
+	# 		collInfo: 3R80
+	# 		rarity: R
+	# 		setNum: "3"
+	# 		cardNum: 80
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Such a Little Thing
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Moria
+	# 	twilight: 0
+	# 	type: event
+	# 	timeword: maneuver
+	# 	effects: {
+	# 		type: event
+	# 		requires: {
+	# 			type: canSpot
+	# 			filter: culture(moria),minion
+	# 		}
+	# 		effect: {
+	# 			type: preventable
+	# 			text: Would you like to discard 2 FP possession to prevent wounding Boromir 3 times?
+	# 			player: fp
+	# 			cost: {
+	# 				type: discard
+	# 				select: choose(side(free),possession)
+	# 				count: 2
+	# 			}
+	# 			effect: 
+	# 			{
+	# 				type: If
+	# 				check: {
+	# 					type: CanSpot
+	# 					filter: name(Boromir),Ring-bearer
+	# 				}
+	# 				true: {
+	# 					type: Exhaust
+	# 					select: choose(name(Boromir))
+	# 				}
+	# 				false: {
+	# 					type: wound
+	# 					select: choose(name(Boromir))
+	# 					times: 3
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+	# 	gametext: Spot a [moria] minion to wound Boromir three times (or exhaust him if Boromir is the Ring-bearer). The Free Peoples player may discard two possessions to prevent this. 
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_80: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E080.2_card.jpg
-			javaClass: false
-			parent: 3_80
-			parentPath: errata/pc
-			version: 2
+			imagePath: errata/LOTR-EN03E080.3_card.jpg
+			//parentId: 3_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 3
 			collInfo: 3R80
 			rarity: R
 			setNum: "3"
 			cardNum: 80
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Such a Little Thing
 		unique: false
 		side: Shadow
 		culture: Moria
-		twilight: 0
-		type: event
-		timeword: maneuver
-		effects: {
-			type: event
-			requires: {
-				type: canSpot
-				filter: culture(moria),minion
-			}
-			effect: {
-				type: preventable
-				text: Would you like to discard 2 FP possession to prevent wounding Boromir 3 times?
-				player: fp
-				cost: {
-					type: discard
-					select: choose(side(free),possession)
-					count: 2
+		twilight: 1
+		type: Condition
+		target: unbound,companion,not(hasAttached(name(Such a Little Thing)))
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: StartOfPhase
+					phase: skirmish
 				}
-				effect: 
-				{
-					type: If
-					check: {
-						type: CanSpot
-						filter: name(Boromir),Ring-bearer
-					}
-					true: {
-						type: Exhaust
-						select: choose(name(Boromir))
-					}
-					false: {
-						type: wound
-						select: choose(name(Boromir))
-						times: 3
-					}
+				requires: {
+					type: CanSpot
+					filter: bearer,InSkirmishAgainst(culture(moria),minion),HasAttached(possession)
 				}
+				effect: [
+					{
+						# We do this just to make the option prompt a
+						# little more elegant.
+						type: Memorize
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: ChooseActiveCards
+						text: Choose a possession attached to {bearer} to discard.
+						select: choose(possession,AttachedTo(bearer))
+						memorize: chosenPoss
+					}
+					{
+						type: choice
+						player: freeps
+						texts: [
+							Exert {bearer} to prevent discarding {chosenPoss}
+							Discard another Free Peoples item (artifact or possession) to prevent discarding {chosenPoss} 
+							Let {chosenPoss} get discarded
+						]
+						effects: [
+							{
+								type: exert
+								select: bearer
+								times: 1
+							}
+							{
+								type: Discard
+								player: freeps
+								select: choose(item,side(freeps),not(memory(chosenPoss)))
+							}
+							{
+								type: Discard
+								player: shadow
+								select: memory(chosenPoss)
+							}
+						]
+					}
+				]
 			}
-		}
-		gametext: Spot a [moria] minion to wound Boromir three times (or exhaust him if Boromir is the Ring-bearer). The Free Peoples player may discard two possessions to prevent this. 
+		]
+		gametext: Bearer must be an unbound companion. Limit 1 per bearer.<br>At the start of each skirmish involving bearer and a [moria] minion, discard a possession borne by bearer. The Free Peoples player may exert bearer or discard another Free Peoples item to prevent that.
 		lore: ""
 		promotext: ""
 		alts: {

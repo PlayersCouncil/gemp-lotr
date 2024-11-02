@@ -30,48 +30,60 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        text: Make Easterling strength +1
-		        requires: {
-		            type: canSpotBurdens
-		            amount: 2
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(easterling)
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        text: Make Easterling strength +2
-		        requires: {
-		            type: canSpotBurdens
-		            amount: 4
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(easterling)
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        text: Make Easterling strength +3
-		        requires: {
-		            type: canSpotBurdens
-		            amount: 6
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(easterling)
-		            amount: 3
-		        }
-		    }
+				{
+						type: activated
+						phase: skirmish
+						text: Make Easterling strength +1
+						requires: {
+								type: canSpotBurdens
+								amount: 2
+						}
+						cost: {
+							type: Exert
+							select: self
+						}
+						effect: {
+								type: modifyStrength
+								select: choose(easterling)
+								amount: 1
+						}
+				}
+				{
+						type: activated
+						phase: skirmish
+						text: Make Easterling strength +2
+						requires: {
+								type: canSpotBurdens
+								amount: 4
+						}
+						cost: {
+							type: Exert
+							select: self
+						}
+						effect: {
+								type: modifyStrength
+								select: choose(easterling)
+								amount: 2
+						}
+				}
+				{
+						type: activated
+						phase: skirmish
+						text: Make Easterling strength +3
+						requires: {
+								type: canSpotBurdens
+								amount: 6
+						}
+						cost: {
+							type: Exert
+							select: self
+						}
+						effect: {
+								type: modifyStrength
+								select: choose(easterling)
+								amount: 3
+						}
+				}
 		]
 		gametext: <b>Easterling</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Spot 2 burdens and exert this minion to make an Easterling strength +1.<br><b>Skirmish:</b> Spot 4 burdens and exert this minion to make an Easterling strength +2.<br><b>Skirmish:</b> Spot 6 burdens and exert this minion to make an Easterling strength +3.
 		lore: ""
@@ -109,30 +121,30 @@
 		itemclass: Hand weapon
 		target: easterling
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: {
-		                type: canSpotBurdens
-		                amount: 2
-		            }
-		            filter: bearer
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotBurdens
-		                amount: 5
-		            }
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+				{
+						type: modifier
+						modifier: {
+								type: cantTakeWounds
+								requires: {
+										type: canSpotBurdens
+										amount: 2
+								}
+								filter: bearer
+						}
+				}
+				{
+						type: modifier
+						modifier: {
+								type: addKeyword
+								requires: {
+										type: canSpotBurdens
+										amount: 5
+								}
+								filter: bearer
+								keyword: damage
+								amount: 1
+						}
+				}
 		]
 		gametext: Bearer must be an Easterling.<br>While you can spot 2 burdens, bearer cannot take wounds.<br>While you can spot 5 burdens, bearer is <b>damage +1</b>.
 		lore: ...and the tips of their spears....'
@@ -175,24 +187,24 @@
 			Archer
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: companion
-		                over: 4
-		                limit: 4
-		            }
-		        }
-		    }
+				{
+						type: activated
+						phase: archery
+						cost: {
+								type: removeTwilight
+								amount: 3
+						}
+						effect: {
+								type: modifyArcheryTotal
+								side: shadow
+								amount: {
+										type: forEachYouCanSpot
+										filter: companion
+										over: 4
+										limit: 4
+								}
+						}
+				}
 		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Remove (3) to add 1 to the minion archery total for each companion over 4 (limit +4).
 		lore: But I've heard tales of the big folk down away in the Sunlands.'
@@ -235,22 +247,22 @@
 			Ambush 1
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,southron
-		        }
-		        effect:{
-		            type: playCardFromDiscard
-		            select: choose(minion,ambush)
-		        }
-		    }
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: played
+								filter: self
+						}
+						requires: {
+								type: canSpot
+								filter: another,southron
+						}
+						effect:{
+								type: playCardFromDiscard
+								select: choose(minion,ambush)
+						}
+				}
 		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When you play this minion, you may spot another Southron to play a minion with ambush from your discard pile.
 		lore: So when you said Men out of the South, all in red and gold," I said "were there any oliphaunts?" For if there was, I was going to take a look....'"
@@ -288,8 +300,8 @@
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: mounted,culture(raider),man
+					type: canSpot
+					filter: mounted,culture(raider),man
 			}
 			effect: [
 				{
@@ -297,12 +309,12 @@
 					player: fp
 					text: Would you like to add (4) to prevent discarding a companion?
 					cost: {
-					    type: addTwilight
-					    amount: 4
+							type: addTwilight
+							amount: 4
 					}
 					effect: {
-					    type: discard
-					    select: choose(companion,not(ringBearer))
+							type: discard
+							select: choose(companion,not(ringBearer))
 					}
 				}
 			]

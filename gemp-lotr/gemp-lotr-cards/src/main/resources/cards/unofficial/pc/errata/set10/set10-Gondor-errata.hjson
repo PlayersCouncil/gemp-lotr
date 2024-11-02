@@ -1,0 +1,79 @@
+{
+	60_28: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN10E028.1_card.jpg
+			//parentId: 10_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1?
+			collInfo: 10R28
+			rarity: R
+			setNum: "10"
+			cardNum: 28
+			style: Standard
+		}
+		title: Denethor
+		subtitle: Lord of Minas Tirith
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+						type: canSpot
+						filter: culture(gondor),man
+						count: 2
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: location
+					filter: sanctuary
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: putCardsFromDeckIntoHand
+						select: choose(culture(gondor),or(condition, possession))
+							reveal: true
+							shuffle: true
+							showAll: true
+					}
+					{
+						type: optional
+						player: shadow
+						text: Would you like to draw 2 cards?
+						effect: {
+								type: drawCards
+								player: shadow
+								count: 2
+						}
+					}
+				]
+			}
+		]
+		gametext: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] condition or possession into hand from your draw deck. Choose an opponent who may draw 2 cards.
+		lore: "There Denethor sat in a grey gloom, like an old patient spider...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

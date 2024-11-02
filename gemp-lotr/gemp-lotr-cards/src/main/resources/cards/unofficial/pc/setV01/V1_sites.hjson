@@ -130,17 +130,65 @@
 			}
 		}
 	}
+	# 101_61: {
+	# 	title: Lorien Throne Room
+	# 	twilight: 3
+	# 	type: site
+	# 	site: 6
+	# 	block: fellowship
+	# 	keyword: [
+	# 		sanctuary
+	# 		forest
+	# 	]
+	# 	direction: left
+	# 	effects: {
+	# 		type: trigger
+	# 		optional: true
+	# 		trigger: {
+	# 			type: exerted
+	# 			filter: your,companion
+	# 			memorize: exertedComp
+	# 		}
+	# 		requires: {
+	# 			type: Location
+	# 			filter: self
+	# 		}
+	# 		cost: {
+	# 			type: exert
+	# 			select: choose(culture(elven),ally)
+	# 		}
+	# 		effect: {
+	# 			type: heal
+	# 			select: memory(exertedComp)
+	# 		}
+	# 	}
+	# }
+	
 	101_61: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1E061.1_card.jpg
+			//parentId: 101_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: V1U61
+			rarity: U
+			setNum: "V1"
+			cardNum: 61
+			style: Standard
+		}
 		title: Lorien Throne Room
+		unique: false
 		twilight: 3
-		type: site
+		type: Site
 		site: 6
-		block: fellowship
-		keyword: [
-			sanctuary
-			forest
+		block: Fellowship
+		direction: Left
+		keywords: [
+			Forest
+			Sanctuary
 		]
-		direction: left
 		effects: {
 			type: trigger
 			optional: true
@@ -149,17 +197,38 @@
 				filter: your,companion
 				memorize: exertedComp
 			}
-			requires: {
-				type: Location
-				filter: self
-			}
+			requires: [
+				{
+					type: Location
+					filter: self
+				}
+				{
+					type: PerPhaseLimit
+					limit: 1
+				}
+			]
 			cost: {
 				type: exert
 				select: choose(culture(elven),ally)
 			}
-			effect: {
-				type: heal
-				select: memory(exertedComp)
+			effect: [
+				{
+					type: heal
+					select: memory(exertedComp)
+				}
+				{
+					type: IncrementPerPhaseLimit
+					limit: 1
+				}
+			]
+		}
+		gametext: Forest. Sanctuary. Each time a companion exerts here, you may exert an [elven] ally to heal that companion (limit once per phase).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}

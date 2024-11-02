@@ -243,7 +243,6 @@ public class Filters {
                                 || game.getModifiersQuerying().isUnhastyCompanionAllowedToParticipateInSkirmishes(game, physicalCard)),
                 Filters.and(
                         CardType.MINION,
-                        Filters.notAssignedToSkirmish,
                         new Filter() {
                             @Override
                             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {

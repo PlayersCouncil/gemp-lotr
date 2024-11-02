@@ -861,5 +861,68 @@ var PCCards = {
 	'1_396': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.3_card.jpg',
 	'1_397': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.4_card.jpg'
 	
+	//2024 Post-WC Errata
+	/// Helpless (2U76) [Errata]
+	'52_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E076.3_card.jpg',
+	// Can You Protect Me From Yourself? (3R50) [Errata]
+	'53_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E050.3_card.jpg',
+	// Such a Little Thing (3R80) [Errata]
+	'53_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.3_card.jpg',
+	// Too Great and Terrible (3R85) [Errata]
+	'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.3_card.jpg',
+	// Terrible as the Dawn (3R103) [Errata]
+	'53_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.4_card.jpg',
+	// Guided by One Purpose (V1U31) [Errata]
+	'101_31' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E031.2_card.jpg',
+	// Thrashing Tentacle (V1C33) [Errata]
+	'101_33' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E033.2_card.jpg',
+	// Out of Dark Waters (V1R34) [Errata]
+	'101_34' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E034.2_card.jpg',
+	// Sam, Of Bagshot Row (V1U54) [Errata]
+	'101_54' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E054.1_card.jpg',
+	// Merry, Of Buckland (V1R52) [Errata]
+	'101_52' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E052.1_card.jpg',
+	// Sam, Faithful Companion (1R310) [Errata]
+	'51_310' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E310.1_card.jpg',
+	// Merry, From O'er the Brandywine (1C303) [Errata]
+	'51_303' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E303.1_card.jpg',
+	// Merry, Horticulturalist (2C104) [Errata]
+	'52_104' : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E104.1_card.jpg',
+	// Pippin, Mr. Took (2C110) [Errata]
+	'52_110' : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E110.1_card.jpg',
+	// Arwen, Elven Rider (3U7) [Errata]
+	'53_7'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E007.1_card.jpg',
+	// Erestor, Chief Advisor to Elrond (3C14) [Errata]
+	'53_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E014.1_card.jpg',
+	// Golradir, Councilor of Imladris (3U20) [Errata]
+	'53_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E020.1_card.jpg',
+	// Saelbeth, Elven Councilor (3U25) [Errata]
+	'53_25'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E025.1_card.jpg',
+	// Arwen, Lady Undomiel (3R8) [Errata]
+	'53_8'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E008.1_card.jpg',
+	// Denethor, Lord of Minas Tirith (10R28) [Errata]
+	'60_28'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E028.1_card.jpg',
+	// Saved From the Fire (8R20) [Errata]
+	'58_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN08E020.1_card.jpg',
+	// Aragorn, Estel (V1R19) [Errata]
+	'101_19' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S019.2_card.jpg',
+	// Elendil, The Tall (9R+32) [Errata]
+	'59_32'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E032.1_card.jpg',
+	// Sapling of the White Tree (9R35) [Errata]
+	'59_35'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E035.1_card.jpg',
+	// Lorien Throne Room (V1U61) [Errata]
+	'101_61' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E061.1_card.jpg',
+	// Stand Against Darkness (1U63) [Errata]
+	'51_63'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E063.1_card.jpg',
+	// The Witch-king, Lord of the Nazgul (2R85) [Errata]
+	'52_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E085.1_card.jpg',
+	// Legolas, Greenleaf (1R50) [Errata]
+	'51_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E050.1_card.jpg',
+	
+	//V1 additions:
+	// Sirannon Dam (V165) 
+	'101_65' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S065.0_card.jpg',
+	// Writhing Tentacle (V1C66) 
+	'101_66' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E066.2_card.jpg',
 }
 

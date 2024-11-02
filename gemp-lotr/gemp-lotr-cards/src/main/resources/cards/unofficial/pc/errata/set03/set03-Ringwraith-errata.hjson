@@ -165,53 +165,132 @@
 	# 	}
 	# }
 	
+	# 53_85: {
+	# 	cardInfo: {
+	# 		imagePath: errata/LOTR-EN03E085.2_card.jpg
+	# 		javaClass: false
+	# 		parent: 3_85
+	# 		parentPath: errata/pc
+	# 		version: 2
+	# 		collInfo: 3R85
+	# 		rarity: R
+	# 		setNum: "3"
+	# 		cardNum: 85
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Too Great and Terrible
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Ringwraith
+	# 	twilight: 0
+	# 	type: event
+	# 	timeword: maneuver
+	# 	effects: {
+	# 		type: event
+	# 		requires: {
+	# 			type: canSpot
+	# 			filter: nazgul
+	# 		}
+	# 		effect: {
+	# 			type: preventable
+	# 			text: Would you like to discard 2 GANDALF cards from hand to prevent wounding Gandalf twice?
+	# 			player: fp
+	# 			cost: {
+	# 				type: discardFromHand
+	# 				forced: false
+	# 				hand: fp
+	# 				player: fp
+	# 				select: choose(culture(gandalf))
+	# 				count: 2
+	# 			}
+	# 			effect: {
+	# 				type: wound
+	# 				select: choose(name(Gandalf))
+	# 				times: 2
+	# 			}
+	# 		}
+	# 	}
+	# 	gametext: Spot a Nazgul to wound Gandalf twice. The Free Peoples player may discard 2 [gandalf] cards from hand to prevent this. 
+	# 	lore: “‘I do not wish to become like the Dark Lord himself.'”
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_85: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E085.2_card.jpg
-			javaClass: false
-			parent: 3_85
-			parentPath: errata/pc
-			version: 2
+			imagePath: errata/LOTR-EN03E085.3_card.jpg
+			//parentId: 3_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 3
 			collInfo: 3R85
 			rarity: R
 			setNum: "3"
 			cardNum: 85
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Too Great and Terrible
 		unique: false
 		side: Shadow
-		culture: Ringwraith
-		twilight: 0
-		type: event
-		timeword: maneuver
-		effects: {
-			type: event
-			requires: {
-				type: canSpot
-				filter: nazgul
-			}
-			effect: {
-				type: preventable
-				text: Would you like to discard 2 GANDALF cards from hand to prevent wounding Gandalf twice?
-				player: fp
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		target: or(companion,ally)
+		effects: [
+			{
+				type: ExtraCost
 				cost: {
-					type: discardFromHand
-					forced: false
-					hand: fp
-					player: fp
-					select: choose(culture(gandalf))
-					count: 2
-				}
-				effect: {
-					type: wound
-					select: choose(name(Gandalf))
-					times: 2
+					type: exert
+					select: choose(culture(ringwraith), minion)
 				}
 			}
-		}
-		gametext: Spot a Nazgul to wound Gandalf twice. The Free Peoples player may discard 2 [gandalf] cards from hand to prevent this. 
+			{
+				type: Trigger
+				trigger: {
+					type: Exerted
+					filter: bearer
+				}
+				effect: [
+					{
+						# We do this just to make the option prompt a
+						# little more elegant.
+						type: Memorize
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: If
+						check: {
+							type: HasCardInHand
+							player: freeps
+							count: 1
+							filter: CultureFromMemory(bearer)
+						}
+						true: {
+							type: DiscardFromHand
+							player: freeps
+							hand: freeps
+							forced: true
+							count: 1
+							select: choose(CultureFromMemory(bearer))
+						}
+						false: {
+							type: RevealHand
+							hand: freeps
+						}
+					}
+					
+				]
+			}
+		]
+		gametext: To play, exert a [ringwraith] minion. Bearer must<br>be a companion or ally.<br>Each time bearer exerts, the Free Peoples player must discard a card from hand of bearer's culture (or reveal their hand if they cannot).  
 		lore: “‘I do not wish to become like the Dark Lord himself.'”
 		promotext: ""
 		alts: {

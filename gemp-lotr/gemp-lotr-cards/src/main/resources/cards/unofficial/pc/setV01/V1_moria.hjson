@@ -1,52 +1,113 @@
 {
 
+	# 101_31: {
+	# 	title: Guided by One Purpose
+	# 	culture: moria
+	# 	twilight: 0
+	# 	type: condition
+	# 	keyword: support area
+	# 	effects: [
+	# 		{
+	# 			type: Response
+	# 			trigger: {
+	# 				type: winsskirmish
+	# 				filter: your,tentacle,inSkirmish
+	# 			}
+	# 			effect: {
+	# 				type: StackCardsFromPlay
+	# 				select: choose(your,tentacle,inSkirmish)
+	# 				where: self
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: assignment
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: self,hasStackedCount(4,tentacle)
+	# 			}
+	# 			cost: {
+	# 				type: discard
+	# 				select: self
+	# 			}
+	# 			effect: [
+	# 			    {
+	# 			        type: assignFPCharacterToSkirmish
+	# 			        fpCharacter: choose(ringBearer)
+	# 			        minion: choose(culture(moria),creature)
+	# 			        memorizeFPCharacter: ringBearer
+	# 			        memorizeMinion: chosenCreature
+	# 			        preventText: Would you like to exert {ringBearer} twice to prevent {chosenCreature} being assigned to them?
+	# 			        preventCost: {
+	# 						type: Exert
+	# 						select: memory(ringBearer)
+	# 						times: 2
+	# 				    }
+	# 			    }
+	# 			]
+	# 		}
+	# 	]
+	# }
+	
 	101_31: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1E031.2_card.jpg
+			//parentId: 101_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1?
+			collInfo: V1U31
+			rarity: U
+			setNum: "V1"
+			cardNum: 31
+			style: Standard
+		}
 		title: Guided by One Purpose
-		culture: moria
-		twilight: 0
-		type: condition
-		keyword: support area
-		effects: [
-			{
-				type: Response
-				trigger: {
-					type: winsskirmish
-					filter: your,tentacle,inSkirmish
-				}
-				effect: {
-					type: StackCardsFromPlay
-					select: choose(your,tentacle,inSkirmish)
-					where: self
-				}
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			cost: {
+				type: Spot
+				filter: tentacle
+				count: 3
 			}
-			{
-				type: activated
-				phase: assignment
-				requires: {
-					type: canSpot
-					filter: self,hasStackedCount(4,tentacle)
+			effect: [
+				{
+					type: AddBurdens
+					amount: 1
 				}
-				cost: {
-					type: discard
-					select: self
+				{
+					type: Optional
+					text: Would you like to make the Free Peoples player discard a tentacle to shuffle a {moria} card from discard into your draw deck?
+					effect: {
+						type: CostToEffect
+						cost: {
+							type: Discard
+							select: choose(tentacle)
+						}
+						effect: {
+							type: ShuffleCardsFromDiscardIntoDrawDeck
+							select: choose(culture(moria))
+						}
+					}
 				}
-				effect: [
-				    {
-				        type: assignFPCharacterToSkirmish
-				        fpCharacter: choose(ringBearer)
-				        minion: choose(culture(moria),creature)
-				        memorizeFPCharacter: ringBearer
-				        memorizeMinion: chosenCreature
-				        preventText: Would you like to exert {ringBearer} twice to prevent {chosenCreature} being assigned to them?
-				        preventCost: {
-							type: Exert
-							select: memory(ringBearer)
-							times: 2
-					    }
-				    }
-				]
+			]
+		}
+		gametext: Spot 3 tentacles to add a burden.  Then you may make the Free Peoples player discard a tentacle to shuffle a [moria] card from your discard pile into your draw deck.
+		lore: "'Something has crept, or has been driven out of dark waters under the mountains. There are older and fouler things than Orcs in the deep places of the world.'"
+		promotext: ""
+		alts: {
+			promos: {
 			}
-		]
+			errata: {
+			}
+		}
 	}
 
 
@@ -77,16 +138,83 @@
 	}
 
 
+	# 101_33: {
+	# 	title: Thrashing Tentacle
+	# 	culture: moria
+	# 	twilight: 2
+	# 	type: minion
+	# 	race: creature
+	# 	keyword: tentacle
+	# 	strength: 5
+	# 	vitality: 2
+	# 	site: 4
+	# 	effects: [
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: cantBear
+	# 				filter: self
+	# 				cardFilter: possession
+	# 			}
+	# 		}
+	# 		{
+	# 			type: trigger
+	# 			trigger: {
+	# 				type: ConstantlyCheck
+	# 				requires: {
+	# 					type: location
+	# 					filter: not(marsh)
+	# 				}
+	# 			}
+	# 			effect: {
+	# 				type: discard
+	# 				select: self
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activatedInDiscard
+	# 			phase: shadow
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: culture(moria),creature
+	# 				count: 3
+	# 			}
+	# 			effect: {
+	# 				type: playCardFromDiscard
+	# 				select: self
+	# 			}
+	# 		}
+	# 	]
+	# }
+	
 	101_33: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1E033.2_card.jpg
+			//parentId: 101_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 2
+			collInfo: V1C33
+			rarity: C
+			setNum: "V1"
+			cardNum: 33
+			style: Standard
+		}
 		title: Thrashing Tentacle
-		culture: moria
+		unique: false
+		side: Shadow
+		culture: Moria
 		twilight: 2
-		type: minion
-		race: creature
-		keyword: tentacle
-		strength: 5
+		type: Minion
+		race: Creature
+		strength: 6
 		vitality: 2
 		site: 4
+		keywords: [
+			Tentacle
+			Fierce
+		]
 		effects: [
 			{
 				type: modifier
@@ -110,69 +238,162 @@
 					select: self
 				}
 			}
+			
 			{
-				type: activatedInDiscard
-				phase: shadow
-				requires: {
-					type: canSpot
-					filter: culture(moria),creature
-					count: 3
+				type: Trigger
+				trigger: {
+					type: LosesSkirmish
+					filter: self
 				}
 				effect: {
-					type: playCardFromDiscard
-					select: self
+					type: AddBurdens
+					amount: {
+						type: Conditional
+						requires: {
+							type: CantSpotBurdens
+							amount: 1
+						}
+						true: 2
+						false: 1
+					}
 				}
 			}
 		]
+		gametext: Tentacle. Fierce. This minion may not bear possessions and is discarded if not at a marsh.<br>Each time this minion loses a skirmish, add a burden (or 2 burdens if you cannot spot a burden).
+		lore: "The others swung round and saw the waters of the lake seething..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 
+
+	# 101_34: {
+	# 	title: Out of Dark Waters
+	# 	culture: moria
+	# 	twilight: 0
+	# 	type: condition
+	# 	keyword: support area
+	# 	effects: [
+	# 		{
+	# 			type: activated
+	# 			phase: shadow
+	# 			cost: {
+	# 				type: removeTwilight
+	# 				amount: 1
+	# 			}
+	# 			effect: {
+	# 				type: choice
+	# 				texts: [
+	# 					Remove (1) to stack a tentacle from hand here.
+	# 					Remove (1) to play a tentacle stacked here
+	# 				]
+	# 				effects: [
+	# 					{
+	# 						type: If
+	# 						check: {
+	# 							type: HasCardInHand
+	# 							filter: tentacle
+	# 						}
+	# 						true: {
+	# 							type: stackCardsFromHand
+	# 							select: choose(tentacle)
+	# 							where: self
+	# 						}
+	# 					}
+	# 					{
+	# 						type: If
+	# 						check: {
+	# 							type: canSpot
+	# 							filter: self,hasStacked(any)
+	# 						}
+	# 						true: {
+	# 							type: playCardFromStacked
+	# 							select: choose(tentacle)
+	# 							on: self
+	# 						}
+	# 					}
+	# 				]
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Response
+	# 			trigger: {
+	# 				type: abouttodiscard
+	# 				filter: self
+	# 			}
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: self,hasStackedCount(1,tentacle)
+	# 			}
+	# 			cost: {
+	# 				type: discardstackedcards
+	# 				on: self
+	# 				select: choose(tentacle)
+	# 				count: 1
+	# 			}
+	# 			effect: {
+	# 				type: preventDiscard
+	# 				select: self
+	# 			}
+	# 		}
+	# 	]
+	# }
+	
 	101_34: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1E034.2_card.jpg
+			//parentId: 101_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1?
+			collInfo: V1R34
+			rarity: R
+			setNum: "V1"
+			cardNum: 34
+			style: Standard
+		}
 		title: Out of Dark Waters
-		culture: moria
-		twilight: 0
-		type: condition
-		keyword: support area
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		keywords: Support Area
 		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: TakesWound
+					filter: tentacle
+					memorize: woundedTentacle
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: memory(woundedTentacle)
+					where: self
+				}
+			}
 			{
 				type: activated
 				phase: shadow
-				cost: {
-					type: removeTwilight
-					amount: 1
-				}
 				effect: {
-					type: choice
-					texts: [
-						Remove (1) to stack a tentacle from hand here.
-						Remove (1) to play a tentacle stacked here
-					]
-					effects: [
-						{
-							type: If
-							check: {
-								type: HasCardInHand
-								filter: tentacle
-							}
-							true: {
-								type: stackCardsFromHand
-								select: choose(tentacle)
-								where: self
-							}
-						}
-						{
-							type: If
-							check: {
-								type: canSpot
-								filter: self,hasStacked(any)
-							}
-							true: {
-								type: playCardFromStacked
-								select: choose(tentacle)
-								on: self
-							}
-						}
-					]
+					type: If
+					check: {
+						type: canSpot
+						filter: self,hasStacked(tentacle)
+					}
+					true: {
+						type: playCardFromStacked
+						select: choose(tentacle)
+						on: self
+					}
 				}
 			}
 			{
@@ -189,7 +410,7 @@
 					type: discardstackedcards
 					on: self
 					select: choose(tentacle)
-					count: 1
+					count: 2
 				}
 				effect: {
 					type: preventDiscard
@@ -197,6 +418,15 @@
 				}
 			}
 		]
+		gametext: Each time a tentacle takes a wound, you may stack that tentacle here.<br>Shadow: Play a tentacle from here as if from hand.<br>Response: If this condition is about to be discarded, discard 2 tentacles stacked here to prevent that.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 
@@ -315,6 +545,155 @@
 			}
 			
 		]
+	}
+	
+	
+	101_65: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S065.0_card.jpg
+			//parentId: 101_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: V1_65
+			rarity: 
+			setNum: "V1"
+			cardNum: 65
+			style: Standard
+		}
+		title: Sirannon Dam
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: marsh
+					filter: or(river,and(site,not(or(Battleground,Dwelling,Forest,Mountain,Plains,River,Underground))))
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: defender
+					filter: companion
+				}
+			}
+			{
+				type: Activated
+				phase: skirmish
+				cost: {
+					type: RemoveBurdens
+					amount: 2
+				}
+				effect: [
+					{
+							type: replaceInSkirmish
+							filter: tentacle
+							with: choose(name(Water in the Water))
+					}
+				]
+			}
+		]
+		gametext: Rivers and sites with no other terrain keywords gain <b>marsh</b>.<br>Companions are <b>defender +1</b>.<br>Skirmish: Remove 2 burdens to have Watcher in the Water replace a tentacle skirmishing an unbound companion.
+		lore: "But either Gandalf was astray, or else the land had changed in recent years..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	101_66: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1E066.2_card.jpg
+			//parentId: 101_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: V1_66
+			rarity: C
+			setNum: "V1"
+			cardNum: 66
+			style: Standard
+		}
+		title: Writhing Tentacle
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Minion
+		race: Creature
+		strength: 6
+		vitality: 1
+		site: 4
+		keywords: Tentacle
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBear
+					filter: self
+					cardFilter: possession
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: location
+						filter: not(marsh)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: activatedFromStacked
+				phase: shadow
+				stackedOn: side(shadow)
+				cost: [
+					{
+						type: Memorize
+						filter: HasStacked(self)
+						memory: stacker
+					}
+					{
+						type: PlayCardFromStacked
+						select: self
+					}
+				]
+				effect: {
+					type: StackCardsFromDiscard
+					select: choose(tentacle)
+					count: 2
+					where: memory(stacker)
+				}
+			}
+		]
+		gametext: Tentacle. This minion may not bear possessions and is discarded if not at a marsh.<br>Shadow: If this minion is stacked on a Shadow card, play it to stack 2 tentacles from your discard pile on that card.
+		lore: "Many coiling arms seized the doors on either side, and with horrible strength, swung them round."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 }
