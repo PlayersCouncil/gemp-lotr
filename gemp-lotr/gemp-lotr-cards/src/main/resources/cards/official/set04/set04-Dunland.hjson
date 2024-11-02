@@ -1196,7 +1196,7 @@
 				}
 				requires: {
 						type: canSpot
-						filter: another,culture(dunland),man
+						filter: another,culture(dunland),minion
 				}
 				effect: {
 						type: takeControlOfSite
