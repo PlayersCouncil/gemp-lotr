@@ -93,7 +93,7 @@
 			effect: [
 				{
 					type: replaceInSkirmish
-					filter: dwarf,not(name(Gimli))
+					select: dwarf,not(name(Gimli))
 					with: memory(exertedGimli)
 				}
 				{

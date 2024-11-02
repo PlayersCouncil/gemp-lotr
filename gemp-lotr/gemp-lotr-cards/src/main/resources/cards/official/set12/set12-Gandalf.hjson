@@ -172,7 +172,7 @@
 		            }
 		            {
 		                type: replaceInSkirmish
-		                filter: memory(anotherCompanion)
+		                select: memory(anotherCompanion)
 		                with: self
 		            }
 		        ]

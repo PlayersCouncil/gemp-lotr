@@ -164,7 +164,7 @@
 		        }
 		        effect: {
 		            type: replaceInSkirmish
-		            filter: minion,inSkirmishAgainst(companion)
+		            select: minion,inSkirmishAgainst(companion)
 		            with: choose(name(Gollum))
 		        }
 		    }

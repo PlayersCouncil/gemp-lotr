@@ -100,7 +100,7 @@
 			effect: [
 				{
 				    type: replaceInSkirmish
-				    filter: companion,not(ringBearer)
+				    select: companion,not(ringBearer)
 				    with: memory(exertedHobbit)
 				}
 			]

@@ -48,7 +48,7 @@
 		        }
 		        effect: {
 		            type: replaceInSkirmish
-		            filter: unbound,hobbit
+		            select: unbound,hobbit
 		            with: choose(name(Boromir))
 		        }
 		    }
@@ -485,7 +485,7 @@
 		        }
 		        effect: {
 		            type: replaceInSkirmish
-		            filter: unbound,companion,inSkirmishAgainst(minion)
+		            select: unbound,companion,inSkirmishAgainst(minion)
 		            with: choose(culture(gondor),companion,notAssignedToSkirmish)
 		        }
 		    }
