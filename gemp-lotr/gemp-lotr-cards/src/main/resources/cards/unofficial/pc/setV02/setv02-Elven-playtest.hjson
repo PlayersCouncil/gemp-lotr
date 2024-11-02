@@ -256,16 +256,17 @@
 					filter: name(Aragorn)
 				}
 				cost: {
-					type: exert
+					type: Wound
 					select: self
 				}
 				effect: {
-					type: heal
+					type: preventWound
 					select: choose(name(Aragorn))
+					memorize: protectedMan
 				}
 			}
 		]
-		gametext: Aragorn is strength +1.<br>Each time Aragorn is about to take a wound, you may exert Arwen to heal Aragorn.<br>While Arwen is exhausted, Aragorn is defender +1.
+		gametext: Aragorn is strength +1.<br>Each time Aragorn is about to take a wound, you may wound Arwen to prevent that wound.<br>While Arwen is exhausted, Aragorn is defender +1.
 		lore: "'Dark is the Shadow, and yet my heart rejoices; for you, Estel, shall be among the great whose valour will destroy it.'"
 		promotext: ""
 		alts: {
