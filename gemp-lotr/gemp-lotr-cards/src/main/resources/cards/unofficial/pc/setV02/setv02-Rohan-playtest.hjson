@@ -140,17 +140,20 @@
 		effects: [
 			{
 				type: ToPlay
-				requires: [
-					{
-						type: CanSpot
-						filter: name(Theoden)
-					}
-					{
-						type: CanSpot
-						filter: culture(Rohan), Man
-						count: 3
-					}
-				]
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: CanSpot
+							filter: name(Theoden)
+						}
+						{
+							type: CanSpot
+							filter: culture(Rohan), Man
+							count: 3
+						}
+					]
+				}
 			}
 			{
 				type: Activated
@@ -749,10 +752,6 @@
 		twilight: 2
 		type: Event
 		timewords: Skirmish
-		/*requires: {
-			
-		}
-		*/
 		effects: {
 			type: event
 			requires: {
@@ -800,6 +799,94 @@
 		}
 		gametext: Remove 2 tokens from X [rohan] conditions to make 3 valiant companions strength +X until the regroup phase.
 		lore: "Captains and champions fell or fled before them. Neither orc nor man withstood them."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	
+	102_73: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S049.0_card.jpg
+			//parentId: 102_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V249
+			rarity: 
+			setNum: "V2"
+			cardNum: 49
+			style: Standard
+		}
+		title: Fortress of My Fathers
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		keywords: [
+			Support Area
+			Fortification
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: CanSpot
+							filter: valiant,companion
+							count: 2
+						}
+						{
+							type: CanSpot
+							filter: culture(Rohan), Companion
+							count: 3
+						}
+					]
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(rohan),companion
+				}
+				cost: {
+					type: Choice
+					texts: [
+						Discard Fortress of My Fathers
+						Discard 2 other {rohan} possessions
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: discard
+							select: other,culture(rohan),possession
+							count: 2
+						}
+					]
+				}
+				effect: [
+					{
+						type: preventWound
+						select: choose(culture(rohan),companion)
+					}
+				]
+				
+			}
+		]
+		gametext: Fortification. To play, spot 3 [rohan] companions (or 2 valiant companions).<br>Response: If a [rohan] companion is about to take a wound, discard this or 2 other [rohan] possessions to prevent that wound.
+		lore: "'Is it not said that no foe has ever taken the Hornburg, if men defended it?'"
 		promotext: ""
 		alts: {
 			promos: {
