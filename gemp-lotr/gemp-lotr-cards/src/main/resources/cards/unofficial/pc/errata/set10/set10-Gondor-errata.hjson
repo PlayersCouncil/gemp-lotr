@@ -48,7 +48,7 @@
 				effect: [
 					{
 						type: putCardsFromDeckIntoHand
-						select: choose(culture(gondor),or(condition, possession))
+						select: choose(culture(gondor),or(condition, item))
 							reveal: true
 							shuffle: true
 							showAll: true
@@ -56,17 +56,17 @@
 					{
 						type: optional
 						player: shadow
-						text: Would you like to draw 2 cards?
+						text: Would you like to draw a card?
 						effect: {
 								type: drawCards
 								player: shadow
-								count: 2
+								count: 1
 						}
 					}
 				]
 			}
 		]
-		gametext: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] condition or possession into hand from your draw deck. Choose an opponent who may draw 2 cards.
+		gametext: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] condition or item into hand from your draw deck. Choose an opponent who may draw 2 cards.
 		lore: "There Denethor sat in a grey gloom, like an old patient spider...."
 		promotext: ""
 		alts: {
