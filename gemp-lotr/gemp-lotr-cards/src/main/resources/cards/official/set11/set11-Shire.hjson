@@ -501,7 +501,7 @@
                 ]
                 effect: {
                     type: replaceInSkirmish
-                    select: unbound, companion, InSkirmish, resistanceLessThanFilter(self)
+                    filter: unbound, companion, InSkirmish, resistanceLessThanFilter(self)
                     with: self
                 }
 		    }

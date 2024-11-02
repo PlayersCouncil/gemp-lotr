@@ -18,9 +18,9 @@ import org.json.simple.JSONObject;
 public class ReplaceInSkirmish implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "with");
+        FieldUtils.validateAllowedFields(effectObject, "filter", "with");
 
-        final String filter = FieldUtils.getString(effectObject.get("select"), "select");
+        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
         final String with = FieldUtils.getString(effectObject.get("with"), "with");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);

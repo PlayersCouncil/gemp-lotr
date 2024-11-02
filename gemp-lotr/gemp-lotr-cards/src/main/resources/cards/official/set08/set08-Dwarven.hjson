@@ -216,7 +216,7 @@
 			effect: [
 				{
 				    type: replaceInSkirmish
-				    select: unbound,companion,not(name(Gimli))
+				    filter: unbound,companion,not(name(Gimli))
 				    with: choose(name(Gimli))
 				}
 			]

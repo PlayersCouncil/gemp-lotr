@@ -541,7 +541,7 @@
 		        }
 		        effect: {
 		            type: replaceInSkirmish
-		            select: ringBound,companion,inSkirmishAgainst(minion)
+		            filter: ringBound,companion,inSkirmishAgainst(minion)
 		            with: self
 		        }
 		    }
