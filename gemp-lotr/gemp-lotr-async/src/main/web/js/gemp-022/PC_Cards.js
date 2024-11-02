@@ -923,6 +923,6 @@ var PCCards = {
 	// Sirannon Dam (V165) 
 	'101_65' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S065.0_card.jpg',
 	// Writhing Tentacle (V1C66) 
-	'101_66' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E066.2_card.jpg',
+	'101_66' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E066.2_card.jpg'
 }
 
