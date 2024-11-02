@@ -798,17 +798,21 @@
 					}
 					memorize: removed
 				}
-				{
-					type: RemoveTokensCumulative
-					count: memory(removed)
-					filter: machine
-				}
+				
 			],
 			effect: [
 				{
-					type: AssignFpCharacterToSkirmish
-					fpCharacter: choose(or(ally,and(unbound,companion)))
-					minion: choose(uruk-hai, MaxTwilight(memory(removed)))
+					type: CostToEffect
+					cost: {
+						type: RemoveTokensCumulative
+						count: memory(removed)
+						filter: machine
+					}
+					effect: {
+						type: AssignFpCharacterToSkirmish
+						fpCharacter: choose(or(ally,and(unbound,companion)))
+						minion: choose(uruk-hai, MaxTwilight(memory(removed)))
+					}
 				}
 			]
 		}
