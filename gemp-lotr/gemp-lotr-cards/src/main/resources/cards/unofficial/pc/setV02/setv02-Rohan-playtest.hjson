@@ -871,7 +871,7 @@
 						}
 						{
 							type: discard
-							select: other,culture(rohan),possession
+							select: choose(other,culture(rohan),possession)
 							count: 2
 						}
 					]
