@@ -18,8 +18,11 @@ public class Card_01_306_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "1_306");
-					// put other cards in here as needed for the test case
+					put("pippin", "1_306");
+					put("taba", "1_317");
+
+					put("uruk", "1_151");
+					put("power", "1_136");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -48,7 +51,7 @@ public class Card_01_306_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pippin");
 
 		assertEquals("Pippin", card.getBlueprint().getTitle());
 		assertEquals("Friend to Frodo", card.getBlueprint().getSubtitle());
@@ -64,18 +67,50 @@ public class Card_01_306_Tests
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PippinTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void PippinDoesNotBlockFreepsUsingThereAndBackAgain() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+		var pippin = scn.GetFreepsCard("pippin");
+		var taba = scn.GetFreepsCard("taba");
+		scn.FreepsMoveCharToTable(pippin);
+		scn.FreepsAttachCardsTo(frodo, taba);
+
+		var power = scn.GetShadowCard("power");
+		scn.ShadowMoveCharToTable("uruk");
+		scn.ShadowMoveCardToHand(power);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.FreepsActionAvailable(taba));
+		assertEquals(Zone.ATTACHED, taba.getZone());
+		scn.FreepsUseCardAction(taba);
+		assertEquals(Zone.DISCARD, taba.getZone());
+	}
+
+	@Test
+	public void PippinPreventsShadowDiscardingShadowCards() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var pippin = scn.GetFreepsCard("pippin");
+		var taba = scn.GetFreepsCard("taba");
+		scn.FreepsMoveCharToTable(pippin);
+		scn.FreepsAttachCardsTo(frodo, taba);
+
+		var power = scn.GetShadowCard("power");
+		scn.ShadowMoveCharToTable("uruk");
+		scn.ShadowMoveCardToHand(power);
+
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Zone.ATTACHED, taba.getZone());
+		scn.ShadowPlayCard(power);
+		assertEquals(Zone.ATTACHED, taba.getZone());
 	}
 }

@@ -18,10 +18,13 @@ public class CantDiscardFromPlayModifier extends AbstractModifier {
 
     @Override
     public boolean canBeDiscardedFromPlay(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard source) {
+
+        if (bannedPlayer != null && !bannedPlayer.equals(performingPlayer))
+            return true;
+
         if (_sourceFilter.accepts(game, source))
             return false;
-        if (bannedPlayer != null && !bannedPlayer.equals(performingPlayer))
-            return false;
+
         return true;
     }
 }

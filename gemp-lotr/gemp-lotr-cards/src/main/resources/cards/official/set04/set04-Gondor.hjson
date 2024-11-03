@@ -976,7 +976,7 @@
                 }
                 effect: {
                     type: exhaust
-                    select: choose(minion,inSkirmishAgainst(self))
+                    select: choose(roaming,minion,inSkirmishAgainst(self))
                 }
 		    }
 		]
