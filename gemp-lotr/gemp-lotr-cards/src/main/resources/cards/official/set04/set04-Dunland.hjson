@@ -1965,20 +1965,20 @@
 		site: 3
 		keyword: fierce
 		effects: [
-				{
-						type: Response
-						trigger: {
-								type: winsSkirmish
-								filter: another,culture(dunland),man
-						}
-						cost: {
-								type: exert
-								select: self
-						}
-						effect: {
-								type: takeControlOfSite
-						}
+			{
+				type: Response
+				trigger: {
+					type: winsSkirmish
+					filter: another,culture(dunland),man
 				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br><b>Response:</b> If another [dunland] Man wins a skirmish, exert Wulf to take control of a site.
 		lore: Do you not hear their voices?'
