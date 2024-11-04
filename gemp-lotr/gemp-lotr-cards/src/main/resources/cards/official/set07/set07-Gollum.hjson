@@ -841,7 +841,7 @@
 				cost: [
 					{
 						type: addThreats
-						amount: any
+						amount: 0-9
 					}
 				]
 			}

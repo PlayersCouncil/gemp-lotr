@@ -52,7 +52,7 @@ public class Card_V2_042_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+		assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

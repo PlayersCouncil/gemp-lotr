@@ -328,7 +328,9 @@ public class CardResolver {
             return actionContext.getGame().getGameState().getDeck(deckId);
         };
 
-        if (type.startsWith("memory(") && type.endsWith(")")) {
+        if (type.equals("self")) {
+            return resolveSelf(choiceFilter, choiceFilter, countSource, memory, cardSource);
+        } else if (type.startsWith("memory(") && type.endsWith(")")) {
             return resolveMemoryCards(type, choiceFilter, choiceFilter, countSource, memory, cardSource);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);

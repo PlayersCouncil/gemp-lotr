@@ -27,7 +27,7 @@ public class Card_V2_070_Tests
 					put("site2", "1_327");
 					put("site3", "1_337");
 					put("site4", "1_343");
-					put("site5", "102_66");
+					put("site5", "102_70");
 					put("site6", "1_351");
 					put("site7", "1_353");
 					put("site8", "1_356");
