@@ -28,47 +28,47 @@ public class Card_V2_019_Tests
 	}
 
 	@Test
-	public void DunadanofIthilienStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BerserkDeathseekerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Dunadan of Ithilien
+		 * Name: Berserk Deathseeker
 		 * Unique: True
-		 * Side: Free Peoples
-		 * Culture: Gondor
-		 * Twilight Cost: 3
-		 * Type: Companion
-		 * Subtype: Man
-		 * Strength: 6
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 5
+		 * Type: Minion
+		 * Subtype: Uruk-hai
+		 * Strength: 10
 		 * Vitality: 3
-		 * Resistance: 6
-		 * Signet: Frodo
-		 * Game Text: Ranger. To play, spot a ranger.
-		* 	Skirmish: Discard a [Gondor] card from hand to wound a roaming minion skirmishing this companion. If that minion is a Man, wound it again.
+		 * Site Number: 5
+		 * Game Text: Damage +1.
+		* 	This minion is strength +1 for each wound on each character in its skirmish.
+		* 	When this minion is killed, add 3 [isengard] tokens to an [isengard] machine.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Dunadan of Ithilien", card.getBlueprint().getTitle());
+		assertEquals("Berserk Deathseeker", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.RANGER));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(10, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
+		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DunadanofIthilienTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BerserkDeathseekerTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -78,6 +78,6 @@ public class Card_V2_019_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(5, scn.GetTwilight());
 	}
 }

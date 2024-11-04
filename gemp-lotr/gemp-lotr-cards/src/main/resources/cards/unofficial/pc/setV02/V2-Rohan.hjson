@@ -788,6 +788,7 @@
 		vitality: 3
 		signet: Theoden
 		resistance: 6
+		keywords: valiant
 		effects: [
 			{
 				type: Modifier

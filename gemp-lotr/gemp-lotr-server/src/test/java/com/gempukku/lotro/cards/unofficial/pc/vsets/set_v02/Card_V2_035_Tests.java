@@ -28,38 +28,40 @@ public class Card_V2_035_Tests
 	}
 
 	@Test
-	public void BackontheMenuStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UrukShieldWallStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Back on the Menu
+		 * Name: Uruk Shield Wall
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
-		 * Twilight Cost: 0
-		 * Type: Condition
+		 * Twilight Cost: 1
+		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: Skirmish: Discard a [Sauron] tracker to make an [Isengard] tracker strength +2.
-		* 	Skirmish: Exert an [isengard] tracker to make a [sauron] tracker fierce. 
+		 * Game Text: Machine.
+		* 	While you can spot X [isengard] tokens here, each time an [isengard] Uruk-hai costing X is about to take a wound, exert it instead.
+		* 	Maneuver: Exert an Uruk-hai to add an [isengard] token here.  
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Back on the Menu", card.getBlueprint().getTitle());
+		assertEquals("Uruk Shield Wall", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.MACHINE));
 		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void BackontheMenuTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UrukShieldWallTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -69,6 +71,6 @@ public class Card_V2_035_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

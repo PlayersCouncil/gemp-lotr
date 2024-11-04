@@ -41,15 +41,14 @@ public class Card_V2_049_Tests
 		 * Subtype: Hand weapon
 		 * Strength: 2
 		 * Game Text: Bearer must be a [rohan] companion.
-		* 	If bearer is Eomer, he is damage +1.
-		* 	If bearer is Eomer, each time he wins a skirmish, you may reinforce a [rohan] token.
+		* 	If bearer is Eomer, he is damage +1 and each time he wins a skirmish, you may reinforce a [rohan] token.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Guthwine", card.getBlueprint().getTitle());
+		assertEquals("Gúthwinë", card.getBlueprint().getTitle());
 		assertEquals("Eomer's Blade", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());

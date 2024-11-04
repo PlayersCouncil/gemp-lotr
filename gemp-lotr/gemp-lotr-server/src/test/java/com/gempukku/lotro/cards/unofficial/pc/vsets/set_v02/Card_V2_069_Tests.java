@@ -28,38 +28,39 @@ public class Card_V2_069_Tests
 	}
 
 	@Test
-	public void DesolationofSarumanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WestfoldPlainsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Desolation of Saruman
+		 * Name: Westfold Plains
 		 * Unique: False
 		 * Side: 
 		 * Culture: 
-		 * Shadow Number: 8
+		 * Shadow Number: 3
 		 * Type: Site
 		 * Subtype: 
-		 * Site Number: 8T
-		 * Game Text: When the fellowship moves to this site, each player may discard a card (except an artifact) from their opponent's support area. 
+		 * Site Number: 4T
+		 * Game Text: Plains. Each mount is twilight cost -1.
 		*/
 
 		var scn = GetScenario();
 
 		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(8);
+		//var card = scn.GetFreepsSite(4);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Desolation of Saruman", card.getBlueprint().getTitle());
+		assertEquals("Westfold Plains", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertEquals(8, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getSiteNumber());
+		assertTrue(scn.hasKeyword(card, Keyword.PLAINS));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DesolationofSarumanTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WestfoldPlainsTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -69,6 +70,6 @@ public class Card_V2_069_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(8, scn.GetTwilight());
+		assertEquals(3, scn.GetTwilight());
 	}
 }

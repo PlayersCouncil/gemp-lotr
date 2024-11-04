@@ -28,39 +28,45 @@ public class Card_V2_063_Tests
 	}
 
 	@Test
-	public void EastemnetHillsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OrcofLugburzStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Eastemnet Hills
+		 * Name: Orc of Lugburz
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 2
-		 * Type: Site
-		 * Subtype: 
-		 * Site Number: 2T
-		 * Game Text: Mountain. When the Fellowship moves from here during the regroup phase, each player may discard 2 cards to draw 2 cards.
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 9
+		 * Vitality: 3
+		 * Site Number: 6
+		 * Game Text: Tracker. 
+		* 	Each [sauron] orc with a site number of 1 or less cannot take wounds except during the skirmish phase.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(2);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Eastemnet Hills", card.getBlueprint().getTitle());
+		assertEquals("Orc of Lugburz", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.MOUNTAIN));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(2, card.getBlueprint().getSiteNumber());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.ORC, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void EastemnetHillsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OrcofLugburzTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -70,6 +76,6 @@ public class Card_V2_063_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(3, scn.GetTwilight());
 	}
 }

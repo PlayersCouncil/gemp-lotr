@@ -28,45 +28,47 @@ public class Card_V2_061_Tests
 	}
 
 	@Test
-	public void OrcofLugburzStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MarshWightStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Orc of Lugburz
+		 * Name: Marsh Wight
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Sauron
-		 * Twilight Cost: 3
+		 * Twilight Cost: 5
 		 * Type: Minion
-		 * Subtype: Orc
+		 * Subtype: Wraith
 		 * Strength: 9
 		 * Vitality: 3
-		 * Site Number: 6
-		 * Game Text: Tracker. 
-		* 	Each [sauron] orc with a site number of 1 or less cannot take wounds except during the skirmish phase.
+		 * Site Number: 4
+		 * Game Text: Twilight.
+		* 	To play, spot a twilight minion.
+		* 	This minion is twilight cost -1 for each burden you can spot.
+		* 	While you can spot 4 burdens, this minion is damage +1.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Orc of Lugburz", card.getBlueprint().getTitle());
+		assertEquals("Marsh Wight", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(Race.WRAITH, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.TWILIGHT));
+		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getSiteNumber());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void OrcofLugburzTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MarshWightTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -76,6 +78,6 @@ public class Card_V2_061_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(5, scn.GetTwilight());
 	}
 }

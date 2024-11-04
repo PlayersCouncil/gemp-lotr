@@ -2,12 +2,9 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.HasInitiativeModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -117,6 +114,4 @@ public class Card_V2_001_Tests
 		assertEquals(5, scn.GetFreepsHandCount());
 		assertFalse(scn.ShadowHasInitiative());
 	}
-
-
 }

@@ -28,37 +28,38 @@ public class Card_V2_030_Tests
 	}
 
 	@Test
-	public void BreachingShotStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StrengthofthePackStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Breaching Shot
+		 * Name: Strength of the Pack
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
-		 * Twilight Cost: 2
-		 * Type: Event
-		 * Subtype: Assignment
-		 * Game Text: Remove X tokens from machines to assign an Uruk-hai costing X or less to an ally or unbound companion.
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Mounted [Isengard] Orcs are strength +1.
+		* 	While you can spot 2 mounted [isengard] Orcs, your [isengard] mounts are twilight cost -1. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Breaching Shot", card.getBlueprint().getTitle());
+		assertEquals("Strength of the Pack", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.ASSIGNMENT));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void BreachingShotTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StrengthofthePackTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -68,6 +69,6 @@ public class Card_V2_030_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

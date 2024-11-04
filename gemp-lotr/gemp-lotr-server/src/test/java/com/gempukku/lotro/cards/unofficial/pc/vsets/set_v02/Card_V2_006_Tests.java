@@ -28,37 +28,44 @@ public class Card_V2_006_Tests
 	}
 
 	@Test
-	public void LeithioiPhillinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ArwenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Leithio i Phillin!
-		 * Unique: False
+		 * Name: Arwen, Lady of Rivendell
+		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Elven
-		 * Twilight Cost: 0
-		 * Type: Event
-		 * Subtype: Archery
-		 * Game Text: Spot 2 valiant elves to wound a minion (or wound a minion twice if each of those elves bears a ranged weapon).
+		 * Twilight Cost: 2
+		 * Type: Ally
+		 * Subtype: Elf
+		 * Strength: 6
+		 * Vitality: 3
+		 * Site Number: 3F
+		 * Game Text: Aragorn is strength +1. While Arwen is exhausted, Aragorn is defender +1.
+		* 	Each time Aragorn is about to take a wound, you may wound Arwen to prevent that wound.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Leithio i Phillin!", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("Arwen", card.getBlueprint().getTitle());
+		assertEquals("Lady of Rivendell", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.ARCHERY));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void LeithioiPhillinTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ArwenTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -68,6 +75,6 @@ public class Card_V2_006_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

@@ -28,37 +28,37 @@ public class Card_V2_009_Tests
 	}
 
 	@Test
-	public void YourFriendsAreWithYouStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void LeithioiPhillinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Your Friends Are With You
-		 * Unique: True
+		 * Name: Leithio i Phillin!
+		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Elven
-		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time your Man, Elf, or Dwarf wins a skirmish, make your Man, Elf, or Dwarf of another race strength +1 until the regroup phase.
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Archery
+		 * Game Text: Spot 2 valiant elves to wound a minion (or wound a minion twice if each of those elves bears a ranged weapon).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Your Friends Are With You", card.getBlueprint().getTitle());
+		assertEquals("Leithio i Phillin!", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.ARCHERY));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void YourFriendsAreWithYouTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void LeithioiPhillinTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -68,6 +68,6 @@ public class Card_V2_009_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

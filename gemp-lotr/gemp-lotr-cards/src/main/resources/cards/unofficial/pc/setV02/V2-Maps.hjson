@@ -20,19 +20,19 @@
 		type: Map
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
-			}
-			{
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: DeckBuildingRestriction
+				pile: sites
+				#We do it this way instead of checking for fellowship
+				# so that the error message shows all sites that don't 
+				# match, instead of listing all the ones that do and
+				# making the user figure out which one isn't listed.
+				filter: or(siteblock(towers),siteblock(king),siteblock(shadows))
+				max: 0
+				text: Adventure Deck must only contain sites from the Fellowship block path.
 			}
 		]
 		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the Fellowship site path.
-		lore: "'It's a dangerous business, Frodo, going out your door. You step onto the Road, and if you don't keep your feet, there's no knowing where you might be swept off to."'
+		lore: "'It's a dangerous business, Frodo, going out your door. You step onto the Road, and if you don't keep your feet, there's no knowing where you might be swept off to.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -62,15 +62,15 @@
 		type: Map
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
-			}
-			{
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: DeckBuildingRestriction
+				pile: sites
+				#We do it this way instead of checking for fellowship
+				# so that the error message shows all sites that don't 
+				# match, instead of listing all the ones that do and
+				# making the user figure out which one isn't listed.
+				filter: or(siteblock(fellowship),siteblock(king),siteblock(shadows))
+				max: 0
+				text: Adventure deck must only contain sites from the Towers block site path.
 			}
 		]
 		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the Towers site path.
@@ -105,15 +105,15 @@
 		type: Map
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
-			}
-			{
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: DeckBuildingRestriction
+				pile: sites
+				#We do it this way instead of checking for fellowship
+				# so that the error message shows all sites that don't 
+				# match, instead of listing all the ones that do and
+				# making the user figure out which one isn't listed.
+				filter: or(siteblock(fellowship),siteblock(towers),siteblock(shadows))
+				max: 0
+				text: Adventure Deck must only contain sites from the King block site path.
 			}
 		]
 		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the King site path.

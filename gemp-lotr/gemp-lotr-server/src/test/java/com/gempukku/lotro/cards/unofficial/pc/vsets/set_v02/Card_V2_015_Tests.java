@@ -28,37 +28,37 @@ public class Card_V2_015_Tests
 	}
 
 	@Test
-	public void RememberYourOldStrengthStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WatchingandWaitingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Remember Your Old Strength
+		 * Name: Watching and Waiting
 		 * Unique: False
-		 * Side: Free Peoples
-		 * Culture: Gandalf
-		 * Twilight Cost: 2
+		 * Side: Shadow
+		 * Culture: Gollum
+		 * Twilight Cost: 0
 		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Exert Gandalf to make Theoden and each valiant companion strength +1 until the regroup phase (or strength +2 if every unbound companion is valiant).
+		 * Subtype: Response
+		 * Game Text: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to draw 8 cards, then remove this from the game. This event may be played from your draw deck or discard pile.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Remember Your Old Strength", card.getBlueprint().getTitle());
+		assertEquals("Watching and Waiting", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void RememberYourOldStrengthTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WatchingandWaitingTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -68,6 +68,6 @@ public class Card_V2_015_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

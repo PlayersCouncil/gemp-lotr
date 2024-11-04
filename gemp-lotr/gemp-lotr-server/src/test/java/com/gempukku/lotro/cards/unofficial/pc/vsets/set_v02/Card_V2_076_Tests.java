@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_V2_010_Tests
+public class Card_V2_076_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_10");
+					put("card", "102_76");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,43 +28,34 @@ public class Card_V2_010_Tests
 	}
 
 	@Test
-	public void NaithArmamentsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void JourneyoftheKingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Naith Armaments
+		 * Name: Journey of the King
 		 * Unique: False
-		 * Side: Free Peoples
-		 * Culture: Elven
-		 * Twilight Cost: 2
-		 * Type: Possession
-		 * Subtype: Hand/ranged weapon
-		 * Strength: 2
-		 * Vitality: 1
-		 * Game Text: Bearer must be a valiant Elf.
-		* 	Each time bearer wins a skirmish, you may exert bearer to heal another valiant Elf.
+		 * Side: 
+		 * Culture: King
+		 * Twilight Cost: 
+		 * Type: Map
+		 * Subtype: 
+		 * Game Text: Before the game begins, place this Map in your support area.
+		* 	Your adventure deck must only contain cards from the King site path.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Naith Armaments", card.getBlueprint().getTitle());
+		assertEquals("Journey of the King", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.RANGED_WEAPON));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(2, card.getBlueprint().getStrength());
-		assertEquals(1, card.getBlueprint().getVitality());
+		assertEquals(CardType.MAP, card.getBlueprint().getCardType());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void NaithArmamentsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void JourneyoftheKingTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -74,6 +65,6 @@ public class Card_V2_010_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

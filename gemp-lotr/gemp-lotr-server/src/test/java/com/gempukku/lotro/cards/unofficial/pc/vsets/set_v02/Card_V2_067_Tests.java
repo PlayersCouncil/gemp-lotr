@@ -28,39 +28,39 @@ public class Card_V2_067_Tests
 	}
 
 	@Test
-	public void IsengardGatesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EastemnetHillsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Isengard Gates
+		 * Name: Eastemnet Hills
 		 * Unique: False
 		 * Side: 
 		 * Culture: 
-		 * Shadow Number: 3
-		 * Type: Sanctuary
+		 * Shadow Number: 2
+		 * Type: Site
 		 * Subtype: 
-		 * Site Number: 6T
-		 * Game Text: Sanctuary. Fellowship: Exert an unbound Hobbit to play a pipe or pipeweed from your draw deck (limit 1).
+		 * Site Number: 2T
+		 * Game Text: Mountain. When the fellowship moves from here during the regroup phase, each player may discard 2 cards to draw 2 cards.
 		*/
 
 		var scn = GetScenario();
 
 		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(6);
+		//var card = scn.GetFreepsSite(2);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Isengard Gates", card.getBlueprint().getTitle());
+		assertEquals("Eastemnet Hills", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SANCTUARY));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getSiteNumber());
+		assertTrue(scn.hasKeyword(card, Keyword.MOUNTAIN));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void IsengardGatesTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EastemnetHillsTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -70,6 +70,6 @@ public class Card_V2_067_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

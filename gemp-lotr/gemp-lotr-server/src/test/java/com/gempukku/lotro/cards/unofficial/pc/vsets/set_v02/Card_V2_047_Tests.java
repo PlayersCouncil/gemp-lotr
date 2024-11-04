@@ -28,38 +28,46 @@ public class Card_V2_047_Tests
 	}
 
 	@Test
-	public void NowforWrathStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ErkenbrandStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Now for Wrath
+		 * Name: Erkenbrand, Kinsman of the House of Eorl
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Rohan
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time a [rohan] item or [rohan] ally is discarded or killed, add a [rohan] token here.
-		* 	Each time a minion is exerted by a Free Peoples card, you may remove a [rohan] token here and exert a valiant companion to wound that minion.
+		 * Twilight Cost: 5
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 7
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Signet: Gandalf
+		 * Game Text: When you play Erkenbrand, remove up to 3 non-unique [rohan] companions in the dead pile from the game. 
+		* 	Each exhausted companion gains <b>valiant</b>.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Now for Wrath", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals("Erkenbrand", card.getBlueprint().getTitle());
+		assertEquals("Kinsman of the House of Eorl", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(7, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void NowforWrathTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ErkenbrandTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -69,6 +77,6 @@ public class Card_V2_047_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(5, scn.GetTwilight());
 	}
 }

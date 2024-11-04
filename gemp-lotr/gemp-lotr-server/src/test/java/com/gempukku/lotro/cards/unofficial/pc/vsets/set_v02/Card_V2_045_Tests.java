@@ -28,44 +28,40 @@ public class Card_V2_045_Tests
 	}
 
 	@Test
-	public void RoyalAttendantStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DoNotTrusttoHopeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Royal Attendant
-		 * Unique: True
+		 * Name: Do Not Trust to Hope
+		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Rohan
-		 * Twilight Cost: 2
-		 * Type: Ally
-		 * Subtype: Man
-		 * Strength: 3
-		 * Vitality: 3
-		 * Site Number: 3T
-		 * Game Text: To play, spot Theoden (or 3 [rohan] Men).
-		* 	Skirmish: If a Hobbit companion is skirmishing, add this ally's strength to that Hobbit and make that Hobbit gain <b>valiant</b> until the regroup phase (limit once per phase). At the end of that skirmish, wound this ally.
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: 
+		 * Strength: 2
+		 * Game Text: Bearer must be a [rohan] companion.
+		* 	 Bearer is <b>valiant</b>.
+		* 	At the start of the regroup phase, wound bearer or discard this condition.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Royal Attendant", card.getBlueprint().getTitle());
+		assertEquals("Do Not Trust to Hope", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(3, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.TWO_TOWERS, 3)));
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void RoyalAttendantTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DoNotTrusttoHopeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -75,6 +71,6 @@ public class Card_V2_045_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

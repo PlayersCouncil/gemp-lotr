@@ -28,38 +28,44 @@ public class Card_V2_025_Tests
 	}
 
 	@Test
-	public void StrengthofthePackStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsengardForemanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Strength of the Pack
-		 * Unique: False
+		 * Name: Isengard Foreman
+		 * Unique: True
 		 * Side: Shadow
 		 * Culture: Isengard
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Mounted [Isengard] Orcs are strength +1.
-		* 	While you can spot 2 mounted [isengard] Orcs, your [isengard] mounts are twilight cost -1. 
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 7
+		 * Vitality: 3
+		 * Site Number: 4
+		 * Game Text: When you play this minion, you may play an [isengard] orc from your discard pile; it is strength +1 until the regroup phase.
+		* 	Regroup: Discard this minion to add two threats.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Strength of the Pack", card.getBlueprint().getTitle());
+		assertEquals("Isengard Foreman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.ORC, card.getBlueprint().getRace());
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(7, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void StrengthofthePackTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsengardForemanTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -69,6 +75,6 @@ public class Card_V2_025_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(3, scn.GetTwilight());
 	}
 }

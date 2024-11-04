@@ -43,8 +43,7 @@ public class Card_V2_050_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Assignment
-		 * Game Text: Exert a valiant companion to make that companion defender +1.
-		 * That companion is strength +1 for each minion skirmishing them until the regroup phase.
+		 * Game Text: Exert a valiant companion to make that companion defender +1. That companion is strength +1 for each minion skirmishing them until the regroup phase.
 		*/
 
 		var scn = GetScenario();

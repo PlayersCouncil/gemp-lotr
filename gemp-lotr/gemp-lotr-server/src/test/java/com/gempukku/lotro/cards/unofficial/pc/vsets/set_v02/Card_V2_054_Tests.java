@@ -28,47 +28,44 @@ public class Card_V2_054_Tests
 	}
 
 	@Test
-	public void MarshWightStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RoyalGuardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Marsh Wight
-		 * Unique: False
-		 * Side: Shadow
-		 * Culture: Sauron
-		 * Twilight Cost: 5
-		 * Type: Minion
-		 * Subtype: Wraith
-		 * Strength: 9
+		 * Name: Royal Guard
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Rohan
+		 * Twilight Cost: 2
+		 * Type: Ally
+		 * Subtype: Man
+		 * Strength: 3
 		 * Vitality: 3
-		 * Site Number: 4
-		 * Game Text: Twilight.
-		* 	To play, spot a twilight minion.
-		* 	This minion is twilight cost -1 for each burden you can spot.
-		* 	While you can spot 4 burdens, this minion is damage +1.
+		 * Site Number: 3T
+		 * Game Text: To play, spot Theoden (or 3 [rohan] Men).
+		* 	Skirmish: Exert this ally to add his strength to a skirmishing Hobbit and make that Hobbit gain <b>valiant</b> until the regroup phase (limit once per phase).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Marsh Wight", card.getBlueprint().getTitle());
+		assertEquals("Royal Guard", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.WRAITH, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.TWILIGHT));
-		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getStrength());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.TWO_TOWERS, 3)));
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void MarshWightTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RoyalGuardTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -78,6 +75,6 @@ public class Card_V2_054_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(5, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

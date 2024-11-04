@@ -76,12 +76,29 @@
 				type: ToPlay
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: Wraith
 				}
 			}
 			{
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Regroup
+				cost: {
+					type: Discard
+					select: choose(twilight, minion)
+					count: 2
+				}
+				effect: {
+					type: Preventable
+					player: freeps
+					text: Would you like to wound the Ring-bearer to avoid adding a burden?
+					cost: {
+						type: Wound
+						select: choose(ring-bearer)
+					}
+					effect: {
+						type: AddBurdens
+					}
+				}
 			}
 		]
 		gametext: To play, spot a Wraith.<br>Regroup: Discard two twilight minions to add a burden. The Free Peoples player may wound the Ring-bearer to prevent this.
@@ -120,17 +137,29 @@
 		strength: 11
 		vitality: 3
 		site: 6
+		keywords: Tracker
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(sauron),orc
+					amount: -3
 				}
 			}
 			{
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Exert
+					times: 1
+					select: self
+				}
+				effect: {
+					type: AddKeyword
+					keyword: damage+1
+					select: choose(InSkirmish, culture(Sauron), Orc, SiteNumber(0-1))
+				}
 			}
 		]
 		gametext: Tracker.<br>The site number of each [sauron] orc is -3. <br>Skirmish: Exert Grishnakh to make a skirmishing [sauron] Orc with a site number of 1 or less damage +1.
@@ -168,17 +197,15 @@
 		strength: 6
 		vitality: 2
 		site: 6
+		keywords: Tracker
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: modifystrength
+					filter: self,siteNumber(0-1)
+					amount: 5
 				}
-			}
-			{
-				type: SendMessage
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: Tracker. <br>If this minion's site number is 1 or less, it is strength +5. 
@@ -216,17 +243,33 @@
 		strength: 9
 		vitality: 3
 		site: 4
+		keywords: Twilight
 		effects: [
 			{
 				type: ToPlay
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: twilight, minion
 				}
 			}
 			{
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: ModifyOwnCost
+				amount: {
+					type: ForEachBurden
+					multiplier: -1
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: damage+1
+					filter: self
+					requires: {
+						type: CanSpotBurdens
+						amount: 4
+					}
+				}
 			}
 		]
 		gametext: Twilight.<br>To play, spot a twilight minion.<br>This minion is twilight cost -1 for each burden you can spot.<br>While you can spot 4 burdens, this minion is damage +1.
@@ -261,21 +304,21 @@
 		twilight: 1
 		type: Event
 		timewords: Skirmish
-		effects: [
-			{
-				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+		keywords: Search
+		effects: {
+			type: event
+			effect: [
+				{
+				type: ModifyStrength
+				amount: {
+					type: ForEachYouCanSpot
+					filter: search
+					limit: 5
 				}
-				effect: [
-					{
-						type: SendMessage
-						text: Placeholder effect for development.
-					}
-				]
-			}
-		]
+				select: choose(culture(sauron), tracker)
+				}
+			]
+		}
 		gametext: Search.<br>Make a [Sauron] tracker strength +1 for each search card you can spot (limit +5).
 		lore: "'You'll wish there was more that you could tell to satisfy the Questioner, indeed you will: quite soon.'"
 		promotext: ""
@@ -311,17 +354,21 @@
 		strength: 9
 		vitality: 3
 		site: 6
+		keywords: Tracker
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: CantTakeWounds
+					filter: culture(sauron),minion,siteNumber(0-1)
+					requires: {
+						type: Not 
+						requires: {
+							type: Phase
+							phase: Skirmish
+						}
+					}
 				}
-			}
-			{
-				type: SendMessage
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: Tracker. <br>Each [sauron] orc with a site number of 1 or less cannot take wounds except during the skirmish phase.
@@ -359,17 +406,21 @@
 		strength: 7
 		vitality: 2
 		site: 6
+		keywords: tracker
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: CantTakeWounds
+					filter: culture(sauron),minion,siteNumber(0-1)
+					requires: {
+						type: Not 
+						requires: {
+							type: Phase
+							phase: Skirmish
+						}
+					}
 				}
-			}
-			{
-				type: SendMessage
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: Tracker.<br>The site number of each [Sauron] orc is -1.<br>Skirmish: Discard this minion to cancel a skirmish involving an [isengard] tracker. 
@@ -409,12 +460,32 @@
 				type: ToPlay
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: Wraith
 				}
 			}
 			{
-				type: SendMessage
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: CantTakeWounds
+					filter: twilight
+					requires: {
+						type: Not 
+						requires: {
+							type: Phase
+							phase: Skirmish
+						}
+					}
+				}
+			}
+			{
+				type: Trigger
+				trigger: {
+					type: TakesOffRing
+ 				}
+				effect: {
+					type: Discard
+					select: self
+				}
 			}
 		]
 		gametext: To play, spot a Wraith.<br>While you can spot 3 twilight minions, twilight minions may not take wounds except during skirmishes.<br>When the ringbearer takes off the One Ring, discard this condition. 
@@ -449,21 +520,35 @@
 		twilight: 0
 		type: Event
 		timewords: Skirmish
-		effects: [
-			{
-				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+		effects: {
+			type: event
+			cost: {
+				type: Exert
+				select: choose(Wraith)
+			},
+			effect: [
+				{
+					type: ModifyStrength
+					amount: 2
+					select: choose(twilight, minion)
+					memorize: pumpedTwilight
 				}
-				effect: [
-					{
-						type: SendMessage
-						text: Placeholder effect for development.
+				{
+					type: AddTrigger
+					trigger: {
+						type: WinsSkirmish
+						filter: memory(pumpedTwilight)
 					}
-				]
-			}
-		]
+					cost: {
+						type: Exert
+						select: memory(pumpedTwilight)
+					}
+					effect: {
+						type: AddBurdens
+					}
+				}
+			]
+		}
 		gametext: Exert a Wraith to make a twilight minion strength +2. If that minion wins its skirmish you may exert it to add a burden.
 		lore: "Very soon it would nail him down, know just exactly where he was."
 		promotext: ""

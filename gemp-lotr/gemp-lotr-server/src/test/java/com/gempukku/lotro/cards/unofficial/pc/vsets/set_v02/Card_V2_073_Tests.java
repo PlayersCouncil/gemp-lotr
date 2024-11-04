@@ -28,37 +28,38 @@ public class Card_V2_073_Tests
 	}
 
 	@Test
-	public void FortressofMyFathersStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsengardCleftsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Fortress of My Fathers
+		 * Name: Isengard Clefts
 		 * Unique: False
-		 * Side: Free Peoples
-		 * Culture: Rohan
-		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: Support area
-		 * Game Text: 73
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 9
+		 * Type: Site
+		 * Subtype: 
+		 * Site Number: 9T
+		 * Game Text: Shadow: Exert a minion to play a Shadow possession from your discard pile. 
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Fortress of My Fathers", card.getBlueprint().getTitle());
+		assertEquals("Isengard Clefts", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(9, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void FortressofMyFathersTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsengardCleftsTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -68,6 +69,6 @@ public class Card_V2_073_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(9, scn.GetTwilight());
 	}
 }

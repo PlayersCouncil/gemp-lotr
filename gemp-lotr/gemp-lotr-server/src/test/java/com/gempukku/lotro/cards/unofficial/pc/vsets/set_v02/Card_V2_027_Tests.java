@@ -28,40 +28,47 @@ public class Card_V2_027_Tests
 	}
 
 	@Test
-	public void UrukShieldWallStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void LegionofIsengardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Uruk Shield Wall
-		 * Unique: False
+		 * Name: Legion of Isengard
+		 * Unique: True
 		 * Side: Shadow
 		 * Culture: Isengard
-		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: Support area
-		 * Game Text: Machine.
-		* 	While you can spot X [isengard] tokens here, each time an [isengard] Uruk-hai costing X is about to take a wound, exert it instead.
-		* 	Maneuver: Exert an Uruk-hai to add an [isengard] token here.  
+		 * Twilight Cost: 8
+		 * Type: Minion
+		 * Subtype: Uruk-hai
+		 * Strength: 17
+		 * Vitality: 4
+		 * Site Number: 5
+		 * Game Text: Damage +1.
+		* 	While you control a battleground, this minion is damage +1.
+		* 	While at a battleground, skirmish special abilities cannot be used during skirmishes involving this minion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Uruk Shield Wall", card.getBlueprint().getTitle());
+		assertEquals("Legion of Isengard", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.MACHINE));
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		assertEquals(8, card.getBlueprint().getTwilightCost());
+		assertEquals(17, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void UrukShieldWallTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void LegionofIsengardTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -71,6 +78,6 @@ public class Card_V2_027_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(8, scn.GetTwilight());
 	}
 }

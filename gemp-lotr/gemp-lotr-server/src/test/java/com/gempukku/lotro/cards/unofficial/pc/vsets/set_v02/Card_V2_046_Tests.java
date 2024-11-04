@@ -28,38 +28,37 @@ public class Card_V2_046_Tests
 	}
 
 	@Test
-	public void NowforRuinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AnEndWorthyofRemembranceStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Now for Ruin
-		 * Unique: True
+		 * Name: An End Worthy of Remembrance
+		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Rohan
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time a minion is killed, spot 2 valiant companions to add a [rohan] token here.
-		* 	Each time there are 3 [rohan] tokens here, remove all tokens here to play a [rohan] condition or event from your discard pile. The Shadow player may then play a minion from their discard pile. 
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: Remove 2 tokens from X [rohan] conditions to make 3 valiant companions strength +X until the regroup phase.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Now for Ruin", card.getBlueprint().getTitle());
+		assertEquals("An End Worthy of Remembrance", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void NowforRuinTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AnEndWorthyofRemembranceTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -69,6 +68,6 @@ public class Card_V2_046_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

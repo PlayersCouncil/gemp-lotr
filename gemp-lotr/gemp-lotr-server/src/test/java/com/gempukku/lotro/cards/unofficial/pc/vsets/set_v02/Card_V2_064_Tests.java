@@ -28,39 +28,46 @@ public class Card_V2_064_Tests
 	}
 
 	@Test
-	public void TheodredsTombStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OrcSearcherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Theodred's Tomb
+		 * Name: Orc Searcher
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 0
-		 * Type: Sanctuary
-		 * Subtype: 
-		 * Site Number: 3T
-		 * Game Text: Sanctuary. Fellowship: Play a valiant character to draw a card.
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 2
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 7
+		 * Vitality: 2
+		 * Site Number: 6
+		 * Game Text: Tracker.
+		* 	The site number of each [Sauron] orc is -1.
+		* 	Skirmish: Discard this minion to cancel a skirmish involving an [isengard] tracker. 
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(3);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Theodred's Tomb", card.getBlueprint().getTitle());
+		assertEquals("Orc Searcher", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SANCTUARY));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
-		assertEquals(3, card.getBlueprint().getSiteNumber());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.ORC, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(7, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TheodredsTombTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OrcSearcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -70,6 +77,6 @@ public class Card_V2_064_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

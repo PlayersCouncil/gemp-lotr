@@ -28,39 +28,39 @@ public class Card_V2_065_Tests
 	}
 
 	@Test
-	public void WestfoldPlainsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ShapestoSeeNottoTouchStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Westfold Plains
+		 * Name: Shapes to See, Not to Touch
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 3
-		 * Type: Site
-		 * Subtype: 
-		 * Site Number: 4T
-		 * Game Text: Plains. Each mount is twilight cost -1.
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: To play, spot a Wraith.
+		* 	While you can spot 3 twilight minions, twilight minions may not take wounds except during skirmishes.
+		* 	When the ringbearer takes off the One Ring, discard this condition. 
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(4);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Westfold Plains", card.getBlueprint().getTitle());
+		assertEquals("Shapes to See, Not to Touch", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.PLAINS));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void WestfoldPlainsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ShapestoSeeNottoTouchTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -70,6 +70,6 @@ public class Card_V2_065_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }
